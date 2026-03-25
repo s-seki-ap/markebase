@@ -1,0 +1,77 @@
+{
+  "id": "ga4--5-3",
+  "moduleId": "5-3",
+  "categoryId": "ga4",
+  "title": "イベント設計と実装",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# GA4の計測品質はイベント設計で決まる\n\nGA4を「とりあえず入れた」状態と「正しく設計して入れた」状態では、分析できることの幅が天と地ほど違います。\n\n## イベント設計が分析精度を左右する理由\n\n**悪い設計の例**\n```\nbtn_click → クリックは計測できているが何のボタンか不明\nform_submit → フォーム送信は計測できているが、どのフォームか不明\n```\n\n**良い設計の例**\n```\ngenerate_lead → リード獲得フォームの送信（GA4推奨名）\n  └── form_name: 'contact_form'\n  └── form_location: 'top_page'\n  └── lead_type: 'consultation'\n```\n\nパラメータを適切に設計することで、「どのページの、どのフォームから、どんな問い合わせが来たか」まで計測できます。\n\n## 4種類のイベントを理解することが全ての出発点\n\nGA4のイベントは4種類に分類されます。どれが「自動」でどれが「実装が必要」かを把握していないと、実装漏れや二重計測が発生します。\n\n| 種類 | 実装 | 例 |\n|------|------|----|\n| 自動収集 | 不要 | `first_visit`, `session_start` |\n| 拡張計測 | GTMまたはgtag設定のみ | `scroll`, `click`, `file_download` |\n| 推奨イベント | コード実装必要 | `purchase`, `add_to_cart`, `generate_lead` |\n| カスタムイベント | コード実装必要 | 独自定義 |\n\nこの分類を正確に理解することが、正確な計測設計の第一歩です。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# 4種類のイベントと実装ルール\n\n## ① 自動収集イベント（実装不要）\n\nGA4がデフォルトで自動的に計測するイベントです。\n\n| イベント名 | 発火タイミング |\n|-----------|---------------|\n| `first_visit` | 初回訪問時 |\n| `session_start` | セッション開始時 |\n| `user_engagement` | ページを10秒以上表示したとき |\n| `page_view` | ページ表示のたびに（gtag設定で発火） |\n\n## ② 拡張計測イベント（GA4設定のみ）\n\n管理画面のデータストリーム設定でON/OFFするだけで計測できます。\n\n| イベント名 | 内容 |\n|-----------|------|\n| `scroll` | ページを90%スクロール |\n| `click` | 外部リンクへのクリック |\n| `view_search_results` | サイト内検索 |\n| `video_start/progress/complete` | YouTube動画の視聴 |\n| `file_download` | ファイルダウンロード |\n\n## ③ 推奨イベント（実装必要・GA4公式の標準名）\n\nGA4が標準レポートで自動集計する特別なイベントです。独自名を使わず、必ずこの名前を使いましょう。\n\n```js\n// リード獲得\ngtag('event', 'generate_lead', {\n  currency: 'JPY',\n  value: 50000  // 見込み顧客の推定価値\n});\n\n// 商品詳細ページ表示\ngtag('event', 'view_item', {\n  currency: 'JPY',\n  value: 9800,\n  items: [{ item_id: 'SKU-001', item_name: 'Tシャツ', price: 9800 }]\n});\n\n// 購入完了\ngtag('event', 'purchase', {\n  transaction_id: 'T-12345',\n  value: 29800,\n  currency: 'JPY',\n  tax: 2709,\n  shipping: 0,\n  items: [\n    { item_id: 'SKU-001', item_name: 'Tシャツ', price: 9800, quantity: 2 },\n    { item_id: 'SKU-002', item_name: 'パーカー', price: 10200, quantity: 1 }\n  ]\n});\n```\n\n## ④ カスタムイベント（独自定義）\n\n推奨イベントに該当しない計測に使います。\n\n**命名規則（必ず守ること）**\n- `snake_case`（小文字 + アンダースコア）: `contact_form_submit` ✅\n- 大文字・ハイフン・スペース禁止: `ContactFormSubmit`❌ `contact-form`❌\n- 40文字以内\n- GA4の予約名（`app_remove`, `error` 等）は使用禁止\n\n**パラメータの上限**\n- 1イベントあたり最大25個のパラメータ\n- パラメータ名: 40文字以内\n- パラメータ値（文字列）: 100文字以内",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: ECサイトのGA4イベントを実装する\n\nECサイトの重要な3つのイベントを `gtag()` で実装してください。\nGA4公式の推奨パラメータに完全準拠した実装を目指します。\n\n## 課題\n\n以下の3つのイベントを実装してください：\n\n1. **view_item** — 商品詳細ページを表示したとき\n   - item_id: `SKU-001`\n   - item_name: `プレミアムTシャツ`\n   - price: `9800`\n   - currency: `JPY`\n\n2. **add_to_cart** — カートに追加したとき（上記商品）\n   - quantity: `1` を追加\n   - value: 商品価格\n\n3. **purchase** — 購入完了したとき\n   - transaction_id: `T-20240401-001`\n   - value: `9800`\n   - tax: `891`（消費税10%計算）\n   - shipping: `0`\n\n各ボタンをクリックしてConsoleで送信内容を確認してください。",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>ECサイト GA4イベント実装</title>\n  <style>\n    body { font-family: sans-serif; padding: 20px; background: #f8f9fa; }\n    .card { background: white; padding: 20px; border-radius: 8px; margin-bottom: 16px; max-width: 500px; }\n    button { padding: 10px 20px; margin: 4px; border: none; border-radius: 6px; cursor: pointer; color: white; font-size: 14px; }\n    .btn-blue   { background: #2563eb; }\n    .btn-green  { background: #16a34a; }\n    .btn-orange { background: #ea580c; }\n    pre { background: #1e293b; color: #e2e8f0; padding: 12px; border-radius: 6px; font-size: 12px; overflow-x: auto; margin-top: 8px; }\n  </style>\n</head>\n<body>\n  <div class=\"card\">\n    <h2>プレミアムTシャツ</h2>\n    <p>価格: ¥9,800</p>\n    <button class=\"btn-blue\" onclick=\"fireViewItem()\">① 商品詳細を表示（view_item）</button>\n    <button class=\"btn-green\" onclick=\"fireAddToCart()\">② カートに追加（add_to_cart）</button>\n    <button class=\"btn-orange\" onclick=\"firePurchase()\">③ 購入完了（purchase）</button>\n    <pre id=\"output\">ここにイベント送信内容が表示されます</pre>\n  </div>\n\n  <script>\n    window.dataLayer = window.dataLayer || [];\n    function gtag(){dataLayer.push(arguments);}\n    gtag('js', new Date());\n    // ※ 演習環境のためconfig行は省略\n\n    function showOutput(label, data) {\n      document.getElementById('output').textContent =\n        label + ':\\n' + JSON.stringify(data, null, 2);\n    }\n\n    // ① view_item イベントを実装してください\n    function fireViewItem() {\n      const eventData = {\n        // ここにパラメータを書いてください\n        // currency, value, items配列\n      };\n      gtag('event', 'view_item', eventData);\n      showOutput('view_item', eventData);\n    }\n\n    // ② add_to_cart イベントを実装してください\n    function fireAddToCart() {\n      const eventData = {\n        // view_item と同じitemsに quantity: 1 を追加\n      };\n      gtag('event', 'add_to_cart', eventData);\n      showOutput('add_to_cart', eventData);\n    }\n\n    // ③ purchase イベントを実装してください\n    function firePurchase() {\n      const eventData = {\n        // transaction_id, value, currency, tax, shipping, items\n      };\n      gtag('event', 'purchase', eventData);\n      showOutput('purchase', eventData);\n    }\n  </script>\n</body>\n</html>",
+        "hints": [
+          "`gtag('event', 'view_item', { currency: 'JPY', value: 9800, items: [{ item_id: 'SKU-001', item_name: 'プレミアムTシャツ', price: 9800 }] })` が基本形です。`items` は必ず配列 `[{ ... }]` で囲みます。",
+          "`add_to_cart` は `view_item` と同じ構造に `quantity: 1` を追加するだけです。`value` はその商品の合計金額（price × quantity）を設定します。",
+          "`purchase` には `transaction_id`（注文ID）が必須です。同じ transaction_id で2回purchaseイベントが送られると二重計測になります。`tax` は消費税額（数値）を入れます。9800円の10%消費税は `Math.round(9800 * 0.1 / 1.1)` = 891円です。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>ECサイト GA4イベント実装</title>\n  <style>\n    body { font-family: sans-serif; padding: 20px; background: #f8f9fa; }\n    .card { background: white; padding: 20px; border-radius: 8px; margin-bottom: 16px; max-width: 500px; }\n    button { padding: 10px 20px; margin: 4px; border: none; border-radius: 6px; cursor: pointer; color: white; font-size: 14px; }\n    .btn-blue   { background: #2563eb; }\n    .btn-green  { background: #16a34a; }\n    .btn-orange { background: #ea580c; }\n    pre { background: #1e293b; color: #e2e8f0; padding: 12px; border-radius: 6px; font-size: 12px; overflow-x: auto; margin-top: 8px; }\n  </style>\n</head>\n<body>\n  <div class=\"card\">\n    <h2>プレミアムTシャツ</h2>\n    <p>価格: ¥9,800</p>\n    <button class=\"btn-blue\" onclick=\"fireViewItem()\">① 商品詳細を表示（view_item）</button>\n    <button class=\"btn-green\" onclick=\"fireAddToCart()\">② カートに追加（add_to_cart）</button>\n    <button class=\"btn-orange\" onclick=\"firePurchase()\">③ 購入完了（purchase）</button>\n    <pre id=\"output\">ここにイベント送信内容が表示されます</pre>\n  </div>\n\n  <script>\n    window.dataLayer = window.dataLayer || [];\n    function gtag(){dataLayer.push(arguments);}\n    gtag('js', new Date());\n\n    function showOutput(label, data) {\n      document.getElementById('output').textContent =\n        label + ':\\n' + JSON.stringify(data, null, 2);\n    }\n\n    const item = {\n      item_id:   'SKU-001',\n      item_name: 'プレミアムTシャツ',\n      price:     9800\n    };\n\n    function fireViewItem() {\n      const eventData = {\n        currency: 'JPY',\n        value:    item.price,\n        items:    [item]\n      };\n      gtag('event', 'view_item', eventData);\n      showOutput('view_item', eventData);\n    }\n\n    function fireAddToCart() {\n      const eventData = {\n        currency: 'JPY',\n        value:    item.price * 1,\n        items:    [{ ...item, quantity: 1 }]\n      };\n      gtag('event', 'add_to_cart', eventData);\n      showOutput('add_to_cart', eventData);\n    }\n\n    function firePurchase() {\n      const eventData = {\n        transaction_id: 'T-20240401-001',\n        value:          9800,\n        currency:       'JPY',\n        tax:            891,\n        shipping:       0,\n        items:          [{ ...item, quantity: 1 }]\n      };\n      gtag('event', 'purchase', eventData);\n      showOutput('purchase', eventData);\n    }\n  </script>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "`session_start` と `purchase` の違いとして正しいのはどれですか？",
+            "options": [
+              "session_startはGA4が自動で計測し、purchaseはコードで実装する必要がある",
+              "どちらもGA4が自動で計測するため実装は不要",
+              "session_startはGTMで設定し、purchaseはgtag.jsで設定する",
+              "どちらも推奨イベントであり、同じ方法で実装する"
+            ],
+            "correct": 0,
+            "explanation": "`session_start` は「自動収集イベント」でGA4が自動的に計測します。`purchase` は「推奨イベント」でコードによる実装が必要です。自動収集とそれ以外の区別は非常に重要で、「GA4入れたから購入計測できてる」は大きな誤解です。purchaseイベントは必ず別途実装が必要です。"
+          },
+          {
+            "q": "GA4のカスタムイベントの命名規則として正しいのはどれですか？",
+            "options": [
+              "`ContactFormSubmit`（PascalCase）",
+              "`contact-form-submit`（ケバブケース）",
+              "`contact_form_submit`（snake_case）",
+              "`CONTACT_FORM_SUBMIT`（大文字のsnake_case）"
+            ],
+            "correct": 2,
+            "explanation": "GA4のイベント名は `snake_case`（小文字 + アンダースコア）が必須です。大文字・ハイフン・スペースは使用できません。また40文字以内の制限があります。命名規則を守らないとGA4の管理画面で正しく表示されなかったり、レポートで扱いにくくなります。"
+          },
+          {
+            "q": "1つのGA4イベントに設定できるパラメータの上限はいくつですか？",
+            "options": ["10個", "25個", "50個", "無制限"],
+            "correct": 1,
+            "explanation": "1つのGA4イベントに設定できるカスタムパラメータは最大25個です。またパラメータ名は40文字以内、文字列の値は100文字以内という制限もあります。この上限を超えたパラメータはGA4に記録されないため、重要なパラメータから優先順位をつけて設計することが大切です。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール5-3 完了！\n\nGA4イベント設計の全体像と、eコマースイベントの完全実装を習得しました。\n\n## 習得したスキル\n\n✅ **4種類のイベント分類**（自動収集/拡張計測/推奨/カスタム）を正確に理解した\n✅ **推奨イベントの命名規則**を把握し、正しいイベント名を選べるようになった\n✅ **view_item / add_to_cart / purchase** をGA4公式仕様で実装できるようになった\n✅ **カスタムイベントの命名規則**（snake_case, 40文字以内）を習得した\n\n## イベント設計のベストプラクティス\n\n```\n1. まず「自動収集で取れているか」を確認する\n2. 「拡張計測」で取れるならコード不要\n3. GA4推奨イベント名があるなら必ずそれを使う\n4. どれにも該当しない場合のみカスタムイベントを作る\n5. パラメータは「後で分析に使うか」を考えて設計する\n```\n\n## 次のモジュールへ\n\n次は **「5-4: GTM × GA4 実装」** です。実務では gtag.js 直書きではなくGTMを使います。GTMの3要素（タグ/トリガー/変数）と dataLayer の仕組みを組み合わせた実装を学びます。\n\n> 💡 **実務チャレンジ**: 担当クライアントのGA4管理画面で「イベント」レポートを開き、`purchase` イベントが計測されているか確認してください。計測されていない場合、実装が必要です。",
+        "diagram": false
+      }
+    }
+  ]
+}

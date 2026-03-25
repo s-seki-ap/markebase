@@ -1,0 +1,82 @@
+{
+  "id": "ga4--5-5",
+  "moduleId": "5-5",
+  "categoryId": "ga4",
+  "title": "GA4レポートとExplore",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# データを集めただけでは仕事は終わらない\n\nGA4を正しく設置してイベントを計測できた。それはスタート地点に立っただけです。コンサルタントの仕事は「だから何をすべきか」を伝えることです。\n\n## 標準レポートと探索レポートの使い分け\n\n多くのGA4ユーザーが「標準レポートを見ている」だけで止まっています。しかし本当の洞察は**探索レポート**にあります。\n\n**標準レポートでわかること（定点観測）**\n- 先月のユーザー数・セッション数はどうだったか\n- どのチャネルからの流入が多いか\n- どのページが見られているか\n\n**探索レポートでわかること（仮説検証）**\n- 購入したユーザーは購入前にどんな経路をたどったか\n- 離脱の多いステップはどこか\n- 初回購入から7日以内に再購入するユーザーはどんな属性か\n- iOSユーザーとAndroidユーザーのCVRに差があるか\n\n## なぜ「探索」を使えるコンサルタントが少ないか\n\n探索レポートは自由度が高い分、「何を聞けばいいかわからない」「操作が複雑」と感じて使われないことが多いです。このモジュールでは7つの探索手法を全て習得し、どの状況でどれを使うかを判断できるようになります。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# 標準レポートと探索の全手法\n\n## 標準レポートの5カテゴリ\n\n| レポート | 主な用途 | 確認ポイント |\n|---------|---------|-------------|\n| **リアルタイム** | 施策直後の反応確認・タグ動作確認 | 現在地・イベント発火状況 |\n| **ユーザー属性** | ターゲット層の把握 | 年齢・性別・地域・デバイス |\n| **集客** | 流入源の評価 | チャネルグループ・参照元/メディア |\n| **エンゲージメント** | コンテンツ評価 | ページ・イベント・コンバージョン |\n| **収益化** | 売上分析 | ECレポート・広告収益 |\n\n## 探索レポートの7手法\n\n### ① 自由形式（最も汎用的）\n行×列の自由なクロス集計です。「デバイス×チャネル×CV数」のような多次元分析に使います。\n\n### ② ファネル探索\nユーザーが特定のステップをどの順番で通過したかを可視化します。\n```\n商品一覧 → 商品詳細 → カート → 購入完了\n  5,000     3,200     1,100       420\n  100%      64%       22%         8.4%\n```\n各ステップの離脱率がわかり、改善優先度を決める根拠になります。\n\n### ③ 経路探索（パス分析）\nユーザーの遷移を木構造で可視化します。「購入完了後に次にどのページに行くか」「トップページからどこへ流れているか」を把握できます。\n\n### ④ セグメントの重複\nビン図（ベン図）形式で複数セグメントの重複を可視化します。「有料流入ユーザー ∩ CV済みユーザー」の重複が全体の何割かを確認できます。\n\n### ⑤ コホート探索\n特定の行動をしたユーザーコホートの継続率を追跡します。「初回購入から1週間・2週間後にどれだけが戻ってきたか」のリテンション分析に使います。\n\n### ⑥ ユーザーのライフタイム\nユーザー獲得コホートごとのLTV（累積収益・セッション）を追跡します。「どのチャネルで獲得したユーザーが長期的に価値が高いか」がわかります。\n\n### ⑦ ユーザーエクスプローラ\n個別ユーザーの行動ログを時系列で確認します。カスタマーサポートとの連携やUX分析に活用します。\n\n## セグメントとフィルタの違い\n\n| | セグメント | フィルタ |\n|--|-----------|--------|\n| 用途 | 特定条件のユーザー群を定義して比較 | レポートデータを絞り込む |\n| 比較 | 複数セグメントを並べて比較できる | 1つの条件で絞るのみ |\n| 例 | CV済みユーザー vs 未CVユーザーを並べて比較 | 日本からのアクセスのみ表示 |",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: チャネル別セッション集計レポートを作る\n\nGA4の集客レポートのデータを模擬したJSONを用意しました。\n`reduce` を使ってチャネル別にセッション数を集計し、表形式で表示してください。\n\n## 課題\n\n1. `sessions` 配列からチャネル別に `sessionCount` を合計する\n2. セッション数の多い順に並べ替える（`sort`）\n3. 結果をHTMLテーブルとして表示する\n4. **ボーナス**: セッション数のシェア（%）を追加する",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>GA4チャネル別集計</title>\n  <style>\n    body { font-family: sans-serif; padding: 20px; background: #0f172a; color: #e2e8f0; }\n    h2 { color: #93c5fd; }\n    table { border-collapse: collapse; width: 100%; max-width: 540px; }\n    th { background: #1e293b; padding: 10px 14px; text-align: left; font-size: 13px; color: #94a3b8; }\n    td { padding: 10px 14px; border-bottom: 1px solid #1e293b; font-size: 14px; }\n    .bar { height: 6px; background: #3b82f6; border-radius: 3px; margin-top: 4px; }\n  </style>\n</head>\n<body>\n  <h2>チャネル別セッション数（過去30日）</h2>\n  <table id=\"reportTable\">\n    <thead>\n      <tr><th>チャネル</th><th>セッション数</th><th>シェア</th></tr>\n    </thead>\n    <tbody id=\"reportBody\"></tbody>\n  </table>\n\n  <script>\n    // GA4の集客レポートを模したデータ\n    const sessions = [\n      { channel: 'Organic Search', sessionCount: 1 },\n      { channel: 'Direct',         sessionCount: 1 },\n      { channel: 'Organic Search', sessionCount: 1 },\n      { channel: 'Paid Search',    sessionCount: 1 },\n      { channel: 'Organic Social', sessionCount: 1 },\n      { channel: 'Direct',         sessionCount: 1 },\n      { channel: 'Referral',       sessionCount: 1 },\n      { channel: 'Paid Search',    sessionCount: 1 },\n      { channel: 'Organic Search', sessionCount: 1 },\n      { channel: 'Email',          sessionCount: 1 },\n      { channel: 'Direct',         sessionCount: 1 },\n      { channel: 'Organic Search', sessionCount: 1 },\n      { channel: 'Paid Search',    sessionCount: 1 },\n      { channel: 'Organic Social', sessionCount: 1 },\n      { channel: 'Referral',       sessionCount: 1 },\n    ];\n\n    // ① reduceでチャネルごとにセッション数を合計してください\n    // 結果: { 'Organic Search': 4, 'Direct': 3, ... } の形式\n    // const totals = sessions.reduce((acc, row) => { ... }, {});\n\n\n    // ② オブジェクトを配列に変換して多い順に並べる\n    // const sorted = Object.entries(totals)\n    //   .map(([channel, count]) => ({ channel, count }))\n    //   .sort(...)\n\n\n    // ③ テーブルに行を追加する\n    // const total = sorted.reduce((s, r) => s + r.count, 0);\n    // sorted.forEach(row => { ... テーブルにtrを追加 });\n\n  </script>\n</body>\n</html>",
+        "hints": [
+          "`sessions.reduce((acc, row) => { acc[row.channel] = (acc[row.channel] || 0) + row.sessionCount; return acc; }, {})` でチャネル名をキーにした合計オブジェクトを作れます。GA4のレポートでは行ごとにディメンションと指標が入っており、同じ処理をしています。",
+          "`Object.entries(totals)` でオブジェクトを `[['Organic Search', 4], ...]` の配列に変換できます。`.sort((a, b) => b.count - a.count)` で降順ソートします。",
+          "`const total = sorted.reduce((s, r) => s + r.count, 0)` で全体合計を計算し、`(r.count / total * 100).toFixed(1) + '%'` でシェアを計算できます。GA4の集客レポートの「セッションのシェア」列も同じ計算です。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>GA4チャネル別集計</title>\n  <style>\n    body { font-family: sans-serif; padding: 20px; background: #0f172a; color: #e2e8f0; }\n    h2 { color: #93c5fd; }\n    table { border-collapse: collapse; width: 100%; max-width: 540px; }\n    th { background: #1e293b; padding: 10px 14px; text-align: left; font-size: 13px; color: #94a3b8; }\n    td { padding: 10px 14px; border-bottom: 1px solid #1e293b; font-size: 14px; }\n    .bar { height: 6px; background: #3b82f6; border-radius: 3px; margin-top: 4px; }\n  </style>\n</head>\n<body>\n  <h2>チャネル別セッション数（過去30日）</h2>\n  <table id=\"reportTable\">\n    <thead>\n      <tr><th>チャネル</th><th>セッション数</th><th>シェア</th></tr>\n    </thead>\n    <tbody id=\"reportBody\"></tbody>\n  </table>\n\n  <script>\n    const sessions = [\n      { channel: 'Organic Search', sessionCount: 1 },\n      { channel: 'Direct',         sessionCount: 1 },\n      { channel: 'Organic Search', sessionCount: 1 },\n      { channel: 'Paid Search',    sessionCount: 1 },\n      { channel: 'Organic Social', sessionCount: 1 },\n      { channel: 'Direct',         sessionCount: 1 },\n      { channel: 'Referral',       sessionCount: 1 },\n      { channel: 'Paid Search',    sessionCount: 1 },\n      { channel: 'Organic Search', sessionCount: 1 },\n      { channel: 'Email',          sessionCount: 1 },\n      { channel: 'Direct',         sessionCount: 1 },\n      { channel: 'Organic Search', sessionCount: 1 },\n      { channel: 'Paid Search',    sessionCount: 1 },\n      { channel: 'Organic Social', sessionCount: 1 },\n      { channel: 'Referral',       sessionCount: 1 },\n    ];\n\n    // ① チャネル別に集計\n    const totals = sessions.reduce((acc, row) => {\n      acc[row.channel] = (acc[row.channel] || 0) + row.sessionCount;\n      return acc;\n    }, {});\n\n    // ② 配列に変換して降順ソート\n    const sorted = Object.entries(totals)\n      .map(([channel, count]) => ({ channel, count }))\n      .sort((a, b) => b.count - a.count);\n\n    // ③ テーブルに表示\n    const total = sorted.reduce((s, r) => s + r.count, 0);\n    const tbody = document.getElementById('reportBody');\n\n    sorted.forEach(row => {\n      const share = (row.count / total * 100).toFixed(1);\n      const barWidth = Math.round(row.count / sorted[0].count * 100);\n      const tr = document.createElement('tr');\n      tr.innerHTML =\n        '<td>' + row.channel + '</td>' +\n        '<td>' + row.count +\n          '<div class=\"bar\" style=\"width:' + barWidth + '%\"></div></td>' +\n        '<td>' + share + '%</td>';\n      tbody.appendChild(tr);\n    });\n  </script>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "GA4の「ファネル探索」を使う最も適切な場面はどれですか？",
+            "options": [
+              "過去30日間の総ユーザー数を確認したいとき",
+              "商品詳細→カート→購入完了の各ステップでどれだけのユーザーが脱落しているか把握したいとき",
+              "ユーザーがどのページを何秒閲覧したか確認したいとき",
+              "特定のユーザーIDの行動履歴を時系列で確認したいとき"
+            ],
+            "correct": 1,
+            "explanation": "ファネル探索は「ユーザーが定義した順番のステップをどれだけ通過・離脱したか」を可視化するレポートです。購入フロー・問い合わせフロー・会員登録フローなど、ビジネス上重要なシーケンスの離脱分析に使います。離脱率が高いステップを特定して改善優先度を決めるのに最適です。"
+          },
+          {
+            "q": "GA4の「セグメント」と「フィルタ」の違いとして正しいのはどれですか？",
+            "options": [
+              "セグメントは標準レポートで使い、フィルタは探索レポートで使う",
+              "フィルタはデータを絞り込む、セグメントは複数のユーザー群を定義して比較できる",
+              "セグメントは有料機能、フィルタは無料機能",
+              "どちらも同じ機能で、名称が異なるだけ"
+            ],
+            "correct": 1,
+            "explanation": "フィルタはレポートのデータを1つの条件で絞り込む機能です。セグメントは条件に合うユーザー群を定義し、複数のセグメントを並べて比較できます。例えば「CV済みユーザー」と「未CVユーザー」を2セグメント定義して、行動の違いを比較分析する使い方が典型的です。"
+          },
+          {
+            "q": "「コホート探索」が最も役立つ分析シナリオはどれですか？",
+            "options": [
+              "今月の広告チャネル別コンバージョン数を確認する",
+              "特定ページのヒートマップを確認する",
+              "初回購入から1週間後・2週間後・1ヶ月後にどれだけのユーザーが再来訪するか追跡する",
+              "有料広告と自然検索のトラフィックシェアを比較する"
+            ],
+            "correct": 2,
+            "explanation": "コホート探索は、特定の行動をした「コホート（ユーザーの集まり）」の時間経過による変化を追跡するレポートです。リテンション分析（継続率の測定）に最も適しており、「特定週に初回購入したユーザーが1週後・2週後にどれだけ戻ってきたか」のような継続的エンゲージメントの計測に活用されます。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール5-5 完了！\n\nGA4の全レポート機能と探索の7手法を習得しました。\n\n## 習得したスキル\n\n✅ **標準レポート5カテゴリ**の用途と確認ポイントを把握した\n✅ **探索レポート7手法**を状況に応じて使い分けられるようになった\n✅ **ファネル分析**で離脱ステップを特定できるようになった\n✅ **セグメントとフィルタの違い**を正確に理解した\n\n## どの探索手法をいつ使うか（実務まとめ）\n\n| やりたいこと | 使う手法 |\n|---|---|\n| 購入フローの離脱分析 | ファネル探索 |\n| サイト内の遷移パターン把握 | 経路探索 |\n| セグメント間の比較 | 自由形式 |\n| リテンション計測 | コホート探索 |\n| LTV分析 | ユーザーのライフタイム |\n| セグメントの重複確認 | セグメントの重複 |\n| 個人ユーザーの行動確認 | ユーザーエクスプローラ |\n\n## 次のモジュールへ\n\n次は **「5-6: GA4 × BigQueryエクスポート」** です。GA4管理画面の限界を超えて、生データに直接アクセスし自由な分析ができるBigQuery連携を学びます。\n\n> 💡 **実務チャレンジ**: GA4の探索レポートを開き、「ファネル探索」で自社サイトの主要コンバージョンフローを作成してみましょう。どのステップの離脱率が最も高いですか？",
+        "diagram": false
+      }
+    }
+  ]
+}

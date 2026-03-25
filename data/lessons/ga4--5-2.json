@@ -1,0 +1,82 @@
+{
+  "id": "ga4--5-2",
+  "moduleId": "5-2",
+  "categoryId": "ga4",
+  "title": "GA4の初期設定と実装",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# クライアントに「GA4を入れてください」と言われたら\n\nGA4導入の依頼を受けたとき、「何をどの順番でやればいいか」を迷わず答えられますか？\n\n## GA4が動き始めるまでの全体像\n\n```\n① Googleアカウント（GCPプロジェクトと紐付き）\n    ↓\n② GA4プロパティ作成（計測の「器」を作る）\n    ↓\n③ データストリーム作成（どのサイト/アプリから計測するか）\n    ↓\n④ 測定ID（G-XXXXXXXX）を取得\n    ↓\n⑤ gtag.jsをサイトに設置（またはGTMで設定）\n    ↓\n⑥ 拡張計測機能の確認・有効化\n    ↓\n⑦ データ保持期間の変更（デフォルト2ヶ月 → 14ヶ月）\n    ↓\n⑧ リアルタイムレポートで計測確認\n```\n\n## よくある失敗パターン\n\n**失敗1: データ保持期間を変更し忘れる**\nデフォルトは2ヶ月です。設定を変えないと2ヶ月以前のデータが消えます。導入直後に必ず14ヶ月に変更してください。\n\n**失敗2: UAのビューの概念でGA4を理解しようとする**\nGA4にビューはありません。代わりに「比較」「セグメント」「探索」で絞り込みます。\n\n**失敗3: 拡張計測機能をデフォルトのまま放置する**\n「サイト内検索」は検索ボックスのname属性が `q` 以外の場合は手動設定が必要です。確認しないまま「計測できてる」と思い込むケースが多発しています。\n\n## このモジュールのゴール\n\nGA4の初期設定を一人でできる、設定漏れなく完了できる、クライアントに手順を説明できるレベルを目指します。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# GA4の設定階層と実装手順\n\n## プロパティ・データストリームの階層構造\n\nGA4の設定は3階層になっています。\n\n```\nGoogleアナリティクスアカウント\n└── GA4プロパティ（計測の単位）\n    ├── データストリーム（Webサイト）\n    │    └── 測定ID: G-XXXXXXXX\n    ├── データストリーム（iOSアプリ）\n    └── データストリーム（Androidアプリ）\n```\n\n**ポイント**: 1つのGA4プロパティで Web・iOS・Androidを横断して計測できます（UAとの大きな違い）。\n\n## gtag.js の設置コード\n\n```html\n<!-- headタグ内、できるだけ上部に記述 -->\n<script async src=\"https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXX\"></script>\n<script>\n  window.dataLayer = window.dataLayer || [];\n  function gtag(){dataLayer.push(arguments);}\n  gtag('js', new Date());\n  gtag('config', 'G-XXXXXXXX');\n  // ↑ G-XXXXXXXX を実際の測定IDに置き換える\n</script>\n```\n\n## 拡張計測機能の各項目\n\n| 機能 | デフォルト | 計測内容 | 注意点 |\n|------|-----------|---------|-------|\n| ページビュー | ON | ページ遷移 | SPAは別途設定が必要 |\n| スクロール数 | ON | 90%到達 | 閾値は変更不可 |\n| 離脱クリック | ON | 外部リンクのクリック | 広告LPへの遷移も計測される |\n| サイト内検索 | ON | 検索クエリ | `q` 以外のname属性は手動設定 |\n| 動画エンゲージメント | ON | YouTube埋め込みの再生状況 | iframe埋め込みのみ対応 |\n| ファイルダウンロード | ON | PDF等のダウンロード | 拡張子リストで管理 |\n| フォームの操作 | OFF | フォームとのインタラクション | 要手動有効化 |\n\n## データ保持期間の変更（重要）\n\n**場所**: 管理 → データ設定 → データ保持\n\n| 設定値 | 内容 |\n|--------|------|\n| 2ヶ月（デフォルト） | 探索レポートで2ヶ月以前のデータが消える |\n| **14ヶ月（推奨）** | 年次比較が可能になる。**必ず変更すること** |\n\n> ⚠️ データ保持期間は標準レポートには影響しません。探索（カスタムレポート）を使うときに影響します。",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: gtag.jsの設置コードを完成させる\n\n新しいクライアントのサイトにGA4を設置します。\n測定IDは `G-ABC123XYZ` です。\n\n## 課題\n\n1. `<script async src=\"...\">` の `?id=` に測定IDを設定する\n2. `gtag('config', ...)` に測定IDを設定する\n3. ページタイトルをカスタム設定するオプション `page_title` を `config` に追加する\n4. **ボーナス**: `gtag('config')` に `debug_mode: true` を追加してデバッグモードを有効にする\n\n**[▶ 実行]** を押してConsoleにエラーが出ないことを確認してください。",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>GA4設置練習</title>\n\n  <!-- ① gtag.jsを読み込む。?id= の後に測定IDを入れてください -->\n  <script async src=\"https://www.googletagmanager.com/gtag/js?id=\"></script>\n\n  <script>\n    window.dataLayer = window.dataLayer || [];\n    function gtag(){dataLayer.push(arguments);}\n    gtag('js', new Date());\n\n    // ② gtag('config') を完成させてください\n    // 測定ID: G-ABC123XYZ\n    // オプションに page_title: 'GA4設置練習ページ' を追加\n    gtag('config', /* ここに測定IDとオプションを書く */ );\n  </script>\n</head>\n<body>\n  <h1>GA4設置練習</h1>\n  <p>gtag.jsが正しく設定されると、このページのpage_viewが送信されます。</p>\n\n  <script>\n    // 設定確認用（変更不要）\n    console.log('dataLayer:', JSON.stringify(window.dataLayer, null, 2));\n  </script>\n</body>\n</html>",
+        "hints": [
+          "`<script async src=\"https://www.googletagmanager.com/gtag/js?id=G-ABC123XYZ\">` のように `?id=` の後に測定IDを書きます。測定IDは必ず `G-` で始まります（UAの `UA-` とは異なります）。",
+          "`gtag('config', 'G-ABC123XYZ')` が基本形です。第3引数にオブジェクトを渡すと追加オプションを設定できます: `gtag('config', 'G-ABC123XYZ', { page_title: 'GA4設置練習ページ' })`",
+          "デバッグモードは `gtag('config', 'G-ABC123XYZ', { debug_mode: true })` で有効になります。GA4のデバッグビューにリアルタイムでイベントが表示されるようになります。本番環境では必ず外してください。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>GA4設置練習</title>\n\n  <!-- gtag.jsを読み込み -->\n  <script async src=\"https://www.googletagmanager.com/gtag/js?id=G-ABC123XYZ\"></script>\n\n  <script>\n    window.dataLayer = window.dataLayer || [];\n    function gtag(){dataLayer.push(arguments);}\n    gtag('js', new Date());\n\n    // config: 測定ID + オプション設定\n    gtag('config', 'G-ABC123XYZ', {\n      page_title: 'GA4設置練習ページ',\n      debug_mode: true  // 開発時のみ。本番では削除\n    });\n  </script>\n</head>\n<body>\n  <h1>GA4設置練習</h1>\n  <p>gtag.jsが正しく設定されると、このページのpage_viewが送信されます。</p>\n\n  <script>\n    console.log('dataLayer:', JSON.stringify(window.dataLayer, null, 2));\n  </script>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "GA4の「データストリーム」の説明として正しいのはどれですか？",
+            "options": [
+              "GA4のレポート画面に表示される「データの流れ」を可視化したグラフ",
+              "GA4プロパティに紐付けられた計測対象（WebサイトやアプリごとのID管理単位）",
+              "BigQueryにエクスポートされるデータの転送パイプライン",
+              "GA4の課金プランごとに割り当てられるデータ枠のこと"
+            ],
+            "correct": 1,
+            "explanation": "データストリームはGA4プロパティの配下に作成する「計測対象ごとの設定単位」です。1つのGA4プロパティにWebサイト・iOSアプリ・Androidアプリのストリームをまとめて登録でき、横断的にユーザー行動を計測できます。各ストリームに固有の測定ID（G-XXXXXXXX）が発行されます。"
+          },
+          {
+            "q": "GA4の拡張計測機能でデフォルトでONになっていて、注意が必要なのはどれですか？",
+            "options": [
+              "フォームの操作（フォームインタラクション計測）",
+              "サイト内検索（検索クエリの取得）",
+              "動画エンゲージメント（YouTube再生計測）",
+              "カスタムイベント送信"
+            ],
+            "correct": 1,
+            "explanation": "サイト内検索はデフォルトONですが、検索フォームのname属性が `q` 以外（例: `search`、`keyword`、`s` など）の場合は正しく計測されません。GA4管理画面の拡張計測設定で「クエリパラメータ」を手動で追加する必要があります。確認せずに「計測できている」と思い込むケースが多発しています。"
+          },
+          {
+            "q": "GA4のデータ保持期間について正しいのはどれですか？",
+            "options": [
+              "デフォルトは14ヶ月で、変更する必要はない",
+              "デフォルトは2ヶ月で、年次比較をするには14ヶ月に変更する必要がある",
+              "データ保持期間を変更すると標準レポートのデータも削除される",
+              "GA4は全データを無期限に保持するためデータ保持期間の設定は存在しない"
+            ],
+            "correct": 1,
+            "explanation": "GA4のデータ保持期間はデフォルト2ヶ月です。これは「探索」（カスタムレポート）で使えるデータの期間に影響します。前年同月比などの年次分析をするには14ヶ月への変更が必須です。管理画面の「データ設定 → データ保持」から変更できます。なお、標準レポート（ホーム・レポートタブ）のデータには影響しません。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール5-2 完了！\n\nGA4の初期設定から計測開始までの全工程を把握しました。\n\n## 習得したスキル\n\n✅ **プロパティ → ストリーム → 測定ID** の階層構造を理解した\n✅ **gtag.jsのスニペット**を正しく設置できるようになった\n✅ **拡張計測機能の各項目**と注意点を把握した\n✅ **データ保持期間の変更**（14ヶ月）の重要性を理解した\n\n## GA4導入チェックリスト（実務用）\n\n```\n□ プロパティ作成（タイムゾーン・通貨を日本に設定）\n□ Webデータストリーム作成\n□ gtag.jsまたはGTMで計測タグ設置\n□ データ保持期間を14ヶ月に変更\n□ 拡張計測機能のサイト内検索クエリパラメータを確認\n□ リアルタイムレポートで計測確認\n□ BigQueryエクスポートの有効化（推奨）\n```\n\n## 次のモジュールへ\n\n次は **「5-3: イベント設計と実装」** です。自動収集・推奨・カスタムイベントの使い分けと、GA4公式推奨のeコマースイベント実装を学びます。\n\n> 💡 **実務チャレンジ**: 担当クライアントのGA4管理画面を開き、データ保持期間の設定を確認してください。2ヶ月のままなら今すぐ14ヶ月に変更しましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "id": "ga4--5-8",
+  "moduleId": "5-8",
+  "categoryId": "ga4",
+  "title": "GA4の高度な活用",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# GA4を「使い倒す」ための上級テクニック\n\n5-1〜5-7でGA4の設計・実装・分析・API活用を習得しました。このモジュールはGA4カテゴリの集大成です。コンサルタントとして他社と差がつく4つのテクニックを学びます。\n\n## このモジュールで学ぶ4つのテクニック\n\n**① オーディエンスとGoogle広告連携**\nGA4で定義したユーザーセグメントを、そのままGoogle広告のリマーケティングリストとして使う。「過去30日に商品詳細を閲覧したが未購入のユーザー」だけに広告を配信する。\n\n**② 予測指標（Predictive Metrics）**\nGA4のAIが「このユーザーは7日以内に購入しそうか」「7日以内に離脱しそうか」を予測します。予測指標を使ったオーディエンスでの広告配信は、獲得効率を大きく改善できます。\n\n**③ Consent Mode v2（同意管理）**\nGDPR対応・個人情報保護法対応で必須になりつつある「クッキー同意管理」とGA4計測精度の両立。2024年3月以降、EU向けサイトでは必須対応です。\n\n**④ サーバーサイドGTM**\nブラウザ（クライアントサイド）ではなくサーバーでタグを処理することで、計測精度の向上・サードパーティCookieへの非依存・ページ速度の改善を実現します。\n\n## なぜこれらが「差がつく」のか\n\nGA4の設置・基本分析は今やマーケターの共通スキルになりつつあります。これら4つのテクニックを提案・実装できるコンサルタントは、まだ少数派です。今が習得のチャンスです。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# 4つの上級テクニック詳解\n\n## ① オーディエンス設計とGoogle広告連携\n\nGA4のオーディエンスは「条件に合うユーザーのグループ」です。\n\n```\n【高価値ユーザーオーディエンスの例】\n条件:\n  - 過去30日以内にpurchaseイベントを発火した\n  - 合計購入金額が10,000円以上\n  - デバイス: mobile\n\n活用: Google広告でこのリストを「類似ユーザー」の種として使い\n      高LTVユーザーに似た新規ユーザーを獲得する\n```\n\n**設定方法**: GA4管理画面 → オーディエンス → 新しいオーディエンス\n\n**Google広告への連携**: GA4とGoogle広告をリンクすると、作成したオーディエンスが自動的に広告側にも表示されます。\n\n## ② 予測指標（Predictive Metrics）\n\nGA4のMLモデルが算出する3つの予測指標です。\n\n| 予測指標 | 内容 | 活用例 |\n|---------|------|-------|\n| `purchaseProbability` | 7日以内に購入する確率 | 高確率ユーザーへの集中投資 |\n| `churnProbability` | 7日以内に離脱する確率 | 離脱しそうなユーザーへのリエンゲージメント |\n| `predictedRevenue` | 28日間の予測収益 | LTV最大化の優先順位付け |\n\n**利用条件**: 過去28日間に1,000人以上のpurchaseユーザーがいる場合のみ機能します。\n\n## ③ Consent Mode v2\n\nユーザーがクッキーに同意しなかった場合でも、GA4が「モデリング」によって計測を補完する仕組みです。\n\n```js\n// ユーザーが同意前: ping送信のみ（個人識別なし）\ngtag('consent', 'default', {\n  ad_storage:            'denied',\n  analytics_storage:     'denied',\n  ad_user_data:          'denied',\n  ad_personalization:    'denied',\n  wait_for_update:       500  // 同意バナーの応答を500ms待つ\n});\n\n// ユーザーが同意後: フル計測に切り替え\ngtag('consent', 'update', {\n  ad_storage:            'granted',\n  analytics_storage:     'granted',\n  ad_user_data:          'granted',\n  ad_personalization:    'granted'\n});\n```\n\n**GA4は同意なしの場合でも cookieless ping を送信**し、集約データからモデリングして計測精度を維持します。\n\n## ④ サーバーサイドGTM（ssGTM）\n\n```\n【通常のクライアントサイドGTM】\nブラウザ → GA4サーバー（直接）\n  - サードパーティCookieに依存\n  - ブラウザのITPによる計測誤差\n  - タグ読み込みがページ速度に影響\n\n【サーバーサイドGTM】\nブラウザ → ssGTMサーバー（自社Cloud Run等）→ GA4サーバー\n  - ファーストパーティCookieで計測（ITP影響なし）\n  - タグ処理をサーバーに移動（ページ速度改善）\n  - データのフィルタリング・エンリッチメントが可能\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: オーディエンス条件でユーザーをフィルタリングする\n\nGA4のオーディエンス機能と同じ「条件ベースのユーザーフィルタリング」をJavaScriptで実装してください。\n\n「過去7日以内に `purchase` イベントを発火させたユーザー」を抽出します。\n\n## 課題\n\n1. `users` 配列から以下の条件を全て満たすユーザーを `filter` で抽出する:\n   - `events` 配列の中に `event_name === 'purchase'` が含まれる\n   - `purchase` イベントの `timestamp` が「過去7日以内」（今日から7日前以降）\n2. 抽出したユーザーの一覧を表示する\n3. **ボーナス**: さらに `value >= 10000` の条件を追加して「高価値ユーザー」のみを抽出する",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>GA4オーディエンスフィルタリング</title>\n  <style>\n    body { font-family: sans-serif; padding: 20px; background: #0f172a; color: #e2e8f0; }\n    h2 { color: #f97316; }\n    .label { font-size: 12px; color: #64748b; margin-top: 20px; margin-bottom: 6px; }\n    .user { background: #1e293b; padding: 10px 14px; border-radius: 6px; margin-bottom: 6px; font-size: 13px; }\n    .user span { color: #94a3b8; font-size: 12px; margin-left: 8px; }\n    .badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; margin-left: 6px; }\n    .gold   { background: #fbbf2422; color: #fbbf24; }\n    .recent { background: #10b98122; color: #10b981; }\n  </style>\n</head>\n<body>\n  <h2>GA4 オーディエンス: 直近7日購入ユーザー</h2>\n\n  <div class=\"label\">全ユーザー</div>\n  <div id=\"allUsers\"></div>\n\n  <div class=\"label\" id=\"label2\"></div>\n  <div id=\"filteredUsers\"></div>\n\n  <script>\n    // 現在時刻（演習用に固定）\n    const NOW = new Date('2024-10-15T12:00:00').getTime();\n    const SEVEN_DAYS_AGO = NOW - 7 * 24 * 60 * 60 * 1000;\n\n    const users = [\n      {\n        user_id: 'U-001', name: '田中 太郎',\n        events: [\n          { event_name: 'page_view', timestamp: new Date('2024-10-14').getTime(), value: null },\n          { event_name: 'purchase',  timestamp: new Date('2024-10-14').getTime(), value: 29800 }\n        ]\n      },\n      {\n        user_id: 'U-002', name: '佐藤 花子',\n        events: [\n          { event_name: 'page_view', timestamp: new Date('2024-10-01').getTime(), value: null },\n          { event_name: 'purchase',  timestamp: new Date('2024-10-01').getTime(), value: 9800 }\n          // 購入は10/1（7日以上前）\n        ]\n      },\n      {\n        user_id: 'U-003', name: '鈴木 一郎',\n        events: [\n          { event_name: 'page_view', timestamp: new Date('2024-10-13').getTime(), value: null }\n          // 購入なし\n        ]\n      },\n      {\n        user_id: 'U-004', name: '高橋 美咲',\n        events: [\n          { event_name: 'purchase',  timestamp: new Date('2024-10-10').getTime(), value: 14800 }\n          // 10/10購入（7日以内: 10/8〜10/15）\n        ]\n      },\n      {\n        user_id: 'U-005', name: '伊藤 健太',\n        events: [\n          { event_name: 'purchase', timestamp: new Date('2024-10-12').getTime(), value: 52000 }\n          // 10/12購入（7日以内、高額）\n        ]\n      }\n    ];\n\n    // 全ユーザーを表示（変更不要）\n    const allDiv = document.getElementById('allUsers');\n    users.forEach(u => {\n      allDiv.innerHTML += '<div class=\"user\">' + u.name +\n        ' <span>' + u.user_id + '</span></div>';\n    });\n\n    // ① 過去7日以内にpurchaseイベントを持つユーザーをfilterで抽出してください\n    // const recentBuyers = users.filter(user => { ... });\n    // 条件: user.eventsの中に\n    //   event_name === 'purchase' かつ timestamp >= SEVEN_DAYS_AGO\n    // のイベントが1つ以上ある\n\n\n    // ② 結果を表示（変更不要）\n    // document.getElementById('label2').textContent =\n    //   '直近7日購入ユーザー (' + recentBuyers.length + '人)';\n    // const filteredDiv = document.getElementById('filteredUsers');\n    // recentBuyers.forEach(u => { ... });\n\n    // ③ ボーナス: さらに value >= 10000 で高価値ユーザーを絞り込む\n\n  </script>\n</body>\n</html>",
+        "hints": [
+          "`users.filter(user => user.events.some(e => e.event_name === 'purchase' && e.timestamp >= SEVEN_DAYS_AGO))` が基本形です。`some()` は配列の要素が1つでも条件を満たせば `true` を返します。GA4のオーディエンス条件「イベントが1回以上発生した」に相当します。",
+          "抽出したユーザーの表示は `recentBuyers.forEach(u => { const purchase = u.events.find(e => e.event_name === 'purchase' && e.timestamp >= SEVEN_DAYS_AGO); filteredDiv.innerHTML += '...' })` で実装します。",
+          "高価値ユーザーの絞り込みは `recentBuyers.filter(u => u.events.some(e => e.event_name === 'purchase' && e.value >= 10000))` を追加します。GA4のオーディエンスで「valueが10000以上」の条件を追加するのと同じ発想です。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>GA4オーディエンスフィルタリング</title>\n  <style>\n    body { font-family: sans-serif; padding: 20px; background: #0f172a; color: #e2e8f0; }\n    h2 { color: #f97316; }\n    .label { font-size: 12px; color: #64748b; margin-top: 20px; margin-bottom: 6px; }\n    .user { background: #1e293b; padding: 10px 14px; border-radius: 6px; margin-bottom: 6px; font-size: 13px; }\n    .user span { color: #94a3b8; font-size: 12px; margin-left: 8px; }\n    .badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; margin-left: 6px; }\n    .gold   { background: #fbbf2422; color: #fbbf24; }\n    .recent { background: #10b98122; color: #10b981; }\n  </style>\n</head>\n<body>\n  <h2>GA4 オーディエンス: 直近7日購入ユーザー</h2>\n\n  <div class=\"label\">全ユーザー</div>\n  <div id=\"allUsers\"></div>\n\n  <div class=\"label\" id=\"label2\"></div>\n  <div id=\"filteredUsers\"></div>\n\n  <div class=\"label\" id=\"label3\"></div>\n  <div id=\"highValueUsers\"></div>\n\n  <script>\n    const NOW = new Date('2024-10-15T12:00:00').getTime();\n    const SEVEN_DAYS_AGO = NOW - 7 * 24 * 60 * 60 * 1000;\n\n    const users = [\n      {\n        user_id: 'U-001', name: '田中 太郎',\n        events: [\n          { event_name: 'page_view', timestamp: new Date('2024-10-14').getTime(), value: null },\n          { event_name: 'purchase',  timestamp: new Date('2024-10-14').getTime(), value: 29800 }\n        ]\n      },\n      {\n        user_id: 'U-002', name: '佐藤 花子',\n        events: [\n          { event_name: 'page_view', timestamp: new Date('2024-10-01').getTime(), value: null },\n          { event_name: 'purchase',  timestamp: new Date('2024-10-01').getTime(), value: 9800 }\n        ]\n      },\n      {\n        user_id: 'U-003', name: '鈴木 一郎',\n        events: [\n          { event_name: 'page_view', timestamp: new Date('2024-10-13').getTime(), value: null }\n        ]\n      },\n      {\n        user_id: 'U-004', name: '高橋 美咲',\n        events: [\n          { event_name: 'purchase', timestamp: new Date('2024-10-10').getTime(), value: 14800 }\n        ]\n      },\n      {\n        user_id: 'U-005', name: '伊藤 健太',\n        events: [\n          { event_name: 'purchase', timestamp: new Date('2024-10-12').getTime(), value: 52000 }\n        ]\n      }\n    ];\n\n    // 全ユーザー表示\n    const allDiv = document.getElementById('allUsers');\n    users.forEach(u => {\n      allDiv.innerHTML += '<div class=\"user\">' + u.name +\n        ' <span>' + u.user_id + '</span></div>';\n    });\n\n    // ① 直近7日購入ユーザーを抽出\n    const recentBuyers = users.filter(user =>\n      user.events.some(e =>\n        e.event_name === 'purchase' && e.timestamp >= SEVEN_DAYS_AGO\n      )\n    );\n\n    document.getElementById('label2').textContent =\n      '直近7日購入ユーザー (' + recentBuyers.length + '人) ← オーディエンスに登録される';\n\n    const filteredDiv = document.getElementById('filteredUsers');\n    recentBuyers.forEach(u => {\n      const purchase = u.events.find(e =>\n        e.event_name === 'purchase' && e.timestamp >= SEVEN_DAYS_AGO\n      );\n      filteredDiv.innerHTML +=\n        '<div class=\"user\">' + u.name +\n        ' <span>' + u.user_id + '</span>' +\n        '<span class=\"badge recent\">購入: ¥' + purchase.value.toLocaleString() + '</span></div>';\n    });\n\n    // ③ 高価値ユーザー（value >= 10000）をさらに絞り込む\n    const highValue = recentBuyers.filter(u =>\n      u.events.some(e => e.event_name === 'purchase' && e.value >= 10000)\n    );\n\n    document.getElementById('label3').textContent =\n      '高価値ユーザー（直近7日 & ¥10,000以上）(' + highValue.length + '人) ← 類似ユーザー獲得の種リスト';\n\n    const hvDiv = document.getElementById('highValueUsers');\n    highValue.forEach(u => {\n      const purchase = u.events.find(e =>\n        e.event_name === 'purchase' && e.value >= 10000\n      );\n      hvDiv.innerHTML +=\n        '<div class=\"user\">' + u.name +\n        ' <span>' + u.user_id + '</span>' +\n        '<span class=\"badge gold\">★ ¥' + purchase.value.toLocaleString() + '</span></div>';\n    });\n  </script>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "GA4の「予測指標」が利用できるようになる条件として正しいのはどれですか？",
+            "options": [
+              "GA4 360（有料版）を契約している場合のみ",
+              "過去28日間で1,000人以上のpurchaseイベントが計測されている場合",
+              "BigQueryエクスポートを有効にしている場合",
+              "Googleシグナルを有効にしている場合"
+            ],
+            "correct": 1,
+            "explanation": "GA4の予測指標（購入確率・離脱確率・予測収益）はGA4のMLモデルが算出しますが、モデルの学習には十分なデータが必要です。過去28日間に購入ユーザーが1,000人以上、かつ非購入ユーザーが1,000人以上いる場合に利用可能になります。小規模サイトでは利用できないことが多いため、条件を確認してから提案してください。"
+          },
+          {
+            "q": "Consent Mode v2を導入する主な目的として正しいのはどれですか？",
+            "options": [
+              "GA4の計測コードを不要にして、プライバシーを完全に保護する",
+              "ユーザーのクッキー同意状態に応じて計測を制御しつつ、GA4のモデリングで計測精度を維持する",
+              "GDPRが適用されないアジア圏サイトでの計測精度を向上させる",
+              "サーバーサイドGTMの代替として、クライアントサイドの負荷を軽減する"
+            ],
+            "correct": 1,
+            "explanation": "Consent Mode v2はユーザーが同意した場合はフル計測、同意しない場合はcookieless pingのみ送信してGA4のモデリングで補完する仕組みです。2024年3月からEU圏へのサービスではConsent Mode v2対応が事実上必須になりました。同意管理プラットフォーム（OneTrust・Cookiebotなど）と組み合わせて実装します。"
+          },
+          {
+            "q": "サーバーサイドGTM（ssGTM）の主なメリットとして正しいのはどれですか？",
+            "options": [
+              "GTMの管理画面が不要になり、コードだけでタグ管理できるようになる",
+              "ファーストパーティCookieでの計測によりITPの影響を受けにくくなり、ページ速度も改善される",
+              "GA4の計測コストが無料になる",
+              "BigQueryへのエクスポートが高速になる"
+            ],
+            "correct": 1,
+            "explanation": "サーバーサイドGTMの主なメリットは3つです。①ファーストパーティCookieで計測するためSafari/iOSのITP（Intelligent Tracking Prevention）による計測誤差を軽減できます。②タグの処理をサーバーに移すことでブラウザの負荷が減りページ速度が改善されます。③データをサーバーでフィルタリング・エンリッチメントしてから送信できます。ただし自前のサーバー（Cloud Run等）の運用コストが発生します。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# GA4カテゴリ 全8モジュール 完了！\n\nおめでとうございます。GA4のデータモデルから高度な活用まで、体系的に習得しました。\n\n## カテゴリ全体の振り返り\n\n| モジュール | 習得内容 |\n|---|---|\n| 5-1 GA4のデータモデル | イベントベース計測の思想・UA vs GA4 |\n| 5-2 初期設定と実装 | プロパティ設定・gtag.js・拡張計測・データ保持 |\n| 5-3 イベント設計と実装 | 4種類のイベント分類・推奨イベント・命名規則 |\n| 5-4 GTM × GA4 | dataLayer・タグ/トリガー/変数・プレビューモード |\n| 5-5 レポートとExplore | 標準レポート・探索7手法・ファネル・コホート |\n| 5-6 BigQueryエクスポート | テーブル構造・UNNEST・生データ分析 |\n| 5-7 GA4 API | Data API・GAS自動化・サービスアカウント |\n| 5-8 高度な活用 | オーディエンス・予測指標・Consent Mode v2・ssGTM |\n\n## あなたが今できること\n\n✅ GA4の導入設計から実装まで一人で完結できる\n✅ GTMを使ったGA4イベントの実装・デバッグができる\n✅ BigQueryで生データを直接分析できる\n✅ GA4 Data APIでレポートを自動化できる\n✅ オーディエンス連携で広告効果を最大化できる\n✅ Consent Mode v2でプライバシー対応と計測精度を両立できる\n\n## これが「計測の設計力」\n\n「データを集める」ことが目的ではありません。「正しく設計されたデータから、事業を前進させるインサイトを取り出す」ことがゴールです。このカテゴリで学んだ全ての知識は、その目的のために存在します。\n\n## 次のカテゴリへ\n\n**「BigQuery & データ基盤」** カテゴリでは、GA4データをBigQueryで本格的に分析するSQLスキルを学びます。5-6で触れたBigQueryの世界を、SQLを武器に深く探求します。\n\n> 💡 **最終チャレンジ**: 担当クライアントのGA4で「オーディエンス」を開き、現在設定されているオーディエンスリストを確認してください。Google広告と連携できているか確認し、未設定なら提案してみましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

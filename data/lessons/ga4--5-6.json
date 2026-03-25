@@ -1,0 +1,82 @@
+{
+  "id": "ga4--5-6",
+  "moduleId": "5-6",
+  "categoryId": "ga4",
+  "title": "GA4 × BigQueryエクスポート",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# GA4の管理画面では見えないデータがある\n\nGA4の標準レポートと探索レポートでできることには限界があります。\n\n## GA4管理画面の限界\n\n**限界1: イベントパラメータが25個しかカスタムディメンション登録できない**\nGA4には1プロパティあたりカスタムディメンション50個・カスタム指標50個という上限があります。登録していないパラメータはレポートに表示されません。\n\n**限界2: 生データにアクセスできない**\nGA4はデータをサンプリング（抽出）したり、特定のイベントパラメータ組み合わせで集計する柔軟な分析ができません。\n\n**限界3: データ保持期間の上限**\nGA4のデータ保持は最大14ヶ月。それ以前のデータは消えます。\n\n## BigQueryエクスポートで解決すること\n\n✅ **全イベント・全パラメータの生データ**に直接アクセス可能\n✅ **SQLで自由に集計**（カスタムディメンション未登録のパラメータも分析可能）\n✅ **データを永久保持**（BigQueryに保存すれば期限なし）\n✅ **複数データソースとの結合**（CRMデータ・広告データとJOIN可能）\n✅ **無料**（GA4 360なしでも、Googleアナリティクスの標準機能として利用可能）\n\n## BigQueryを使えるコンサルタントの差別化\n\n「GA4の画面で見られる数字を読む」コンサルタントはいくらでもいます。「BigQueryで生データを引っ張って独自分析できる」コンサルタントは、まだ少ない。これが差別化のポイントです。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# BigQueryエクスポートの設定とテーブル構造\n\n## エクスポート設定方法\n\n```\nGA4管理画面\n  → プロパティ設定\n  → BigQueryのリンク\n  → リンクを作成\n  → GCPプロジェクトを選択\n  → エクスポートタイプを選択（日次 or ストリーミング）\n  → データセットのリージョンを選択（asia-northeast1 推奨）\n```\n\n## 生成されるテーブル構造\n\nBigQueryに以下のテーブルが自動生成されます。\n\n```\nGA4プロパティID_yyyymmdd（日次エクスポート）\n例: analytics_123456789.events_20241015\n\nanalyticsというデータセット配下に:\n- events_YYYYMMDD（各日のイベントデータ）\n- events_intraday_YYYYMMDD（当日分。翌日に events_YYYYMMDD に統合）\n- pseudonymous_users_YYYYMMDD（ユーザー属性）\n```\n\n## events_YYYYMMDD のスキーマ（重要）\n\n```sql\nSELECT\n  event_date,          -- STRING: '20241015'\n  event_timestamp,     -- INT64: マイクロ秒のUNIXタイムスタンプ\n  event_name,          -- STRING: 'page_view'\n  event_params,        -- RECORD（REPEATED）: イベントパラメータの配列\n  user_pseudo_id,      -- STRING: クッキーベースのユーザーID\n  user_id,             -- STRING: ログインユーザーID（設定時のみ）\n  device.category,     -- STRING: 'desktop'/'mobile'/'tablet'\n  geo.country,         -- STRING: 'Japan'\n  traffic_source.medium -- STRING: 'organic'\nFROM\n  `project.dataset.events_20241015`\n```\n\n## event_paramsの構造とUNNEST（最重要）\n\nGA4のイベントパラメータは**REPEATED RECORD**型（配列の中にオブジェクト）です。\nそのままSQLでアクセスできないため、`UNNEST` で展開する必要があります。\n\n```sql\n-- NG: これでは参照できない\nSELECT event_params.page_location FROM events_20241015;\n\n-- OK: UNNESTで展開する\nSELECT\n  event_name,\n  (SELECT value.string_value FROM UNNEST(event_params)\n   WHERE key = 'page_location') AS page_location,\n  (SELECT value.string_value FROM UNNEST(event_params)\n   WHERE key = 'page_title') AS page_title\nFROM `project.dataset.events_20241015`\nWHERE event_name = 'page_view'\nLIMIT 10;\n```\n\n## 日次エクスポート vs ストリーミングエクスポート\n\n| | 日次 | ストリーミング |\n|--|------|---------------|\n| 遅延 | 翌日 | 数秒〜数分 |\n| コスト | 無料 | ストレージ・クエリ費用あり |\n| 用途 | 定期レポート・月次分析 | リアルタイム監視・アラート |\n| 推奨 | **通常はこちら** | 特定要件がある場合のみ |",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: event_paramsの入れ子構造を展開する\n\nGA4がBigQueryにエクスポートするデータ構造を模したJSONを用意しました。\n実際のBigQueryのSQLクエリで行う処理（UNNESTに相当する処理）をJavaScriptで実装してください。\n\n## 課題\n\n1. `events` 配列から `page_view` イベントだけを抽出する\n2. 各イベントの `event_params` から以下の値を取り出す:\n   - `page_location`（URLパス）\n   - `page_title`（ページタイトル）\n3. 結果をテーブルとして表示する\n4. **ボーナス**: `engagement_time_msec` パラメータも取り出して表示する",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>GA4 BigQueryデータ解析</title>\n  <style>\n    body { font-family: sans-serif; padding: 20px; background: #0f172a; color: #e2e8f0; }\n    h2 { color: #93c5fd; }\n    table { border-collapse: collapse; width: 100%; }\n    th { background: #1e293b; padding: 8px 12px; text-align: left; font-size: 12px; color: #94a3b8; }\n    td { padding: 8px 12px; border-bottom: 1px solid #1e293b; font-size: 12px; max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }\n  </style>\n</head>\n<body>\n  <h2>page_viewイベント一覧</h2>\n  <table>\n    <thead><tr><th>event_date</th><th>page_location</th><th>page_title</th><th>user_pseudo_id</th></tr></thead>\n    <tbody id=\"tbody\"></tbody>\n  </table>\n\n  <script>\n    // GA4 BigQueryエクスポートのデータ構造を模したJSON\n    // event_paramsは [{key: 'xxx', value: {string_value: 'yyy'}}] の配列（REPEATED RECORD）\n    const events = [\n      {\n        event_date: '20241015', event_name: 'page_view', user_pseudo_id: 'abc123',\n        event_params: [\n          { key: 'page_location',      value: { string_value: 'https://example.com/',         int_value: null } },\n          { key: 'page_title',         value: { string_value: 'トップページ',                  int_value: null } },\n          { key: 'engagement_time_msec', value: { string_value: null, int_value: 12400 } }\n        ]\n      },\n      {\n        event_date: '20241015', event_name: 'scroll', user_pseudo_id: 'abc123',\n        event_params: [\n          { key: 'percent_scrolled', value: { string_value: null, int_value: 90 } }\n        ]\n      },\n      {\n        event_date: '20241015', event_name: 'page_view', user_pseudo_id: 'def456',\n        event_params: [\n          { key: 'page_location',      value: { string_value: 'https://example.com/products/', int_value: null } },\n          { key: 'page_title',         value: { string_value: '商品一覧',                      int_value: null } },\n          { key: 'engagement_time_msec', value: { string_value: null, int_value: 8700 } }\n        ]\n      },\n      {\n        event_date: '20241015', event_name: 'page_view', user_pseudo_id: 'ghi789',\n        event_params: [\n          { key: 'page_location',      value: { string_value: 'https://example.com/contact/', int_value: null } },\n          { key: 'page_title',         value: { string_value: 'お問い合わせ',                  int_value: null } },\n          { key: 'engagement_time_msec', value: { string_value: null, int_value: 45200 } }\n        ]\n      }\n    ];\n\n    // event_paramsからkeyに対応する値を取り出すヘルパー関数\n    // BigQueryのSQLで「(SELECT value.string_value FROM UNNEST(event_params) WHERE key = 'xxx')」に相当\n    function getParam(params, key) {\n      // ① params配列から key が一致するオブジェクトを見つけて\n      //    value.string_value または value.int_value を返してください\n      //    どちらもnullの場合は null を返してください\n    }\n\n    // ② page_viewイベントだけ抽出してテーブルに表示\n    // events.filter(...).forEach(event => { ... })\n\n  </script>\n</body>\n</html>",
+        "hints": [
+          "`params.find(p => p.key === key)` でキーに一致するパラメータオブジェクトを取得できます。これがBigQueryの `UNNEST(event_params) WHERE key = 'xxx'` に相当します。",
+          "見つかったオブジェクトの `.value.string_value` または `.value.int_value` で値を取り出します。どちらかが `null` でない方を返します: `const found = ...; return found ? (found.value.string_value ?? found.value.int_value) : null;`",
+          "`events.filter(e => e.event_name === 'page_view')` で絞り込み、`.forEach(event => { const pageLocation = getParam(event.event_params, 'page_location'); ... })` でテーブル行を生成します。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>GA4 BigQueryデータ解析</title>\n  <style>\n    body { font-family: sans-serif; padding: 20px; background: #0f172a; color: #e2e8f0; }\n    h2 { color: #93c5fd; }\n    table { border-collapse: collapse; width: 100%; }\n    th { background: #1e293b; padding: 8px 12px; text-align: left; font-size: 12px; color: #94a3b8; }\n    td { padding: 8px 12px; border-bottom: 1px solid #1e293b; font-size: 12px; max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }\n  </style>\n</head>\n<body>\n  <h2>page_viewイベント一覧</h2>\n  <table>\n    <thead><tr><th>event_date</th><th>page_location</th><th>page_title</th><th>滞在時間(ms)</th></tr></thead>\n    <tbody id=\"tbody\"></tbody>\n  </table>\n\n  <script>\n    const events = [\n      {\n        event_date: '20241015', event_name: 'page_view', user_pseudo_id: 'abc123',\n        event_params: [\n          { key: 'page_location',        value: { string_value: 'https://example.com/',         int_value: null } },\n          { key: 'page_title',           value: { string_value: 'トップページ',                  int_value: null } },\n          { key: 'engagement_time_msec', value: { string_value: null, int_value: 12400 } }\n        ]\n      },\n      {\n        event_date: '20241015', event_name: 'scroll', user_pseudo_id: 'abc123',\n        event_params: [\n          { key: 'percent_scrolled', value: { string_value: null, int_value: 90 } }\n        ]\n      },\n      {\n        event_date: '20241015', event_name: 'page_view', user_pseudo_id: 'def456',\n        event_params: [\n          { key: 'page_location',        value: { string_value: 'https://example.com/products/', int_value: null } },\n          { key: 'page_title',           value: { string_value: '商品一覧',                      int_value: null } },\n          { key: 'engagement_time_msec', value: { string_value: null, int_value: 8700 } }\n        ]\n      },\n      {\n        event_date: '20241015', event_name: 'page_view', user_pseudo_id: 'ghi789',\n        event_params: [\n          { key: 'page_location',        value: { string_value: 'https://example.com/contact/', int_value: null } },\n          { key: 'page_title',           value: { string_value: 'お問い合わせ',                  int_value: null } },\n          { key: 'engagement_time_msec', value: { string_value: null, int_value: 45200 } }\n        ]\n      }\n    ];\n\n    // UNNESTに相当するヘルパー関数\n    function getParam(params, key) {\n      const found = params.find(p => p.key === key);\n      if (!found) return null;\n      return found.value.string_value ?? found.value.int_value;\n    }\n\n    // page_viewのみ抽出してテーブルに表示\n    const tbody = document.getElementById('tbody');\n    events\n      .filter(e => e.event_name === 'page_view')\n      .forEach(event => {\n        const loc   = getParam(event.event_params, 'page_location');\n        const title = getParam(event.event_params, 'page_title');\n        const ms    = getParam(event.event_params, 'engagement_time_msec');\n        const tr = document.createElement('tr');\n        tr.innerHTML =\n          '<td>' + event.event_date + '</td>' +\n          '<td title=\"' + loc + '\">' + (loc ? loc.replace('https://example.com', '') : '-') + '</td>' +\n          '<td>' + (title || '-') + '</td>' +\n          '<td>' + (ms !== null ? ms.toLocaleString() : '-') + '</td>';\n        tbody.appendChild(tr);\n      });\n  </script>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "BigQueryでGA4のevent_paramsを参照するときに`UNNEST`が必要な理由はどれですか？",
+            "options": [
+              "BigQueryはGA4のデータを暗号化しているため、復号が必要だから",
+              "event_paramsがREPEATED RECORD型（配列）のため、通常のSELECTでは参照できないから",
+              "GA4のデータはJSON文字列で保存されているため、パースが必要だから",
+              "BigQueryはGA4の専用フォーマットに対応していないから"
+            ],
+            "correct": 1,
+            "explanation": "GA4のevent_paramsはBigQueryの「REPEATED RECORD型」（配列の中にオブジェクト）で保存されています。この型は `SELECT event_params.page_location` のように直接参照できないため、`UNNEST(event_params)` で配列を展開してから `WHERE key = 'page_location'` で目的のキーを絞り込む必要があります。これがGA4のBigQueryクエリで最初に躓くポイントです。"
+          },
+          {
+            "q": "GA4 BigQueryエクスポートの「日次エクスポート」と「ストリーミングエクスポート」の違いとして正しいのはどれですか？",
+            "options": [
+              "日次は全データ、ストリーミングはサンプリングされたデータを出力する",
+              "日次は翌日にデータが届く、ストリーミングは数秒〜数分でデータが届く。ストリーミングは追加コストがかかる",
+              "日次は無料プロパティ、ストリーミングはGA4 360（有料）専用",
+              "日次とストリーミングは同じデータを出力する。違いはファイル形式のみ"
+            ],
+            "correct": 1,
+            "explanation": "日次エクスポートは翌日にデータが届きます（リアルタイム性なし）が、追加コストは基本的に発生しません。ストリーミングエクスポートはほぼリアルタイムでBigQueryに届きますが、BigQueryのストリーミング書き込みコスト（1GBあたり約$0.01）が発生します。通常の分析用途には日次で十分です。"
+          },
+          {
+            "q": "GA4のBigQueryエクスポートについて正しいのはどれですか？",
+            "options": [
+              "GA4 360（有料版）でのみ利用できる",
+              "無料のGA4標準プロパティでも利用できる",
+              "BigQueryへのエクスポートはGTMの設定が必要",
+              "エクスポートできるのは標準レポートのデータのみ"
+            ],
+            "correct": 1,
+            "explanation": "GA4のBigQueryエクスポートは、無料のGA4標準プロパティでも利用できます（UAの頃はGA4 360専用有料機能でした）。GA4管理画面の「BigQueryのリンク」から設定し、GCPプロジェクトと連携するだけで開始できます。BigQuery側のストレージ・クエリコストは別途発生します。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール5-6 完了！\n\nGA4 × BigQueryエクスポートの設定から活用まで習得しました。\n\n## 習得したスキル\n\n✅ **BigQueryエクスポートの設定手順**を把握した\n✅ **events_YYYYMMDDのスキーマ構造**を理解した\n✅ **event_paramsのREPEATED RECORD構造**とUNNESTの必要性を理解した\n✅ **日次 vs ストリーミング**の使い分けを判断できるようになった\n\n## 実務でよく使うGA4 BigQueryクエリパターン\n\n```sql\n-- パターン1: ページビューとタイトルの一覧\nSELECT\n  event_date,\n  (SELECT value.string_value FROM UNNEST(event_params) WHERE key = 'page_location') AS page_location,\n  (SELECT value.string_value FROM UNNEST(event_params) WHERE key = 'page_title')    AS page_title,\n  COUNT(*) AS pageviews\nFROM `project.dataset.events_*`\nWHERE event_name = 'page_view'\n  AND _TABLE_SUFFIX BETWEEN '20241001' AND '20241031'\nGROUP BY 1, 2, 3\nORDER BY 4 DESC;\n\n-- パターン2: ユーザーごとの購入金額合計\nSELECT\n  user_pseudo_id,\n  SUM((SELECT value.int_value FROM UNNEST(event_params) WHERE key = 'value')) AS total_value\nFROM `project.dataset.events_*`\nWHERE event_name = 'purchase'\nGROUP BY 1\nORDER BY 2 DESC;\n```\n\n## 次のモジュールへ\n\n次は **「5-7: GA4 APIとデータ活用」** です。BigQueryがデータ保管・大規模分析の基盤なら、GA4 Data APIはレポートの自動化・連携の基盤です。\n\n> 💡 **実務チャレンジ**: GA4管理画面で「BigQueryのリンク」を開き、設定済みかどうか確認しましょう。未設定なら今すぐ有効にしてください（無料です）。",
+        "diagram": false
+      }
+    }
+  ]
+}

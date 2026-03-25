@@ -1,0 +1,82 @@
+{
+  "id": "ga4--5-7",
+  "moduleId": "5-7",
+  "categoryId": "ga4",
+  "title": "GA4 APIとデータ活用",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# GA4のデータをプログラムで取得する\n\n「毎週月曜にGA4のレポートをスプレッドシートに貼る作業が30分かかる」\n「クライアントへの週次レポートを手動で作っている」\n\nこれらは全てGA4 Data APIで自動化できます。\n\n## GA4 Data APIでできること\n\n**定期レポートの自動化**\nGoogle Apps ScriptからGA4 Data APIを呼び出し、毎週月曜朝にスプレッドシートを自動更新して、クライアントにメール送信する。\n\n**Slackへのアラート通知**\n「昨日のコンバージョンが先週比50%以上減少したら、Slack #analyticsチャンネルに自動通知する」\n\n**独自ダッシュボードの構築**\n社内の経営ダッシュボードにGA4のKPIを組み込む。Looker StudioはGA4 Data APIを使っています。\n\n**BigQueryとの使い分け**\n| | GA4 Data API | BigQuery |\n|--|-------------|----------|\n| 特徴 | 集計済みデータを手軽に取得 | 生データで自由な分析 |\n| 速度 | 速い | クエリ次第 |\n| コスト | 無料（クォータあり） | クエリ・ストレージコスト |\n| 向いている用途 | 定期レポート・アラート | 複雑な多次元分析・他データとのJOIN |",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# GA4 Data API v1betaの構造\n\n## エンドポイントとリクエスト構造\n\n```\nPOST https://analyticsdata.googleapis.com/v1beta/properties/{PROPERTY_ID}:runReport\n```\n\nリクエストボディ（JSON形式）:\n```json\n{\n  \"dateRanges\": [\n    { \"startDate\": \"2024-10-01\", \"endDate\": \"2024-10-31\" }\n  ],\n  \"dimensions\": [\n    { \"name\": \"sessionDefaultChannelGroup\" },\n    { \"name\": \"deviceCategory\" }\n  ],\n  \"metrics\": [\n    { \"name\": \"sessions\" },\n    { \"name\": \"conversions\" },\n    { \"name\": \"purchaseRevenue\" }\n  ],\n  \"orderBys\": [\n    { \"metric\": { \"metricName\": \"sessions\" }, \"desc\": true }\n  ],\n  \"limit\": 50\n}\n```\n\n## レスポンス構造（重要）\n\n```json\n{\n  \"dimensionHeaders\": [\n    { \"name\": \"sessionDefaultChannelGroup\" },\n    { \"name\": \"deviceCategory\" }\n  ],\n  \"metricHeaders\": [\n    { \"name\": \"sessions\",         \"type\": \"TYPE_INTEGER\" },\n    { \"name\": \"conversions\",      \"type\": \"TYPE_INTEGER\" },\n    { \"name\": \"purchaseRevenue\",  \"type\": \"TYPE_FLOAT\"   }\n  ],\n  \"rows\": [\n    {\n      \"dimensionValues\": [\n        { \"value\": \"Organic Search\" },\n        { \"value\": \"desktop\" }\n      ],\n      \"metricValues\": [\n        { \"value\": \"12450\" },\n        { \"value\": \"284\" },\n        { \"value\": \"2847000\" }\n      ]\n    }\n  ],\n  \"rowCount\": 24\n}\n```\n\n**ポイント**: ヘッダーと行が分離しています。`dimensionHeaders[0]` が `rows[n].dimensionValues[0]` に対応します。\n\n## 認証方法（サービスアカウント）\n\n```\n① GCPでサービスアカウントを作成\n② サービスアカウントのJSONキーをダウンロード\n③ GA4管理画面でサービスアカウントのメールアドレスに「閲覧者」権限を付与\n④ Google Auth Libraryで認証してAPIを呼び出す\n```\n\nGoogle Apps Scriptで使う場合はサービスアカウント不要で、スクリプト所有者の権限で実行できます。\n\n## Admin APIとData APIの違い\n\n| | Data API | Admin API |\n|--|---------|----------|\n| 用途 | レポートデータの取得 | プロパティ設定の読み書き |\n| できること | セッション数・CV数など指標の取得 | カスタムイベントの作成・削除 |\n| 主な使い手 | レポート自動化・ダッシュボード | 設定管理の自動化 |",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: APIレスポンスをパースしてテーブルを生成する\n\nGA4 Data APIのレスポンスJSON（ダミーデータ）をパースして、\n見やすいレポートテーブルとして表示してください。\n\n## 課題\n\n1. `response.dimensionHeaders` と `response.metricHeaders` からテーブルのヘッダー行を生成する\n2. `response.rows` をループして各行のデータを表示する\n   - `row.dimensionValues[i].value` でディメンション値を取得\n   - `row.metricValues[i].value` でメトリクス値を取得\n3. 数値を読みやすくフォーマットする（カンマ区切り）\n4. **ボーナス**: 売上金額（purchaseRevenue）の高い行をハイライトする",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>GA4 Data APIレポート</title>\n  <style>\n    body { font-family: sans-serif; padding: 20px; background: #0f172a; color: #e2e8f0; }\n    h2 { color: #93c5fd; margin-bottom: 4px; }\n    p.meta { color: #64748b; font-size: 13px; margin-bottom: 16px; }\n    table { border-collapse: collapse; width: 100%; }\n    th { background: #1e293b; padding: 10px 14px; text-align: left; font-size: 12px; color: #94a3b8; white-space: nowrap; }\n    td { padding: 10px 14px; border-bottom: 1px solid #1e293b; font-size: 13px; }\n    .top { background: #f97316; color: white; }\n  </style>\n</head>\n<body>\n  <h2>チャネル × デバイス レポート</h2>\n  <p class=\"meta\">2024/10/01 〜 2024/10/31 | GA4 Data API（ダミーデータ）</p>\n  <table id=\"report\"></table>\n\n  <script>\n    // GA4 Data APIのレスポンス（ダミー）\n    const response = {\n      dimensionHeaders: [\n        { name: 'sessionDefaultChannelGroup' },\n        { name: 'deviceCategory' }\n      ],\n      metricHeaders: [\n        { name: 'sessions',        type: 'TYPE_INTEGER' },\n        { name: 'conversions',     type: 'TYPE_INTEGER' },\n        { name: 'purchaseRevenue', type: 'TYPE_FLOAT'   }\n      ],\n      rows: [\n        { dimensionValues: [{value:'Organic Search'},{value:'desktop'}],  metricValues: [{value:'12450'},{value:'284'},{value:'2847000'}] },\n        { dimensionValues: [{value:'Paid Search'},   {value:'desktop'}],  metricValues: [{value:'8320'}, {value:'312'},{value:'3124000'}] },\n        { dimensionValues: [{value:'Direct'},        {value:'mobile'}],   metricValues: [{value:'6100'}, {value:'98'}, {value:'882000'}]  },\n        { dimensionValues: [{value:'Organic Search'},{value:'mobile'}],   metricValues: [{value:'5840'}, {value:'112'},{value:'1012000'}] },\n        { dimensionValues: [{value:'Organic Social'},{value:'mobile'}],   metricValues: [{value:'3200'}, {value:'24'}, {value:'198000'}]  },\n        { dimensionValues: [{value:'Email'},         {value:'desktop'}],  metricValues: [{value:'2100'}, {value:'87'}, {value:'1305000'}] },\n        { dimensionValues: [{value:'Referral'},      {value:'desktop'}],  metricValues: [{value:'1450'}, {value:'31'}, {value:'284000'}]  }\n      ],\n      rowCount: 7\n    };\n\n    // ① テーブルヘッダーを生成してください\n    // response.dimensionHeaders と response.metricHeaders を使う\n\n\n    // ② 各行をループしてテーブル行を生成してください\n    // ③ 数値はカンマ区切りでフォーマット: Number(v).toLocaleString()\n    // ④ ボーナス: purchaseRevenue が最大の行に class=\"top\" を付ける\n\n  </script>\n</body>\n</html>",
+        "hints": [
+          "ヘッダー行は `[...response.dimensionHeaders, ...response.metricHeaders].map(h => '<th>' + h.name + '</th>').join('')` で生成できます。スプレッド構文（`...`）で2つの配列を1つに結合しています。",
+          "`response.rows.forEach(row => { row.dimensionValues.forEach(d => ...); row.metricValues.forEach(m => ...); })` でデータを取り出せます。`Number(v.value).toLocaleString()` で数値のカンマ区切りフォーマットができます。",
+          "最大売上の行を見つけるには `const maxRevenue = Math.max(...response.rows.map(r => Number(r.metricValues[2].value)))` を使います。各行でこの値と比較して `class=\"top\"` を付けるかどうか判定します。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>GA4 Data APIレポート</title>\n  <style>\n    body { font-family: sans-serif; padding: 20px; background: #0f172a; color: #e2e8f0; }\n    h2 { color: #93c5fd; margin-bottom: 4px; }\n    p.meta { color: #64748b; font-size: 13px; margin-bottom: 16px; }\n    table { border-collapse: collapse; width: 100%; }\n    th { background: #1e293b; padding: 10px 14px; text-align: left; font-size: 12px; color: #94a3b8; white-space: nowrap; }\n    td { padding: 10px 14px; border-bottom: 1px solid #1e293b; font-size: 13px; }\n    .top td { background: #431407; color: #fed7aa; }\n  </style>\n</head>\n<body>\n  <h2>チャネル × デバイス レポート</h2>\n  <p class=\"meta\">2024/10/01 〜 2024/10/31 | GA4 Data API（ダミーデータ）</p>\n  <table id=\"report\"></table>\n\n  <script>\n    const response = {\n      dimensionHeaders: [\n        { name: 'sessionDefaultChannelGroup' },\n        { name: 'deviceCategory' }\n      ],\n      metricHeaders: [\n        { name: 'sessions',        type: 'TYPE_INTEGER' },\n        { name: 'conversions',     type: 'TYPE_INTEGER' },\n        { name: 'purchaseRevenue', type: 'TYPE_FLOAT'   }\n      ],\n      rows: [\n        { dimensionValues: [{value:'Organic Search'},{value:'desktop'}],  metricValues: [{value:'12450'},{value:'284'},{value:'2847000'}] },\n        { dimensionValues: [{value:'Paid Search'},   {value:'desktop'}],  metricValues: [{value:'8320'}, {value:'312'},{value:'3124000'}] },\n        { dimensionValues: [{value:'Direct'},        {value:'mobile'}],   metricValues: [{value:'6100'}, {value:'98'}, {value:'882000'}]  },\n        { dimensionValues: [{value:'Organic Search'},{value:'mobile'}],   metricValues: [{value:'5840'}, {value:'112'},{value:'1012000'}] },\n        { dimensionValues: [{value:'Organic Social'},{value:'mobile'}],   metricValues: [{value:'3200'}, {value:'24'}, {value:'198000'}]  },\n        { dimensionValues: [{value:'Email'},         {value:'desktop'}],  metricValues: [{value:'2100'}, {value:'87'}, {value:'1305000'}] },\n        { dimensionValues: [{value:'Referral'},      {value:'desktop'}],  metricValues: [{value:'1450'}, {value:'31'}, {value:'284000'}]  }\n      ],\n      rowCount: 7\n    };\n\n    const table = document.getElementById('report');\n\n    // ① ヘッダー行\n    const allHeaders = [...response.dimensionHeaders, ...response.metricHeaders];\n    const thead = document.createElement('thead');\n    thead.innerHTML = '<tr>' + allHeaders.map(h => '<th>' + h.name + '</th>').join('') + '</tr>';\n    table.appendChild(thead);\n\n    // ② 最大売上の特定（ボーナス）\n    const maxRevenue = Math.max(...response.rows.map(r => Number(r.metricValues[2].value)));\n\n    // ③ データ行\n    const tbody = document.createElement('tbody');\n    response.rows.forEach(row => {\n      const revenue = Number(row.metricValues[2].value);\n      const tr = document.createElement('tr');\n      if (revenue === maxRevenue) tr.className = 'top';\n\n      const dims = row.dimensionValues.map(d => '<td>' + d.value + '</td>').join('');\n      const mets = row.metricValues.map(m => '<td>' + Number(m.value).toLocaleString() + '</td>').join('');\n      tr.innerHTML = dims + mets;\n      tbody.appendChild(tr);\n    });\n    table.appendChild(tbody);\n  </script>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "GA4 Data APIとGA4 Admin APIの違いとして正しいのはどれですか？",
+            "options": [
+              "Data APIは無料、Admin APIは有料",
+              "Data APIはレポートデータの取得、Admin APIはプロパティ設定の読み書きを行う",
+              "Data APIはGoogleアカウントで認証、Admin APIはサービスアカウントが必須",
+              "Data APIはリアルタイムデータ専用、Admin APIは過去データ専用"
+            ],
+            "correct": 1,
+            "explanation": "GA4 Data APIはセッション数・CV数・収益などの「レポートデータ」を取得するためのAPIです。GA4 Admin APIはプロパティの作成・カスタムイベントの管理・オーディエンスの操作などの「設定管理」を行うためのAPIです。Looker StudioはData APIを使ってレポートを表示しています。"
+          },
+          {
+            "q": "GA4 Data APIのリクエストにおける`dimensions`と`metrics`の違いとして正しいのはどれですか？",
+            "options": [
+              "dimensionsは定量的な数値データ、metricsは定性的なカテゴリデータ",
+              "dimensionsは分析の軸となるカテゴリ（デバイス・チャネル等）、metricsは集計される数値（セッション数・CV数等）",
+              "dimensionsはユーザー属性のみ、metricsはイベントのみを指定できる",
+              "dimensionsとmetricsは同じもので、どちらに書いてもよい"
+            ],
+            "correct": 1,
+            "explanation": "dimensionsは「何を軸に集計するか」を指定するカテゴリ型データです（例: デバイス種別、チャネル、ページURL）。metricsは「何を集計するか」を指定する数値データです（例: セッション数、コンバージョン数、収益）。GA4の標準レポートでも行（ディメンション）と列（メトリクス）の組み合わせで表示されています。"
+          },
+          {
+            "q": "サービスアカウント認証が必要な理由として最も適切なのはどれですか？",
+            "options": [
+              "セキュリティ上、個人アカウントよりサービスアカウントの方が安全だから",
+              "人間が介在しない自動化処理（cronジョブ・サーバー処理）では、特定ユーザーのログインに依存しない認証が必要だから",
+              "GA4 Data APIはサービスアカウントでしか呼び出せないから",
+              "サービスアカウントを使うとAPIの呼び出し上限が増加するから"
+            ],
+            "correct": 1,
+            "explanation": "自動化スクリプト（定期実行の週次レポート、サーバー常駐のアラートシステムなど）では、特定ユーザーのGoogleアカウントに依存するとそのユーザーが退職・パスワード変更した際に動かなくなります。サービスアカウントはプロジェクト（システム）専用のIDで、人間の認証に依存しない安定した自動化が実現できます。Google Apps Scriptでは所有者権限で動くためサービスアカウント不要です。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール5-7 完了！\n\nGA4 Data APIの構造からレスポンスのパースまで習得しました。\n\n## 習得したスキル\n\n✅ **GA4 Data APIのリクエスト構造**（dateRanges/dimensions/metrics）を理解した\n✅ **レスポンスのパース方法**（ヘッダーと行の対応関係）を習得した\n✅ **Data APIとAdmin APIの違い**を正確に把握した\n✅ **サービスアカウント認証**の概念と必要性を理解した\n\n## Google Apps ScriptでのGA4 Data API呼び出し（実務テンプレート）\n\n```javascript\n// GASでGA4 Data APIを呼び出してスプレッドシートに書き出す\nfunction fetchGA4Report() {\n  const propertyId = 'YOUR_PROPERTY_ID';\n  const response = AnalyticsData.Properties.runReport(\n    {\n      dateRanges: [{ startDate: '7daysAgo', endDate: 'yesterday' }],\n      dimensions:  [{ name: 'sessionDefaultChannelGroup' }],\n      metrics:     [{ name: 'sessions' }, { name: 'conversions' }]\n    },\n    'properties/' + propertyId\n  );\n\n  const sheet = SpreadsheetApp.getActiveSheet();\n  response.rows.forEach((row, i) => {\n    sheet.getRange(i + 2, 1).setValue(row.dimensionValues[0].value);\n    sheet.getRange(i + 2, 2).setValue(row.metricValues[0].value);\n  });\n}\n```\n\n## 次のモジュールへ\n\n最後のモジュール **「5-8: GA4の高度な活用」** では、オーディエンス設計・予測指標・Consent Mode v2・サーバーサイドGTMという上級テクニックを学びます。\n\n> 💡 **実務チャレンジ**: Google Apps ScriptからGA4 Data APIを呼び出す「GA4週次レポート自動化」を試してみましょう。GASの「サービスを追加」でGoogle Analytics Data APIを有効にするだけで始められます。",
+        "diagram": false
+      }
+    }
+  ]
+}

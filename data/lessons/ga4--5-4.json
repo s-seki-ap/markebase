@@ -1,0 +1,82 @@
+{
+  "id": "ga4--5-4",
+  "moduleId": "5-4",
+  "categoryId": "ga4",
+  "title": "GTM × GA4 実装",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# なぜ実務では gtag.js 直書きではなくGTMを使うのか\n\n5-2・5-3でgtag.js直書きの実装を学びました。しかし実務の現場では、**ほぼ全てのケースでGTM（Google Tag Manager）経由でGA4を実装**します。理由は明確です。\n\n## gtag.js直書きの問題点\n\n**問題1: 変更のたびにエンジニアが必要**\n「このページのイベントを修正したい」と思っても、HTMLファイルを直接編集してリリースするのにエンジニアの手が必要です。スピードが出ません。\n\n**問題2: デバッグが難しい**\nどのタグが発火しているか、パラメータが正しいかをConsoleだけで確認するのは大変です。\n\n**問題3: バージョン管理ができない**\nどのタグをいつ設置したか、変更履歴が残りません。\n\n## GTMが解決すること\n\n✅ **コード変更なしでタグを管理** — ブラウザの管理画面だけでタグ追加・変更・削除が完結\n✅ **プレビューモード** — 公開前に全タグの発火状況・パラメータを視覚的に確認できる\n✅ **バージョン管理** — 変更履歴と「元に戻す」機能がある\n✅ **権限管理** — 編集者・公開者・閲覧者を分けて管理できる\n✅ **dataLayerによる柔軟な連携** — サイト側のデータをGTMに安全に渡せる\n\n## このモジュールのゴール\n\nGTMの3要素（タグ/トリガー/変数）と dataLayer の仕組みを理解し、「GTMでGA4イベントを設定する」思考プロセスを習得します。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# GTMの3要素とdataLayerの仕組み\n\n## GTMの3要素\n\n### タグ（Tag）: 「何を実行するか」\nGA4にイベントを送る、広告のコンバージョンタグを発火させる、などの「実行する処理」です。\n\n```\n【GA4設定タグ】: GA4の計測IDを設定。全ページで発火。\n  → 測定ID: G-XXXXXXXX\n  → すべてのページトリガー\n\n【GA4イベントタグ】: 特定のイベントをGA4に送信。\n  → イベント名: add_to_cart\n  → トリガー: カスタムイベント「add_to_cart」\n  → パラメータ: {{DLV - ecommerce.currency}} など\n```\n\n### トリガー（Trigger）: 「いつ実行するか」\nタグを発火させる条件です。\n\n```\n【すべてのページビュー】: 全ページで発火\n【クリックトリガー】: 特定の要素がクリックされたとき\n【カスタムイベント】: dataLayer.push({ event: 'xxx' }) を受け取ったとき\n【フォーム送信】: フォームが送信されたとき\n```\n\n### 変数（Variable）: 「どんな値を使うか」\nタグやトリガーの中で動的に使うデータです。\n\n```\n【組み込み変数】: Click URL, Page URL, Form ID など\n【データレイヤー変数】: dataLayer から値を取り出す\n  → データレイヤーの変数名: ecommerce.value → {{DLV - ecommerce.value}}\n【カスタムJS変数】: function() { return 値; } の形式\n```\n\n## dataLayerの仕組み\n\ndataLayerは**サイトのJSとGTMの間の「共有メモ帳」**です。\n\n```js\n// ① サイト側: dataLayerにデータを書き込む\ndataLayer.push({\n  event: 'add_to_cart',        // GTMトリガーが監視するイベント名\n  ecommerce: {                  // GTM変数で取り出せるデータ\n    currency: 'JPY',\n    value: 9800,\n    items: [{\n      item_id:   'SKU-001',\n      item_name: 'プレミアムTシャツ',\n      price:     9800,\n      quantity:  1\n    }]\n  }\n});\n\n// ② GTM側: トリガー「カスタムイベント = add_to_cart」が発火\n// ③ GTM側: GA4イベントタグが実行\n//    イベント名: add_to_cart\n//    currency: {{DLV - ecommerce.currency}}\n//    value: {{DLV - ecommerce.value}}\n//    items: {{DLV - ecommerce.items}}\n\n// ④ GA4にイベントが送信される\n```\n\n## プレビューモードの使い方\n\nGTMのプレビューモード（虫眼鏡アイコン）は、公開前にタグの動作を確認できる最重要機能です。\n\n```\n確認できること:\n- どのタグが発火したか / しなかったか\n- トリガーの条件が満たされているか\n- dataLayerに正しいデータが入っているか\n- 各イベントパラメータの値\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: dataLayer → GTM → GA4 の流れを実装する\n\nGTMを使ったGA4イベント送信の全体フローを、コードでシミュレーションします。\n実際のGTMと同じデータ構造でdataLayerを設計してください。\n\n## 課題\n\n商品詳細ページで「カートに追加」ボタンがクリックされたとき：\n\n1. `dataLayer.push()` で `add_to_cart` イベントを送信する\n   - `event`: `'add_to_cart'`（GTMトリガーが監視するキー）\n   - `ecommerce.currency`: `'JPY'`\n   - `ecommerce.value`: `14800`\n   - `ecommerce.items`: 商品情報の配列（item_id, item_name, price, quantity）\n\n2. GTMが受け取ったデータを「変数」として取り出す処理を実装する\n   - `ecommerce.currency` → `currency変数`\n   - `ecommerce.value` → `value変数`\n\n3. 取り出した値を使ってGA4イベントを模擬送信し、結果を画面に表示する",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>GTM × GA4 連携シミュレーション</title>\n  <style>\n    body { font-family: sans-serif; padding: 20px; background: #0f172a; color: #e2e8f0; }\n    .product { background: #1e293b; padding: 20px; border-radius: 8px; max-width: 500px; margin-bottom: 16px; }\n    button { background: #2563eb; color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; }\n    .flow { background: #0f172a; padding: 16px; border-radius: 6px; margin-top: 16px; font-size: 13px; }\n    .step { margin: 8px 0; padding: 8px 12px; border-radius: 4px; }\n    .step-site { background: #1d4ed822; border-left: 3px solid #3b82f6; color: #93c5fd; }\n    .step-gtm  { background: #16a34a22; border-left: 3px solid #4ade80; color: #86efac; }\n    .step-ga4  { background: #ea580c22; border-left: 3px solid #fb923c; color: #fdba74; }\n    pre { font-size: 12px; white-space: pre-wrap; margin: 4px 0; }\n  </style>\n</head>\n<body>\n  <div class=\"product\">\n    <h2>ランニングシューズ Pro</h2>\n    <p>価格: ¥14,800</p>\n    <button onclick=\"handleAddToCart()\">🛒 カートに追加</button>\n  </div>\n\n  <div class=\"flow\" id=\"flow\" style=\"display:none\">\n    <div class=\"step step-site\" id=\"step1\"></div>\n    <div class=\"step step-gtm\"  id=\"step2\"></div>\n    <div class=\"step step-ga4\"  id=\"step3\"></div>\n  </div>\n\n  <script>\n    window.dataLayer = window.dataLayer || [];\n\n    function handleAddToCart() {\n      // ① dataLayer.push() で add_to_cart イベントを送信してください\n      // event, ecommerce（currency/value/items）を含める\n      // 商品: item_id='SHOE-001', item_name='ランニングシューズ Pro', price=14800, quantity=1\n      dataLayer.push({\n        // ここに書いてください\n      });\n\n      // ② 送信したデータを dataLayer から取り出す（GTMの変数処理をシミュレート）\n      const lastPush = dataLayer[dataLayer.length - 1];\n      // const currency = lastPush.ecommerce.???  で取り出してください\n      // const value    = lastPush.ecommerce.???  で取り出してください\n\n      // ③ 結果を表示（変更不要）\n      showFlow(lastPush /*, currency, value */);\n    }\n\n    function showFlow(pushed, currency, value) {\n      document.getElementById('flow').style.display = 'block';\n      document.getElementById('step1').innerHTML =\n        '<strong>① サイト側 (dataLayer.push)</strong><pre>' +\n        JSON.stringify(pushed, null, 2) + '</pre>';\n      document.getElementById('step2').innerHTML =\n        '<strong>② GTM変数として取り出し</strong><pre>' +\n        'currency = ' + currency + '\\nvalue = ' + value + '</pre>';\n      document.getElementById('step3').innerHTML =\n        '<strong>③ GA4イベント送信</strong><pre>' +\n        'event: add_to_cart\\ncurrency: ' + currency + '\\nvalue: ' + value + '</pre>';\n    }\n  </script>\n</body>\n</html>",
+        "hints": [
+          "`dataLayer.push({ event: 'add_to_cart', ecommerce: { currency: 'JPY', value: 14800, items: [{ ... }] } })` が基本構造です。`event` キーはGTMのカスタムイベントトリガーが監視するキーです。この名前がトリガーの「イベント名」と一致する必要があります。",
+          "`const lastPush = dataLayer[dataLayer.length - 1]` で最後にpushされたデータを取得できます。`lastPush.ecommerce.currency` でcurrencyの値を取り出せます。これがGTMの「データレイヤー変数」と同じ動作です。",
+          "`showFlow(lastPush, currency, value)` の引数に取り出した変数を渡すと結果が表示されます。GTMのプレビューモードでは、このように各変数に何の値が入っているか確認できます。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>GTM × GA4 連携シミュレーション</title>\n  <style>\n    body { font-family: sans-serif; padding: 20px; background: #0f172a; color: #e2e8f0; }\n    .product { background: #1e293b; padding: 20px; border-radius: 8px; max-width: 500px; margin-bottom: 16px; }\n    button { background: #2563eb; color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; }\n    .flow { background: #0f172a; padding: 16px; border-radius: 6px; margin-top: 16px; font-size: 13px; }\n    .step { margin: 8px 0; padding: 8px 12px; border-radius: 4px; }\n    .step-site { background: #1d4ed822; border-left: 3px solid #3b82f6; color: #93c5fd; }\n    .step-gtm  { background: #16a34a22; border-left: 3px solid #4ade80; color: #86efac; }\n    .step-ga4  { background: #ea580c22; border-left: 3px solid #fb923c; color: #fdba74; }\n    pre { font-size: 12px; white-space: pre-wrap; margin: 4px 0; }\n  </style>\n</head>\n<body>\n  <div class=\"product\">\n    <h2>ランニングシューズ Pro</h2>\n    <p>価格: ¥14,800</p>\n    <button onclick=\"handleAddToCart()\">🛒 カートに追加</button>\n  </div>\n\n  <div class=\"flow\" id=\"flow\" style=\"display:none\">\n    <div class=\"step step-site\" id=\"step1\"></div>\n    <div class=\"step step-gtm\"  id=\"step2\"></div>\n    <div class=\"step step-ga4\"  id=\"step3\"></div>\n  </div>\n\n  <script>\n    window.dataLayer = window.dataLayer || [];\n\n    function handleAddToCart() {\n      // ① dataLayer.push でGA4推奨形式のadd_to_cartイベントを送信\n      dataLayer.push({\n        event: 'add_to_cart',\n        ecommerce: {\n          currency: 'JPY',\n          value:    14800,\n          items: [{\n            item_id:   'SHOE-001',\n            item_name: 'ランニングシューズ Pro',\n            price:     14800,\n            quantity:  1\n          }]\n        }\n      });\n\n      // ② GTMのデータレイヤー変数処理をシミュレート\n      const lastPush = dataLayer[dataLayer.length - 1];\n      const currency = lastPush.ecommerce.currency;  // 'JPY'\n      const value    = lastPush.ecommerce.value;     // 14800\n\n      showFlow(lastPush, currency, value);\n    }\n\n    function showFlow(pushed, currency, value) {\n      document.getElementById('flow').style.display = 'block';\n      document.getElementById('step1').innerHTML =\n        '<strong>① サイト側 (dataLayer.push)</strong><pre>' +\n        JSON.stringify(pushed, null, 2) + '</pre>';\n      document.getElementById('step2').innerHTML =\n        '<strong>② GTM変数として取り出し</strong><pre>' +\n        'currency = ' + currency + '\\nvalue = ' + value + '</pre>';\n      document.getElementById('step3').innerHTML =\n        '<strong>③ GA4イベント送信</strong><pre>' +\n        'event: add_to_cart\\ncurrency: ' + currency + '\\nvalue: ' + value + '</pre>';\n    }\n  </script>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "GTMの「タグ」「トリガー」「変数」の役割の組み合わせとして正しいのはどれですか？",
+            "options": [
+              "タグ=いつ実行するか、トリガー=何を実行するか、変数=どんな値を使うか",
+              "タグ=何を実行するか、トリガー=いつ実行するか、変数=どんな値を使うか",
+              "タグ=どんな値を使うか、トリガー=何を実行するか、変数=いつ実行するか",
+              "タグ=何を実行するか、トリガー=どんな値を使うか、変数=いつ実行するか"
+            ],
+            "correct": 1,
+            "explanation": "GTMの3要素は「タグ（何を実行するか）」「トリガー（いつ実行するか）」「変数（どんな値を使うか）」です。例えばGA4のpurchaseイベントであれば、タグ=GA4イベントタグ、トリガー=カスタムイベント「purchase」、変数=dataLayerから取り出したvalue・transaction_idなどになります。"
+          },
+          {
+            "q": "GTMにおける「GA4設定タグ」と「GA4イベントタグ」の違いとして正しいのはどれですか？",
+            "options": [
+              "GA4設定タグはGA4の測定IDを設定する基盤タグ、GA4イベントタグは個別のイベントを送信するタグ",
+              "GA4設定タグはGA4管理画面で設定し、GA4イベントタグはGTMで設定する",
+              "GA4設定タグは有料版専用、GA4イベントタグは無料版でも使える",
+              "GA4設定タグとGA4イベントタグは同じもので、名前が違うだけ"
+            ],
+            "correct": 0,
+            "explanation": "「GA4設定タグ」（正式名称: Googleタグ）は測定IDを設定する基盤となるタグで全ページに設置します。「GA4イベントタグ」は特定のイベント（add_to_cart, purchaseなど）をGA4に送信するタグで、特定のトリガー条件で発火します。通常、GA4設定タグを1つ作成し、イベントタグはそれを参照する構成にします。"
+          },
+          {
+            "q": "GTMのプレビューモードで確認できないのはどれですか？",
+            "options": [
+              "どのタグが発火したか / しなかったか",
+              "dataLayerに入っているデータの値",
+              "GA4の管理画面でのリアルタイムレポート",
+              "トリガーの条件が満たされているかどうか"
+            ],
+            "correct": 2,
+            "explanation": "GTMのプレビューモードではタグの発火状況・dataLayerの値・トリガー条件の評価結果を確認できます。しかし「GA4の管理画面でのリアルタイムレポートへの反映」はGTMプレビューモードとは別の確認方法です。GTMプレビュー中にGA4のデバッグビューを同時に開くことで、GA4側でのイベント受信も確認できます。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール5-4 完了！\n\nGTM × GA4の実装フローを完全に理解しました。\n\n## 習得したスキル\n\n✅ **GTMの3要素**（タグ/トリガー/変数）の役割を正確に理解した\n✅ **GA4設定タグとイベントタグの違い**を把握した\n✅ **dataLayerのデータ設計**と変数での取り出し方を習得した\n✅ **プレビューモードの活用方法**を理解した\n\n## 実務でのGTM × GA4 設定フロー\n\n```\n① GTMにGA4設定タグを作成\n   → 測定ID設定、「すべてのページ」トリガー\n\n② dataLayerの設計（サイトエンジニアと合意）\n   → どのイベントで何のパラメータを渡すか\n\n③ GTMにデータレイヤー変数を作成\n   → ecommerce.value, ecommerce.currency など\n\n④ GTMにGA4イベントタグを作成\n   → イベント名、パラメータに変数を設定\n\n⑤ GTMにカスタムイベントトリガーを作成\n   → dataLayer.pushの event キーと一致させる\n\n⑥ GTMプレビューモードでデバッグ\n   → 全パラメータの値を確認\n\n⑦ GTMバージョン公開\n```\n\n## 次のモジュールへ\n\n次は **「5-5: ファネル分析と経路探索」** です。GA4の「探索」レポートを使ったファネル分析・ユーザー経路の可視化・離脱ポイントの特定を学びます。\n\n> 💡 **実務チャレンジ**: GTMのプレビューモードを起動して、担当サイトの「Summary」タブでどのタグが発火しているか確認してみましょう。予期せぬタグが発火していることがよくあります。",
+        "diagram": false
+      }
+    }
+  ]
+}
