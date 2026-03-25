@@ -1,0 +1,67 @@
+{
+  "id": "html--1-1",
+  "moduleId": "1-1",
+  "categoryId": "html",
+  "title": "HTMLとは何か",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# なぜマーケターがHTMLを学ぶのか\n\nあなたはマーケターです。なぜHTMLを学ぶのでしょうか？\n\n## マーケターのHTML活用場面\n\n**1. GTMタグ設置**\nGoogle Tag Managerをサイトに設置するとき、HTMLの `<head>` タグにスニペットを貼り付けます。どこに貼るかを理解するにはHTMLの構造知識が必要です。\n\n**2. GA4計測タグの確認**\nGA4がページを正しく計測しているかをDevToolsで確認するとき、HTMLとJavaScriptの関係を理解していると格段に速く問題を特定できます。\n\n**3. LP修正の依頼・確認**\nエンジニアに「このボタンのテキストを変えてください」と依頼するより、自分でHTMLを確認して正確な修正箇所を伝えられると、コミュニケーションが10倍速くなります。\n\n**4. ABテスト実装**\nOptimizeやVWOでABテストを設定するとき、ターゲット要素をCSSセレクタで指定します。HTMLのクラスやIDの概念が必要です。\n\n## 今日から変わること\n\nHTMLを知ることで、あなたはブラックボックスだったWebサイトの「構造」が見えるようになります。これはデジタルマーケターとしての大きな武器です。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# HTMLタグの仕組み\n\nHTMLは**タグ**でテキストを囲むことで、ブラウザに「これは何か」を伝えます。\n\n## タグの基本構造\n\n```html\n<h1>これは見出しです</h1>\n```\n\n- `<h1>` ：**開始タグ**。「ここからh1が始まる」\n- `これは見出しです` ：**コンテンツ**\n- `</h1>` ：**終了タグ**。「h1はここまで」\n\n## 属性（Attribute）\n\nタグには**属性**を追加して、追加情報を持たせることができます。\n\n```html\n<a href=\"https://google.com\">Googleへ</a>\n```\n\n- `href` ：属性名\n- `\"https://google.com\"` ：属性値\n\n## マーケターが知るべき主要タグ\n\n| タグ | 役割 | マーケティング活用 |\n|------|------|-------------------|\n| `<h1>〜<h6>` | 見出し | SEOの重要度順 |\n| `<p>` | 段落テキスト | 本文コンテンツ |\n| `<a>` | リンク | CTA・内部リンク |\n| `<img>` | 画像 | バナー・商品画像 |\n| `<div>` | ブロック区切り | GTMのターゲット指定 |\n| `<script>` | JavaScript | GA4・GTMタグ埋め込み |",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: はじめてのHTMLページ\n\nあなたは新しいLPを作ろうとしています。まずHTMLの基本構造を作りましょう。\n\n## 課題\n\n以下を完成させてください：\n\n1. `<h1>` タグで「私のマーケティングポートフォリオ」という見出しを作る\n2. `<p>` タグで自己紹介文を1文書く\n3. `<a>` タグで `href=\"https://analytics.google.com\"` を持つリンクを作る\n\n完成したら **[▶ 実行]** を押してプレビューで確認してみましょう。",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>マイポートフォリオ</title>\n</head>\n<body>\n\n  <!-- ① h1タグで見出しを書いてください -->\n  \n\n  <!-- ② pタグで自己紹介文を書いてください -->\n  \n\n  <!-- ③ aタグでGA4へのリンクを作ってください -->\n  \n\n</body>\n</html>",
+        "hints": [
+          "h1タグは `<h1>テキスト</h1>` のように書きます。開始タグと終了タグで囲みます。",
+          "pタグは `<p>テキスト</p>` です。段落（Paragraph）の略です。",
+          "aタグは `<a href=\"URL\">リンクテキスト</a>` です。href属性にリンク先URLを指定します。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>マイポートフォリオ</title>\n</head>\n<body>\n\n  <h1>私のマーケティングポートフォリオ</h1>\n\n  <p>デジタルマーケターとしてGA4・GTMを活用した分析を得意としています。</p>\n\n  <a href=\"https://analytics.google.com\">Google Analytics 4 を開く</a>\n\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "HTMLタグの「終了タグ」の正しい書き方はどれですか？",
+            "options": ["<h1>", "</h1>", "<h1/>", "<!--h1-->"],
+            "correct": 1,
+            "explanation": "終了タグはスラッシュ `/` を先頭に付けた `</h1>` の形式です。開始タグ `<h1>` と対になって、その要素の範囲を示します。"
+          },
+          {
+            "q": "SEO上、ページで最も重要なキーワードを含めるべき見出しタグはどれですか？",
+            "options": ["<h6>", "<h3>", "<h1>", "<p>"],
+            "correct": 2,
+            "explanation": "`<h1>` は検索エンジンがページの主題を判断する最重要タグです。1ページに1つのh1を使い、最も重要なキーワードを含めましょう。"
+          },
+          {
+            "q": "GTMのタグ（スニペット）を設置する際、一般的にコードを貼り付けるのはどのタグの中ですか？",
+            "options": ["<body>タグの中", "<head>タグの中と<body>タグ直後", "<footer>タグの中", "<main>タグの中"],
+            "correct": 1,
+            "explanation": "GTMのスニペットは `<head>` 内と `<body>` タグの直後に2つのコードを貼り付けます。headに計測スクリプト、bodyの直後にnoscript用タグを配置するのがGoogleの推奨です。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール1-1 完了！\n\nお疲れ様でした。このモジュールで学んだことを振り返りましょう。\n\n## 習得したスキル\n\n✅ **HTMLはタグでテキストを囲む言語**であることを理解した\n✅ **開始タグ・終了タグ・属性**の概念を習得した\n✅ **マーケターが使う主要タグ**（h1, p, a, div, script）を把握した\n✅ **GTMタグ設置とHTMLの関係**を理解した\n\n## 次のステップ\n\n次のモジュール **「1-2: テキストとリンク」** では、より多くのHTMLタグを使って、リンク構造の設計とアンカーテキストのSEO効果について学びます。\n\n> 💡 **実務チャレンジ**: 今日から自分のよく見るサイトでDevTools（F12）を開いて、HTMLを確認してみましょう。h1タグとaタグを探すだけで、サイトの構造が見えてきます。",
+        "diagram": false
+      }
+    }
+  ]
+}

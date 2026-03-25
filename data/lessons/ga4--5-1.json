@@ -1,0 +1,72 @@
+{
+  "id": "ga4--5-1",
+  "moduleId": "5-1",
+  "categoryId": "ga4",
+  "title": "GA4の思想とデータモデル",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# なぜGA4はUAから変わったのか\n\n2023年7月、Googleはユニバーサルアナリティクス（UA）を終了し、GA4に完全移行しました。これはただのUIリニューアルではありません。**計測の思想が根本から変わった**のです。\n\n## UAの限界\n\nUAは「セッション」単位でデータを取得していました。\n\n- ユーザーがサイトに来る → セッション開始\n- ページを見る → ページビュー\n- 離脱 → セッション終了\n\nこのモデルは「Webサイト」のために作られていました。しかしビジネスは変わりました。\n\n**課題1**: スマホアプリとWebを横断する計測ができない\n**課題2**: 動画視聴・スクロール深度などの行動が取れない\n**課題3**: Cookieへの依存でプライバシー規制に対応できない\n\n## GA4が解決したこと\n\nGA4は「**イベント**」を唯一の計測単位にしました。\n\nページビューも、ボタンクリックも、購入も、すべて「イベント」として同じ形式で記録されます。これによりWeb・アプリを統一的に計測できるようになりました。\n\n**あなたへの問い**: 自社サイトでは今、どんなユーザー行動を計測できていますか？",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# イベントベースデータモデル\n\nGA4のすべてのデータは以下の3要素で構成されます。\n\n## データ構造\n\n```\nイベント（event）\n├── event_name: \"purchase\"           # 何が起きたか\n├── event_timestamp: 1234567890      # いつ起きたか\n└── event_params: [                  # どんな内容か\n      { key: \"transaction_id\", value: \"T-001\" },\n      { key: \"value\", value: 29800 },\n      { key: \"currency\", value: \"JPY\" }\n    ]\n```\n\n## BigQueryエクスポートの構造\n\nGA4のデータはBigQueryに以下の形で保存されます：\n\n```sql\n-- テーブル名: events_YYYYMMDD\nSELECT\n  event_name,\n  event_date,\n  (SELECT value.string_value \n   FROM UNNEST(event_params) \n   WHERE key = 'page_title') AS page_title,\n  user_pseudo_id\nFROM `project.dataset.events_*`\nWHERE event_name = 'page_view'\nLIMIT 10\n```\n\n## UAとGA4の比較\n\n| 概念 | UA | GA4 |\n|------|-----|-----|\n| 計測単位 | セッション | **イベント** |\n| ページビュー | 独立した概念 | page_viewイベント |\n| 購入 | トランザクション | purchaseイベント |\n| BQ連携 | 有料（360のみ） | **無料** |\n| Cookieレス対応 | 困難 | **設計済み** |",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: カスタムイベントを設計する\n\nあなたはECサイトの「カートに追加」ボタンにGA4イベントを実装します。\n\n## 課題\n\n以下のHTMLとJavaScriptを完成させてください：\n\n1. ボタンクリック時に `add_to_cart` イベントを送信する\n2. `dataLayer.push()` を使ってGTM経由でGA4に送信する\n3. イベントパラメータ: `item_id`, `item_name`, `price`, `currency`\n\n> 💡 実際の現場では `gtag()` または `dataLayer.push()` を使います。ここではdataLayerを使います。",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>商品ページ</title>\n  <!-- GTMスニペット（省略） -->\n  <script>\n    window.dataLayer = window.dataLayer || [];\n  </script>\n</head>\n<body>\n  <h1>プレミアムTシャツ</h1>\n  <p>価格: ¥3,980</p>\n  \n  <button id=\"addToCartBtn\" onclick=\"handleAddToCart()\">\n    カートに追加\n  </button>\n\n  <div id=\"result\" style=\"margin-top: 20px; color: green;\"></div>\n\n  <script>\n    function handleAddToCart() {\n      // ここにdataLayer.pushを書いてください\n      // イベント名: add_to_cart\n      // パラメータ: item_id=\"SKU-001\", item_name=\"プレミアムTシャツ\", price=3980, currency=\"JPY\"\n      \n      \n      // 確認用（変更不要）\n      document.getElementById('result').textContent = \n        'イベント送信: ' + JSON.stringify(dataLayer[dataLayer.length-1]);\n    }\n  </script>\n</body>\n</html>",
+        "hints": [
+          "dataLayer.push() は `dataLayer.push({ ... })` の形式でオブジェクトを渡します。",
+          "GTM向けのイベントは `event: 'イベント名'` をキーとして含めます。例: `dataLayer.push({ event: 'add_to_cart' })`",
+          "パラメータはオブジェクトのプロパティとして追加します。例: `dataLayer.push({ event: 'add_to_cart', item_id: 'SKU-001', price: 3980 })`"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>商品ページ</title>\n  <script>\n    window.dataLayer = window.dataLayer || [];\n  </script>\n</head>\n<body>\n  <h1>プレミアムTシャツ</h1>\n  <p>価格: ¥3,980</p>\n  \n  <button id=\"addToCartBtn\" onclick=\"handleAddToCart()\">\n    カートに追加\n  </button>\n\n  <div id=\"result\" style=\"margin-top: 20px; color: green;\"></div>\n\n  <script>\n    function handleAddToCart() {\n      dataLayer.push({\n        event: 'add_to_cart',\n        item_id: 'SKU-001',\n        item_name: 'プレミアムTシャツ',\n        price: 3980,\n        currency: 'JPY'\n      });\n      \n      document.getElementById('result').textContent = \n        'イベント送信: ' + JSON.stringify(dataLayer[dataLayer.length-1]);\n    }\n  </script>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "GA4における「計測の基本単位」は何ですか？",
+            "options": ["ページビュー", "セッション", "イベント", "ユーザー"],
+            "correct": 2,
+            "explanation": "GA4ではページビューも購入も「イベント」として統一的に記録されます。これがUAとの最大の違いで、Web・アプリ横断の統一計測を可能にしています。"
+          },
+          {
+            "q": "GA4のイベントに付加できる詳細情報（例: 商品名、価格）を何と呼ぶか？",
+            "options": ["カスタムディメンション", "イベントパラメータ", "ユーザープロパティ", "セグメント"],
+            "correct": 1,
+            "explanation": "「イベントパラメータ」はイベントに付加する詳細情報です。例えばpurchaseイベントに対して、transaction_id・value・currencyなどのパラメータを付加することで詳細な分析が可能になります。"
+          },
+          {
+            "q": "GA4のBigQueryエクスポートについて正しいのはどれですか？",
+            "options": [
+              "有料プラン（GA4 360）でのみ利用できる",
+              "無料で利用でき、生データにアクセスできる",
+              "エクスポートできるのは集計データのみ",
+              "BigQueryへのエクスポートはGTMが必要"
+            ],
+            "correct": 1,
+            "explanation": "GA4のBigQueryエクスポートはUAと違い無料で利用できます。生のイベントデータにアクセスでき、SQLで柔軟に分析できるのがGA4の大きなメリットです。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール5-1 完了！\n\nGA4の根幹となるデータモデルを理解しました。\n\n## 習得したスキル\n\n✅ **UAとGA4の根本的な違い**を説明できる\n✅ **イベントベースモデル**の構造（event_name / event_params）を理解した\n✅ **dataLayer.push()** でGA4カスタムイベントを送信できる\n✅ **BigQueryエクスポート**の基本構造を把握した\n\n## なぜこれが重要か\n\nこの理解があると、今後のGA4設定・カスタムイベント設計・BigQuery分析のすべての基礎になります。「なんとなくGA4を使う」から「GA4の構造を理解して設計する」マーケターへの第一歩です。\n\n## 次のステップ\n\n次のモジュール **「5-2: 自動収集・拡張計測イベント」** では、GA4が標準で収集するイベント一覧と、拡張計測の設定方法を学びます。\n\n> 💡 **実務チャレンジ**: 自社のGA4管理画面でリアルタイムレポートを開き、イベント名の一覧を確認してみましょう。page_view、session_start以外に何のイベントが送られていますか？",
+        "diagram": false
+      }
+    }
+  ]
+}

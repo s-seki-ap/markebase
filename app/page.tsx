@@ -1,101 +1,96 @@
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { redirect } from "next/navigation";
+import Link from "next/link";
 import Image from "next/image";
 
-export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+// 開発時: GOOGLE_CLIENT_IDが未設定なら認証スキップ
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+const isDevBypass =
+  process.env.NODE_ENV !== "production" && !process.env.GOOGLE_CLIENT_ID;
+
+export default async function Home() {
+  const session = await getServerSession(authOptions);
+  if (!session && !isDevBypass) {
+    redirect("/auth/signin");
+  }
+
+  const userName = session?.user?.name ?? "ゲスト";
+  const userEmail = session?.user?.email ?? null;
+  const userImage = session?.user?.image ?? null;
+
+  return (
+    <main className="min-h-screen p-8" style={{ backgroundColor: "#0f172a" }}>
+      <div className="max-w-4xl mx-auto">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-12">
+          <div className="flex items-center gap-3">
+            <div
+              className="w-10 h-10 rounded-xl flex items-center justify-center text-white text-xl font-bold"
+              style={{ backgroundColor: "#3b82f6" }}
+            >
+              M
+            </div>
+            <span className="text-xl font-bold text-white">MarkeBase</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="text-right">
+              <p className="text-sm text-white font-medium">{userName}</p>
+              {userEmail && <p className="text-xs text-slate-400">{userEmail}</p>}
+            </div>
+            {userImage ? (
+              <Image
+                src={userImage}
+                alt="avatar"
+                width={36}
+                height={36}
+                className="w-9 h-9 rounded-full"
+              />
+            ) : (
+              <div
+                className="w-9 h-9 rounded-full flex items-center justify-center text-white text-sm font-bold"
+                style={{ backgroundColor: "#475569" }}
+              >
+                {userName[0]}
+              </div>
+            )}
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+
+        {/* Welcome */}
+        <div className="mb-10">
+          <h1 className="text-3xl font-bold text-white mb-2">
+            おかえりなさい、{userName.split(" ")[0]}さん 👋
+          </h1>
+          <p className="text-slate-400">学習を続けましょう。今日も1モジュール進めてみませんか？</p>
+        </div>
+
+        {/* Stats */}
+        <div className="grid grid-cols-3 gap-4 mb-10">
+          <div className="p-5 rounded-xl" style={{ backgroundColor: "#1e293b" }}>
+            <p className="text-slate-400 text-sm mb-1">完了モジュール</p>
+            <p className="text-2xl font-bold text-white">0 <span className="text-sm text-slate-500 font-normal">/ 64</span></p>
+          </div>
+          <div className="p-5 rounded-xl" style={{ backgroundColor: "#1e293b" }}>
+            <p className="text-slate-400 text-sm mb-1">獲得XP</p>
+            <p className="text-2xl font-bold" style={{ color: "#fbbf24" }}>0 XP</p>
+          </div>
+          <div className="p-5 rounded-xl" style={{ backgroundColor: "#1e293b" }}>
+            <p className="text-slate-400 text-sm mb-1">現在のレベル</p>
+            <p className="text-2xl font-bold" style={{ color: "#10b981" }}>Lv. 1</p>
+          </div>
+        </div>
+
+        {/* CTA */}
+        <Link
+          href="/curriculum"
+          className="inline-flex items-center gap-2 px-8 py-4 rounded-xl text-white font-semibold text-lg transition-opacity hover:opacity-90"
+          style={{ backgroundColor: "#3b82f6" }}
         >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+          📚 カリキュラムマップを見る
+          <span>→</span>
+        </Link>
+      </div>
+    </main>
   );
 }

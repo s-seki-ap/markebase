@@ -1,0 +1,138 @@
+[
+  {
+    "id": "html",
+    "name": "HTML",
+    "icon": "📗",
+    "description": "マーケターに必要なHTML基礎。GTM・GA4との接点を理解する",
+    "color": "#10b981",
+    "modules": [
+      { "id": "1-1", "categoryId": "html", "name": "HTMLとは何か", "description": "なぜマーケターがHTMLを学ぶのか", "difficulty": "beginner", "estimatedMinutes": 15, "lessons": [] },
+      { "id": "1-2", "categoryId": "html", "name": "テキストとリンク", "description": "h1〜h6、p、a タグの使い方", "difficulty": "beginner", "estimatedMinutes": 20, "lessons": [] },
+      { "id": "1-3", "categoryId": "html", "name": "フォームとボタン", "description": "input、button、formタグ。コンバージョン計測の基礎", "difficulty": "beginner", "estimatedMinutes": 20, "lessons": [] },
+      { "id": "1-4", "categoryId": "html", "name": "divとスパン", "description": "ブロック・インライン要素とクラス・ID属性", "difficulty": "beginner", "estimatedMinutes": 20, "lessons": [] },
+      { "id": "1-5", "categoryId": "html", "name": "メタタグとSEO", "description": "title、description、OGPタグの設定", "difficulty": "intermediate", "estimatedMinutes": 25, "lessons": [] },
+      { "id": "1-6", "categoryId": "html", "name": "dataレイヤーとHTMLの関係", "description": "GTMのdataLayerをHTMLから理解する", "difficulty": "intermediate", "estimatedMinutes": 25, "lessons": [] },
+      { "id": "1-7", "categoryId": "html", "name": "LP制作の実践", "description": "シンプルなランディングページを作る", "difficulty": "intermediate", "estimatedMinutes": 35, "lessons": [] },
+      { "id": "1-8", "categoryId": "html", "name": "HTMLデバッグ入門", "description": "DevToolsでHTMLを確認・修正する方法", "difficulty": "intermediate", "estimatedMinutes": 30, "lessons": [] }
+    ]
+  },
+  {
+    "id": "css",
+    "name": "CSS",
+    "icon": "🎨",
+    "description": "見た目を整えるCSS。LPデザインとABテストの基礎",
+    "color": "#3b82f6",
+    "modules": [
+      { "id": "2-1", "categoryId": "css", "name": "CSSの基本文法", "description": "セレクタ・プロパティ・値の仕組み", "difficulty": "beginner", "estimatedMinutes": 20, "lessons": [] },
+      { "id": "2-2", "categoryId": "css", "name": "色・フォント・余白", "description": "color、font、margin、paddingの使い方", "difficulty": "beginner", "estimatedMinutes": 20, "lessons": [] },
+      { "id": "2-3", "categoryId": "css", "name": "Flexboxレイアウト", "description": "横並び・縦並びレイアウトの基本", "difficulty": "beginner", "estimatedMinutes": 25, "lessons": [] },
+      { "id": "2-4", "categoryId": "css", "name": "レスポンシブデザイン", "description": "スマホ・PC対応。メディアクエリの使い方", "difficulty": "intermediate", "estimatedMinutes": 30, "lessons": [] },
+      { "id": "2-5", "categoryId": "css", "name": "CTAボタンのデザイン", "description": "コンバージョンを上げるボタン設計", "difficulty": "intermediate", "estimatedMinutes": 25, "lessons": [] },
+      { "id": "2-6", "categoryId": "css", "name": "アニメーションと遷移", "description": "transition・animationでUX向上", "difficulty": "intermediate", "estimatedMinutes": 30, "lessons": [] },
+      { "id": "2-7", "categoryId": "css", "name": "CSS変数とデザインシステム", "description": "--var()で一貫したデザインを管理", "difficulty": "intermediate", "estimatedMinutes": 25, "lessons": [] },
+      { "id": "2-8", "categoryId": "css", "name": "LPスタイリング実践", "description": "HTMLモジュールのLPをCSSで仕上げる", "difficulty": "intermediate", "estimatedMinutes": 40, "lessons": [] }
+    ]
+  },
+  {
+    "id": "javascript",
+    "name": "JavaScript基礎",
+    "icon": "⚡",
+    "description": "マーケティング実務で使うJS。イベント処理とAPI連携",
+    "color": "#f59e0b",
+    "modules": [
+      { "id": "3-1", "categoryId": "javascript", "name": "JavaScriptとは", "description": "ブラウザでJSが動く仕組み。コンソールの使い方", "difficulty": "beginner", "estimatedMinutes": 15, "lessons": [] },
+      { "id": "3-2", "categoryId": "javascript", "name": "変数・条件・ループ", "description": "let/const、if文、for文の基本", "difficulty": "beginner", "estimatedMinutes": 25, "lessons": [] },
+      { "id": "3-3", "categoryId": "javascript", "name": "DOM操作入門", "description": "getElementById、querySelector、innerHTMLの使い方", "difficulty": "beginner", "estimatedMinutes": 25, "lessons": [] },
+      { "id": "3-4", "categoryId": "javascript", "name": "イベントリスナー", "description": "クリック・フォーム送信イベントの処理", "difficulty": "intermediate", "estimatedMinutes": 30, "lessons": [] },
+      { "id": "3-5", "categoryId": "javascript", "name": "dataLayerへのpush", "description": "GTM連携のためのdataLayer操作", "difficulty": "intermediate", "estimatedMinutes": 30, "lessons": [] },
+      { "id": "3-6", "categoryId": "javascript", "name": "Fetch APIとJSON", "description": "外部APIからデータを取得して表示", "difficulty": "intermediate", "estimatedMinutes": 35, "lessons": [] },
+      { "id": "3-7", "categoryId": "javascript", "name": "ローカルストレージ活用", "description": "ユーザー状態をブラウザに保存する", "difficulty": "intermediate", "estimatedMinutes": 25, "lessons": [] },
+      { "id": "3-8", "categoryId": "javascript", "name": "非同期処理入門", "description": "Promise・async/awaitの基本概念", "difficulty": "advanced", "estimatedMinutes": 35, "lessons": [] }
+    ]
+  },
+  {
+    "id": "seo-ads",
+    "name": "SEO・広告・マーケティング基盤",
+    "icon": "📈",
+    "description": "検索・広告・計測の三位一体。デジタルマーケティングの骨格",
+    "color": "#ef4444",
+    "modules": [
+      { "id": "4-1", "categoryId": "seo-ads", "name": "SEOの基本原則", "description": "クロール・インデックス・ランキングの仕組み", "difficulty": "beginner", "estimatedMinutes": 20, "lessons": [] },
+      { "id": "4-2", "categoryId": "seo-ads", "name": "キーワード戦略", "description": "検索意図の分類とキーワード設計", "difficulty": "beginner", "estimatedMinutes": 25, "lessons": [] },
+      { "id": "4-3", "categoryId": "seo-ads", "name": "コンテンツSEO実践", "description": "Eeat・構造化データ・内部リンク設計", "difficulty": "intermediate", "estimatedMinutes": 30, "lessons": [] },
+      { "id": "4-4", "categoryId": "seo-ads", "name": "Google広告の基礎", "description": "検索広告・ディスプレイ広告の仕組みと設定", "difficulty": "beginner", "estimatedMinutes": 25, "lessons": [] },
+      { "id": "4-5", "categoryId": "seo-ads", "name": "コンバージョン計測設計", "description": "目標設定・マイクロコンバージョンの定義", "difficulty": "intermediate", "estimatedMinutes": 30, "lessons": [] },
+      { "id": "4-6", "categoryId": "seo-ads", "name": "UTMパラメータ設計", "description": "流入元を正確に計測するURL設計", "difficulty": "intermediate", "estimatedMinutes": 25, "lessons": [] },
+      { "id": "4-7", "categoryId": "seo-ads", "name": "ABテストの設計", "description": "仮説・検証・統計的有意差の基本", "difficulty": "intermediate", "estimatedMinutes": 35, "lessons": [] },
+      { "id": "4-8", "categoryId": "seo-ads", "name": "アトリビューション分析", "description": "ラストクリック以外のモデルを理解する", "difficulty": "advanced", "estimatedMinutes": 35, "lessons": [] }
+    ]
+  },
+  {
+    "id": "ga4",
+    "name": "GA4 & GCP",
+    "icon": "🔥",
+    "description": "GA4の深い理解とGCPとの連携。データドリブン分析の核心",
+    "color": "#f97316",
+    "modules": [
+      { "id": "5-1", "categoryId": "ga4", "name": "GA4の思想とデータモデル", "description": "イベントベース計測とUAからの転換", "difficulty": "beginner", "estimatedMinutes": 20, "lessons": [] },
+      { "id": "5-2", "categoryId": "ga4", "name": "自動収集・拡張計測イベント", "description": "page_view・scrollなど自動で取れるデータ", "difficulty": "beginner", "estimatedMinutes": 20, "lessons": [] },
+      { "id": "5-3", "categoryId": "ga4", "name": "カスタムイベント設計", "description": "ビジネス要件に合わせたイベント設計", "difficulty": "intermediate", "estimatedMinutes": 30, "lessons": [] },
+      { "id": "5-4", "categoryId": "ga4", "name": "コンバージョン設定と分析", "description": "目標イベントの設定と効果測定", "difficulty": "intermediate", "estimatedMinutes": 25, "lessons": [] },
+      { "id": "5-5", "categoryId": "ga4", "name": "ファネル分析と経路探索", "description": "ユーザー行動の可視化と離脱分析", "difficulty": "intermediate", "estimatedMinutes": 30, "lessons": [] },
+      { "id": "5-6", "categoryId": "ga4", "name": "ユーザー属性とオーディエンス", "description": "セグメントとリマーケティングリストの作成", "difficulty": "intermediate", "estimatedMinutes": 25, "lessons": [] },
+      { "id": "5-7", "categoryId": "ga4", "name": "BigQueryエクスポート活用", "description": "GA4生データをBQで直接分析する", "difficulty": "advanced", "estimatedMinutes": 35, "lessons": [] },
+      { "id": "5-8", "categoryId": "ga4", "name": "GA4 APIとLooker Studio連携", "description": "データの自動取得とダッシュボード構築", "difficulty": "advanced", "estimatedMinutes": 40, "lessons": [] }
+    ]
+  },
+  {
+    "id": "bigquery",
+    "name": "BigQuery & データ基盤",
+    "icon": "🗄️",
+    "description": "SQLとBigQueryでデータを自在に操る。マーケターのデータスキル最前線",
+    "color": "#8b5cf6",
+    "modules": [
+      { "id": "6-1", "categoryId": "bigquery", "name": "SQLの基本文法", "description": "SELECT・FROM・WHERE・GROUP BYの基礎", "difficulty": "beginner", "estimatedMinutes": 25, "lessons": [] },
+      { "id": "6-2", "categoryId": "bigquery", "name": "BigQueryの概要とUI", "description": "プロジェクト・データセット・テーブルの構造", "difficulty": "beginner", "estimatedMinutes": 20, "lessons": [] },
+      { "id": "6-3", "categoryId": "bigquery", "name": "GA4データのSQLクエリ", "description": "events_*テーブルを使った基本分析", "difficulty": "intermediate", "estimatedMinutes": 35, "lessons": [] },
+      { "id": "6-4", "categoryId": "bigquery", "name": "集計・ウィンドウ関数", "description": "SUM・COUNT・ROW_NUMBER・LAG/LEADの活用", "difficulty": "intermediate", "estimatedMinutes": 30, "lessons": [] },
+      { "id": "6-5", "categoryId": "bigquery", "name": "コホート分析の実装", "description": "ユーザーの継続率をSQLで計算する", "difficulty": "intermediate", "estimatedMinutes": 35, "lessons": [] },
+      { "id": "6-6", "categoryId": "bigquery", "name": "LTV分析とセグメント", "description": "顧客価値の計測とターゲット抽出", "difficulty": "advanced", "estimatedMinutes": 40, "lessons": [] },
+      { "id": "6-7", "categoryId": "bigquery", "name": "データパイプライン設計", "description": "Scheduled QueryとBigQuery MLの入門", "difficulty": "advanced", "estimatedMinutes": 40, "lessons": [] },
+      { "id": "6-8", "categoryId": "bigquery", "name": "Looker Studioとのデータ連携", "description": "BQをデータソースにしたレポート作成", "difficulty": "intermediate", "estimatedMinutes": 30, "lessons": [] }
+    ]
+  },
+  {
+    "id": "ai-automation",
+    "name": "AI & 自動化",
+    "icon": "🤖",
+    "description": "LLMとAPIを使ったマーケティング自動化。次世代マーケターの武器",
+    "color": "#6366f1",
+    "modules": [
+      { "id": "7-1", "categoryId": "ai-automation", "name": "LLMの基本概念", "description": "GPT・Claude・Geminiの仕組みと違い", "difficulty": "beginner", "estimatedMinutes": 20, "lessons": [] },
+      { "id": "7-2", "categoryId": "ai-automation", "name": "プロンプトエンジニアリング", "description": "高精度な出力を引き出すプロンプト設計", "difficulty": "beginner", "estimatedMinutes": 25, "lessons": [] },
+      { "id": "7-3", "categoryId": "ai-automation", "name": "AIコンテンツ生成と品質管理", "description": "SEO記事・広告文の生成ワークフロー", "difficulty": "intermediate", "estimatedMinutes": 30, "lessons": [] },
+      { "id": "7-4", "categoryId": "ai-automation", "name": "Google Apps Scriptで業務自動化", "description": "スプレッドシート・Gmail連携の自動化", "difficulty": "intermediate", "estimatedMinutes": 35, "lessons": [] },
+      { "id": "7-5", "categoryId": "ai-automation", "name": "Python入門（マーケター向け）", "description": "データ処理とAPI呼び出しの基礎", "difficulty": "intermediate", "estimatedMinutes": 40, "lessons": [] },
+      { "id": "7-6", "categoryId": "ai-automation", "name": "Claude/OpenAI API連携", "description": "API経由でLLMをアプリに組み込む", "difficulty": "advanced", "estimatedMinutes": 40, "lessons": [] },
+      { "id": "7-7", "categoryId": "ai-automation", "name": "GA4データのAI分析", "description": "BQデータをLLMに読み込ませてインサイト生成", "difficulty": "advanced", "estimatedMinutes": 45, "lessons": [] },
+      { "id": "7-8", "categoryId": "ai-automation", "name": "AIエージェント設計入門", "description": "マーケティングタスクを自律実行するエージェント", "difficulty": "advanced", "estimatedMinutes": 45, "lessons": [] }
+    ]
+  },
+  {
+    "id": "app-marketing",
+    "name": "アプリマーケティング & Firebase",
+    "icon": "📱",
+    "description": "モバイルアプリの計測とFirebaseエコシステムの活用",
+    "color": "#ec4899",
+    "modules": [
+      { "id": "8-1", "categoryId": "app-marketing", "name": "アプリ計測の基礎", "description": "インストール・起動・課金イベントの考え方", "difficulty": "beginner", "estimatedMinutes": 20, "lessons": [] },
+      { "id": "8-2", "categoryId": "app-marketing", "name": "Firebase Analytics概要", "description": "GA4とFirebaseの関係とデータフロー", "difficulty": "beginner", "estimatedMinutes": 20, "lessons": [] },
+      { "id": "8-3", "categoryId": "app-marketing", "name": "カスタムイベント実装（アプリ）", "description": "iOS/AndroidでのFirebaseイベント送信", "difficulty": "intermediate", "estimatedMinutes": 30, "lessons": [] },
+      { "id": "8-4", "categoryId": "app-marketing", "name": "ASO（アプリストア最適化）", "description": "ストアページの最適化と評価改善", "difficulty": "intermediate", "estimatedMinutes": 25, "lessons": [] },
+      { "id": "8-5", "categoryId": "app-marketing", "name": "UA広告とSKAdNetwork", "description": "iOSプライバシー対応の広告計測", "difficulty": "intermediate", "estimatedMinutes": 30, "lessons": [] },
+      { "id": "8-6", "categoryId": "app-marketing", "name": "プッシュ通知戦略", "description": "Firebase Cloud Messagingの活用", "difficulty": "intermediate", "estimatedMinutes": 30, "lessons": [] },
+      { "id": "8-7", "categoryId": "app-marketing", "name": "リテンション分析", "description": "D1/D7/D30継続率の計測と改善", "difficulty": "advanced", "estimatedMinutes": 35, "lessons": [] },
+      { "id": "8-8", "categoryId": "app-marketing", "name": "Firestore + BigQuery連携", "description": "アプリデータをBQで分析するパイプライン", "difficulty": "advanced", "estimatedMinutes": 40, "lessons": [] }
+    ]
+  }
+]
