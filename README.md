@@ -50,7 +50,7 @@ gcloud auth login
 gcloud run deploy markebase \
   --source . \
   --region asia-northeast1 \
-  --project appirits-sseki-test \
+  --project ap-hp-bq-test \
   --allow-unauthenticated
 
 # 3. 環境変数を設定
@@ -132,4 +132,4 @@ gcloud run services update markebase \
 - **Next.js 14** (App Router) + TypeScript + Tailwind CSS
 - **Monaco Editor** (@monaco-editor/react) — コードエディタ
 - **NextAuth.js** — Google OAuth 認証
-- **Cloud Run** — ホスティング（GCP: appirits-sseki-test）
+- **Cloud Run** — ホスティング（GCP: ap-hp-bq-test）

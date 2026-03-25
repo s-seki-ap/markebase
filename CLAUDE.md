@@ -9,7 +9,7 @@
 - DB: なし（JSONファイルから直接読み込み。Firestore接続はPhase 1）
 - 認証: NextAuth.js + Google OAuth
 - ホスティング: Cloud Run（手動デプロイ）
-- GCPプロジェクト: appirits-sseki-test
+- GCPプロジェクト: ap-hp-bq-test
 
 ## ディレクトリ構成
 ```
