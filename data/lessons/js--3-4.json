@@ -1,0 +1,82 @@
+{
+  "id": "js--3-4",
+  "moduleId": "3-4",
+  "categoryId": "javascript",
+  "title": "関数とスコープ",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# GTMのカスタムJS変数は「関数」そのもの\n\nGTMで「カスタムJavaScript変数」を作ったことがある方は、次のようなコードを見たことがあるはずです。\n\n```js\nfunction() {\n  return window.location.pathname;\n}\n```\n\nこれが**関数（Function）**です。「処理をひとまとめにして名前をつけたもの」です。\n\n## なぜ関数が重要か\n\n**GTMカスタムJS変数の全体が関数**\nGTMのカスタムJS変数は `function() { return 値; }` という形式で書きます。`return` は「この値を返す」という命令です。\n\n**処理の再利用**\n「URLからutm_sourceを取得する」処理を毎回書かずに、一度関数にしておけば何度でも呼び出せます。\n\n```js\n// ↓ この「getParam」という関数を一度作れば\nfunction getParam(name) {\n  const params = new URLSearchParams(window.location.search);\n  return params.get(name);\n}\n\n// ↓ 何度でも簡単に使える\ngetParam(\"utm_source\");   // → \"google\"\ngetParam(\"utm_medium\");   // → \"cpc\"\ngetParam(\"utm_campaign\"); // → \"summer_sale\"\n```\n\nこれがGTMのカスタムJS変数として設定されているコードの典型例です。今日はこれが書けるようになります。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# 関数の書き方とスコープ\n\n## 関数宣言の基本\n\n```js\n// function 関数名(引数) { 処理; return 戻り値; }\nfunction greet(name) {\n  return \"こんにちは、\" + name + \"さん\";\n}\n\n// 呼び出し\nconst message = greet(\"山田\");\nconsole.log(message);  // → \"こんにちは、山田さん\"\n```\n\n- **引数（ひきすう）**: 関数に渡す入力値。`name` の部分。\n- **戻り値（もどりち）**: `return` で返す出力値。\n\n## アロー関数（=> ）\n\nより短く書ける現代的な書き方です。GTMやGA4のサンプルコードでよく見かけます。\n\n```js\n// 通常の関数\nfunction add(a, b) {\n  return a + b;\n}\n\n// アロー関数（同じ意味）\nconst add = (a, b) => a + b;\n\nconsole.log(add(3, 5));  // → 8\n```\n\n## スコープ（変数の有効範囲）\n\n```js\nconst globalVar = \"グローバル\";  // どこからでもアクセス可能\n\nfunction checkScope() {\n  const localVar = \"ローカル\";  // この関数の中だけで有効\n  console.log(globalVar);   // → \"グローバル\" ← アクセスできる\n  console.log(localVar);    // → \"ローカル\"\n}\n\ncheckScope();\n// console.log(localVar);  // → エラー！関数の外からは見えない\n```\n\nGTMのカスタムJS変数内で宣言した変数は、その変数の外（他のタグや変数）からは見えません。これがスコープです。\n\n## URLパラメータ取得（実務頻出）\n\n```js\n// URLSearchParams: URLのクエリ文字列を解析するJSの機能\n// 例: https://example.com/?utm_source=google&utm_medium=cpc\n\nconst params = new URLSearchParams(window.location.search);\nconsole.log(params.get(\"utm_source\"));  // → \"google\"\nconsole.log(params.get(\"utm_medium\"));  // → \"cpc\"\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: UTMパラメータ取得関数を作る\n\nGTMのカスタムJS変数として実際に使えるコードを書きましょう。\nURLのクエリパラメータ（`?utm_source=google` の部分）を取得する関数を作成してください。\n\n## 課題\n\n1. `getParam(paramName)` という関数を作成する\n   - 引数 `paramName` に `\"utm_source\"` などのパラメータ名を渡す\n   - URLSearchParamsで値を取得して `return` する\n   - 値がない場合は `\"(none)\"` を返す\n\n2. 以下のテストURLで動作確認する（演習用にURLを上書きしています）\n   - `utm_source` → `\"google\"`\n   - `utm_medium` → `\"cpc\"`\n   - 存在しないパラメータ → `\"(none)\"`\n\n> 💡 このコードはほぼそのままGTMのカスタムJS変数に貼り付けて使えます。",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>関数の練習</title>\n</head>\n<body>\n  <h1>UTMパラメータ取得関数</h1>\n\n  <script>\n    // 演習用: URLパラメータをシミュレート\n    // ※実際のブラウザURLの代わりに使用\n    const testSearch = \"?utm_source=google&utm_medium=cpc&utm_campaign=summer_sale\";\n\n    // ① getParam関数を定義してください\n    // 引数: paramName（取得したいパラメータ名）\n    // 戻り値: パラメータの値。なければ \"(none)\"\n    function getParam(paramName) {\n      // URLSearchParams を使って testSearch を解析\n      // ヒント: new URLSearchParams(testSearch)\n      \n\n      // 値がなければ \"(none)\" を return\n      \n    }\n\n    // ② 以下で動作確認（変更不要）\n    console.log(\"utm_source: \" + getParam(\"utm_source\"));\n    console.log(\"utm_medium: \" + getParam(\"utm_medium\"));\n    console.log(\"utm_campaign: \" + getParam(\"utm_campaign\"));\n    console.log(\"存在しない: \" + getParam(\"utm_content\"));\n  </script>\n</body>\n</html>",
+        "hints": [
+          "関数は `function getParam(paramName) { 処理; return 値; }` の形で定義します。GTMのカスタムJS変数も `function() { return 値; }` という同じ形式です。",
+          "`new URLSearchParams(testSearch)` でパラメータを解析できます。`.get(\"utm_source\")` のように `.get(パラメータ名)` で値を取得します。値がなければnullが返ります。",
+          "`params.get(paramName)` の結果がnullの場合は `\"(none)\"` を返します。`return params.get(paramName) || \"(none)\"` と書くと、nullやundefinedの場合に `\"(none)\"` を返すシンプルな書き方になります。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>関数の練習</title>\n</head>\n<body>\n  <h1>UTMパラメータ取得関数</h1>\n\n  <script>\n    // 演習用: URLパラメータをシミュレート\n    const testSearch = \"?utm_source=google&utm_medium=cpc&utm_campaign=summer_sale\";\n\n    // getParam関数\n    function getParam(paramName) {\n      const params = new URLSearchParams(testSearch);\n      return params.get(paramName) || \"(none)\";\n    }\n\n    // 動作確認\n    console.log(\"utm_source: \" + getParam(\"utm_source\"));    // → google\n    console.log(\"utm_medium: \" + getParam(\"utm_medium\"));    // → cpc\n    console.log(\"utm_campaign: \" + getParam(\"utm_campaign\")); // → summer_sale\n    console.log(\"存在しない: \" + getParam(\"utm_content\"));   // → (none)\n  </script>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "以下の関数の戻り値は何ですか？\n`function calcCPA(cost, cv) { return cost / cv; }`\n`calcCPA(100000, 25)` を呼び出した場合",
+            "options": [
+              "100000",
+              "25",
+              "4000",
+              "undefined"
+            ],
+            "correct": 2,
+            "explanation": "`cost` に100000、`cv` に25が渡されるので、`100000 / 25 = 4000` が返ります。このようにCPA・CPCなどの指標計算を関数にしておくと、GTMのカスタムJS変数として再利用できます。"
+          },
+          {
+            "q": "アロー関数 `const double = (n) => n * 2;` を呼び出した `double(7)` の結果はどれですか？",
+            "options": [
+              "7",
+              "2",
+              "14",
+              "エラーになる"
+            ],
+            "correct": 2,
+            "explanation": "`(n) => n * 2` は `function(n) { return n * 2; }` と同じ意味です。`double(7)` は `7 * 2 = 14` を返します。アロー関数はGA4やGTMのドキュメントのサンプルコードでよく使われる書き方です。"
+          },
+          {
+            "q": "GTMの「カスタムJavaScript変数」で正しいコードの形式はどれですか？",
+            "options": [
+              "`let value = window.location.pathname;`",
+              "`function() { return window.location.pathname; }`",
+              "`console.log(window.location.pathname);`",
+              "`if (window.location.pathname) { return true; }`"
+            ],
+            "correct": 1,
+            "explanation": "GTMのカスタムJavaScript変数は必ず `function() { return 値; }` という形式で書く必要があります。変数に値を代入するだけではGTMに値が渡らず、`return` で値を返す関数の形式にする必要があります。これがJavaScriptの「関数の戻り値」の実務活用の典型例です。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール3-4 完了！\n\n関数という概念を習得し、GTMのカスタムJS変数と直接つながりました。\n\n## 習得したスキル\n\n✅ **function宣言**で処理をまとめて再利用できるようになった\n✅ **引数と戻り値**の概念を理解した\n✅ **アロー関数（=>）**の書き方を把握した\n✅ **URLSearchParams**でUTMパラメータを取得できるようになった\n✅ **GTMのカスタムJS変数が関数である**ことを完全に理解した\n\n## ここまでで何ができるようになったか\n\nモジュール3-1〜3-4を通して、次のことができるようになりました:\n\n- 開発者ツール(F12)でJSのエラーや`console.log`出力を確認できる\n- GTMのカスタムJSコードを読んで意味がわかる\n- URLパラメータを取得する関数をGTMに設定できる\n- GA4のイベントパラメータの型ミスを自力で発見できる\n\n## 次のカテゴリへ\n\n**「3-5: dataLayerへのpush」** では、ここまでの知識を総動員して、実際のGA4 + GTM連携コードを書きます。`dataLayer.push()` でカスタムイベントを送信する実装を体験しましょう。\n\n> 💡 **実務チャレンジ**: GTMのカスタムJS変数を一つ開いて、`function() { return ... }` の部分が今日学んだ「関数」であることを確認してみましょう。`return` の後に何が書いてあるか読んでみてください。",
+        "diagram": false
+      }
+    }
+  ]
+}

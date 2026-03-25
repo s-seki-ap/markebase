@@ -1,0 +1,82 @@
+{
+  "id": "js--3-1",
+  "moduleId": "3-1",
+  "categoryId": "javascript",
+  "title": "JSとは何か・開発者ツール",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# なぜマーケターがJavaScriptを知るべきか\n\nあなたは「JavaScriptなんてエンジニアの仕事では？」と思っていませんか？\n実は、マーケターが毎日使うツールは全てJavaScriptで動いています。\n\n## マーケターとJSの接点\n\n**1. GTM（Google Tag Manager）のカスタムJS**\nGTMには「カスタムJavaScript変数」という機能があります。URLからパラメータを取得したり、ページの状態を読み取るとき、JavaScriptのコードを直接書きます。\n\n**2. GA4のイベント送信**\nGA4にカスタムイベントを送信するコードは、全てJavaScriptで書かれています。\n```js\ngtag('event', 'purchase', { value: 9800 });\n```\nこの1行がJavaScriptです。\n\n**3. 広告タグの仕組み**\nGoogle広告・Meta広告・TikTok広告などのコンバージョンタグも、HTMLに貼り付けるJavaScriptのコードです。「タグが発火する」とは「JavaScriptが実行される」ということです。\n\n**4. ABテストツール**\nOptimize・VWO・ABsmartlyなどのABテストは、JavaScriptでページの要素を書き換えることで動作します。\n\n## 今日のゴール\n\nJavaScriptを「書ける」必要はありません。**読んで理解できる**、**デバッグできる**レベルを目指します。まずは開発者ツールの使い方から始めましょう。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# JavaScriptの役割と開発者ツール\n\n## Web技術の役割分担\n\nWebページは3つの技術で構成されています。\n\n- **HTML** → 骨格・構造（「見出しがある」「ボタンがある」）\n- **CSS** → 見た目・装飾（「青い」「大きい」「右寄せ」）\n- **JavaScript** → 動き・処理（「クリックしたら」「データを取得して」「表示を変える」）\n\nGTMやGA4のタグはHTMLの `<script>` タグの中に書かれたJavaScriptです。\n\n## 開発者ツール（DevTools）の開き方\n\n| OS | 操作 |\n|----|---------|\n| Windows | F12 キー または Ctrl+Shift+I |\n| Mac | Cmd+Option+I |\n| どちらでも | 右クリック → 「検証」 |\n\n## Consoleタブとは\n\n**Console（コンソール）** は、JavaScriptの実行結果を確認したり、コードを直接試せる場所です。\n\n```js\n// consoleにメッセージを表示する命令\nconsole.log(\"こんにちは\");\n\n// 計算結果を確認できる\nconsole.log(100 + 200);  // → 300\n\n// エラーの確認もここ\nconsole.error(\"エラーが起きました\");\n```\n\nGTMのカスタムHTMLタグが正しく動いているか確認するとき、`console.log()` を使って動作確認するのはエンジニアが必ず行う手法です。",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: はじめてのJavaScript\n\nHTMLページにJavaScriptを埋め込んで、開発者ツールのコンソールにメッセージを表示してみましょう。\n\n## 課題\n\n1. `console.log()` で `\"Hello, Marketing!\"` を表示する\n2. 変数 `myName` に自分の名前を格納して表示する\n3. 変数 `tool` に `\"GA4\"` を格納して `myName + \" が \" + tool + \" を使っています\"` と表示する\n\n**[▶ 実行]** を押した後、**開発者ツール（F12）のConsoleタブ**で出力を確認してください。",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>はじめてのJS</title>\n</head>\n<body>\n  <h1>JavaScriptの練習</h1>\n  <p>開発者ツール（F12）のConsoleタブを開いて確認してください。</p>\n\n  <script>\n    // ① ここに console.log(\"Hello, Marketing!\") を書いてください\n    \n\n    // ② 変数 myName に自分の名前を格納してください\n    // 例: let myName = \"山田\";\n    \n\n    // ③ 変数 tool に \"GA4\" を格納して、文章として表示してください\n    \n\n  </script>\n</body>\n</html>",
+        "hints": [
+          "`<script>` タグはHTMLの中に書きます。中にJavaScriptコードを書くと実行されます。GTMのカスタムHTMLタグも同じ仕組みです。",
+          "`console.log(表示したい内容)` で出力できます。文字列は `\"ダブルクォート\"` または `'シングルクォート'` で囲みます。",
+          "文字列と変数を `+` でつなげられます。例: `console.log(myName + \"さん\")` — GTMの変数を文字列に埋め込むのと同じ感覚です。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>はじめてのJS</title>\n</head>\n<body>\n  <h1>JavaScriptの練習</h1>\n  <p>開発者ツール（F12）のConsoleタブを開いて確認してください。</p>\n\n  <script>\n    // ① Hello, Marketing! を表示\n    console.log(\"Hello, Marketing!\");\n\n    // ② 変数に名前を格納\n    let myName = \"山田\";\n    console.log(myName);\n\n    // ③ 文章として表示\n    let tool = \"GA4\";\n    console.log(myName + \" が \" + tool + \" を使っています\");\n  </script>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "WebページにおけるJavaScriptの主な役割はどれですか？",
+            "options": [
+              "ページの構造（見出し・段落・リンク）を定義する",
+              "ページの色・フォント・レイアウトを装飾する",
+              "クリックや送信などのインタラクションと動的な処理を担う",
+              "サーバーとのデータベース接続を管理する"
+            ],
+            "correct": 2,
+            "explanation": "JavaScriptはWebページに「動き」と「インタラクション」を加える言語です。構造はHTML、装飾はCSSが担います。GTMのトリガーが「クリック時」「ページ表示時」に動くのも、JavaScriptのイベント処理の仕組みを使っているからです。"
+          },
+          {
+            "q": "開発者ツールの「Console」タブは何に使いますか？",
+            "options": [
+              "ページのHTMLを確認・編集する",
+              "JavaScriptの実行結果の確認やエラーの調査に使う",
+              "ページの読み込み速度を計測する",
+              "CSSのスタイルを確認・変更する"
+            ],
+            "correct": 1,
+            "explanation": "Consoleはconsole.log()の出力やエラーメッセージが表示される場所です。GTMのタグが正しく動いているか、GA4イベントが送信されているかを確認するとき、エンジニアやアナリティクス担当者は必ずConsoleをチェックします。"
+          },
+          {
+            "q": "GTMの「カスタムJavaScript変数」について正しいのはどれですか？",
+            "options": [
+              "CSSファイルを直接編集できる機能",
+              "JavaScriptのコードを書いて、その戻り値をGTMの変数として使える機能",
+              "HTMLタグをページに直接挿入する機能",
+              "Google広告のコンバージョンタグを設定する機能"
+            ],
+            "correct": 1,
+            "explanation": "GTMのカスタムJavaScript変数は「function() { return 値; }」という形式でコードを書き、その戻り値を変数として使えます。URLパラメータの取得やページ情報の取り出しなど、標準の変数タイプでは取れない情報を取得できます。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール3-1 完了！\n\nJavaScriptの世界への第一歩を踏み出しました。\n\n## 習得したスキル\n\n✅ **JSはHTML/CSSとセットで動く**ことを理解した\n✅ **GTM・GA4・広告タグがJSで動いている**ことを把握した\n✅ **開発者ツール（F12）のConsoleタブ**を開いてコードを試せるようになった\n✅ **console.log()** でデバッグできるようになった\n\n## 開発者ツールが使えると何が変わるか\n\nConsoleタブを使えるようになると、GTMのプレビューモードで何が起きているか、GA4イベントが正しく送信されているか、自分で確認できるようになります。エンジニアへの「このタグ、動いてますか？」という確認が自分でできる — それだけでコミュニケーションコストが大幅に下がります。\n\n## 次のモジュールへ\n\n次は **「3-2: 変数・型・演算子」** です。GTMの変数機能やGA4のカスタムディメンションと直結する「変数」の概念を学びます。\n\n> 💡 **実務チャレンジ**: 今日から自社サイトで F12 を押してConsoleタブを開き、エラー（赤いメッセージ）が出ていないか確認してみましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

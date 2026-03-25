@@ -1,0 +1,82 @@
+{
+  "id": "js--3-5",
+  "moduleId": "3-5",
+  "categoryId": "javascript",
+  "title": "DOM操作",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# DOMを理解するとGTMが深くわかる\n\n**DOM（Document Object Model）** とは、ブラウザがHTMLを読み込んだときに作る「構造化されたデータ」です。\nHTMLの各タグが、木（ツリー）のような階層構造として扱われます。\n\n## GTMのトリガー設定はDOM操作の上に成り立っている\n\nGTMで「クリックトリガー」を設定するとき、「クリックされた要素のCSSセレクタ」を指定します。\n\n```\nトリガー条件: Click Element → CSS Selector → .add-to-cart-btn\n```\n\nGTMはこの設定をもとに、内部で以下のようなJSを実行しています。\n\n```js\ndocument.querySelector(\".add-to-cart-btn\").addEventListener(\"click\", function() {\n  // タグを発火\n});\n```\n\n## GA4のイベント計測もDOM操作\n\nGA4が「スクロール計測」や「クリック計測」を自動収集できるのも、DOMのイベントリスナーを使っているからです。\n\n`拡張計測機能 → スクロール数` をオンにすると、GA4はページ下部（DOM要素）まで到達したかを監視しています。\n\n## LP改善とDOM操作\n\nABテストツール（Optimize・VWOなど）は、DOMを直接書き換えてボタンの色・文章を変えます。「なぜABテストの変更がたまに遅延して表示されるか」もDOMの仕組みを知ると理解できます。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# DOM操作の基本\n\n## 要素の取得\n\n```js\n// IDで取得（1つだけ）\nconst btn = document.getElementById(\"myButton\");\n\n// CSSセレクタで取得（GTMのクリックトリガーと同じ書き方）\nconst title = document.querySelector(\"h1\");\nconst btn2  = document.querySelector(\"#myButton\");   // ID\nconst item  = document.querySelector(\".item-name\");  // クラス\n\n// 複数まとめて取得\nconst allButtons = document.querySelectorAll(\"button\");\n```\n\n## 要素の読み取り・変更\n\n```js\nconst el = document.querySelector(\"#message\");\n\n// テキストを読む\nconsole.log(el.textContent);  // → 現在のテキスト\n\n// テキストを変更\nel.textContent = \"新しいテキスト\";\n\n// スタイルを変更\nel.style.color = \"red\";\nel.style.display = \"none\";  // 非表示にする\n\n// クラスを追加・削除（ABテストツールの内部処理と同じ）\nel.classList.add(\"active\");\nel.classList.remove(\"hidden\");\n```\n\n## イベントリスナー\n\nユーザーの操作（クリック・入力・スクロール）を「聞いて」処理を実行する仕組みです。\n\n```js\nconst btn = document.querySelector(\"#sendBtn\");\n\nbtn.addEventListener(\"click\", function() {\n  console.log(\"ボタンがクリックされました\");\n  // ↑ GTMのカスタムHTMLタグでよく書くパターン\n});\n```\n\nGTMの「クリックトリガー」は、全要素に対してこの `addEventListener(\"click\", ...)` を自動で設定しています。",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: クリックカウンター\n\nボタンをクリックするたびにテキストが変わり、クリック回数をカウントするページを作りましょう。\nこれはGTMのクリックトリガーが内部でやっていることと同じ仕組みです。\n\n## 課題\n\n1. `#clickBtn` ボタンにクリックイベントを設定する\n2. クリックするたびに `#message` のテキストを `\"クリックされました！\"` に変更する\n3. クリック回数を `#counter` に表示する（例: `\"クリック回数: 3\"` ）\n4. **ボーナス**: 5回クリックしたら `#message` の色を赤に変える",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>DOM操作の練習</title>\n  <style>\n    body { font-family: sans-serif; padding: 20px; }\n    button { padding: 10px 20px; font-size: 16px; cursor: pointer; }\n    #message { margin-top: 16px; font-size: 18px; }\n    #counter { margin-top: 8px; color: #666; }\n  </style>\n</head>\n<body>\n  <h1>クリックカウンター</h1>\n  <button id=\"clickBtn\">クリックしてください</button>\n  <div id=\"message\">まだクリックされていません</div>\n  <div id=\"counter\">クリック回数: 0</div>\n\n  <script>\n    // クリック回数を管理する変数\n    let count = 0;\n\n    // ① #clickBtn を取得\n    // const btn = document.querySelector(...)\n\n\n    // ② ボタンにクリックイベントを設定\n    // btn.addEventListener(\"click\", function() {\n    //   count を増やす\n    //   #message のテキストを変更\n    //   #counter に回数を表示\n    //   ボーナス: 5回以上で #message を赤に\n    // });\n\n  </script>\n</body>\n</html>",
+        "hints": [
+          "`document.querySelector(\"#clickBtn\")` で id=\"clickBtn\" の要素を取得できます。GTMのクリックトリガーで「CSSセレクタ #clickBtn」と設定するのと同じ指定方法です。",
+          "取得した要素の `.textContent = \"新しいテキスト\"` でテキストを書き換えられます。`count++` で変数を1ずつ増やせます。",
+          "5回以上の判定は `if (count >= 5) { el.style.color = \"red\"; }` です。これはGTMのトリガー条件「クリック数が5以上のとき発火」と同じ思考です。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>DOM操作の練習</title>\n  <style>\n    body { font-family: sans-serif; padding: 20px; }\n    button { padding: 10px 20px; font-size: 16px; cursor: pointer; }\n    #message { margin-top: 16px; font-size: 18px; }\n    #counter { margin-top: 8px; color: #666; }\n  </style>\n</head>\n<body>\n  <h1>クリックカウンター</h1>\n  <button id=\"clickBtn\">クリックしてください</button>\n  <div id=\"message\">まだクリックされていません</div>\n  <div id=\"counter\">クリック回数: 0</div>\n\n  <script>\n    let count = 0;\n\n    const btn     = document.querySelector(\"#clickBtn\");\n    const message = document.querySelector(\"#message\");\n    const counter = document.querySelector(\"#counter\");\n\n    btn.addEventListener(\"click\", function() {\n      count++;\n      message.textContent = \"クリックされました！\";\n      counter.textContent = \"クリック回数: \" + count;\n\n      if (count >= 5) {\n        message.style.color = \"red\";\n      }\n    });\n  </script>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "DOMとHTMLの関係として正しいのはどれですか？",
+            "options": [
+              "DOMとHTMLは全く同じもので、呼び方が違うだけ",
+              "HTMLはテキストファイル、DOMはブラウザがHTMLを読み込んで作るオブジェクトの構造",
+              "DOMはCSSのことで、HTMLとは別の言語",
+              "DOMはサーバー側で生成され、HTMLはクライアント側で生成される"
+            ],
+            "correct": 1,
+            "explanation": "HTMLはテキストファイルですが、ブラウザがそれを読み込むとDOMというオブジェクト構造を作ります。JavaScriptはこのDOMを通じてページの要素を取得・変更します。GTMのカスタムJSタグがページ内の要素を操作できるのはDOMがあるからです。"
+          },
+          {
+            "q": "`document.querySelector(\".cta-button\")` で取得できる要素はどれですか？",
+            "options": [
+              "id=\"cta-button\" の要素",
+              "class=\"cta-button\" の要素（最初の1つ）",
+              "タグ名がcta-buttonの要素",
+              "name=\"cta-button\" の要素"
+            ],
+            "correct": 1,
+            "explanation": "`.` （ドット）はCSSセレクタでクラスを意味します。`querySelector(\".cta-button\")` は `class=\"cta-button\"` を持つ要素の最初の1つを返します。GTMのクリックトリガーで「Click Classes contains cta-button」と設定するのと同じ要素を指します。IDを指定する場合は `#` を使います。"
+          },
+          {
+            "q": "GTMの「クリックトリガー」が内部で行っていることに最も近いJSはどれですか？",
+            "options": [
+              "`document.querySelector(\"button\").click()`",
+              "`document.querySelector(\"button\").remove()`",
+              "`document.querySelector(\"button\").addEventListener(\"click\", function() { ... })`",
+              "`document.querySelector(\"button\").textContent = \"clicked\"`"
+            ],
+            "correct": 2,
+            "explanation": "GTMのクリックトリガーは、指定した要素（またはすべてのクリック）に対して `addEventListener(\"click\", ...)` でイベントリスナーを設定し、クリックされたときにタグを発火させます。GTMのプレビューモードで「Click」イベントが表示されるのはこの仕組みによるものです。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール3-5 完了！\n\nDOMという概念を理解し、ページ要素の取得・変更・イベント検知ができるようになりました。\n\n## 習得したスキル\n\n✅ **DOMがHTMLのオブジェクト表現**であることを理解した\n✅ **querySelector** でページ要素を取得できるようになった\n✅ **textContent / style** で要素を動的に変更できるようになった\n✅ **addEventListener** でクリックイベントを処理できるようになった\n✅ **GTMクリックトリガーの内部動作**を理解した\n\n## GTMのデバッグに活かす\n\n開発者ツールのConsoleで `document.querySelector(\".ターゲット要素\")` を実行することで、GTMトリガーが期待通りの要素を取得できるか事前確認できます。「GTMのクリックトリガーが発火しない」問題の多くはセレクタの指定ミスなので、このスキルで解決できます。\n\n## 次のモジュールへ\n\n次は **「3-6: 配列とオブジェクト」** です。GA4のeコマースイベントで使う `items` 配列と、イベントパラメータのオブジェクト構造を深く理解します。\n\n> 💡 **実務チャレンジ**: GTMのプレビューモードを開き、クリックイベントの「Click Element」欄を確認してください。表示されているCSSセレクタが `querySelector()` に渡せる文字列です。",
+        "diagram": false
+      }
+    }
+  ]
+}

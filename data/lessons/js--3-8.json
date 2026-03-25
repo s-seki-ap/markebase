@@ -1,0 +1,82 @@
+{
+  "id": "js--3-8",
+  "moduleId": "3-8",
+  "categoryId": "javascript",
+  "title": "JSの実務活用 — GTM・dataLayer・GA4イベント",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# JavaScript カテゴリの総まとめ\n\nここまでの7モジュールで学んできた知識が、全てこのモジュールにつながります。\n\n| モジュール | 学んだこと | 今回使う場面 |\n|---|---|---|\n| 3-1 | 開発者ツール / console.log | デバッグ・動作確認 |\n| 3-2 | 変数・型 | イベントパラメータの格納 |\n| 3-3 | 条件分岐 | ボタンクリック時の分岐処理 |\n| 3-4 | 関数 | GTMカスタムJS変数の設計 |\n| 3-5 | DOM操作 | ボタンのクリックイベント取得 |\n| 3-6 | 配列・オブジェクト | items配列の構築 |\n| 3-7 | 非同期処理 | （応用として） |\n\n## dataLayer とは何か\n\n`dataLayer` は、**WebサイトとGTMの間でデータを受け渡すための「共有メモ帳」**です。\n\nサイト側のJavaScriptが `dataLayer.push({ event: \"purchase\", value: 29800 })` と書き込むと、GTMがその情報を受け取って「purchaseイベントが発生した、valueは29800円」と認識し、設定されたタグを発火させます。\n\nGA4のイベントを正確に計測するには、この `dataLayer` の設計が最重要です。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# dataLayer → GTM → GA4 の流れ\n\n## dataLayer の基本\n\n```js\n// dataLayerの初期化（GTMスニペットより前に記述）\nwindow.dataLayer = window.dataLayer || [];\n\n// イベントの送信\ndataLayer.push({\n  event: 'add_to_cart',      // GTMのトリガーが「このevent名」を監視する\n  ecommerce: {\n    currency: 'JPY',\n    value: 9800,\n    items: [\n      {\n        item_id:   'SKU-001',\n        item_name: 'プレミアムTシャツ',\n        price:     9800,\n        quantity:  1\n      }\n    ]\n  }\n});\n```\n\n## GTM側の設定との対応\n\n```\ndataLayer.push({ event: 'add_to_cart', ... })\n         ↓\nGTM: トリガー「カスタムイベント = add_to_cart」が発火\n         ↓\nGTM: タグ「GA4イベント = add_to_cart」が実行\n         ↓\nGA4: イベント「add_to_cart」が記録される\n```\n\n## GTMカスタムJavaScript変数（復習）\n\n3-4で学んだ関数がそのまま使われます。\n\n```js\n// GTMカスタムJavaScript変数「UTMソース取得」\nfunction() {\n  const params = new URLSearchParams(window.location.search);\n  return params.get('utm_source') || '(none)';\n}\n// ↑ return で値を返すのが必須\n```\n\n## GA4推奨イベントの命名規則\n\nGA4には「推奨イベント」という標準名があります。独自名より推奨名を使うと自動でGA4のレポートに集計されます。\n\n| アクション | GA4推奨イベント名 |\n|---|---|\n| カートに追加 | `add_to_cart` |\n| 購入完了 | `purchase` |\n| リスト表示 | `view_item_list` |\n| 商品詳細表示 | `view_item` |\n| チェックアウト開始 | `begin_checkout` |",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: カートに追加ボタンのGA4イベント実装\n\n商品詳細ページを模したHTMLです。\n「カートに追加」ボタンがクリックされたとき、`dataLayer.push()` で GA4の `add_to_cart` イベントを送信するコードを書いてください。\n\nこれは **実際のEC サイトで行われているGA4実装そのもの** です。\n\n## 課題\n\n1. `#addToCartBtn` にクリックイベントを設定する（DOM操作）\n2. クリック時に `dataLayer.push()` で以下を送信する\n   - `event: 'add_to_cart'`\n   - `ecommerce.currency: 'JPY'`\n   - `ecommerce.value: 商品価格`\n   - `ecommerce.items` 配列（item_id, item_name, price, quantity）\n3. `#result` にイベント送信内容を表示して確認する",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>商品詳細ページ</title>\n  <style>\n    body { font-family: sans-serif; padding: 24px; background: #f9f9f9; }\n    .product { background: white; padding: 24px; border-radius: 8px; max-width: 400px; }\n    h1 { font-size: 20px; margin-bottom: 4px; }\n    .price { font-size: 24px; font-weight: bold; color: #e63946; margin: 12px 0; }\n    button { background: #2563eb; color: white; padding: 12px 24px;\n             border: none; border-radius: 6px; font-size: 16px; cursor: pointer; }\n    #result { margin-top: 16px; padding: 12px; background: #f0fdf4;\n              border: 1px solid #86efac; border-radius: 6px; font-size: 13px;\n              white-space: pre-wrap; display: none; }\n  </style>\n</head>\n<body>\n  <div class=\"product\">\n    <h1 id=\"productName\">プレミアムTシャツ</h1>\n    <p>カラー: ネイビー / サイズ: M</p>\n    <div class=\"price\">¥9,800</div>\n    <button id=\"addToCartBtn\">🛒 カートに追加</button>\n    <div id=\"result\"></div>\n  </div>\n\n  <script>\n    // dataLayerの初期化（GTMスニペットがある場合も必要）\n    window.dataLayer = window.dataLayer || [];\n\n    // 商品情報（実際はサーバーから動的に生成される）\n    const product = {\n      item_id:   'SKU-001',\n      item_name: 'プレミアムTシャツ',\n      price:     9800,\n      quantity:  1\n    };\n\n    // ① #addToCartBtn を取得してクリックイベントを設定する\n    \n\n    // クリック時の処理:\n    // ② dataLayer.push() で add_to_cart イベントを送信\n    //    event, ecommerce.currency, ecommerce.value, ecommerce.items を含める\n    \n\n    // ③ #result に送信内容を表示する（確認用）\n    //    JSON.stringify(dataLayer[dataLayer.length - 1], null, 2) を使う\n    \n  </script>\n</body>\n</html>",
+        "hints": [
+          "`document.querySelector('#addToCartBtn').addEventListener('click', function() { ... })` でクリックイベントを設定します。3-5（DOM操作）で学んだ内容です。",
+          "`dataLayer.push({ event: 'add_to_cart', ecommerce: { currency: 'JPY', value: product.price, items: [product] } })` が基本構造です。`items` は配列（`[ ]`）で囲むことを忘れずに（3-6の配列）。",
+          "送信確認は `const result = document.querySelector('#result'); result.style.display = 'block'; result.textContent = JSON.stringify(dataLayer[dataLayer.length - 1], null, 2);` です。`JSON.stringify` の第3引数 `2` でインデント付きの見やすいJSON形式になります。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>商品詳細ページ</title>\n  <style>\n    body { font-family: sans-serif; padding: 24px; background: #f9f9f9; }\n    .product { background: white; padding: 24px; border-radius: 8px; max-width: 400px; }\n    h1 { font-size: 20px; margin-bottom: 4px; }\n    .price { font-size: 24px; font-weight: bold; color: #e63946; margin: 12px 0; }\n    button { background: #2563eb; color: white; padding: 12px 24px;\n             border: none; border-radius: 6px; font-size: 16px; cursor: pointer; }\n    #result { margin-top: 16px; padding: 12px; background: #f0fdf4;\n              border: 1px solid #86efac; border-radius: 6px; font-size: 13px;\n              white-space: pre-wrap; display: none; }\n  </style>\n</head>\n<body>\n  <div class=\"product\">\n    <h1 id=\"productName\">プレミアムTシャツ</h1>\n    <p>カラー: ネイビー / サイズ: M</p>\n    <div class=\"price\">¥9,800</div>\n    <button id=\"addToCartBtn\">🛒 カートに追加</button>\n    <div id=\"result\"></div>\n  </div>\n\n  <script>\n    window.dataLayer = window.dataLayer || [];\n\n    const product = {\n      item_id:   'SKU-001',\n      item_name: 'プレミアムTシャツ',\n      price:     9800,\n      quantity:  1\n    };\n\n    const btn    = document.querySelector('#addToCartBtn');\n    const result = document.querySelector('#result');\n\n    btn.addEventListener('click', function() {\n      // GA4推奨形式のadd_to_cartイベントを送信\n      dataLayer.push({\n        event: 'add_to_cart',\n        ecommerce: {\n          currency: 'JPY',\n          value:    product.price,\n          items:    [{\n            item_id:   product.item_id,\n            item_name: product.item_name,\n            price:     product.price,\n            quantity:  product.quantity\n          }]\n        }\n      });\n\n      // 送信内容を表示して確認\n      result.style.display = 'block';\n      result.textContent = '✅ dataLayer送信完了:\\n'\n        + JSON.stringify(dataLayer[dataLayer.length - 1], null, 2);\n    });\n  </script>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "GTMにおける `dataLayer` の役割として正しいのはどれですか？",
+            "options": [
+              "GA4のトラッキングIDを保存するための変数",
+              "Webサイトのコードとの間でデータを受け渡す「共有メモ帳」の役割を持つ配列",
+              "CSSのスタイル情報を格納するオブジェクト",
+              "ブラウザのキャッシュを管理するシステム変数"
+            ],
+            "correct": 1,
+            "explanation": "dataLayerはWebサイトのJSとGTMの間でデータをやり取りするための「橋渡し」役です。サイト側が `dataLayer.push({ event: 'purchase', value: 29800 })` と書き込むと、GTMがそのデータを受け取り、設定されたタグ（GA4イベントタグなど）を発火させます。"
+          },
+          {
+            "q": "GTMの「カスタムJavaScript変数」で正しく値を返すコードはどれですか？",
+            "options": [
+              "`let value = window.location.pathname; console.log(value);`",
+              "`function() { let value = window.location.pathname; return value; }`",
+              "`window.location.pathname;`",
+              "`{ value: window.location.pathname }`"
+            ],
+            "correct": 1,
+            "explanation": "GTMのカスタムJavaScript変数は必ず `function() { return 値; }` の形式で書く必要があります。`return` がないとGTMに値が渡されず `undefined` になります。これはモジュール3-4（関数とスコープ）で学んだ「関数の戻り値」の実務応用です。"
+          },
+          {
+            "q": "GA4で「カートに追加」イベントを計測する際の推奨イベント名はどれですか？",
+            "options": [
+              "`cart_addition`",
+              "`add_cart`",
+              "`add_to_cart`",
+              "`cart_add_item`"
+            ],
+            "correct": 2,
+            "explanation": "`add_to_cart` はGA4の「推奨イベント」として定義されている標準名です。この名前を使うとGA4のeコマースレポートに自動で集計されます。独自名（`cart_addition` など）を使うとカスタムイベントとして扱われ、標準レポートに表示されません。GA4推奨イベントの命名規則は必ず確認しましょう。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# JavaScriptカテゴリ 全8モジュール 完了！\n\nおめでとうございます。非エンジニアのマーケターとして必要なJavaScriptの全知識を習得しました。\n\n## カテゴリ全体の振り返り\n\n| モジュール | 習得スキル |\n|---|---|\n| 3-1 開発者ツール | F12でConsoleを開き、JSの動作を確認できる |\n| 3-2 変数・型 | GA4パラメータの型ミスを自力で発見できる |\n| 3-3 条件分岐 | GTMトリガーの条件設定がJSのifと同じだと理解できた |\n| 3-4 関数 | GTMカスタムJS変数を自分で書ける |\n| 3-5 DOM操作 | GTMクリックトリガーの仕組みを深く理解できた |\n| 3-6 配列・オブジェクト | GA4 eコマースの items 配列を正確に構築できる |\n| 3-7 非同期・API | GA4 Data APIとLooker Studio連携の仕組みが理解できた |\n| 3-8 GTM・dataLayer | add_to_cartイベントをdataLayerで実装できるようになった |\n\n## あなたが今できること\n\n✅ GTMのカスタムJSコードを読んで意味がわかる\n✅ UTMパラメータ取得のカスタムJS変数を自分で書ける\n✅ GA4のeコマースイベント（add_to_cart, purchase）を実装できる\n✅ 開発者ツールでタグの発火・エラーを自力でデバッグできる\n✅ エンジニアへの依頼が正確になり、コミュニケーションコストが下がる\n\n## 次のカテゴリへ\n\n**「SEO・広告・マーケティング基盤」** カテゴリでは、ここで学んだHTML・CSS・JSの知識を実際のSEO施策・広告タグ設置・コンバージョン設計に活かします。\n\n> 💡 **最終チャレンジ**: 自社サイトのGTMを開き、`dataLayer.push()` を使っているカスタムHTMLタグを探してみましょう。今なら何をやっているか読めるはずです。",
+        "diagram": false
+      }
+    }
+  ]
+}

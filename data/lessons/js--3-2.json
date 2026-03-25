@@ -1,0 +1,82 @@
+{
+  "id": "js--3-2",
+  "moduleId": "3-2",
+  "categoryId": "javascript",
+  "title": "変数・型・演算子",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# なぜ「変数」がマーケターに重要なのか\n\nGTMを使ったことがある方なら、「変数」という言葉を聞いたことがあるはずです。\n\n## GTMの「変数」とJSの「変数」は同じ概念\n\nGTMには「組み込み変数」（クリック先URL、ページURL、フォームIDなど）と「ユーザー定義変数」があります。これらは全て、JavaScriptの変数の仕組みを使っています。\n\nGTMで `{{Click URL}}` と書くとき、内部では以下のようなJSが動いています。\n```js\nlet clickUrl = document.activeElement.href;\n```\n\n## GA4のカスタムディメンションとも直結\n\nGA4のカスタムディメンション（例：「会員ランク」「商品カテゴリ」）を送信するとき、その値はJavaScriptの変数に格納されてからGA4に渡されます。\n\n```js\nlet memberRank = \"gold\";  // ← これが変数\ngtag('event', 'page_view', { member_rank: memberRank });\n```\n\n## 型を理解するとデバッグが速くなる\n\n「数字のはずなのに文字列として送られている」「nullが入っている」といったGA4の計測ミスの多くは、変数の「型」の問題です。型を理解することで、計測トラブルを自力で解決できるようになります。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# 変数・データ型・演算子\n\n## 変数の宣言: let と const\n\n```js\n// let: 後から値を変更できる変数\nlet pageViews = 0;\npageViews = 100;  // OK、変更できる\n\n// const: 変更できない定数（一度設定したら固定）\nconst siteName = \"MarkeBase\";\n// siteName = \"別のサイト\";  // エラー！変更不可\n```\n\n**使い分けの目安**: 変わらない値（サイト名、プロパティIDなど）は `const`、変わる値（PV数、ユーザー状態など）は `let`。\n\n## データ型（Type）\n\n変数に入れられるデータの種類を「型」といいます。\n\n```js\n// 文字列（String）: テキスト。クォートで囲む\nlet pageName = \"トップページ\";\nlet utmSource = \"google\";\n\n// 数値（Number）: 数字。クォート不要\nlet price = 9800;\nlet conversionRate = 0.032;\n\n// 真偽値（Boolean）: true か false のみ\nlet isConverted = false;\nlet isMember = true;\n\n// null: 値が「ない」ことを明示的に示す\nlet userId = null;\n\n// undefined: 変数が宣言されたが値がまだない\nlet campaignName;  // → undefined\n```\n\n## typeof演算子で型を確認する\n\n```js\nconsole.log(typeof \"google\");    // → \"string\"\nconsole.log(typeof 9800);        // → \"number\"\nconsole.log(typeof true);        // → \"boolean\"\nconsole.log(typeof null);        // → \"object\"（JSの有名なバグ）\n```\n\nGA4に数値を送るべきところで文字列が送られていないか、`typeof` で確認できます。\n\n## 主な演算子\n\n```js\n// 算術演算子\nlet revenue = 9800 * 3;     // 掛け算 → 29400\nlet cpa = 50000 / 10;       // 割り算 → 5000\n\n// 比較演算子（結果はtrue/false）\nconsole.log(100 > 50);      // → true\nconsole.log(\"google\" === \"google\");  // → true（完全一致）\n\n// 文字列の結合\nlet msg = \"UTMソース: \" + utmSource;  // → \"UTMソース: google\"\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: Webサイト情報を変数に格納する\n\nWebマーケティングの現場でよく扱うデータを変数に格納して、console.logで表示してみましょう。\n\n## 課題\n\n1. `pageName`（文字列）に現在のページ名を格納する\n2. `pageViews`（数値）に今月のPV数 `45000` を格納する\n3. `isConverted`（真偽値）にCV済みかどうか `false` を格納する\n4. `utmSource` に `\"google\"` を格納し、`typeof` で型を確認する\n5. CPA（費用対効果）を計算: 広告費 `200000` ÷ CV数 `40`",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>変数の練習</title>\n</head>\n<body>\n  <h1>変数・型・演算子の練習</h1>\n\n  <script>\n    // ① ページ名を格納（文字列）\n    // let pageName = ...\n\n\n    // ② 今月のPV数を格納（数値）\n    // let pageViews = ...\n\n\n    // ③ CV済みかどうかを格納（真偽値）\n    // let isConverted = ...\n\n\n    // ④ UTMソースを格納し、typeofで型を確認\n    // const utmSource = ...\n    // console.log(typeof ...)\n\n\n    // ⑤ CPAを計算して表示\n    // 広告費: 200000、CV数: 40\n    // const cpa = ...\n    // console.log(\"CPA: \" + cpa + \"円\")\n\n  </script>\n</body>\n</html>",
+        "hints": [
+          "文字列は `\"ダブルクォート\"` で囲みます。数値はそのまま書きます。例: `let price = 9800;` — GA4のvalueパラメータも同じく数値で渡します。",
+          "真偽値は `true` または `false`（クォートなし、小文字）で書きます。GA4のユーザープロパティでも「会員かどうか」をtrueとfalseで管理することがあります。",
+          "`typeof` は変数の前に書くだけです: `console.log(typeof utmSource)`。GA4に送るパラメータの型が期待通りかデバッグするときに使えます。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>変数の練習</title>\n</head>\n<body>\n  <h1>変数・型・演算子の練習</h1>\n\n  <script>\n    // ① ページ名を格納（文字列）\n    let pageName = \"トップページ\";\n    console.log(\"ページ名: \" + pageName);\n\n    // ② 今月のPV数を格納（数値）\n    let pageViews = 45000;\n    console.log(\"PV数: \" + pageViews);\n\n    // ③ CV済みかどうかを格納（真偽値）\n    let isConverted = false;\n    console.log(\"CV済み: \" + isConverted);\n\n    // ④ UTMソースを格納し、typeofで型を確認\n    const utmSource = \"google\";\n    console.log(typeof utmSource);  // → string\n\n    // ⑤ CPAを計算して表示\n    const cpa = 200000 / 40;\n    console.log(\"CPA: \" + cpa + \"円\");  // → CPA: 5000円\n  </script>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "`let` と `const` の違いとして正しいのはどれですか？",
+            "options": [
+              "letは文字列専用、constは数値専用",
+              "letは後から値を変更できる、constは変更できない",
+              "letはグローバル変数、constはローカル変数になる",
+              "letとconstは全く同じで、書き方のスタイルの違いだけ"
+            ],
+            "correct": 1,
+            "explanation": "letは後から値を上書きできる変数、constは一度設定したら変更できない定数です。GTMのカスタムJS変数では、計算結果を格納して返す場合に const を使うことが多いです。変わらない値（サイトID、ブランド名など）は const にしておくと意図しない変更を防げます。"
+          },
+          {
+            "q": "`typeof null` の実行結果はどれですか？",
+            "options": [
+              "\"null\"",
+              "\"undefined\"",
+              "\"object\"",
+              "\"boolean\""
+            ],
+            "correct": 2,
+            "explanation": "`typeof null` は `\"object\"` を返します。これはJavaScript初期のバグで、現在も仕様として残っています。GA4でnullが送られてきたとき、typeofでチェックしてもobjectと返ってくるため、null判定には `=== null` を使う必要があります。"
+          },
+          {
+            "q": "GA4のイベントパラメータで `value: \"9800\"` と `value: 9800` の違いは何ですか？",
+            "options": [
+              "違いはない。GA4が自動的に変換してくれる",
+              "前者は文字列型、後者は数値型。収益レポートには数値型で送る必要がある",
+              "文字列の方が精度が高いので前者が正しい",
+              "GA4はどちらの型でも受け付けないため、エラーになる"
+            ],
+            "correct": 1,
+            "explanation": "GA4のvalueパラメータ（売上金額）は数値型で送る必要があります。文字列型 `\"9800\"` で送ると収益レポートに集計されないことがあります。GTMでデータレイヤー変数を使う際、数値型になっているかを `typeof` で確認する習慣が大切です。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール3-2 完了！\n\nJavaScriptの変数と型の基礎を習得しました。\n\n## 習得したスキル\n\n✅ **let と const** の使い分けを理解した\n✅ **文字列・数値・真偽値・null** の4つの型を把握した\n✅ **typeof演算子** でデータ型を確認できるようになった\n✅ **GA4パラメータの型ミスを発見できる**視点を得た\n\n## なぜこれが計測品質に直結するか\n\nGA4に送るデータの型が間違っていると、レポートに正しく集計されません。特に売上金額（value）が文字列として送られているケースは現場でよく発生するミスです。typeofを使ったデバッグができるようになると、計測トラブルを自力で特定できます。\n\n## 次のモジュールへ\n\n次は **「3-3: 条件分岐とループ」** です。「ユーザーがCVしたかどうかで処理を分ける」「複数の商品情報を一括処理する」といった実務直結のコードを書きます。\n\n> 💡 **実務チャレンジ**: GTMを開いて「変数」タブを確認してみましょう。組み込み変数（クリックURL、ページURL等）のデータ型が何型か意識してみてください。",
+        "diagram": false
+      }
+    }
+  ]
+}

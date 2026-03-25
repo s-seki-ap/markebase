@@ -1,0 +1,82 @@
+{
+  "id": "js--3-3",
+  "moduleId": "3-3",
+  "categoryId": "javascript",
+  "title": "条件分岐とループ",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# マーケティングは「条件分岐」でできている\n\nマーケティングの施策を少し丁寧に言語化すると、ほぼ全て「もし〜なら、〜する」という構造になります。\n\n## 実務の条件分岐の例\n\n**GTMのトリガー設定**\n「もしページURLに `/thanks` が含まれるなら、コンバージョンタグを発火させる」\n→ これはJavaScriptの `if` 文と全く同じ構造です。\n\n**GA4のオーディエンス設定**\n「もしユーザーが商品詳細ページを3回以上見ていて、かつ購入していないなら、リターゲティングリストに追加する」\n→ 複数条件の `if` 文です。\n\n**パーソナライゼーション**\n「会員ランクが gold なら割引クーポンを表示、silver なら別のオファーを表示、それ以外は非表示」\n→ `if / else if / else` の構造です。\n\n## ループ（繰り返し処理）の実務活用\n\n「カートに入った商品が複数ある場合、各商品のIDと価格をGA4に送る」\n→ 商品の数だけ繰り返す `forEach` です。\n\nこれらの仕組みを理解すると、GTMのカスタムHTMLタグやカスタムJS変数のコードを読んで理解できるようになります。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# 条件分岐とループの書き方\n\n## if / else if / else\n\n```js\nlet score = 85;\n\nif (score >= 90) {\n  console.log(\"Aランク\");\n} else if (score >= 70) {\n  console.log(\"Bランク\");  // ← scoreが85なのでここが実行される\n} else {\n  console.log(\"Cランク\");\n}\n```\n\n**GTMのトリガーに置き換えると:**\n```js\nlet pageUrl = window.location.href;\n\nif (pageUrl.includes(\"/thanks\")) {\n  // コンバージョンタグを発火\n}\n```\n\n## 比較演算子\n\n| 演算子 | 意味 | 例 |\n|--------|------|----|\n| `===` | 完全一致（型も含む） | `\"90\" === 90` → false |\n| `!==` | 不一致 | `status !== \"error\"` |\n| `>` | より大きい | `pageViews > 1000` |\n| `>=` | 以上 | `score >= 70` |\n| `&&` | かつ（AND） | `isLogin && isPremium` |\n| `\\|\\|` | または（OR） | `page === \"/\" \\|\\| page === \"/home\"` |\n\n## forループ\n\n```js\n// 基本のforループ\nfor (let i = 0; i < 3; i++) {\n  console.log(i + \"回目\");\n}\n// → 0回目, 1回目, 2回目\n```\n\n## 配列のforEach（GA4のecommerceイベントで頻出）\n\n```js\n// 複数商品をGA4に送る実務パターン\nconst items = [\n  { item_id: \"SKU-001\", item_name: \"Tシャツ\", price: 2980 },\n  { item_id: \"SKU-002\", item_name: \"パーカー\", price: 5980 },\n];\n\nitems.forEach(function(item) {\n  console.log(item.item_name + \": \" + item.price + \"円\");\n});\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: ユーザーランク判定システム\n\nスコアに応じてユーザーのランクを判定するプログラムを作成してください。\nこれはGA4のオーディエンス設定やGTMの条件設定と同じ思考プロセスです。\n\n## 課題\n\n1. 変数 `score` の値（0〜100）に応じて以下のランクを判定して表示する\n   - 80以上: Goldランク\n   - 60以上80未満: Silverランク\n   - 60未満: Bronzeランク\n\n2. **ボーナス**: 以下の複数ユーザーのスコアをforeachでループして全員のランクを表示する\n   - `const users = [95, 72, 58, 83, 41]`",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>条件分岐の練習</title>\n</head>\n<body>\n  <h1>ユーザーランク判定</h1>\n\n  <script>\n    // ① スコアに応じてランクを判定してください\n    let score = 75;\n\n    // if / else if / else を使ってランクを表示\n    // 80以上 → \"Goldランク\"\n    // 60以上80未満 → \"Silverランク\"\n    // 60未満 → \"Bronzeランク\"\n\n\n\n    // ② ボーナス: 複数ユーザーをループして全員のランクを表示\n    const users = [95, 72, 58, 83, 41];\n\n    // users.forEach(function(s) { ... }) を使ってみましょう\n\n\n  </script>\n</body>\n</html>",
+        "hints": [
+          "`if (score >= 80) { }` のように書きます。GTMトリガーで「ページURLが〜を含む場合」と設定するのと同じ構造です。",
+          "`else if (score >= 60) { }` を追加することで複数条件を順番に判定できます。条件は上から順に評価されるため、最初に一致した条件だけが実行されます。",
+          "配列のforEachは `users.forEach(function(s) { ここにif文を書く })` の形です。GA4のecommerceイベントで複数商品をitemsとして渡すとき、内部でこの処理が行われています。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>条件分岐の練習</title>\n</head>\n<body>\n  <h1>ユーザーランク判定</h1>\n\n  <script>\n    // ① ランク判定\n    let score = 75;\n\n    if (score >= 80) {\n      console.log(\"Goldランク\");\n    } else if (score >= 60) {\n      console.log(\"Silverランク\");  // scoreが75なのでここ\n    } else {\n      console.log(\"Bronzeランク\");\n    }\n\n    // ② 複数ユーザーをループ\n    const users = [95, 72, 58, 83, 41];\n\n    users.forEach(function(s) {\n      if (s >= 80) {\n        console.log(s + \"点 → Goldランク\");\n      } else if (s >= 60) {\n        console.log(s + \"点 → Silverランク\");\n      } else {\n        console.log(s + \"点 → Bronzeランク\");\n      }\n    });\n  </script>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "`==` と `===` の違いとして正しいのはどれですか？",
+            "options": [
+              "どちらも同じ。書き方のスタイルが違うだけ",
+              "`==` は値だけを比較、`===` は値と型の両方を比較する",
+              "`===` は数値専用、`==` は文字列専用",
+              "`===` の方が処理が重いため、`==` を使うべき"
+            ],
+            "correct": 1,
+            "explanation": "`===` は値と型が両方一致する場合のみtrueを返す「厳密等価演算子」です。`\"90\" == 90` はtrueになりますが、`\"90\" === 90` はfalseです（文字列と数値なので型が違う）。GA4やGTMのコードでは型の不一致によるバグを防ぐため、`===` を使うのが現代のベストプラクティスです。"
+          },
+          {
+            "q": "以下のコードの実行結果はどれですか？\n`if (false) { console.log(\"A\"); } else if (true) { console.log(\"B\"); } else { console.log(\"C\"); }`",
+            "options": [
+              "A",
+              "B",
+              "C",
+              "AとBの両方"
+            ],
+            "correct": 1,
+            "explanation": "if文は上から順に条件を評価し、最初にtrueになった条件のブロックだけを実行します。最初の `false` はスキップされ、次の `true` のブロック「B」が実行されます。GTMトリガーの条件も同様に、設定した全条件が満たされた場合にのみ発火します。"
+          },
+          {
+            "q": "GTMで「ページURLに /thanks を含む場合にのみタグを発火させる」トリガーを設定しました。これはJavaScriptのどの概念と最も近いですか？",
+            "options": [
+              "forループ（繰り返し処理）",
+              "変数の型変換",
+              "if文による条件分岐",
+              "関数の定義"
+            ],
+            "correct": 2,
+            "explanation": "GTMのトリガー条件は「もし〜なら発火する」という条件分岐そのものです。内部では `if (pageUrl.includes('/thanks')) { fireTag(); }` のようなJavaScriptが実行されています。GTMの設定UIは、JSを直接書かなくても条件分岐を設定できるようにしたものです。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール3-3 完了！\n\n条件分岐とループという、プログラムの根幹となる概念を習得しました。\n\n## 習得したスキル\n\n✅ **if / else if / else** で複数条件を処理できるようになった\n✅ **`===` による厳密な比較**の重要性を理解した\n✅ **forEachループ**で複数データを処理できるようになった\n✅ **GTMトリガーが条件分岐そのもの**であることを理解した\n\n## GTMコードが読めるようになってきた\n\n「URLに `/thanks` が含まれていたらCV計測する」「商品リストを1件ずつGA4に送る」といったGTMのカスタムコードが、今なら読んで理解できるはずです。\n\n## 次のモジュールへ\n\n次は **「3-4: 関数とスコープ」** です。GTMのカスタムJavaScript変数は「関数」そのものです。URLからUTMパラメータを取得する実務的な関数を書きます。\n\n> 💡 **実務チャレンジ**: GTMのカスタムHTMLタグのコードを1つ開いて、`if` 文が使われているか確認してみましょう。どういう条件で何をしているか読んでみてください。",
+        "diagram": false
+      }
+    }
+  ]
+}
