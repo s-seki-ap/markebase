@@ -1,12 +1,15 @@
 "use client";
 
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function SignInClient({
   isOAuthConfigured,
 }: {
   isOAuthConfigured: boolean;
 }) {
+  const router = useRouter();
+
   return (
     <div
       className="min-h-screen flex items-center justify-center"
@@ -66,20 +69,21 @@ export default function SignInClient({
             </p>
           </>
         ) : (
-          <div
-            className="rounded-xl p-4 text-sm"
-            style={{ backgroundColor: "#0f172a", border: "1px solid #334155" }}
-          >
-            <p className="text-yellow-400 font-medium mb-2">⚠️ 開発環境セットアップ</p>
-            <p className="text-slate-400 mb-3">
-              Google OAuth が未設定です。<code className="text-slate-300">.env.local</code> を作成してください。
-            </p>
-            <pre className="text-xs text-slate-500 leading-relaxed">
-{`GOOGLE_CLIENT_ID=...
-GOOGLE_CLIENT_SECRET=...
-NEXTAUTH_SECRET=任意の文字列
-NEXTAUTH_URL=http://localhost:3000`}
-            </pre>
+          <div className="space-y-3">
+            <div
+              className="rounded-xl p-4 text-sm text-center"
+              style={{ backgroundColor: "#0f172a", border: "1px solid #334155" }}
+            >
+              <p className="text-slate-300 font-medium mb-1">デモモード</p>
+              <p className="text-slate-500 text-xs">ログインなしで利用できます</p>
+            </div>
+            <button
+              onClick={() => router.push("/curriculum")}
+              className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-white font-medium transition-opacity hover:opacity-90"
+              style={{ backgroundColor: "#10b981" }}
+            >
+              📚 デモを始める
+            </button>
           </div>
         )}
       </div>

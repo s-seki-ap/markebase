@@ -4,10 +4,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 
-// 開発時: GOOGLE_CLIENT_IDが未設定なら認証スキップ
-
-const isDevBypass =
-  process.env.NODE_ENV !== "production" && !process.env.GOOGLE_CLIENT_ID;
+const isDevBypass = !process.env.GOOGLE_CLIENT_ID;
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
