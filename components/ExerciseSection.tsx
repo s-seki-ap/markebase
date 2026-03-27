@@ -35,16 +35,9 @@ export default function ExerciseSection({
   const [code, setCode] = useState(data.starterCode);
   const [previewHtml, setPreviewHtml] = useState("");
   const [shownHints, setShownHints] = useState(0);
-  const [showAnswer, setShowAnswer] = useState(false);
 
   const handleRun = () => {
-    setPreviewHtml(showAnswer ? data.answer : code);
-  };
-
-  const handleShowAnswer = () => {
-    setShowAnswer(true);
-    setCode(data.answer);
-    setPreviewHtml(data.answer);
+    setPreviewHtml(code);
   };
 
   const showNextHint = () => {
@@ -182,13 +175,6 @@ export default function ExerciseSection({
           style={{ backgroundColor: "#10b981", color: "white" }}
         >
           ▶ 実行
-        </button>
-        <button
-          onClick={handleShowAnswer}
-          className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-colors"
-          style={{ backgroundColor: "#1e293b", color: "#94a3b8" }}
-        >
-          ✅ 答えを見る
         </button>
         <button
           onClick={onAIClick}
