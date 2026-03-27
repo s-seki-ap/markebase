@@ -1,0 +1,67 @@
+{
+  "id": "web-fundamentals--0-3",
+  "moduleId": "0-3",
+  "categoryId": "web-fundamentals",
+  "title": "HTTP vs HTTPS：暗号化通信の仕組み",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# なぜHTTPSがマーケターの必須知識なのか\n\n「サイトをHTTPSにしてください」——開発チームに伝えるだけで終わっていませんか？実は、HTTPSへの移行はSEO・広告計測・GA4の精度に直結する重大なマーケティング課題です。\n\n## HTTPSを理解しないと起きる問題\n\n**1. リファラーデータが消える**\nHTTPSサイトからHTTPサイトへのリンクを踏むと、リファラー情報（流入元）がGAに送られません。GA4でトラフィックが「direct」に見えていても、実はHTTPS→HTTP遷移でリファラーが消えている可能性があります。\n\n**2. Google広告のコンバージョン計測が不安定になる**\nGoogle広告のコンバージョンタグはHTTPSのLPでのみ確実に動作します。HTTPのLPでは計測精度が落ち、広告の最適化に悪影響を与えます。\n\n**3. Chromeがサイトを「危険」と表示する**\nHTTPのフォームページはChromeに「保護されていない通信」と表示されます。これはコンバージョン率（CVR）を直接低下させます。\n\n**4. SEO順位への影響**\nGoogleはHTTPSをランキング要因としています。競合がHTTPSでこちらがHTTPなら、それだけで不利な戦いをしていることになります。\n\n## このモジュールで身につくこと\n\nTLSハンドシェイクの流れを理解し、「HTTPS化によって何が保護され、なぜマーケティングデータの精度に影響するのか」を自信を持って説明できるようになります。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# HTTP vs HTTPS の違い\n\n## 根本的な違い\n\n| 項目 | HTTP | HTTPS |\n|------|------|-------|\n| ポート | 80 | 443 |\n| 暗号化 | なし | TLSによる暗号化 |\n| 通信内容 | 第三者に盗聴可能 | 暗号化で保護 |\n| 証明書 | 不要 | SSL/TLS証明書が必要 |\n| SEO | 不利 | 有利 |\n| リファラー送信 | HTTPS→HTTPで消える | HTTPS→HTTPSで維持 |\n\n## TLSハンドシェイクの流れ\n\nブラウザがHTTPSサイトに接続するとき、通信を開始する前に「TLSハンドシェイク」という手続きを行います。\n\n```\nブラウザ                      サーバー\n   │                             │\n   │──── ClientHello ──────────▶│  どの暗号方式を使えるか提示\n   │                             │\n   │◀─── ServerHello ───────────│  使用する暗号方式を決定\n   │◀─── Certificate ───────────│  SSL証明書を送付\n   │                             │\n   │  [証明書を検証する]          │\n   │  └ 発行元（CA）は信頼できるか？\n   │  └ 証明書の期限は切れていないか？\n   │  └ ドメイン名が一致しているか？\n   │                             │\n   │──── KeyExchange ──────────▶│  共通鍵を安全に共有\n   │                             │\n   │◀═══════════════════════════│  以降すべての通信が暗号化\n   │  【暗号化された通信】        │\n   │  GA4イベントデータなど       │\n```\n\n## 証明書の種類\n\n| 種類 | 特徴 | 用途 |\n|------|------|------|\n| DV（ドメイン認証） | ドメイン所有確認のみ | 一般サイト・LP |\n| OV（組織認証） | 組織の実在確認 | 企業サイト |\n| EV（拡張認証） | 厳密な企業審査 | 金融・EC |\n| ワイルドカード | サブドメイン全対応 | `*.example.com` 形式 |\n\n## リファラーが消えるメカニズム\n\n```\n[HTTPSページからリンクをクリック]\n  ↓\nhttps://referrer-site.com → http://your-lp.com\n  ↓\nReferrer-Policy: no-referrer（ブラウザのデフォルト動作）\n  ↓\nGA4: session_source = \"(direct)\" ← 本来はreferral\n```\n\nこれがHTTPS→HTTPの遷移でリファラーが消える理由です。\n\n## HSTS（HTTP Strict Transport Security）\n\nHTTPSサイトはHSTSヘッダーを返すことで、ブラウザに「次回以降は必ずHTTPSで接続してください」と指示できます。\n\n```\nStrict-Transport-Security: max-age=31536000; includeSubDomains\n```\n\nこれにより、ユーザーが `http://` と入力しても自動的に `https://` にリダイレクトされます。",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: HTTPS証明書情報とリダイレクト状況を可視化する\n\n## 課題\n\nHTTPSの証明書情報とリダイレクト挙動を確認できるツールを作成してください。\n\n1. URLを入力して「接続確認」ボタンを押すと、そのURLへのfetchを実行し、実際のレスポンス（最終到達URL・ステータスコード・Content-Type・X-Frame-Optionsなど）を表示する\n2. 入力URLのスキームがHTTPかHTTPSかを判定して視覚的に表示する（HTTPなら警告、HTTPSなら安全マーク）\n3. HTTPで始まるURLが入力されたとき、HTTPSバージョンのURLを自動提案する\n4. よくある証明書エラーの原因を説明するセクションを静的コンテンツとして表示する",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>HTTPS確認ツール</title>\n  <style>\n    body { font-family: sans-serif; padding: 20px; background: #0f172a; color: #e2e8f0; }\n    h2 { color: #3b82f6; border-bottom: 1px solid #334155; padding-bottom: 8px; margin-top: 24px; }\n    .input-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }\n    input { padding: 8px 12px; background: #1e293b; color: #e2e8f0; border: 1px solid #334155; border-radius: 6px; width: 360px; }\n    button { padding: 8px 16px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer; }\n    .result { margin-top: 12px; padding: 16px; background: #1e293b; border-radius: 8px; min-height: 60px; }\n    .safe { color: #10b981; }\n    .warn { color: #f59e0b; }\n    .error { color: #ef4444; }\n    .badge { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: bold; }\n    .badge-safe { background: #064e3b; color: #10b981; }\n    .badge-warn { background: #451a03; color: #f59e0b; }\n  </style>\n</head>\n<body>\n  <h1>HTTPS確認ツール</h1>\n\n  <h2>接続確認</h2>\n  <div class=\"input-row\">\n    <input id=\"urlInput\" type=\"text\" placeholder=\"https://example.com\" />\n    <button id=\"checkBtn\">接続確認</button>\n  </div>\n  <div id=\"schemeStatus\" class=\"result\"></div>\n  <div id=\"responseResult\" class=\"result\" style=\"margin-top:8px\"></div>\n\n  <h2>証明書エラーの主な原因</h2>\n  <div id=\"certErrors\"></div>\n\n  <script>\n\n  </script>\n</body>\n</html>",
+        "hints": [
+          "URLのスキーム判定には url.startsWith('https://') を使います。fetchは no-cors モードだとレスポンスヘッダーが取得できないため、通常モードで試み、CORSエラーになった場合はエラーとして処理してください。",
+          "HTTPSバージョンの自動提案は url.replace('http://', 'https://') で生成できます。スキーム判定の結果に応じて、安全バッジか警告バッジを表示する条件分岐を作ってください。",
+          "証明書エラーの原因リストは配列で定義して innerHTML で表示します。例: [{title: '証明書の期限切れ', desc: '...'}, ...] のような配列を map してHTMLを生成してください。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>HTTPS確認ツール</title>\n  <style>\n    body { font-family: sans-serif; padding: 20px; background: #0f172a; color: #e2e8f0; }\n    h2 { color: #3b82f6; border-bottom: 1px solid #334155; padding-bottom: 8px; margin-top: 24px; }\n    .input-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }\n    input { padding: 8px 12px; background: #1e293b; color: #e2e8f0; border: 1px solid #334155; border-radius: 6px; width: 360px; }\n    button { padding: 8px 16px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer; }\n    .result { margin-top: 12px; padding: 16px; background: #1e293b; border-radius: 8px; min-height: 60px; }\n    .safe { color: #10b981; } .warn { color: #f59e0b; } .error { color: #ef4444; }\n    .badge { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: bold; }\n    .badge-safe { background: #064e3b; color: #10b981; }\n    .badge-warn { background: #451a03; color: #f59e0b; }\n    .cert-item { padding: 12px; background: #0f172a; border-radius: 6px; margin-bottom: 8px; border-left: 3px solid #334155; }\n    .cert-title { font-weight: bold; color: #f59e0b; margin-bottom: 4px; }\n  </style>\n</head>\n<body>\n  <h1>HTTPS確認ツール</h1>\n  <h2>接続確認</h2>\n  <div class=\"input-row\">\n    <input id=\"urlInput\" type=\"text\" placeholder=\"https://example.com\" />\n    <button id=\"checkBtn\">接続確認</button>\n  </div>\n  <div id=\"schemeStatus\" class=\"result\"></div>\n  <div id=\"responseResult\" class=\"result\" style=\"margin-top:8px\"></div>\n  <h2>証明書エラーの主な原因</h2>\n  <div id=\"certErrors\"></div>\n  <script>\n    document.getElementById('checkBtn').addEventListener('click', async () => {\n      const url = document.getElementById('urlInput').value.trim();\n      const schemeEl = document.getElementById('schemeStatus');\n      const resultEl = document.getElementById('responseResult');\n      if (!url) { schemeEl.textContent = 'URLを入力してください'; return; }\n      const isHttps = url.startsWith('https://');\n      const isHttp = url.startsWith('http://');\n      if (isHttps) {\n        schemeEl.innerHTML = `<span class=\"badge badge-safe\">HTTPS</span> <span class=\"safe\">暗号化通信が有効です。</span>`;\n      } else if (isHttp) {\n        const suggested = url.replace('http://', 'https://');\n        schemeEl.innerHTML = `<span class=\"badge badge-warn\">HTTP</span> <span class=\"warn\">非暗号化通信です。リファラーが消える可能性があります。</span><br><small style=\"color:#94a3b8\">推奨URL: <a href=\"#\" style=\"color:#3b82f6\">${suggested}</a></small>`;\n      } else {\n        schemeEl.innerHTML = `<span class=\"error\">有効なURLを入力してください（http:// または https:// で始まる必要があります）</span>`;\n        return;\n      }\n      resultEl.textContent = '確認中...';\n      try {\n        const res = await fetch(url);\n        const ct = res.headers.get('content-type') || 'N/A';\n        const xframe = res.headers.get('x-frame-options') || 'N/A';\n        const hsts = res.headers.get('strict-transport-security') || '未設定';\n        resultEl.innerHTML = `\n          <div><span style=\"color:#94a3b8\">ステータス: </span><span class=\"safe\">${res.status} ${res.statusText}</span></div>\n          <div><span style=\"color:#94a3b8\">最終URL: </span>${res.url}</div>\n          <div><span style=\"color:#94a3b8\">Content-Type: </span>${ct}</div>\n          <div><span style=\"color:#94a3b8\">X-Frame-Options: </span>${xframe}</div>\n          <div><span style=\"color:#94a3b8\">HSTS: </span>${hsts === '未設定' ? '<span class=\"warn\">未設定（HTTPS強制リダイレクトなし）</span>' : '<span class=\"safe\">' + hsts + '</span>'}</div>\n        `;\n      } catch (e) {\n        resultEl.innerHTML = `<span class=\"error\">接続エラー: ${e.message}</span><br><small style=\"color:#64748b\">CORSエラーの場合、リクエスト自体は送信されています。DevToolsのNetworkタブで確認できます。</small>`;\n      }\n    });\n    const certErrors = [\n      { title: '証明書の期限切れ', desc: 'SSL証明書には有効期限があります。Let\\'s Encryptは90日、商用証明書は1〜2年。期限切れのサイトではGA4タグが計測できなくなることがあります。' },\n      { title: 'ドメイン名の不一致', desc: '証明書が発行されたドメインとアクセスしているドメインが違う場合。サブドメインを使う場合はワイルドカード証明書（*.example.com）が必要です。' },\n      { title: '中間証明書の欠落', desc: '証明書チェーンが不完全な状態。ブラウザはルートCAまで信頼チェーンを検証するため、中間証明書が欠けると接続できません。' },\n      { title: '混在コンテンツ（Mixed Content）', desc: 'HTTPSページ内にHTTPリソース（画像・スクリプト）が含まれる状態。ブラウザはHTTPリソースをブロックし、GTMやGA4タグが読み込めなくなる原因になります。' },\n    ];\n    document.getElementById('certErrors').innerHTML = certErrors.map(e => `\n      <div class=\"cert-item\">\n        <div class=\"cert-title\">${e.title}</div>\n        <div style=\"color:#94a3b8;font-size:14px\">${e.desc}</div>\n      </div>\n    `).join('');\n  </script>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "HTTPSサイトからHTTPサイトへのリンクを踏んだとき、GA4でトラフィックソースはどのように記録されますか？",
+            "options": ["正確にリファラーが記録される", "「organic」として記録される", "「direct」として記録されることが多い", "「referral」として正しく記録される"],
+            "correct": 2,
+            "explanation": "ブラウザのデフォルトのReferrer-Policyにより、HTTPSからHTTPへの遷移ではRefererヘッダーが送信されません。そのためGA4はリファラーが不明と判断し「direct」として記録されます。これは特に流入元分析の精度に影響します。"
+          },
+          {
+            "q": "TLSハンドシェイクの主な目的として最も適切なものはどれですか？",
+            "options": ["通信速度を上げるための事前接続確立", "クライアントとサーバーの間で安全に共通鍵を共有すること", "サーバーの場所（IPアドレス）を特定すること", "ポート番号を動的に決定すること"],
+            "correct": 1,
+            "explanation": "TLSハンドシェイクの最大の目的は、第三者に盗聴されることなくクライアントとサーバーで共通の暗号鍵を共有することです。この鍵交換が完了して初めて、以降の通信（GA4のイベントデータなど）が暗号化されます。"
+          },
+          {
+            "q": "HTTPSページ内にHTTPの外部スクリプト（タグ）が含まれている状態を何と言いますか？",
+            "options": ["HSTS（HTTP Strict Transport Security）", "CORS（Cross-Origin Resource Sharing）", "混在コンテンツ（Mixed Content）", "CSP（Content Security Policy）"],
+            "correct": 2,
+            "explanation": "Mixed Content（混在コンテンツ）と呼びます。モダンブラウザはHTTPSページ内のHTTPスクリプトをブロックするため、GTMやGA4のタグがHTTPで読み込まれているとブロックされ計測できなくなります。すべての外部タグがHTTPSで提供されているか確認することが重要です。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール0-3 完了！\n\n## 習得したスキル\n\n- HTTPとHTTPSの根本的な違い（暗号化の有無・ポート・SEO影響）を説明できる\n- TLSハンドシェイクの流れ（ClientHello→証明書検証→鍵交換→暗号化通信）を図解できる\n- HTTPS→HTTP遷移でリファラーが消えるメカニズムをGA4の文脈で説明できる\n- 混在コンテンツ（Mixed Content）がGTM・GA4タグのブロック原因になることを理解した\n- HSTSヘッダーの意味と、HTTPSを強制する仕組みを知っている\n\n## 次のモジュール\n\n**0-4: HTTPリクエストの構造（メソッド・ヘッダー・ボディ）** では、HTTPSで保護された通信の「中身」を詳しく見ていきます。GA4がイベントデータを送信するときのHTTPリクエストには何が入っているのか。GETとPOSTの違いがなぜ重要なのかを理解します。\n\n## 実務チャレンジ\n\n担当サイトのトップページをChromeで開き、アドレスバーの鍵アイコンをクリックして「証明書が有効」の詳細を確認してください。証明書の発行者・有効期限・サブジェクト代替名（SAN）を確認し、ワイルドカード証明書かどうかを調べてみましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

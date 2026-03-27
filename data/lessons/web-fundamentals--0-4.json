@@ -1,0 +1,67 @@
+{
+  "id": "web-fundamentals--0-4",
+  "moduleId": "0-4",
+  "categoryId": "web-fundamentals",
+  "title": "HTTPリクエストの構造（メソッド・ヘッダー・ボディ）",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# GETとPOSTを知らずしてGA4計測は語れない\n\nGA4のイベントが発火していることをDevToolsで確認しようとしたとき、「どのリクエストを見ればいいのか分からない」という経験はありませんか？それはHTTPリクエストの構造を理解していないからです。\n\n## HTTPリクエスト知識がマーケターに直結する場面\n\n**1. GA4 Measurement Protocolの直接送信**\nサーバーサイドからGA4にイベントを送信するMeasurement Protocolは、POSTリクエストでJSONデータを送ります。「なぜGETではないのか」「ボディとヘッダーの違いは何か」を理解していないと、デバッグができません。\n\n**2. GTMのカスタムHTMLタグのデバッグ**\nGTMで `fetch()` を使ったカスタムタグを作るとき、どのHTTPメソッドを使うべきか、認証ヘッダーはどこに書くのかを判断するためにリクエスト構造の知識が必要です。\n\n**3. コンバージョンAPIの連携確認**\nMeta広告のConversions API・Google広告のEnhanced Conversionsは、いずれもPOSTリクエストでイベントデータを送ります。APIドキュメントを読んで実装を確認するには、HTTPリクエストの読み書きができる必要があります。\n\n**4. フォーム送信とCV計測**\n問い合わせフォームのコンバージョン計測では、フォームがGETかPOSTかによって計測方法が変わります。GETのフォームはURLにデータが含まれるためGA4が自動的に拾える場合がありますが、POSTのフォームは追加実装が必要です。\n\nHTTPリクエストはWebの「文法」です。このモジュールでその文法をマスターして、GA4計測の解像度を格段に上げましょう。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# HTTPリクエストの3つの構成要素\n\nHTTPリクエストは「リクエストライン」「ヘッダー」「ボディ」の3つで構成されています。\n\n## 1. リクエストライン\n\n```\nPOST /g/collect?v=2 HTTP/1.1\n│    │           │\n│    │           └── HTTPバージョン\n│    └────────────── リクエストパス\n└─────────────────── HTTPメソッド\n```\n\n## 2. ヘッダー\n\n```http\nHost: www.google-analytics.com\nContent-Type: application/json\nAuthorization: Bearer ya29.xxxxx\nUser-Agent: Mozilla/5.0 (Windows NT 10.0)\nAccept: application/json\n```\n\n## 3. ボディ（メソッドがPOSTの場合）\n\n```json\n{\n  \"client_id\": \"1234567890.1234567890\",\n  \"events\": [\n    {\n      \"name\": \"purchase\",\n      \"params\": {\n        \"transaction_id\": \"T-12345\",\n        \"value\": 9800,\n        \"currency\": \"JPY\"\n      }\n    }\n  ]\n}\n```\n\n## GETとPOSTの違い\n\n| 項目 | GET | POST |\n|------|-----|------|\n| データの場所 | URLのクエリ文字列 | リクエストボディ |\n| データ量の制限 | あり（URL最大長） | なし（実質） |\n| ブラウザ履歴 | URLに残る | 残らない |\n| 冪等性 | あり（何度呼んでも同じ） | なし |\n| GA4の通常計測 | GETを使用 | Measurement Protocolはこちら |\n| フォーム送信 | データがURLに露出 | データがBodyに隠れる |\n\n## GA4の2種類のリクエスト方式\n\n**クライアントサイド（通常のGTM/gtag）**\n```\nGET https://www.google-analytics.com/g/collect\n  ?v=2\n  &tid=G-XXXXXXXXXX\n  &en=purchase\n  &ep.transaction_id=T-12345\n```\n\n**Measurement Protocol（サーバーサイド）**\n```\nPOST https://www.google-analytics.com/mp/collect\n  ?measurement_id=G-XXXXXXXXXX\n  &api_secret=xxxxxxxx\n\nBody:\n{\n  \"client_id\": \"xxx\",\n  \"events\": [{\"name\": \"purchase\", \"params\": {...}}]\n}\n```\n\n## よく使うリクエストヘッダー\n\n| ヘッダー名 | 意味 | マーケティング文脈 |\n|-----------|------|-------------------|\n| `Content-Type` | ボディのデータ形式 | `application/json` でJSONを送信 |\n| `Authorization` | 認証情報 | APIキーやBearerトークン |\n| `User-Agent` | ブラウザ・クライアント情報 | ボット除外フィルタに影響 |\n| `Referer` | 前のページのURL | GA4のリファラー情報の元 |\n| `Cookie` | クッキー情報 | GA4のclient_idが入っている |",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: GA4 Measurement Protocolリクエストビルダーを作る\n\n## 課題\n\nGA4 Measurement Protocolに送るPOSTリクエストを組み立てて表示するツールを作成してください。\n\n1. フォームでClient ID・Measurement ID・イベント名・イベントパラメータ（キーと値のペア）を入力できるようにする\n2. 「リクエストを生成」ボタンを押すと、実際に送信するPOSTリクエストのエンドポイントURL・ヘッダー・ボディJSONを画面に整形して表示する\n3. パラメータは「キー追加」ボタンで動的に行を追加できるようにする\n4. 生成されたJSONボディを「コピー」ボタンでクリップボードにコピーできるようにする",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>Measurement Protocolビルダー</title>\n  <style>\n    body { font-family: sans-serif; padding: 20px; background: #0f172a; color: #e2e8f0; max-width: 800px; }\n    h2 { color: #3b82f6; border-bottom: 1px solid #334155; padding-bottom: 8px; margin-top: 24px; }\n    label { display: block; color: #94a3b8; font-size: 12px; margin-bottom: 4px; margin-top: 12px; }\n    input { padding: 8px 12px; background: #1e293b; color: #e2e8f0; border: 1px solid #334155; border-radius: 6px; width: 100%; box-sizing: border-box; }\n    .param-row { display: flex; gap: 8px; margin-bottom: 8px; }\n    .param-row input { width: auto; flex: 1; }\n    button { padding: 8px 16px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer; margin-top: 8px; margin-right: 8px; }\n    .btn-sm { padding: 4px 10px; font-size: 12px; background: #334155; margin-top: 0; }\n    .result-block { background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 16px; margin-top: 8px; font-family: monospace; font-size: 13px; white-space: pre-wrap; word-break: break-all; }\n    .section-label { color: #8b5cf6; font-size: 11px; font-weight: bold; text-transform: uppercase; margin-bottom: 4px; }\n  </style>\n</head>\n<body>\n  <h1>GA4 Measurement Protocol ビルダー</h1>\n\n  <h2>リクエスト設定</h2>\n  <label>Measurement ID（例: G-XXXXXXXXXX）</label>\n  <input id=\"measurementId\" type=\"text\" placeholder=\"G-XXXXXXXXXX\" />\n\n  <label>API Secret（GA4管理画面で取得）</label>\n  <input id=\"apiSecret\" type=\"text\" placeholder=\"xxxxxxxxxx\" />\n\n  <label>Client ID（例: 1234567890.9876543210）</label>\n  <input id=\"clientId\" type=\"text\" placeholder=\"1234567890.9876543210\" />\n\n  <label>イベント名</label>\n  <input id=\"eventName\" type=\"text\" placeholder=\"purchase\" />\n\n  <label>イベントパラメータ</label>\n  <div id=\"params\"></div>\n  <button class=\"btn-sm\" id=\"addParam\">＋ パラメータを追加</button>\n\n  <br>\n  <button id=\"buildBtn\">リクエストを生成</button>\n\n  <h2>生成されたリクエスト</h2>\n  <div class=\"section-label\">エンドポイントURL</div>\n  <div id=\"endpointResult\" class=\"result-block\">—</div>\n  <div class=\"section-label\" style=\"margin-top:12px\">リクエストヘッダー</div>\n  <div id=\"headerResult\" class=\"result-block\">—</div>\n  <div class=\"section-label\" style=\"margin-top:12px\">リクエストボディ（JSON）</div>\n  <div id=\"bodyResult\" class=\"result-block\">—</div>\n  <button id=\"copyBtn\" style=\"display:none\">JSONをコピー</button>\n\n  <script>\n\n  </script>\n</body>\n</html>",
+        "hints": [
+          "パラメータ行の追加は document.createElement を使って動的に input 要素を作り、params div に appendChild します。削除ボタンも各行に追加すると使いやすいです。",
+          "パラメータ収集は document.querySelectorAll('.param-key') と document.querySelectorAll('.param-value') で全行のinputを取得し、forEach でオブジェクトに変換します。値が空の行はスキップしてください。",
+          "JSONの整形表示は JSON.stringify(obj, null, 2) で2スペースインデントのきれいなJSONになります。クリップボードコピーは navigator.clipboard.writeText(text) を使います。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>Measurement Protocolビルダー</title>\n  <style>\n    body { font-family: sans-serif; padding: 20px; background: #0f172a; color: #e2e8f0; max-width: 800px; }\n    h2 { color: #3b82f6; border-bottom: 1px solid #334155; padding-bottom: 8px; margin-top: 24px; }\n    label { display: block; color: #94a3b8; font-size: 12px; margin-bottom: 4px; margin-top: 12px; }\n    input { padding: 8px 12px; background: #1e293b; color: #e2e8f0; border: 1px solid #334155; border-radius: 6px; width: 100%; box-sizing: border-box; }\n    .param-row { display: flex; gap: 8px; margin-bottom: 8px; align-items: center; }\n    .param-row input { flex: 1; }\n    button { padding: 8px 16px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer; margin-top: 8px; margin-right: 8px; }\n    .btn-sm { padding: 4px 10px; font-size: 12px; background: #334155; margin-top: 0; }\n    .btn-del { padding: 4px 8px; font-size: 12px; background: #7f1d1d; margin-top: 0; }\n    .result-block { background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 16px; margin-top: 8px; font-family: monospace; font-size: 13px; white-space: pre-wrap; word-break: break-all; color: #a5f3fc; }\n    .section-label { color: #8b5cf6; font-size: 11px; font-weight: bold; text-transform: uppercase; margin-bottom: 4px; }\n  </style>\n</head>\n<body>\n  <h1>GA4 Measurement Protocol ビルダー</h1>\n  <h2>リクエスト設定</h2>\n  <label>Measurement ID（例: G-XXXXXXXXXX）</label>\n  <input id=\"measurementId\" type=\"text\" value=\"G-XXXXXXXXXX\" />\n  <label>API Secret（GA4管理画面で取得）</label>\n  <input id=\"apiSecret\" type=\"text\" value=\"my_api_secret\" />\n  <label>Client ID（例: 1234567890.9876543210）</label>\n  <input id=\"clientId\" type=\"text\" value=\"1234567890.9876543210\" />\n  <label>イベント名</label>\n  <input id=\"eventName\" type=\"text\" value=\"purchase\" />\n  <label>イベントパラメータ</label>\n  <div id=\"params\"></div>\n  <button class=\"btn-sm\" id=\"addParam\">+ パラメータを追加</button>\n  <br>\n  <button id=\"buildBtn\">リクエストを生成</button>\n  <h2>生成されたリクエスト</h2>\n  <div class=\"section-label\">エンドポイントURL</div>\n  <div id=\"endpointResult\" class=\"result-block\">—</div>\n  <div class=\"section-label\" style=\"margin-top:12px\">リクエストヘッダー</div>\n  <div id=\"headerResult\" class=\"result-block\">—</div>\n  <div class=\"section-label\" style=\"margin-top:12px\">リクエストボディ（JSON）</div>\n  <div id=\"bodyResult\" class=\"result-block\">—</div>\n  <button id=\"copyBtn\" style=\"display:none\">JSONをコピー</button>\n  <script>\n    function addParamRow(key = '', value = '') {\n      const row = document.createElement('div');\n      row.className = 'param-row';\n      row.innerHTML = `<input class=\"param-key\" type=\"text\" placeholder=\"キー（例: transaction_id）\" value=\"${key}\"><input class=\"param-val\" type=\"text\" placeholder=\"値（例: T-12345）\" value=\"${value}\"><button class=\"btn-del\" onclick=\"this.parentElement.remove()\">削除</button>`;\n      document.getElementById('params').appendChild(row);\n    }\n    addParamRow('transaction_id', 'T-12345');\n    addParamRow('value', '9800');\n    addParamRow('currency', 'JPY');\n    document.getElementById('addParam').addEventListener('click', () => addParamRow());\n    let lastBody = '';\n    document.getElementById('buildBtn').addEventListener('click', () => {\n      const mid = document.getElementById('measurementId').value.trim() || 'G-XXXXXXXXXX';\n      const secret = document.getElementById('apiSecret').value.trim() || 'xxxxxxxxxx';\n      const clientId = document.getElementById('clientId').value.trim() || '1234567890.0';\n      const eventName = document.getElementById('eventName').value.trim() || 'page_view';\n      const params = {};\n      document.querySelectorAll('.param-row').forEach(row => {\n        const k = row.querySelector('.param-key').value.trim();\n        const v = row.querySelector('.param-val').value.trim();\n        if (k && v) params[k] = isNaN(v) ? v : Number(v);\n      });\n      const endpoint = `https://www.google-analytics.com/mp/collect?measurement_id=${mid}&api_secret=${secret}`;\n      const headers = { 'Content-Type': 'application/json' };\n      const body = { client_id: clientId, events: [{ name: eventName, params }] };\n      lastBody = JSON.stringify(body, null, 2);\n      document.getElementById('endpointResult').textContent = `POST ${endpoint}`;\n      document.getElementById('headerResult').textContent = JSON.stringify(headers, null, 2);\n      document.getElementById('bodyResult').textContent = lastBody;\n      document.getElementById('copyBtn').style.display = 'inline-block';\n    });\n    document.getElementById('copyBtn').addEventListener('click', async () => {\n      await navigator.clipboard.writeText(lastBody);\n      const btn = document.getElementById('copyBtn');\n      btn.textContent = 'コピーしました!';\n      setTimeout(() => { btn.textContent = 'JSONをコピー'; }, 2000);\n    });\n  </script>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "GA4のMeasurement ProtocolでイベントをサーバーからGoogleに送信する際に使用するHTTPメソッドはどれですか？",
+            "options": ["GET", "POST", "PUT", "DELETE"],
+            "correct": 1,
+            "explanation": "Measurement ProtocolはPOSTメソッドを使用します。イベントデータをJSONボディに含めてPOSTします。GETメソッドはURLにデータを含めるため、複雑なJSONデータの送信には向きません。クライアントサイドのgtagはGETを使います。"
+          },
+          {
+            "q": "フォームをGET方式で送信した場合、入力データはどこに入りますか？",
+            "options": ["リクエストボディ", "URLのクエリ文字列", "リクエストヘッダー", "Cookieの中"],
+            "correct": 1,
+            "explanation": "GETフォームは入力データをURLのクエリ文字列（?key=value&key2=value2）に含めて送信します。このためブラウザ履歴にデータが残り、URLが共有されると入力データも共有されます。個人情報を含むフォームにはPOSTを使うべきです。"
+          },
+          {
+            "q": "HTTPリクエストの「Content-Type: application/json」ヘッダーが示すものはどれですか？",
+            "options": ["レスポンスのファイル形式がJSONであること", "リクエストボディのデータ形式がJSONであること", "認証方式がJSON Web Tokenであること", "エンコーディングがUTF-8であること"],
+            "correct": 1,
+            "explanation": "Content-Typeヘッダーはリクエストボディのデータ形式を示します。「application/json」はボディがJSON形式であることをサーバーに伝えます。これによりサーバー側はボディをJSONとして正しくパースします。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール0-4 完了！\n\n## 習得したスキル\n\n- HTTPリクエストの3構成要素（リクエストライン・ヘッダー・ボディ）を説明できる\n- GETとPOSTの違いとそれぞれの使いどころを理解した\n- GA4 Measurement ProtocolがPOSTリクエストでJSONボディを送ることを理解した\n- Content-Type・Authorization・Refererなどのリクエストヘッダーの役割を把握した\n- DevToolsのNetworkタブでHTTPリクエストの内容を確認する方法を知っている\n\n## 次のモジュール\n\n**0-5: HTTPレスポンスの構造とステータスコード** では、リクエストに対してサーバーが返す「レスポンス」の構造を学びます。200・301・404・500などのステータスコードが示す意味と、GA4計測やサイト運用トラブルとの関係を解説します。\n\n## 実務チャレンジ\n\nChrome DevToolsのNetworkタブを開き、GA4の計測タグが送信しているリクエスト（`www.google-analytics.com/g/collect` または `www.google-analytics.com/mp/collect`）を確認してください。「Headers」タブでリクエストヘッダーを、「Payload」タブでリクエストボディを確認し、どんなパラメータが送られているかを読んでみましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

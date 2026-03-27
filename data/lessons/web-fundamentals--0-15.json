@@ -1,0 +1,72 @@
+{
+  "id": "web-fundamentals--0-15",
+  "moduleId": "0-15",
+  "categoryId": "web-fundamentals",
+  "title": "Chrome DevToolsのネットワークパネル活用",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# マーケター向け導入\n\n「GTMでGA4のイベントタグを設定したのに、GA4のリアルタイムレポートに表示されない」という問題の調査で最も役立つツールがDevToolsのネットワークパネルです。GTMプレビューモードでタグが「発火済み」になっていても、実際にGA4サーバーへのリクエストが送信されているかどうかは別の問題です。\n\nネットワークパネルを使うと、GA4計測用のHTTPリクエスト（`https://www.google-analytics.com/g/collect` へのPOSTリクエスト）をリアルタイムに確認できます。パラメータの内容・タイミング・レスポンスコードをすべて目視で確認できるため、「タグは動いているのにデータが届かない」「イベントパラメータの値が正しく送られているか不明」という問題を10分以内に特定できます。また広告のビーコン（コンバージョンタグ）・フォント読み込み・画像リクエストなど、ページパフォーマンスに関わるすべての通信が確認できるため、サイト改善の議論でも必須のスキルです。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# Chrome DevTools ネットワークパネルの使い方\n\n## パネルの開き方\n\n- `F12` または `Ctrl+Shift+I`（Mac: `Cmd+Option+I`）でDevToolsを開く\n- 「Network」タブをクリック\n- ページをリロード（`F5`）して通信の記録を開始\n\n## GA4リクエストのフィルタリング\n\nGA4の計測リクエストは `collect` というキーワードでフィルタできます。\n\n```\nフィルターボックスに入力: collect\n```\n\n表示されるURLの形式：\n```\nhttps://www.google-analytics.com/g/collect?v=2&tid=G-XXXXXXXXXX&...\n```\n\n## リクエストの詳細確認\n\n| タブ | 確認できる内容 |\n|------|----------------|\n| Headers | リクエストURL・メソッド（POST）・ステータスコード（200/204）|\n| Payload | 送信されたイベントパラメータ（event_name, value等）|\n| Timing | DNSルックアップ・接続・送信・待機・受信の時間内訳 |\n| Preview | レスポンスのプレビュー |\n\n## GA4の主要パラメータ一覧\n\nGA4はリクエストのURLクエリパラメータとしてイベントデータを送信します。\n\n| パラメータ | 意味 |\n|------------|------|\n| `v=2` | Measurement Protocol v2 |\n| `tid=G-XXXX` | GA4プロパティID |\n| `cid` | クライアントID（ユーザー識別子）|\n| `en` | イベント名（event_name）|\n| `ep.event_category` | カスタムイベントパラメータ |\n| `_p` | セッション内のヒット番号 |\n\n## ネットワークパネルの重要機能\n\n### Preserve log\n「Preserve log」チェックボックスをONにすると、ページ遷移後もログが消えません。フォーム送信やページ遷移を伴うコンバージョンイベントの確認に必須です。\n\n### Throttling（通信速度制限）\n「No throttling」のドロップダウンから「Slow 3G」や「Fast 3G」を選択すると、低速回線を模擬できます。スマートフォンユーザー向けLPの表示速度やGA4タグの読み込みタイミングを実際に体験できます。\n\n### HAR形式でのエクスポート\n「Download profile as HAR」でネットワークログをファイルに保存し、エンジニアや代理店と共有できます。\n\n## GTMコンテナの通信確認\n\nGTMコンテナ自体の読み込みは以下のURLで確認できます：\n```\nhttps://www.googletagmanager.com/gtm.js?id=GTM-XXXXXXX\n```\n\n読み込み失敗（404/503）やタイムアウトがあれば、そもそもGTMが動作していない原因がここにあります。\n\n## Waterfall（ウォーターフォール）チャートの読み方\n\nネットワークパネルの右側に表示されるバーがWaterfallです。\n\n```\n|--DNS--|--Connect--|--TTFB--|--Download--|\n```\n\n- **TTFB（Time to First Byte）が長い** → サーバーの処理が遅い\n- **Download時間が長い** → ファイルサイズが大きい\n- **多数のリクエストが連鎖している** → クリティカルパスが長い",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: GA4計測リクエストをシミュレートして検証する\n\n## 課題\n\n1. 下記のstarterCodeをブラウザで開く\n2. 「ページビューを送信」ボタンを押したときに `navigator.sendBeacon` でGA4のcollectエンドポイントに擬似リクエストを送信する（実際には送信されないが、DevToolsで通信を確認できる）\n3. 「イベントを送信」ボタンでカスタムイベントパラメータを含むリクエストを送信する\n4. DevToolsのNetworkパネルを開いて `collect` でフィルタし、送信内容をPayloadタブで確認する\n5. 「リクエスト詳細表示」エリアに送信するパラメータの内容をJSON形式で表示して、DevToolsで見る内容と照合できるようにする",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>GA4リクエスト検証ツール</title>\n  <style>\n    body { font-family: sans-serif; max-width: 750px; margin: 40px auto; padding: 0 20px; background: #f0f8ff; }\n    .card { background: white; border-radius: 8px; padding: 20px; margin: 16px 0; }\n    h1 { color: #1557a0; }\n    button { padding: 10px 20px; cursor: pointer; background: #1a73e8; color: white; border: none; border-radius: 4px; margin: 4px; }\n    button.secondary { background: #34a853; }\n    button.danger { background: #ea4335; }\n    pre { background: #f8f9fa; padding: 16px; border-radius: 8px; font-size: 12px; overflow-x: auto; border-left: 4px solid #1a73e8; }\n    .instruction { background: #e8f5e9; border-left: 4px solid #34a853; padding: 12px; border-radius: 4px; font-size: 14px; }\n    input, select { padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin: 4px; }\n    label { font-size: 14px; color: #555; }\n    #log { background: #fff; border: 1px solid #ddd; padding: 12px; border-radius: 4px; max-height: 200px; overflow-y: auto; font-family: monospace; font-size: 13px; }\n  </style>\n</head>\n<body>\n  <h1>GA4リクエスト検証ツール</h1>\n\n  <div class=\"card instruction\">\n    <strong>使い方:</strong> DevToolsのNetworkタブを開いてフィルターに「collect」を入力してから、下のボタンを押してください。\n  </div>\n\n  <div class=\"card\">\n    <h2>ページビュー送信</h2>\n    <label>プロパティID: <input type=\"text\" id=\"measurementId\" value=\"G-XXXXXXXXXX\" style=\"width:160px\"></label>\n    <br><br>\n    <button onclick=\"sendPageView()\">ページビューを送信</button>\n    <pre id=\"pageViewPayload\">ここにペイロードが表示されます</pre>\n  </div>\n\n  <div class=\"card\">\n    <h2>カスタムイベント送信</h2>\n    <label>イベント名: <input type=\"text\" id=\"eventName\" value=\"button_click\" style=\"width:160px\"></label><br>\n    <label>カテゴリ: <input type=\"text\" id=\"eventCategory\" value=\"engagement\" style=\"width:160px\"></label><br>\n    <label>値: <input type=\"number\" id=\"eventValue\" value=\"1\" style=\"width:100px\"></label><br><br>\n    <button class=\"secondary\" onclick=\"sendCustomEvent()\">カスタムイベントを送信</button>\n    <pre id=\"eventPayload\">ここにペイロードが表示されます</pre>\n  </div>\n\n  <div class=\"card\">\n    <h2>送信ログ</h2>\n    <div id=\"log\">（まだ送信されていません）</div>\n  </div>\n\n  <script>\n    const COLLECT_URL = 'https://www.google-analytics.com/g/collect';\n    let clientId = Math.random().toString(36).substring(2) + '.' + Date.now();\n    let sessionId = Date.now().toString();\n    let hitCount = 0;\n\n    function buildBaseParams(measurementId) {\n      return {\n        v: '2',\n        tid: measurementId,\n        cid: clientId,\n        sid: sessionId,\n        sct: '1',\n        seg: '1',\n        _p: ++hitCount\n      };\n    }\n\n    function paramsToQueryString(params) {\n      return Object.entries(params)\n        .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`)\n        .join('&');\n    }\n\n    function addToLog(message) {\n      const log = document.getElementById('log');\n      const div = document.createElement('div');\n      div.textContent = new Date().toLocaleTimeString() + ' - ' + message;\n      log.prepend(div);\n    }\n\n    function sendPageView() {\n      const mid = document.getElementById('measurementId').value.trim();\n      // TODO: buildBaseParams を使ってベースパラメータを作成する\n      // TODO: ページビュー用パラメータ（en: 'page_view', dl: location.href, dt: document.title）を追加する\n      // TODO: paramsToQueryString でクエリ文字列を生成する\n      // TODO: navigator.sendBeacon(COLLECT_URL + '?' + queryString, '') で送信する\n      // TODO: pageViewPayload に送信内容を JSON.stringify で表示する\n      // TODO: addToLog でログに記録する\n    }\n\n    function sendCustomEvent() {\n      const mid = document.getElementById('measurementId').value.trim();\n      const eventName = document.getElementById('eventName').value.trim();\n      const category = document.getElementById('eventCategory').value.trim();\n      const value = document.getElementById('eventValue').value;\n      // TODO: buildBaseParams を使ってベースパラメータを作成する\n      // TODO: カスタムイベント用パラメータ（en: eventName, ep.event_category: category, ep.value: value）を追加する\n      // TODO: 送信して eventPayload に表示する\n    }\n  </script>\n</body>\n</html>",
+        "hints": [
+          "buildBaseParams(mid) でベースオブジェクトを受け取った後、スプレッド構文を使って追加パラメータをマージできます。例: const params = { ...buildBaseParams(mid), en: 'page_view', dl: location.href, dt: document.title } というように書きます。",
+          "navigator.sendBeacon の第一引数はURL、第二引数は送信するボディです。GA4のcollectエンドポイントはクエリパラメータとしてデータを受け取るため、URL に ? + queryString を付けて第二引数は空文字列 '' で構いません。sendBeaconは戻り値として送信キューへの追加成否（boolean）を返します。",
+          "pageViewPayload への表示は document.getElementById('pageViewPayload').textContent = JSON.stringify(params, null, 2) で整形表示できます。DevToolsのNetworkパネルのPayloadタブで実際のリクエストと照合してください。collect URLへのリクエストが表示されない場合はフィルターが正しく設定されているか確認します。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>GA4リクエスト検証ツール</title>\n  <style>\n    body { font-family: sans-serif; max-width: 750px; margin: 40px auto; padding: 0 20px; background: #f0f8ff; }\n    .card { background: white; border-radius: 8px; padding: 20px; margin: 16px 0; }\n    h1 { color: #1557a0; }\n    button { padding: 10px 20px; cursor: pointer; background: #1a73e8; color: white; border: none; border-radius: 4px; margin: 4px; }\n    button.secondary { background: #34a853; }\n    pre { background: #f8f9fa; padding: 16px; border-radius: 8px; font-size: 12px; overflow-x: auto; border-left: 4px solid #1a73e8; }\n    .instruction { background: #e8f5e9; border-left: 4px solid #34a853; padding: 12px; border-radius: 4px; font-size: 14px; }\n    input { padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin: 4px; }\n    label { font-size: 14px; color: #555; }\n    #log { background: #fff; border: 1px solid #ddd; padding: 12px; border-radius: 4px; max-height: 200px; overflow-y: auto; font-family: monospace; font-size: 13px; }\n  </style>\n</head>\n<body>\n  <h1>GA4リクエスト検証ツール</h1>\n\n  <div class=\"card instruction\">\n    <strong>使い方:</strong> DevToolsのNetworkタブを開いてフィルターに「collect」を入力してから、下のボタンを押してください。\n  </div>\n\n  <div class=\"card\">\n    <h2>ページビュー送信</h2>\n    <label>プロパティID: <input type=\"text\" id=\"measurementId\" value=\"G-XXXXXXXXXX\" style=\"width:160px\"></label>\n    <br><br>\n    <button onclick=\"sendPageView()\">ページビューを送信</button>\n    <pre id=\"pageViewPayload\">ここにペイロードが表示されます</pre>\n  </div>\n\n  <div class=\"card\">\n    <h2>カスタムイベント送信</h2>\n    <label>イベント名: <input type=\"text\" id=\"eventName\" value=\"button_click\" style=\"width:160px\"></label><br>\n    <label>カテゴリ: <input type=\"text\" id=\"eventCategory\" value=\"engagement\" style=\"width:160px\"></label><br>\n    <label>値: <input type=\"number\" id=\"eventValue\" value=\"1\" style=\"width:100px\"></label><br><br>\n    <button class=\"secondary\" onclick=\"sendCustomEvent()\">カスタムイベントを送信</button>\n    <pre id=\"eventPayload\">ここにペイロードが表示されます</pre>\n  </div>\n\n  <div class=\"card\">\n    <h2>送信ログ</h2>\n    <div id=\"log\">（まだ送信されていません）</div>\n  </div>\n\n  <script>\n    const COLLECT_URL = 'https://www.google-analytics.com/g/collect';\n    let clientId = Math.random().toString(36).substring(2) + '.' + Date.now();\n    let sessionId = Date.now().toString();\n    let hitCount = 0;\n\n    function buildBaseParams(measurementId) {\n      return {\n        v: '2',\n        tid: measurementId,\n        cid: clientId,\n        sid: sessionId,\n        sct: '1',\n        seg: '1',\n        _p: ++hitCount\n      };\n    }\n\n    function paramsToQueryString(params) {\n      return Object.entries(params)\n        .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`)\n        .join('&');\n    }\n\n    function addToLog(message) {\n      const log = document.getElementById('log');\n      const div = document.createElement('div');\n      div.textContent = new Date().toLocaleTimeString() + ' - ' + message;\n      log.prepend(div);\n    }\n\n    function sendPageView() {\n      const mid = document.getElementById('measurementId').value.trim();\n      const params = {\n        ...buildBaseParams(mid),\n        en: 'page_view',\n        dl: location.href,\n        dt: document.title,\n        dr: document.referrer\n      };\n      const qs = paramsToQueryString(params);\n      const ok = navigator.sendBeacon(COLLECT_URL + '?' + qs, '');\n      document.getElementById('pageViewPayload').textContent = JSON.stringify(params, null, 2);\n      addToLog(`page_view 送信 (sendBeacon: ${ok}) → ${COLLECT_URL}`);\n    }\n\n    function sendCustomEvent() {\n      const mid = document.getElementById('measurementId').value.trim();\n      const eventName = document.getElementById('eventName').value.trim();\n      const category = document.getElementById('eventCategory').value.trim();\n      const value = document.getElementById('eventValue').value;\n      const params = {\n        ...buildBaseParams(mid),\n        en: eventName,\n        'ep.event_category': category,\n        'ep.value': value,\n        'epn.value': Number(value)\n      };\n      const qs = paramsToQueryString(params);\n      const ok = navigator.sendBeacon(COLLECT_URL + '?' + qs, '');\n      document.getElementById('eventPayload').textContent = JSON.stringify(params, null, 2);\n      addToLog(`${eventName} 送信 (sendBeacon: ${ok})`);\n    }\n  </script>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "DevToolsのNetworkパネルでGA4の計測リクエストを絞り込むために使うフィルターキーワードはどれですか？",
+            "options": ["analytics", "ga4", "collect", "gtag"],
+            "correct": 2,
+            "explanation": "GA4の計測リクエストは `https://www.google-analytics.com/g/collect` に送信されます。Networkパネルのフィルターボックスに `collect` と入力することで、GA4関連のリクエストを絞り込めます。"
+          },
+          {
+            "q": "ページ遷移を伴うフォーム送信のコンバージョンタグをNetworkパネルで確認する場合、事前に必要な設定はどれですか？",
+            "options": [
+              "Throttlingを「Slow 3G」に設定する",
+              "「Preserve log」チェックボックスをONにする",
+              "「Disable cache」をONにする",
+              "HARファイルをインポートする"
+            ],
+            "correct": 1,
+            "explanation": "デフォルトではページ遷移時にNetworkログがクリアされます。「Preserve log」をONにすることで、遷移後もログが保持されます。フォーム送信後のサンクスページに遷移してもコンバージョンリクエストを確認できます。"
+          },
+          {
+            "q": "GA4のcollectリクエストのPayloadタブで `en` パラメータが示すものはどれですか？",
+            "options": ["エンコーディング形式", "イベント名（event_name）", "エンドポイントURL", "エラー番号"],
+            "correct": 1,
+            "explanation": "`en` はevent_nameの略称です。GA4のMeasurement Protocol v2では各パラメータが短縮名で送信されます。`tid`はプロパティID、`cid`はクライアントID、`en`はイベント名です。Payloadで `en=purchase` などと表示されます。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール0-15 完了！\n\n## 習得スキル\n\n- DevToolsのNetworkパネルを使ってGA4のcollectリクエストをリアルタイムに確認できる\n- `collect` フィルターでGA4リクエストを絞り込む方法を習得した\n- Headers・Payload・Timingタブで確認できる情報の違いを把握した\n- 「Preserve log」でページ遷移後もログを保持する設定ができる\n- Waterfallチャートの読み方とパフォーマンス分析の基礎を理解した\n\n## 実務チャレンジ\n\n担当するWebサイトをDevToolsのNetworkパネル（`collect`フィルター）を開いた状態で閲覧し、GA4のイベントリクエストを実際に確認してください。Payloadタブでイベント名（`en`）とパラメータ（`ep.*`）が正しい値で送信されているかを確認し、不一致があればGTMの設定を見直します。\n\n## 次のモジュールへ\n\n**0-16: DevToolsのコンソールとElements活用** では、JavaScriptエラーの読み方とDOM変化のデバッグ方法を学びます。GTM設定後にコンソールにエラーが出る場合の原因特定と、Elements パネルでDOM変化をウォッチする方法を習得します。",
+        "diagram": false
+      }
+    }
+  ]
+}

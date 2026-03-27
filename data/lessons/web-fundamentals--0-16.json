@@ -1,0 +1,82 @@
+{
+  "id": "web-fundamentals--0-16",
+  "moduleId": "0-16",
+  "categoryId": "web-fundamentals",
+  "title": "DevToolsのコンソールとElements活用",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# マーケター向け導入\n\nGTMの実装後やGA4設定の確認作業で「コンソールに赤いエラーが出ているけど何を意味するかわからない」という場面は多くあります。また「特定のボタンをクリックしたときにGTMタグが発火するはずなのに発火しない」という問題を調査するとき、ElementsパネルとコンソールはDevToolsの中で最も使用頻度の高いツールです。\n\nコンソールでは `dataLayer` の現在の状態を確認したり、`document.querySelector('.buy-button')` を実行してGTMのCSSセレクタが正しく要素を捕捉できるかをリアルタイムに検証できます。またElementsパネルでは、DOM要素の属性値・テキスト内容・クラス名をリアルタイムに確認でき、GTMのトリガー条件（クリックテキスト・クリックID等）が正しく設定されているかを確かめられます。さらにDOMの変化をBreakpointで監視することで、SPAでのDOM書き換えのタイミングを特定することも可能です。このモジュールではこれらの実務的な使い方を体系的に習得します。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# DevToolsのコンソールとElementsパネルの使い方\n\n## Consoleパネルの基本機能\n\n### エラーレベルの種類\n\n| レベル | 色 | 意味 |\n|--------|-----|------|\n| Error | 赤 | 実行を妨げる重大なエラー（スクリプトが停止） |\n| Warning | 黄 | 問題の可能性（動作は継続） |\n| Info | 青 | 情報メッセージ |\n| Log | 白/黒 | 一般的なログ出力 |\n\n### GTM関連の代表的なエラーパターン\n\n```\n// よくあるエラー例\nUncaught TypeError: Cannot read properties of null (reading 'addEventListener')\n→ DOM要素が存在しない状態でイベントリスナーを設定しようとした\n→ GTMタグのトリガーを「DOM Ready」に変更することで解決\n\nUncaught ReferenceError: dataLayer is not defined\n→ GTMスニペット読み込み前に dataLayer.push() を実行した\n→ GTMスニペットをできるだけ <head> 上部に移動する\n\nAccess to fetch ... blocked by CORS policy\n→ クロスオリジンへのリクエストがブロックされた（0-19で詳しく学習）\n```\n\n### コンソールでのdataLayer確認\n\nコンソールに以下を入力してEnterで即座に確認できます：\n\n```javascript\n// dataLayerの現在の状態を表示\ndataLayer\n\n// 最後にプッシュされたオブジェクトを確認\ndataLayer[dataLayer.length - 1]\n\n// GTMが処理したイベント名の一覧\ndataLayer.filter(d => d.event).map(d => d.event)\n```\n\n### コンソールでのCSSセレクタ検証\n\nGTMのクリックトリガーで「クリック要素が一致」条件を設定するときに使えます：\n\n```javascript\n// セレクタが要素を正しく捕捉できるか確認\ndocument.querySelector('.purchase-button')\n// → 要素が返れば正しい。nullなら要素が存在しないか、セレクタが誤り\n\ndocument.querySelectorAll('a[href*=\"/cart\"]').length\n// → カートリンクの数を確認\n```\n\n## Elementsパネルの活用\n\n### 要素の選択方法\n\n- **インスペクト（虫眼鏡アイコン）**: クリックしてページ上の要素を直接選択\n- **右クリック > 検証**: 特定の要素を右クリックして素早く開く\n\n### GTMトリガー設定のための属性確認\n\nGTMの「クリック – 全要素」トリガーで使える変数と対応するHTML属性：\n\n| GTM変数 | HTML属性 | Elementsでの確認箇所 |\n|---------|----------|---------------------|\n| Click ID | `id=\"xxx\"` | 要素の id 属性 |\n| Click Classes | `class=\"xxx\"` | 要素の class 属性 |\n| Click Text | 要素のテキスト | テキストノード |\n| Click URL | `href=\"xxx\"` | a要素の href 属性 |\n\n### DOM変化のBreakpoint（DOM Breakpoints）\n\nSPAでの計測トラブルで特に有用な機能です。\n\n1. Elementsパネルで要素を右クリック\n2. 「Break on」→「Subtree modifications」を選択\n3. その要素の子要素が変化するとJavaScriptの実行が一時停止\n4. SourcesパネルのCall Stackで「どのスクリプトがDOMを変更したか」を特定\n\n### Styles（スタイル）ペインの活用\n\nElementsパネルの右側にあるStylesペインでは、選択した要素に適用されているCSSをすべて確認できます。取り消し線が引かれているプロパティは上書きされています。これによりLPのデザイン崩れの原因特定が効率化されます。\n\n## コンソールAPIの活用例\n\n```javascript\n// テーブル形式での表示（dataLayer確認に便利）\nconsole.table(dataLayer)\n\n// グループ化\nconsole.group('GA4イベント確認');\nconsole.log('event_name:', dataLayer.slice(-1)[0]?.event);\nconsole.groupEnd();\n\n// 実行時間計測\nconsole.time('タグ実行時間');\n// ... 処理 ...\nconsole.timeEnd('タグ実行時間');\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: JavaScriptエラーとdataLayerデバッグツールを作る\n\n## 課題\n\n1. 下記のstarterCodeをブラウザで開く\n2. 「エラーを発生させる」ボタンで意図的にJavaScriptエラーを生成し、`try-catch` でエラーメッセージを画面にキャプチャして表示する\n3. 「dataLayer確認」セクションで `window.dataLayer` の現在の状態を表示する\n4. `window.onerror` を使ってページ全体のキャッチされないエラーを監視してログに記録する\n5. 「CSSセレクタ検証」入力欄にセレクタを入力するとページ上の一致要素数と最初の要素のタグ名・クラスを表示する",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Consoleデバッグツール</title>\n  <style>\n    body { font-family: sans-serif; max-width: 750px; margin: 40px auto; padding: 0 20px; background: #1a1a2e; color: #eee; }\n    .card { background: #16213e; border-radius: 8px; padding: 20px; margin: 16px 0; }\n    h1 { color: #e94560; }\n    h2 { color: #0f3460; background: #e94560; padding: 8px 12px; border-radius: 4px; }\n    button { padding: 8px 16px; cursor: pointer; border: none; border-radius: 4px; margin: 4px; }\n    .btn-danger { background: #e94560; color: white; }\n    .btn-info { background: #0f3460; color: white; }\n    .btn-success { background: #1a936f; color: white; }\n    pre { background: #0d0d0d; color: #00ff88; padding: 12px; border-radius: 4px; font-size: 12px; overflow-x: auto; }\n    .error-msg { background: #2d0a0a; border-left: 4px solid #e94560; padding: 12px; border-radius: 4px; font-family: monospace; font-size: 13px; }\n    input { padding: 8px; width: 280px; background: #0d0d0d; color: #eee; border: 1px solid #444; border-radius: 4px; }\n    #errorLog { max-height: 180px; overflow-y: auto; }\n    .purchase-button { background: #1a936f; }\n    .nav-link { color: #88ccff; text-decoration: underline; cursor: pointer; }\n  </style>\n</head>\n<body>\n  <h1>Console デバッグツール</h1>\n\n  <div class=\"card\">\n    <h2>サンプル要素（GTMターゲット）</h2>\n    <button class=\"purchase-button btn-success\" id=\"buyBtn\" data-product=\"GA4-course\">購入する</button>\n    <a class=\"nav-link\" href=\"/cart\">カートへ</a>\n    <span class=\"price-tag\">¥9,800</span>\n  </div>\n\n  <div class=\"card\">\n    <h2>エラーキャプチャ</h2>\n    <button class=\"btn-danger\" onclick=\"triggerTypeError()\">TypeError を発生</button>\n    <button class=\"btn-danger\" onclick=\"triggerReferenceError()\">ReferenceError を発生</button>\n    <button class=\"btn-info\" onclick=\"clearErrors()\">クリア</button>\n    <div id=\"errorLog\" style=\"margin-top:12px\"></div>\n  </div>\n\n  <div class=\"card\">\n    <h2>dataLayer 確認</h2>\n    <button class=\"btn-success\" onclick=\"pushToDataLayer()\">dataLayer に push</button>\n    <button class=\"btn-info\" onclick=\"showDataLayer()\">dataLayer を表示</button>\n    <pre id=\"dataLayerOutput\">（まだpushされていません）</pre>\n  </div>\n\n  <div class=\"card\">\n    <h2>CSSセレクタ検証</h2>\n    <input type=\"text\" id=\"selectorInput\" placeholder=\".purchase-button\" value=\".purchase-button\">\n    <button class=\"btn-info\" onclick=\"validateSelector()\">検証</button>\n    <pre id=\"selectorResult\"></pre>\n  </div>\n\n  <script>\n    window.dataLayer = window.dataLayer || [];\n    let errorCount = 0;\n\n    // TODO: window.onerror を設定して、キャッチされない全エラーを addErrorLog で表示する\n\n    function addErrorLog(type, message, source, line) {\n      errorCount++;\n      const div = document.createElement('div');\n      div.className = 'error-msg';\n      div.innerHTML = `<strong>[${errorCount}] ${type}</strong>: ${message}` +\n        (source ? `<br><small>場所: ${source}:${line}</small>` : '');\n      document.getElementById('errorLog').prepend(div);\n    }\n\n    function triggerTypeError() {\n      try {\n        // TODO: null の .textContent を読み取って TypeError を発生させ、catch で addErrorLog を呼ぶ\n      } catch (e) {\n        // エラーをキャッチして表示\n      }\n    }\n\n    function triggerReferenceError() {\n      try {\n        // TODO: 存在しない変数 undeclaredVariable を参照して ReferenceError を発生させ、catch で表示\n      } catch (e) {\n        // エラーをキャッチして表示\n      }\n    }\n\n    function clearErrors() {\n      document.getElementById('errorLog').innerHTML = '';\n      errorCount = 0;\n    }\n\n    function pushToDataLayer() {\n      dataLayer.push({\n        event: 'button_click',\n        event_category: 'purchase',\n        event_label: 'GA4-course',\n        value: 9800,\n        timestamp: new Date().toISOString()\n      });\n      addErrorLog('Info', 'dataLayer に push しました（エラーではありません）', null, null);\n    }\n\n    function showDataLayer() {\n      // TODO: dataLayer の内容を JSON.stringify で整形して dataLayerOutput に表示する\n    }\n\n    function validateSelector() {\n      const selector = document.getElementById('selectorInput').value.trim();\n      // TODO: document.querySelectorAll でセレクタに一致する全要素を取得して件数を表示する\n      // TODO: 最初の要素のタグ名・id・className・textContent（最大30文字）を表示する\n      // TODO: セレクタが不正な場合はエラーメッセージを表示する\n    }\n  </script>\n</body>\n</html>",
+        "hints": [
+          "window.onerror には function(message, source, lineno, colno, error) のシグネチャのコールバックを設定します。このコールバック内で addErrorLog('Uncaught Error', message, source, lineno) を呼び出すと、try-catch で捕捉されないエラーもキャプチャできます。",
+          "triggerTypeError では const nullEl = document.querySelector('#存在しない要素'); nullEl.textContent; のように null の属性にアクセスします。catch ブロックでは addErrorLog(e.constructor.name, e.message, 'inline', 0) のように e.constructor.name でエラー種別、e.message でメッセージを取得できます。",
+          "validateSelector では try { const els = document.querySelectorAll(selector); const first = els[0]; const info = first ? `タグ: ${first.tagName} / id: ${first.id || '（なし）'} / class: ${first.className} / テキスト: ${first.textContent.trim().substring(0,30)}` : '最初の要素なし'; document.getElementById('selectorResult').textContent = `一致: ${els.length}件\\n${info}`; } catch(e) { ... } の形で実装します。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Consoleデバッグツール</title>\n  <style>\n    body { font-family: sans-serif; max-width: 750px; margin: 40px auto; padding: 0 20px; background: #1a1a2e; color: #eee; }\n    .card { background: #16213e; border-radius: 8px; padding: 20px; margin: 16px 0; }\n    h1 { color: #e94560; }\n    h2 { color: #0f3460; background: #e94560; padding: 8px 12px; border-radius: 4px; }\n    button { padding: 8px 16px; cursor: pointer; border: none; border-radius: 4px; margin: 4px; }\n    .btn-danger { background: #e94560; color: white; }\n    .btn-info { background: #0f3460; color: white; }\n    .btn-success { background: #1a936f; color: white; }\n    pre { background: #0d0d0d; color: #00ff88; padding: 12px; border-radius: 4px; font-size: 12px; overflow-x: auto; }\n    .error-msg { background: #2d0a0a; border-left: 4px solid #e94560; padding: 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 4px 0; }\n    input { padding: 8px; width: 280px; background: #0d0d0d; color: #eee; border: 1px solid #444; border-radius: 4px; }\n    #errorLog { max-height: 180px; overflow-y: auto; }\n    .purchase-button { background: #1a936f; }\n    .nav-link { color: #88ccff; text-decoration: underline; cursor: pointer; }\n  </style>\n</head>\n<body>\n  <h1>Console デバッグツール</h1>\n\n  <div class=\"card\">\n    <h2>サンプル要素（GTMターゲット）</h2>\n    <button class=\"purchase-button btn-success\" id=\"buyBtn\" data-product=\"GA4-course\">購入する</button>\n    <a class=\"nav-link\" href=\"/cart\">カートへ</a>\n    <span class=\"price-tag\">¥9,800</span>\n  </div>\n\n  <div class=\"card\">\n    <h2>エラーキャプチャ</h2>\n    <button class=\"btn-danger\" onclick=\"triggerTypeError()\">TypeError を発生</button>\n    <button class=\"btn-danger\" onclick=\"triggerReferenceError()\">ReferenceError を発生</button>\n    <button class=\"btn-info\" onclick=\"clearErrors()\">クリア</button>\n    <div id=\"errorLog\" style=\"margin-top:12px\"></div>\n  </div>\n\n  <div class=\"card\">\n    <h2>dataLayer 確認</h2>\n    <button class=\"btn-success\" onclick=\"pushToDataLayer()\">dataLayer に push</button>\n    <button class=\"btn-info\" onclick=\"showDataLayer()\">dataLayer を表示</button>\n    <pre id=\"dataLayerOutput\">（まだpushされていません）</pre>\n  </div>\n\n  <div class=\"card\">\n    <h2>CSSセレクタ検証</h2>\n    <input type=\"text\" id=\"selectorInput\" placeholder=\".purchase-button\" value=\".purchase-button\">\n    <button class=\"btn-info\" onclick=\"validateSelector()\">検証</button>\n    <pre id=\"selectorResult\"></pre>\n  </div>\n\n  <script>\n    window.dataLayer = window.dataLayer || [];\n    let errorCount = 0;\n\n    window.onerror = function(message, source, lineno, colno, error) {\n      addErrorLog('Uncaught ' + (error ? error.constructor.name : 'Error'), message, source, lineno);\n      return false;\n    };\n\n    function addErrorLog(type, message, source, line) {\n      errorCount++;\n      const div = document.createElement('div');\n      div.className = 'error-msg';\n      div.innerHTML = `<strong>[${errorCount}] ${type}</strong>: ${message}` +\n        (source ? `<br><small>場所: ${source}:${line}</small>` : '');\n      document.getElementById('errorLog').prepend(div);\n    }\n\n    function triggerTypeError() {\n      try {\n        const nullEl = document.querySelector('#non-existent-element-xyz');\n        nullEl.textContent;\n      } catch (e) {\n        addErrorLog(e.constructor.name, e.message, 'inline-script', 0);\n      }\n    }\n\n    function triggerReferenceError() {\n      try {\n        eval('undeclaredVariableXYZ123');\n      } catch (e) {\n        addErrorLog(e.constructor.name, e.message, 'inline-script', 0);\n      }\n    }\n\n    function clearErrors() {\n      document.getElementById('errorLog').innerHTML = '';\n      errorCount = 0;\n    }\n\n    function pushToDataLayer() {\n      dataLayer.push({\n        event: 'button_click',\n        event_category: 'purchase',\n        event_label: 'GA4-course',\n        value: 9800,\n        timestamp: new Date().toISOString()\n      });\n      addErrorLog('Info', 'dataLayer に push しました（エラーではありません）', null, null);\n    }\n\n    function showDataLayer() {\n      document.getElementById('dataLayerOutput').textContent = JSON.stringify(dataLayer, null, 2);\n    }\n\n    function validateSelector() {\n      const selector = document.getElementById('selectorInput').value.trim();\n      const result = document.getElementById('selectorResult');\n      try {\n        const els = document.querySelectorAll(selector);\n        const first = els[0];\n        const info = first\n          ? `タグ名: ${first.tagName}\\nid: ${first.id || '（なし）'}\\nclass: ${first.className || '（なし）'}\\nテキスト: ${first.textContent.trim().substring(0, 40)}`\n          : '一致する要素なし';\n        result.textContent = `一致件数: ${els.length}\\n\\n--- 最初の要素 ---\\n${info}`;\n      } catch (e) {\n        result.textContent = 'セレクタエラー: ' + e.message;\n      }\n    }\n  </script>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "GTMのカスタムHTMLタグで `document.querySelector('.buy-btn')` が `null` を返すエラーが発生しました。最も適切な対処法はどれですか？",
+            "options": [
+              "セレクタを `#buy-btn` に変更する",
+              "タグのトリガーを「ページビュー」から「DOM Ready」に変更する",
+              "タグを「すべてのページ」に発火させる",
+              "JavaScriptを使わないようにする"
+            ],
+            "correct": 1,
+            "explanation": "querySelector が null を返すのは、タグが実行された時点でDOM要素がまだ構築されていないためです。「DOM Ready」（DOMContentLoadedイベント）トリガーを使うことで、DOM構築完了後にタグを実行でき、要素を正しく取得できます。"
+          },
+          {
+            "q": "コンソールで `dataLayer` の内容を確認したところ、`event: 'purchase'` のオブジェクトが存在しました。次に確認すべきことはどれですか？",
+            "options": [
+              "dataLayer の長さ（length）を確認する",
+              "NetworkパネルでGA4のcollectリクエストに正しいパラメータが含まれているか確認する",
+              "Elementsパネルで購入ボタンのクラス名を確認する",
+              "ページをリロードして再確認する"
+            ],
+            "correct": 1,
+            "explanation": "dataLayer への push が確認できたら、次はGA4へ実際にデータが送信されているかをNetworkパネル（collect フィルター）で確認します。dataLayerへのpushが成功してもGTMタグが正しく設定されていなければGA4には送信されません。"
+          },
+          {
+            "q": "DevToolsのElementsパネルで「Break on > Subtree modifications」を設定する主な目的はどれですか？",
+            "options": [
+              "要素のCSSスタイルが変わったときに停止する",
+              "要素の属性値が変わったときに停止する",
+              "要素の子ノードが追加・変更・削除されたときにJavaScriptの実行を一時停止する",
+              "ページのスクロールイベントを監視する"
+            ],
+            "correct": 2,
+            "explanation": "「Subtree modifications」はDOMのサブツリー（子要素）が変化したときにJavaScriptの実行を一時停止します。SPAでコンテンツが動的に書き換わるタイミングを特定する際に、どのスクリプトがDOM変更を引き起こしているかをCall Stackで追跡できます。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール0-16 完了！\n\n## 習得スキル\n\n- DevToolsコンソールでError・Warning・Infoのレベル差を理解した\n- GTM実装後の代表的なエラーパターンと解決策を把握した\n- コンソールで `dataLayer` の状態をリアルタイムに確認できる\n- `document.querySelector()` でGTMのCSSセレクタが正しいか検証できる\n- ElementsパネルのDOM Breakpointで動的DOM変化のトリガーを特定できる\n\n## 実務チャレンジ\n\n担当サイトのGA4実装ページをChromeで開き、コンソールに赤いエラーが出ていないか確認してください。エラーがあれば `dataLayer` の状態とNetworkパネルのcollectリクエストも合わせて確認し、GA4への計測漏れが発生していないかを調査します。\n\n## 次のモジュールへ\n\n**0-17: ブラウザキャッシュの種類と制御** では、タグ修正やLP更新が「キャッシュのせいで反映されない」という現象のメカニズムを学びます。強いキャッシュと弱いキャッシュの違い、Cache-Controlヘッダーの読み方を習得します。",
+        "diagram": false
+      }
+    }
+  ]
+}

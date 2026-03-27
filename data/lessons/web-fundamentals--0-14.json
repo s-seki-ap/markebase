@@ -1,0 +1,77 @@
+{
+  "id": "web-fundamentals--0-14",
+  "moduleId": "0-14",
+  "categoryId": "web-fundamentals",
+  "title": "JavaScriptエンジン（V8）の実行モデル",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# マーケター向け導入\n\nGTMで「タグ A が完了してからタグ B を起動したい」「非同期で読み込んだデータをGA4に送信したい」という要件はよくあります。このときJavaScriptの実行順序が直感と異なる動作をして困った経験はないでしょうか。\n\nたとえば「コンバージョンイベントを送信するコードを書いたのにGA4に届かない」「DataLayerにプッシュしたはずのデータがGTMで取得できない」という問題の多くは、JavaScriptの非同期処理の仕組みへの理解不足から生じています。\n\nJavaScriptはシングルスレッドで動作します。一度に1つの処理しかできません。しかし`setTimeout`・`fetch`・`addEventListener`などの非同期APIを使うと、処理の完了を待たずに次のコードに進めます。この仕組みを制御しているのが**イベントループ**です。GTMタグの実行順序の問題や、`dataLayer.push`のタイミングのズレを理解・デバッグするために、V8エンジンの実行モデルは避けては通れない知識です。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# V8エンジンとイベントループの仕組み\n\n## コールスタックとは\n\nJavaScriptの実行は**コールスタック（Call Stack）**と呼ばれるデータ構造で管理されます。関数を呼び出すと先頭に積まれ（push）、関数が終了すると取り除かれます（pop）。\n\n```javascript\nfunction c() { console.log('C'); }\nfunction b() { c(); }\nfunction a() { b(); }\na();\n\n// コールスタックの変化\n// [a]  →  [a, b]  →  [a, b, c]  →  [a, b]  →  [a]  →  []\n```\n\nコールスタックが空になるまで、ブラウザはUIの更新や他のJavaScriptの実行ができません。これが「重い処理をするとブラウザがフリーズする」原因です。\n\n## 非同期処理とコールバックキュー\n\n`setTimeout`・`addEventListener`・`fetch` のようなWeb APIの処理は、ブラウザのバックグラウンドで実行されます。完了後にコールバック関数が**タスクキュー（Callback Queue）**に追加されます。\n\nイベントループはコールスタックが空になったタイミングでタスクキューからコールバックを取り出して実行します。\n\n```\n[コールスタック] ← イベントループ ← [タスクキュー]\n     ↑                                     ↑\n同期コード実行                    setTimeout等の完了コールバック\n```\n\n## マイクロタスクキューの優先度\n\n`Promise.then()` や `async/await` のコールバックは**マイクロタスクキュー**に入ります。マイクロタスクはタスクキューより優先度が高く、コールスタックが空になった直後に「タスクキューよりも先に」実行されます。\n\n```javascript\nconsole.log('1: 同期');\nsetTimeout(() => console.log('3: タスクキュー'), 0);\nPromise.resolve().then(() => console.log('2: マイクロタスク'));\n// 出力順: 1 → 2 → 3\n```\n\n## GTMタグの実行順序との関連\n\n### GTMタグが順番通りに実行されない問題\n\nGTMで「シーケンス設定（タグの順序設定）」を使わずに複数タグを同一トリガーで発火させると、非同期タグの完了を待たずに次のタグが実行される場合があります。\n\n```javascript\n// DataLayerへのpushとGA4送信のタイミングの問題\nwindow.dataLayer = window.dataLayer || [];\ndataLayer.push({ event: 'purchase', value: 9800 }); // キューに入る\n// この時点でGTMがdataLayer.pushを処理するのはイベントループの次のサイクル\n```\n\n### async/awaitを使ったカスタムHTMLタグ\n\nGTMのカスタムHTMLタグ内で `fetch` や `async/await` を使う場合、タグの「完了」はPromiseの解決より先に起動します。GTMはタグの同期的完了しか待てないため、非同期処理の結果をGA4に送りたい場合は `gtag` 関数や `dataLayer.push` を非同期処理の完了コールバック内に記述する必要があります。\n\n## V8のJITコンパイル\n\nV8はJavaScriptをそのまま解釈実行するのではなく、**JIT（Just-In-Time）コンパイル**によって頻繁に実行されるコードをネイティブマシンコードに変換します。これによりGA4のタグスクリプト（gtag.js）のような繰り返し呼ばれるコードが高速化されます。\n\n| 処理 | 方式 |\n|------|------|\n| 初回実行 | インタプリタ（Ignition）で解釈実行 |\n| 頻繁に実行されるコード | JITコンパイラ（TurboFan）でネイティブコードに変換 |\n| 型が変わる場合 | 最適化解除（Deoptimization）が発生 |",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: イベントループの実行順序を観察する\n\n## 課題\n\n1. 下記のstarterCodeをブラウザで開く\n2. 「実行順序テスト」ボタンを押して、同期・マイクロタスク・タスクキューの実行順序を確認する\n3. 「GTMタイミングシミュレーション」として dataLayer.push の後に即座に値を読み取る処理を実装し、タイミング問題を再現する\n4. setTimeout(fn, 0) とPromise.resolve().then(fn) の実行順序の違いを可視化する\n5. 「コールスタック表示」エリアに現在のコールスタック深度を数値で表示する（Error().stack のパース）",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>イベントループ可視化</title>\n  <style>\n    body { font-family: sans-serif; max-width: 750px; margin: 40px auto; padding: 0 20px; background: #fff8f0; }\n    .card { background: white; border-radius: 8px; padding: 20px; margin: 16px 0; }\n    h1 { color: #bf4700; }\n    button { padding: 8px 16px; cursor: pointer; background: #e65c00; color: white; border: none; border-radius: 4px; margin: 4px; }\n    #log { background: #1a1a1a; color: #00ff88; padding: 16px; border-radius: 8px; font-family: monospace; font-size: 13px; min-height: 200px; max-height: 350px; overflow-y: auto; }\n    .sync { color: #4fc3f7; }\n    .micro { color: #aed581; }\n    .task { color: #ffb74d; }\n    input { padding: 8px; width: 200px; border: 1px solid #ccc; border-radius: 4px; }\n    #stackDepth { font-size: 24px; font-weight: bold; color: #e65c00; }\n  </style>\n</head>\n<body>\n  <h1>イベントループ可視化ツール</h1>\n\n  <div class=\"card\">\n    <h2>実行順序テスト</h2>\n    <button onclick=\"runOrderTest()\">実行順序を確認</button>\n    <button onclick=\"clearLog()\">ログクリア</button>\n    <div id=\"log\"></div>\n  </div>\n\n  <div class=\"card\">\n    <h2>GTMタイミングシミュレーション</h2>\n    <p>dataLayer.push直後に値を読み取るとどうなるか？</p>\n    <button onclick=\"runGTMSim()\">GTMタイミングをシミュレーション</button>\n  </div>\n\n  <div class=\"card\">\n    <h2>コールスタック深度</h2>\n    <button onclick=\"showStackDepth()\">現在のスタック深度を表示</button>\n    <div>深度: <span id=\"stackDepth\">-</span></div>\n  </div>\n\n  <script>\n    const logEl = document.getElementById('log');\n    let logCount = 0;\n\n    function addLog(msg, type = 'sync') {\n      logCount++;\n      const span = document.createElement('div');\n      span.className = type;\n      span.textContent = `[${logCount}] ${msg}`;\n      logEl.appendChild(span);\n      logEl.scrollTop = logEl.scrollHeight;\n    }\n\n    function clearLog() {\n      logEl.innerHTML = '';\n      logCount = 0;\n    }\n\n    function runOrderTest() {\n      clearLog();\n      // TODO: 以下の3種類の処理を同じブロック内に記述して実行順序を観察する\n      // 1. 同期コード: addLog('同期処理 A', 'sync') を直接呼ぶ\n      // 2. タスクキュー: setTimeout を使って addLog('タスクキュー B', 'task') を呼ぶ\n      // 3. マイクロタスク: Promise.resolve().then を使って addLog('マイクロタスク C', 'micro') を呼ぶ\n      // 4. 同期コード: addLog('同期処理 D', 'sync') を直接呼ぶ\n      // 期待する出力順: A → D → C → B\n    }\n\n    function runGTMSim() {\n      const dataLayer = [];\n      // TODO: dataLayer.push({ event: 'purchase', revenue: 9800 }) を実行する\n      // TODO: push直後（同期的）に dataLayer の中身を addLog で表示する\n      // TODO: setTimeout 0 の中でも dataLayer の中身を表示して、タイミング差を観察する\n    }\n\n    function showStackDepth() {\n      // TODO: new Error().stack をパースして行数を数え stackDepth に表示する\n      // Error().stack は '    at functionName (url:line:col)' 形式の文字列\n    }\n  </script>\n</body>\n</html>",
+        "hints": [
+          "runOrderTest では、まず addLog('同期処理 A', 'sync') を書き、次に setTimeout(() => addLog('タスクキュー B', 'task'), 0) を書き、次に Promise.resolve().then(() => addLog('マイクロタスク C', 'micro')) を書き、最後に addLog('同期処理 D', 'sync') を書きます。同期コードがすべて実行された後にマイクロタスク、その後タスクキューが実行される順番を観察します。",
+          "runGTMSim では dataLayer.push({ event: 'purchase', revenue: 9800 }) を実行した後、直後に addLog('push直後: ' + JSON.stringify(dataLayer[0]), 'sync') でpushされたオブジェクトを表示します。次に setTimeout(() => addLog('setTimeout後: ' + JSON.stringify(dataLayer[0]), 'task'), 0) を追加して、両方のタイミングで値が取得できることを確認します。",
+          "showStackDepth では const stack = new Error().stack と書いてスタック文字列を取得します。stack.split('\\n') で行に分割し、'    at ' で始まる行だけをフィルタして length を数えます。document.getElementById('stackDepth').textContent = その数値 で表示します。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>イベントループ可視化</title>\n  <style>\n    body { font-family: sans-serif; max-width: 750px; margin: 40px auto; padding: 0 20px; background: #fff8f0; }\n    .card { background: white; border-radius: 8px; padding: 20px; margin: 16px 0; }\n    h1 { color: #bf4700; }\n    button { padding: 8px 16px; cursor: pointer; background: #e65c00; color: white; border: none; border-radius: 4px; margin: 4px; }\n    #log { background: #1a1a1a; color: #00ff88; padding: 16px; border-radius: 8px; font-family: monospace; font-size: 13px; min-height: 200px; max-height: 350px; overflow-y: auto; }\n    .sync { color: #4fc3f7; }\n    .micro { color: #aed581; }\n    .task { color: #ffb74d; }\n    input { padding: 8px; width: 200px; border: 1px solid #ccc; border-radius: 4px; }\n    #stackDepth { font-size: 24px; font-weight: bold; color: #e65c00; }\n  </style>\n</head>\n<body>\n  <h1>イベントループ可視化ツール</h1>\n\n  <div class=\"card\">\n    <h2>実行順序テスト</h2>\n    <button onclick=\"runOrderTest()\">実行順序を確認</button>\n    <button onclick=\"clearLog()\">ログクリア</button>\n    <div id=\"log\"></div>\n  </div>\n\n  <div class=\"card\">\n    <h2>GTMタイミングシミュレーション</h2>\n    <p>dataLayer.push直後に値を読み取るとどうなるか？</p>\n    <button onclick=\"runGTMSim()\">GTMタイミングをシミュレーション</button>\n  </div>\n\n  <div class=\"card\">\n    <h2>コールスタック深度</h2>\n    <button onclick=\"showStackDepth()\">現在のスタック深度を表示</button>\n    <div>深度: <span id=\"stackDepth\">-</span></div>\n  </div>\n\n  <script>\n    const logEl = document.getElementById('log');\n    let logCount = 0;\n\n    function addLog(msg, type = 'sync') {\n      logCount++;\n      const span = document.createElement('div');\n      span.className = type;\n      span.textContent = `[${logCount}] ${msg}`;\n      logEl.appendChild(span);\n      logEl.scrollTop = logEl.scrollHeight;\n    }\n\n    function clearLog() {\n      logEl.innerHTML = '';\n      logCount = 0;\n    }\n\n    function runOrderTest() {\n      clearLog();\n      addLog('同期処理 A（コールスタック）', 'sync');\n      setTimeout(() => addLog('タスクキュー B（setTimeout 0ms後）', 'task'), 0);\n      Promise.resolve().then(() => addLog('マイクロタスク C（Promise.then）', 'micro'));\n      addLog('同期処理 D（コールスタック）', 'sync');\n      addLog('--- 同期処理完了 → マイクロタスク → タスクキューの順で実行されます ---', 'sync');\n    }\n\n    function runGTMSim() {\n      const dataLayer = [];\n      dataLayer.push({ event: 'purchase', revenue: 9800 });\n      addLog('push直後（同期）: ' + JSON.stringify(dataLayer[0]), 'sync');\n      addLog('GA4への送信コードをここに書けば値を取得できる', 'sync');\n      setTimeout(() => {\n        addLog('setTimeout後（タスクキュー）: ' + JSON.stringify(dataLayer[0]), 'task');\n        addLog('非同期タグでもdataLayerはここで読める', 'task');\n      }, 0);\n    }\n\n    function showStackDepth() {\n      const stack = new Error().stack;\n      const frames = stack.split('\\n').filter(l => l.trim().startsWith('at '));\n      document.getElementById('stackDepth').textContent = frames.length;\n      addLog('スタックフレーム数: ' + frames.length, 'sync');\n      addLog(frames.slice(0, 3).join(' | '), 'micro');\n    }\n  </script>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "次のコードの実行順序として正しいものはどれですか？\n```\nconsole.log('A');\nsetTimeout(() => console.log('B'), 0);\nPromise.resolve().then(() => console.log('C'));\nconsole.log('D');\n```",
+            "options": ["A → B → C → D", "A → D → B → C", "A → D → C → B", "A → C → D → B"],
+            "correct": 2,
+            "explanation": "同期コード（A, D）が先に実行され、次にマイクロタスクキュー（Promise.then → C）が実行され、最後にタスクキュー（setTimeout → B）が実行されます。マイクロタスクはタスクキューよりも優先度が高いです。"
+          },
+          {
+            "q": "GTMのカスタムHTMLタグ内で `fetch` APIを使ってデータを取得し、その結果をGA4のイベントとして送信したい場合の正しいアプローチはどれですか？",
+            "options": [
+              "fetch の直後に gtag('event') を呼び出す",
+              "fetch の .then() コールバック内で gtag('event') を呼び出す",
+              "window.onload の後に fetch を実行する",
+              "fetch は GTM カスタムHTMLタグでは使えない"
+            ],
+            "correct": 1,
+            "explanation": "fetch は非同期処理です。fetch直後にgtag を呼び出してもデータ取得は完了していません。必ず .then() または async/await で完了を待ってから gtag('event') を呼び出す必要があります。"
+          },
+          {
+            "q": "V8のJITコンパイルが「最適化解除（Deoptimization）」を行う主な原因はどれですか？",
+            "options": [
+              "関数の実行回数が少ない場合",
+              "変数の型が途中で変わる場合",
+              "関数の引数が多い場合",
+              "コードの行数が多い場合"
+            ],
+            "correct": 1,
+            "explanation": "V8は変数が常に同じ型であることを前提に最適化します。変数の型が途中で変わると（例：数値だったものが文字列になる）、最適化したコードが使えなくなり最適化解除が発生します。型を一定に保つことがパフォーマンス上重要です。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール0-14 完了！\n\n## 習得スキル\n\n- コールスタックによる同期処理の実行モデルを説明できる\n- タスクキューとマイクロタスクキューの優先度差異を理解した\n- イベントループが非同期処理を制御する仕組みを把握した\n- GTMカスタムHTMLタグでの非同期処理の正しい書き方を実装できる\n- `dataLayer.push` とGA4送信コードのタイミング設計を正しく行える\n\n## 実務チャレンジ\n\nGTMのプレビューモードで「タグが発火しているのにGA4に届かない」という状況に直面したら、タグのカスタムHTMLコード内に非同期処理が含まれていないかを確認してください。`fetch` や `XMLHttpRequest` が含まれていれば、GA4送信コードがコールバック内に正しく配置されているか確認します。\n\n## 次のモジュールへ\n\n**0-15: Chrome DevToolsのネットワークパネル活用** では、GA4やGTMが実際にどのようなHTTPリクエストを送っているかをリアルタイムにキャプチャする方法を学びます。「タグが動いているか」をコードを見ずに通信レベルで確認できるようになります。",
+        "diagram": false
+      }
+    }
+  ]
+}

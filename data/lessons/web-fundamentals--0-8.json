@@ -1,0 +1,67 @@
+{
+  "id": "web-fundamentals--0-8",
+  "moduleId": "0-8",
+  "categoryId": "web-fundamentals",
+  "title": "DNSの名前解決プロセス",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 「サーバー移行したのにサイトが古いまま」の原因はDNSにある\n\n「本番環境を新サーバーに移したのに、一部のユーザーはまだ旧サイトを見ている」「GTMタグを入れたのにChromeでは動くがSafariでは動かない」「会社のDNSがGA4のサーバーをブロックしている」——これらはすべてDNS（Domain Name System）の仕組みと関係しています。\n\n## DNSがマーケターに関係する4つの場面\n\n**1. サーバー移行とDNS伝播の理解**\nサイトを新しいサーバーに移すとき、DNSのIPアドレスを変更してから全世界に伝わるまでに時間がかかります（DNS伝播）。この間、一部のユーザーには旧サイトが表示されます。なぜ時間がかかるのかを知っていれば、クライアントへの説明も正確にできます。\n\n**2. サブドメインの設定とGA4**\nブログを `blog.example.com`、ショップを `shop.example.com` に分けるとき、DNSのCNAMEレコードやAレコードを設定します。これを理解していないと、クロスドメイントラッキングの設定を間違えます。\n\n**3. カスタムドメインのGTM/GA4サーバーサイド**\nサーバーサイドGTMをカスタムドメイン（例: `collect.example.com`）で運用するとき、CNAMEレコードをCloud Runのサービスに向ける設定が必要です。\n\n**4. メール配信ドメインとDNS認証**\nメルマガ配信でSPF・DKIM・DMARCを設定するとき、すべてDNSのTXTレコードを編集します。DNSの仕組みを知らないとこれらの設定ができません。\n\nDNSはインターネットの「電話帳」です。電話帳の読み方を知ることで、サイト運用のあらゆるトラブルを素早く切り分けられるようになります。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# DNSの名前解決プロセス\n\n## DNSとは\n\nDNS（Domain Name System）は `example.com` のようなドメイン名を `93.184.216.34` のようなIPアドレスに変換するシステムです。\n\n## 名前解決の流れ（フルリゾルバー）\n\n```\nユーザーが https://shop.example.com/ にアクセス\n           ↓\n\n1. ブラウザキャッシュを確認\n   └── キャッシュあり → IPアドレス確定（完了）\n   └── キャッシュなし → 次へ\n           ↓\n2. OSのキャッシュ（/etc/hosts・systemdリゾルバー）を確認\n   └── キャッシュなし → 次へ\n           ↓\n3. フルリゾルバー（ISPや8.8.8.8）へ問い合わせ\n   └── キャッシュあり → IPアドレス回答\n   └── キャッシュなし → 再帰的に問い合わせ\n           ↓\n4. ルートDNSサーバー（13台）に問い合わせ\n   →「.comのネームサーバーはここ」と回答\n           ↓\n5. .comのTLDネームサーバーに問い合わせ\n   →「example.comのネームサーバーはここ」と回答\n           ↓\n6. example.comの権威DNSサーバーに問い合わせ\n   →「shop.example.comのIPは93.184.x.xです」と回答\n           ↓\nIPアドレス確定 → TCP接続 → HTTP通信 → ページ表示\n```\n\n## TTL（Time To Live）：DNSキャッシュの有効期間\n\n```dns\nshop.example.com.  3600  IN  A  93.184.216.34\n                   ↑\n                   TTL（秒）= 1時間\n```\n\nTTLが3600（1時間）なら、DNSの変更が全世界に伝わるまで最大1時間かかります。\n\n| 用途 | 推奨TTL | 理由 |\n|------|---------|------|\n| 通常時 | 3600〜86400 | キャッシュ効率 |\n| 移行直前 | 300〜600 | 素早い伝播 |\n| CDNオリジン | 60〜300 | フェイルオーバー |\n\n## 主なDNSレコードの種類\n\n| レコード | 役割 | 例 |\n|---------|------|----|\n| A | ドメイン→IPv4 | `example.com → 93.184.216.34` |\n| AAAA | ドメイン→IPv6 | `example.com → 2606:2800::1` |\n| CNAME | ドメイン→別ドメイン | `www → example.com` |\n| MX | メールサーバー | メルマガ配信先 |\n| TXT | テキスト情報 | SPF・DKIM・DMARC |\n| NS | ネームサーバー | DNSの権威サーバー |\n\n## マーケティングに直結するDNS設定例\n\n```dns\n# サーバーサイドGTMのカスタムドメイン\ncollect.example.com  CNAME  myservice.a.run.app\n\n# メルマガ配信のSPFレコード\nexample.com  TXT  \"v=spf1 include:sendgrid.net ~all\"\n\n# GA4のサブドメイン計測\nblog.example.com  A  192.0.2.1\nshop.example.com  A  198.51.100.1\n```\n\n## DNS変更が全世界に伝播する時間\n\n```\nDNS変更\n  └── 自分のPC: TTL秒後（ブラウザ再起動も必要な場合あり）\n  └── ISPのリゾルバー: TTL秒後\n  └── 世界のリゾルバー: TTL秒〜最大48時間\n```\n\nサーバー移行時にTTLを事前に短くしておくと（例: 300秒）、切り替え後の伝播が速くなります。",
+        "diagram": true
+      }
+    },
+      {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: DNS名前解決シミュレーターを作る\n\n## 課題\n\nDNSの名前解決プロセスをステップバイステップで可視化するシミュレーターを作成してください。\n\n1. ドメインを入力して「名前解決開始」ボタンを押すと、名前解決の各ステップをアニメーション付きで順番に表示する（各ステップは500msごとに追加）\n2. 各ステップには「問い合わせ先」「問い合わせ内容」「レスポンス」を表示する\n3. 最終的なIPアドレス（サンプル値でOK）とTTLを表示する\n4. 「DNSキャッシュをクリア」ボタンでリセットして再実行できるようにする",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>DNS名前解決シミュレーター</title>\n  <style>\n    body { font-family: sans-serif; padding: 20px; background: #0f172a; color: #e2e8f0; max-width: 740px; }\n    h2 { color: #3b82f6; border-bottom: 1px solid #334155; padding-bottom: 8px; }\n    .input-row { display: flex; gap: 8px; }\n    input { flex: 1; padding: 8px 12px; background: #1e293b; color: #e2e8f0; border: 1px solid #334155; border-radius: 6px; }\n    button { padding: 8px 16px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer; }\n    .btn-reset { background: #334155; }\n    #steps { margin-top: 16px; }\n    .step { padding: 12px 16px; background: #1e293b; border-radius: 8px; margin-bottom: 8px; border-left: 3px solid #334155; opacity: 0; transform: translateY(8px); transition: opacity 0.3s, transform 0.3s; }\n    .step.visible { opacity: 1; transform: translateY(0); }\n    .step-num { color: #8b5cf6; font-size: 11px; font-weight: bold; margin-bottom: 4px; }\n    .step-server { color: #fbbf24; font-size: 13px; font-weight: bold; }\n    .step-query { color: #94a3b8; font-size: 12px; }\n    .step-response { color: #10b981; font-size: 13px; margin-top: 4px; }\n    #finalResult { display: none; margin-top: 16px; padding: 16px; background: #0f172a; border: 2px solid #10b981; border-radius: 8px; }\n  </style>\n</head>\n<body>\n  <h1>DNS 名前解決シミュレーター</h1>\n  <h2>ドメインを入力</h2>\n  <div class=\"input-row\">\n    <input id=\"domainInput\" type=\"text\" value=\"shop.example.com\" />\n    <button id=\"startBtn\">名前解決開始</button>\n    <button id=\"resetBtn\" class=\"btn-reset\">DNSキャッシュをクリア</button>\n  </div>\n  <div id=\"steps\"></div>\n  <div id=\"finalResult\"></div>\n\n  <script>\n\n  </script>\n</body>\n</html>",
+        "hints": [
+          "ステップを順番に表示するには setTimeout を使います。steps.forEach((step, i) => { setTimeout(() => { /* DOM追加 */ }, i * 600); }) でi番目のステップをi*600ms後に表示できます。",
+          "要素を追加した直後に opacity:0 を設定し、requestAnimationFrame の後に visible クラスを追加することでフェードインアニメーションになります。例: el.classList.add('step'); setTimeout(() => el.classList.add('visible'), 10);",
+          "ドメインからステップデータを生成する関数を作ります。ドメインを split('.') して parts を取得し、TLD（最後の部分）・セカンドレベルドメイン・サブドメインをそれぞれステップの問い合わせ内容に反映させてください。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>DNS名前解決シミュレーター</title>\n  <style>\n    body { font-family: sans-serif; padding: 20px; background: #0f172a; color: #e2e8f0; max-width: 740px; }\n    h2 { color: #3b82f6; border-bottom: 1px solid #334155; padding-bottom: 8px; }\n    .input-row { display: flex; gap: 8px; flex-wrap: wrap; }\n    input { flex: 1; min-width: 200px; padding: 8px 12px; background: #1e293b; color: #e2e8f0; border: 1px solid #334155; border-radius: 6px; }\n    button { padding: 8px 16px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer; }\n    .btn-reset { background: #334155; }\n    #steps { margin-top: 16px; }\n    .step { padding: 12px 16px; background: #1e293b; border-radius: 8px; margin-bottom: 8px; border-left: 3px solid #334155; opacity: 0; transform: translateY(8px); transition: opacity 0.4s, transform 0.4s; }\n    .step.visible { opacity: 1; transform: translateY(0); border-left-color: #3b82f6; }\n    .step-num { color: #8b5cf6; font-size: 11px; font-weight: bold; margin-bottom: 4px; }\n    .step-server { color: #fbbf24; font-size: 13px; font-weight: bold; }\n    .step-query { color: #94a3b8; font-size: 12px; margin-top: 2px; }\n    .step-response { color: #10b981; font-size: 13px; margin-top: 6px; }\n    #finalResult { display: none; margin-top: 16px; padding: 16px; background: #0f172a; border: 2px solid #10b981; border-radius: 8px; }\n  </style>\n</head>\n<body>\n  <h1>DNS 名前解決シミュレーター</h1>\n  <h2>ドメインを入力</h2>\n  <div class=\"input-row\">\n    <input id=\"domainInput\" type=\"text\" value=\"shop.example.com\" />\n    <button id=\"startBtn\">名前解決開始</button>\n    <button id=\"resetBtn\" class=\"btn-reset\">DNSキャッシュをクリア</button>\n  </div>\n  <div id=\"steps\"></div>\n  <div id=\"finalResult\"></div>\n  <script>\n    function buildSteps(domain) {\n      const parts = domain.split('.');\n      const tld = parts[parts.length - 1];\n      const sld = parts.length >= 2 ? parts[parts.length - 2] + '.' + tld : domain;\n      const fakeIp = `93.${Math.floor(Math.random()*200+10)}.${Math.floor(Math.random()*200+10)}.${Math.floor(Math.random()*200+10)}`;\n      return [\n        { num: 'STEP 1', server: 'ブラウザキャッシュ', query: `${domain} のキャッシュを確認`, response: 'キャッシュなし → 次に進む' },\n        { num: 'STEP 2', server: 'OSのDNSリゾルバー', query: `${domain} の名前解決を要求`, response: 'キャッシュなし → ISPリゾルバーへ転送' },\n        { num: 'STEP 3', server: 'フルリゾルバー（8.8.8.8 / ISP）', query: `${domain} のIPアドレスを要求`, response: 'キャッシュなし → ルートDNSへ再帰問い合わせ' },\n        { num: 'STEP 4', server: 'ルートDNSサーバー（13台）', query: `.${tld} を管理するネームサーバーは？`, response: `→ .${tld} のTLDネームサーバー（例: a.gtld-servers.net）を回答` },\n        { num: 'STEP 5', server: `.${tld} TLDネームサーバー`, query: `${sld} の権威DNSサーバーは？`, response: `→ ${sld} のネームサーバー（例: ns1.${sld}）を回答` },\n        { num: 'STEP 6', server: `${sld} の権威DNSサーバー`, query: `${domain} のAレコードは？`, response: `→ TTL: 3600 / A レコード: ${fakeIp}（サンプル値）` },\n        { num: 'STEP 7', server: 'フルリゾルバーがキャッシュ', query: `結果を3600秒キャッシュ`, response: `ブラウザに ${fakeIp} を回答` },\n      ];\n    }\n    let running = false;\n    document.getElementById('startBtn').addEventListener('click', () => {\n      if (running) return;\n      const domain = document.getElementById('domainInput').value.trim() || 'example.com';\n      document.getElementById('steps').innerHTML = '';\n      document.getElementById('finalResult').style.display = 'none';\n      const steps = buildSteps(domain);\n      const finalIp = steps[steps.length - 1].response.match(/\\d+\\.\\d+\\.\\d+\\.\\d+/)?.[0] || '93.x.x.x';\n      running = true;\n      steps.forEach((s, i) => {\n        setTimeout(() => {\n          const el = document.createElement('div');\n          el.className = 'step';\n          el.innerHTML = `<div class=\"step-num\">${s.num}</div><div class=\"step-server\">${s.server}</div><div class=\"step-query\">問い合わせ: ${s.query}</div><div class=\"step-response\">${s.response}</div>`;\n          document.getElementById('steps').appendChild(el);\n          requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('visible')));\n          if (i === steps.length - 1) {\n            setTimeout(() => {\n              const fin = document.getElementById('finalResult');\n              fin.innerHTML = `<div style=\"color:#10b981;font-size:16px;font-weight:bold\">名前解決完了</div><div style=\"margin-top:8px\"><span style=\"color:#94a3b8\">ドメイン: </span>${domain}</div><div><span style=\"color:#94a3b8\">IPアドレス: </span><span style=\"color:#a5f3fc;font-family:monospace\">${finalIp}</span></div><div><span style=\"color:#94a3b8\">TTL: </span>3600秒（1時間）</div><div style=\"color:#64748b;font-size:12px;margin-top:8px\">このIPにTCPで接続してHTTPリクエストを送信します</div>`;\n              fin.style.display = 'block';\n              running = false;\n            }, 500);\n          }\n        }, i * 700);\n      });\n    });\n    document.getElementById('resetBtn').addEventListener('click', () => {\n      running = false;\n      document.getElementById('steps').innerHTML = '';\n      document.getElementById('finalResult').style.display = 'none';\n    });\n  </script>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "DNSのTTL（Time To Live）の説明として正しいものはどれですか？",
+            "options": ["HTTPSの証明書有効期限のこと", "DNSレコードのキャッシュ有効期間（秒単位）", "サーバーへのTCP接続タイムアウト時間", "ページのキャッシュ有効期間"],
+            "correct": 1,
+            "explanation": "TTLはDNSレコードをリゾルバーがキャッシュしておく時間（秒単位）です。TTL=3600なら1時間、各リゾルバーはその時間内に同じドメインのIPを問われたらキャッシュを返します。サーバー移行前にTTLを短くしておくと、IPアドレス変更後の伝播が速くなります。"
+          },
+          {
+            "q": "サーバーサイドGTMのカスタムドメイン（collect.example.com）をCloud Runサービスに向けるために使うDNSレコードの種類はどれですか？",
+            "options": ["AレコードにIPアドレスを設定する", "MXレコードにメールサーバーを設定する", "CNAMEレコードにCloud RunのURLを設定する", "TXTレコードに設定を書く"],
+            "correct": 2,
+            "explanation": "CNAMEレコードは「このドメインは別のドメインと同じIPを指す」と設定するレコードです。collect.example.comをCloud RunのサービスURL（例: myservice.a.run.app）のCNAMEとして設定することで、collect.example.comへのリクエストがCloud Runに届きます。"
+          },
+          {
+            "q": "DNSの名前解決プロセスで、最初に「.comのTLDネームサーバーはここ」という情報を返すのはどのサーバーですか？",
+            "options": ["フルリゾルバー（ISP）", "権威DNSサーバー", "ルートDNSサーバー（13台）", "ブラウザキャッシュ"],
+            "correct": 2,
+            "explanation": "ルートDNSサーバーはDNSの最上位に位置し、世界に13台（論理的）存在します。フルリゾルバーがキャッシュを持っていない場合、最初にルートDNSサーバーへ問い合わせ、「.comはここのTLDサーバーが管理している」という情報を受け取ります。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール0-8 完了！\n\n## 習得したスキル\n\n- DNS名前解決の7ステップ（ブラウザキャッシュ→OS→リゾルバー→ルート→TLD→権威DNS）を説明できる\n- TTLとDNS伝播の仕組みを理解し、サーバー移行時の手順を説明できる\n- A・CNAME・MX・TXTの各レコードの役割を把握した\n- サーバーサイドGTMのカスタムドメイン設定にCNAMEが必要な理由を知っている\n- メルマガ配信のSPF・DKIM設定がDNSのTXTレコードであることを理解した\n\n## 次のモジュール\n\n**0-9: WebSocketとHTTPのリアルタイム通信の違い** では、通常のHTTP通信とWebSocketの違いを学びます。GA4のリアルタイムレポートやチャットボットが「即座に更新される」仕組みがどう実現されているかを理解します。\n\n## 実務チャレンジ\n\n担当サイトのドメインに対して、ブラウザの開発者コンソールで `fetch('https://dns.google/resolve?name=YOUR-DOMAIN&type=A').then(r=>r.json()).then(d=>console.log(d))` を実行してみてください。Google Public DNS APIがAレコードとTTLを返します。TTLが短ければ最近変更があった可能性があります。",
+        "diagram": false
+      }
+    }
+  ]
+}

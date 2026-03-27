@@ -1,0 +1,77 @@
+{
+  "id": "web-fundamentals--0-12",
+  "moduleId": "0-12",
+  "categoryId": "web-fundamentals",
+  "title": "DOMツリーの構築プロセス（HTMLパース→DOM生成）",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# マーケター向け導入\n\nGTMの設定画面でトリガーを作成するとき、「DOM Ready」と「ページビュー」の2種類があることに気づいたことはありませんか？この2つの使い分けを理解するには、ブラウザがHTMLを受け取ってから画面に表示するまでの「DOM構築プロセス」を知る必要があります。\n\nGTMタグを「DOM Ready」で起動するとは、「ブラウザがHTMLをすべて読み終えてDOMツリーを作り終えた瞬間に発火する」という意味です。一方「ページビュー（gtm.js）」はGTMスクリプト自体が読み込まれた瞬間に発火するため、DOMがまだ完成していない場合があります。\n\nGA4のイベントタグでページ上の要素（ボタンのテキストや商品名）をDataLayerから取得する場合や、カスタムJavaScriptで `document.querySelector()` を使う場合、DOMが存在しない段階でコードが実行されると `null` エラーが発生します。これを防ぐためにDOM Readyトリガーを使います。このモジュールでHTMLパースからDOM生成までの流れを理解することで、GTMトリガーの選択ミスを根本的になくせるようになります。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# DOMツリーの構築プロセス\n\n## DOMとは何か\n\nDOM（Document Object Model）は、HTMLドキュメントをプログラムから操作可能なオブジェクト構造として表現したものです。ブラウザはHTMLテキストを受信した後、以下のプロセスでDOMを構築します。\n\n## HTMLパースの流れ\n\n```\n[サーバー] → HTMLバイト列\n    ↓ 文字コードデコード（UTF-8 等）\n[文字列] → HTMLテキスト\n    ↓ トークナイザー（字句解析）\n[トークン列] → <html>, <head>, <div> 等のトークン\n    ↓ ツリー構築アルゴリズム\n[DOMツリー] → JavaScript・CSS から操作可能な状態\n```\n\n## 構築ステップの詳細\n\n### 1. バイト列の受信\nHTTPレスポンスのボディはバイト列として届きます。`Content-Type: text/html; charset=utf-8` ヘッダーを元に文字コードが特定され、テキストに変換されます。\n\n### 2. トークナイズ（字句解析）\nHTMLの仕様に基づき、文字列を意味のある単位（トークン）に分割します。`<div class=\"container\">` は「開始タグトークン・属性トークン」に分解されます。\n\n### 3. ツリー構築\n生成されたトークンを元に、親子関係・兄弟関係を持つDOMノードのツリーを構築します。\n\n```\ndocument\n└── html\n    ├── head\n    │   ├── meta\n    │   └── title\n    └── body\n        ├── div#container\n        │   ├── h1\n        │   └── p\n        └── script （GTMスニペット）\n```\n\n## パーサーブロッキングとGTMへの影響\n\n### scriptタグがパースをブロックする\nHTMLパーサーが `<script>` タグを見つけると、スクリプトのダウンロードと実行が完了するまでHTMLパースを一時停止します。これを**パーサーブロッキング**と言います。\n\nGTMスニペットを `<head>` の先頭近くに配置する理由はここにあります。GTMコンテナのスクリプトを早期に実行することで、コンバージョンイベントの取りこぼしを最小化しています。ただしこれはパースを遅延させるトレードオフでもあります。\n\n### DOMContentLoaded と load イベント\n\n| イベント | タイミング | GTMとの対応 |\n|----------|-----------|-------------|\n| `DOMContentLoaded` | HTMLパース完了・DOM構築完了 | GTMの「DOM Ready」トリガー |\n| `load` | 画像・CSS等の全リソース読み込み完了 | GTMの「Window Loaded」トリガー |\n\n### async と defer 属性\n\n`<script async>` はHTMLパースと並行してダウンロードされ、ダウンロード完了次第すぐ実行します。実行順序は保証されません。\n\n`<script defer>` はHTMLパースと並行してダウンロードされ、DOMContentLoaded直前に順番通り実行されます。GTMタグの遅延読み込みにはdeferが適しています。\n\n## document.readyState でDOM状態を確認する\n\n```javascript\nconsole.log(document.readyState);\n// \"loading\"     → HTMLパース中\n// \"interactive\" → DOMContentLoaded（DOM構築完了）\n// \"complete\"    → load完了\n```\n\nGTMのカスタムJavaScript変数でDOM要素を取得する場合、実行時点で `readyState` が `\"interactive\"` 以降であることを確認するのが安全な実装です。",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: DOMパースのタイムラインを可視化する\n\n## 課題\n\n1. 下記のstarterCodeをブラウザで開く\n2. `document.readyState` の変化を `document.onreadystatechange` で監視してログに記録する\n3. `DOMContentLoaded` と `load` イベントのタイミングを記録する\n4. 各タイミングで取得できるDOM要素と取得できない要素を実際に確認する\n5. 「DOM要素を取得」ボタンを押すと、指定したCSSセレクタの要素を取得してその存在を表示する機能を実装する",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>DOMタイムライン可視化</title>\n  <style>\n    body { font-family: sans-serif; max-width: 700px; margin: 40px auto; padding: 0 20px; background: #f0f4ff; }\n    .card { background: white; border-radius: 8px; padding: 20px; margin: 16px 0; }\n    h1 { color: #1a1a2e; }\n    #timeline { list-style: none; padding: 0; }\n    #timeline li { padding: 8px 12px; margin: 4px 0; border-radius: 4px; font-family: monospace; font-size: 13px; }\n    .state-loading { background: #ffeeba; }\n    .state-interactive { background: #c3e6cb; }\n    .state-complete { background: #bee5eb; }\n    .state-event { background: #e2d9f3; }\n    input { padding: 8px; width: 280px; margin-right: 8px; border: 1px solid #ccc; border-radius: 4px; }\n    button { padding: 8px 16px; cursor: pointer; background: #1a73e8; color: white; border: none; border-radius: 4px; }\n    #queryResult { margin-top: 12px; padding: 12px; background: #f8f9fa; border-radius: 4px; font-family: monospace; }\n    #late-element { color: blue; font-weight: bold; }\n  </style>\n</head>\n<body>\n  <h1>DOMタイムライン可視化</h1>\n\n  <div class=\"card\">\n    <h2>イベントタイムライン</h2>\n    <ul id=\"timeline\"></ul>\n  </div>\n\n  <div class=\"card\">\n    <h2>DOM要素クエリ</h2>\n    <input type=\"text\" id=\"selectorInput\" placeholder=\"#late-element\" value=\"#late-element\">\n    <button onclick=\"queryDOM()\">DOM要素を取得</button>\n    <div id=\"queryResult\"></div>\n  </div>\n\n  <div class=\"card\">\n    <h2>サンプルコンテンツ</h2>\n    <p id=\"late-element\">このpタグはDOMツリーに存在しています</p>\n  </div>\n\n  <script>\n    const timeline = document.getElementById('timeline');\n    const t0 = performance.now();\n\n    function addLog(message, cssClass) {\n      const ms = (performance.now() - t0).toFixed(1);\n      const li = document.createElement('li');\n      li.className = cssClass;\n      li.textContent = `[+${ms}ms] ${message}`;\n      timeline.appendChild(li);\n    }\n\n    // TODO: document.onreadystatechange で readyState の変化を addLog でタイムラインに追加する\n    // TODO: DOMContentLoaded イベントを addEventListener で監視して addLog する\n    // TODO: load イベントを addEventListener で監視して addLog する\n\n    addLog(`スクリプト開始 / readyState: ${document.readyState}`, 'state-loading');\n\n    function queryDOM() {\n      const selector = document.getElementById('selectorInput').value.trim();\n      // TODO: document.querySelector で要素を取得し、存在すればタグ名・id・textContent を表示する\n      // TODO: 取得できない場合は「要素が見つかりません」と表示する\n    }\n  </script>\n</body>\n</html>",
+        "hints": [
+          "document.onreadystatechange にはコールバック関数を代入します。コールバック内で document.readyState の値を確認し、'loading'・'interactive'・'complete' のそれぞれに対応するCSSクラス名（state-loading・state-interactive・state-complete）を addLog に渡します。",
+          "DOMContentLoaded と load イベントの監視には document.addEventListener('DOMContentLoaded', callback) と window.addEventListener('load', callback) を使います。どちらも 'state-event' クラスでログを追加すると視認しやすくなります。",
+          "queryDOM 関数では const el = document.querySelector(selector) で要素を取得します。el が null でなければ el.tagName・el.id・el.textContent を表示し、null であれば「要素が見つかりません」と表示します。try-catch で不正なセレクタによるエラーも捕捉すると親切です。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>DOMタイムライン可視化</title>\n  <style>\n    body { font-family: sans-serif; max-width: 700px; margin: 40px auto; padding: 0 20px; background: #f0f4ff; }\n    .card { background: white; border-radius: 8px; padding: 20px; margin: 16px 0; }\n    h1 { color: #1a1a2e; }\n    #timeline { list-style: none; padding: 0; }\n    #timeline li { padding: 8px 12px; margin: 4px 0; border-radius: 4px; font-family: monospace; font-size: 13px; }\n    .state-loading { background: #ffeeba; }\n    .state-interactive { background: #c3e6cb; }\n    .state-complete { background: #bee5eb; }\n    .state-event { background: #e2d9f3; }\n    input { padding: 8px; width: 280px; margin-right: 8px; border: 1px solid #ccc; border-radius: 4px; }\n    button { padding: 8px 16px; cursor: pointer; background: #1a73e8; color: white; border: none; border-radius: 4px; }\n    #queryResult { margin-top: 12px; padding: 12px; background: #f8f9fa; border-radius: 4px; font-family: monospace; }\n    #late-element { color: blue; font-weight: bold; }\n  </style>\n</head>\n<body>\n  <h1>DOMタイムライン可視化</h1>\n\n  <div class=\"card\">\n    <h2>イベントタイムライン</h2>\n    <ul id=\"timeline\"></ul>\n  </div>\n\n  <div class=\"card\">\n    <h2>DOM要素クエリ</h2>\n    <input type=\"text\" id=\"selectorInput\" placeholder=\"#late-element\" value=\"#late-element\">\n    <button onclick=\"queryDOM()\">DOM要素を取得</button>\n    <div id=\"queryResult\"></div>\n  </div>\n\n  <div class=\"card\">\n    <h2>サンプルコンテンツ</h2>\n    <p id=\"late-element\">このpタグはDOMツリーに存在しています</p>\n  </div>\n\n  <script>\n    const timeline = document.getElementById('timeline');\n    const t0 = performance.now();\n\n    function addLog(message, cssClass) {\n      const ms = (performance.now() - t0).toFixed(1);\n      const li = document.createElement('li');\n      li.className = cssClass;\n      li.textContent = `[+${ms}ms] ${message}`;\n      timeline.appendChild(li);\n    }\n\n    document.onreadystatechange = function() {\n      const state = document.readyState;\n      const cssMap = { loading: 'state-loading', interactive: 'state-interactive', complete: 'state-complete' };\n      addLog(`readyState変化 → \"${state}\"`, cssMap[state] || 'state-loading');\n    };\n\n    document.addEventListener('DOMContentLoaded', function() {\n      addLog('DOMContentLoaded 発火（GTM「DOM Ready」トリガーに相当）', 'state-event');\n    });\n\n    window.addEventListener('load', function() {\n      addLog('load 発火（GTM「Window Loaded」トリガーに相当）', 'state-event');\n    });\n\n    addLog(`スクリプト開始 / readyState: ${document.readyState}`, 'state-loading');\n\n    function queryDOM() {\n      const selector = document.getElementById('selectorInput').value.trim();\n      const result = document.getElementById('queryResult');\n      try {\n        const el = document.querySelector(selector);\n        if (el) {\n          result.innerHTML = `<span style=\"color:green\">要素を取得しました</span><br>タグ名: ${el.tagName}<br>ID: ${el.id || '（なし）'}<br>テキスト: ${el.textContent.trim().substring(0, 100)}`;\n        } else {\n          result.innerHTML = '<span style=\"color:red\">要素が見つかりません（DOMに存在しない、またはセレクタが誤っています）</span>';\n        }\n      } catch (e) {\n        result.innerHTML = `<span style=\"color:red\">セレクタエラー: ${e.message}</span>`;\n      }\n    }\n  </script>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "GTMのトリガー「DOM Ready」はどのブラウザイベントに対応していますか？",
+            "options": ["window load", "DOMContentLoaded", "readystatechange:loading", "beforeunload"],
+            "correct": 1,
+            "explanation": "GTMの「DOM Ready」トリガーはブラウザの `DOMContentLoaded` イベントに対応しています。このイベントはHTMLパースが完了してDOMツリーが構築されたタイミングで発火します。画像やCSSなどの外部リソース読み込みは待ちません。"
+          },
+          {
+            "q": "HTMLパーサーが `<script>` タグを検出したとき、デフォルト動作として正しいものはどれですか？",
+            "options": [
+              "スクリプトをバックグラウンドでダウンロードし、パースは続行する",
+              "スクリプトのダウンロードと実行が完了するまでHTMLパースを一時停止する",
+              "スクリプトを無視してパースを続行する",
+              "スクリプトを最後にまとめて実行する"
+            ],
+            "correct": 1,
+            "explanation": "デフォルトの `<script>` タグはパーサーブロッキングです。ブラウザはスクリプトのダウンロードと実行が完了するまでHTMLパースを停止します。`async` や `defer` 属性を付けることでこの動作を変更できます。"
+          },
+          {
+            "q": "`document.readyState` が `\"interactive\"` になるタイミングはいつですか？",
+            "options": [
+              "最初のHTMLバイトを受信したとき",
+              "すべての画像と外部リソースの読み込みが完了したとき",
+              "HTMLパースが完了してDOMツリーが構築されたとき",
+              "GTMコンテナの読み込みが完了したとき"
+            ],
+            "correct": 2,
+            "explanation": "`document.readyState` は `\"loading\"`（パース中）→ `\"interactive\"`（DOM構築完了・DOMContentLoadedと同タイミング）→ `\"complete\"`（全リソース読み込み完了・loadと同タイミング）と変化します。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール0-12 完了！\n\n## 習得スキル\n\n- HTMLバイト列からDOMツリーが構築される4ステップのプロセスを説明できる\n- `DOMContentLoaded`（DOM Ready）と `load`（Window Loaded）の違いを理解した\n- パーサーブロッキングとscriptタグの `async`・`defer` 属性の違いを把握した\n- `document.readyState` でDOM構築状態を確認できる\n- GTMのDOM Readyトリガーが必要な場面を技術的根拠から説明できる\n\n## 実務チャレンジ\n\nGTMの設定を開き、GA4イベントタグのトリガーをすべて確認してください。ページ上のDOM要素（クリックされた要素のテキスト等）を参照するタグが「ページビュー」トリガーで動いている場合、「DOM Ready」に変更することでエラーを防げる場合があります。\n\n## 次のモジュールへ\n\n**0-13: CSSOMとレンダーツリーの合成** では、DOMツリーとCSS情報がどのように合成されて画面が描画されるかを学びます。スタイル計算がページ表示速度に与える影響を理解し、Core Web Vitals改善のための基礎知識を身につけます。",
+        "diagram": false
+      }
+    }
+  ]
+}

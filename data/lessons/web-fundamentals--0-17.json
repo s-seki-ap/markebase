@@ -1,0 +1,82 @@
+{
+  "id": "web-fundamentals--0-17",
+  "moduleId": "0-17",
+  "categoryId": "web-fundamentals",
+  "title": "ブラウザキャッシュの種類と制御（強いキャッシュ・弱いキャッシュ）",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# マーケター向け導入\n\n「GTMコンテナを更新して公開したのにサイトに変化がない」「LP素材を差し替えたのにクライアントの画面では古いままだ」という問題に直面したことはありませんか？このような状況の多くは、ブラウザやCDNが以前のリソースを**キャッシュ（一時保存）**しているために起きています。\n\nブラウザキャッシュにはHTTPレスポンスヘッダーで制御される「強いキャッシュ」と「弱いキャッシュ」があります。強いキャッシュ（`Cache-Control: max-age`）が設定されているリソースはキャッシュ有効期間内であればサーバーへの問い合わせすら行わないため、`Ctrl+F5` の強制リロードが必要です。\n\nGTMコンテナ（`gtm.js?id=GTM-XXXXX`）は実は短い有効期間のキャッシュが設定されており、数分以内に反映されます。一方、LPのCSSや画像に `Cache-Control: max-age=31536000`（1年間）が設定されている場合、ファイル名を変えないと一切更新が届きません。この仕組みを理解することで、クライアントへの「なぜ反映されないか」の説明と対処法の提案が的確にできるようになります。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# ブラウザキャッシュの仕組みと制御\n\n## キャッシュの2種類\n\n### 強いキャッシュ（Strong Cache）\n\nキャッシュ有効期間内はサーバーへの問い合わせを一切行わずにキャッシュを使います。NetworkパネルでStatus欄に「200（from disk cache）」や「200（from memory cache）」と表示されます。\n\n設定ヘッダー：\n```\nCache-Control: max-age=86400   → 86400秒（1日）有効\nExpires: Tue, 27 Mar 2027 00:00:00 GMT  → 絶対的な期限（旧方式）\n```\n\n### 弱いキャッシュ（Weak Cache / Conditional Cache）\n\nキャッシュはあるが、使用前にサーバーに「このキャッシュはまだ有効ですか？」と確認します。サーバーが「有効」と返せば、ボディなしの `304 Not Modified` が返りキャッシュを使います。\n\n設定ヘッダー：\n```\nCache-Control: no-cache       → 必ずサーバーに確認する（キャッシュは持つ）\nETag: \"abc123\"                → コンテンツのハッシュ値\nLast-Modified: Mon, 27 Mar 2026 10:00:00 GMT  → 最終更新日時\n```\n\n## Cache-Controlディレクティブ一覧\n\n| ディレクティブ | 意味 | 使用場面 |\n|---------------|------|----------|\n| `max-age=秒数` | 指定秒数キャッシュ有効 | CSS・画像・フォント |\n| `no-cache` | 毎回サーバー確認（304対応） | HTML・APIレスポンス |\n| `no-store` | キャッシュを一切保存しない | 個人情報を含むページ |\n| `public` | CDNもキャッシュ可能 | 静的ファイル全般 |\n| `private` | ブラウザのみキャッシュ可 | ログイン後ページ |\n| `immutable` | 有効期間中は必ずキャッシュ | ハッシュ付きファイル |\n\n## キャッシュバスティング（Cache Busting）\n\n長期キャッシュを設定した静的ファイルを更新する場合、ファイル名にハッシュやバージョン番号を含めて「別ファイル」として扱わせます。\n\n```html\n<!-- 悪い例：キャッシュが更新されない -->\n<link rel=\"stylesheet\" href=\"/styles.css\">\n\n<!-- 良い例：ビルドごとにハッシュが変わる -->\n<link rel=\"stylesheet\" href=\"/styles.abc123.css\">\n```\n\nGTMはコンテナURLに `id=GTM-XXXXX` のクエリパラメータが含まれますが、キャッシュは数分程度で期限切れになるため通常は問題ありません。\n\n## ServiceWorkerキャッシュとの関係\n\nService Worker（次のモジュールで詳しく学習）独自のキャッシュAPIを使ってリソースをキャッシュする場合、ブラウザキャッシュよりも優先度が高く、`Cache-Control` ヘッダーより先にService Workerがインターセプトします。GA4タグが動作しないPWAの調査では、Service Workerがリクエストをブロックしていないかの確認が必要です。\n\n## DevToolsでのキャッシュ確認\n\n```\nNetworkパネルで確認する列:\n- Status: 200（サーバーから取得）/ 304（キャッシュ有効）/ 200 disk cache（強いキャッシュ）\n- Size: 「(disk cache)」「(memory cache)」と表示される\n- Time: キャッシュから取得は1ms以下\n```\n\n### 強制リロードの種類\n\n| 操作 | 動作 | ショートカット |\n|------|------|----------------|\n| 通常リロード | 弱いキャッシュは確認、強いキャッシュはそのまま使う | F5 |\n| 強制リロード | すべてのリソースをサーバーから再取得 | Ctrl+Shift+R |\n| キャッシュ無効化リロード | DevToolsを開いた状態でのみ有効・全キャッシュ無効 | Ctrl+Shift+R（DevTools開時）|",
+        "diagram": true
+      }
+    },
+      {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: キャッシュヘッダーアナライザーを作る\n\n## 課題\n\n1. 下記のstarterCodeをブラウザで開く\n2. 「キャッシュヘッダーを解析」ボタンを押すと、入力されたCache-Control文字列を解析して各ディレクティブの意味を日本語で表示する\n3. max-ageが含まれる場合、有効期限を「〇日〇時間〇分」に変換して表示する\n4. 設定の「良し悪し」を判定する（no-storeなら個人情報ページ向き、max-age=0なら常に再取得等）\n5. キャッシュシナリオシミュレーターで「強いキャッシュ中」「弱いキャッシュ確認中」「キャッシュなし」の3状態を模擬してNetworkパネルでの見え方を説明する",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>キャッシュヘッダーアナライザー</title>\n  <style>\n    body { font-family: sans-serif; max-width: 750px; margin: 40px auto; padding: 0 20px; background: #f0f4e8; }\n    .card { background: white; border-radius: 8px; padding: 20px; margin: 16px 0; }\n    h1 { color: #2d5a27; }\n    button { padding: 8px 16px; cursor: pointer; background: #2d5a27; color: white; border: none; border-radius: 4px; margin: 4px; }\n    input, textarea { padding: 8px; width: 100%; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; margin: 4px 0; }\n    .result { background: #f8f9fa; padding: 16px; border-radius: 8px; margin-top: 12px; }\n    .directive { padding: 8px; margin: 4px 0; border-radius: 4px; }\n    .good { background: #d4edda; border-left: 4px solid #28a745; }\n    .warn { background: #fff3cd; border-left: 4px solid #ffc107; }\n    .bad { background: #f8d7da; border-left: 4px solid #dc3545; }\n    .neutral { background: #e2e3e5; border-left: 4px solid #6c757d; }\n    .scenario-btn { background: #6c757d; }\n    pre { background: #1a1a1a; color: #00ff88; padding: 12px; border-radius: 4px; font-size: 12px; }\n    select { padding: 8px; border: 1px solid #ccc; border-radius: 4px; }\n  </style>\n</head>\n<body>\n  <h1>キャッシュヘッダーアナライザー</h1>\n\n  <div class=\"card\">\n    <h2>Cache-Control ヘッダー解析</h2>\n    <label>Cache-Control の値を入力:</label>\n    <select id=\"presets\" onchange=\"loadPreset()\">\n      <option value=\"\">-- プリセットを選択 --</option>\n      <option value=\"max-age=86400, public\">静的ファイル（1日）</option>\n      <option value=\"max-age=31536000, immutable\">長期静的ファイル（1年）</option>\n      <option value=\"no-cache\">HTMLページ（毎回確認）</option>\n      <option value=\"no-store\">個人情報ページ</option>\n      <option value=\"max-age=0, must-revalidate\">常に再検証</option>\n    </select>\n    <input type=\"text\" id=\"headerInput\" placeholder=\"max-age=86400, public\" value=\"max-age=86400, public\">\n    <button onclick=\"analyzeHeader()\">解析する</button>\n    <div id=\"analysisResult\"></div>\n  </div>\n\n  <div class=\"card\">\n    <h2>キャッシュシナリオシミュレーター</h2>\n    <button class=\"scenario-btn\" onclick=\"showScenario('strong')\">強いキャッシュ（disk cache）</button>\n    <button class=\"scenario-btn\" onclick=\"showScenario('weak')\">弱いキャッシュ（304）</button>\n    <button class=\"scenario-btn\" onclick=\"showScenario('none')\">キャッシュなし（200）</button>\n    <div id=\"scenarioResult\"></div>\n  </div>\n\n  <script>\n    const directiveInfo = {\n      'no-store': { label: 'キャッシュを保存しない', level: 'neutral', note: '個人情報・機密データのページに適用。毎回サーバーから取得。' },\n      'no-cache': { label: '毎回サーバーに確認する', level: 'good', note: 'キャッシュは保持するが304で有効性確認。HTMLに最適。' },\n      'public': { label: 'CDNもキャッシュ可能', level: 'good', note: '静的ファイルをCDNでキャッシュする場合に必要。' },\n      'private': { label: 'ブラウザのみキャッシュ可', level: 'warn', note: 'ログイン後のページ等、CDNにキャッシュさせたくない場合。' },\n      'immutable': { label: '有効期間中は変更なしと保証', level: 'good', note: 'max-ageと組み合わせ。ハッシュ付きファイルに最適。' },\n      'must-revalidate': { label: '期限切れ後は必ずサーバー確認', level: 'neutral', note: 'max-age=0と組み合わせて常に再検証に使われる。' }\n    };\n\n    function loadPreset() {\n      const val = document.getElementById('presets').value;\n      if (val) document.getElementById('headerInput').value = val;\n    }\n\n    function analyzeHeader() {\n      const header = document.getElementById('headerInput').value.trim();\n      // TODO: header を , で分割してトリミングし、各ディレクティブを解析する\n      // TODO: max-age=N が含まれれば日時分に変換して表示する\n      // TODO: directiveInfo に登録されたディレクティブは説明を付けて表示する\n      // TODO: analysisResult に結果を表示する\n    }\n\n    function showScenario(type) {\n      // TODO: type に応じてDevToolsのNetworkパネルでの見え方と説明を scenarioResult に表示する\n      // strong: Status=200 disk cache, Size=(disk cache), Time=1ms未満\n      // weak: リクエストあり Status=304, Sizeは小さい, ETagで確認\n      // none: Status=200, 通常のサイズとTime\n    }\n  </script>\n</body>\n</html>",
+        "hints": [
+          "analyzeHeader では header.split(',').map(s => s.trim()) で各ディレクティブに分割します。各ディレクティブが 'max-age=' で始まる場合は parseInt(d.split('=')[1]) で秒数を取得し、Math.floor(sec / 86400) で日数、Math.floor((sec % 86400) / 3600) で時間、Math.floor((sec % 3600) / 60) で分を計算します。",
+          "各ディレクティブに対して directiveInfo[directive] が存在すれば説明を表示し、存在しなければ「不明なディレクティブ」として neutral クラスで表示します。結果はHTMLをテンプレートリテラルで生成して analysisResult.innerHTML に設定します。",
+          "showScenario では if (type === 'strong') { ... } else if (type === 'weak') { ... } else { ... } の分岐でそれぞれの説明HTMLを生成します。pre タグを使ってNetworkパネル風の表示（Status・Size・Time・Headers）を模擬すると学習効果が高まります。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>キャッシュヘッダーアナライザー</title>\n  <style>\n    body { font-family: sans-serif; max-width: 750px; margin: 40px auto; padding: 0 20px; background: #f0f4e8; }\n    .card { background: white; border-radius: 8px; padding: 20px; margin: 16px 0; }\n    h1 { color: #2d5a27; }\n    button { padding: 8px 16px; cursor: pointer; background: #2d5a27; color: white; border: none; border-radius: 4px; margin: 4px; }\n    input { padding: 8px; width: 100%; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; margin: 4px 0; }\n    .result { background: #f8f9fa; padding: 16px; border-radius: 8px; margin-top: 12px; }\n    .directive { padding: 8px; margin: 4px 0; border-radius: 4px; }\n    .good { background: #d4edda; border-left: 4px solid #28a745; }\n    .warn { background: #fff3cd; border-left: 4px solid #ffc107; }\n    .bad { background: #f8d7da; border-left: 4px solid #dc3545; }\n    .neutral { background: #e2e3e5; border-left: 4px solid #6c757d; }\n    .scenario-btn { background: #6c757d; }\n    pre { background: #1a1a1a; color: #00ff88; padding: 12px; border-radius: 4px; font-size: 12px; }\n    select { padding: 8px; border: 1px solid #ccc; border-radius: 4px; }\n  </style>\n</head>\n<body>\n  <h1>キャッシュヘッダーアナライザー</h1>\n\n  <div class=\"card\">\n    <h2>Cache-Control ヘッダー解析</h2>\n    <label>Cache-Control の値を入力:</label>\n    <select id=\"presets\" onchange=\"loadPreset()\">\n      <option value=\"\">-- プリセットを選択 --</option>\n      <option value=\"max-age=86400, public\">静的ファイル（1日）</option>\n      <option value=\"max-age=31536000, immutable\">長期静的ファイル（1年）</option>\n      <option value=\"no-cache\">HTMLページ（毎回確認）</option>\n      <option value=\"no-store\">個人情報ページ</option>\n      <option value=\"max-age=0, must-revalidate\">常に再検証</option>\n    </select>\n    <input type=\"text\" id=\"headerInput\" placeholder=\"max-age=86400, public\" value=\"max-age=86400, public\">\n    <button onclick=\"analyzeHeader()\">解析する</button>\n    <div id=\"analysisResult\"></div>\n  </div>\n\n  <div class=\"card\">\n    <h2>キャッシュシナリオシミュレーター</h2>\n    <button class=\"scenario-btn\" onclick=\"showScenario('strong')\">強いキャッシュ（disk cache）</button>\n    <button class=\"scenario-btn\" onclick=\"showScenario('weak')\">弱いキャッシュ（304）</button>\n    <button class=\"scenario-btn\" onclick=\"showScenario('none')\">キャッシュなし（200）</button>\n    <div id=\"scenarioResult\"></div>\n  </div>\n\n  <script>\n    const directiveInfo = {\n      'no-store': { label: 'キャッシュを保存しない', level: 'neutral', note: '個人情報・機密データのページに適用。毎回サーバーから取得。' },\n      'no-cache': { label: '毎回サーバーに確認する', level: 'good', note: 'キャッシュは保持するが304で有効性確認。HTMLに最適。' },\n      'public': { label: 'CDNもキャッシュ可能', level: 'good', note: '静的ファイルをCDNでキャッシュする場合に必要。' },\n      'private': { label: 'ブラウザのみキャッシュ可', level: 'warn', note: 'ログイン後のページ等、CDNにキャッシュさせたくない場合。' },\n      'immutable': { label: '有効期間中は変更なしと保証', level: 'good', note: 'max-ageと組み合わせ。ハッシュ付きファイルに最適。' },\n      'must-revalidate': { label: '期限切れ後は必ずサーバー確認', level: 'neutral', note: 'max-age=0と組み合わせて常に再検証に使われる。' }\n    };\n\n    function loadPreset() {\n      const val = document.getElementById('presets').value;\n      if (val) document.getElementById('headerInput').value = val;\n    }\n\n    function analyzeHeader() {\n      const header = document.getElementById('headerInput').value.trim();\n      const directives = header.split(',').map(s => s.trim()).filter(Boolean);\n      let html = '<div class=\"result\">';\n      directives.forEach(d => {\n        const lower = d.toLowerCase();\n        if (lower.startsWith('max-age=')) {\n          const sec = parseInt(d.split('=')[1]);\n          const days = Math.floor(sec / 86400);\n          const hours = Math.floor((sec % 86400) / 3600);\n          const mins = Math.floor((sec % 3600) / 60);\n          const level = sec === 0 ? 'warn' : sec >= 86400 ? 'good' : 'neutral';\n          html += `<div class=\"directive ${level}\"><strong>${d}</strong>: キャッシュ有効期間 = ${days}日 ${hours}時間 ${mins}分（${sec}秒）${ sec === 0 ? '<br>※ max-age=0 は毎回サーバー確認と同等' : ''}</div>`;\n        } else {\n          const info = directiveInfo[lower];\n          if (info) {\n            html += `<div class=\"directive ${info.level}\"><strong>${d}</strong>: ${info.label}<br><small>${info.note}</small></div>`;\n          } else {\n            html += `<div class=\"directive neutral\"><strong>${d}</strong>: 不明なディレクティブ</div>`;\n          }\n        }\n      });\n      html += '</div>';\n      document.getElementById('analysisResult').innerHTML = html;\n    }\n\n    function showScenario(type) {\n      const scenarios = {\n        strong: {\n          title: '強いキャッシュ（disk cache）',\n          desc: 'max-age の有効期間内。サーバーへのリクエストは発生しません。',\n          network: `Status  : 200 (disk cache)\nSize    : (disk cache)\nTime    : 0 ms\nHeaders : リクエストは送信されない\n\nGTMへの影響: コンテナ更新後もmax-age内はキャッシュが使われます。\n通常F5リロードでは更新されません。Ctrl+Shift+Rで強制リロード。`\n        },\n        weak: {\n          title: '弱いキャッシュ（304 Not Modified）',\n          desc: 'no-cache またはmax-age切れ後。サーバーに確認リクエストを送ります。',\n          network: `Status  : 304 Not Modified\nSize    : 0 B（ボディなし）\nTime    : 数十ms（RTT分）\nHeaders : If-None-Match: \"abc123\" (ETag)\n          If-Modified-Since: ...\n\nGTMへの影響: サーバーが304を返せばキャッシュを使用。\nコンテナ更新後は次のリクエスト時に200が返り最新版が取得できます。`\n        },\n        none: {\n          title: 'キャッシュなし（200 OK）',\n          desc: 'no-store またはキャッシュが存在しない。毎回フルにダウンロード。',\n          network: `Status  : 200 OK\nSize    : ファイルのフルサイズ\nTime    : ファイルサイズ次第（数十〜数百ms）\nHeaders : Cache-Control: no-store\n\nGTMへの影響: 毎回最新のコンテナが取得されます。\nページパフォーマンスへの影響が最も大きい設定です。`\n        }\n      };\n      const s = scenarios[type];\n      document.getElementById('scenarioResult').innerHTML =\n        `<div class=\"result\"><h3>${s.title}</h3><p>${s.desc}</p><pre>${s.network}</pre></div>`;\n    }\n  </script>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "DevToolsのNetworkパネルで `Status: 200 (disk cache)` と表示されたリソースについて正しい説明はどれですか？",
+            "options": [
+              "サーバーからダウンロードしたが200が返った",
+              "強いキャッシュの有効期間内で、サーバーへのリクエストは発生していない",
+              "サーバーがキャッシュを許可する200レスポンスを返した",
+              "弱いキャッシュの確認をしてサーバーが200を返した"
+            ],
+            "correct": 1,
+            "explanation": "`200 (disk cache)` はブラウザのディスクキャッシュから取得したことを示します。強いキャッシュ（`Cache-Control: max-age`）が有効期間内の場合に発生し、サーバーへのリクエストは一切行われていません。"
+          },
+          {
+            "q": "LPに配置した画像（`Cache-Control: max-age=31536000, immutable`）を更新したい場合、正しいアプローチはどれですか？",
+            "options": [
+              "サーバーで画像ファイルを上書きする",
+              "HTMLのimgタグにquery parameterを追加する（`?v=2`）",
+              "画像ファイル名にハッシュやバージョン番号を含めて別ファイルとして配置し、HTMLの参照先を更新する",
+              "Cache-Controlヘッダーを削除する"
+            ],
+            "correct": 2,
+            "explanation": "`max-age=31536000, immutable` は1年間は変更なしを保証する設定です。ファイルを上書きしてもクライアントのキャッシュには届きません。ファイル名にハッシュを含めて別URLにすることで、クライアントに新しいリソースとして認識させます。"
+          },
+          {
+            "q": "`Cache-Control: no-cache` が設定されたリソースに対するブラウザの動作として正しいものはどれですか？",
+            "options": [
+              "キャッシュを一切保存せず毎回サーバーからダウンロードする",
+              "キャッシュを保存するが、使用前に必ずサーバーに有効性を確認する",
+              "キャッシュを保存しないが、次回リクエストは同じURLに送信する",
+              "CDNのキャッシュを無効化する"
+            ],
+            "correct": 1,
+            "explanation": "`no-cache` は「キャッシュを保存しない」ではなく「キャッシュを使用前にサーバーで確認する」という意味です。サーバーが有効と判断すれば304が返り、キャッシュが使われます。キャッシュを完全に保存しないのは `no-store` です。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール0-17 完了！\n\n## 習得スキル\n\n- 強いキャッシュ（max-age）と弱いキャッシュ（no-cache + ETag）の違いを説明できる\n- `Cache-Control` の主要ディレクティブ（no-store・no-cache・public・private・immutable）の意味を理解した\n- DevToolsで `200 (disk cache)` と `304 Not Modified` の違いを判別できる\n- キャッシュバスティング（ファイル名にハッシュを含める手法）の仕組みを把握した\n- GTMコンテナのキャッシュ特性を理解した\n\n## 実務チャレンジ\n\n担当するLPをDevToolsのNetworkパネルで確認し、CSSや画像リソースの `Cache-Control` ヘッダーを確認してください。`max-age=31536000` が設定されているリソースが更新される際、エンジニアにキャッシュバスティングの対応を依頼できるかを検討します。\n\n## 次のモジュールへ\n\n**0-18: Service Workerとオフラインキャッシュの仕組み** では、PWA（Progressive Web App）がなぜオフラインでも動作できるのかをService Workerの仕組みから学びます。GA4タグのリクエストがService Workerによってインターセプトされる可能性も含めて理解します。",
+        "diagram": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "id": "web-fundamentals--0-11",
+  "moduleId": "0-11",
+  "categoryId": "web-fundamentals",
+  "title": "ブラウザのレンダリングエンジン（Blink・WebKit・Gecko）",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# マーケター向け導入\n\nGA4のタグやGTMのスクリプトを設置しても「Chromeでは動くのにSafariでは動かない」「iPhoneで確認したら表示が崩れる」という経験はありませんか？この問題の根本には、ブラウザごとに異なる**レンダリングエンジン**の存在があります。\n\nレンダリングエンジンとは、HTMLやCSS・JavaScriptを受け取って実際に画面に表示する「描画担当のソフトウェア」です。Chromeは**Blink**、SafariとiOSの全ブラウザは**WebKit**、FirefoxとThor Browserは**Gecko**を使っています。\n\n計測タグの動作保証範囲を決めるとき、クライアントのブラウザシェアデータ（GA4のデバイス・ブラウザレポート）を確認して「どのエンジンをカバーすべきか」を判断するのがマーケターに求められる実務スキルです。特にiOSでは**App Store規定によりすべてのブラウザがWebKitを使わなければならない**ため、ChromeやFirefoxをiOSで使っていてもエンジンはWebKitです。この事実を知っておくことで、iOS環境での不具合調査が格段にスムーズになります。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# レンダリングエンジンの仕組みと差異\n\n## 主要レンダリングエンジンの対応関係\n\n| エンジン | 採用ブラウザ | 開発元 | 特徴 |\n|----------|-------------|--------|------|\n| Blink | Chrome, Edge, Opera, Brave, Vivaldi | Google（WebKitからフォーク） | 世界シェア首位・V8 JSエンジンと統合 |\n| WebKit | Safari, iOS全ブラウザ | Apple | Apple製品に最適化・省電力 |\n| Gecko | Firefox, Tor Browser | Mozilla | プライバシー重視・独自実装が多い |\n\n## レンダリングエンジンが行う処理のステップ\n\nどのエンジンも基本的には以下の処理パイプラインを持ちます。\n\n1. **HTMLパース** — サーバーから受け取ったHTMLをDOMツリーに変換\n2. **CSSパース** — スタイルシートをCSSOMツリーに変換\n3. **レンダーツリー合成** — DOMとCSSOMを組み合わせて描画対象を決定\n4. **レイアウト（Reflow）** — 各要素の位置・サイズを計算\n5. **ペイント** — ピクセルを描画バッファに書き込む\n6. **コンポジット** — GPU上でレイヤーを合成して最終画面を生成\n\nエンジンによってこの各ステップの実装が異なるため、CSSプロパティのサポート状況・JavaScriptの挙動・フォントレンダリングに差が生じます。\n\n## 計測タグへの影響\n\n### CSS/JSのサポート差\nGTMでカスタムイベントを実装する際に使う `ResizeObserver` や `IntersectionObserver` などのWeb APIは、エンジンのバージョンによってサポート状況が異なります。古いiOS（WebKit古バージョン）では使えないAPIがあるため、GTMのカスタムHTMLタグでこれらを使う場合は必ずフォールバック処理が必要です。\n\n### Intelligent Tracking Prevention（ITP）\nSafari/WebKitはAppleのプライバシーポリシーに基づき、サードパーティCookieを制限する**ITP（Intelligent Tracking Prevention）**を実装しています。GA4のクライアントIDはファーストパーティCookieで保持されますが、JavaScriptで書き込んだCookieはITPにより最大7日で削除される場合があります。これはGA4のユーザー計測精度に直接影響します。\n\n### 実務での確認手順\n```\n1. GA4 > レポート > テクノロジー > ブラウザでシェアを確認\n2. SafariとiOS系の合計シェアを算出\n3. 20%を超える場合はWebKit対応を優先事項に追加\n4. Chromeのみ動作確認している実装は要注意\n```\n\n## BlinkとWebKitの共通祖先\n\nBlinkは2013年にGoogleがWebKitからフォークして作成しました。そのため一部の動作は似ていますが、現在では実装が大きく乖離しています。「ChromeとSafariは似たものでしょ」という思い込みは禁物で、特にCSSアニメーション・フレックスボックスの挙動・JavaScriptのタイミング処理に差があります。",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: ブラウザ情報とエンジン判定ツールを作る\n\n## 課題\n\n1. 下記のstarterCodeをブラウザで開く\n2. `navigator` オブジェクトを使って現在のブラウザ情報を表示する\n3. UserAgentの文字列を解析して、使用中のレンダリングエンジンを判定する\n4. iOSデバイスかどうかを判定して注意メッセージを表示する\n5. `window.CSS.supports()` を使ってCSSプロパティのサポート確認機能を追加する",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>ブラウザエンジン判定ツール</title>\n  <style>\n    body { font-family: sans-serif; max-width: 700px; margin: 40px auto; padding: 0 20px; background: #f5f5f5; }\n    .card { background: white; border-radius: 8px; padding: 20px; margin: 16px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }\n    h1 { color: #1a1a2e; }\n    .engine-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-weight: bold; color: white; }\n    .blink { background: #4285f4; }\n    .webkit { background: #999; }\n    .gecko { background: #ff6611; }\n    .unknown { background: #aaa; }\n    table { width: 100%; border-collapse: collapse; }\n    td, th { padding: 8px; border: 1px solid #ddd; text-align: left; }\n    th { background: #f0f0f0; }\n    .warn { background: #fff3cd; border-left: 4px solid #ffc107; padding: 12px; }\n    button { padding: 8px 16px; cursor: pointer; background: #1a73e8; color: white; border: none; border-radius: 4px; }\n    input { padding: 8px; width: 300px; margin-right: 8px; border: 1px solid #ccc; border-radius: 4px; }\n    #cssResult { margin-top: 12px; font-family: monospace; }\n  </style>\n</head>\n<body>\n  <h1>ブラウザエンジン判定ツール</h1>\n\n  <div class=\"card\">\n    <h2>現在のブラウザ情報</h2>\n    <div id=\"engineDisplay\"></div>\n    <table id=\"browserInfo\"></table>\n  </div>\n\n  <div class=\"card\">\n    <h2>iOS判定</h2>\n    <div id=\"iosCheck\"></div>\n  </div>\n\n  <div class=\"card\">\n    <h2>CSSサポート確認</h2>\n    <p>CSSプロパティ:値の形式で入力してください（例: display:grid）</p>\n    <input type=\"text\" id=\"cssInput\" placeholder=\"display:grid\">\n    <button onclick=\"checkCSS()\">確認</button>\n    <div id=\"cssResult\"></div>\n  </div>\n\n  <script>\n    function detectEngine(ua) {\n      // TODO: UAからエンジンを判定して { name, cssClass } を返す\n    }\n\n    function displayBrowserInfo() {\n      const ua = navigator.userAgent;\n      // TODO: detectEngine を使ってエンジンバッジを表示する\n      // TODO: browserInfo テーブルに userAgent, platform, language, cookieEnabled を表示する\n    }\n\n    function checkIOS() {\n      // TODO: UserAgentまたはnavigator.platformでiOSを判定して警告を表示する\n    }\n\n    function checkCSS() {\n      const input = document.getElementById('cssInput').value.trim();\n      // TODO: CSS.supports() でサポート状況を判定して結果を表示する\n    }\n\n    displayBrowserInfo();\n    checkIOS();\n  </script>\n</body>\n</html>",
+        "hints": [
+          "detectEngine関数では navigator.userAgent の文字列に 'Chrome' が含まれるかどうかを if 文でチェックします。ただし SafariのUAにも 'Chrome' が含まれる場合があるので、判定順序に注意が必要です。まず 'Firefox' を確認し、次に 'Chrome' を確認し、それ以外を 'WebKit' とする順番が安全です。",
+          "iOSの判定は /iPad|iPhone|iPod/.test(navigator.userAgent) または navigator.platform で行います。また、最近のiPad OSはPCのSafariに偽装することがあるため、navigator.maxTouchPoints > 1 と組み合わせると精度が上がります。",
+          "CSS.supports() の使い方は CSS.supports('display', 'grid') のようにプロパティと値を別々に渡す方法と、CSS.supports('display:grid') のように文字列全体を渡す方法があります。input.split(':') で分割して前者の方式で呼び出すとシンプルに実装できます。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>ブラウザエンジン判定ツール</title>\n  <style>\n    body { font-family: sans-serif; max-width: 700px; margin: 40px auto; padding: 0 20px; background: #f5f5f5; }\n    .card { background: white; border-radius: 8px; padding: 20px; margin: 16px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }\n    h1 { color: #1a1a2e; }\n    .engine-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-weight: bold; color: white; }\n    .blink { background: #4285f4; }\n    .webkit { background: #999; }\n    .gecko { background: #ff6611; }\n    .unknown { background: #aaa; }\n    table { width: 100%; border-collapse: collapse; }\n    td, th { padding: 8px; border: 1px solid #ddd; text-align: left; }\n    th { background: #f0f0f0; }\n    .warn { background: #fff3cd; border-left: 4px solid #ffc107; padding: 12px; }\n    .ok { background: #d4edda; border-left: 4px solid #28a745; padding: 12px; }\n    button { padding: 8px 16px; cursor: pointer; background: #1a73e8; color: white; border: none; border-radius: 4px; }\n    input { padding: 8px; width: 300px; margin-right: 8px; border: 1px solid #ccc; border-radius: 4px; }\n    #cssResult { margin-top: 12px; font-family: monospace; }\n  </style>\n</head>\n<body>\n  <h1>ブラウザエンジン判定ツール</h1>\n\n  <div class=\"card\">\n    <h2>現在のブラウザ情報</h2>\n    <div id=\"engineDisplay\"></div>\n    <table id=\"browserInfo\"></table>\n  </div>\n\n  <div class=\"card\">\n    <h2>iOS判定</h2>\n    <div id=\"iosCheck\"></div>\n  </div>\n\n  <div class=\"card\">\n    <h2>CSSサポート確認</h2>\n    <p>CSSプロパティ:値の形式で入力してください（例: display:grid）</p>\n    <input type=\"text\" id=\"cssInput\" placeholder=\"display:grid\">\n    <button onclick=\"checkCSS()\">確認</button>\n    <div id=\"cssResult\"></div>\n  </div>\n\n  <script>\n    function detectEngine(ua) {\n      if (/Firefox/.test(ua)) return { name: 'Gecko (Firefox)', cssClass: 'gecko' };\n      if (/Chrome/.test(ua)) return { name: 'Blink (Chrome/Edge)', cssClass: 'blink' };\n      if (/Safari/.test(ua)) return { name: 'WebKit (Safari)', cssClass: 'webkit' };\n      return { name: '不明', cssClass: 'unknown' };\n    }\n\n    function displayBrowserInfo() {\n      const ua = navigator.userAgent;\n      const engine = detectEngine(ua);\n      document.getElementById('engineDisplay').innerHTML =\n        `<p>検出エンジン: <span class=\"engine-badge ${engine.cssClass}\">${engine.name}</span></p>`;\n      const rows = [\n        ['UserAgent', ua],\n        ['Platform', navigator.platform],\n        ['言語', navigator.language],\n        ['Cookie有効', navigator.cookieEnabled ? 'はい' : 'いいえ']\n      ];\n      const table = document.getElementById('browserInfo');\n      table.innerHTML = '<tr><th>項目</th><th>値</th></tr>' +\n        rows.map(([k,v]) => `<tr><td>${k}</td><td style=\"word-break:break-all\">${v}</td></tr>`).join('');\n    }\n\n    function checkIOS() {\n      const ua = navigator.userAgent;\n      const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);\n      const el = document.getElementById('iosCheck');\n      if (isIOS) {\n        el.innerHTML = '<div class=\"warn\"><strong>iOSデバイスを検出しました。</strong><br>iOSではChrome・FirefoxもWebKitエンジンを使用します。ITPによりCookieの有効期限が短縮される可能性があります。GA4のユーザー計測精度に影響が出る場合があります。</div>';\n      } else {\n        el.innerHTML = '<div class=\"ok\">iOSデバイスではありません。</div>';\n      }\n    }\n\n    function checkCSS() {\n      const input = document.getElementById('cssInput').value.trim();\n      if (!input.includes(':')) {\n        document.getElementById('cssResult').innerHTML = '<span style=\"color:red\">「プロパティ:値」の形式で入力してください</span>';\n        return;\n      }\n      const [prop, ...rest] = input.split(':');\n      const value = rest.join(':');\n      const supported = CSS.supports(prop.trim(), value.trim());\n      document.getElementById('cssResult').innerHTML =\n        `<strong>${input}</strong> → ${supported ? '<span style=\"color:green\">サポートされています</span>' : '<span style=\"color:red\">サポートされていません</span>'}`;\n    }\n\n    displayBrowserInfo();\n    checkIOS();\n  </script>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "iPhoneでChromeブラウザを使用した場合、どのレンダリングエンジンが使われますか？",
+            "options": ["Blink", "WebKit", "Gecko", "Trident"],
+            "correct": 1,
+            "explanation": "Apple の App Store 規定により、iOS上で動作するすべてのブラウザはWebKitエンジンを使わなければなりません。そのためiOS版ChromeはBlinkではなくWebKitを使用しています。"
+          },
+          {
+            "q": "SafariのITP（Intelligent Tracking Prevention）がGA4計測に与える主な影響はどれですか？",
+            "options": [
+              "GA4のタグ自体が読み込まれなくなる",
+              "JavaScriptで書き込んだCookieの有効期限が短縮され、ユーザー識別精度が下がる",
+              "イベント送信がすべてブロックされる",
+              "BigQueryエクスポートが停止する"
+            ],
+            "correct": 1,
+            "explanation": "ITPはサードパーティCookieのブロックとJavaScript書き込みCookieの有効期限短縮（最大7日）を行います。GA4のクライアントIDを保持するCookieもこの影響を受け、ユーザーの継続計測精度が低下します。"
+          },
+          {
+            "q": "Blinkエンジンはどのエンジンからフォークされましたか？",
+            "options": ["Gecko", "Trident", "WebKit", "Presto"],
+            "correct": 2,
+            "explanation": "BlinkはGoogleが2013年にAppleのWebKitからフォークして作成したレンダリングエンジンです。共通の祖先を持つため一部の動作は似ていますが、現在では大きく乖離しています。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール0-11 完了！\n\n## 習得スキル\n\n- Blink・WebKit・Geckoの3大エンジンとそれぞれの採用ブラウザを説明できる\n- iOSではすべてのブラウザがWebKitを使うというApple規定を理解した\n- SafariのITPがGA4クッキー計測に与える影響を把握した\n- `navigator.userAgent` を使ったエンジン判定の実装ができる\n- `CSS.supports()` でプロパティのブラウザ対応を確認できる\n\n## 実務チャレンジ\n\nGA4の「テクノロジー > ブラウザ」レポートを開き、Safari・iOS Safariの合計セッションシェアを計算してください。20%を超えていた場合、ITP対策として[Server-Side Tagging](https://developers.google.com/tag-platform/tag-manager/server-side)の検討が有効です。\n\n## 次のモジュールへ\n\n**0-12: DOMツリーの構築プロセス** では、ブラウザがHTMLを受け取ってからDOMが完成するまでのプロセスを学びます。GTMのトリガー「DOM Ready」がなぜ必要なのか、技術的な根拠から理解できるようになります。",
+        "diagram": false
+      }
+    }
+  ]
+}

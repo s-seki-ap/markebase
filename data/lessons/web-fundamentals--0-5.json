@@ -1,0 +1,67 @@
+{
+  "id": "web-fundamentals--0-5",
+  "moduleId": "0-5",
+  "categoryId": "web-fundamentals",
+  "title": "HTTPレスポンスの構造とステータスコード",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# ステータスコードを読めないマーケターは何が困るのか\n\n「LPにアクセスしたら404エラーが出ている」「リダイレクトがかかっているのに広告のコンバージョンが計測されない」「GTMのカスタムHTMLタグが500エラーを返している」——これらは全部HTTPレスポンスのステータスコードが示す情報です。\n\n## ステータスコードがマーケターに直結する場面\n\n**1. SEOでの301 vs 302の使い分け**\nサイトリニューアルでURLを変更するとき、301（恒久的リダイレクト）を使わないとGoogleの評価が旧URLに蓄積されたまま新URLに引き継がれません。302（一時的リダイレクト）を間違って使うと、SEO効果がリセットされる可能性があります。\n\n**2. GA4の「(not set)」問題の原因調査**\nGA4でランディングページやソースが「(not set)」になる場合、サイト内のリダイレクトチェーンが原因であることがあります。302リダイレクトが複数挟まると、リファラーが失われる場合があります。\n\n**3. 広告LPの404チェックと機会損失の算出**\nGoogle広告やMeta広告でリンク先URLが404になっていると、広告費が無駄になります。「404が何件あるか」をサイト監視ツールで把握することはマーケターの業務の一つです。\n\n**4. APIリクエストのエラー分析**\nGA4 Measurement ProtocolやMeta Conversions APIへのリクエストが400や401を返しているとき、「何がおかしいか」をステータスコードで素早く切り分けられます。\n\nステータスコードは「サーバーからの返事」です。200種類以上あるステータスコードのうち、マーケターが絶対に覚えるべきものをこのモジュールで完全に習得します。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# HTTPレスポンスの構造\n\n## レスポンスの3構成要素\n\n```http\nHTTP/1.1 200 OK\nContent-Type: text/html; charset=UTF-8\nCache-Control: max-age=3600\nX-Frame-Options: DENY\n\n<html>...(レスポンスボディ)...</html>\n```\n\n1. **ステータスライン**: HTTPバージョン + ステータスコード + テキスト\n2. **レスポンスヘッダー**: サーバーからの追加情報\n3. **レスポンスボディ**: 実際のコンテンツ（HTML・JSON等）\n\n## ステータスコードの5グループ\n\n| グループ | 意味 | マーケター的解釈 |\n|---------|------|----------------|\n| 1xx | 情報 | 処理中（レア） |\n| 2xx | 成功 | 正常に受け取った |\n| 3xx | リダイレクト | 別のURLへ案内 |\n| 4xx | クライアントエラー | リクエスト側の問題 |\n| 5xx | サーバーエラー | サーバー側の問題 |\n\n## マーケターが必ず覚えるステータスコード\n\n### 2xx 成功\n\n| コード | 意味 | 場面 |\n|-------|------|------|\n| 200 OK | リクエスト成功 | ページが正常に表示された |\n| 204 No Content | 成功、ボディなし | GA4 Measurement Protocolの成功レスポンス |\n\n### 3xx リダイレクト\n\n```\n301 Moved Permanently（恒久リダイレクト）\n  → SEOの評価が新URLに引き継がれる\n  → キャッシュされるため変更に注意\n\n302 Found（一時リダイレクト）\n  → SEOの評価は引き継がれない\n  → A/Bテストのリダイレクトはこちら\n\n307 Temporary Redirect\n  → 302と同様だがHTTPメソッドが変わらない\n```\n\n### 4xx クライアントエラー\n\n| コード | 意味 | マーケティング文脈 |\n|-------|------|------------------|\n| 400 Bad Request | リクエストの形式が不正 | Measurement Protocolのパラメータミス |\n| 401 Unauthorized | 認証失敗 | API Secretが間違っている |\n| 403 Forbidden | アクセス権限なし | IPブロック・ロボットブロック |\n| 404 Not Found | ページが存在しない | リンク切れ・URL変更漏れ |\n| 429 Too Many Requests | リクエスト過多 | APIのレート制限超過 |\n\n### 5xx サーバーエラー\n\n| コード | 意味 | マーケティング文脈 |\n|-------|------|------------------|\n| 500 Internal Server Error | サーバー内部エラー | サーバー側のバグ |\n| 503 Service Unavailable | サービス停止中 | アクセス集中・メンテ |\n| 504 Gateway Timeout | タイムアウト | サーバー処理が遅すぎる |\n\n## GA4 Measurement Protocolの成功・失敗の判定\n\n```\nリクエスト送信\n  └── 204 No Content → 成功（ボディなし）\n  └── 400 Bad Request → パラメータ不正\n  └── 401 Unauthorized → API Secretが違う\n  └── 500 → Googleサーバー側の問題\n```\n\n## 301 vs 302 の SEO判断フロー\n\n```\n「このURLは今後も使わない」→ 301（恒久）\n「ABテスト・キャンペーン期間中だけ」→ 302（一時）\n「HTTPSへの移行」→ 301（恒久）\n「地域・言語による振り分け」→ 302（一時）\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: HTTPステータスコード診断ツールを作る\n\n## 課題\n\n複数のURLを一括でチェックしてステータスコードを可視化するツールを作成してください。\n\n1. テキストエリアにURLを1行1件で入力できるようにする\n2. 「一括チェック」ボタンを押すと全URLへのfetchを並行して実行する\n3. 各URLの結果をステータスコードに応じた色分けで表示する（2xxは緑、3xxは黄、4xxは橙、5xxは赤、エラーはグレー）\n4. 結果の下に「ステータスコード別サマリー」を集計して表示する",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>ステータスコード診断ツール</title>\n  <style>\n    body { font-family: sans-serif; padding: 20px; background: #0f172a; color: #e2e8f0; max-width: 800px; }\n    h2 { color: #3b82f6; border-bottom: 1px solid #334155; padding-bottom: 8px; margin-top: 24px; }\n    textarea { width: 100%; height: 120px; padding: 12px; background: #1e293b; color: #e2e8f0; border: 1px solid #334155; border-radius: 6px; font-family: monospace; box-sizing: border-box; }\n    button { padding: 10px 20px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer; margin-top: 8px; }\n    #results { margin-top: 16px; }\n    .result-item { padding: 10px 14px; border-radius: 6px; margin-bottom: 6px; display: flex; align-items: center; gap: 12px; font-size: 14px; }\n    .status-badge { padding: 2px 10px; border-radius: 999px; font-weight: bold; font-size: 13px; min-width: 50px; text-align: center; }\n    #summary { margin-top: 16px; padding: 16px; background: #1e293b; border-radius: 8px; }\n  </style>\n</head>\n<body>\n  <h1>URLステータスコード診断ツール</h1>\n  <h2>URLを入力（1行1件）</h2>\n  <textarea id=\"urlsInput\">https://www.google.com\nhttps://httpstat.us/404\nhttps://httpstat.us/301\nhttps://httpstat.us/500</textarea>\n  <button id=\"checkBtn\">一括チェック</button>\n\n  <h2>結果</h2>\n  <div id=\"results\">チェック前です</div>\n\n  <div id=\"summary\" style=\"display:none\"></div>\n\n  <script>\n\n  </script>\n</body>\n</html>",
+        "hints": [
+          "全URLを並行fetch（Promise.all）するには、urls.map(url => fetch(url, {signal: controller.signal}).catch(e => ({error: e.message, url})))) のような形で配列を作り Promise.all に渡します。",
+          "ステータスコードによる色分けは、status >= 500 → 赤、status >= 400 → 橙、status >= 300 → 黄、status >= 200 → 緑 というif-else構造で色の文字列を返す関数を作ると管理しやすいです。",
+          "サマリーの集計はオブジェクトを使います。const counts = {}; results.forEach(r => { const key = r.status ? Math.floor(r.status/100)+'xx' : 'error'; counts[key] = (counts[key] || 0) + 1; }); でグループ別件数が集計できます。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>ステータスコード診断ツール</title>\n  <style>\n    body { font-family: sans-serif; padding: 20px; background: #0f172a; color: #e2e8f0; max-width: 800px; }\n    h2 { color: #3b82f6; border-bottom: 1px solid #334155; padding-bottom: 8px; margin-top: 24px; }\n    textarea { width: 100%; height: 120px; padding: 12px; background: #1e293b; color: #e2e8f0; border: 1px solid #334155; border-radius: 6px; font-family: monospace; box-sizing: border-box; }\n    button { padding: 10px 20px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer; margin-top: 8px; }\n    #results { margin-top: 16px; }\n    .result-item { padding: 10px 14px; border-radius: 6px; margin-bottom: 6px; display: flex; align-items: center; gap: 12px; font-size: 14px; background: #1e293b; }\n    .status-badge { padding: 2px 10px; border-radius: 999px; font-weight: bold; font-size: 13px; min-width: 50px; text-align: center; }\n    .s2 { background: #064e3b; color: #10b981; }\n    .s3 { background: #451a03; color: #f59e0b; }\n    .s4 { background: #431407; color: #f97316; }\n    .s5 { background: #450a0a; color: #ef4444; }\n    .se { background: #1e1b4b; color: #818cf8; }\n    #summary { margin-top: 16px; padding: 16px; background: #1e293b; border-radius: 8px; }\n    .sum-item { display: inline-block; padding: 6px 14px; border-radius: 6px; margin-right: 8px; font-size: 13px; font-weight: bold; }\n  </style>\n</head>\n<body>\n  <h1>URLステータスコード診断ツール</h1>\n  <h2>URLを入力（1行1件）</h2>\n  <textarea id=\"urlsInput\">https://www.google.com\nhttps://httpstat.us/404\nhttps://httpstat.us/301\nhttps://httpstat.us/500</textarea>\n  <button id=\"checkBtn\">一括チェック</button>\n  <h2>結果</h2>\n  <div id=\"results\">チェック前です</div>\n  <div id=\"summary\" style=\"display:none\"></div>\n  <script>\n    function getClass(status) {\n      if (!status) return 'se';\n      if (status >= 500) return 's5';\n      if (status >= 400) return 's4';\n      if (status >= 300) return 's3';\n      return 's2';\n    }\n    function getLabel(status) {\n      if (!status) return 'ERR';\n      return status;\n    }\n    document.getElementById('checkBtn').addEventListener('click', async () => {\n      const raw = document.getElementById('urlsInput').value.trim();\n      const urls = raw.split('\\n').map(u => u.trim()).filter(u => u);\n      if (!urls.length) return;\n      const resultsEl = document.getElementById('results');\n      const summaryEl = document.getElementById('summary');\n      resultsEl.innerHTML = '<span style=\"color:#fbbf24\">チェック中...</span>';\n      summaryEl.style.display = 'none';\n      const promises = urls.map(url =>\n        fetch(url, { mode: 'no-cors' })\n          .then(r => ({ url, status: r.status === 0 ? 200 : r.status, statusText: r.statusText || 'no-cors' }))\n          .catch(e => ({ url, status: null, statusText: e.message }))\n      );\n      const results = await Promise.all(promises);\n      resultsEl.innerHTML = results.map(r => {\n        const cls = getClass(r.status);\n        return `<div class=\"result-item\"><span class=\"status-badge ${cls}\">${getLabel(r.status)}</span><span style=\"word-break:break-all\">${r.url}</span><span style=\"color:#64748b;font-size:12px\">${r.statusText}</span></div>`;\n      }).join('');\n      const counts = {};\n      results.forEach(r => {\n        const key = r.status ? Math.floor(r.status / 100) + 'xx' : 'error';\n        counts[key] = (counts[key] || 0) + 1;\n      });\n      const colorMap = { '2xx': 's2', '3xx': 's3', '4xx': 's4', '5xx': 's5', 'error': 'se' };\n      summaryEl.innerHTML = '<div style=\"color:#94a3b8;font-size:12px;margin-bottom:8px\">ステータス別サマリー</div>' +\n        Object.entries(counts).map(([k, v]) => `<span class=\"sum-item ${colorMap[k] || 'se'}\">${k}: ${v}件</span>`).join('');\n      summaryEl.style.display = 'block';\n    });\n  </script>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "サイトリニューアルで旧URLから新URLへ恒久的にリダイレクトする場合、SEO評価を引き継ぐために使うべきステータスコードはどれですか？",
+            "options": ["302 Found", "200 OK", "301 Moved Permanently", "307 Temporary Redirect"],
+            "correct": 2,
+            "explanation": "301は恒久的なリダイレクトを示し、検索エンジンはSEO評価（PageRankなど）を旧URLから新URLへ引き継ぎます。302や307は一時的なリダイレクトのため、検索エンジンは旧URLのインデックスを維持し評価を引き継ぎません。"
+          },
+          {
+            "q": "GA4 Measurement ProtocolにイベントデータをPOSTしたとき、成功を示すステータスコードはどれですか？",
+            "options": ["200 OK", "204 No Content", "201 Created", "202 Accepted"],
+            "correct": 1,
+            "explanation": "GA4 Measurement Protocolは成功時に204 No Contentを返します。204はリクエストが成功したがレスポンスボディがないことを示します。GA4はデータ受け取りの確認として204を返すため、200ではなく204で成功を判定する実装が必要です。"
+          },
+          {
+            "q": "Google広告の広告文に設定したLPのURLが404を返している場合、どのような問題が発生しますか？",
+            "options": ["広告の品質スコアは変わらないが表示回数が減る", "広告費が消費されているにも関わらずユーザーがLPにアクセスできない", "広告が自動停止されるため費用は発生しない", "Google広告から自動的にサイトに通知が送られる"],
+            "correct": 1,
+            "explanation": "広告がクリックされると広告費が発生しますが、LPが404の場合ユーザーはエラーページを見るだけでコンバージョンは0になります。広告費は消費され続けるため、機会損失が発生します。定期的なURLの死活監視はマーケターの重要な業務です。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール0-5 完了！\n\n## 習得したスキル\n\n- HTTPレスポンスの3構成要素（ステータスライン・ヘッダー・ボディ）を理解した\n- 5つのステータスコードグループ（1xx〜5xx）の意味を把握した\n- SEOに影響する301と302の違いを説明できる\n- GA4 Measurement Protocolの成功レスポンス（204）を知っている\n- 404・500・400・401などのエラーコードをマーケティング業務と結びつけられる\n\n## 次のモジュール\n\n**0-6: HTTPヘッダー詳解（Cache-Control・Content-Type他）** では、レスポンスヘッダーをさらに深掘りします。特にCache-Controlヘッダーはページの表示速度・GTMタグの更新反映速度・GA4データの鮮度に直結する重要な設定です。ヘッダーを読んでキャッシュ戦略を判断できるようになります。\n\n## 実務チャレンジ\n\n担当サイトの主要なURLを5件選んで、DevToolsのNetworkタブでステータスコードを確認してください。その中にリダイレクトチェーン（301や302）があれば、最終到達URLまでの経路を確認しましょう。リダイレクトが3回以上連鎖している場合、SEOとページ速度に影響する可能性があります。",
+        "diagram": false
+      }
+    }
+  ]
+}

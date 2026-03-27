@@ -1,0 +1,67 @@
+{
+  "id": "web-fundamentals--0-2",
+  "moduleId": "0-2",
+  "categoryId": "web-fundamentals",
+  "title": "IPアドレスとポート番号の役割",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# なぜマーケターがIPアドレスとポート番号を知るべきか\n\n「GA4のタグが特定のオフィスのネットワークからだけ計測されない」「広告のコンバージョンAPIが社内環境で動かない」——こうした障害はIPアドレスやポート番号の制限が原因であることが少なくありません。\n\n## マーケターにとっての重要場面\n\n**1. GA4除外フィルタの設定**\nGA4では「社内IPアドレスからのアクセスを除外する」という設定ができます。この設定をするには、自社のIPアドレスを正確に把握している必要があります。IPアドレスが何かを知らないと、そもそも何を設定すべきかが分かりません。\n\n**2. サーバーサイドGTM（sGTM）の構築**\nサーバーサイドタグを使ってGA4データを送信する場合、Cloud RunやFirebaseのサーバーにIPアドレスが割り当てられます。ファイアウォール設定でどのポートを開放するかを指定する必要があります。\n\n**3. Measurement Protocolの直接送信**\nGA4 Measurement Protocolでサーバーからイベントを直接送信するとき、送信先エンドポイントのURLに含まれる「ポート番号」の概念を理解していると、設定ミスを素早く発見できます。\n\n**4. CDNとキャッシュ設定の理解**\nCloudflareなどのCDNはIPアドレスレベルで通信を制御します。広告のランディングページがCDNを経由しているとき、特定のIPから計測がうまくいかない原因を調べる際にこの知識が役立ちます。\n\nIPアドレスとポート番号は「インターネット上の住所と部屋番号」です。このモジュールではその仕組みを完全に理解し、実務での障害切り分けに活かせるようになることを目指します。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# IPアドレスとポート番号の仕組み\n\n## IPアドレス：インターネット上の「住所」\n\nIPアドレスはインターネット上のすべてのコンピュータに割り当てられた識別番号です。\n\n### IPv4アドレスの構造\n\n```\n192.168.1.100\n│   │   │ │\n│   │   │ └── ホスト番号（その家の部屋番号）\n│   │   └──── サブネット番号\n│   └──────── ネットワーク番号\n└──────────── ネットワーク番号\n```\n\n- **グローバルIPアドレス**: インターネット上で一意。サーバーに割り当てられる。例: `142.250.185.46`（Google）\n- **プライベートIPアドレス**: 社内ネットワーク用。例: `192.168.1.x`、`10.0.0.x`\n\n### GA4でのIPアドレス活用\n\n```\nGA4管理画面 → データストリーム → 内部トラフィックルール\n→ IPアドレス: 203.0.113.50（自社のグローバルIPを入力）\n```\n\n## ポート番号：サービスの「部屋番号」\n\n1台のサーバーは複数のサービスを同時に提供できます。ポート番号がどのサービスへの通信かを区別します。\n\n| ポート番号 | プロトコル | 用途 |\n|-----------|-----------|------|\n| 80 | HTTP | 暗号化なしWeb通信 |\n| 443 | HTTPS | 暗号化Web通信（GA4, GTMはここ） |\n| 22 | SSH | サーバーへの安全なリモート接続 |\n| 3306 | MySQL | データベース接続 |\n| 8080 | HTTP (代替) | 開発環境・プロキシ |\n\n### URLとポート番号の関係\n\n```\nhttps://www.google-analytics.com:443/g/collect\n│       │                         │   │\n│       │                         │   └── パス\n│       │                         └──── ポート（443はHTTPSのデフォルト）\n│       └───────────────────────────── ホスト名（IPに変換される）\n└───────────────────────────────────── スキーム（HTTPS）\n```\n\nHTTPSのデフォルトポートは443のため、通常は省略されています。`https://example.com` は実際には `https://example.com:443` と同じです。\n\n## IPアドレスの確認方法\n\n```javascript\n// ブラウザからは直接自分のIPは取得できないが\n// 外部サービスのAPIを使う方法がある\nfetch('https://api.ipify.org?format=json')\n  .then(r => r.json())\n  .then(data => console.log('グローバルIP:', data.ip));\n```\n\n## ファイアウォールとポート開放\n\nCloud RunでsGTMを動かすとき、ファイアウォールは「443番ポートへの通信のみ許可」という設定をします。意図せずポートを閉じてしまうと、GA4データが届かなくなります。",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: IPアドレス・ポートの情報を可視化する\n\n## 課題\n\n以下の機能を持つツールを作成してください。\n\n1. 「自分のグローバルIPを取得」ボタンをクリックすると `https://api.ipify.org?format=json` から自分のIPアドレスを取得して表示する\n2. テキストボックスにURLを入力して「ポート番号を解析」ボタンを押すと、URLからスキーム・ホスト・ポート番号・パスを解析して表示する（ポートが省略されている場合はHTTPなら80、HTTPSなら443を表示する）\n3. よく使うポート番号の一覧テーブルをページに表示する",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>IP・ポート番号ツール</title>\n  <style>\n    body { font-family: sans-serif; padding: 20px; background: #0f172a; color: #e2e8f0; }\n    h2 { color: #3b82f6; border-bottom: 1px solid #334155; padding-bottom: 8px; }\n    button { padding: 8px 16px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer; margin-right: 8px; }\n    input { padding: 8px 12px; background: #1e293b; color: #e2e8f0; border: 1px solid #334155; border-radius: 6px; width: 360px; }\n    .result { margin-top: 12px; padding: 12px; background: #1e293b; border-radius: 8px; }\n    table { border-collapse: collapse; width: 100%; margin-top: 12px; }\n    th, td { padding: 8px 12px; border: 1px solid #334155; text-align: left; }\n    th { background: #1e293b; color: #94a3b8; }\n    .highlight { color: #10b981; font-weight: bold; }\n  </style>\n</head>\n<body>\n  <h1>IPアドレス・ポート番号ツール</h1>\n\n  <h2>1. 自分のグローバルIPを取得</h2>\n  <button id=\"getIpBtn\">グローバルIPを取得</button>\n  <div id=\"ipResult\" class=\"result\">ここにIPが表示されます</div>\n\n  <h2 style=\"margin-top:24px\">2. URLのポート番号を解析</h2>\n  <input id=\"urlInput\" type=\"text\" placeholder=\"https://www.google-analytics.com/g/collect\" />\n  <button id=\"parseBtn\" style=\"margin-top:8px\">ポート番号を解析</button>\n  <div id=\"parseResult\" class=\"result\">URLを入力してボタンを押してください</div>\n\n  <h2 style=\"margin-top:24px\">3. よく使うポート番号</h2>\n  <div id=\"portTable\"></div>\n\n  <script>\n\n  </script>\n</body>\n</html>",
+        "hints": [
+          "グローバルIP取得には fetch('https://api.ipify.org?format=json') を使います。レスポンスのJSONに ip プロパティが含まれています。",
+          "URLの解析には組み込みの URL クラスが使えます。new URL('https://example.com:8080/path') を実行すると、.protocol / .hostname / .port / .pathname プロパティでそれぞれの部分を取得できます。portが空文字の場合はHTTPSなら443、HTTPなら80と判定してください。",
+          "ポート番号テーブルは配列データを用意して innerHTML に動的に組み立てると管理しやすいです。例: const ports = [{port: 80, proto: 'HTTP', ...}, ...]; のようにオブジェクト配列を定義し、map でtr要素に変換してjoinで結合します。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>IP・ポート番号ツール</title>\n  <style>\n    body { font-family: sans-serif; padding: 20px; background: #0f172a; color: #e2e8f0; }\n    h2 { color: #3b82f6; border-bottom: 1px solid #334155; padding-bottom: 8px; }\n    button { padding: 8px 16px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer; margin-right: 8px; }\n    input { padding: 8px 12px; background: #1e293b; color: #e2e8f0; border: 1px solid #334155; border-radius: 6px; width: 360px; }\n    .result { margin-top: 12px; padding: 12px; background: #1e293b; border-radius: 8px; }\n    table { border-collapse: collapse; width: 100%; margin-top: 12px; }\n    th, td { padding: 8px 12px; border: 1px solid #334155; text-align: left; }\n    th { background: #1e293b; color: #94a3b8; }\n    .highlight { color: #10b981; font-weight: bold; }\n  </style>\n</head>\n<body>\n  <h1>IPアドレス・ポート番号ツール</h1>\n  <h2>1. 自分のグローバルIPを取得</h2>\n  <button id=\"getIpBtn\">グローバルIPを取得</button>\n  <div id=\"ipResult\" class=\"result\">ここにIPが表示されます</div>\n  <h2 style=\"margin-top:24px\">2. URLのポート番号を解析</h2>\n  <input id=\"urlInput\" type=\"text\" placeholder=\"https://www.google-analytics.com/g/collect\" />\n  <br>\n  <button id=\"parseBtn\" style=\"margin-top:8px\">ポート番号を解析</button>\n  <div id=\"parseResult\" class=\"result\">URLを入力してボタンを押してください</div>\n  <h2 style=\"margin-top:24px\">3. よく使うポート番号</h2>\n  <div id=\"portTable\"></div>\n  <script>\n    document.getElementById('getIpBtn').addEventListener('click', async () => {\n      const el = document.getElementById('ipResult');\n      el.textContent = '取得中...';\n      try {\n        const res = await fetch('https://api.ipify.org?format=json');\n        const data = await res.json();\n        el.innerHTML = `<span style=\"color:#94a3b8\">あなたのグローバルIPアドレス: </span><span class=\"highlight\">${data.ip}</span><br><small style=\"color:#64748b\">GA4の内部トラフィック除外設定にこのIPを登録してください</small>`;\n      } catch (e) {\n        el.innerHTML = `<span style=\"color:#ef4444\">取得失敗: ${e.message}</span>`;\n      }\n    });\n    document.getElementById('parseBtn').addEventListener('click', () => {\n      const urlStr = document.getElementById('urlInput').value.trim();\n      const el = document.getElementById('parseResult');\n      if (!urlStr) { el.textContent = 'URLを入力してください'; return; }\n      try {\n        const url = new URL(urlStr);\n        const defaultPort = url.protocol === 'https:' ? '443' : '80';\n        const port = url.port || defaultPort;\n        const isDefault = !url.port;\n        el.innerHTML = `\n          <div><span style=\"color:#94a3b8\">スキーム: </span><span class=\"highlight\">${url.protocol.replace(':','')}</span></div>\n          <div><span style=\"color:#94a3b8\">ホスト: </span><span class=\"highlight\">${url.hostname}</span></div>\n          <div><span style=\"color:#94a3b8\">ポート番号: </span><span class=\"highlight\">${port}</span>${isDefault ? ' <small style=\"color:#64748b\">(デフォルトのため省略されています)</small>' : ''}</div>\n          <div><span style=\"color:#94a3b8\">パス: </span><span class=\"highlight\">${url.pathname || '/'}</span></div>\n          ${url.search ? `<div><span style=\"color:#94a3b8\">クエリ: </span><span class=\"highlight\">${url.search}</span></div>` : ''}\n        `;\n      } catch (e) {\n        el.innerHTML = `<span style=\"color:#ef4444\">URLの解析に失敗しました。正しいURLを入力してください。</span>`;\n      }\n    });\n    const ports = [\n      { port: 80, proto: 'HTTP', use: 'Webサイト（非暗号化）' },\n      { port: 443, proto: 'HTTPS', use: 'GA4, GTM, 広告タグすべて' },\n      { port: 22, proto: 'SSH', use: 'サーバーへの安全な接続' },\n      { port: 3306, proto: 'MySQL', use: 'データベース接続' },\n      { port: 8080, proto: 'HTTP代替', use: '開発環境・sGTMローカル' },\n      { port: 5432, proto: 'PostgreSQL', use: 'データベース接続' },\n    ];\n    document.getElementById('portTable').innerHTML = `\n      <table>\n        <thead><tr><th>ポート番号</th><th>プロトコル</th><th>主な用途</th></tr></thead>\n        <tbody>${ports.map(p => `<tr><td class=\"highlight\">${p.port}</td><td>${p.proto}</td><td>${p.use}</td></tr>`).join('')}</tbody>\n      </table>`;\n  </script>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "GA4の「内部トラフィックルール」でフィルタリングに使う情報はどれですか？",
+            "options": ["ユーザーのブラウザの種類", "ユーザーのグローバルIPアドレス", "ユーザーのデバイスの種類", "ユーザーの画面解像度"],
+            "correct": 1,
+            "explanation": "GA4の内部トラフィック除外設定では、社内ネットワークのグローバルIPアドレスを登録します。社内からのアクセスを計測データから除外することで、実際のユーザー行動データのみを分析できます。"
+          },
+          {
+            "q": "HTTPSのデフォルトポート番号はどれですか？",
+            "options": ["80", "8080", "443", "3306"],
+            "correct": 2,
+            "explanation": "HTTPSのデフォルトポートは443です。HTTPのデフォルトは80です。URLにポート番号が記載されていない場合、ブラウザはスキームに応じて自動的にこれらのデフォルトポートに接続します。GA4やGTMの通信はすべてHTTPS（ポート443）を使用します。"
+          },
+          {
+            "q": "プライベートIPアドレスとして正しいものはどれですか？",
+            "options": ["8.8.8.8（GoogleのDNS）", "142.250.185.46（Googleのサーバー）", "192.168.1.100（社内LAN）", "203.0.113.1（インターネット）"],
+            "correct": 2,
+            "explanation": "192.168.x.x はプライベートIPアドレスの範囲です（RFC 1918）。ほかに10.0.0.0〜10.255.255.255、172.16.0.0〜172.31.255.255もプライベートIPです。これらは社内ネットワーク内でのみ使用され、インターネットから直接アクセスできません。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール0-2 完了！\n\n## 習得したスキル\n\n- IPアドレス（グローバル・プライベート）の違いと役割を説明できる\n- ポート番号がサービスの「部屋番号」として機能することを理解した\n- HTTPとHTTPSのデフォルトポート（80/443）を正確に覚えた\n- GA4の内部トラフィック除外設定でIPアドレスが必要な理由を説明できる\n- URLクラスを使ってJavaScriptでURLを解析する方法を習得した\n\n## 次のモジュール\n\n**0-3: HTTP vs HTTPS：暗号化通信の仕組み** では、443番ポートで行われるTLS（暗号化）の仕組みを学びます。「なぜHTTPSのサイトでないと広告コンバージョンが計測できないのか」「TLSハンドシェイクとは何か」をマーケターの視点から解説します。\n\n## 実務チャレンジ\n\nお使いのPCから `https://api.ipify.org?format=json` にアクセスして自分のグローバルIPアドレスを確認し、GA4のテストプロパティで「内部トラフィックルール」に登録してみてください。登録後にGA4のリアルタイムレポートを開き、自社IPからのアクセスが「internal」ラベルで表示されるかを確認しましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

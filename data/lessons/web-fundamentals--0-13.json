@@ -1,0 +1,82 @@
+{
+  "id": "web-fundamentals--0-13",
+  "moduleId": "0-13",
+  "categoryId": "web-fundamentals",
+  "title": "CSSOMとレンダーツリーの合成",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# マーケター向け導入\n\nLCP（Largest Contentful Paint）やCLS（Cumulative Layout Shift）といったCore Web Vitalsの指標を改善するよう求められたとき、「CSSのどこが問題なのか」を特定するためには、ブラウザがCSSをどう処理しているかを知る必要があります。\n\nブラウザはHTMLからDOMツリーを構築するのと並行して、CSSを解析して**CSSOMツリー（CSS Object Model）**を構築します。そしてDOMとCSSOMを合成して**レンダーツリー**を作り、初めて「どの要素をどのスタイルで表示するか」が確定します。\n\n`display: none` の要素はレンダーツリーに含まれません。つまりGTMで非表示要素の存在を確認したい場合は、DOMには存在してもレンダーツリーには存在しないという事実を把握しておく必要があります。また、広告ランディングページで「ファーストビューに大きなCSSファイルが刺さっていてLCPが悪い」という問題は、CSSOMの構築がレンダーブロッキングを引き起こしていることが原因です。このモジュールでその仕組みを理解します。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# CSSOMとレンダーツリーの仕組み\n\n## CSSOMの構築プロセス\n\nブラウザはCSSテキストを受け取ると、DOMと同様にツリー構造（CSSOMツリー）を構築します。\n\n```\n[CSSバイト列]\n    ↓ 文字変換・トークナイズ\n[CSSルール列]\n    ↓ スタイル計算（カスケード・継承）\n[CSSOMツリー]\n    ↓\n各DOMノードに適用される「計算済みスタイル」が確定\n```\n\n## CSSOMはレンダーブロッキング\n\nCSSOMが完成するまで、ブラウザはレンダーツリーを構築できません。つまり**外部CSSファイルの読み込みが完了するまで画面描画が始まりません**。これをレンダーブロッキングと言います。\n\nGoogleのLighthouseが「レンダーブロッキングリソースを排除してください」と指摘するのは、大きなCSSファイルがCSSOMの完成を遅らせてLCPを悪化させているからです。\n\n## レンダーツリーの合成\n\nDOMツリーとCSSOMツリーが両方完成すると、レンダーツリーが合成されます。\n\n| DOMノード | CSSの状態 | レンダーツリーへの参加 |\n|-----------|-----------|------------------------|\n| `<p>` | `display: block` | 参加する |\n| `<span>` | `display: none` | 参加しない（非表示） |\n| `<div>` | `visibility: hidden` | 参加する（スペースは占有） |\n| `<head>` | （要素自体が非表示） | 参加しない |\n\n`display: none` と `visibility: hidden` の違いは重要です。`display: none` はレイアウト上のスペースを占有しないため、後から `display: block` に変えると周囲の要素が動きCLSが発生する可能性があります。\n\n## レイアウト（Reflow）とペイント\n\nレンダーツリーが完成した後、2つの重要なステップがあります。\n\n### レイアウト（Reflow）\n各ノードの位置とサイズをピクセル単位で計算します。ビューポートサイズ、フォントサイズ、padding/marginがすべて考慮されます。\n\n### ペイント\nテキスト・色・ボーダー・影などをビットマップに描画します。\n\n## JavaScriptによる強制Reflow\n\nJavaScriptから `offsetWidth` や `getBoundingClientRect()` などのレイアウト情報を読み取った直後にスタイルを変更すると、ブラウザは同期的にReflowを再実行します。これを**強制Reflow**と言い、パフォーマンスの大きなボトルネックになります。\n\n```javascript\n// 悪い例：ループ内で強制Reflowが繰り返し発生\nfor (let i = 0; i < 100; i++) {\n  el.style.width = el.offsetWidth + 10 + 'px'; // 読み取り→書き込みで毎回Reflow\n}\n\n// 良い例：読み取りと書き込みを分離\nconst w = el.offsetWidth;\nfor (let i = 0; i < 100; i++) {\n  el.style.width = w + 10 + 'px';\n}\n```\n\n## Core Web Vitalsとの関連\n\n| 指標 | CSSOMとの関連 |\n|------|---------------|\n| LCP | 大きなCSSファイルがレンダーブロッキングになると悪化 |\n| CLS | display変更やフォント読み込みによるReflowがレイアウトシフトを引き起こす |\n| INP | 強制Reflowを含む処理が多いとユーザー操作への応答が遅れる |",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: レンダーツリーとReflowの影響を可視化する\n\n## 課題\n\n1. 下記のstarterCodeをブラウザで開く\n2. `getComputedStyle()` を使って任意の要素の計算済みスタイルを取得して表示する\n3. `display: none` の要素がレンダーツリーから除外されていることを `offsetParent` で確認する\n4. 強制Reflowのパフォーマンス影響を `performance.now()` で計測して比較表示する\n5. 「スタイル変更のアニメーション」ボタンで `width` を変化させてCLSに相当するレイアウトシフトを体験する",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>レンダーツリー確認ツール</title>\n  <style>\n    body { font-family: sans-serif; max-width: 750px; margin: 40px auto; padding: 0 20px; background: #f5f0ff; }\n    .card { background: white; border-radius: 8px; padding: 20px; margin: 16px 0; }\n    h1 { color: #2d1b69; }\n    .target-box { width: 200px; height: 80px; background: #6c63ff; color: white; display: flex; align-items: center; justify-content: center; border-radius: 8px; margin: 12px 0; transition: width 0.3s; }\n    .hidden-box { display: none; background: #ff6b6b; color: white; padding: 12px; }\n    .invisible-box { visibility: hidden; background: #ffd93d; padding: 12px; }\n    button { padding: 8px 16px; cursor: pointer; background: #6c63ff; color: white; border: none; border-radius: 4px; margin: 4px; }\n    input { padding: 8px; width: 200px; border: 1px solid #ccc; border-radius: 4px; }\n    pre { background: #f8f9fa; padding: 12px; border-radius: 4px; font-size: 12px; overflow-x: auto; }\n    #reflowResult { font-family: monospace; margin-top: 8px; }\n    .label { font-size: 12px; color: #666; }\n  </style>\n</head>\n<body>\n  <h1>レンダーツリー確認ツール</h1>\n\n  <div class=\"card\">\n    <h2>計算済みスタイルの確認</h2>\n    <div class=\"target-box\" id=\"targetBox\">対象要素</div>\n    <input type=\"text\" id=\"propInput\" placeholder=\"width\" value=\"width\">\n    <button onclick=\"getStyle()\">スタイルを取得</button>\n    <pre id=\"styleOutput\">ここに結果が表示されます</pre>\n  </div>\n\n  <div class=\"card\">\n    <h2>display:none と visibility:hidden の差</h2>\n    <p>この文の直後に非表示要素があります。</p>\n    <div class=\"hidden-box\" id=\"hiddenBox\">display:none の要素</div>\n    <div class=\"invisible-box\" id=\"invisibleBox\">visibility:hidden の要素（スペース占有）</div>\n    <p>この文は上記要素の直後です。</p>\n    <button onclick=\"checkRenderTree()\">レンダーツリー参加状態を確認</button>\n    <pre id=\"renderOutput\"></pre>\n  </div>\n\n  <div class=\"card\">\n    <h2>強制Reflowの計測</h2>\n    <button onclick=\"measureReflow()\">強制Reflow vs 最適化を比較</button>\n    <div id=\"reflowResult\"></div>\n  </div>\n\n  <div class=\"card\">\n    <h2>レイアウトシフト体験</h2>\n    <button onclick=\"triggerShift()\">幅を変化させる（CLSに相当）</button>\n    <button onclick=\"resetBox()\">リセット</button>\n  </div>\n\n  <script>\n    function getStyle() {\n      const prop = document.getElementById('propInput').value.trim();\n      const el = document.getElementById('targetBox');\n      // TODO: getComputedStyle を使ってプロパティ値を取得し styleOutput に表示する\n      // 複数の代表的プロパティ（width, height, color, background-color, display）もまとめて表示する\n    }\n\n    function checkRenderTree() {\n      const hidden = document.getElementById('hiddenBox');\n      const invisible = document.getElementById('invisibleBox');\n      // TODO: offsetParent と offsetHeight を使って各要素のレンダーツリー参加状態を renderOutput に表示する\n      // display:none は offsetParent が null になる特性を使う\n    }\n\n    function measureReflow() {\n      const boxes = Array.from({ length: 50 }, (_, i) => {\n        const d = document.createElement('div');\n        d.style.cssText = `width:${50+i}px;height:20px;background:#eee;margin:2px;`;\n        document.body.appendChild(d);\n        return d;\n      });\n      // TODO: 強制Reflowあり（ループ内でoffsetWidth読み取り→style書き込み）の時間を計測する\n      // TODO: 強制Reflowなし（読み取りを先に完了してから書き込みをまとめる）の時間を計測する\n      // TODO: 両者の時間を reflowResult に比較表示する\n      // TODO: 計測後に追加したdivをすべて削除する\n    }\n\n    function triggerShift() {\n      document.getElementById('targetBox').style.width = '400px';\n    }\n\n    function resetBox() {\n      document.getElementById('targetBox').style.width = '200px';\n    }\n  </script>\n</body>\n</html>",
+        "hints": [
+          "getStyle 関数では const style = getComputedStyle(el) でスタイルオブジェクトを取得し、style.getPropertyValue(prop) で値を取り出します。複数プロパティを表示する場合は ['width','height','color','background-color','display'] などの配列をループして出力するとすっきりします。",
+          "checkRenderTree では display:none の要素は el.offsetParent が null を返す性質を使います。また el.offsetHeight は display:none で 0、visibility:hidden でも通常の高さを返します。これらをまとめて pre タグに表示してください。",
+          "measureReflow では const t1 = performance.now() を計測開始前に記録し、処理後に performance.now() - t1 でミリ秒を算出します。強制Reflowあり版は boxes.forEach(b => { b.style.width = b.offsetWidth + 1 + 'px'; }) のように読み取りと書き込みを混在させ、最適化版は先に widths = boxes.map(b => b.offsetWidth) で全幅を取得してから boxes.forEach((b,i) => b.style.width = widths[i] + 1 + 'px') と分離します。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>レンダーツリー確認ツール</title>\n  <style>\n    body { font-family: sans-serif; max-width: 750px; margin: 40px auto; padding: 0 20px; background: #f5f0ff; }\n    .card { background: white; border-radius: 8px; padding: 20px; margin: 16px 0; }\n    h1 { color: #2d1b69; }\n    .target-box { width: 200px; height: 80px; background: #6c63ff; color: white; display: flex; align-items: center; justify-content: center; border-radius: 8px; margin: 12px 0; transition: width 0.3s; }\n    .hidden-box { display: none; background: #ff6b6b; color: white; padding: 12px; }\n    .invisible-box { visibility: hidden; background: #ffd93d; padding: 12px; }\n    button { padding: 8px 16px; cursor: pointer; background: #6c63ff; color: white; border: none; border-radius: 4px; margin: 4px; }\n    input { padding: 8px; width: 200px; border: 1px solid #ccc; border-radius: 4px; }\n    pre { background: #f8f9fa; padding: 12px; border-radius: 4px; font-size: 12px; overflow-x: auto; }\n    #reflowResult { font-family: monospace; margin-top: 8px; }\n  </style>\n</head>\n<body>\n  <h1>レンダーツリー確認ツール</h1>\n\n  <div class=\"card\">\n    <h2>計算済みスタイルの確認</h2>\n    <div class=\"target-box\" id=\"targetBox\">対象要素</div>\n    <input type=\"text\" id=\"propInput\" placeholder=\"width\" value=\"width\">\n    <button onclick=\"getStyle()\">スタイルを取得</button>\n    <pre id=\"styleOutput\">ここに結果が表示されます</pre>\n  </div>\n\n  <div class=\"card\">\n    <h2>display:none と visibility:hidden の差</h2>\n    <p>この文の直後に非表示要素があります。</p>\n    <div class=\"hidden-box\" id=\"hiddenBox\">display:none の要素</div>\n    <div class=\"invisible-box\" id=\"invisibleBox\">visibility:hidden の要素（スペース占有）</div>\n    <p>この文は上記要素の直後です。</p>\n    <button onclick=\"checkRenderTree()\">レンダーツリー参加状態を確認</button>\n    <pre id=\"renderOutput\"></pre>\n  </div>\n\n  <div class=\"card\">\n    <h2>強制Reflowの計測</h2>\n    <button onclick=\"measureReflow()\">強制Reflow vs 最適化を比較</button>\n    <div id=\"reflowResult\"></div>\n  </div>\n\n  <div class=\"card\">\n    <h2>レイアウトシフト体験</h2>\n    <button onclick=\"triggerShift()\">幅を変化させる（CLSに相当）</button>\n    <button onclick=\"resetBox()\">リセット</button>\n  </div>\n\n  <script>\n    function getStyle() {\n      const prop = document.getElementById('propInput').value.trim();\n      const el = document.getElementById('targetBox');\n      const style = getComputedStyle(el);\n      const val = style.getPropertyValue(prop);\n      const props = ['width','height','color','background-color','display','font-size'];\n      const all = props.map(p => `${p}: ${style.getPropertyValue(p)}`).join('\\n');\n      document.getElementById('styleOutput').textContent =\n        `--- 指定プロパティ ---\\n${prop}: ${val || '（取得できません）'}\\n\\n--- 代表プロパティ ---\\n${all}`;\n    }\n\n    function checkRenderTree() {\n      const hidden = document.getElementById('hiddenBox');\n      const invisible = document.getElementById('invisibleBox');\n      const result = [\n        '=== display:none の要素 ===',\n        `offsetParent: ${hidden.offsetParent} （nullならレンダーツリー外）`,\n        `offsetHeight: ${hidden.offsetHeight}px`,\n        `getComputedStyle display: ${getComputedStyle(hidden).display}`,\n        '',\n        '=== visibility:hidden の要素 ===',\n        `offsetParent: ${invisible.offsetParent ? invisible.offsetParent.tagName : null}`,\n        `offsetHeight: ${invisible.offsetHeight}px （スペースを占有）`,\n        `getComputedStyle visibility: ${getComputedStyle(invisible).visibility}`\n      ].join('\\n');\n      document.getElementById('renderOutput').textContent = result;\n    }\n\n    function measureReflow() {\n      const boxes = Array.from({ length: 50 }, (_, i) => {\n        const d = document.createElement('div');\n        d.style.cssText = `width:${50+i}px;height:20px;background:#eee;margin:2px;`;\n        document.body.appendChild(d);\n        return d;\n      });\n\n      const t1 = performance.now();\n      boxes.forEach(b => { b.style.width = b.offsetWidth + 1 + 'px'; });\n      const badTime = (performance.now() - t1).toFixed(3);\n\n      boxes.forEach((b,i) => { b.style.width = (50+i) + 'px'; });\n\n      const t2 = performance.now();\n      const widths = boxes.map(b => b.offsetWidth);\n      boxes.forEach((b,i) => { b.style.width = widths[i] + 1 + 'px'; });\n      const goodTime = (performance.now() - t2).toFixed(3);\n\n      document.getElementById('reflowResult').innerHTML =\n        `強制Reflowあり: <strong>${badTime}ms</strong><br>最適化（読み書き分離）: <strong>${goodTime}ms</strong><br><small>環境により差は小さい場合があります</small>`;\n\n      boxes.forEach(b => document.body.removeChild(b));\n    }\n\n    function triggerShift() {\n      document.getElementById('targetBox').style.width = '400px';\n    }\n\n    function resetBox() {\n      document.getElementById('targetBox').style.width = '200px';\n    }\n  </script>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "`display: none` が設定された要素の特徴として正しいものはどれですか？",
+            "options": [
+              "レンダーツリーに含まれ、スペースを占有する",
+              "レンダーツリーに含まれず、スペースも占有しない",
+              "レンダーツリーに含まれるが、スペースを占有しない",
+              "DOMツリーからも削除される"
+            ],
+            "correct": 1,
+            "explanation": "`display: none` の要素はレンダーツリーから除外されます。DOMには存在しますが、レイアウト計算に参加しないためスペースも占有しません。`visibility: hidden` はレンダーツリーに参加しスペースを占有しますが、描画されません。"
+          },
+          {
+            "q": "CSSがレンダーブロッキングリソースと呼ばれる理由はどれですか？",
+            "options": [
+              "CSSの読み込み中はJavaScriptが実行できないから",
+              "CSSOMが完成するまでレンダーツリーを構築できず画面描画が始まらないから",
+              "CSSは必ずHTMLの先頭で読み込まなければならないから",
+              "CSSファイルは並行読み込みができないから"
+            ],
+            "correct": 1,
+            "explanation": "レンダーツリーはDOMとCSSOMの両方が完成して初めて構築されます。そのためCSSファイルの読み込みが完了するまで画面描画が開始されません。これがLCP悪化の主要因になります。"
+          },
+          {
+            "q": "強制Reflow（Layout Thrashing）が発生する典型的なコードパターンはどれですか？",
+            "options": [
+              "ループの外でスタイルを一括変更する",
+              "ループの外でoffsetWidthを読み取ってから、ループ内でスタイルを変更する",
+              "ループ内でoffsetWidth読み取りとスタイル変更を交互に行う",
+              "requestAnimationFrameを使ってスタイルを変更する"
+            ],
+            "correct": 2,
+            "explanation": "ループ内でレイアウト情報（offsetWidth等）を読み取った直後にスタイルを変更すると、ブラウザはキャッシュを無効化して毎回Reflowを再計算します。読み取りをまとめて先に行い、書き込みをまとめて後で行うことでこの問題を回避できます。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール0-13 完了！\n\n## 習得スキル\n\n- CSSOMがDOMと合成されてレンダーツリーが構築される仕組みを説明できる\n- `display: none` と `visibility: hidden` のレンダーツリーへの参加差異を理解した\n- CSSがレンダーブロッキングになる理由とLCPへの影響を把握した\n- 強制Reflowの発生パターンと読み書き分離による最適化を実装できる\n- `getComputedStyle()` で計算済みスタイルを取得できる\n\n## 実務チャレンジ\n\nLighthouseでLP（ランディングページ）を計測し、「レンダーブロッキングリソースを排除」の指摘があれば、該当するCSSファイルのサイズと優先度を確認してください。クリティカルCSSのインライン化を提案できるとエンジニアとの協議がスムーズになります。\n\n## 次のモジュールへ\n\n**0-14: JavaScriptエンジン（V8）の実行モデル** では、JavaScriptがどのように実行されるかを「コールスタック」と「イベントループ」の概念で学びます。GTMタグが予期しない順序で実行される問題の根本原因を理解できるようになります。",
+        "diagram": false
+      }
+    }
+  ]
+}

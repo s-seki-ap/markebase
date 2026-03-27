@@ -1,0 +1,67 @@
+{
+  "id": "web-fundamentals--0-1",
+  "moduleId": "0-1",
+  "categoryId": "web-fundamentals",
+  "title": "TCP/IPプロトコルスタックの全体像",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# なぜマーケターがTCP/IPを学ぶのか\n\nGA4の計測タグが「発火しているのに数字が入らない」「GTMのプレビューモードでは見えているのに本番データが届かない」——そんな経験はありませんか？こうした障害のほとんどは、HTTP通信の仕組みを知らないと原因を特定できません。\n\n## TCP/IPがマーケターに関係する3つの場面\n\n**1. GA4イベントが送信されているか確認する**\nDevToolsの「ネットワーク」タブに表示される通信ログは、TCP/IPスタックの上位層（アプリケーション層）の通信です。「なぜこのタブを見れば分かるのか」を理解するには、4層構造の知識が必要です。\n\n**2. 広告タグの遅延問題を切り分ける**\nLPの表示速度が遅い原因がサーバー側にあるのか、ネットワーク層にあるのか、それとも広告タグのJavaScriptにあるのかを判断するとき、通信の層を意識すると切り分けが格段に速くなります。\n\n**3. エンジニアへの説明精度を上げる**\n「なんかデータが来ません」ではなく「HTTPリクエストはサーバーに届いているがレスポンスが500を返しています」と言えるだけで、問題解決のスピードが大きく変わります。\n\n## このモジュールで身につくこと\n\nTCP/IPの4層モデルを把握し、どの層でどんな問題が起きうるかを説明できるようになります。GA4やGTMのトラブルシューティングで「どこを見ればいいか」が分かるようになることを目標にします。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# TCP/IPプロトコルスタックの4層\n\nインターネット通信は「役割分担」によって成り立っています。その役割分担の枠組みがTCP/IPの4層モデルです。\n\n## 4層の構造\n\n```\n┌─────────────────────────────────────┐\n│ 第4層: アプリケーション層            │\n│   HTTP, HTTPS, DNS, SMTP            │\n│   → 「何を送るか」を定義             │\n├─────────────────────────────────────┤\n│ 第3層: トランスポート層              │\n│   TCP, UDP                          │\n│   → 「確実に届けるか」「速く届けるか」│\n├─────────────────────────────────────┤\n│ 第2層: インターネット層              │\n│   IP（IPv4/IPv6）                   │\n│   → 「どこに届けるか」を決定         │\n├─────────────────────────────────────┤\n│ 第1層: ネットワークインターフェース層 │\n│   Ethernet, Wi-Fi                   │\n│   → 「物理的にどう届けるか」          │\n└─────────────────────────────────────┘\n```\n\n## 各層の詳細\n\n| 層 | プロトコル例 | マーケター視点での意味 |\n|----|------------|---------------------|\n| アプリケーション層 | HTTP/HTTPS | GA4タグが送るリクエストの中身 |\n| トランスポート層 | TCP | データが欠損なく届く保証 |\n| インターネット層 | IP | データを届けるべきサーバーのアドレス |\n| ネットワークインターフェース層 | Wi-Fi/Ethernet | 実際の電気信号・電波 |\n\n## GA4のイベント送信で何が起きているか\n\nGA4の `gtag('event', 'purchase', {...})` を実行すると、以下の流れでGoogleのサーバーにデータが送られます。\n\n```\n1. アプリケーション層: HTTPSリクエストを作成\n   POST https://www.google-analytics.com/g/collect\n   \n2. トランスポート層: TCPで分割・順序保証\n   データを複数のパケットに分割して送信\n   \n3. インターネット層: IPでルーティング\n   Googleのサーバー（IP: 142.250.x.x）へ経路選択\n   \n4. ネットワークインターフェース層: 電波/ケーブルで送信\n   Wi-Fiや有線LANを通じて物理的に送出\n```\n\n## なぜTCPが使われるのか（UDPとの違い）\n\nGA4はTCPを使います。TCPは「確実性」を重視するプロトコルで、以下の特性を持ちます。\n\n- **順序保証**: 複数パケットが正しい順番で届く\n- **再送制御**: 届かなかったデータは自動再送\n- **輻輳制御**: ネットワーク混雑時に送信量を調整\n\n逆にリアルタイム動画配信などはUDPを使います。多少データが欠けても遅延が大きくなるより速度を優先するためです。\n\n## DevToolsで4層を「見る」方法\n\nChromeのDevToolsを開き「Network」タブを確認すると、アプリケーション層の通信（HTTPリクエスト・レスポンス）を観察できます。「Timing」タブではTCP接続の確立にかかった時間も確認できます。",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: TCP接続のタイムラインを可視化する\n\n## 課題\n\nブラウザ上でGA4のcollect APIへのfetchリクエストを送り、通信のタイムラインを視覚的に確認するツールを作成してください。\n\n1. ボタンをクリックするとGA4 Measurement Protocol（テスト用）へGETリクエストを送信する\n2. リクエストのステータスコード・所要時間・レスポンスヘッダー（Content-Type）を画面に表示する\n3. 送信中は「送信中...」と表示し、完了後に結果を表示する\n4. エラーが発生した場合はエラーメッセージを赤字で表示する",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>TCP/IP通信デモ</title>\n  <style>\n    body { font-family: sans-serif; padding: 20px; background: #0f172a; color: #e2e8f0; }\n    button { padding: 10px 20px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; }\n    #result { margin-top: 20px; padding: 16px; border-radius: 8px; background: #1e293b; min-height: 60px; }\n    .error { color: #ef4444; }\n    .success { color: #10b981; }\n    .label { color: #94a3b8; font-size: 12px; margin-bottom: 4px; }\n    .value { font-size: 16px; font-weight: bold; margin-bottom: 12px; }\n  </style>\n</head>\n<body>\n  <h1>TCP/IP通信タイムライン</h1>\n  <p>ボタンを押してGA4エンドポイントへリクエストを送信します</p>\n\n  <button id=\"sendBtn\">リクエスト送信</button>\n  <div id=\"result\">結果がここに表示されます</div>\n\n  <script>\n    document.getElementById('sendBtn').addEventListener('click', async () => {\n      const resultEl = document.getElementById('result');\n      const btn = document.getElementById('sendBtn');\n\n    });\n  </script>\n</body>\n</html>",
+        "hints": [
+          "performance.now() を使うと、リクエスト前後の時刻を記録して所要時間（ミリ秒）を計算できます。",
+          "fetch() はPromiseを返します。const startTime = performance.now() で開始時刻を記録し、await fetch(url) の後に performance.now() - startTime で経過時間を計算してください。",
+          "response.headers.get('content-type') でContent-Typeヘッダーの値を取得できます。response.status でステータスコードを取得します。CORSで一部ヘッダーが取得できない場合は 'N/A' と表示するようにしてください。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>TCP/IP通信デモ</title>\n  <style>\n    body { font-family: sans-serif; padding: 20px; background: #0f172a; color: #e2e8f0; }\n    button { padding: 10px 20px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; }\n    button:disabled { opacity: 0.5; cursor: not-allowed; }\n    #result { margin-top: 20px; padding: 16px; border-radius: 8px; background: #1e293b; min-height: 60px; }\n    .error { color: #ef4444; }\n    .success { color: #10b981; }\n    .label { color: #94a3b8; font-size: 12px; margin-bottom: 4px; }\n    .value { font-size: 16px; font-weight: bold; margin-bottom: 12px; }\n  </style>\n</head>\n<body>\n  <h1>TCP/IP通信タイムライン</h1>\n  <p>ボタンを押してGA4エンドポイントへリクエストを送信します</p>\n  <button id=\"sendBtn\">リクエスト送信</button>\n  <div id=\"result\">結果がここに表示されます</div>\n  <script>\n    document.getElementById('sendBtn').addEventListener('click', async () => {\n      const resultEl = document.getElementById('result');\n      const btn = document.getElementById('sendBtn');\n      btn.disabled = true;\n      resultEl.innerHTML = '<span style=\"color:#fbbf24\">送信中...</span>';\n      const url = 'https://www.google-analytics.com/collect?v=1&t=pageview&tid=UA-XXXXX-Y&cid=555';\n      const startTime = performance.now();\n      try {\n        const response = await fetch(url, { mode: 'no-cors' });\n        const elapsed = Math.round(performance.now() - startTime);\n        const contentType = response.headers.get('content-type') || 'N/A (no-corsモード)';\n        resultEl.innerHTML = `\n          <div class=\"label\">ステータス</div>\n          <div class=\"value success\">${response.status === 0 ? 'リクエスト送信成功（no-corsモード）' : response.status}</div>\n          <div class=\"label\">所要時間</div>\n          <div class=\"value\">${elapsed} ms</div>\n          <div class=\"label\">Content-Type</div>\n          <div class=\"value\">${contentType}</div>\n          <div class=\"label\">解説</div>\n          <div style=\"color:#94a3b8;font-size:13px\">no-corsモードのためレスポンス本体は読めませんが、TCPコネクション確立→HTTPリクエスト送信→レスポンス受信の流れは実行されています。DevToolsのNetworkタブでTimingを確認してみましょう。</div>\n        `;\n      } catch (e) {\n        const elapsed = Math.round(performance.now() - startTime);\n        resultEl.innerHTML = `<div class=\"error\">エラー: ${e.message}</div><div style=\"margin-top:8px;color:#94a3b8;font-size:13px\">所要時間: ${elapsed}ms</div>`;\n      }\n      btn.disabled = false;\n    });\n  </script>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "TCP/IPの4層モデルで、GA4のHTTPSリクエストが属する層はどれですか？",
+            "options": ["ネットワークインターフェース層", "インターネット層", "トランスポート層", "アプリケーション層"],
+            "correct": 3,
+            "explanation": "HTTPSはアプリケーション層のプロトコルです。GA4タグが送信するデータの形式・宛先URLなどはアプリケーション層で定義されます。その下のトランスポート層（TCP）が信頼性を、インターネット層（IP）がルーティングを担います。"
+          },
+          {
+            "q": "GA4がUDPではなくTCPを使う主な理由として最も適切なものはどれですか？",
+            "options": ["UDPより通信速度が速いから", "データが確実・正確に届くことを保証するため", "リアルタイム通信に最適化されているから", "暗号化機能が内蔵されているから"],
+            "correct": 1,
+            "explanation": "TCPはデータの順序保証・再送制御・輻輳制御を提供し、データが確実に届くことを保証します。GA4のイベントデータは分析基盤に欠損なく届く必要があるためTCPが使われます。暗号化はTLS（HTTPS）が担当し、TCPの機能ではありません。"
+          },
+          {
+            "q": "ChromeのDevToolsで「NetworkタブのTiming」を確認することで把握できる情報として正しいものはどれですか？",
+            "options": ["GA4イベントのパラメータ値", "TCPコネクション確立にかかった時間", "JavaScriptの実行エラー内容", "CSSのレンダリング時間"],
+            "correct": 1,
+            "explanation": "DevToolsのNetworkタブでリクエストを選択しTimingを開くと、DNS Lookup・Initial Connection（TCP）・SSL・TTFB（Time to First Byte）などの各フェーズにかかった時間を確認できます。これはTCP/IPの各層に対応した情報です。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール0-1 完了！\n\n## 習得したスキル\n\n- TCP/IPの4層モデル（アプリケーション・トランスポート・インターネット・ネットワークインターフェース）を説明できる\n- GA4のイベント送信がTCP/IPのどの層でどのように処理されているかを理解した\n- TCPとUDPの違いと、GA4がTCPを採用する理由を説明できる\n- DevToolsのNetworkタブでTCP接続のタイムラインを確認する方法を知っている\n\n## 次のモジュール\n\n**0-2: IPアドレスとポート番号の役割** では、インターネット層でデータを届ける先を特定する「IPアドレス」と、どのアプリケーションに届けるかを決める「ポート番号」の仕組みを学びます。「HTTPSは443番ポートを使う」という知識がなぜ重要か、ファイアウォールやセキュリティ設定との関係も解説します。\n\n## 実務チャレンジ\n\nChromeのDevToolsを開き、あなたが担当するサイトのGA4タグが送信しているリクエストを `www.google-analytics.com` でフィルタして探してみてください。そのリクエストのTimingタブを開き、TCP接続確立（Initial connection）に何ミリ秒かかっているか確認してみましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}
