@@ -66,7 +66,7 @@ export default async function Home() {
         <div className="grid grid-cols-3 gap-4 mb-10">
           <div className="p-5 rounded-xl" style={{ backgroundColor: "#1e293b" }}>
             <p className="text-slate-400 text-sm mb-1">完了モジュール</p>
-            <p className="text-2xl font-bold text-white">0 <span className="text-sm text-slate-500 font-normal">/ 64</span></p>
+            <p className="text-2xl font-bold text-white">0 <span className="text-sm text-slate-500 font-normal">/ 1,200</span></p>
           </div>
           <div className="p-5 rounded-xl" style={{ backgroundColor: "#1e293b" }}>
             <p className="text-slate-400 text-sm mb-1">獲得XP</p>

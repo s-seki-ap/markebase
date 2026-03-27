@@ -1,10 +1,9 @@
-import { getCategories } from "@/lib/curriculum";
+import { getCategories, isModuleAvailable } from "@/lib/curriculum";
 import Link from "next/link";
-
-const AVAILABLE_LESSONS = ["html--1-1", "ga4--5-1"];
 
 export default function CurriculumPage() {
   const categories = getCategories();
+  const totalModules = categories.reduce((s, c) => s + c.modules.length, 0);
 
   return (
     <main className="min-h-screen p-8" style={{ backgroundColor: "#0f172a" }}>
@@ -20,15 +19,22 @@ export default function CurriculumPage() {
         </div>
 
         <h1 className="text-3xl font-bold text-white mb-2">カリキュラムマップ</h1>
-        <p className="text-slate-400 mb-10">
-          デジタルマーケターに必要なスキルを体系的に学べる8つのカテゴリ
+        <p className="text-slate-400 mb-3">
+          デジタルマーケターに必要なスキルを体系的に学べる{categories.length}カテゴリ・{totalModules}モジュール
         </p>
+        <Link
+          href="/why-learn"
+          className="inline-flex items-center gap-1 text-sm mb-10 transition-colors hover:opacity-80"
+          style={{ color: "#3b82f6" }}
+        >
+          なぜ体系的に学ぶ必要があるのか？ →
+        </Link>
 
         {/* Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {categories.map((category) => {
-            const availableCount = category.modules.filter((m) =>
-              AVAILABLE_LESSONS.includes(`${category.id}--${m.id}`)
+            const publishedCount = category.modules.filter((m) =>
+              isModuleAvailable(category.id, m.id)
             ).length;
 
             return (
@@ -59,21 +65,22 @@ export default function CurriculumPage() {
                   <span className="text-slate-500 text-xs">
                     {category.modules.length} モジュール
                   </span>
-                  {availableCount > 0 && (
-                    <span
-                      className="text-xs px-2 py-0.5 rounded-full font-medium"
-                      style={{ backgroundColor: "#10b98133", color: "#10b981" }}
-                    >
-                      教材あり
-                    </span>
-                  )}
+                  <span className="text-slate-500 text-xs">
+                    公開 {publishedCount} / {category.modules.length}
+                  </span>
                 </div>
 
                 {/* Color bar */}
-                <div
-                  className="mt-4 h-1 rounded-full opacity-60"
-                  style={{ backgroundColor: category.color }}
-                />
+                <div className="mt-4 h-1 rounded-full overflow-hidden" style={{ backgroundColor: "#334155" }}>
+                  <div
+                    className="h-full rounded-full"
+                    style={{
+                      backgroundColor: category.color,
+                      width: `${Math.max((publishedCount / category.modules.length) * 100, 0)}%`,
+                      opacity: publishedCount > 0 ? 1 : 0,
+                    }}
+                  />
+                </div>
               </Link>
             );
           })}
