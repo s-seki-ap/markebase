@@ -8,27 +8,40 @@
       "type": "intro",
       "data": {
         "content": "# マーケター向け導入\n\nGA4やGTMを運用していると、ブラウザの開発者ツール（DevTools）でCookieの一覧を目にする機会があります。`_ga` や `_ga_XXXXXX` といったGA4クライアントIDが格納されたCookieの横に、`Secure` や `HttpOnly`、`SameSite` といった属性が並んでいます。これらの属性はセキュリティ設定を意味しており、広告計測や分析ツールが正しく動作するかどうかに直接関係します。\n\n例えばGoogle広告の `_gcl_au` CookieやFacebook Pixelが生成するCookieにも同様の属性が設定されています。`SameSite=None; Secure` の設定がなければ、クロスサイトリクエスト時にCookieが送信されず、コンバージョン計測が正確に機能しません。ブラウザのプライバシー強化が進む現代では、これらの属性を正しく理解することがマーケターの必須スキルになっています。\n\nこのモジュールでは、Cookieの4つの主要属性（Secure・HttpOnly・SameSite・Expires）の意味と、GA4・GTM・広告計測の文脈での実務的な影響を学びます。",
-        "diagram": false
+        "diagram": false,
+        "annotations": [
+          {"term": "Cookie", "desc": "ブラウザに保存される小さなデータ。サーバーが「Set-Cookie」ヘッダーで送信し、ブラウザは次回以降のリクエスト時に自動的に添付して送る。ユーザー識別・ログイン状態維持・計測に使われる"},
+          {"term": "Secure属性", "desc": "CookieをHTTPS通信時のみ送信するフラグ。HTTPの通信では送信されないため盗聴リスクを軽減する。GA4・Google広告のCookieはすべてSecure付き"},
+          {"term": "HttpOnly属性", "desc": "JavaScriptからCookieへのアクセスを禁止するフラグ。document.cookieで読めなくなる。XSS攻撃によるCookie盗難を防ぐため、ログインセッションIDに使われることが多い。GTMからも読めなくなる"},
+          {"term": "SameSite属性", "desc": "クロスサイト（別ドメインから）のリクエスト時にCookieを送るかを制御するフラグ。Strict・Lax・Noneの3種類がある。広告計測タグはNone+Secureが必要なことが多い"},
+          {"term": "XSS（クロスサイトスクリプティング）", "desc": "悪意あるJavaScriptをWebページに埋め込む攻撃手法。HttpOnly属性のないCookieはXSSで盗まれる可能性がある。セキュリティ上重要なCookieにはHttpOnlyが推奨される"},
+          {"term": "Max-Age / Expires", "desc": "Cookieの有効期限を指定する属性。Max-Ageは秒数で指定（例: 63072000 = 2年間）、Expiresは絶対的な日時で指定する。指定しない場合はブラウザを閉じると削除されるセッションCookieになる"}
+        ]
       }
     },
     {
       "type": "concept",
       "data": {
         "content": "# Cookieの主要属性\n\nCookieはサーバーが `Set-Cookie` レスポンスヘッダーで送信する小さなデータです。ブラウザはそのデータを保存し、以降のリクエストに自動的に付与します。属性はCookieの挙動を制御するフラグです。\n\n## Secure属性\n\n```\nSet-Cookie: session_id=abc123; Secure\n```\n\n`Secure` を付けると、**HTTPS通信時のみ**Cookieが送信されます。HTTPでアクセスしたページではCookieが送られないため、通信経路での盗聴リスクを軽減します。GA4やGoogle広告のCookieはすべてSecure付きで発行されます。本番環境が常にHTTPSであれば問題ありませんが、ローカル開発環境（http://localhost）でCookieが機能しない原因になることがあります。\n\n## HttpOnly属性\n\n```\nSet-Cookie: auth_token=xyz789; HttpOnly\n```\n\n`HttpOnly` を付けると、**JavaScriptからCookieにアクセスできなくなります**。`document.cookie` で読み書きできないため、XSS（クロスサイトスクリプティング）攻撃によるCookie盗難を防ぎます。ログインセッションIDなど重要な認証情報に使われます。GTMのJavaScriptタグからCookieを読み取ろうとしても、HttpOnly付きのCookieは取得できません。\n\n## SameSite属性\n\n```\nSet-Cookie: _ga=GA1.1.123456; SameSite=Lax\n```\n\nクロスサイトリクエスト時にCookieを送信するかを制御します。\n\n| 値 | 動作 | 用途 |\n|---|---|---|\n| `Strict` | 同じサイトからのリクエストのみ送信 | 高セキュリティが必要な認証Cookie |\n| `Lax` | トップレベルナビゲーション（リンク遷移）では送信 | 一般的なCookie（ブラウザのデフォルト） |\n| `None` | すべてのクロスサイトリクエストで送信（Secure必須） | サードパーティCookie・広告計測 |\n\nFacebook PixelやGoogle広告のコンバージョンタグなど、**異なるドメイン間で動作するトラッキングCookieは `SameSite=None; Secure` が必要**です。この設定がないとChrome・Safariなどで計測漏れが発生します。\n\n## Expires / Max-Age属性\n\n```\nSet-Cookie: _ga=GA1.1.123456; Expires=Fri, 31 Dec 2027 23:59:59 GMT\nSet-Cookie: _ga=GA1.1.123456; Max-Age=63072000\n```\n\nCookieの有効期限を指定します。`Expires` は絶対日時、`Max-Age` は現在時刻からの秒数で指定します。どちらも指定しない場合は**セッションCookie**（ブラウザを閉じると削除）になります。GA4の `_ga` Cookieは2年間（約63,072,000秒）有効で、この期間ユーザーを同一人物として識別し続けます。\n\n## GA4のCookie属性まとめ\n\n| Cookie名 | Secure | HttpOnly | SameSite | 有効期限 |\n|---|---|---|---|---|\n| `_ga` | あり | なし | Lax | 2年 |\n| `_ga_XXXX` | あり | なし | Lax | 2年 |\n| `_gcl_au` | あり | なし | Lax | 90日 |\n\nGA4のCookieにHttpOnlyが付いていないのは、GTMのJavaScriptがクライアントIDを読み取れるようにするためです。",
-        "diagram": true
+        "diagram": true,
+        "annotations": [
+          {"term": "Set-Cookie ヘッダー", "desc": "サーバーがブラウザに「このCookieを保存して」と指示するHTTPレスポンスヘッダー。値・属性（Secure等）を一緒に指定できる。JavaScriptのdocument.cookieではHttpOnly属性を付けられない"},
+          {"term": "セッションCookie", "desc": "有効期限（ExpiresまたはMax-Age）を指定しないCookie。ブラウザを閉じると自動削除される。ログイン状態の保持などに使われる。GA4の_gaは2年間の持続CookieなのでセッションCookieではない"},
+          {"term": "クロスサイトリクエスト", "desc": "あるドメインのページから別ドメインのサーバーへのリクエスト。SameSite=Strictが設定されたCookieはこのリクエストに添付されない。広告タグのコンバージョン計測はクロスサイトで動作するためSameSite=Noneが必要"},
+          {"term": "_gcl_au", "desc": "Google広告のCookieのひとつ。クリックIDと広告キャンペーン情報を格納する。有効期限は90日。SameSite=Laxで設定されており、コンバージョンの計測に使われる"}
+        ]
       }
     },
     {
-      "type": "exercise",
+      "type": "interactive",
       "data": {
-        "content": "# 練習: Cookieの属性を操作するデモページ\n\n## 課題\n\n1. 「Cookieを設定」ボタンをクリックして、4種類のCookieを作成してください\n2. ブラウザのDevTools（F12 > Application > Cookies）でそれぞれのCookieの属性を確認してください\n3. 「Cookieを読み取る」ボタンで、JavaScriptから読み取れるCookieと読み取れないCookieを確認してください\n4. コード内の `SameSite=Lax` を `SameSite=Strict` に変更して、挙動の違いをコメントしてください\n5. `max-age` の値を変更して、有効期限が変わることをDevToolsで確認してください",
-        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n<meta charset=\"UTF-8\">\n<title>Cookie属性デモ</title>\n<style>\n  body { font-family: sans-serif; max-width: 700px; margin: 40px auto; padding: 0 20px; }\n  button { margin: 6px; padding: 10px 18px; cursor: pointer; font-size: 14px; }\n  .set-btn { background: #4285f4; color: white; border: none; border-radius: 4px; }\n  .read-btn { background: #34a853; color: white; border: none; border-radius: 4px; }\n  .clear-btn { background: #ea4335; color: white; border: none; border-radius: 4px; }\n  pre { background: #f5f5f5; padding: 16px; border-radius: 4px; font-size: 13px; white-space: pre-wrap; }\n  .note { background: #fff3cd; border-left: 4px solid #ffc107; padding: 10px 14px; margin: 10px 0; }\n</style>\n</head>\n<body>\n<h1>Cookie属性デモ</h1>\n\n<div class=\"note\">※ HttpOnly属性はサーバーサイドでのみ設定可能なため、このデモではSimulatedとして扱います。</div>\n\n<h2>操作パネル</h2>\n<button class=\"set-btn\" onclick=\"setCookies()\">Cookieを設定する</button>\n<button class=\"read-btn\" onclick=\"readCookies()\">Cookieを読み取る</button>\n<button class=\"clear-btn\" onclick=\"clearCookies()\">Cookieをクリア</button>\n\n<h2>結果</h2>\n<pre id=\"output\">ボタンを押してください...</pre>\n\n<script>\nfunction setCookies() {\n  document.cookie = \"normal_cookie=hello; path=/\";\n  document.cookie = \"secure_cookie=world; path=/; secure\";\n  document.cookie = \"samesite_lax=test_lax; path=/; SameSite=Lax\";\n  document.cookie = \"expires_cookie=will_expire; path=/; max-age=60\";\n\n  document.getElementById(\"output\").textContent =\n    \"Cookieを設定しました。\\n\" +\n    \"DevTools > Application > Cookies で以下を確認:\\n\\n\" +\n    \"1. normal_cookie    : 属性なし\\n\" +\n    \"2. secure_cookie    : Secure あり（HTTPSのみ有効）\\n\" +\n    \"3. samesite_lax     : SameSite=Lax\\n\" +\n    \"4. expires_cookie   : max-age=60（60秒後に自動削除）\\n\\n\" +\n    \"※ HttpOnly は document.cookie では設定不可（サーバーのみ設定可能）\";\n}\n\nfunction readCookies() {\n  var all = document.cookie;\n  document.getElementById(\"output\").textContent =\n    \"document.cookie で読み取れる内容:\\n\\n\" +\n    (all || \"（Cookieが存在しないか、すべてクリア済み）\") + \"\\n\\n\" +\n    \"注意: HttpOnly 属性が付いたCookieは\\nここには表示されません。\";\n}\n\nfunction clearCookies() {\n  var cookies = document.cookie.split(\";\");\n  for (var i = 0; i < cookies.length; i++) {\n    var name = cookies[i].split(\"=\")[0].trim();\n    document.cookie = name + \"=; max-age=0; path=/\";\n  }\n  document.getElementById(\"output\").textContent = \"Cookieをクリアしました。\";\n}\n</script>\n</body>\n</html>",
-        "hints": [
-          "Secure属性はHTTPS環境でのみ有効です。ローカルのhttp://ではSecure付きCookieは保存されません。file://で開いた場合も同様の制限があります。",
-          "HttpOnly属性はJavaScriptからのアクセスをブロックしますが、document.cookieでは設定できません。サーバーのSet-Cookieレスポンスヘッダーでのみ付与可能です。",
-          "SameSite=NoneはSecure属性とセットで使う必要があります。単独では無効になります。広告計測タグがクロスサイトで機能しない場合はこの組み合わせを確認してください。"
-        ],
-        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n<meta charset=\"UTF-8\">\n<title>Cookie属性デモ（完成版）</title>\n<style>\n  body { font-family: sans-serif; max-width: 700px; margin: 40px auto; padding: 0 20px; }\n  button { margin: 6px; padding: 10px 18px; cursor: pointer; font-size: 14px; }\n  .set-btn { background: #4285f4; color: white; border: none; border-radius: 4px; }\n  .read-btn { background: #34a853; color: white; border: none; border-radius: 4px; }\n  .clear-btn { background: #ea4335; color: white; border: none; border-radius: 4px; }\n  pre { background: #f5f5f5; padding: 16px; border-radius: 4px; font-size: 13px; white-space: pre-wrap; }\n  .note { background: #fff3cd; border-left: 4px solid #ffc107; padding: 10px 14px; margin: 10px 0; }\n  table { border-collapse: collapse; width: 100%; margin-top: 16px; }\n  th, td { border: 1px solid #ddd; padding: 8px 12px; text-align: left; font-size: 13px; }\n  th { background: #f0f0f0; }\n</style>\n</head>\n<body>\n<h1>Cookie属性デモ（完成版）</h1>\n\n<div class=\"note\">※ HttpOnly属性はサーバーサイドでのみ設定可能なため、このデモではSimulatedとして扱います。</div>\n\n<h2>操作パネル</h2>\n<button class=\"set-btn\" onclick=\"setCookies()\">Cookieを設定する</button>\n<button class=\"read-btn\" onclick=\"readCookies()\">Cookieを読み取る</button>\n<button class=\"clear-btn\" onclick=\"clearCookies()\">Cookieをクリア</button>\n\n<h2>Cookie属性一覧</h2>\n<table>\n  <tr><th>属性</th><th>効果</th><th>GA4での例</th></tr>\n  <tr><td>Secure</td><td>HTTPS通信時のみ送信</td><td>_ga, _ga_XXXX</td></tr>\n  <tr><td>HttpOnly</td><td>JSからアクセス不可</td><td>セッションCookieなど</td></tr>\n  <tr><td>SameSite=Lax</td><td>同サイト+トップナビゲーション</td><td>_ga (デフォルト)</td></tr>\n  <tr><td>SameSite=None; Secure</td><td>クロスサイトでも送信</td><td>広告タグ用Cookie</td></tr>\n  <tr><td>Max-Age / Expires</td><td>有効期限を指定</td><td>_ga: 2年</td></tr>\n</table>\n\n<h2>結果</h2>\n<pre id=\"output\">ボタンを押してください...</pre>\n\n<script>\nfunction setCookies() {\n  // 通常のCookie（属性なし）\n  document.cookie = \"normal_cookie=hello; path=/\";\n  // Secure属性付き（HTTPSのみ有効）\n  document.cookie = \"secure_cookie=world; path=/; secure\";\n  // SameSite=Lax（GA4のデフォルトと同等）\n  document.cookie = \"samesite_lax=test_lax; path=/; SameSite=Lax\";\n  // 有効期限60秒（max-age）\n  document.cookie = \"expires_cookie=will_expire; path=/; max-age=60\";\n  // SameSite=Strict（最も制限が強い）\n  document.cookie = \"strict_cookie=strict_val; path=/; SameSite=Strict\";\n\n  document.getElementById(\"output\").textContent =\n    \"5種類のCookieを設定しました。\\n\" +\n    \"DevTools > Application > Cookies で各属性カラムを確認してください。\\n\\n\" +\n    \"注目ポイント:\\n\" +\n    \"- expires_cookie は60秒後に自動削除されます\\n\" +\n    \"- secure_cookie はHTTPSでないと送信されません\\n\" +\n    \"- strict_cookie はリンク遷移でも送信されません\\n\" +\n    \"- HttpOnly Cookie はこの画面からは設定・読取不可です\";\n}\n\nfunction readCookies() {\n  var all = document.cookie;\n  var lines = all ? all.split(\";\").map(function(c){ return c.trim(); }) : [];\n  var output = \"document.cookie で読み取れるCookie:\\n\\n\";\n  if (lines.length === 0 || (lines.length === 1 && lines[0] === \"\")) {\n    output += \"（Cookieが存在しないか、すべてクリア済み）\\n\";\n  } else {\n    lines.forEach(function(c) { output += \"  \" + c + \"\\n\"; });\n  }\n  output += \"\\n[重要] HttpOnly属性付きCookieはここに表示されません。\\n\";\n  output += \"サーバーが Set-Cookie: ...; HttpOnly で送信したCookieは\\n\";\n  output += \"JavaScriptからは完全に見えなくなります。\";\n  document.getElementById(\"output\").textContent = output;\n}\n\nfunction clearCookies() {\n  var cookies = document.cookie.split(\";\");\n  for (var i = 0; i < cookies.length; i++) {\n    var name = cookies[i].split(\"=\")[0].trim();\n    document.cookie = name + \"=; max-age=0; path=/\";\n  }\n  document.getElementById(\"output\").textContent = \"Cookieをクリアしました。\\nDevToolsで削除されたことを確認してください。\";\n}\n</script>\n</body>\n</html>"
+        "content": "# 体験: Cookieセキュリティメーター\n\nCookieの属性（Secure・HttpOnly・SameSite・有効期限）を組み合わせてセキュリティレベルがどう変わるかを体験しましょう。",
+        "htmlContent": "<!DOCTYPE html><html lang='ja'><head><meta charset='UTF-8'><style>body{font-family:sans-serif;background:#0f172a;color:#e2e8f0;padding:20px;margin:0}h2{color:#38bdf8;font-size:16px;margin:12px 0 8px}.card{background:#1e293b;border:1px solid #334155;border-radius:8px;padding:14px;margin-bottom:12px}.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #1e293b}.toggle-row:last-child{border-bottom:none}.toggle-label{font-size:13px}.toggle-desc{font-size:11px;color:#94a3b8;margin-top:2px}.switch{position:relative;display:inline-block;width:44px;height:24px}.switch input{opacity:0;width:0;height:0}.knob{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#334155;border-radius:12px;transition:0.3s}.knob:before{content:'';position:absolute;width:18px;height:18px;left:3px;top:3px;background:#94a3b8;border-radius:50%;transition:0.3s}input:checked+.knob{background:#1d4ed8}input:checked+.knob:before{transform:translateX(20px);background:#e2e8f0}select{padding:6px 10px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:4px;font-size:13px}.meter-wrap{height:24px;background:#0f172a;border-radius:12px;overflow:hidden;margin:8px 0}.meter-bar{height:100%;border-radius:12px;transition:width 0.5s,background 0.5s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:12px;font-weight:bold}.cookie-preview{font-family:monospace;font-size:12px;background:#0f172a;border:1px solid #334155;border-radius:4px;padding:10px;word-break:break-all;margin-top:8px}.tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;margin:2px}.tag-good{background:#14532d;color:#86efac}.tag-warn{background:#422006;color:#fbbf24}.tag-bad{background:#7f1d1d;color:#fca5a5}.check-item{display:flex;align-items:flex-start;gap:8px;padding:5px 0;font-size:12px}.check-icon{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}.icon-ok{background:#14532d;color:#86efac}.icon-ng{background:#7f1d1d;color:#fca5a5}</style></head><body><h2>Cookie 属性セキュリティメーター</h2><div class='card'><div class='toggle-row'><div><div class='toggle-label'>Secure</div><div class='toggle-desc'>HTTPS通信時のみ送信</div></div><label class='switch'><input type='checkbox' id='chk-secure' checked onchange='update()'><span class='knob'></span></label></div><div class='toggle-row'><div><div class='toggle-label'>HttpOnly</div><div class='toggle-desc'>JavaScriptからアクセス禁止</div></div><label class='switch'><input type='checkbox' id='chk-httponly' onchange='update()'><span class='knob'></span></label></div><div class='toggle-row'><div><div class='toggle-label'>SameSite</div><div class='toggle-desc'>クロスサイトリクエストの送信制限</div></div><select id='sel-samesite' onchange='update()'><option value='None'>None（制限なし）</option><option value='Lax' selected>Lax（デフォルト）</option><option value='Strict'>Strict（最厳格）</option></select></div><div class='toggle-row'><div><div class='toggle-label'>有効期限</div><div class='toggle-desc'>Cookieの保持期間</div></div><select id='sel-expires' onchange='update()'><option value='0'>なし（セッションCookie）</option><option value='86400'>1日</option><option value='2592000'>30日</option><option value='63072000' selected>2年（GA4標準）</option></select></div></div><div class='card'><div style='display:flex;justify-content:space-between;align-items:center;margin-bottom:4px'><span style='font-size:13px'>セキュリティレベル</span><span id='score-label' style='font-size:13px;font-weight:bold'></span></div><div class='meter-wrap'><div class='meter-bar' id='meter-bar'></div></div><div id='cookie-preview' class='cookie-preview'></div></div><div class='card' id='checks-card'><div style='font-size:13px;margin-bottom:8px;color:#94a3b8'>この設定の評価</div><div id='checks'></div></div><script>function update(){var secure=document.getElementById('chk-secure').checked;var httponly=document.getElementById('chk-httponly').checked;var samesite=document.getElementById('sel-samesite').value;var expires=parseInt(document.getElementById('sel-expires').value);var score=0;var checks=[];if(secure){score+=25;checks.push({ok:true,text:'Secure: HTTPS通信のみで送信。盗聴リスクを軽減'})}else{checks.push({ok:false,text:'Secure なし: HTTP通信でもCookieが送信される。通信経路での盗聴リスクあり'})}if(httponly){score+=30;checks.push({ok:true,text:'HttpOnly: JavaScriptからアクセス不可。XSS攻撃でのCookie盗難を防ぐ'})}else{checks.push({ok:false,text:'HttpOnly なし: JavaScriptからdocument.cookieで読み取り可能。GA4の_gaはこの状態（GTMが読む必要があるため）'})}if(samesite==='Strict'){score+=30;checks.push({ok:true,text:'SameSite=Strict: 最も厳格。同一サイトからのリクエストのみCookieを送信。広告計測には使えない'})}else if(samesite==='Lax'){score+=20;checks.push({ok:true,text:'SameSite=Lax: 標準設定。トップレベルナビゲーションでは送信。GA4の_gaはLax設定'})}else{if(secure){score+=10;checks.push({ok:true,text:'SameSite=None + Secure: クロスサイトでもCookieを送信。広告計測・コンバージョントラッキングに必要'})}else{checks.push({ok:false,text:'SameSite=None + Secureなし: Chromeではこの組み合わせはブロックされる。Secureと一緒に設定が必須'})}}if(expires===0){checks.push({ok:false,text:'有効期限なし（セッションCookie）: ブラウザを閉じると削除される。GA4のユーザー識別に使えない'})}else if(expires<=86400){checks.push({ok:false,text:'有効期限1日: ユーザーの再訪問で別ユーザーとして計測される可能性あり'})}else{score+=15;checks.push({ok:true,text:'有効期限あり: '+Math.floor(expires/86400)+'日間保持。GA4の2年間（63072000秒）が標準'})}var pct=Math.min(score,100);var color=pct>=80?'#22c55e':pct>=50?'#fbbf24':'#ef4444';var levelText=pct>=80?'高（認証・個人情報向き）':pct>=50?'中（GA4・計測Cookie標準）':'低（見直しを推奨）';document.getElementById('meter-bar').style.width=pct+'%';document.getElementById('meter-bar').style.background=color;document.getElementById('meter-bar').textContent=pct+'点';document.getElementById('score-label').textContent=levelText;document.getElementById('score-label').style.color=color;var parts=['_ga=GA1.1.1234567890.1711836400'];if(secure)parts.push('Secure');if(httponly)parts.push('HttpOnly');parts.push('SameSite='+samesite);if(expires>0)parts.push('Max-Age='+expires);else parts.push('（有効期限なし）');document.getElementById('cookie-preview').textContent='Set-Cookie: '+parts.join('; ');var checksHtml=checks.map(function(c){return'<div class=\"check-item\"><div class=\"check-icon '+(c.ok?'icon-ok':'icon-ng')+'\">'+(c.ok?'✓':'✗')+'</div><span>'+c.text+'</span></div>'}).join('');document.getElementById('checks').innerHTML=checksHtml}update()</script></body></html>",
+        "checkpoints": [
+          "SameSite=NoneにはSecureが必須であることをメーターで確認した",
+          "HttpOnly属性でJavaScriptからの読み取りが禁止されること（GTMへの影響）を確認した",
+          "GA4の_gaクッキーの標準設定（Secure・SameSite=Lax・2年）を確認した"
+        ]
       }
     },
     {
@@ -36,37 +49,37 @@
       "data": {
         "questions": [
           {
-            "q": "GA4の `_ga` CookieにHttpOnly属性が付いていない理由として正しいものはどれですか？",
+            "q": "Facebook PixelのコンバージョンCookieに `SameSite=None; Secure` が必要な理由はどれですか？",
             "options": [
-              "セキュリティ上の問題があるから",
-              "GTMのJavaScriptタグがクライアントIDを読み取れるようにするため",
-              "HTTPSでも動作させるため",
-              "Expiresを設定できないから"
+              "FacebookのサーバーがHTTPSでのみ動作するから",
+              "クロスサイトリクエスト時にもCookieを送信する必要があるから",
+              "HttpOnly属性を使うためにSecureが必要だから",
+              "Strictが設定されているとCookieが削除されるから"
             ],
             "correct": 1,
-            "explanation": "GTM経由でGA4のクライアントIDをデータレイヤーに渡したり、JavaScriptから参照できるようにするために、_gaはHttpOnlyなしで設定されています。HttpOnlyを付けると document.cookie で読めなくなります。"
+            "explanation": "コンバージョンタグはfacebook.comから埋め込まれた別ドメインのコードが実行されます。SameSite=NoneにしないとクロスサイトリクエストでCookieが送信されず計測できません。NoneにはSecure属性も必須です。"
           },
           {
-            "q": "Facebook PixelやGoogle広告のコンバージョンタグがクロスサイトで正しく動作するために必要なSameSite設定はどれですか？",
+            "q": "GA4の `_ga` CookieにHttpOnly属性が付いていない理由はどれですか？",
             "options": [
-              "SameSite=Strict",
-              "SameSite=Lax",
-              "SameSite=None; Secure",
-              "SameSite属性を設定しない"
+              "Googleがセキュリティを軽視しているから",
+              "GTMのJavaScriptがdocument.cookieでクライアントIDを読み取れるようにするため",
+              "HttpOnlyはHTTPS環境でしか使えないから",
+              "HttpOnlyにするとGA4のレポートが動作しなくなるから"
             ],
-            "correct": 2,
-            "explanation": "クロスサイトリクエストでCookieを送信するにはSameSite=Noneが必要で、かつSecure属性も必須です。この組み合わせがなければ、Chrome等のブラウザはサードパーティCookieを送信しません。"
+            "correct": 1,
+            "explanation": "GTMのカスタムJavaScriptやGA4のクライアントID取得では、`document.cookie` でCookieを読み取る必要があります。HttpOnlyを付けるとJavaScriptからアクセスできなくなるため、GA4はあえてHttpOnlyを付けていません。"
           },
           {
-            "q": "有効期限を指定しないCookieはどのように扱われますか？",
+            "q": "Cookieに `Max-Age=0` を設定するとどうなりますか？",
             "options": [
-              "永久に保存される",
-              "1時間後に削除される",
-              "ブラウザを閉じると削除されるセッションCookieになる",
-              "24時間後に削除される"
+              "有効期限が永続になる",
+              "即座にCookieが削除される",
+              "ブラウザを閉じるまで有効になる",
+              "サーバーからの送信が禁止される"
             ],
-            "correct": 2,
-            "explanation": "ExpiresもMax-Ageも指定しないCookieはセッションCookieとなり、ブラウザを閉じると削除されます。GA4の_gaは2年間（Max-Age=63072000）有効に設定されています。"
+            "correct": 1,
+            "explanation": "`Max-Age=0` はCookieの有効期間を0秒にするため、受け取った瞬間に期限切れとなりCookieが削除されます。GTMやJavaScriptでCookieを削除したいときによく使われるテクニックです。"
           }
         ]
       }
@@ -74,7 +87,7 @@
     {
       "type": "summary",
       "data": {
-        "content": "# モジュール0-21 完了！\n\n## 習得スキル\n\n- Secure属性：HTTPS通信時のみCookieが送信されることを理解した\n- HttpOnly属性：JavaScriptからのCookieアクセスを遮断するセキュリティ機能を理解した\n- SameSite属性：Strict / Lax / Noneの違いと、広告計測への影響を把握した\n- Expires / Max-Age：Cookieの有効期限設定とGA4の2年間保持の仕組みを理解した\n- DevToolsでGA4・広告CookieのSecure/SameSite設定を確認できるようになった\n\n## 実務チャレンジ\n\n自社サイトのDevTools（Application > Cookies）を開き、`_ga`・`_ga_XXXX`・`_gcl_au` のSameSite属性とSecure属性を確認してください。もし `SameSite` が空欄や `Lax` 以外であれば、計測漏れの原因になっている可能性があります。\n\n## 次のモジュール\n\n次のモジュール **0-22: ファーストパーティCookieとサードパーティCookieの違い** では、リターゲティング広告の仕組みをCookieの種別から理解します。今回学んだSameSite属性が、サードパーティCookie廃止問題とどう関係するかが明確になります。",
+        "content": "# モジュール0-21 完了！\n\n## 習得スキル\n\n- Secure・HttpOnly・SameSite・Expiresの4属性の意味と役割を理解した\n- SameSite=None+Secureが広告計測に必要な理由を説明できる\n- GA4の`_ga`CookieにHttpOnlyが付いていない理由を技術的に説明できる\n- DevToolsでCookie属性を確認して計測問題の原因を特定できる\n\n## 実務チャレンジ\n\nDevToolsのApplication > Cookiesで担当サイトのCookie一覧を確認してください。広告計測タグが生成するCookieに `SameSite=None; Secure` が設定されているかを確認し、設定がなければエンジニアへ修正依頼の根拠として活用してください。\n\n## 次のモジュールへ\n\n**0-22: ファーストパーティCookieとサードパーティCookieの違い** では、GA4の_gaがファーストパーティCookieである意味と、サードパーティCookie廃止がリターゲティング広告に与える影響を学びます。",
         "diagram": false
       }
     }

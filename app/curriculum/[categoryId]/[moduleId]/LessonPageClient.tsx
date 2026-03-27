@@ -5,6 +5,7 @@ import Link from "next/link";
 import type { Category } from "@/types/curriculum";
 import QuizSection from "@/components/QuizSection";
 import ExerciseSection from "@/components/ExerciseSection";
+import InteractiveSection from "@/components/InteractiveSection";
 import DiagramSection from "@/components/DiagramSection";
 import AIChatPanel from "@/components/AIChatPanel";
 
@@ -14,7 +15,7 @@ interface LessonPageClientProps {
   lessonData: {
     title: string;
     sections: Array<{
-      type: "intro" | "concept" | "exercise" | "quiz" | "summary";
+      type: "intro" | "concept" | "exercise" | "interactive" | "quiz" | "summary";
       data: Record<string, unknown>;
     }>;
   };
@@ -24,6 +25,7 @@ const SECTION_LABELS: Record<string, string> = {
   intro: "イントロ",
   concept: "概念理解",
   exercise: "演習",
+  interactive: "体験",
   quiz: "クイズ",
   summary: "まとめ",
 };
@@ -32,6 +34,7 @@ const SECTION_ICONS: Record<string, string> = {
   intro: "👋",
   concept: "💡",
   exercise: "✏️",
+  interactive: "🎮",
   quiz: "🧠",
   summary: "✅",
 };
@@ -196,6 +199,12 @@ export default function LessonPageClient({
               onNext={goNext}
               onAIClick={() => setShowAIPanel(true)}
             />
+          ) : currentSection.type === "interactive" ? (
+            <InteractiveSection
+              data={currentSection.data as { content: string; htmlContent: string; checkpoints: string[] }}
+              onNext={goNext}
+              onAIClick={() => setShowAIPanel(true)}
+            />
           ) : currentSection.type === "quiz" ? (
             <QuizSection
               data={currentSection.data as { questions: Array<{ q: string; options: string[]; correct: number; explanation: string }> }}
@@ -216,10 +225,24 @@ export default function LessonPageClient({
 
       {/* AI Panel */}
       {showAIPanel && (
-        <AIChatPanel onClose={() => setShowAIPanel(false)} />
+        <AIChatPanel
+          onClose={() => setShowAIPanel(false)}
+          lessonTitle={currentModule?.name ?? lessonData.title}
+          lessonContent={
+            currentSection.data.content
+              ? String(currentSection.data.content)
+              : undefined
+          }
+        />
       )}
     </div>
   );
+}
+
+// Annotation type for ContentSection sidebar
+interface AnnotationItem {
+  term: string;
+  desc: string;
 }
 
 // Content section (intro / concept / summary)
@@ -238,17 +261,65 @@ function ContentSection({
   isLast: boolean;
   categoryId: string;
 }) {
+  const annotations = section.data.annotations as AnnotationItem[] | undefined;
+  const hasAnnotations = Array.isArray(annotations) && annotations.length > 0;
+
   return (
     <div className="h-full flex flex-col">
       <div className="flex-1 overflow-y-auto">
-        <div className="max-w-[680px] mx-auto px-8 py-10">
-          <MarkdownContent content={section.data.content as string} />
-          {Boolean(section.data.diagram) && (
-            <div className="mt-8">
-              <DiagramSection type={section.type} categoryId={categoryId} />
+        {hasAnnotations ? (
+          /* 2-column layout: main content (65%) + annotation sidebar (35%) */
+          <div className="flex flex-col lg:flex-row min-h-full">
+            {/* Main content */}
+            <div className="flex-1 min-w-0 px-8 py-10 lg:max-w-none">
+              <MarkdownContent content={section.data.content as string} />
+              {Boolean(section.data.diagram) && (
+                <div className="mt-8">
+                  <DiagramSection type={section.type} categoryId={categoryId} />
+                </div>
+              )}
             </div>
-          )}
-        </div>
+            {/* Annotation sidebar */}
+            <aside
+              className="shrink-0 w-full lg:w-[35%] px-6 py-10 border-t lg:border-t-0 lg:border-l"
+              style={{ borderColor: "#1e293b" }}
+            >
+              <p
+                className="text-xs font-semibold uppercase tracking-widest mb-4"
+                style={{ color: "#06b6d4" }}
+              >
+                用語解説
+              </p>
+              <div className="space-y-3">
+                {annotations.map((a, i) => (
+                  <div
+                    key={i}
+                    className="rounded-lg p-4 border-l-4"
+                    style={{
+                      backgroundColor: "#1e293b",
+                      borderLeftColor: "#06b6d4",
+                    }}
+                  >
+                    <p className="font-bold text-white text-sm mb-1">{a.term}</p>
+                    <p className="text-sm leading-relaxed" style={{ color: "#94a3b8" }}>
+                      {a.desc}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </aside>
+          </div>
+        ) : (
+          /* 1-column fallback (original layout) */
+          <div className="max-w-[680px] mx-auto px-8 py-10">
+            <MarkdownContent content={section.data.content as string} />
+            {Boolean(section.data.diagram) && (
+              <div className="mt-8">
+                <DiagramSection type={section.type} categoryId={categoryId} />
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Navigation */}

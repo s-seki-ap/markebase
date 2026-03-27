@@ -23,23 +23,31 @@ export interface Category {
 export interface Lesson {
   id: string;
   moduleId: string;
-  type: "intro" | "concept" | "exercise" | "quiz" | "summary";
+  type: "intro" | "concept" | "exercise" | "interactive" | "quiz" | "summary";
   title: string;
+}
+
+export interface Annotation {
+  term: string;
+  desc: string;
 }
 
 export interface IntroSection {
   content: string;
   diagram?: boolean;
+  annotations?: Annotation[];
 }
 
 export interface ConceptSection {
   content: string;
   diagram?: boolean;
+  annotations?: Annotation[];
 }
 
 export interface SummarySection {
   content: string;
   diagram?: boolean;
+  annotations?: Annotation[];
 }
 
 export interface ExerciseSection {
@@ -47,6 +55,12 @@ export interface ExerciseSection {
   starterCode: string;
   hints: string[];
   answer: string;
+}
+
+export interface InteractiveSection {
+  content: string;
+  htmlContent: string;
+  checkpoints: string[];
 }
 
 export interface QuizQuestion {
@@ -64,6 +78,7 @@ export type LessonSection =
   | { type: "intro"; data: IntroSection }
   | { type: "concept"; data: ConceptSection }
   | { type: "exercise"; data: ExerciseSection }
+  | { type: "interactive"; data: InteractiveSection }
   | { type: "quiz"; data: QuizSection }
   | { type: "summary"; data: SummarySection };
 
