@@ -65,7 +65,7 @@ export default function SignInClient({
               Googleでログイン
             </button>
             <p className="text-center text-slate-500 text-xs mt-6">
-              ログインすることで利用規約に同意したものとみなします
+              @appirits.com アカウントでログインしてください
             </p>
           </>
         ) : (
