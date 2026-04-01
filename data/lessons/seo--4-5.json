@@ -1,0 +1,73 @@
+{
+  "id": "seo--4-5",
+  "moduleId": "4-5",
+  "categoryId": "seo",
+  "title": "SERPの構成：オーガニック・広告・リッチリザルト",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# SERPを「読める」マーケターになる\n\nSERP（Search Engine Results Page）は検索結果ページのことです。検索キーワードによって、SERPの構成は大きく変わります。\n\n## なぜSERPの構成を理解するのか\n\n**「1位を取っているのにオーガニックトラフィックが少ない」**という状況はよくあります。原因はSERPの構成にあることが多いです。\n\n- 検索結果1位でも、上に広告が4本並んでいればクリック率は下がる\n- リッチリザルト（強調スニペット）が表示されると、1位より目立つ「0位」が生まれる\n- 画像・動画・ショッピング結果がSERPを占める場合、オーガニックの出番が減る\n\n## この知識が変えること\n\n- 狙うべきキーワードのSERPを事前に確認して戦略を立てられる\n- リッチリザルト獲得のための構造化データ実装を判断できる\n- 広告とオーガニックの予算配分を最適化できる",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# SERPの主要構成要素\n\n## 1. 広告（有料掲載）\n\nページ上部・下部に表示。「スポンサー」と表記されます。\n\n- 上部広告：最大4枠（競合性の高いキーワード）\n- 下部広告：最大3枠\n- Google Shopping広告（画像付き商品広告）\n\n## 2. オーガニック検索結果\n\nSEOの成果が反映される枠。一般的に10件/ページ。\n\n```\n表示要素：\n- タイトルタグ（青いリンク）\n- URLパス（緑のテキスト）\n- メタディスクリプション（説明文）\n```\n\n## 3. リッチリザルト（構造化データ活用）\n\n| 種類 | 説明 | 対応Schema |\n|------|------|------------|\n| 強調スニペット | 回答を直接表示する「0位」 | Q&A・How-to |\n| FAQリッチリザルト | 質問と回答を展開表示 | FAQPage |\n| レビュースター | 星評価を検索結果に表示 | Review・Product |\n| パンくずリスト | URLの代わりに階層を表示 | BreadcrumbList |\n| サイトリンク | 主要ページへのリンクを追加表示 | 自動 |\n\n## 4. ナレッジパネル・ローカルパック\n\n- **ナレッジパネル**：ブランド・人物・場所の情報を右側に表示\n- **ローカルパック**：地域ビジネスの地図付き3件表示\n\n## CTR（クリック率）の目安\n\n| 掲載順位 | 平均CTR |\n|---------|--------|\n| 1位 | 約28% |\n| 2位 | 約15% |\n| 3位 | 約11% |\n| 4位以下 | 急激に低下 |\n| リッチリザルト（0位）| 状況により変動大 |\n\n> 強調スニペット（0位）はCTRを上げることも下げることもあります。回答がSERPで完結してしまうと、クリックされないケースがあります。",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: FAQリッチリザルトの構造化データ実装\n\nFAQページにJSON-LDで構造化データを実装し、GoogleのFAQリッチリザルトに対応させましょう。\n\n## 課題\n\nSEOに関するFAQページを作成し、3つの質問と回答をJSON-LDで構造化してください。\n\n## 必要な質問と回答\n\n1. 「SEOとは何ですか？」→ 検索エンジン最適化についての説明\n2. 「SEO効果が出るまでどのくらいかかりますか？」→ 3〜6ヶ月の目安\n3. 「SEOと広告の違いは何ですか？」→ 費用対効果の違い",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>SEOよくある質問 | MarkeBase</title>\n  <meta name=\"description\" content=\"SEOについてのよくある質問と回答をまとめました。\">\n\n  <!-- FAQPage構造化データ -->\n  <script type=\"application/ld+json\">\n  {\n    \"@context\": \"https://schema.org\",\n    \"@type\": \"FAQPage\",\n    \"mainEntity\": [\n      {\n        \"@type\": \"Question\",\n        \"name\": \"\",\n        \"acceptedAnswer\": {\n          \"@type\": \"Answer\",\n          \"text\": \"\"\n        }\n      }\n      // ② 2番目の質問を追加してください\n      // ③ 3番目の質問を追加してください\n    ]\n  }\n  </script>\n\n</head>\n<body>\n  <h1>SEOよくある質問</h1>\n\n  <section>\n    <h2>SEOとは何ですか？</h2>\n    <p>SEO（Search Engine Optimization）とは、検索エンジン最適化のことです。</p>\n  </section>\n\n  <section>\n    <h2>SEO効果が出るまでどのくらいかかりますか？</h2>\n    <p>一般的に効果が表れるまでには3〜6ヶ月かかることが多いです。</p>\n  </section>\n\n  <section>\n    <h2>SEOと広告の違いは何ですか？</h2>\n    <p>広告は即効性がありますが費用が継続的にかかります。SEOは時間がかかりますが長期的な集客コストを下げられます。</p>\n  </section>\n</body>\n</html>",
+        "hints": [
+          "FAQPageのmainEntityは配列で、複数のQuestionオブジェクトをカンマ区切りで並べます",
+          "各Questionは `{\"@type\": \"Question\", \"name\": \"質問文\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"回答文\"}}` の構造です",
+          "JSON内のコメント（//）は実際のJSONでは使えません。削除してQuestionオブジェクトをカンマで繋げてください",
+          "HTMLのFAQセクションとJSON-LDの内容は一致させる必要があります"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>SEOよくある質問 | MarkeBase</title>\n  <meta name=\"description\" content=\"SEOについてのよくある質問と回答をまとめました。\">\n\n  <script type=\"application/ld+json\">\n  {\n    \"@context\": \"https://schema.org\",\n    \"@type\": \"FAQPage\",\n    \"mainEntity\": [\n      {\n        \"@type\": \"Question\",\n        \"name\": \"SEOとは何ですか？\",\n        \"acceptedAnswer\": {\n          \"@type\": \"Answer\",\n          \"text\": \"SEO（Search Engine Optimization）とは、検索エンジン最適化のことです。WebサイトをGoogleなどの検索エンジンで上位表示させるための施策全般を指します。\"\n        }\n      },\n      {\n        \"@type\": \"Question\",\n        \"name\": \"SEO効果が出るまでどのくらいかかりますか？\",\n        \"acceptedAnswer\": {\n          \"@type\": \"Answer\",\n          \"text\": \"一般的に効果が表れるまでには3〜6ヶ月かかることが多いです。新規サイトや競合が強いキーワードではさらに時間がかかる場合があります。\"\n        }\n      },\n      {\n        \"@type\": \"Question\",\n        \"name\": \"SEOと広告の違いは何ですか？\",\n        \"acceptedAnswer\": {\n          \"@type\": \"Answer\",\n          \"text\": \"広告は即効性がありますが費用が継続的にかかります。SEOは効果が出るまで時間がかかりますが、長期的な集客コストを下げられ、広告を止めても流入が継続するメリットがあります。\"\n        }\n      }\n    ]\n  }\n  </script>\n\n</head>\n<body>\n  <h1>SEOよくある質問</h1>\n\n  <section>\n    <h2>SEOとは何ですか？</h2>\n    <p>SEO（Search Engine Optimization）とは、検索エンジン最適化のことです。</p>\n  </section>\n\n  <section>\n    <h2>SEO効果が出るまでどのくらいかかりますか？</h2>\n    <p>一般的に効果が表れるまでには3〜6ヶ月かかることが多いです。</p>\n  </section>\n\n  <section>\n    <h2>SEOと広告の違いは何ですか？</h2>\n    <p>広告は即効性がありますが費用が継続的にかかります。SEOは時間がかかりますが長期的な集客コストを下げられます。</p>\n  </section>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "SERPにおける「強調スニペット」（ゼロ位）の説明として正しいものはどれですか？",
+            "options": [
+              "有料広告の一種で、Googleに課金すると表示される",
+              "検索結果の1番上に回答を直接表示する枠で、構造化データや適切なコンテンツ構成で獲得を目指せる",
+              "Googleマイビジネスに登録したビジネスのみ表示される",
+              "モバイル検索にのみ表示される特殊な検索結果"
+            ],
+            "correct": 1,
+            "explanation": "強調スニペットはオーガニック検索結果の上部に回答を直接表示する枠です。「ゼロ位」とも呼ばれます。質問に答えるコンテンツ構成と適切なHTML構造・構造化データで獲得を狙えます。"
+          },
+          {
+            "q": "FAQリッチリザルトを実装するために使用するSchema.orgの@typeは何ですか？",
+            "options": ["Article", "FAQPage", "HowTo", "WebPage"],
+            "correct": 1,
+            "explanation": "`FAQPage` タイプを使うことで、Google検索でFAQリッチリザルト（質問と回答が展開表示される）の対象になります。mainEntityに複数のQuestionオブジェクトを配列で指定します。"
+          },
+          {
+            "q": "オーガニック検索1位のCTR（クリック率）の目安として最も近いものはどれですか？",
+            "options": ["約5%", "約15%", "約28%", "約50%"],
+            "correct": 2,
+            "explanation": "オーガニック検索1位のCTRは平均約28%と言われています（キーワードや業界により変動あり）。2位は約15%、3位は約11%と急落するため、1位と2位の差は大きく、1位獲得の価値は非常に高いです。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール4-5 完了！\n\n## 習得したスキル\n\n✅ **SERPの主要構成要素**（広告・オーガニック・リッチリザルト・ナレッジパネル）を理解した\n✅ **各掲載順位のCTR目安**を把握し、1位獲得の重要性を再確認した\n✅ **FAQリッチリザルト**の構造化データ（FAQPage Schema）を実装できた\n✅ **強調スニペット（0位）**の仕組みと獲得戦略の基礎を理解した\n✅ **構造化データの種類**（FAQ・レビュー・パンくず等）を把握した\n\n## 次のステップ\n\n次のモジュール **「4-6: Google検索の歴史とPageRankアルゴリズムの誕生」** では、現在のGoogleがどのように進化してきたかを歴史的背景から理解します。\n\n> 実務チャレンジ: 自社サイトで狙っているキーワードを実際に検索し、SERPの構成（広告の数・リッチリザルトの有無・上位ページの傾向）をメモしておきましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "id": "seo--4-4",
+  "moduleId": "4-4",
+  "categoryId": "seo",
+  "title": "検索順位ランキングを決める200以上のシグナル概説",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 「200以上のシグナル」の本質を掴む\n\nGoogleは200以上のランキングシグナル（要素）で検索順位を決定すると言われています。全部覚えようとするのは非効率です。**重要なシグナルの「群」を理解すること**が実務で役立ちます。\n\n## この情報がなぜ重要か\n\nSEO施策を打つとき「何を改善すれば順位が上がるか」を判断するためには、ランキングシグナルの全体像を知っておく必要があります。\n\n- コンテンツ品質だけ上げても、ページ速度が遅ければ限界がある\n- リンクだけ増やしても、E-E-A-T（専門性・信頼性）が低ければ上位は難しい\n- 技術的SEOを完璧にしても、コンテンツが薄ければ順位は上がらない\n\n**SEOは複数の要素を総合的に最適化するホリスティックなアプローチが必要です。**",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# ランキングシグナルの7大カテゴリ\n\n## カテゴリ1: コンテンツの関連性と品質\n最重要カテゴリです。\n\n- **検索意図への合致度**：ユーザーが求める情報と一致しているか\n- **キーワードの自然な使用**：タイトル・見出し・本文に適切に含まれているか\n- **コンテンツの深さ・網羅性**：トピックをどれだけ詳しくカバーしているか\n- **オリジナリティ**：他サイトにない独自情報があるか\n\n## カテゴリ2: E-E-A-T（経験・専門性・権威性・信頼性）\n特に医療・金融・法律（YMYL）ジャンルで重視されます。\n\n## カテゴリ3: リンク（内部・外部）\n- **被リンク数と質**：権威あるサイトからのリンクが価値高い\n- **内部リンク構造**：サイト内の重要ページへのリンク集中度\n\n## カテゴリ4: ページエクスペリエンス（技術的要素）\n\n| シグナル | 指標例 |\n|---------|-------|\n| Core Web Vitals | LCP < 2.5秒、CLS < 0.1、FID < 100ms |\n| モバイルフレンドリー | スマホ対応レイアウト |\n| HTTPS | SSL証明書設置 |\n| ページ速度 | 3秒以内の表示 |\n\n## カテゴリ5: ユーザー行動シグナル\n- クリック率（CTR）\n- 滞在時間・直帰率\n- ページのエンゲージメント\n\n## カテゴリ6: サイト構造・技術的SEO\n- クロールしやすい構造（URL設計・サイトマップ）\n- 構造化データ（Schema.org）\n- hreflang（多言語対応）\n\n## カテゴリ7: ローカル・パーソナライゼーション\n- 検索地域・言語\n- 検索履歴による個人化\n\n## 優先度の考え方\n\n```\n高優先度: コンテンツ品質 > E-E-A-T > リンク\n中優先度: Core Web Vitals > モバイル対応 > 構造化データ\n低優先度: その他技術的要素\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: Core Web VitalsとページエクスペリエンスのHTML実装\n\nランキングシグナルの「ページエクスペリエンス」カテゴリに対応するHTMLの基本設定を実装しましょう。\n\n## 課題\n\n以下のランキングシグナルに対応するHTML要素を追加してください：\n\n1. **HTTPS対応の宣言**：`<meta http-equiv=\"Content-Security-Policy\">` でHTTPSリソースのみ許可\n2. **モバイルフレンドリー**：viewportメタタグの設定\n3. **ページ速度向上**：重要CSSのプリロードと画像の遅延読み込み\n4. **構造化データ（ArticleSchema）**：JSON-LDで記事情報を設定",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n\n  <!-- ① モバイルフレンドリー対応のviewportタグ -->\n\n\n  <!-- ② HTTPSリソースのみ許可するCSP -->\n\n\n  <!-- ③ 重要CSSのプリロード -->\n  <!-- <link rel=\"preload\" as=\"style\" href=\"\"> -->\n\n  <title>SEOランキングシグナル完全ガイド | MarkeBase</title>\n  <meta name=\"description\" content=\"Googleの200以上のランキングシグナルを7カテゴリで解説。\">\n\n</head>\n<body>\n\n  <!-- ④ JSON-LDで記事の構造化データを追加してください -->\n  <script type=\"application/ld+json\">\n  {\n    \"@context\": \"https://schema.org\",\n    \"@type\": \"\",\n    \"headline\": \"\",\n    \"author\": {\n      \"@type\": \"Person\",\n      \"name\": \"\"\n    },\n    \"datePublished\": \"\",\n    \"description\": \"\"\n  }\n  </script>\n\n  <h1>SEOランキングシグナル完全ガイド</h1>\n\n  <!-- ⑤ 画像の遅延読み込み -->\n  <img src=\"/images/seo-guide.jpg\" alt=\"SEOガイドのイメージ画像\" loading=\"\">\n\n</body>\n</html>",
+        "hints": [
+          "viewportタグ：`<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">`",
+          "JSON-LDの@typeは `Article` にします",
+          "画像の遅延読み込み：`loading=\"lazy\"` 属性を追加します",
+          "preloadのas属性：スタイルシートなら `as=\"style\"`、スクリプトなら `as=\"script\"`"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n\n  <meta http-equiv=\"Content-Security-Policy\" content=\"upgrade-insecure-requests\">\n\n  <link rel=\"preload\" as=\"style\" href=\"/css/main.css\">\n\n  <title>SEOランキングシグナル完全ガイド | MarkeBase</title>\n  <meta name=\"description\" content=\"Googleの200以上のランキングシグナルを7カテゴリで解説。\">\n\n</head>\n<body>\n\n  <script type=\"application/ld+json\">\n  {\n    \"@context\": \"https://schema.org\",\n    \"@type\": \"Article\",\n    \"headline\": \"SEOランキングシグナル完全ガイド\",\n    \"author\": {\n      \"@type\": \"Person\",\n      \"name\": \"MarkeBase編集部\"\n    },\n    \"datePublished\": \"2024-04-01\",\n    \"description\": \"Googleの200以上のランキングシグナルを7カテゴリで解説します。\"\n  }\n  </script>\n\n  <h1>SEOランキングシグナル完全ガイド</h1>\n\n  <img src=\"/images/seo-guide.jpg\" alt=\"SEOガイドのイメージ画像\" loading=\"lazy\">\n\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "Googleのランキングシグナルのうち、現在最も重要視されるカテゴリはどれですか？",
+            "options": [
+              "ドメイン年齢と取得年数",
+              "コンテンツの質と検索意図への合致度",
+              "SNSのフォロワー数",
+              "ページのデザインの美しさ"
+            ],
+            "correct": 1,
+            "explanation": "Googleは「ユーザーの検索意図に最もよく答えるページ」を上位表示するため、コンテンツの質と検索意図への合致度が最重要シグナルです。技術的SEOがいくら完璧でもコンテンツが薄ければ上位は難しくなります。"
+          },
+          {
+            "q": "Core Web Vitalsに含まれる指標の組み合わせとして正しいものはどれですか？",
+            "options": [
+              "直帰率・滞在時間・PV数",
+              "LCP・CLS・FID（INP）",
+              "クリック率・インプレッション数・掲載順位",
+              "被リンク数・内部リンク数・ページ数"
+            ],
+            "correct": 1,
+            "explanation": "Core Web VitalsはLCP（最大コンテンツ描画）・CLS（累積レイアウトシフト）・FID/INP（入力遅延）の3指標です。Googleのページエクスペリエンスシグナルの重要な構成要素で、2021年にランキング要因に正式採用されました。"
+          },
+          {
+            "q": "JSONLDで構造化データを実装する際に使用するscriptタグのtype属性の正しい値はどれですか？",
+            "options": [
+              "application/json",
+              "application/ld+json",
+              "text/javascript",
+              "application/schema"
+            ],
+            "correct": 1,
+            "explanation": "`<script type=\"application/ld+json\">` がJSON-LD形式の構造化データを記述する正しい書き方です。この中にSchema.orgの形式でページ情報を記述することで、Googleにリッチリザルト表示のヒントを与えられます。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール4-4 完了！\n\n## 習得したスキル\n\n✅ **ランキングシグナルの7大カテゴリ**（コンテンツ・E-E-A-T・リンク・ページ体験・ユーザー行動・技術・ローカル）を理解した\n✅ **Core Web Vitals**（LCP・CLS・FID）の各指標の意味を習得した\n✅ **JSON-LDで構造化データ**を実装する方法を習得した\n✅ **画像の遅延読み込み**（`loading=\"lazy\"`）を実践した\n✅ **優先度の考え方**：コンテンツ品質→E-E-A-T→リンク→技術的SEOの順を把握した\n\n## 次のステップ\n\n次のモジュール **「4-5: SERPの構成：オーガニック・広告・リッチリザルト」** では、検索結果ページの構造とリッチリザルト獲得戦略を学びます。\n\n> 実務チャレンジ: Google Search ConsoleのCore Web Vitalsレポートを開き、自サイトのLCP・CLSのスコアを確認してみましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

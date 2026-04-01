@@ -1,0 +1,67 @@
+{
+  "id": "css--2-13",
+  "moduleId": "2-13",
+  "categoryId": "css",
+  "title": "font-size・font-weight・font-styleの基本設定",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# タイポグラフィがLPのCVRを変える\n\nWebページの読みやすさとビジュアル階層は、コンバージョンに直接影響します。フォントサイズ・太さ・スタイルの設定は、ユーザーの視線をCTAへ誘導するための重要な設計要素です。\n\n## マーケターがフォント設定を知るべき理由\n\n**1. 視覚的な階層設計とCVR**\n「何が一番重要か」をユーザーに伝えるには、フォントサイズと太さで優先順位を示す必要があります。CTA周辺のコピーを大きく・太くするだけでCVRが変わることがあります。\n\n**2. LP上のテキストの修正指示**\n「このキャッチコピーをもっと目立つように」という曖昧な指示より「font-size: 2.5rem, font-weight: 700に変更してください」の方が正確で手戻りが減ります。\n\n**3. ABテストのバリエーション設計**\nフォントサイズや太さを変えるABテストは効果が出やすいです。具体的な数値でバリエーションを設計できます。\n\n**4. アクセシビリティとSEO**\nテキストのコントラスト比やフォントサイズはアクセシビリティ（WCAG）に影響し、Googleのアクセシビリティ評価にも関連します。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# font-size・font-weight・font-styleの詳細\n\n## font-size\n\n```css\n/* キーワード指定 */\np { font-size: small; }\nh1 { font-size: xx-large; }\n\n/* px指定（絶対値） */\n.base { font-size: 16px; }\n.small { font-size: 14px; }\n.large { font-size: 24px; }\n\n/* rem指定（推奨） */\nhtml { font-size: 16px; }\n\n.body-text    { font-size: 1rem; }     /* 16px */\n.small-text   { font-size: 0.875rem; } /* 14px */\n.caption      { font-size: 0.75rem; }  /* 12px */\n.lead         { font-size: 1.125rem; } /* 18px */\n.heading-sm   { font-size: 1.25rem; }  /* 20px */\n.heading-md   { font-size: 1.5rem; }   /* 24px */\n.heading-lg   { font-size: 2rem; }     /* 32px */\n.hero-title   { font-size: 2.5rem; }   /* 40px */\n.display      { font-size: 3.5rem; }   /* 56px */\n```\n\n## font-weight\n\n```css\n/* キーワード指定 */\n.normal  { font-weight: normal; }  /* = 400 */\n.bold    { font-weight: bold; }    /* = 700 */\n.lighter { font-weight: lighter; } /* 親より細く */\n.bolder  { font-weight: bolder; }  /* 親より太く */\n\n/* 数値指定（100〜900） */\n.thin       { font-weight: 100; } /* 最細 */\n.extra-light{ font-weight: 200; }\n.light      { font-weight: 300; }\n.regular    { font-weight: 400; } /* 通常 */\n.medium     { font-weight: 500; }\n.semi-bold  { font-weight: 600; }\n.bold-text  { font-weight: 700; } /* 太字 */\n.extra-bold { font-weight: 800; }\n.black      { font-weight: 900; } /* 最太 */\n```\n\n**注意**: 使用するフォントが該当のウェイトを持っていない場合、最も近いウェイトが適用されます。Google Fontsで読み込む際は必要なウェイトを明示的に指定します。\n\n```html\n<!-- wght@400;700 で400と700のみ読み込む -->\n<link href=\"https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap\" rel=\"stylesheet\">\n```\n\n## font-style\n\n```css\n.normal  { font-style: normal; }  /* 標準（デフォルト） */\n.italic  { font-style: italic; }  /* イタリック体（フォント組み込みの斜体） */\n.oblique { font-style: oblique; } /* 傾斜（フォントが斜体を持たない場合、通常フォントを傾ける） */\n```\n\n```html\n<!-- HTMLのiタグと同等だが、意味論的にはemタグを使う -->\n<em>強調テキスト</em>  <!-- デフォルトでitalic -->\n<i>表記的な斜体</i>   <!-- デフォルトでitalic -->\n```\n\n## タイポグラフィスケールの設計\n\n```css\n/* TypographyScaleの例（1.25倍スケール）*/\n:root {\n  --text-xs:   0.64rem;   /* 10.24px */\n  --text-sm:   0.8rem;    /* 12.8px */\n  --text-base: 1rem;      /* 16px */\n  --text-lg:   1.25rem;   /* 20px */\n  --text-xl:   1.563rem;  /* 25px */\n  --text-2xl:  1.953rem;  /* 31.25px */\n  --text-3xl:  2.441rem;  /* 39px */\n  --text-4xl:  3.052rem;  /* 48.8px */\n}\n```\n\n## LPでのフォント階層設計例\n\n| 要素 | font-size | font-weight | 用途 |\n|------|-----------|-------------|------|\n| ヒーロータイトル | 2.5〜3.5rem | 700 | 最重要メッセージ |\n| セクション見出し | 1.5〜2rem | 700 | セクション区切り |\n| サブ見出し | 1.125〜1.25rem | 600 | 説明の補助 |\n| 本文 | 1rem | 400 | 説明文 |\n| キャプション | 0.75〜0.875rem | 400 | 補足情報 |\n| CTAボタン | 1〜1.125rem | 700 | アクション促進 |",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: LPのタイポグラフィ階層を設計する\n\nフォントサイズ・太さを使って、視覚的な階層が明確なLPを作りましょう。\n\n## 課題\n\n1. `.hero-title` を `font-size: 3rem`、`font-weight: 700` に設定する\n2. `.hero-subtitle` を `font-size: 1.25rem`、`font-weight: 400` に設定する\n3. `.section-heading` を `font-size: 1.75rem`、`font-weight: 700` に設定する\n4. `.body-text` を `font-size: 1rem`、`font-weight: 400` に設定する\n5. `.cta-button` を `font-size: 1.125rem`、`font-weight: 700` に設定する",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>タイポグラフィ階層練習</title>\n  <style>\n    *, *::before, *::after { box-sizing: border-box; }\n    body {\n      font-family: 'Helvetica Neue', sans-serif;\n      margin: 0;\n      color: #1a1a2e;\n    }\n\n    /* ① .hero-title: 3rem, bold(700) */\n    .hero-title {\n\n    }\n\n    /* ② .hero-subtitle: 1.25rem, regular(400) */\n    .hero-subtitle {\n      color: #555;\n    }\n\n    /* ③ .section-heading: 1.75rem, bold(700) */\n    .section-heading {\n\n    }\n\n    /* ④ .body-text: 1rem, regular(400) */\n    .body-text {\n      color: #666;\n      line-height: 1.8;\n    }\n\n    /* ⑤ .cta-button: 1.125rem, bold(700) */\n    .cta-button {\n      background: #e94560;\n      color: white;\n      padding: 14px 32px;\n      border: none;\n      border-radius: 8px;\n      cursor: pointer;\n    }\n\n    .hero { background: #f0f4ff; padding: 80px 40px; text-align: center; }\n    .section { padding: 60px 40px; max-width: 800px; margin: 0 auto; }\n  </style>\n</head>\n<body>\n  <section class=\"hero\">\n    <h1 class=\"hero-title\">GA4データでLPを改善する</h1>\n    <p class=\"hero-subtitle\">AIが分析・改善提案までを自動化。マーケターの生産性を3倍に。</p>\n    <button class=\"cta-button\">無料で試してみる</button>\n  </section>\n\n  <div class=\"section\">\n    <h2 class=\"section-heading\">なぜGA4分析が重要なのか</h2>\n    <p class=\"body-text\">Googleアナリティクス4は、従来のUAとは根本的に異なるイベントベースのデータ収集を採用しています。適切に設定・分析することで、ユーザー行動の深い理解が可能になります。</p>\n  </div>\n</body>\n</html>",
+        "hints": [
+          "`font-size: 3rem` はhtmlのfont-sizeが16pxの場合、48pxに相当します。",
+          "`font-weight: 700` と `font-weight: bold` は同じ太さです。",
+          "`font-style` はここでは使いませんが、テキストを斜体にする際は `font-style: italic` を使います。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>タイポグラフィ階層練習</title>\n  <style>\n    *, *::before, *::after { box-sizing: border-box; }\n    body {\n      font-family: 'Helvetica Neue', sans-serif;\n      margin: 0;\n      color: #1a1a2e;\n    }\n\n    .hero-title {\n      font-size: 3rem;\n      font-weight: 700;\n    }\n\n    .hero-subtitle {\n      font-size: 1.25rem;\n      font-weight: 400;\n      color: #555;\n    }\n\n    .section-heading {\n      font-size: 1.75rem;\n      font-weight: 700;\n    }\n\n    .body-text {\n      font-size: 1rem;\n      font-weight: 400;\n      color: #666;\n      line-height: 1.8;\n    }\n\n    .cta-button {\n      font-size: 1.125rem;\n      font-weight: 700;\n      background: #e94560;\n      color: white;\n      padding: 14px 32px;\n      border: none;\n      border-radius: 8px;\n      cursor: pointer;\n    }\n\n    .hero { background: #f0f4ff; padding: 80px 40px; text-align: center; }\n    .section { padding: 60px 40px; max-width: 800px; margin: 0 auto; }\n  </style>\n</head>\n<body>\n  <section class=\"hero\">\n    <h1 class=\"hero-title\">GA4データでLPを改善する</h1>\n    <p class=\"hero-subtitle\">AIが分析・改善提案までを自動化。マーケターの生産性を3倍に。</p>\n    <button class=\"cta-button\">無料で試してみる</button>\n  </section>\n\n  <div class=\"section\">\n    <h2 class=\"section-heading\">なぜGA4分析が重要なのか</h2>\n    <p class=\"body-text\">Googleアナリティクス4は、従来のUAとは根本的に異なるイベントベースのデータ収集を採用しています。適切に設定・分析することで、ユーザー行動の深い理解が可能になります。</p>\n  </div>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "font-weight: 400 と同じ意味のキーワードはどれですか？",
+            "options": ["lighter", "normal", "bold", "bolder"],
+            "correct": 1,
+            "explanation": "`font-weight: normal` は数値の `400` と同等です。`bold` は `700` に相当します。"
+          },
+          {
+            "q": "LPのCTAボタンのテキストに推奨されるfont-weightはどれですか？",
+            "options": ["100〜300（細いウェイト）", "400（通常ウェイト）", "700（太字）", "font-weightは関係ない"],
+            "correct": 2,
+            "explanation": "CTAボタンは視認性とアクションの促進が重要です。font-weight: 700（太字）を使うことで、他のテキストより目立ち、クリックを促します。ABテストでも太字CTAの方がCVRが高いケースが多いです。"
+          },
+          {
+            "q": "font-style: italic と font-style: oblique の違いはどれですか？",
+            "options": ["italicはフォント組み込みの斜体、obliqueは通常フォントを傾けた斜体", "italicの方がobliqueより角度が大きい", "obliqueの方がitalicより美しい", "全く同じ見た目になる"],
+            "correct": 0,
+            "explanation": "italicはフォントファミリーに含まれる専用の斜体デザインを使用します。obliqueは斜体バリアントがない場合に通常フォントを機械的に傾けます。日本語フォントはobliqueで表示されることが多いです。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール2-13 完了！\n\n## 習得したスキル\n\n✅ **font-size** のrem・px指定とタイポグラフィスケールを設計できる\n✅ **font-weight** の数値（100〜900）とキーワード（normal/bold）を使い分けられる\n✅ **font-style** でitalicとobliqueの違いを理解した\n✅ **LPのフォント階層設計**（ヒーロー・見出し・本文・CTA）を実装できる\n\n## 次のステップ\n\n次のモジュール **「2-14: line-heightとletter-spacingで読みやすい文字を改善する」** では、テキストの縦間隔と字間を調整して読みやすさを改善する方法を学びます。\n\n> 実務チャレンジ: 自社LPのCTAボタンのfont-weightをDevToolsで確認しましょう。700以上になっていない場合は改善の余地があります。",
+        "diagram": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "id": "bigquery--6-13",
+  "moduleId": "6-13",
+  "categoryId": "bigquery",
+  "title": "集計関数：COUNT・SUM・AVG・MIN・MAXの使い分け",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 分析の「答え」を出す集計関数\n\nデータ分析の目的は「問いに答えること」です。SQLの集計関数はその答えを直接計算します。\n\n**マーケターが答えを出したい問いと対応する関数**：\n\n| 問い | 関数 |\n|------|------|\n| 何件あるか？（ユーザー数・イベント数） | COUNT |\n| 合計はいくらか？（売上合計） | SUM |\n| 平均はいくらか？（平均注文額） | AVG |\n| 最小はいくらか？（最安値・最初の日） | MIN |\n| 最大はいくらか？（最高額・最後の日） | MAX |\n\n## GA4のBigQueryで集計関数を使う際の注意\n\nGA4のイベントパラメータ（売上金額など）は `event_params` という配列カラムに格納されています。SUM・AVGを使う際はまず `UNNEST` や `event_value_in_usd` などの専用カラムからデータを取り出す必要があります。\n\nこのモジュールではシンプルに使える列（`event_value_in_usd` など）を使って集計関数を習得します。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# 5つの集計関数の構文\n\n## COUNT：件数を数える\n\n```sql\n-- 全イベント数\nSELECT COUNT(*) AS total_events\nFROM `myproject.analytics_123456789.events_20240115`\n\n-- NULL以外の件数\nSELECT COUNT(user_id) AS logged_in_events\nFROM `myproject.analytics_123456789.events_20240115`\n\n-- ユニーク件数（重複除去）\nSELECT COUNT(DISTINCT user_pseudo_id) AS unique_users\nFROM `myproject.analytics_123456789.events_20240115`\n```\n\n## SUM：合計値を計算する\n\n```sql\n-- 購入イベントの売上合計（event_value_in_usd はGA4の購入額フィールド）\nSELECT\n  SUM(event_value_in_usd) AS total_revenue_usd\nFROM\n  `myproject.analytics_123456789.events_*`\nWHERE\n  event_name = 'purchase'\n  AND _TABLE_SUFFIX BETWEEN '20240101' AND '20240131'\n```\n\n## AVG：平均値を計算する\n\n```sql\n-- 平均注文額（AOV: Average Order Value）\nSELECT\n  AVG(event_value_in_usd) AS avg_order_value_usd\nFROM\n  `myproject.analytics_123456789.events_*`\nWHERE\n  event_name = 'purchase'\n  AND _TABLE_SUFFIX BETWEEN '20240101' AND '20240131'\n```\n\n## MIN / MAX：最小値・最大値を取得する\n\n```sql\n-- データの期間を確認する（最初と最後の日付）\nSELECT\n  MIN(event_date) AS earliest_date,\n  MAX(event_date) AS latest_date\nFROM\n  `myproject.analytics_123456789.events_*`\nWHERE\n  event_name = 'purchase'\n```\n\n## 複数の集計関数を組み合わせる（実務の典型パターン）\n\n```sql\n-- 月別売上サマリー\nSELECT\n  FORMAT_DATE('%Y-%m', PARSE_DATE('%Y%m%d', event_date)) AS year_month,\n  COUNT(DISTINCT user_pseudo_id)   AS unique_buyers,\n  COUNT(*)                         AS total_orders,\n  SUM(event_value_in_usd)          AS total_revenue,\n  AVG(event_value_in_usd)          AS avg_order_value,\n  MAX(event_value_in_usd)          AS max_order_value\nFROM\n  `myproject.analytics_123456789.events_*`\nWHERE\n  event_name = 'purchase'\n  AND _TABLE_SUFFIX BETWEEN '20240101' AND '20241231'\nGROUP BY\n  year_month\nORDER BY\n  year_month\n```",
+        "diagram": false
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習：デバイス別の売上サマリーを作る\n\n## 課題\n\n2024年Q1（1〜3月）のGA4データから、デバイス種別ごとの購入サマリーを集計するSQLを完成させてください。\n\n**取得内容**：\n- `device.category`（デバイス種別）\n- ユニーク購入者数（`COUNT(DISTINCT user_pseudo_id) AS buyers`）\n- 注文数（`COUNT(*) AS orders`）\n- 売上合計（`SUM(event_value_in_usd) AS total_revenue`）\n- 平均注文額（`AVG(event_value_in_usd) AS avg_order_value`）\n\n**条件**：\n- テーブル：`myproject.analytics_123456789.events_*`\n- 期間：2024年Q1\n- イベント：`purchase` のみ\n- 並び順：売上合計の多い順",
+        "starterCode": "-- 2024年Q1 デバイス別購入サマリー\n\nSELECT\n  device.category                   AS device_type,\n  COUNT(DISTINCT user_pseudo_id)    AS buyers,\n  ________                          AS orders,\n  ________                          AS total_revenue,\n  ________                          AS avg_order_value\nFROM\n  `myproject.analytics_123456789.events_*`\nWHERE\n  event_name = 'purchase'\n  AND _TABLE_SUFFIX BETWEEN '20240101' AND '20240331'\nGROUP BY\n  device_type\nORDER BY\n  total_revenue DESC",
+        "hints": [
+          "注文数は全行数なので `COUNT(*)` を使います。",
+          "売上合計は `SUM(event_value_in_usd)` です。",
+          "平均注文額は `AVG(event_value_in_usd)` です。"
+        ],
+        "answer": "-- 2024年Q1 デバイス別購入サマリー\n\nSELECT\n  device.category                   AS device_type,\n  COUNT(DISTINCT user_pseudo_id)    AS buyers,\n  COUNT(*)                          AS orders,\n  SUM(event_value_in_usd)           AS total_revenue,\n  AVG(event_value_in_usd)           AS avg_order_value\nFROM\n  `myproject.analytics_123456789.events_*`\nWHERE\n  event_name = 'purchase'\n  AND _TABLE_SUFFIX BETWEEN '20240101' AND '20240331'\nGROUP BY\n  device_type\nORDER BY\n  total_revenue DESC"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "「1ヶ月間で1回以上購入したユニークユーザー数」を求める正しい関数はどれですか？",
+            "options": [
+              "`COUNT(*)`",
+              "`COUNT(user_pseudo_id)`",
+              "`COUNT(DISTINCT user_pseudo_id)`",
+              "`SUM(user_pseudo_id)`"
+            ],
+            "correct": 2,
+            "explanation": "`COUNT(DISTINCT user_pseudo_id)` が正解です。`COUNT(*)` は総イベント数、`COUNT(user_pseudo_id)` はuser_pseudo_idがNULLでないイベント数で、いずれも重複を含みます。ユニークユーザー数にはDISTINCTが必要です。"
+          },
+          {
+            "q": "AVG関数についての説明として正しいものはどれですか？",
+            "options": [
+              "AVGはNULLを0として計算に含める",
+              "AVGはNULLを無視して（NULLでない値だけで）平均を計算する",
+              "AVGは整数型の列にしか使えない",
+              "AVGは必ずGROUP BYと組み合わせないと使えない"
+            ],
+            "correct": 1,
+            "explanation": "AVGはNULLを無視して計算します。例えば [10, NULL, 20] の平均はAVGでは (10+20)/2 = 15 になります（NULLを0として計算すると (10+0+20)/3 = 10 になりますが、これは誤りです）。"
+          },
+          {
+            "q": "次のSQLで `max_value` に入る値は何ですか？（イベントの値が 100, 250, NULL, 80, 320 の5行の場合）\n`SELECT MAX(event_value_in_usd) AS max_value FROM events`",
+            "options": [
+              "NULL",
+              "750（合計）",
+              "320",
+              "187.5（NULLを0として平均）"
+            ],
+            "correct": 2,
+            "explanation": "MAXはNULLを無視して、残りの値の中の最大値を返します。100, 250, 80, 320 の中で最大は 320 です。NULLは比較に含まれません。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール6-13 完了！\n\n5つの集計関数の使い分けをマスターしました。\n\n## 習得したスキル\n\n✅ **COUNT**：件数・ユニーク件数を集計できる\n✅ **SUM**：合計値（売上合計など）を計算できる\n✅ **AVG**：平均値（平均注文額など）を計算できる\n✅ **MIN / MAX**：最小・最大値（期間確認など）を取得できる\n✅ **NULLと集計関数の関係**（AVG・SUM・MIN・MAXはNULLを無視）を理解した\n\n## GA4分析でよく使うパターン\n\n```sql\nSELECT\n  COUNT(DISTINCT user_pseudo_id) AS uu,      -- ユニークユーザー数\n  COUNT(*)                       AS events,   -- イベント数\n  SUM(event_value_in_usd)        AS revenue,  -- 売上\n  AVG(event_value_in_usd)        AS aov       -- 平均注文額\nFROM events WHERE event_name = 'purchase'\n```\n\n## 次のステップ\n\n次のモジュール **「6-14: INNER JOIN」** では、2つのテーブルを共通のキーで結合する方法を学びます。マスタデータとトランザクションデータを組み合わせる際に使います。",
+        "diagram": false
+      }
+    }
+  ]
+}

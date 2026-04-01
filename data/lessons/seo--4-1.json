@@ -1,0 +1,68 @@
+{
+  "id": "seo--4-1",
+  "moduleId": "4-1",
+  "categoryId": "seo",
+  "title": "検索エンジンがWebページを発見する仕組み",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# なぜ「発見」の仕組みを知るとSEOが変わるのか\n\nあなたのサイトを作っても、Googleが「存在を知らない」状態では検索結果に表示されません。\n\n## マーケターが直面するリアルな問題\n\n**「記事を公開したのに、1ヶ月経っても検索に出てこない」**\n\nこれはよくある悩みです。原因のほとんどは、検索エンジンによる「発見」の仕組みを理解していないことにあります。\n\n## 発見の仕組みを知ると何が変わるか\n\n- サイトマップを正しく設置できる\n- 内部リンクの重要性が具体的に理解できる\n- 新規ページをいち早くインデックスさせる方法がわかる\n- クロールされていないページの原因を診断できる\n\n## 検索エンジンの3ステップ\n\nGoogleをはじめとする検索エンジンは、以下の3ステップでWebページを扱います。\n\n1. **発見（Discovery）** ← このモジュールのテーマ\n2. **クロール（Crawling）**\n3. **インデックス（Indexing）**\n\nこの最初のステップ「発見」を正しく理解することが、SEO戦略の出発点です。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# 検索エンジンがページを発見する3つの経路\n\nGoogleがWebページの存在を知る方法は主に3つあります。\n\n## 経路1: 他のページからのリンク（最も重要）\n\n既知のページにあるリンクを辿って新しいページを発見します。これが**Webクロールの基本原理**です。\n\n```\n既知のページA → リンク → 未知のページB（発見！）\n```\n\nこの仕組みから、**内部リンクはSEOの生命線**であることがわかります。孤立したページ（どこからもリンクされないページ）は発見されません。\n\n## 経路2: XMLサイトマップ\n\nサイト内の全URLを列挙したXMLファイルをGoogle Search Consoleに登録することで、直接ページの存在を教えられます。\n\n```xml\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n  <url>\n    <loc>https://example.com/blog/seo-guide/</loc>\n    <lastmod>2024-03-15</lastmod>\n    <priority>0.8</priority>\n  </url>\n</urlset>\n```\n\n## 経路3: URL直接送信（Search Console）\n\nGoogle Search Consoleの「URL検査ツール」からURLを直接送信することで、新規ページの発見を促せます。緊急時や重要ページの公開時に有効です。\n\n## 発見されない原因トップ5\n\n| 原因 | 解決策 |\n|------|--------|\n| 内部リンクが一切ない | サイドバーやナビから内部リンクを追加 |\n| サイトマップが未登録 | Search ConsoleでXMLサイトマップを送信 |\n| `noindex`タグの誤設定 | metaタグを確認・修正 |\n| robots.txtでブロック | robots.txtの設定を見直す |\n| 新規ドメインで外部リンクがない | SNSや他サイトからのリンクを獲得 |",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: 発見されやすいHTMLページの基礎設定\n\nあなたは新しいブログ記事ページを作りました。Googleに発見・認識してもらうための基本的なHTMLメタ情報を設定しましょう。\n\n## 課題\n\n以下を完成させてください：\n\n1. `<title>` タグにページタイトルを設定する\n2. `<meta name=\"description\">` にページの説明文を設定する\n3. `<link rel=\"canonical\">` で正規URLを設定する\n4. ナビゲーションに内部リンクを2つ追加する（ホームとブログ一覧）",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n\n  <!-- ① titleタグを設定してください -->\n  <title></title>\n\n  <!-- ② meta descriptionを設定してください -->\n  <meta name=\"description\" content=\"\">\n\n  <!-- ③ canonical URLを設定してください -->\n  <link rel=\"canonical\" href=\"\">\n\n</head>\n<body>\n\n  <nav>\n    <!-- ④ ホームとブログ一覧への内部リンクを追加してください -->\n\n  </nav>\n\n  <h1>SEO基礎：検索エンジンの仕組みを理解しよう</h1>\n  <p>この記事では検索エンジンがWebページを発見する仕組みを解説します。</p>\n\n</body>\n</html>",
+        "hints": [
+          "titleタグ：`<title>SEO基礎：検索エンジンの仕組みを理解しよう | サイト名</title>` のように記述します",
+          "meta descriptionのcontent属性に120〜160文字程度の説明文を書きます",
+          "canonical URLはそのページの正規URLを絶対パスで指定します：`<link rel=\"canonical\" href=\"https://example.com/blog/seo-kiso/\">`",
+          "内部リンクは `<a href=\"/\">ホーム</a>` や `<a href=\"/blog/\">ブログ一覧</a>` の形式で追加します"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n\n  <title>SEO基礎：検索エンジンの仕組みを理解しよう | MarkeBase</title>\n\n  <meta name=\"description\" content=\"検索エンジンがWebページを発見する3つの経路（リンク・サイトマップ・URL送信）を解説。内部リンクの重要性とクロールされない原因も網羅した実践的SEO入門記事です。\">\n\n  <link rel=\"canonical\" href=\"https://example.com/blog/seo-kiso/\">\n\n</head>\n<body>\n\n  <nav>\n    <a href=\"/\">ホーム</a>\n    <a href=\"/blog/\">ブログ一覧</a>\n  </nav>\n\n  <h1>SEO基礎：検索エンジンの仕組みを理解しよう</h1>\n  <p>この記事では検索エンジンがWebページを発見する仕組みを解説します。</p>\n\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "Googleがまったく新しいページの存在を発見する方法として、最も基本的な経路はどれですか？",
+            "options": ["Google広告を出稿する", "既存ページからのリンクを辿る", "Twitterに投稿する", "Google Analyticsを設置する"],
+            "correct": 1,
+            "explanation": "Googlebotは既知のページにあるリンクを辿って未知のページを発見します。これがWebクロールの基本原理です。だからこそ内部リンクと外部リンクがSEOで重要視されます。"
+          },
+          {
+            "q": "XMLサイトマップの主な役割はどれですか？",
+            "options": ["ページの表示速度を上げる", "サイト内の全URLをGoogleに直接伝える", "ページのデザインをGoogleに伝える", "広告費を削減する"],
+            "correct": 1,
+            "explanation": "XMLサイトマップはサイト内のURLを列挙したファイルで、Googleに「このページが存在する」と直接伝える手段です。特に内部リンクが少ないページや新規サイトの発見促進に有効です。"
+          },
+          {
+            "q": "公開したばかりのページをすぐにGoogleに発見してもらいたい場合、最も直接的に効果がある方法はどれですか？",
+            "options": ["SNSで記事を拡散する", "Google Search ConsoleのURL検査ツールで送信する", "Google広告を出す", "ページのデザインを改善する"],
+            "correct": 1,
+            "explanation": "Google Search ConsoleのURL検査ツールからURLを直接送信すると、Googlebotに対してそのページのクロールをリクエストできます。新規公開ページや重要な更新後に活用しましょう。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール4-1 完了！\n\n## 習得したスキル\n\n✅ **検索エンジンがページを発見する3つの経路**（リンク・サイトマップ・URL送信）を理解した\n✅ **内部リンクの重要性**：孤立したページは発見されないことを把握した\n✅ **XMLサイトマップの役割**と設置方法の基礎を習得した\n✅ **発見されない原因トップ5**と対応策を理解した\n✅ **titleタグ・meta description・canonical**の基本設定を実践した\n\n## 次のステップ\n\n次のモジュール **「4-2: クローリング：Googlebotがサイトを巡回する流れ」** では、Googleがページを発見した後に実際にどのようにサイトを巡回するかを詳しく学びます。\n\n> 実務チャレンジ: Google Search ConsoleでURLの「カバレッジ」レポートを確認し、インデックスされていないページがないかチェックしてみましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

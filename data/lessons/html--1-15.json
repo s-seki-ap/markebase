@@ -1,0 +1,67 @@
+{
+  "id": "html--1-15",
+  "moduleId": "1-15",
+  "categoryId": "html",
+  "title": "blockquote・citeタグと引用元の構造化",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 引用コンテンツを正しくマークアップする\n\nオウンドメディアやブログ記事で他のサイトや書籍から引用するとき、HTMLで正しくマークアップすることはSEOとコンプライアンスの両面で重要です。\n\n## マーケターが知るべき理由\n\n**1. SEOでの引用コンテンツの扱い**\n`<blockquote>` で囲まれたテキストは、検索エンジンが「引用」として認識します。オリジナルコンテンツと区別されるため、重複コンテンツのペナルティを避けられます。\n\n**2. コンプライアンス**\n引用元を `<cite>` で明示することで、著作権法上の「引用」の要件を満たしやすくなります。\n\n**3. お客様の声の構造化**\nLPでよく使う「お客様の声」も引用の一種です。正しくマークアップすると検索結果でリッチな表示が得られる場合があります。\n\nこのモジュールでは、blockquoteとciteの正しい使い方を学びます。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# 引用タグの使い方\n\n## blockquote（ブロック引用）\n\n他のソースからの引用ブロック全体を囲みます。\n\n```html\n<blockquote cite=\"https://example.com/article\">\n  <p>デジタルマーケティングにおいて、データドリブンな意思決定は競争優位性の源泉である。</p>\n</blockquote>\n```\n\n- ブロック要素（前後に改行）\n- デフォルトで左にインデント表示\n- `cite` 属性で引用元URLを指定（ブラウザには表示されないがSEO向け）\n\n## q（インライン引用）\n\n文中の短い引用に使います。\n\n```html\n<p>マーケティングの父コトラーは<q>マーケティングとは顧客のニーズを満たすことである</q>と述べています。</p>\n```\n\n- インライン要素（文中に流れる）\n- ブラウザが自動的に引用符（「」や \"\"）を付ける\n\n## cite（引用元・出典）\n\n作品名や出典を表します。\n\n```html\n<blockquote>\n  <p>良いデザインは、できるだけ少ないデザインである。</p>\n  <footer>— <cite>ディーター・ラムス</cite></footer>\n</blockquote>\n```\n\n- インライン要素\n- デフォルトで斜体表示\n- 書名、記事名、人名などの出典表示に使用\n\n## マーケティング実例\n\n### お客様の声\n\n```html\n<section class=\"testimonials\">\n  <h2>お客様の声</h2>\n  \n  <blockquote>\n    <p>このクリームを使い始めてから肌の調子がとても良くなりました。毎日のスキンケアが楽しみです。</p>\n    <footer>— <cite>東京都 A.K.様（30代女性）</cite></footer>\n  </blockquote>\n\n  <blockquote>\n    <p>敏感肌の私でも刺激を感じません。リピート3回目です。</p>\n    <footer>— <cite>大阪府 S.T.様（40代女性）</cite></footer>\n  </blockquote>\n</section>\n```\n\n### メディア記事での引用\n\n```html\n<article>\n  <h2>GA4の新機能について</h2>\n  <p>Googleは公式ブログで次のように発表しています。</p>\n  \n  <blockquote cite=\"https://blog.google/products/analytics/\">\n    <p>GA4は機械学習を活用して、ユーザーの将来の行動を予測する機能を提供します。これにより、マーケターはより効率的なキャンペーン設計が可能になります。</p>\n  </blockquote>\n  \n  <p>出典: <cite><a href=\"https://blog.google/products/analytics/\">Google公式ブログ</a></cite></p>\n</article>\n```\n\n### CSSでのスタイリング\n\n```css\nblockquote {\n  border-left: 4px solid #3b82f6;\n  margin: 1.5em 0;\n  padding: 1em 1.5em;\n  background: #f8fafc;\n  font-style: italic;\n}\n\nblockquote footer {\n  margin-top: 0.5em;\n  font-style: normal;\n  color: #6b7280;\n}\n\nblockquote cite {\n  font-weight: bold;\n}\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: LPの「お客様の声」セクションを作る\n\nLPに掲載する「お客様の声」セクションを、blockquoteとciteを使って正しくマークアップしてください。\n\n## 課題\n\n1. 各お客様の声を `<blockquote>` で囲む\n2. お客様の名前を `<cite>` で表示する\n3. セクション全体に適切な見出しを付ける",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>お客様の声</title>\n  <style>\n    body { font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; }\n    blockquote {\n      border-left: 4px solid #10b981;\n      margin: 1.5em 0;\n      padding: 1em 1.5em;\n      background: #f0fdf4;\n    }\n    blockquote footer { color: #6b7280; margin-top: 0.5em; }\n    cite { font-weight: bold; font-style: normal; }\n  </style>\n</head>\n<body>\n\n  <!-- セクション見出しを追加してください -->\n\n  <!-- お客様の声1: blockquoteとciteを使って書いてください -->\n  <!-- 内容: 「使い始めて1週間で肌のハリを実感しました。自然な成分なので安心して使えます。」 -->\n  <!-- 出典: 東京都 M.Y.様（30代女性） -->\n\n  <!-- お客様の声2: blockquoteとciteを使って書いてください -->\n  <!-- 内容: 「香りがとても良く、毎晩のスキンケアが楽しみになりました。友人にもすすめています。」 -->\n  <!-- 出典: 神奈川県 K.S.様（40代女性） -->\n\n  <!-- お客様の声3: blockquoteとciteを使って書いてください -->\n  <!-- 内容: 「敏感肌で今まで合う化粧品がなかったのですが、これは全く刺激がありません。」 -->\n  <!-- 出典: 埼玉県 R.A.様（20代女性） -->\n\n</body>\n</html>",
+        "hints": [
+          "<blockquote> の中に <p> でテキストを入れ、<footer> と <cite> で出典を表示します。",
+          "各引用は <blockquote><p>内容</p><footer>— <cite>出典</cite></footer></blockquote> の形式です。",
+          "セクション見出しは <h2>お客様の声</h2> のように書きましょう。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>お客様の声</title>\n  <style>\n    body { font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; }\n    blockquote {\n      border-left: 4px solid #10b981;\n      margin: 1.5em 0;\n      padding: 1em 1.5em;\n      background: #f0fdf4;\n    }\n    blockquote footer { color: #6b7280; margin-top: 0.5em; }\n    cite { font-weight: bold; font-style: normal; }\n  </style>\n</head>\n<body>\n\n  <h2>お客様の声</h2>\n\n  <blockquote>\n    <p>使い始めて1週間で肌のハリを実感しました。自然な成分なので安心して使えます。</p>\n    <footer>— <cite>東京都 M.Y.様（30代女性）</cite></footer>\n  </blockquote>\n\n  <blockquote>\n    <p>香りがとても良く、毎晩のスキンケアが楽しみになりました。友人にもすすめています。</p>\n    <footer>— <cite>神奈川県 K.S.様（40代女性）</cite></footer>\n  </blockquote>\n\n  <blockquote>\n    <p>敏感肌で今まで合う化粧品がなかったのですが、これは全く刺激がありません。</p>\n    <footer>— <cite>埼玉県 R.A.様（20代女性）</cite></footer>\n  </blockquote>\n\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "他のWebサイトからの引用文をブロックで表示するのに適切なタグはどれですか？",
+            "options": ["<p>", "<div>", "<blockquote>", "<pre>"],
+            "correct": 2,
+            "explanation": "<blockquote>は他のソースからの引用ブロックを表すタグです。検索エンジンが引用コンテンツとオリジナルコンテンツを区別できるため、重複コンテンツのペナルティ回避にも有効です。"
+          },
+          {
+            "q": "<cite>タグの正しい用途はどれですか？",
+            "options": ["テキストを太字にする", "引用元の作品名や出典を表す", "コードを表示する", "リンクを作成する"],
+            "correct": 1,
+            "explanation": "<cite>は引用元の作品名、著者名、出典などを表すタグです。デフォルトで斜体表示され、検索エンジンやスクリーンリーダーが出典情報として認識します。"
+          },
+          {
+            "q": "blockquoteタグのcite属性の役割は何ですか？",
+            "options": ["引用元のURLをブラウザに表示する", "引用元のURLを機械可読な形で記録する（画面には表示されない）", "引用文のスタイルを変更する", "引用文に自動的にリンクを作成する"],
+            "correct": 1,
+            "explanation": "blockquoteのcite属性は引用元のURLを機械可読な形で記録しますが、ブラウザの画面には表示されません。検索エンジンやスクリーンリーダーなどのツールが引用元を識別するために使用されます。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール1-15 完了！\n\n引用コンテンツの正しいマークアップを習得しました。\n\n## 習得したスキル\n\n✅ **blockquote** でブロック引用を正しくマークアップできる\n✅ **q** で文中のインライン引用ができる\n✅ **cite** で引用元・出典を表示できる\n✅ **お客様の声**を構造化されたHTMLで表現できる\n\n## 次のステップ\n\n次のモジュール **「1-16: preタグとcodeタグでのコード表示」** では、GTM実装手順書にコードスニペットを正しく埋め込む方法を学びます。\n\n> 💡 **実務チャレンジ**: 自社のオウンドメディア記事で引用を使っている箇所を確認しましょう。blockquoteが使われていなければ、SEOとアクセシビリティ改善の提案ができます。",
+        "diagram": false
+      }
+    }
+  ]
+}

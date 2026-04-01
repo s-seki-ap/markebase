@@ -1,0 +1,82 @@
+{
+  "id": "marketing-strategy--10-4",
+  "moduleId": "10-4",
+  "categoryId": "marketing-strategy",
+  "title": "4P/4C：マーケティングミックスの設計",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 4P/4C：戦略を施策に落とし込む\n\nSTPで「誰に・どう戦うか」が決まったら、次は**具体的な施策を設計**するステップです。この設計のフレームワークが **4P（マーケティングミックス）** です。\n\n## 4Pとは\n\n- **Product（製品）**: 何を売るか\n- **Price（価格）**: いくらで売るか\n- **Place（流通）**: どこで売るか\n- **Promotion（プロモーション）**: どうやって知らせるか\n\n## 4Cとの違い\n\n4Pは「企業視点」。これを「顧客視点」に変換したものが **4C** です。\n\n| 4P（企業視点） | 4C（顧客視点） |\n|----------------|----------------|\n| Product（製品） | Customer Value（顧客価値） |\n| Price（価格） | Cost（顧客コスト） |\n| Place（流通） | Convenience（利便性） |\n| Promotion（宣伝） | Communication（コミュニケーション） |\n\n**現代のマーケティングでは4Cの視点が重要**です。顧客が何に価値を感じ、どんなコストを負担できるかから逆算します。\n\n**あなたへの問い**: 自社の4Pを今すぐ言語化できますか？",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# 4P各要素の詳細と設計ポイント\n\n## Product（製品・サービス）\n\n製品を3つの層で考えます：\n\n```\n核心ベネフィット（Core Benefit）\n    └─ 顧客が本当に求めているもの\n       例: 英会話サービス → 「自信を持って話せる」\n\n実体製品（Actual Product）\n    └─ 製品・サービスの実際の形\n       例: アプリUI、カリキュラム、講師の質\n\n拡張製品（Augmented Product）\n    └─ 付随するサービス・サポート\n       例: 学習コミュニティ、担当コーチのサポート\n```\n\n## Price（価格）\n\n### 価格設定の3つのアプローチ\n\n| アプローチ | 方法 | 特徴 |\n|------------|------|------|\n| **コスト積み上げ** | 原価 + 利益 | シンプルだが市場無視のリスク |\n| **競合基準** | 競合の価格を参考に設定 | 差別化しにくい |\n| **価値基準** | 顧客が感じる価値から逆算 | 最も戦略的、高単価化しやすい |\n\n## Place（流通・チャネル）\n\n- **直販**: Webサイト、自社EC、直営店\n- **間接販売**: 代理店、卸売、マーケットプレイス\n- **デジタル**: App Store、SaaSプラットフォーム\n\n**チャネル選択の基準**: ターゲット顧客がどこにいるかで決める\n\n## Promotion（プロモーション）\n\nIMC（統合マーケティングコミュニケーション）の視点で設計します：\n\n```\nAwareness（認知）: 広告・PR・SEO\nConsideration（検討）: コンテンツ・ウェビナー・事例\nConversion（購買）: 無料体験・営業・LP\nRetention（継続）: メール・コミュニティ・サポート\n```\n\n## 4Pの整合性が重要\n\n4つの要素は**相互に整合している**必要があります。\n\n**例**: 高品質・高価格帯（Product × Price）の製品を、ディスカウントストアで売る（Place）のは整合性がとれない。",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: 4P/4Cマーケティングミックスシートを作成する\n\n任意の製品・サービスの4P分析を行い、4C視点でのチェックも実施してください。\n\n## 課題\n\n以下のHTMLテンプレートを完成させ、4Pの各要素を記述してください。また、各項目の下に4C視点での確認コメントを追記してください。",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>4P/4Cマーケティングミックスシート</title>\n  <style>\n    body { font-family: sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; }\n    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }\n    .card { border-radius: 8px; padding: 20px; }\n    textarea { width: 100%; height: 80px; padding: 8px; border: 1px solid #e2e8f0; border-radius: 4px; resize: vertical; }\n    label { display: block; font-weight: bold; margin: 10px 0 4px; font-size: 0.85rem; }\n    .tag { display: inline-block; font-size: 0.75rem; padding: 2px 8px; border-radius: 12px; margin-bottom: 8px; }\n  </style>\n</head>\n<body>\n  <h1>4P / 4C マーケティングミックスシート</h1>\n  <p>対象: <input type=\"text\" placeholder=\"製品・サービス名\" style=\"padding:4px 8px; border:1px solid #ccc; border-radius:4px; width:260px;\"/></p>\n\n  <div class=\"grid-2\">\n    <!-- 4つのカードをここに作成 -->\n  </div>\n\n</body>\n</html>",
+        "hints": [
+          "4つのカード（Product, Price, Place, Promotion）を2列グリッドで配置しましょう。各カードに異なる背景色をつけると見やすくなります。",
+          "各カードの中に「4P視点（企業）」と「4C視点（顧客）」の2つのテキストエリアを追加しましょう。",
+          "4C視点のラベルは「Customer Value / Cost / Convenience / Communication」とし、4Pに対応させて記述します。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>4P/4Cマーケティングミックスシート</title>\n  <style>\n    body { font-family: sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; background: #f8fafc; }\n    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; }\n    .card { border-radius: 8px; padding: 20px; background: white; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }\n    .card h2 { margin-top: 0; font-size: 1.1rem; }\n    .product h2 { color: #10b981; }\n    .price h2 { color: #3b82f6; }\n    .place h2 { color: #f59e0b; }\n    .promotion h2 { color: #ef4444; }\n    textarea { width: 100%; height: 75px; padding: 8px; border: 1px solid #e2e8f0; border-radius: 4px; resize: vertical; font-size: 0.85rem; }\n    label { display: block; font-weight: bold; margin: 10px 0 4px; font-size: 0.82rem; color: #475569; }\n    .c-label { color: #8b5cf6 !important; }\n    .divider { border: none; border-top: 1px dashed #e2e8f0; margin: 12px 0; }\n  </style>\n</head>\n<body>\n  <h1>4P / 4C マーケティングミックスシート</h1>\n  <p>対象: <input type=\"text\" value=\"中小企業向けSNS運用代行サービス\" style=\"padding:4px 8px; border:1px solid #ccc; border-radius:4px; width:300px;\"/></p>\n\n  <div class=\"grid-2\">\n    <div class=\"card product\">\n      <h2>Product（製品）</h2>\n      <label>提供する製品・サービス内容</label>\n      <textarea>月額制SNS運用代行。Instagram・X対応。月8〜16投稿、コメント管理、月次レポート込み。業種特化コンテンツ制作。</textarea>\n      <hr class=\"divider\">\n      <label class=\"c-label\">Customer Value（顧客が得る価値）</label>\n      <textarea>「SNSを自分でやらなくてよい安心感」と「プロが作るコンテンツでブランドイメージが上がる」という価値。</textarea>\n    </div>\n\n    <div class=\"card price\">\n      <h2>Price（価格）</h2>\n      <label>価格・料金体系</label>\n      <textarea>Liteプラン：月3.8万円（月8投稿）Standardプラン：月6.8万円（月16投稿）Premiumプラン：月12万円（広告運用込）</textarea>\n      <hr class=\"divider\">\n      <label class=\"c-label\">Cost（顧客が負担するコスト）</label>\n      <textarea>金銭的コストは月3.8万〜。時間的コストはほぼゼロ（初回ヒアリング1時間のみ）。学習コストも不要。</textarea>\n    </div>\n\n    <div class=\"card place\">\n      <h2>Place（流通・チャネル）</h2>\n      <label>販売チャネル・提供方法</label>\n      <textarea>主にWebサイト経由の問い合わせ・無料相談。既存クライアントからの紹介。BizReach等の比較サイト掲載。</textarea>\n      <hr class=\"divider\">\n      <label class=\"c-label\">Convenience（顧客の利便性）</label>\n      <textarea>Webから24時間相談予約可能。オンライン完結（対面不要）。契約書類は電子署名で手間なし。</textarea>\n    </div>\n\n    <div class=\"card promotion\">\n      <h2>Promotion（プロモーション）</h2>\n      <label>認知・集客施策</label>\n      <textarea>SEOブログ記事（「中小企業SNS運用」関連KW）、Instagram自社アカウント運用、Google広告（リスティング）、ウェビナー開催。</textarea>\n      <hr class=\"divider\">\n      <label class=\"c-label\">Communication（顧客との対話）</label>\n      <textarea>無料相談で課題ヒアリング、月次レポートで継続的な改善提案、Slackでリアルタイム相談対応。一方通行の宣伝でなく対話重視。</textarea>\n    </div>\n  </div>\n\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "4Pの「Price（価格）」に対応する4Cの要素はどれですか？",
+            "options": [
+              "Customer Value（顧客価値）",
+              "Cost（顧客コスト）",
+              "Convenience（利便性）",
+              "Communication（コミュニケーション）"
+            ],
+            "correct": 1,
+            "explanation": "4PのPriceは4CのCost（顧客コスト）に対応します。価格だけでなく、時間的コスト・学習コスト・心理的コストなど顧客が負担するあらゆるコストを考慮します。"
+          },
+          {
+            "q": "製品を「核心ベネフィット・実体製品・拡張製品」の3層で考えたとき、「英会話サービスの担当コーチによる個別サポート」はどの層に当たりますか？",
+            "options": [
+              "核心ベネフィット",
+              "実体製品",
+              "拡張製品",
+              "いずれにも属さない"
+            ],
+            "correct": 2,
+            "explanation": "「担当コーチのサポート」は製品に付随するサービスであり「拡張製品（Augmented Product）」に当たります。拡張製品は差別化の重要な武器になります。"
+          },
+          {
+            "q": "価格設定の「価値基準アプローチ」の説明として正しいのはどれですか？",
+            "options": [
+              "原価に一定の利益率を上乗せして価格を設定する",
+              "競合他社の価格を参考にして価格を設定する",
+              "顧客が感じる価値から逆算して価格を設定する",
+              "市場シェアを最大化するために最安値を設定する"
+            ],
+            "correct": 2,
+            "explanation": "価値基準アプローチは「顧客がその製品・サービスに感じる価値」から逆算して価格を設定します。最も戦略的な方法で、高単価化しやすいアプローチです。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール10-4 完了！\n\n4P/4Cマーケティングミックスの設計方法を習得しました。\n\n## 習得したスキル\n\n✅ **4P（Product・Price・Place・Promotion）**の各要素を設計できる\n✅ **4C（Customer Value・Cost・Convenience・Communication）**で顧客視点に変換できる\n✅ **製品の3層構造**（核心・実体・拡張）で価値を整理できる\n✅ **4Pの整合性**を確認する視点を持てる\n\n## なぜこれが重要か\n\n4Pが整合していないと、施策がバラバラになります。高品質な製品が低価格で売られると価値が伝わらず、良い製品でも適切なチャネルがなければ届きません。4Pをセットで設計・整合させる習慣が戦略的マーケターの証です。\n\n## 次のステップ\n\n次のモジュール **「10-5: SWOT分析：強み弱み機会脅威の整理」** では、自社の内部環境と外部環境を同時に整理するフレームワークを学びます。",
+        "diagram": false
+      }
+    }
+  ]
+}

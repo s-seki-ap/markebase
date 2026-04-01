@@ -1,0 +1,82 @@
+{
+  "id": "project-management--11-5",
+  "moduleId": "11-5",
+  "categoryId": "project-management",
+  "title": "ウォーターフォールとアジャイルの比較",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 手法の違いが成果の違いを生む\n\n同じ「Webサイトリニューアル」というプロジェクトでも、ウォーターフォールで進めるかアジャイルで進めるかによって、チームの動き方・顧客との関わり方・リスクの発現タイミングがまったく異なります。\n\n## 実際の違いを体感するシナリオ\n\n**シナリオ: 新規ランディングページの制作（3ヶ月）**\n\n**ウォーターフォールの場合**:\n→ 1ヶ月で要件定義書を完成→1ヶ月でデザイン→1ヶ月で実装→完成\n→ クライアントが完成品を見て「イメージと違う」と言った時点でプロジェクトは危機\n\n**アジャイルの場合**:\n→ 2週間ごとにワイヤーフレーム→デザインラフ→プロトタイプと段階的に確認\n→ 早い段階でズレを発見・修正できる\n\nどちらが正解かではなく、**プロジェクトの性質とチームの状況に合わせて選ぶ**ことが大切です。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# ウォーターフォールとアジャイルの詳細比較\n\n## ウォーターフォール（Waterfall）\n\n水が上から下へ流れるように、フェーズを順番に進める手法。\n\n```\n要件定義\n  ↓\n基本設計\n  ↓\n詳細設計\n  ↓\n実装・開発\n  ↓\nテスト\n  ↓\nリリース・納品\n```\n\n**強み**:\n- 全体スケジュールと予算の見通しが立てやすい\n- ドキュメントが整備されるため引き継ぎが容易\n- 承認プロセスが明確（クライアント・経営層への説明がしやすい）\n\n**弱み**:\n- 要件変更に対応しにくい（後戻りコストが大きい）\n- 完成まで成果物が見えない（フィードバックが遅い）\n- 問題が終盤に発覚するリスク\n\n## アジャイル（Scrum/Kanban等）\n\n短いサイクル（スプリント）を繰り返し、継続的に改善する手法。\n\n```\n[スプリント1: 2週間]\nバックログ整理 → 設計 → 実装 → レビュー → 振り返り\n          ↓\n[スプリント2: 2週間]\n改善 → 次機能設計 → 実装 → レビュー → 振り返り\n          ↓\n（繰り返し）\n```\n\n**強み**:\n- 早期に動くものをリリースしてフィードバックを得られる\n- 要件変更に柔軟に対応できる\n- チームの自己組織化でモチベーション維持しやすい\n\n**弱み**:\n- 全体スコープと最終コストが見積もりにくい\n- 顧客の継続的な関与が必要（コミット負荷が高い）\n- 大規模チームではスケールしにくい\n\n## デジタルマーケ案件での具体的な使い分け表\n\n| 案件タイプ | 推奨手法 | 理由 |\n|------------|----------|------|\n| ECサイト全面構築 | ウォーターフォール | 要件固定・決済連携・予算大 |\n| LP A/Bテスト改善 | アジャイル | 仮説検証サイクルが核心 |\n| GA4移行 | ウォーターフォール | 計測要件は事前定義が必須 |\n| コンテンツSEO運用 | アジャイル | 月次トピック調整が常態 |\n| CRM/MA導入 | ハイブリッド | 初期設定固定・運用改善継続 |",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: プロセス比較タイムライン\n\n同じ「LP制作プロジェクト（12週間）」を、ウォーターフォールとアジャイルそれぞれで計画したタイムラインを作成してください。\n\n## 課題\n\n1. ウォーターフォール版のフェーズをタイムラインに配置する\n2. アジャイル版のスプリント構成を記入する\n3. 各手法でクライアントが初めて成果物を見るタイミングを明記する\n\n完成したら **[▶ 実行]** でプレビューを確認してください。",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>プロセス比較タイムライン</title>\n  <style>\n    body { font-family: sans-serif; max-width: 850px; margin: 40px auto; background: #f8fafc; color: #1e293b; }\n    h1 { border-left: 4px solid #6366f1; padding-left: 12px; }\n    h2 { margin-top: 32px; }\n    .timeline { display: flex; gap: 4px; margin: 16px 0; }\n    .phase { flex: 1; padding: 12px 6px; text-align: center; border-radius: 6px; font-size: 0.8em; font-weight: bold; }\n    .wf1 { background: #dbeafe; color: #1d4ed8; }\n    .wf2 { background: #ede9fe; color: #6d28d9; }\n    .wf3 { background: #fce7f3; color: #9d174d; }\n    .wf4 { background: #dcfce7; color: #15803d; }\n    .wf5 { background: #ffedd5; color: #c2410c; }\n    .ag { background: #f0fdf4; color: #15803d; border: 2px solid #10b981; }\n    .week-label { display: flex; gap: 4px; margin-bottom: 4px; }\n    .week { flex: 1; text-align: center; font-size: 0.75em; color: #94a3b8; }\n    .note { background: #fef9c3; border: 1px solid #fde047; border-radius: 6px; padding: 10px; margin: 8px 0; font-size: 0.9em; }\n  </style>\n</head>\n<body>\n  <h1>LP制作プロジェクト: 12週間タイムライン比較</h1>\n\n  <h2>ウォーターフォール版</h2>\n  <div class=\"week-label\">\n    <span class=\"week\">W1-2</span><span class=\"week\">W3-4</span><span class=\"week\">W5-6</span>\n    <span class=\"week\">W7-8</span><span class=\"week\">W9-10</span><span class=\"week\">W11-12</span>\n  </div>\n  <div class=\"timeline\">\n    <!-- 各フェーズ名を記入してください -->\n    <div class=\"phase wf1\">（フェーズ1）</div>\n    <div class=\"phase wf2\">（フェーズ2）</div>\n    <div class=\"phase wf3\">（フェーズ3）</div>\n    <div class=\"phase wf4\">（フェーズ4）</div>\n    <div class=\"phase wf5\">（フェーズ5）</div>\n    <div class=\"phase wf1\">（フェーズ6）</div>\n  </div>\n  <div class=\"note\">クライアントが初めて成果物を見るタイミング: （記入してください）</div>\n\n  <h2>アジャイル版（2週間スプリント×6）</h2>\n  <div class=\"week-label\">\n    <span class=\"week\">Sprint 1</span><span class=\"week\">Sprint 2</span><span class=\"week\">Sprint 3</span>\n    <span class=\"week\">Sprint 4</span><span class=\"week\">Sprint 5</span><span class=\"week\">Sprint 6</span>\n  </div>\n  <div class=\"timeline\">\n    <!-- 各スプリントのテーマを記入してください -->\n    <div class=\"phase ag\">（Sprint 1）</div>\n    <div class=\"phase ag\">（Sprint 2）</div>\n    <div class=\"phase ag\">（Sprint 3）</div>\n    <div class=\"phase ag\">（Sprint 4）</div>\n    <div class=\"phase ag\">（Sprint 5）</div>\n    <div class=\"phase ag\">（Sprint 6）</div>\n  </div>\n  <div class=\"note\">クライアントが初めて成果物を見るタイミング: （記入してください）</div>\n\n</body>\n</html>",
+        "hints": [
+          "ウォーターフォールの典型フェーズは「要件定義→ワイヤーフレーム→デザイン→実装→テスト→リリース」の6段階です",
+          "アジャイルのスプリントは「ワイヤー確認→デザインラフ→デザイン本決め→実装→テスト・修正→リリース」などの流れが典型です",
+          "クライアントが成果物を初めて見るタイミング：ウォーターフォールは「テスト後〜リリース前」、アジャイルは「Sprint 1終了時」です"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>プロセス比較タイムライン</title>\n  <style>\n    body { font-family: sans-serif; max-width: 850px; margin: 40px auto; background: #f8fafc; color: #1e293b; }\n    h1 { border-left: 4px solid #6366f1; padding-left: 12px; }\n    h2 { margin-top: 32px; }\n    .timeline { display: flex; gap: 4px; margin: 16px 0; }\n    .phase { flex: 1; padding: 12px 6px; text-align: center; border-radius: 6px; font-size: 0.8em; font-weight: bold; }\n    .wf1 { background: #dbeafe; color: #1d4ed8; }\n    .wf2 { background: #ede9fe; color: #6d28d9; }\n    .wf3 { background: #fce7f3; color: #9d174d; }\n    .wf4 { background: #dcfce7; color: #15803d; }\n    .wf5 { background: #ffedd5; color: #c2410c; }\n    .ag { background: #f0fdf4; color: #15803d; border: 2px solid #10b981; }\n    .week-label { display: flex; gap: 4px; margin-bottom: 4px; }\n    .week { flex: 1; text-align: center; font-size: 0.75em; color: #94a3b8; }\n    .note { background: #fef9c3; border: 1px solid #fde047; border-radius: 6px; padding: 10px; margin: 8px 0; font-size: 0.9em; }\n  </style>\n</head>\n<body>\n  <h1>LP制作プロジェクト: 12週間タイムライン比較</h1>\n  <h2>ウォーターフォール版</h2>\n  <div class=\"week-label\">\n    <span class=\"week\">W1-2</span><span class=\"week\">W3-4</span><span class=\"week\">W5-6</span>\n    <span class=\"week\">W7-8</span><span class=\"week\">W9-10</span><span class=\"week\">W11-12</span>\n  </div>\n  <div class=\"timeline\">\n    <div class=\"phase wf1\">要件定義</div>\n    <div class=\"phase wf2\">ワイヤーフレーム</div>\n    <div class=\"phase wf3\">デザイン</div>\n    <div class=\"phase wf4\">実装</div>\n    <div class=\"phase wf5\">テスト</div>\n    <div class=\"phase wf1\">リリース</div>\n  </div>\n  <div class=\"note\">クライアントが初めて成果物を見るタイミング: W9〜10（テスト完了後）。ここで「イメージと違う」が発覚すると手戻りが最大になるリスクがある。</div>\n  <h2>アジャイル版（2週間スプリント×6）</h2>\n  <div class=\"week-label\">\n    <span class=\"week\">Sprint 1</span><span class=\"week\">Sprint 2</span><span class=\"week\">Sprint 3</span>\n    <span class=\"week\">Sprint 4</span><span class=\"week\">Sprint 5</span><span class=\"week\">Sprint 6</span>\n  </div>\n  <div class=\"timeline\">\n    <div class=\"phase ag\">要件整理＋ワイヤー確認</div>\n    <div class=\"phase ag\">デザインラフ＋FB</div>\n    <div class=\"phase ag\">デザイン本決め</div>\n    <div class=\"phase ag\">実装（PC版）</div>\n    <div class=\"phase ag\">実装（SP版）＋テスト</div>\n    <div class=\"phase ag\">修正＋リリース</div>\n  </div>\n  <div class=\"note\">クライアントが初めて成果物を見るタイミング: Sprint 1終了時（W1〜2）。ワイヤーフレームの段階でフィードバックを得ることで、大きな方向転換を早期に防げる。</div>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "ウォーターフォール手法の最大の弱点として最も正確な説明はどれですか？",
+            "options": [
+              "ドキュメントが多すぎて管理が大変になること",
+              "完成まで動く成果物が見えず、問題が終盤に発覚するリスクがあること",
+              "チームメンバーが自律的に動けないこと",
+              "スプリントの計画に時間がかかりすぎること"
+            ],
+            "correct": 1,
+            "explanation": "ウォーターフォールの最大リスクは「後戻りコストの高さ」です。要件変更や品質問題が終盤のテスト・納品フェーズで発覚した場合、前のフェーズに戻る修正コストが膨大になります。"
+          },
+          {
+            "q": "アジャイルのスプリントとして最も正確な説明はどれですか？",
+            "options": [
+              "プロジェクトの最終納品フェーズの名称",
+              "1〜4週間の短い開発サイクルで、繰り返し成果物をリリースする単位",
+              "チームの朝会（デイリースタンドアップ）の別名",
+              "プロジェクトの年間計画サイクル"
+            ],
+            "correct": 1,
+            "explanation": "スプリントはアジャイル（特にスクラム）における反復開発サイクルです。通常1〜4週間の期間で計画・開発・レビュー・振り返りを行い、動く成果物を継続的にリリースします。"
+          },
+          {
+            "q": "GA4の計測設計・実装プロジェクトにウォーターフォールが推奨される主な理由はどれですか？",
+            "options": [
+              "GA4はGoogleのツールなので、Googleのプロセスに合わせるべきだから",
+              "計測イベントの定義は事前に全て確定させる必要があり、後から変更すると過去データと不整合が生じるから",
+              "アジャイルではGA4の設定ができないから",
+              "ウォーターフォールの方が安価に実装できるから"
+            ],
+            "correct": 1,
+            "explanation": "GA4計測設計は事前の要件定義が極めて重要です。途中で計測仕様を変更すると、それ以前に収集したデータとの一貫性が失われ、分析が困難になります。このため、事前に詳細を固めるウォーターフォールが適しています。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール11-5 完了！\n\n2手法の具体的なプロセスと使い分けを習得しました。\n\n## 習得したスキル\n\n✅ **ウォーターフォールの強み・弱み**：詳細計画の信頼性と後戻りリスクを理解した\n✅ **アジャイルの強み・弱み**：早期フィードバックと全体見通しの難しさを理解した\n✅ **タイムライン比較**：同一プロジェクトで2手法のプロセスの違いを可視化した\n✅ **案件別選定基準**：デジタルマーケ5種類の案件での推奨手法を習得した\n\n## 次のステップ\n\n次のモジュール **「11-6: PMの役割と責任の明確化」** では、チーム内でのPMの具体的な役割定義と、RACI図を使った責任分担の明確化手法を学びます。\n\n> 実務チャレンジ: 現在のプロジェクトで「最初に顧客にレビューしてもらったのはいつか」を確認してみましょう。遅すぎる場合は、より早いフィードバックポイントを設定する改善余地があります。",
+        "diagram": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "id": "html--1-18",
+  "moduleId": "1-18",
+  "categoryId": "html",
+  "title": "abbr・acronymタグと略語の展開表示",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 略語に正式名称を付与する\n\nデジタルマーケティングの世界は略語であふれています。GA4、GTM、SEO、CTA、CVR、LTV... これらの略語を初めて読む人にとって、正式名称がわからないと理解できません。\n\n## マーケターが知るべき理由\n\n**1. アクセシビリティの向上**\nスクリーンリーダーは `<abbr>` タグの `title` 属性を読み上げるため、視覚障害のあるユーザーが略語の意味を理解できます。\n\n**2. 新人教育・クライアント向け資料**\nオウンドメディアやマニュアルで略語を使うとき、`<abbr>` タグを使えばマウスホバーで正式名称が表示されます。\n\n**3. SEO効果**\n検索エンジンが略語と正式名称の関係を理解し、両方のキーワードでコンテンツを評価できる可能性があります。\n\nこのモジュールでは、abbrタグの使い方とマーケティング略語への適用を学びます。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# abbrタグの使い方\n\n## 基本構文\n\n```html\n<abbr title=\"Google Analytics 4\">GA4</abbr>\n```\n\n- `<abbr>` タグで略語を囲む\n- `title` 属性に正式名称を記述\n- マウスホバーでツールチップとして正式名称が表示される\n- スクリーンリーダーが正式名称を読み上げる\n\n## acronymタグについて\n\n```html\n<!-- 旧式（HTML5で廃止） -->\n<acronym title=\"Search Engine Optimization\">SEO</acronym>\n\n<!-- 現在の推奨（abbrに統一） -->\n<abbr title=\"Search Engine Optimization\">SEO</abbr>\n```\n\n`<acronym>` はHTML5で廃止されました。すべて `<abbr>` を使いましょう。\n\n## デジタルマーケティング略語の一覧\n\n```html\n<p>\n  <abbr title=\"Google Tag Manager\">GTM</abbr>を使って\n  <abbr title=\"Google Analytics 4\">GA4</abbr>のイベントを計測し、\n  <abbr title=\"Conversion Rate\">CVR</abbr>の改善を目指します。\n</p>\n```\n\n### マーケターが使う主な略語\n\n| 略語 | 正式名称 | 意味 |\n|------|---------|------|\n| GA4 | Google Analytics 4 | Googleの分析ツール |\n| GTM | Google Tag Manager | タグ管理ツール |\n| SEO | Search Engine Optimization | 検索エンジン最適化 |\n| CTA | Call To Action | 行動喚起 |\n| CVR | Conversion Rate | コンバージョン率 |\n| CTR | Click Through Rate | クリック率 |\n| LTV | Life Time Value | 顧客生涯価値 |\n| KPI | Key Performance Indicator | 重要業績評価指標 |\n| ROI | Return On Investment | 投資対効果 |\n| LP | Landing Page | ランディングページ |\n\n## CSSでのスタイリング\n\n```css\n/* 略語に下線を引いてホバー可能であることを示す */\nabbr[title] {\n  text-decoration: underline dotted;\n  cursor: help;\n}\n\n/* ホバー時のスタイル */\nabbr[title]:hover {\n  text-decoration: underline solid;\n}\n```\n\n## 使い方のベストプラクティス\n\n### 1. 初出時にabbrを使う\n\n```html\n<!-- 最初の出現時にabbrを使う -->\n<p><abbr title=\"Google Analytics 4\">GA4</abbr>は、Googleが提供する最新の分析ツールです。</p>\n\n<!-- 2回目以降はabbrなしでもOK -->\n<p>GA4の設定方法について説明します。</p>\n```\n\n### 2. 同時に文中で展開する方法\n\n```html\n<!-- 初出時に展開 + abbrタグ -->\n<p>Google Analytics 4（以下、<abbr title=\"Google Analytics 4\">GA4</abbr>）を導入します。</p>\n```\n\n### 3. 用語集セクションを作る\n\n```html\n<section class=\"glossary\">\n  <h2>用語集</h2>\n  <dl>\n    <dt><abbr title=\"Google Analytics 4\">GA4</abbr></dt>\n    <dd>Googleが提供する最新のWeb分析プラットフォーム。</dd>\n    \n    <dt><abbr title=\"Google Tag Manager\">GTM</abbr></dt>\n    <dd>Webサイトのタグを一元管理するツール。</dd>\n  </dl>\n</section>\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: マーケティング記事に略語タグを追加する\n\nデジタルマーケティングの解説記事に、abbrタグを使って略語の正式名称を付与してください。\n\n## 課題\n\n1. 各略語（GA4, GTM, SEO, CTA, CVR）を `<abbr>` タグで囲む\n2. `title` 属性に正式名称を記述する\n3. CSSで略語にスタイルを適用する",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>デジタルマーケティング入門</title>\n  <style>\n    body { font-family: sans-serif; max-width: 700px; margin: 0 auto; padding: 20px; line-height: 1.8; }\n    /* 略語のスタイルを追加してください */\n  </style>\n</head>\n<body>\n\n  <h1>デジタルマーケティング入門ガイド</h1>\n\n  <h2>分析ツールの導入</h2>\n  <!-- ① GA4とGTMにabbrタグを追加してください -->\n  <p>まずGA4を導入してWebサイトのユーザー行動を分析します。タグの管理にはGTMを使用し、効率的にイベント計測を設定します。</p>\n\n  <h2>集客の最適化</h2>\n  <!-- ② SEOにabbrタグを追加してください -->\n  <p>SEOを強化して、検索エンジンからの流入を増やします。キーワード調査とコンテンツ最適化が基本です。</p>\n\n  <h2>コンバージョン改善</h2>\n  <!-- ③ CTA, CVRにabbrタグを追加してください -->\n  <p>LPのCTAを最適化し、CVRの向上を目指します。ボタンのテキスト、色、配置がコンバージョンに大きく影響します。</p>\n\n</body>\n</html>",
+        "hints": [
+          "GA4は <abbr title=\"Google Analytics 4\">GA4</abbr> のように書きます。",
+          "CSSでabbr[title]に対してスタイルを設定すると、ユーザーにホバー可能であることを示せます。",
+          "CTAは Call To Action、CVRは Conversion Rate が正式名称です。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>デジタルマーケティング入門</title>\n  <style>\n    body { font-family: sans-serif; max-width: 700px; margin: 0 auto; padding: 20px; line-height: 1.8; }\n    abbr[title] {\n      text-decoration: underline dotted;\n      cursor: help;\n    }\n  </style>\n</head>\n<body>\n\n  <h1>デジタルマーケティング入門ガイド</h1>\n\n  <h2>分析ツールの導入</h2>\n  <p>まず<abbr title=\"Google Analytics 4\">GA4</abbr>を導入してWebサイトのユーザー行動を分析します。タグの管理には<abbr title=\"Google Tag Manager\">GTM</abbr>を使用し、効率的にイベント計測を設定します。</p>\n\n  <h2>集客の最適化</h2>\n  <p><abbr title=\"Search Engine Optimization\">SEO</abbr>を強化して、検索エンジンからの流入を増やします。キーワード調査とコンテンツ最適化が基本です。</p>\n\n  <h2>コンバージョン改善</h2>\n  <p>LPの<abbr title=\"Call To Action\">CTA</abbr>を最適化し、<abbr title=\"Conversion Rate\">CVR</abbr>の向上を目指します。ボタンのテキスト、色、配置がコンバージョンに大きく影響します。</p>\n\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "HTML5で略語に正式名称を付与するのに使うタグはどれですか？",
+            "options": ["<acronym>", "<abbr>", "<dfn>", "<span>"],
+            "correct": 1,
+            "explanation": "<abbr>タグが HTML5 で略語に正式名称を付与する標準タグです。<acronym>はHTML5で廃止されたため、すべて<abbr>を使いましょう。"
+          },
+          {
+            "q": "<abbr title=\"Google Analytics 4\">GA4</abbr> の title 属性はどのように表示されますか？",
+            "options": ["常に略語の横に表示される", "マウスホバー時にツールチップとして表示される", "ページ下部に脚注として表示される", "ポップアップウィンドウで表示される"],
+            "correct": 1,
+            "explanation": "title属性の値は、ユーザーが要素の上にマウスカーソルを合わせた（ホバーした）ときにツールチップとして表示されます。また、スクリーンリーダーも正式名称を読み上げます。"
+          },
+          {
+            "q": "記事内で略語にabbrタグを使うベストプラクティスはどれですか？",
+            "options": ["すべての出現箇所にabbrを使う", "初出時にabbrを使い、2回目以降は省略可能", "最後の出現箇所のみabbrを使う", "abbrは使わず、すべて正式名称で書く"],
+            "correct": 1,
+            "explanation": "初出時にabbrタグ（必要に応じて文中でも展開）を使い、2回目以降はabbrなしで略語だけを使うのがベストプラクティスです。すべてにabbrを付けるとコードが冗長になります。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール1-18 完了！\n\nabbrタグで略語に正式名称を付与する方法を習得しました。\n\n## 習得したスキル\n\n✅ **abbr** タグで略語に正式名称を付与できる\n✅ **title属性**のツールチップ表示の仕組みを理解した\n✅ **acronymは廃止**されabbrに統一されたことを知った\n✅ **初出時にabbr**を使うベストプラクティスを理解した\n\n## 次のステップ\n\n次のモジュール **「1-19: time・dateタグと機械可読な日付表現」** では、イベントページの日付をtimeタグで構造化してリッチリザルトに対応する方法を学びます。\n\n> 💡 **実務チャレンジ**: 自社のオウンドメディア記事でGA4やGTMなどの略語が初出で説明なく使われていないか確認しましょう。abbrタグの追加を提案すると、アクセシビリティが向上します。",
+        "diagram": false
+      }
+    }
+  ]
+}

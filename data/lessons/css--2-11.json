@@ -1,0 +1,67 @@
+{
+  "id": "css--2-11",
+  "moduleId": "2-11",
+  "categoryId": "css",
+  "title": "colorプロパティと色指定方法（HEX・RGB・HSL・named color）",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 色の指定方法を知るとブランドカラーが正確に伝えられる\n\nLPやバナーを作るとき、「なんとなく青」ではなくブランドのコーポレートカラーを正確に指定することが重要です。CSSの色指定には複数の記法があり、それぞれ使いどころが異なります。\n\n## マーケターが色指定を知るべき理由\n\n**1. ブランドカラーの正確な指示**\n「コーポレートブルーの #1a73e8 を使ってください」という指示が出せるようになります。デザイナーに「この青で」という曖昧な指示がなくなります。\n\n**2. GA4のカスタムダッシュボードカスタマイズ**\nLooker Studioでレポートをカスタマイズするとき、ブランドカラーをHEXコードで正確に指定できます。\n\n**3. GTMのバナー実装**\nGTMで緊急告知バナーを実装するとき、インラインCSSで色を指定します。HEXコードがすぐに書けると素早く対応できます。\n\n**4. CTA最適化のテスト**\nABテストでボタンの色を変えるとき、色の変化がどの程度CVRに影響するかを測定します。RGBaで透明度を変えたバリエーションも試せます。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# CSSの色指定方法\n\n## 1. HEX（16進数カラーコード）\n\nWebデザインで最もよく使われる形式です。\n\n```css\n/* #RRGGBB の形式 */\n.primary { color: #1a73e8; }        /* Google Blue */\n.danger  { color: #ea4335; }        /* Google Red */\n.success { color: #34a853; }        /* Google Green */\n.warning { color: #fbbc04; }        /* Google Yellow */\n.text    { color: #333333; }        /* ダークグレー */\n.light   { color: #f5f5f5; }        /* ライトグレー */\n\n/* 6桁が同じ数字のペアの場合は3桁に省略可能 */\n.black { color: #000000; }  /* = */ .black { color: #000; }\n.white { color: #ffffff; }  /* = */ .white { color: #fff; }\n.red   { color: #ff0000; }  /* = */ .red   { color: #f00; }\n\n/* 8桁 = 透明度付き */\n.transparent-bg { background: #1a73e880; }  /* 50%透明 */\n```\n\n## 2. RGB / RGBA\n\n赤・緑・青を0〜255の値で指定します。\n\n```css\n/* rgb(red, green, blue) */\n.primary { color: rgb(26, 115, 232); }    /* #1a73e8 と同じ */\n.dark    { color: rgb(0, 0, 0); }          /* 黒 */\n.white   { color: rgb(255, 255, 255); }    /* 白 */\n\n/* rgba(red, green, blue, alpha) - 透明度付き */\n.overlay {\n  background-color: rgba(0, 0, 0, 0.5);    /* 半透明の黒 */\n}\n\n.card-hover {\n  background-color: rgba(26, 115, 232, 0.1);  /* 薄い青 */\n}\n\n/* 現代的な記法（スペース区切り） */\n.modern { color: rgb(26 115 232 / 80%); }  /* 80%不透明 */\n```\n\n## 3. HSL / HSLA\n\n**色相（Hue）・彩度（Saturation）・輝度（Lightness）** で指定します。\nデザイナーが好む直感的な形式です。\n\n```css\n/* hsl(hue, saturation, lightness) */\n/* Hue: 0-360 （0=赤, 120=緑, 240=青） */\n/* Saturation: 0%-100% （0%=グレー, 100%=鮮やか） */\n/* Lightness: 0%-100% （0%=黒, 50%=純色, 100%=白） */\n\n.blue-hsl   { color: hsl(211, 79%, 51%); }  /* #1a73e8 相当 */\n.red-hsl    { color: hsl(4, 79%, 55%); }     /* #ea4335 相当 */\n\n/* 同じ色相で明度だけ変えたバリエーション（ブランドパレット） */\n.brand-light  { background: hsl(211, 79%, 90%); }  /* 薄い */\n.brand-medium { background: hsl(211, 79%, 51%); }  /* 基本色 */\n.brand-dark   { background: hsl(211, 79%, 30%); }  /* 暗め */\n\n/* hsla - 透明度付き */\n.overlay-hsl {\n  background: hsla(0, 0%, 0%, 0.6);  /* 60%透明の黒 */\n}\n```\n\n## 4. Named Color（名前付き色）\n\nCSSで定義された140以上の色名です。\n\n```css\n.example {\n  color: red;           /* #ff0000 */\n  background: white;    /* #ffffff */\n  border-color: navy;   /* #000080 */\n  outline: transparent; /* 透明 */\n}\n\n/* 便利なnamed color */\nblack / white / red / blue / green\ngray / silver / gold / orange / pink\ntomato / coral / salmon / crimson\nroyalblue / steelblue / skyblue\nforestgreen / seagreen / lime\n```\n\n**注意**: named colorは本番サービスのブランドカラー指定には使わない。\n\n## 色形式の比較まとめ\n\n| 形式 | 例 | 透明度 | 主な用途 |\n|------|----|---------|---------|\n| HEX | `#1a73e8` | `#1a73e880` | デザイン指定書・ブランドカラー |\n| RGB | `rgb(26,115,232)` | `rgba(...)` | JavaScriptでの動的変更 |\n| HSL | `hsl(211,79%,51%)` | `hsla(...)` | デザインシステム・パレット設計 |\n| named | `blue` | - | プロトタイプ・学習 |\n\n## currentColorキーワード\n\n```css\n/* 親要素のcolorを参照する特殊な値 */\n.icon {\n  color: #1a73e8;\n}\n.icon svg {\n  fill: currentColor;  /* 親のcolorと同じ色（#1a73e8）になる */\n}\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: カラーパレットを使ったLPセクションの作成\n\nブランドカラーを使って、サービスLPのヒーローセクションとカードを作りましょう。\n\n## ブランドカラー\n- プライマリ: `#1a73e8`（ブランドブルー）\n- アクセント: `#ea4335`（CTAレッド）\n- 背景: `#f8f9fa`\n- テキスト: `#202124`\n- サブテキスト: `#5f6368`\n\n## 課題\n\n1. `body` の背景色を `#f8f9fa`、文字色を `#202124` にする\n2. `.hero` の背景をプライマリカラーの薄い版 `rgba(26, 115, 232, 0.08)` にする\n3. `.hero-title` の色を `#1a73e8` にする\n4. `.cta-button` の背景色を `#ea4335`、文字色を `white` にする\n5. `.card-sub` の色を `#5f6368` にする",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>カラーパレット練習</title>\n  <style>\n    /* ① bodyのbackground-colorとcolorを設定 */\n    body {\n      font-family: sans-serif;\n      margin: 0;\n      padding: 0;\n    }\n\n    /* ② .heroの背景をrgba(26, 115, 232, 0.08)に */\n    .hero {\n      padding: 80px 40px;\n      text-align: center;\n    }\n\n    /* ③ .hero-titleのcolorを #1a73e8 に */\n    .hero-title {\n      font-size: 2.5rem;\n      margin-bottom: 16px;\n    }\n\n    .hero-subtitle {\n      font-size: 1.1rem;\n      margin-bottom: 32px;\n    }\n\n    /* ④ .cta-buttonのbackground-colorを #ea4335、colorをwhiteに */\n    .cta-button {\n      padding: 14px 32px;\n      border: none;\n      border-radius: 8px;\n      font-size: 1rem;\n      cursor: pointer;\n      font-weight: bold;\n    }\n\n    .cards {\n      display: flex;\n      gap: 16px;\n      max-width: 900px;\n      margin: 40px auto;\n      padding: 0 40px;\n    }\n\n    .card {\n      flex: 1;\n      background: white;\n      padding: 24px;\n      border-radius: 8px;\n      box-shadow: 0 1px 3px rgba(0,0,0,0.1);\n    }\n\n    .card-title {\n      font-size: 1.1rem;\n      font-weight: bold;\n      margin-bottom: 8px;\n    }\n\n    /* ⑤ .card-subのcolorを #5f6368 に */\n    .card-sub {\n      font-size: 0.9rem;\n    }\n  </style>\n</head>\n<body>\n  <section class=\"hero\">\n    <h1 class=\"hero-title\">GA4データ分析プラットフォーム</h1>\n    <p class=\"hero-subtitle\">マーケターのためのデータドリブン経営を実現します</p>\n    <button class=\"cta-button\">無料で始める</button>\n  </section>\n\n  <div class=\"cards\">\n    <div class=\"card\">\n      <h3 class=\"card-title\">GA4 自動レポート</h3>\n      <p class=\"card-sub\">毎週自動でKPIレポートを生成。分析工数を80%削減。</p>\n    </div>\n    <div class=\"card\">\n      <h3 class=\"card-title\">LLM自然言語分析</h3>\n      <p class=\"card-sub\">「先月より売上が下がった理由は？」をAIが回答。</p>\n    </div>\n    <div class=\"card\">\n      <h3 class=\"card-title\">GTM連携</h3>\n      <p class=\"card-sub\">タグ設定から計測設計まで一貫サポート。</p>\n    </div>\n  </div>\n</body>\n</html>",
+        "hints": [
+          "HEXコードはシャープ記号から始まります：`color: #1a73e8;`",
+          "rgba()は4つの値を取ります：`background-color: rgba(赤, 緑, 青, 透明度);` 透明度は0（完全透明）〜1（完全不透明）。",
+          "named colorの `white` も `#ffffff` や `rgb(255,255,255)` と同じです。CTAボタンのテキストに使えます。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>カラーパレット練習</title>\n  <style>\n    body {\n      font-family: sans-serif;\n      margin: 0;\n      padding: 0;\n      background-color: #f8f9fa;\n      color: #202124;\n    }\n\n    .hero {\n      padding: 80px 40px;\n      text-align: center;\n      background-color: rgba(26, 115, 232, 0.08);\n    }\n\n    .hero-title {\n      font-size: 2.5rem;\n      margin-bottom: 16px;\n      color: #1a73e8;\n    }\n\n    .hero-subtitle {\n      font-size: 1.1rem;\n      margin-bottom: 32px;\n    }\n\n    .cta-button {\n      padding: 14px 32px;\n      border: none;\n      border-radius: 8px;\n      font-size: 1rem;\n      cursor: pointer;\n      font-weight: bold;\n      background-color: #ea4335;\n      color: white;\n    }\n\n    .cards {\n      display: flex;\n      gap: 16px;\n      max-width: 900px;\n      margin: 40px auto;\n      padding: 0 40px;\n    }\n\n    .card {\n      flex: 1;\n      background: white;\n      padding: 24px;\n      border-radius: 8px;\n      box-shadow: 0 1px 3px rgba(0,0,0,0.1);\n    }\n\n    .card-title {\n      font-size: 1.1rem;\n      font-weight: bold;\n      margin-bottom: 8px;\n    }\n\n    .card-sub {\n      font-size: 0.9rem;\n      color: #5f6368;\n    }\n  </style>\n</head>\n<body>\n  <section class=\"hero\">\n    <h1 class=\"hero-title\">GA4データ分析プラットフォーム</h1>\n    <p class=\"hero-subtitle\">マーケターのためのデータドリブン経営を実現します</p>\n    <button class=\"cta-button\">無料で始める</button>\n  </section>\n\n  <div class=\"cards\">\n    <div class=\"card\">\n      <h3 class=\"card-title\">GA4 自動レポート</h3>\n      <p class=\"card-sub\">毎週自動でKPIレポートを生成。分析工数を80%削減。</p>\n    </div>\n    <div class=\"card\">\n      <h3 class=\"card-title\">LLM自然言語分析</h3>\n      <p class=\"card-sub\">「先月より売上が下がった理由は？」をAIが回答。</p>\n    </div>\n    <div class=\"card\">\n      <h3 class=\"card-title\">GTM連携</h3>\n      <p class=\"card-sub\">タグ設定から計測設計まで一貫サポート。</p>\n    </div>\n  </div>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "HEXカラーコード `#3399ff` を3桁に省略すると何になりますか？",
+            "options": ["#39f", "#33f", "#3f", "#3af"],
+            "correct": 0,
+            "explanation": "HEXの3桁省略は、各ペアが同じ数字の場合のみ可能です。#3399ff は #33・#99・#ff なので省略すると #39f になります。"
+          },
+          {
+            "q": "ボタンのホバー時に半透明の青い背景を付けたい場合、最も適した色指定はどれですか？",
+            "options": ["color: blue;", "background-color: rgba(0, 0, 255, 0.2);", "background-color: #0000ff;", "background: hsl(240, 100%, 50%);"],
+            "correct": 1,
+            "explanation": "透明度を持つ色を指定するには rgba() または hsla() を使います。rgba(0, 0, 255, 0.2) は青色（RGB: 0,0,255）を20%の不透明度で指定します。#0000ff は完全に不透明な青です。"
+          },
+          {
+            "q": "HSLの色相（Hue）で「青」は何度付近ですか？",
+            "options": ["0度", "120度", "180度", "240度"],
+            "correct": 3,
+            "explanation": "HSLの色相（Hue）は0〜360の円で表されます。0度=赤、120度=緑、240度=青です。これを知っていると `hsl(240, 100%, 50%)` が純粋な青だと分かります。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール2-11 完了！\n\n## 習得したスキル\n\n✅ **HEXコード**（#RRGGBB）でブランドカラーを正確に指定できる\n✅ **RGB/RGBA**で透明度付きの色を指定できる\n✅ **HSL/HSLA**でデザインシステム的なカラーパレットを設計できる\n✅ **named color** の適切な使いどころを理解した\n✅ **currentColor** で親要素の色を参照できる\n\n## 次のステップ\n\n次のモジュール **「2-12: font-familyとWebフォント（Google Fonts）の読み込み設定」** では、LPのフォント選びと、Google FontsをCSSで読み込む方法を学びます。ブランドイメージを左右するフォント設定をマスターします。\n\n> 実務チャレンジ: 自社のブランドガイドラインやLPのCSSをDevToolsで確認し、コーポレートカラーのHEXコードを書き出してみましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

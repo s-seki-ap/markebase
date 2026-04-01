@@ -1,0 +1,82 @@
+{
+  "id": "app-marketing--8-5",
+  "moduleId": "8-5",
+  "categoryId": "app-marketing",
+  "title": "インストールから初回起動までの計測",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# インストールと起動の間に何があるか\n\nアプリマーケティングでは「インストール数」がよく注目されますが、実はインストールと初回起動の間には重要な計測ポイントがあります。この区間を正しく計測することで、広告の効果判定とユーザー体験の改善ができます。\n\n## インストールから起動までのフロー\n\n```\n広告クリック\n  ↓\nアプリストア遷移（App Store / Google Play）\n  ↓\nインストール（ダウンロード完了）\n  ↓\n初回起動（first_open イベント）\n  ↓\nオンボーディング\n  ↓\nコアアクション（登録・購入等）\n```\n\n## なぜこの区間が重要か\n\n- **広告→インストール**: CPI最適化に使う\n- **インストール→初回起動**: アプリストアのコンバージョン率（インストール後に起動しないケースがある）\n- **初回起動→コアアクション**: オンボーディングの効果を測る\n\nFirebaseの `first_open` イベントは、インストール後にアプリを**初めて起動したとき**に自動で発火します。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# インストール〜初回起動の計測詳細\n\n## first_open イベントの特徴\n\n```\nfirst_openイベントのパラメータ例:\n{\n  event_name: 'first_open',\n  event_params: [\n    { key: 'previous_app_version', value: null },  // 新規インストール\n    { key: 'firebase_campaign', value: 'summer_sale_2024' },\n    { key: 'medium', value: 'cpc' },\n    { key: 'source', value: 'google' }\n  ]\n}\n```\n\n## アトリビューション（流入元の特定）\n\nどの広告・チャネルからインストールが来たかを特定することを「アトリビューション」と呼びます。\n\n| 計測方法 | 仕組み | 使用ツール |\n|---|---|---|\n| クリックベース | 広告クリック時のIDをインストール後に照合 | AppsFlyer・Adjust・Firebase |\n| ビュースルー | 広告を見た後のインストールも計測 | MMP（Mobile Measurement Partner） |\n| SKAdNetwork | iOS14.5以降の計測規格（プライバシー保護型） | Apple公式 |\n\n## MMP（モバイル計測パートナー）の役割\n\n```\n広告主 → [広告配信] → ユーザー\n             ↓\n         MMP（AppsFlyer等）\n             ↓\n       インストール・イベントのアトリビューション\n             ↓\n   媒体別CPI・ROAS・LTV レポート\n```\n\nFirebase単体でもアトリビューションは可能ですが、複数媒体を横断管理する場合はMMP導入が実務標準です。\n\n## first_openの落とし穴\n\n- アプリを**アンインストールして再インストール**した場合、2回目以降は `first_open` が発火しない（デバイスに記録が残るため）\n- ただし一定期間後や設定リセット後は再発火することがある\n- これにより「インストール数 > first_open数」になる場合がある",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: インストール〜起動のファネル分析\n\n広告キャンペーンのパフォーマンスデータからファネル各段階の指標を計算してください。\n\n## 課題\n\nキャンペーンデータから「広告クリック→インストール→初回起動→登録完了」の各転換率と CPI を計算します。",
+        "starterCode": "// キャンペーンデータ\nconst campaignData = {\n  adSpend: 1500000,      // 広告費（円）\n  clicks: 75000,          // 広告クリック数\n  installs: 12000,        // インストール数\n  firstOpens: 10800,      // first_openイベント数\n  registrations: 3240     // 登録完了数（コアアクション）\n};\n\n// CPI（インストール単価）を計算する関数\nfunction calcCPI(adSpend, installs) {\n  // ここに実装してください\n  return 0;\n}\n\n// クリック→インストール転換率を計算する関数\nfunction calcInstallRate(clicks, installs) {\n  // ここに実装してください\n  return 0;\n}\n\n// インストール→first_open率を計算する関数\nfunction calcFirstOpenRate(installs, firstOpens) {\n  // ここに実装してください\n  return 0;\n}\n\n// first_open→登録転換率を計算する関数\nfunction calcRegistrationRate(firstOpens, registrations) {\n  // ここに実装してください\n  return 0;\n}\n\n// 結果出力（変更不要）\nconsole.log('CPI:', '¥' + calcCPI(campaignData.adSpend, campaignData.installs).toFixed(0));\nconsole.log('クリック→インストール率:', calcInstallRate(campaignData.clicks, campaignData.installs).toFixed(1) + '%');\nconsole.log('インストール→first_open率:', calcFirstOpenRate(campaignData.installs, campaignData.firstOpens).toFixed(1) + '%');\nconsole.log('first_open→登録率:', calcRegistrationRate(campaignData.firstOpens, campaignData.registrations).toFixed(1) + '%');",
+        "hints": [
+          "CPI = adSpend / installs です。",
+          "転換率はすべて「後段の数 / 前段の数 * 100」で計算します。",
+          "calcFirstOpenRate は firstOpens / installs * 100 です。"
+        ],
+        "answer": "const campaignData = {\n  adSpend: 1500000,\n  clicks: 75000,\n  installs: 12000,\n  firstOpens: 10800,\n  registrations: 3240\n};\n\nfunction calcCPI(adSpend, installs) {\n  return adSpend / installs;\n}\n\nfunction calcInstallRate(clicks, installs) {\n  return (installs / clicks) * 100;\n}\n\nfunction calcFirstOpenRate(installs, firstOpens) {\n  return (firstOpens / installs) * 100;\n}\n\nfunction calcRegistrationRate(firstOpens, registrations) {\n  return (registrations / firstOpens) * 100;\n}\n\nconsole.log('CPI:', '¥' + calcCPI(campaignData.adSpend, campaignData.installs).toFixed(0));\nconsole.log('クリック→インストール率:', calcInstallRate(campaignData.clicks, campaignData.installs).toFixed(1) + '%');\nconsole.log('インストール→first_open率:', calcFirstOpenRate(campaignData.installs, campaignData.firstOpens).toFixed(1) + '%');\nconsole.log('first_open→登録率:', calcRegistrationRate(campaignData.firstOpens, campaignData.registrations).toFixed(1) + '%');"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "Firebaseの `first_open` イベントが発火するタイミングとして正しいものはどれですか？",
+            "options": [
+              "アプリのダウンロード完了時",
+              "アプリストアのページを開いた時",
+              "インストール後にアプリを初めて起動した時",
+              "ユーザー登録が完了した時"
+            ],
+            "correct": 2,
+            "explanation": "`first_open` はインストール後にアプリを初めて起動した瞬間に発火するFirebaseの自動収集イベントです。ダウンロード完了ではなく「起動」がトリガーです。インストールして起動しないユーザーは計測されません。"
+          },
+          {
+            "q": "iOS 14.5以降のアトリビューション計測で使われるApple公式の仕組みはどれですか？",
+            "options": [
+              "IDFA（Identifier for Advertisers）",
+              "SKAdNetwork",
+              "AppsFlyer SDK",
+              "Firebase Dynamic Links"
+            ],
+            "correct": 1,
+            "explanation": "SKAdNetworkはAppleが提供するプライバシー保護型のアトリビューション計測フレームワークです。ATT導入後、IDFAが取得できない状況でもインストール計測を可能にしますが、詳細なユーザー情報は取得できない制約があります。"
+          },
+          {
+            "q": "「インストール数 > first_open数」になる主な理由はどれですか？",
+            "options": [
+              "FirebaseのSDKが正しくインストールされていない",
+              "インストールしたがアプリを起動しなかったユーザーがいるため",
+              "App StoreとGoogle Playで計測方法が異なるため",
+              "first_openはDay1のみ計測されるため"
+            ],
+            "correct": 1,
+            "explanation": "インストールしたがアプリを起動しないユーザーがいるため、インストール数 > first_open数になります。広告経由でインストールされても初回起動されなければ意味がなく、アプリストアのプロダクトページ最適化やインストール後のプッシュ通知が有効な施策です。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール8-5 完了！\n\nインストールから初回起動までの計測フローを習得しました。\n\n## 習得したスキル\n\n✅ **広告→インストール→first_open→コアアクション**のファネル構造を説明できる\n✅ **first_openイベント**の発火タイミングと特徴を理解した\n✅ **アトリビューションとMMP**の役割と必要性を把握した\n✅ **CPI・各段階の転換率**を計算してキャンペーンを評価できる\n\n## 次のステップ\n\n次のモジュール **「8-6: ディープリンクの仕組みと活用」** では、広告からアプリの特定画面に直接誘導する技術を学びます。",
+        "diagram": false
+      }
+    }
+  ]
+}

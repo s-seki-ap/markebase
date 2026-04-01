@@ -1,0 +1,67 @@
+{
+  "id": "html--1-19",
+  "moduleId": "1-19",
+  "categoryId": "html",
+  "title": "time・dateタグと機械可読な日付表現",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 日付を機械可読にする\n\n「2024年3月15日（金）14:00〜」— 人間にとっては読みやすい日付ですが、検索エンジンにとってはただの文字列です。`<time>` タグを使うことで、日付を機械可読にし、リッチリザルトに対応できます。\n\n## マーケターが知るべき理由\n\n**1. リッチリザルト（検索結果のリッチ表示）**\nイベントページやセール告知で日付を `<time>` タグでマークアップすると、Google検索結果に日付情報が表示される可能性があります。\n\n**2. イベント構造化データ**\nSchema.orgのイベント構造化データで `startDate` や `endDate` を指定する際、ISO 8601形式の日付が必要です。\n\n**3. SNSシェア時の日付認識**\nSNSやカレンダーアプリが日付を自動認識し、予定への追加を提案してくれることがあります。\n\nこのモジュールでは、timeタグとISO 8601形式の日付表現を学びます。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# timeタグの使い方\n\n## 基本構文\n\n```html\n<time datetime=\"2024-03-15\">2024年3月15日</time>\n```\n\n- `<time>` タグで日時テキストを囲む\n- `datetime` 属性にISO 8601形式の日時を指定\n- 表示テキストは人間向けの読みやすい形式でOK\n\n## ISO 8601形式\n\n| 形式 | 例 | 意味 |\n|------|-----|------|\n| 日付のみ | `2024-03-15` | 2024年3月15日 |\n| 日時 | `2024-03-15T14:00` | 3月15日 14:00 |\n| 日時+タイムゾーン | `2024-03-15T14:00+09:00` | 3月15日 14:00 JST |\n| 月のみ | `2024-03` | 2024年3月 |\n| 年のみ | `2024` | 2024年 |\n| 時間のみ | `14:00` | 午後2時 |\n| 期間 | `P3D` | 3日間 |\n\n## マーケティング実例\n\n### セール・キャンペーン告知\n\n```html\n<section class=\"campaign\">\n  <h2>春の特別セール</h2>\n  <p>\n    期間: <time datetime=\"2024-03-01\">2024年3月1日（金）</time> 〜 \n    <time datetime=\"2024-03-31\">3月31日（日）</time>\n  </p>\n  <p>全商品20%OFF！</p>\n</section>\n```\n\n### イベント・ウェビナー告知\n\n```html\n<article class=\"event\">\n  <h2>GA4活用セミナー</h2>\n  <p>\n    日時: <time datetime=\"2024-04-10T14:00+09:00\">2024年4月10日（水）14:00〜16:00</time>\n  </p>\n  <p>場所: オンライン（Zoom）</p>\n  <p>参加費: 無料</p>\n</article>\n```\n\n### ブログ記事の公開日\n\n```html\n<article>\n  <h2>GA4のコンバージョン設定ガイド</h2>\n  <p class=\"meta\">\n    公開日: <time datetime=\"2024-02-20\">2024年2月20日</time>\n    | 更新日: <time datetime=\"2024-03-05\">2024年3月5日</time>\n  </p>\n  <p>この記事ではGA4のコンバージョン設定方法を...</p>\n</article>\n```\n\n## 構造化データとの連携\n\ntimeタグだけでなく、Schema.orgのJSON-LDと組み合わせるとリッチリザルトの可能性が高まります。\n\n```html\n<script type=\"application/ld+json\">\n{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"Event\",\n  \"name\": \"GA4活用セミナー\",\n  \"startDate\": \"2024-04-10T14:00+09:00\",\n  \"endDate\": \"2024-04-10T16:00+09:00\",\n  \"eventAttendanceMode\": \"https://schema.org/OnlineEventAttendanceMode\",\n  \"location\": {\n    \"@type\": \"VirtualLocation\",\n    \"url\": \"https://zoom.us/j/xxxxx\"\n  }\n}\n</script>\n```\n\n## dateタグについて\n\nHTMLには `<date>` タグは存在しません。日付は `<time>` タグで統一して表現します。\n\n## CSSでのスタイリング\n\n```css\ntime {\n  color: #3b82f6;\n  font-weight: bold;\n}\n\n/* ホバーでISO形式を表示 */\ntime[datetime]:hover::after {\n  content: ' (' attr(datetime) ')';\n  color: #9ca3af;\n  font-size: 0.8em;\n}\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: イベントページの日付を構造化する\n\nウェビナー告知ページの日時をtimeタグで構造化してください。\n\n## 課題\n\n1. セミナーの開催日時を `<time>` タグで囲む（datetime属性にISO 8601形式を指定）\n2. 申し込み締め切り日を `<time>` タグで囲む\n3. セール期間の開始日と終了日をそれぞれ `<time>` タグで囲む",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>セミナー＆セール告知</title>\n  <style>\n    body { font-family: sans-serif; max-width: 700px; margin: 0 auto; padding: 20px; }\n    time { color: #3b82f6; font-weight: bold; }\n    .event, .sale { border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; margin: 20px 0; }\n  </style>\n</head>\n<body>\n\n  <h1>4月のイベント情報</h1>\n\n  <div class=\"event\">\n    <h2>GA4活用ウェビナー</h2>\n    <!-- ① 開催日時にtimeタグを追加してください（JST: +09:00） -->\n    <p>日時: 2024年4月10日（水）14:00〜16:00</p>\n    <p>場所: オンライン（Zoom）</p>\n    <!-- ② 申し込み締め切りにtimeタグを追加してください -->\n    <p>申し込み締め切り: 2024年4月8日（月）</p>\n  </div>\n\n  <div class=\"sale\">\n    <h2>春のセール</h2>\n    <!-- ③ 開始日と終了日にtimeタグを追加してください -->\n    <p>期間: 2024年4月1日 〜 2024年4月30日</p>\n    <p>全商品が20%OFFになります！</p>\n  </div>\n\n</body>\n</html>",
+        "hints": [
+          "日時は datetime=\"2024-04-10T14:00+09:00\" のようにISO 8601形式で指定します。+09:00は日本時間です。",
+          "日付のみの場合は datetime=\"2024-04-08\" のように年-月-日形式で指定します。",
+          "表示テキストは人間向けの読みやすい形式（「2024年4月10日」等）のままでOKです。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>セミナー＆セール告知</title>\n  <style>\n    body { font-family: sans-serif; max-width: 700px; margin: 0 auto; padding: 20px; }\n    time { color: #3b82f6; font-weight: bold; }\n    .event, .sale { border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; margin: 20px 0; }\n  </style>\n</head>\n<body>\n\n  <h1>4月のイベント情報</h1>\n\n  <div class=\"event\">\n    <h2>GA4活用ウェビナー</h2>\n    <p>日時: <time datetime=\"2024-04-10T14:00+09:00\">2024年4月10日（水）14:00〜16:00</time></p>\n    <p>場所: オンライン（Zoom）</p>\n    <p>申し込み締め切り: <time datetime=\"2024-04-08\">2024年4月8日（月）</time></p>\n  </div>\n\n  <div class=\"sale\">\n    <h2>春のセール</h2>\n    <p>期間: <time datetime=\"2024-04-01\">2024年4月1日</time> 〜 <time datetime=\"2024-04-30\">2024年4月30日</time></p>\n    <p>全商品が20%OFFになります！</p>\n  </div>\n\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "日本時間の2024年4月10日 14:00をISO 8601形式で正しく書いたものはどれですか？",
+            "options": ["2024/04/10 14:00 JST", "2024-04-10T14:00+09:00", "April 10, 2024 2:00PM", "10-04-2024T14:00"],
+            "correct": 1,
+            "explanation": "ISO 8601形式では、日付はYYYY-MM-DD、日時の区切りはT、タイムゾーンは+09:00（日本時間）で表現します。2024-04-10T14:00+09:00が正しい表記です。"
+          },
+          {
+            "q": "timeタグを使うことでSEOに期待できる効果は何ですか？",
+            "options": ["ページの読み込み速度が向上する", "検索結果にリッチリザルトとして日付情報が表示される可能性がある", "ページのランキングが必ず上がる", "広告が自動的に表示される"],
+            "correct": 1,
+            "explanation": "timeタグで日付を機械可読にすることで、Googleがイベントの日時を認識し、検索結果にリッチリザルトとして日付情報を表示する可能性があります。特にSchema.orgのJSON-LDと組み合わせると効果的です。"
+          },
+          {
+            "q": "HTMLで日付を構造化するために使うべきタグはどれですか？",
+            "options": ["<date>", "<time>", "<datetime>", "<calendar>"],
+            "correct": 1,
+            "explanation": "HTMLには<date>タグは存在しません。日付と時刻の構造化には<time>タグを使います。datetime属性にISO 8601形式の値を指定することで、機械可読な日時情報を提供できます。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール1-19 完了！\n\ntimeタグとISO 8601形式の日付表現を習得しました。\n\n## 習得したスキル\n\n✅ **time** タグで日付・時刻を機械可読にできる\n✅ **ISO 8601形式**（YYYY-MM-DDThh:mm+09:00）を正しく書ける\n✅ **リッチリザルト**と日付構造化の関係を理解した\n✅ **Schema.orgのJSON-LD**との連携方法を知った\n\n## 次のステップ\n\n次のモジュール **「1-20: spanタグとクラス付与によるGTMターゲット設計」** では、spanにdata属性を付けてGTMのクリックイベントを取得する設計を学びます。\n\n> 💡 **実務チャレンジ**: 自社のイベントページやセール告知ページで、日付がtimeタグで構造化されているか確認してみましょう。構造化されていなければ、リッチリザルト対応の改善提案ができます。",
+        "diagram": false
+      }
+    }
+  ]
+}

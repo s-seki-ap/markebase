@@ -1,0 +1,67 @@
+{
+  "id": "html--1-10",
+  "moduleId": "1-10",
+  "categoryId": "html",
+  "title": "インライン要素とブロック要素の違い",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# ブロック要素とインライン要素を使い分ける\n\nHTMLの要素は大きく「ブロック要素」と「インライン要素」に分かれます。この違いを理解することは、GTMでのCSSセレクタ設計やLP修正で欠かせません。\n\n## なぜマーケターに必要か\n\n**1. GTMのクリックトリガー設計**\nGTMでクリックイベントを取得するとき、ターゲット要素がブロックかインラインかで挙動が変わります。divクリックとspanクリックでは取得範囲が異なります。\n\n**2. ABテストのCSS変更**\nブロック要素の幅は100%、インライン要素はコンテンツ幅のみ。この違いを知らないとABテストでレイアウトが崩れます。\n\n**3. LPのレイアウト理解**\nなぜ `<div>` は改行されて、`<span>` は改行されないのか。この基本を押さえるとHTMLが読めるようになります。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# ブロック要素とインライン要素\n\n## ブロック要素の特徴\n\n```html\n<div>これはブロック要素です</div>\n<p>これもブロック要素です</p>\n<h1>見出しもブロック要素です</h1>\n```\n\n- 常に**新しい行**から始まる\n- **横幅いっぱい**（100%）に広がる\n- 上下に**margin**を設定できる\n- 中にブロック要素もインライン要素も入れられる\n\n## インライン要素の特徴\n\n```html\n<span>これはインライン要素です</span>\n<a href=\"#\">リンクもインライン要素です</a>\n<strong>強調もインライン要素です</strong>\n```\n\n- 新しい行に改行**されない**（テキストの中に流れる）\n- **コンテンツの幅だけ**を占める\n- 上下のmarginが効かない（左右は効く）\n- 中にブロック要素を入れてはいけない（HTML5で一部緩和）\n\n## 視覚的な違い\n\n```html\n<!-- ブロック要素: それぞれ新しい行 -->\n<div style=\"background: #e0f2fe;\">ブロック1</div>\n<div style=\"background: #dbeafe;\">ブロック2</div>\n\n<!-- インライン要素: 横に並ぶ -->\n<span style=\"background: #fef3c7;\">インライン1</span>\n<span style=\"background: #fde68a;\">インライン2</span>\n```\n\n## 主要な要素の分類\n\n| ブロック要素 | インライン要素 |\n|-------------|---------------|\n| `<div>` | `<span>` |\n| `<p>` | `<a>` |\n| `<h1>`〜`<h6>` | `<strong>` |\n| `<ul>`, `<ol>`, `<li>` | `<em>` |\n| `<section>` | `<img>` |\n| `<header>`, `<footer>` | `<br>` |\n| `<form>` | `<input>` |\n| `<table>` | `<label>` |\n\n## GTMのCSSセレクタ設計への影響\n\n```html\n<!-- GTMでdivクリックを取得する場合 -->\n<div class=\"cta-section\">\n  <h2>今すぐ登録</h2>\n  <p>無料で始められます</p>\n  <a href=\"/signup\" class=\"cta-btn\">登録する</a>\n</div>\n```\n\n- `div.cta-section` をクリックターゲットにすると、セクション全体のクリックを取得\n- `a.cta-btn` をターゲットにすると、ボタンだけのクリックを取得\n\nブロック要素は領域が広いため、意図しないクリック計測が起きやすいです。GTMでは**できるだけ具体的な要素**（ボタンやリンク）をターゲットにしましょう。\n\n## CSSのdisplayプロパティ\n\nCSSの `display` プロパティで要素の表示方法を変更できます。\n\n```css\n/* インライン要素をブロック要素のように表示 */\nspan { display: block; }\n\n/* ブロック要素をインラインのように表示 */\ndiv { display: inline; }\n\n/* 両方の特性を持つ（幅・高さ指定可能で横並び） */\na { display: inline-block; }\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: ブロック要素とインライン要素を正しく使い分ける\n\nLPのCTAセクションを作成します。ブロック要素でセクション構造を作り、インライン要素でテキスト内の強調を行ってください。\n\n## 課題\n\n1. `<div>` でCTAセクション全体を囲む（class=\"cta-section\"）\n2. `<h2>` でセクション見出しを書く\n3. `<p>` 内で `<span>` を使って価格部分を強調する（class=\"highlight\"）\n4. `<a>` タグでCTAボタンを作る（class=\"cta-btn\"）",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>CTAセクション</title>\n  <style>\n    .cta-section {\n      background: #f0fdf4;\n      padding: 40px;\n      text-align: center;\n    }\n    .highlight {\n      color: #dc2626;\n      font-weight: bold;\n      font-size: 1.5em;\n    }\n    .cta-btn {\n      display: inline-block;\n      background: #10b981;\n      color: white;\n      padding: 16px 32px;\n      text-decoration: none;\n      border-radius: 8px;\n      font-size: 1.2em;\n    }\n  </style>\n</head>\n<body>\n\n  <!-- ① divでCTAセクション全体を囲んでください -->\n  \n    <!-- ② h2でセクション見出しを書いてください -->\n    \n\n    <!-- ③ pタグ内でspanを使って価格を強調してください -->\n    \n\n    <!-- ④ aタグでCTAボタンを作ってください -->\n    \n  \n\n</body>\n</html>",
+        "hints": [
+          "divはブロック要素です。<div class=\"cta-section\">...</div> でセクション全体を囲みます。",
+          "spanはインライン要素です。<p>今なら <span class=\"highlight\">¥2,980</span> で提供中！</p> のように、テキストの一部だけを囲みます。",
+          "aタグでボタンを作ります。<a href=\"/signup\" class=\"cta-btn\">今すぐ申し込む</a> のように書きます。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>CTAセクション</title>\n  <style>\n    .cta-section {\n      background: #f0fdf4;\n      padding: 40px;\n      text-align: center;\n    }\n    .highlight {\n      color: #dc2626;\n      font-weight: bold;\n      font-size: 1.5em;\n    }\n    .cta-btn {\n      display: inline-block;\n      background: #10b981;\n      color: white;\n      padding: 16px 32px;\n      text-decoration: none;\n      border-radius: 8px;\n      font-size: 1.2em;\n    }\n  </style>\n</head>\n<body>\n\n  <div class=\"cta-section\">\n    <h2>期間限定キャンペーン</h2>\n\n    <p>今なら特別価格 <span class=\"highlight\">&yen;2,980</span> でご提供中！</p>\n\n    <a href=\"/signup\" class=\"cta-btn\">今すぐ申し込む</a>\n  </div>\n\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "ブロック要素の特徴として正しいものはどれですか？",
+            "options": ["コンテンツの幅だけを占める", "常に新しい行から始まり、横幅いっぱいに広がる", "横に並んで表示される", "上下のmarginが効かない"],
+            "correct": 1,
+            "explanation": "ブロック要素は常に新しい行から始まり、親要素の横幅いっぱい（100%）に広がります。<div>、<p>、<h1>〜<h6> などが代表的なブロック要素です。"
+          },
+          {
+            "q": "GTMでCTAボタンのクリックイベントを正確に計測するとき、ターゲットとして最適なのはどれですか？",
+            "options": ["ボタンを含むdiv要素（セクション全体）", "body要素", "ボタン自体のa要素またはbutton要素", "親のsection要素"],
+            "correct": 2,
+            "explanation": "CTAボタン自体（aやbutton）をターゲットにすることで、ボタンクリックだけを正確に計測できます。divやsectionなどのブロック要素をターゲットにすると、周囲の余白クリックも計測されてしまいます。"
+          },
+          {
+            "q": "インライン要素をブロック要素のように表示させるCSSプロパティはどれですか？",
+            "options": ["position: block;", "display: block;", "float: block;", "style: block;"],
+            "correct": 1,
+            "explanation": "display: block; を指定すると、インライン要素もブロック要素のように新しい行から始まり、幅いっぱいに広がる振る舞いになります。display: inline-block; は両方の特性を持ちます。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール1-10 完了！\n\nブロック要素とインライン要素の違いを理解し、使い分けられるようになりました。\n\n## 習得したスキル\n\n✅ **ブロック要素**（div, p, h1-h6）の特徴を理解した\n✅ **インライン要素**（span, a, strong）の特徴を理解した\n✅ **GTMのCSSセレクタ設計**で適切なターゲット要素を選べる\n✅ **CSSのdisplayプロパティ**で表示方法を変更できることを知った\n\n## 次のステップ\n\n次のモジュール **「1-11: 見出しタグ（h1〜h6）の階層設計とSEOへの影響」** では、見出しの階層構造がSEO評価にどう影響するかを学びます。\n\n> 💡 **実務チャレンジ**: DevTools（F12）で自社LPのCTAボタンを検証し、ブロック要素（div）とインライン要素（a）がどのように使われているか確認してみましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

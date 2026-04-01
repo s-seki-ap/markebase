@@ -1,0 +1,72 @@
+{
+  "id": "advertising--9-6",
+  "moduleId": "9-6",
+  "categoryId": "advertising",
+  "title": "デジタル広告の予算設計：目標から逆算する方法",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 「予算いくらですか？」ではなく「何件獲得したいですか？」から始める\n\n多くの担当者が「予算を決めてから目標を考える」という順番で広告を設計しています。しかし本来は**目標（獲得件数・売上）から逆算して必要な予算を算出する**のが正しい設計手順です。\n\n## 逆算設計のメリット\n\n- 「この予算では目標達成できない」と事前に判断できる\n- 予算増額の根拠を数値で説明できる\n- 媒体別の期待値を明確にできる\n\n## 前提となる知識\n\n逆算設計には前モジュールで学んだ指標の計算式が必要です：\n\n```\n必要クリック数 = 目標CV数 ÷ CVR\n必要予算     = 必要クリック数 × CPC\n              = 目標CV数 ÷ CVR × CPC\n              = 目標CV数 × CPA目標\n```\n\n> **この式を覚えてください**: 必要予算 = 目標CV数 × 目標CPA",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# 予算設計の手順と考え方\n\n## Step1: ビジネスKPIの設定\n\n```\n事例: フィットネスジム\n─────────────────────────────\n月間新規入会目標: 50名\n月会費:          ¥8,000\n平均継続月数:     18ヶ月\nLTV（顧客生涯価値）: ¥8,000 × 18 = ¥144,000\n```\n\n## Step2: 許容CPA（目標獲得単価）の設定\n\n```\n許容CPA = LTV × 広告費率\n\n例: LTV ¥144,000 × 10% = CPA目標 ¥14,400\n※ 「初年度回収」なら ¥8,000 × 12ヶ月 × 20% = ¥19,200\n```\n\n## Step3: 必要予算の算出\n\n```\n必要月間予算 = 目標CV数 × 目標CPA\n           = 50名 × ¥14,400\n           = ¥720,000/月\n```\n\n## Step4: 媒体別配分と期待値設定\n\n| 媒体 | 予算配分 | 予算 | 想定CPA | 期待CV数 |\n|------|---------|------|---------|----------|\n| Google検索 | 55% | ¥396,000 | ¥12,000 | 33名 |\n| Instagram | 30% | ¥216,000 | ¥18,000 | 12名 |\n| YouTube | 15% | ¥108,000 | ¥27,000 | 4名 |\n| **合計** | **100%** | **¥720,000** | - | **49名** |\n\n## Step5: 月次モニタリング計画\n\n```\n【週次チェックポイント】\n週1: CV数が週あたり12件以上あるか？\n週2: 各媒体のCPAが目標の120%（¥17,280）以内か？\n週3: 予算消化ペースは適切か？（月末予算枯渇していないか）\n週4: 翌月の予算と配分調整の検討\n```\n\n## 予算不足の場合の対処法\n\n```\n目標CV 50名 × 目標CPA ¥14,400 = ¥720,000 が必要\n\n実際の予算が ¥300,000 しかない場合:\n\n選択肢A: 目標CV数を下げる（¥300,000 ÷ ¥14,400 = 約20名）\n選択肢B: 目標CPAを改善する（CVR改善でCPAを下げる）\n選択肢C: 予算増額を交渉する（LTV計算で費用対効果を証明）\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: 予算逆算計算シート\n\n目標から予算を逆算する計算シートを実装します。\n\n## 課題\n\n以下のHTMLフォームに数値を入力すると、必要予算と期待値を自動計算するスクリプトを完成させてください。\n\n1. `calcBudget()` 関数でLTV・許容CPA・必要予算を計算する\n2. 各計算結果を対応するHTML要素に表示する",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>広告予算逆算シート</title>\n  <style>\n    body { font-family: 'Noto Sans JP', sans-serif; background: #0f172a; color: #e2e8f0; padding: 20px; }\n    h1 { color: #60a5fa; font-size: 18px; }\n    .section { background: #1e293b; padding: 16px; border-radius: 8px; margin: 12px 0; }\n    .section h2 { font-size: 13px; color: #94a3b8; margin: 0 0 12px; }\n    .row { display: flex; justify-content: space-between; align-items: center; margin: 8px 0; }\n    label { font-size: 13px; color: #cbd5e1; }\n    input { background: #0f172a; border: 1px solid #334155; color: #e2e8f0; padding: 6px 10px; border-radius: 4px; width: 140px; text-align: right; }\n    button { background: #10b981; color: white; border: none; padding: 10px 24px; border-radius: 6px; cursor: pointer; margin-top: 8px; width: 100%; }\n    .result-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #334155; font-size: 13px; }\n    .result-value { color: #fbbf24; font-weight: bold; }\n    .highlight { color: #34d399; font-size: 18px; font-weight: bold; }\n  </style>\n</head>\n<body>\n  <h1>広告予算逆算シート</h1>\n  <div class=\"section\">\n    <h2>ビジネス情報</h2>\n    <div class=\"row\"><label>月間目標CV数（件）</label><input id=\"targetCV\" type=\"number\" value=\"50\"></div>\n    <div class=\"row\"><label>平均顧客単価（円）</label><input id=\"unitPrice\" type=\"number\" value=\"8000\"></div>\n    <div class=\"row\"><label>平均継続月数（月）</label><input id=\"retentionMonths\" type=\"number\" value=\"18\"></div>\n    <div class=\"row\"><label>広告費率（%）</label><input id=\"adCostRate\" type=\"number\" value=\"10\"></div>\n  </div>\n  <div class=\"section\">\n    <h2>想定パフォーマンス</h2>\n    <div class=\"row\"><label>想定CVR（%）</label><input id=\"cvr\" type=\"number\" value=\"2\"></div>\n    <div class=\"row\"><label>想定CPC（円）</label><input id=\"cpc\" type=\"number\" value=\"200\"></div>\n  </div>\n  <button onclick=\"calcBudget()\">予算を逆算する</button>\n  <div class=\"section\" id=\"results\" style=\"display:none;\">\n    <h2>計算結果</h2>\n    <div class=\"result-row\"><span>LTV（顧客生涯価値）</span><span class=\"result-value\" id=\"ltv\">-</span></div>\n    <div class=\"result-row\"><span>許容CPA（目標獲得単価）</span><span class=\"result-value\" id=\"allowedCPA\">-</span></div>\n    <div class=\"result-row\"><span>必要クリック数/月</span><span class=\"result-value\" id=\"requiredClicks\">-</span></div>\n    <div class=\"result-row\"><span>必要月間広告予算</span><span class=\"highlight\" id=\"requiredBudget\">-</span></div>\n  </div>\n  <script>\n    function calcBudget() {\n      const targetCV       = parseFloat(document.getElementById('targetCV').value);\n      const unitPrice      = parseFloat(document.getElementById('unitPrice').value);\n      const retentionMonths = parseFloat(document.getElementById('retentionMonths').value);\n      const adCostRate     = parseFloat(document.getElementById('adCostRate').value);\n      const cvr            = parseFloat(document.getElementById('cvr').value);\n      const cpc            = parseFloat(document.getElementById('cpc').value);\n\n      // 各値を計算してください\n      const ltv             = 0; // LTV = 単価 × 継続月数\n      const allowedCPA      = 0; // 許容CPA = LTV × (adCostRate / 100)\n      const requiredClicks  = 0; // 必要クリック数 = targetCV / (cvr / 100)\n      const requiredBudget  = 0; // 必要予算 = requiredClicks × cpc\n\n      document.getElementById('results').style.display = 'block';\n      document.getElementById('ltv').textContent           = '¥' + Math.round(ltv).toLocaleString();\n      document.getElementById('allowedCPA').textContent    = '¥' + Math.round(allowedCPA).toLocaleString();\n      document.getElementById('requiredClicks').textContent = Math.round(requiredClicks).toLocaleString() + ' クリック';\n      document.getElementById('requiredBudget').textContent = '¥' + Math.round(requiredBudget).toLocaleString() + '/月';\n    }\n  </script>\n</body>\n</html>",
+        "hints": [
+          "LTV = unitPrice × retentionMonths",
+          "許容CPA = LTV × (adCostRate / 100)、必要クリック数 = targetCV / (cvr / 100)",
+          "必要予算 = requiredClicks × cpc（またはシンプルに targetCV × allowedCPA でも同じ値になる）"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>広告予算逆算シート</title>\n  <style>\n    body { font-family: 'Noto Sans JP', sans-serif; background: #0f172a; color: #e2e8f0; padding: 20px; }\n    h1 { color: #60a5fa; font-size: 18px; }\n    .section { background: #1e293b; padding: 16px; border-radius: 8px; margin: 12px 0; }\n    .section h2 { font-size: 13px; color: #94a3b8; margin: 0 0 12px; }\n    .row { display: flex; justify-content: space-between; align-items: center; margin: 8px 0; }\n    label { font-size: 13px; color: #cbd5e1; }\n    input { background: #0f172a; border: 1px solid #334155; color: #e2e8f0; padding: 6px 10px; border-radius: 4px; width: 140px; text-align: right; }\n    button { background: #10b981; color: white; border: none; padding: 10px 24px; border-radius: 6px; cursor: pointer; margin-top: 8px; width: 100%; }\n    .result-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #334155; font-size: 13px; }\n    .result-value { color: #fbbf24; font-weight: bold; }\n    .highlight { color: #34d399; font-size: 18px; font-weight: bold; }\n  </style>\n</head>\n<body>\n  <h1>広告予算逆算シート</h1>\n  <div class=\"section\">\n    <h2>ビジネス情報</h2>\n    <div class=\"row\"><label>月間目標CV数（件）</label><input id=\"targetCV\" type=\"number\" value=\"50\"></div>\n    <div class=\"row\"><label>平均顧客単価（円）</label><input id=\"unitPrice\" type=\"number\" value=\"8000\"></div>\n    <div class=\"row\"><label>平均継続月数（月）</label><input id=\"retentionMonths\" type=\"number\" value=\"18\"></div>\n    <div class=\"row\"><label>広告費率（%）</label><input id=\"adCostRate\" type=\"number\" value=\"10\"></div>\n  </div>\n  <div class=\"section\">\n    <h2>想定パフォーマンス</h2>\n    <div class=\"row\"><label>想定CVR（%）</label><input id=\"cvr\" type=\"number\" value=\"2\"></div>\n    <div class=\"row\"><label>想定CPC（円）</label><input id=\"cpc\" type=\"number\" value=\"200\"></div>\n  </div>\n  <button onclick=\"calcBudget()\">予算を逆算する</button>\n  <div class=\"section\" id=\"results\" style=\"display:none;\">\n    <h2>計算結果</h2>\n    <div class=\"result-row\"><span>LTV（顧客生涯価値）</span><span class=\"result-value\" id=\"ltv\">-</span></div>\n    <div class=\"result-row\"><span>許容CPA（目標獲得単価）</span><span class=\"result-value\" id=\"allowedCPA\">-</span></div>\n    <div class=\"result-row\"><span>必要クリック数/月</span><span class=\"result-value\" id=\"requiredClicks\">-</span></div>\n    <div class=\"result-row\"><span>必要月間広告予算</span><span class=\"highlight\" id=\"requiredBudget\">-</span></div>\n  </div>\n  <script>\n    function calcBudget() {\n      const targetCV        = parseFloat(document.getElementById('targetCV').value);\n      const unitPrice       = parseFloat(document.getElementById('unitPrice').value);\n      const retentionMonths = parseFloat(document.getElementById('retentionMonths').value);\n      const adCostRate      = parseFloat(document.getElementById('adCostRate').value);\n      const cvr             = parseFloat(document.getElementById('cvr').value);\n      const cpc             = parseFloat(document.getElementById('cpc').value);\n      const ltv             = unitPrice * retentionMonths;\n      const allowedCPA      = ltv * (adCostRate / 100);\n      const requiredClicks  = targetCV / (cvr / 100);\n      const requiredBudget  = requiredClicks * cpc;\n      document.getElementById('results').style.display = 'block';\n      document.getElementById('ltv').textContent            = '¥' + Math.round(ltv).toLocaleString();\n      document.getElementById('allowedCPA').textContent     = '¥' + Math.round(allowedCPA).toLocaleString();\n      document.getElementById('requiredClicks').textContent = Math.round(requiredClicks).toLocaleString() + ' クリック';\n      document.getElementById('requiredBudget').textContent = '¥' + Math.round(requiredBudget).toLocaleString() + '/月';\n    }\n  </script>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "目標CV数50件、目標CPA ¥10,000の場合、必要な月間広告予算はいくらですか？",
+            "options": ["¥50,000", "¥500,000", "¥5,000,000", "¥100,000"],
+            "correct": 1,
+            "explanation": "必要予算 = 目標CV数 × 目標CPA = 50件 × ¥10,000 = ¥500,000です。この逆算式は予算設計の基本中の基本です。目標CVと許容CPAが決まれば、必要予算が自動的に導き出されます。"
+          },
+          {
+            "q": "LTV（顧客生涯価値）を広告予算設計に活用する主な目的はどれですか？",
+            "options": [
+              "売上予測を精密に行うため",
+              "許容CPA（獲得単価の上限）を科学的に設定するため",
+              "競合他社の広告戦略を分析するため",
+              "媒体ごとのCPMを比較するため"
+            ],
+            "correct": 1,
+            "explanation": "LTVを算出することで「この顧客を獲得するためにいくらまで広告費を払えるか（許容CPA）」を科学的に設定できます。LTVを無視した許容CPA設定は、利益を圧迫するリスクがあります。"
+          },
+          {
+            "q": "予算¥300,000、目標CPA ¥10,000の場合、期待されるCV数はいくつですか？",
+            "options": ["10件", "30件", "300件", "3件"],
+            "correct": 1,
+            "explanation": "期待CV数 = 予算 ÷ 目標CPA = ¥300,000 ÷ ¥10,000 = 30件です。この計算は「予算が決まっている場合に目標CV数を設定する」逆方向の計算としても使います。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール9-6 完了！\n\n目標から逆算する広告予算設計の手法を習得しました。\n\n## 習得したスキル\n\n✅ **LTV → 許容CPA → 必要予算**の逆算フローを説明できる\n✅ **必要予算 = 目標CV数 × 目標CPA**の式を使いこなせる\n✅ 予算不足時の3つの対処法（目標調整・CPA改善・予算交渉）を知った\n✅ JavaScriptで予算逆算計算ツールを実装できた\n\n## 次のステップ\n\n次のモジュール **「9-7: 広告アカウントの権限管理とセキュリティ設定」** では、複数人・複数社での広告アカウント運用を安全に行うための権限設計を学びます。\n\n> **実務チャレンジ**: 担当クライアントのLTVを計算し、現在の目標CPAが適切かどうかを検証してみましょう。「CPA目標はどこから来たのか？」を問い直すことが改善の第一歩です。",
+        "diagram": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "id": "javascript--3-9",
+  "moduleId": "3-9",
+  "categoryId": "javascript",
+  "title": "GTMカスタムHTMLタグのJS構造と読み方",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "## GTMカスタムHTMLタグのJS構造と読み方\n\nGoogle Tag Manager（GTM）のカスタムHTMLタグは、`<script>` タグで囲まれたJavaScriptコードを直接記述できる強力な機能です。\n\nこのモジュールでは、GTMカスタムHTMLタグの基本構造を理解し、既存のタグコードを正確に「読む」スキルを習得します。\n\n**このモジュールで学ぶこと**\n- GTMカスタムHTMLタグの基本的なHTML/JS構造\n- `<script>` タグ内のコードの読み方\n- GTM変数・dataLayerとの連携パターン\n- よく使われるコードパターンの解読",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "## GTMカスタムHTMLタグの基本構造\n\nカスタムHTMLタグは以下の形式で記述します。\n\n```javascript\n<script>\n  // ここにJavaScriptコードを記述\n  console.log('タグが発火しました');\n</script>\n```\n\n### GTM変数の参照方法\n\nGTM内で定義した変数は `{{変数名}}` の形式でカスタムHTMLタグ内から参照できます。\n\n```javascript\n<script>\n  // GTM変数を参照する\n  var pageTitle = {{Page Title}};\n  var userId = {{User ID}};\n\n  console.log('ページタイトル:', pageTitle);\n  console.log('ユーザーID:', userId);\n</script>\n```\n\n### dataLayerへのプッシュ\n\nカスタムHTMLタグからdataLayerにデータを送ることも一般的なパターンです。\n\n```javascript\n<script>\n  // dataLayerへイベントをプッシュ\n  window.dataLayer = window.dataLayer || [];\n  window.dataLayer.push({\n    'event': 'custom_event',\n    'eventCategory': 'engagement',\n    'eventLabel': 'button_click'\n  });\n</script>\n```\n\n### 実際のタグコード例：スクロール深度計測\n\n```javascript\n<script>\n  // スクロール深度を計測するカスタムタグ\n  (function() {\n    var depths = [25, 50, 75, 100];\n    var fired = {};\n\n    window.addEventListener('scroll', function() {\n      var scrollTop = window.scrollY || document.documentElement.scrollTop;\n      var docHeight = document.documentElement.scrollHeight - window.innerHeight;\n      var scrollPercent = Math.round((scrollTop / docHeight) * 100);\n\n      depths.forEach(function(depth) {\n        if (scrollPercent >= depth && !fired[depth]) {\n          fired[depth] = true;\n          window.dataLayer = window.dataLayer || [];\n          window.dataLayer.push({\n            'event': 'scroll_depth',\n            'scroll_depth_threshold': depth\n          });\n        }\n      });\n    });\n  })();\n</script>\n```\n\n**コードの読み方ポイント**\n1. `(function() { ... })();` は即時実行関数（IIFE）。スコープ汚染を防ぐ\n2. `window.dataLayer = window.dataLayer || []` はdataLayerの安全な初期化\n3. `forEach` は配列の各要素に対して処理を繰り返す",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "## 練習：カスタムHTMLタグを読んで穴埋めする\n\n以下は「フォーム送信イベントをGA4に送るカスタムHTMLタグ」です。\nコメントに従って、空欄部分を補完してください。\n\n**要件**\n- フォーム送信時に `form_submit` イベントをdataLayerにプッシュする\n- GTM変数 `{{Form ID}}` からフォームIDを取得する\n- dataLayerが未定義の場合は空配列で初期化する",
+        "starterCode": "<script>\n  // dataLayerを安全に初期化する（未定義なら空配列にする）\n  window.dataLayer = window.dataLayer ______ [];\n\n  // GTM変数からフォームIDを取得\n  var formId = ______;\n\n  // dataLayerにform_submitイベントをプッシュ\n  window.dataLayer.push({\n    '______': 'form_submit',\n    'form_id': formId\n  });\n</script>",
+        "hints": [
+          "dataLayerの初期化には「すでに存在すればそれを使い、なければ空配列」という短絡評価パターン `||` を使います",
+          "GTM変数を参照するには `{{変数名}}` の構文を使います。変数名は「Form ID」です",
+          "dataLayerのイベント名キーは `'event'` です。GA4のイベントトリガーはこのキーで識別されます"
+        ],
+        "answer": "<script>\n  // dataLayerを安全に初期化する（未定義なら空配列にする）\n  window.dataLayer = window.dataLayer || [];\n\n  // GTM変数からフォームIDを取得\n  var formId = {{Form ID}};\n\n  // dataLayerにform_submitイベントをプッシュ\n  window.dataLayer.push({\n    'event': 'form_submit',\n    'form_id': formId\n  });\n</script>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "question": "GTMカスタムHTMLタグ内でGTM変数「Page URL」を参照する正しい記述はどれですか？",
+            "options": [
+              "{{Page URL}}",
+              "${Page URL}",
+              "[[Page URL]]",
+              "<%Page URL%>"
+            ],
+            "correct": 0,
+            "explanation": "GTMカスタムHTMLタグ内でGTM変数を参照するには `{{変数名}}` の二重中括弧構文を使います。この構文はGTMがタグを処理する際に実際の値に置き換えます。"
+          },
+          {
+            "question": "`window.dataLayer = window.dataLayer || []` の目的として正しいのはどれですか？",
+            "options": [
+              "dataLayerを空配列にリセットする",
+              "dataLayerが未定義の場合のみ空配列で初期化し、既存データを保持する",
+              "dataLayerに空のオブジェクトを追加する",
+              "dataLayerのイベントをすべて削除する"
+            ],
+            "correct": 1,
+            "explanation": "`||` は短絡評価演算子です。左辺（window.dataLayer）が truthy であればそのまま使い、falsy（undefined等）であれば右辺（[]）を使います。これにより既存のdataLayerデータを破壊せず安全に初期化できます。"
+          },
+          {
+            "question": "GTMカスタムHTMLタグで `(function() { ... })();` という即時実行関数（IIFE）を使う主な理由はどれですか？",
+            "options": [
+              "コードの実行速度を上げるため",
+              "GTMのデバッグモードを有効にするため",
+              "変数のスコープをタグ内に閉じ込め、グローバルスコープを汚染しないため",
+              "dataLayerへのアクセスを高速化するため"
+            ],
+            "correct": 2,
+            "explanation": "IIFEはJavaScriptのスコープを活用したパターンです。関数内で宣言した変数はその関数内にのみ存在するため、GTMの他のタグやページ上の他のスクリプトと変数名が衝突するリスクを防げます。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "## まとめ：GTMカスタムHTMLタグの読み方\n\n✅ カスタムHTMLタグは `<script>` タグ内にJavaScriptを記述する\n\n✅ GTM変数は `{{変数名}}` 構文でタグ内から参照できる\n\n✅ `window.dataLayer = window.dataLayer || []` でdataLayerを安全に初期化する\n\n✅ `dataLayer.push({...})` でGA4/UA向けのイベントデータを送信する\n\n✅ IIFEパターン `(function(){ })()` でスコープ汚染を防ぐ\n\n**次のモジュールでは** ES5構文でGTM互換のJSを書く方法を学びます。GTMが対応しているブラウザを意識した安全な書き方を習得しましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

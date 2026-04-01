@@ -1,0 +1,82 @@
+{
+  "id": "app-marketing--8-15",
+  "moduleId": "8-15",
+  "categoryId": "app-marketing",
+  "title": "データストリームの設定と確認",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# データストリームとは何か\n\nGA4では、データの「流れ」を**データストリーム**という単位で管理します。1つのGA4プロパティに複数のストリームを追加して、WebとアプリのデータをGA4に集約します。\n\n## データストリームの種類\n\n```\nGA4プロパティ\n├── Webデータストリーム   → Webサイトのデータ\n├── iOSアプリストリーム   → iOSアプリのデータ\n└── Androidアプリストリーム → Androidアプリのデータ\n```\n\n## なぜストリームを正しく設定する必要があるか\n\n- ストリームの設定が不正確だと、アプリのイベントがGA4に届かない\n- 計測IDの不一致でWebとアプリのデータが混在することがある\n- BigQueryエクスポートは**プロパティ単位**で設定するため、ストリームの統合が前提\n\n## このモジュールで学ぶこと\n\nGA4管理画面でアプリデータストリームを設定・確認する手順と、正しく計測が始まっているかのチェック方法を習得します。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# アプリデータストリームの設定手順\n\n## GA4管理画面での設定手順\n\n```\n手順:\n1. GA4管理 → 「データストリーム」\n2. 「ストリームを追加」→ iOS または Android を選択\n3. iOS: バンドルID（例: com.company.appname）を入力\n   Android: パッケージ名（例: com.company.appname）を入力\n4. アプリ名を入力して「アプリを登録」\n5. google-services.json（Android）または\n   GoogleService-Info.plist（iOS）をダウンロード\n6. このファイルをエンジニアに渡してアプリに組み込んでもらう\n```\n\n## データストリームの設定画面で確認すること\n\n| 確認項目 | 意味 |\n|---|---|\n| ストリームID | 各ストリームの一意のID |\n| 計測ID（G-XXXXXXXX） | Webストリームのタグ設定に使う |\n| アプリID | モバイルアプリの識別子 |\n| 最終受信日時 | データが届いているかの確認 |\n| イベント数（過去30日） | 計測が正常に動作しているか |\n\n## Androidアプリストリームの主要設定\n\n```\nAndroidアプリストリーム\n├── パッケージ名: com.example.myapp\n│   → AndroidのアプリID。build.gradleのapplicationIdと一致させる\n├── Firebase App ID: 1:123456789:android:abcdef\n│   → FirebaseとGA4を紐づけるID\n└── google-services.json\n    → プロジェクト設定 + Firebase App IDを含む設定ファイル\n```\n\n## iOSアプリストリームの主要設定\n\n```\niOSアプリストリーム\n├── バンドルID: com.example.myapp\n│   → Xcodeで設定するアプリの識別子\n├── Firebase App ID: 1:123456789:ios:abcdef\n└── GoogleService-Info.plist\n    → iOSアプリに配置する設定ファイル\n```\n\n## 計測確認のチェックポイント\n\n```\n確認1: GA4 → 管理 → データストリーム → 該当ストリームを選択\n         → 「最終受信日時」が今日または直近の日付か確認\n\n確認2: GA4リアルタイムレポート → アプリが起動しているデバイスで\n         イベントが表示されるかリアルタイムで確認\n\n確認3: Firebase Console → DebugView\n         → テストデバイスのイベントをリアルタイムで確認\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: データストリームの設定情報を管理するオブジェクトを作成する\n\nGA4プロパティのデータストリーム情報を管理するオブジェクトを実装し、設定の健全性チェック関数を作成してください。\n\n## 課題\n\n`checkStreamHealth()` 関数を実装して、各ストリームのデータ受信状態を確認してください。",
+        "starterCode": "// GA4プロパティのデータストリーム設定\nconst ga4Property = {\n  propertyId: 'GA4-123456789',\n  propertyName: 'MyFitnessApp',\n  streams: [\n    {\n      type: 'web',\n      name: 'WebサイトStream',\n      measurementId: 'G-ABCDEF1234',\n      lastReceived: '2024-08-01',  // 最終受信日\n      eventsLast30Days: 45000\n    },\n    {\n      type: 'ios',\n      name: 'iOSアプリStream',\n      bundleId: 'com.example.myfitness',\n      lastReceived: '2024-08-01',\n      eventsLast30Days: 120000\n    },\n    {\n      type: 'android',\n      name: 'AndroidアプリStream',\n      packageName: 'com.example.myfitness',\n      lastReceived: '2024-07-20',  // 2週間前（問題あり）\n      eventsLast30Days: 0          // イベントなし（問題あり）\n    }\n  ]\n};\n\n// ストリームの健全性をチェックする関数\n// lastReceived が今月（2024年8月）かつ eventsLast30Days > 0 なら '正常'\n// それ以外は '要確認' を返す\nfunction checkStreamHealth(stream) {\n  // lastReceived が '2024-08' で始まり、かつ eventsLast30Days > 0 なら '正常'\n  // ここに実装してください\n  return { name: stream.name, type: stream.type, status: '' };\n}\n\n// 結果出力（変更不要）\nconsole.log('=== データストリーム健全性チェック ===');\nga4Property.streams.forEach(stream => {\n  const result = checkStreamHealth(stream);\n  const icon = result.status === '正常' ? '✅' : '⚠️';\n  console.log(`${icon} [${result.type.toUpperCase()}] ${result.name}: ${result.status}`);\n});",
+        "hints": [
+          "lastReceived.startsWith('2024-08') でその月のデータかどうかを確認できます。",
+          "status の条件: stream.lastReceived.startsWith('2024-08') && stream.eventsLast30Days > 0 なら '正常'",
+          "三項演算子で status: (条件) ? '正常' : '要確認' と書けます。"
+        ],
+        "answer": "const ga4Property = {\n  propertyId: 'GA4-123456789',\n  propertyName: 'MyFitnessApp',\n  streams: [\n    {\n      type: 'web',\n      name: 'WebサイトStream',\n      measurementId: 'G-ABCDEF1234',\n      lastReceived: '2024-08-01',\n      eventsLast30Days: 45000\n    },\n    {\n      type: 'ios',\n      name: 'iOSアプリStream',\n      bundleId: 'com.example.myfitness',\n      lastReceived: '2024-08-01',\n      eventsLast30Days: 120000\n    },\n    {\n      type: 'android',\n      name: 'AndroidアプリStream',\n      packageName: 'com.example.myfitness',\n      lastReceived: '2024-07-20',\n      eventsLast30Days: 0\n    }\n  ]\n};\n\nfunction checkStreamHealth(stream) {\n  const isHealthy = stream.lastReceived.startsWith('2024-08') && stream.eventsLast30Days > 0;\n  return {\n    name: stream.name,\n    type: stream.type,\n    status: isHealthy ? '正常' : '要確認'\n  };\n}\n\nconsole.log('=== データストリーム健全性チェック ===');\nga4Property.streams.forEach(stream => {\n  const result = checkStreamHealth(stream);\n  const icon = result.status === '正常' ? '✅' : '⚠️';\n  console.log(`${icon} [${result.type.toUpperCase()}] ${result.name}: ${result.status}`);\n});"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "GA4の1つのプロパティに追加できるデータストリームの種類として正しいものはどれですか？",
+            "options": [
+              "Webストリームのみ（アプリは別プロパティが必要）",
+              "iOSまたはAndroidのどちらか1つのみ",
+              "Web・iOS・Androidの複数ストリームを1プロパティに追加できる",
+              "ストリームは1プロパティに1つまで"
+            ],
+            "correct": 2,
+            "explanation": "GA4の1プロパティには複数のデータストリームを追加できます。Web・iOS・Androidを1つのGA4プロパティに集約することで、クロスプラットフォームの統合分析が可能になります。これがGA4がUAより優れている大きなポイントの1つです。"
+          },
+          {
+            "q": "AndroidアプリのデータストリームをGA4に設定する際に必要な識別子はどれですか？",
+            "options": [
+              "バンドルID（com.example.app形式）",
+              "パッケージ名（com.example.app形式）",
+              "UDID（デバイス固有ID）",
+              "AndroidのIMEI番号"
+            ],
+            "correct": 1,
+            "explanation": "Androidアプリのデータストリーム設定には「パッケージ名」（com.example.appのような形式）が必要です。iOSでは同じ形式の「バンドルID」を使います。どちらもアプリを一意に識別するIDで、アプリストアへの公開時にも使われます。"
+          },
+          {
+            "q": "データストリームにデータが届いているかを最速で確認する方法はどれですか？",
+            "options": [
+              "GA4の探索レポートで過去30日のデータを確認する",
+              "BigQueryエクスポートのテーブルを確認する",
+              "GA4のリアルタイムレポートまたはFirebase Consoleの DebugView で確認する",
+              "Google Search Consoleで確認する"
+            ],
+            "correct": 2,
+            "explanation": "データ到達の最速確認はGA4リアルタイムレポートまたはFirebase ConsoleのDebugViewです。通常のGA4レポートへの反映は最大24時間かかりますが、リアルタイム系は遅延なく確認できます。実装確認には必ずこちらを使います。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール8-15 完了！\n\nデータストリームの設定と確認を習得しました。\n\n## 習得したスキル\n\n✅ **データストリームの3種類**（Web・iOS・Android）と1プロパティへの集約を理解した\n✅ **アプリストリームの設定手順**（バンドルID/パッケージ名の入力・設定ファイルの取得）を把握した\n✅ **ストリームの健全性チェック**（最終受信日時・イベント数）の確認ポイントを理解した\n✅ **リアルタイム確認とレポート反映の違い**（即時 vs 最大24時間）を理解した\n\n## 次のステップ\n\n次のモジュール **「8-16: Firebase SDKのiOSインストール手順」** では、実際にアプリにFirebaseを組み込む際の手順をエンジニアと連携する視点で学びます。",
+        "diagram": false
+      }
+    }
+  ]
+}

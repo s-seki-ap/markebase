@@ -1,0 +1,77 @@
+{
+  "id": "advertising--9-2",
+  "moduleId": "9-2",
+  "categoryId": "advertising",
+  "title": "DSP・SSP・DMPの役割と広告配信の仕組み",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 広告配信の舞台裏を理解する\n\n「なぜ自分が昨日見た商品の広告が、今日別のサイトに表示されるのか？」\n\nこれを実現しているのが**DSP・SSP・DMP**の連携です。広告主は1億円の予算を「この属性のユーザーに、このタイミングで、この金額で入札してほしい」という設定だけで、自動的に最適配信できる時代になりました。\n\n## この仕組みを理解する重要性\n\nデジタル広告担当者が「なんとなく運用している」と「仕組みを理解して設計している」では、成果に大きな差が出ます。\n\n- 無駄な入札を防げる\n- オーディエンスターゲティングを適切に設計できる\n- 媒体選定の根拠を持てる\n\n> **キャリアへの影響**: この3つのプラットフォームの仕組みを説明できるだけで、広告の専門知識を持つ人材として差別化できます。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# DSP・SSP・DMPの詳細解説\n\n## DSP（Demand-Side Platform）\n\nDSPは**広告主が広告枠を購入するためのプラットフォーム**です。\n\n**主な機能**:\n- 複数のAd Exchangeへの一元入札\n- オーディエンスターゲティングの設定\n- 入札価格の自動最適化\n- キャンペーン実績のレポーティング\n\n**代表的なDSP**:\n\n| DSP名 | 運営 | 特徴 |\n|-------|------|------|\n| Google DV360 | Google | YouTube・Google系在庫への強みが大きい |\n| The Trade Desk | 独立系 | 独立性が高く透明性に優れる |\n| Amazon DSP | Amazon | EC購買データに基づくターゲティング |\n| Xandr | Microsoft | Microsoftメディア在庫との連携 |\n\n## SSP（Supply-Side Platform）\n\nSSPは**メディア（パブリッシャー）が広告枠を販売するためのプラットフォーム**です。\n\n**主な機能**:\n- 複数DSPからの入札を集約\n- フロアプライス（最低入札額）の設定\n- 広告収益の最大化\n- 不正広告の排除（ブランドセーフティ）\n\n```\n【SSPの収益最大化の仕組み】\n\n広告枠1つに対して複数のDSPが入札\n  DSP-A: 300円の入札\n  DSP-B: 450円の入札  ← 落札\n  DSP-C: 200円の入札\n\n→ SSPが最高入札額を選択してメディア収益を最大化\n```\n\n## DMP（Data Management Platform）\n\nDMPは**オーディエンスデータを管理・活用するプラットフォーム**です。\n\n**データの種類**:\n\n| データ種別 | 内容 | 例 |\n|-----------|------|----|\n| 1st Partyデータ | 自社保有データ | 自社サイト訪問者・購買履歴 |\n| 2nd Partyデータ | パートナー企業データ | 提携メディアのユーザー |\n| 3rd Partyデータ | 外部購入データ | 属性・興味関心データ |\n\n## 3者の連携フロー\n\n```\n1. DMP → DSPへ「このユーザーは購買意欲が高い」を通知\n2. DSP → Ad Exchangeで入札「このユーザーに500円で入札」\n3. SSP → 最高入札を落札\n4. パブリッシャー → 落札した広告を表示\n5. 結果データ → DMPへフィードバック（学習・改善）\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: DSP・SSP・DMPの設定概念を整理する\n\nあなたは広告運用担当者として、新しいリターゲティングキャンペーンの設定方針をHTMLドキュメントにまとめます。\n\n## 課題\n\n以下の設定概念カードのHTMLを完成させてください。\n\n1. DSPカードに「ターゲット」「入札戦略」「除外設定」を記述する\n2. DMPカードに使用するオーディエンスセグメントを記述する\n3. SSPカードに配信先メディア条件を記述する",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>キャンペーン設定概念書</title>\n  <style>\n    body { font-family: 'Noto Sans JP', sans-serif; padding: 20px; background: #0f172a; color: #e2e8f0; }\n    h1 { color: #f1f5f9; font-size: 20px; margin-bottom: 24px; }\n    .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }\n    .card { background: #1e293b; border-radius: 8px; padding: 16px; border: 1px solid #334155; }\n    .card h2 { font-size: 14px; margin: 0 0 12px; }\n    .card ul { margin: 0; padding-left: 16px; font-size: 13px; color: #94a3b8; line-height: 1.8; }\n    .dsp { border-color: #3b82f6; }\n    .dsp h2 { color: #60a5fa; }\n    .dmp { border-color: #8b5cf6; }\n    .dmp h2 { color: #a78bfa; }\n    .ssp { border-color: #10b981; }\n    .ssp h2 { color: #34d399; }\n  </style>\n</head>\n<body>\n  <h1>リターゲティングキャンペーン 設定概念書</h1>\n  <div class=\"cards\">\n    <div class=\"card dsp\">\n      <h2>DSP設定</h2>\n      <ul>\n        <!-- DSPの設定項目を追加してください -->\n      </ul>\n    </div>\n    <div class=\"card dmp\">\n      <h2>DMP オーディエンス</h2>\n      <ul>\n        <!-- DMPのオーディエンスセグメントを追加してください -->\n      </ul>\n    </div>\n    <div class=\"card ssp\">\n      <h2>SSP 配信先条件</h2>\n      <ul>\n        <!-- SSPの配信先条件を追加してください -->\n      </ul>\n    </div>\n  </div>\n</body>\n</html>",
+        "hints": [
+          "DSPカードには「ターゲット: 過去30日間のサイト訪問者」「入札戦略: 目標CPA ¥3,000」「除外: 購入済みユーザー」などを記述します。",
+          "DMPカードには「商品詳細ページ閲覧セグメント」「カート離脱セグメント」などのオーディエンスリストを記述します。",
+          "SSPカードには「ニュース系メディア」「フロアプライス: ¥200以上」「アダルト除外」などの条件を記述します。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>キャンペーン設定概念書</title>\n  <style>\n    body { font-family: 'Noto Sans JP', sans-serif; padding: 20px; background: #0f172a; color: #e2e8f0; }\n    h1 { color: #f1f5f9; font-size: 20px; margin-bottom: 24px; }\n    .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }\n    .card { background: #1e293b; border-radius: 8px; padding: 16px; border: 1px solid #334155; }\n    .card h2 { font-size: 14px; margin: 0 0 12px; }\n    .card ul { margin: 0; padding-left: 16px; font-size: 13px; color: #94a3b8; line-height: 1.8; }\n    .dsp { border-color: #3b82f6; }\n    .dsp h2 { color: #60a5fa; }\n    .dmp { border-color: #8b5cf6; }\n    .dmp h2 { color: #a78bfa; }\n    .ssp { border-color: #10b981; }\n    .ssp h2 { color: #34d399; }\n  </style>\n</head>\n<body>\n  <h1>リターゲティングキャンペーン 設定概念書</h1>\n  <div class=\"cards\">\n    <div class=\"card dsp\">\n      <h2>DSP設定</h2>\n      <ul>\n        <li>ターゲット: 過去30日間のサイト訪問者</li>\n        <li>入札戦略: 目標CPA ¥3,000</li>\n        <li>フリークエンシーキャップ: 3回/日</li>\n        <li>除外: 購入済みユーザー</li>\n        <li>予算: 日予算 ¥50,000</li>\n      </ul>\n    </div>\n    <div class=\"card dmp\">\n      <h2>DMP オーディエンス</h2>\n      <ul>\n        <li>商品詳細ページ閲覧セグメント</li>\n        <li>カート追加・未購入セグメント</li>\n        <li>過去購入者（類似拡張用）</li>\n        <li>除外: 直帰ユーザー（3秒未満）</li>\n      </ul>\n    </div>\n    <div class=\"card ssp\">\n      <h2>SSP 配信先条件</h2>\n      <ul>\n        <li>配信先: ニュース・ライフスタイル系</li>\n        <li>フロアプライス: ¥200以上</li>\n        <li>除外カテゴリ: アダルト・ギャンブル</li>\n        <li>ビューアビリティ: 70%以上</li>\n      </ul>\n    </div>\n  </div>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "SSPの主な役割はどれですか？",
+            "options": [
+              "広告主が広告枠を購入するための入札管理",
+              "メディアが広告枠を販売し収益を最大化する",
+              "オーディエンスデータを収集・分類する",
+              "広告クリエイティブの品質を審査する"
+            ],
+            "correct": 1,
+            "explanation": "SSP（Supply-Side Platform）はパブリッシャー（メディア）が複数のDSPからの入札を集約し、広告収益を最大化するためのプラットフォームです。広告主側のツールであるDSPと対をなす存在です。"
+          },
+          {
+            "q": "1st Partyデータとはどのようなデータですか？",
+            "options": [
+              "Googleや各広告プラットフォームが提供するデータ",
+              "自社サイトや自社アプリで収集した自社保有データ",
+              "外部のデータベンダーから購入したデータ",
+              "パートナー企業から提供を受けたデータ"
+            ],
+            "correct": 1,
+            "explanation": "1st Partyデータは自社が直接収集した自社保有データです。自社サイトの訪問者データ、購買履歴、会員情報などが該当します。クッキーレス時代において最も価値が高まっているデータです。"
+          },
+          {
+            "q": "DV360はどの企業が提供するDSPですか？",
+            "options": ["Amazon", "The Trade Desk", "Google", "Meta"],
+            "correct": 2,
+            "explanation": "DV360（Display & Video 360）はGoogleが提供するエンタープライズ向けDSPです。Google広告（旧Google AdWords）より高度なプログラマティック機能を持ち、YouTube・Googleネットワーク在庫への強みがあります。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール9-2 完了！\n\nDSP・SSP・DMPの役割と連携の仕組みを習得しました。\n\n## 習得したスキル\n\n✅ **DSP**が広告主側のプラットフォームとして複数媒体を一括入札することを理解した\n✅ **SSP**がメディア側の収益最大化ツールであることを説明できる\n✅ **DMP**のデータ種別（1st/2nd/3rd Party）を区別できる\n✅ 3者の連携フローを図解して説明できる\n\n## 次のステップ\n\n次のモジュール **「9-3: RTB：リアルタイム入札でどう広告が表示されるか」** では、1秒以下で完結する入札オークションの詳細プロセスを学びます。\n\n> **実務チャレンジ**: Google広告の管理画面で「オーディエンスマネージャー」を確認してみましょう。どんなオーディエンスリストが自動作成されていますか？これがDMPの基本的な概念です。",
+        "diagram": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "id": "marketing-strategy--10-11",
+  "moduleId": "10-11",
+  "categoryId": "marketing-strategy",
+  "title": "ファネル概念の概要と設計",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# マーケティングファネル：顧客の旅を設計する\n\n「広告に反応した人が全員購買するわけではない」—— これは当然のことです。顧客は段階的に認知→興味→検討→購買と進みます。この流れを整理する概念が **マーケティングファネル** です。\n\n## ファネルとは\n\n漏斗（ファネル）の形がモデルの名前の由来です。上部（認知）は広く多くの人が入りますが、下部（購買）に向かうにつれて絞られていきます。\n\n```\n　　　┌─────────────────┐\n　　　│    認知（多数）    │ ← 広告・SEO・口コミ\n　　　└────────────────┘\n　　　  └────────────┘\n　　　    │  興味・関心  │ ← コンテンツ・SNS\n　　　    └──────────┘\n　　　      └────────┘\n　　　        │  検討  │ ← LP・事例・比較\n　　　        └──────┘\n　　　          └────┘\n　　　            │購買│ ← 営業・CTA・試用\n　　　            └──┘\n```\n\n## なぜファネル設計が必要か\n\nファネルを設計しないと「なんとなく広告を出す」「なんとなくSNSをする」になります。各ステージで何をすべきかが明確になることで、施策に一貫性が生まれます。\n\n**あなたへの問い**: 自社のファネルのどのステージに最大のボトルネックがあると思いますか？",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# ファネルの種類と設計方法\n\n## 代表的なファネルモデル\n\n### 従来型ファネル（TOFU/MOFU/BOFU）\n\n| ステージ | 名称 | 顧客状態 | 主な施策 |\n|----------|------|----------|---------|\n| **TOFU** | Top of Funnel | まだ自社を知らない | SEO・SNS・広告・PR |\n| **MOFU** | Middle of Funnel | 関心はあるが検討中 | ブログ・ウェビナー・事例 |\n| **BOFU** | Bottom of Funnel | 購買直前・比較中 | LP・無料体験・営業 |\n\n### フルファネル設計（認知〜推奨）\n\n```\nAwareness（認知） → Interest（興味） → Consideration（検討）\n→ Conversion（購買） → Retention（継続） → Advocacy（推奨）\n```\n\n**現代のマーケティングではファネルの「下流」（継続・推奨）が特に重要**。\n\n既存顧客の継続・推奨（口コミ・レビュー）は新規獲得のTOFUに影響します（ループ構造）。\n\n## ファネル設計の5ステップ\n\n```\nStep 1: 自社のターゲット顧客の購買プロセスをマッピング\nStep 2: 各ステージで顧客が持つ疑問・不安を特定\nStep 3: 各ステージに対応するコンテンツ・施策を設計\nStep 4: KPI（指標）を各ステージに設定\nStep 5: データで計測→ボトルネックを発見・改善\n```\n\n## 各ステージのKPI例\n\n| ステージ | KPI例 |\n|----------|-------|\n| TOFU | インプレッション数、リーチ数、認知率 |\n| MOFU | Webセッション数、コンテンツ閲覧率、メール開封率 |\n| BOFU | 問い合わせ数、無料体験登録数、CVR |\n| 購買後 | 継続率（リテンション）、LTV、NPS |\n\n## ファネル分析の実践\n\n```\n例：CVR（コンバージョン率）の計算\n\n認知: 10,000人\n  ↓ CTR 5%\nサイト訪問: 500人\n  ↓ 資料ダウンロード率 10%\n資料DL: 50件\n  ↓ 商談化率 40%\n商談: 20件\n  ↓ 受注率 30%\n受注: 6件\n\n全体CVR = 6/10,000 = 0.06%\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: マーケティングファネル設計シートを作成する\n\n自社（または想定するサービス）のマーケティングファネルを設計してください。各ステージに施策・KPI・コンテンツを割り当ててください。\n\n## 課題\n\n以下のHTMLテンプレートを完成させ、6段階のファネル設計シートを作成してください。",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>ファネル設計シート</title>\n  <style>\n    body { font-family: sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; }\n    .funnel-stage { padding: 16px 20px; margin: 8px 0; border-radius: 8px; }\n    textarea { width: 100%; height: 60px; padding: 8px; border: 1px solid #e2e8f0; border-radius: 4px; resize: vertical; font-size: 0.85rem; }\n    label { display: block; font-weight: bold; margin: 8px 0 4px; font-size: 0.82rem; }\n    .stage-cols { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }\n  </style>\n</head>\n<body>\n  <h1>マーケティングファネル設計シート</h1>\n  <p>サービス: <input type=\"text\" placeholder=\"サービス名\" style=\"padding:4px 8px; border:1px solid #ccc; border-radius:4px; width:260px;\"/></p>\n\n  <!-- 6つのステージカードをここに作成 -->\n  <!-- Awareness / Interest / Consideration / Conversion / Retention / Advocacy -->\n\n</body>\n</html>",
+        "hints": [
+          "6つのファネルステージのカードを縦に並べ、上から下に向かって幅が狭くなるデザインにすると漏斗感が出ます。CSSのmax-widthをそれぞれ異なる値にして実現できます。",
+          "各ステージのカードに「顧客の状態」「主な施策・コンテンツ」「KPI（指標）」の3つのテキストエリアを横並びで配置しましょう。",
+          "各ステージのカード背景色をグラデーション（青→紫→赤など）にするとファネルの流れが視覚的にわかります。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>ファネル設計シート</title>\n  <style>\n    body { font-family: sans-serif; max-width: 860px; margin: 40px auto; padding: 20px; background: #f8fafc; }\n    h1 { color: #1e293b; }\n    .funnel-wrap { display: flex; flex-direction: column; align-items: center; gap: 4px; margin: 20px 0; }\n    .funnel-stage { width: 100%; border-radius: 8px; padding: 16px 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); transition: all 0.2s; }\n    .funnel-stage:nth-child(1) { max-width: 100%; background: #eff6ff; border-left: 4px solid #3b82f6; }\n    .funnel-stage:nth-child(2) { max-width: 92%; background: #f0fdf4; border-left: 4px solid #22c55e; }\n    .funnel-stage:nth-child(3) { max-width: 84%; background: #fefce8; border-left: 4px solid #eab308; }\n    .funnel-stage:nth-child(4) { max-width: 76%; background: #fff7ed; border-left: 4px solid #f97316; }\n    .funnel-stage:nth-child(5) { max-width: 68%; background: #fdf4ff; border-left: 4px solid #a855f7; }\n    .funnel-stage:nth-child(6) { max-width: 60%; background: #fff1f2; border-left: 4px solid #f43f5e; }\n    .stage-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }\n    .stage-header h3 { margin: 0; font-size: 0.95rem; color: #1e293b; }\n    .stage-badge { font-size: 0.72rem; background: rgba(0,0,0,0.08); padding: 2px 8px; border-radius: 10px; color: #475569; }\n    .stage-cols { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }\n    label { display: block; font-weight: bold; margin-bottom: 4px; font-size: 0.78rem; color: #64748b; }\n    textarea { width: 100%; height: 55px; padding: 6px; border: 1px solid #e2e8f0; border-radius: 4px; resize: vertical; font-size: 0.82rem; background: white; }\n    .arrow { text-align: center; color: #94a3b8; font-size: 1.2rem; }\n  </style>\n</head>\n<body>\n  <h1>マーケティングファネル設計シート</h1>\n  <p>サービス: <input type=\"text\" value=\"中小企業向けデジタルマーケ支援サービス\" style=\"padding:4px 8px; border:1px solid #ccc; border-radius:4px; width:320px;\"/></p>\n\n  <div class=\"funnel-wrap\">\n    <div class=\"funnel-stage\">\n      <div class=\"stage-header\"><h3>Awareness（認知）</h3><span class=\"stage-badge\">TOFU</span></div>\n      <div class=\"stage-cols\">\n        <div><label>顧客の状態</label><textarea>自社の存在を知らない。デジタルマーケの課題は感じているが、解決策を探していない段階。</textarea></div>\n        <div><label>施策・コンテンツ</label><textarea>Google検索広告、SEOブログ（「中小企業 SNS運用」等のKW）、SNS投稿、PR記事、ウェビナー開催。</textarea></div>\n        <div><label>KPI（指標）</label><textarea>インプレッション数、クリック数、Webサイトへの新規訪問者数、ブランド検索数。</textarea></div>\n      </div>\n    </div>\n    <div class=\"arrow\">▼</div>\n    <div class=\"funnel-stage\">\n      <div class=\"stage-header\"><h3>Interest（興味・関心）</h3><span class=\"stage-badge\">TOFU〜MOFU</span></div>\n      <div class=\"stage-cols\">\n        <div><label>顧客の状態</label><textarea>自社を認知し、サービスに興味を持った。具体的な情報を探している。</textarea></div>\n        <div><label>施策・コンテンツ</label><textarea>事例記事、サービス紹介ページ、SNSフォロー促進、メルマガ登録CTA、お役立ち資料の無料DL。</textarea></div>\n        <div><label>KPI（指標）</label><textarea>サイト滞在時間、ページビュー数、メルマガ登録数、資料DL数、SNSフォロワー増加数。</textarea></div>\n      </div>\n    </div>\n    <div class=\"arrow\">▼</div>\n    <div class=\"funnel-stage\">\n      <div class=\"stage-header\"><h3>Consideration（検討）</h3><span class=\"stage-badge\">MOFU</span></div>\n      <div class=\"stage-cols\">\n        <div><label>顧客の状態</label><textarea>複数社を比較している。価格・実績・サポート内容を詳しく調べている。</textarea></div>\n        <div><label>施策・コンテンツ</label><textarea>比較表コンテンツ、詳細な事例PDF、FAQ充実、無料相談予約LP、リターゲティング広告。</textarea></div>\n        <div><label>KPI（指標）</label><textarea>無料相談予約数、比較コンテンツのPV数、リターゲティングCTR、問い合わせフォーム到達率。</textarea></div>\n      </div>\n    </div>\n    <div class=\"arrow\">▼</div>\n    <div class=\"funnel-stage\">\n      <div class=\"stage-header\"><h3>Conversion（購買・契約）</h3><span class=\"stage-badge\">BOFU</span></div>\n      <div class=\"stage-cols\">\n        <div><label>顧客の状態</label><textarea>購買意欲が高く、最後の意思決定をしている。価格交渉・細部確認段階。</textarea></div>\n        <div><label>施策・コンテンツ</label><textarea>無料相談→提案書作成→見積書提示→契約。初月割引キャンペーン、成果保証オプション。</textarea></div>\n        <div><label>KPI（指標）</label><textarea>受注数、CVR（商談→受注率）、受注単価、受注までの日数（リードタイム）。</textarea></div>\n      </div>\n    </div>\n    <div class=\"arrow\">▼</div>\n    <div class=\"funnel-stage\">\n      <div class=\"stage-header\"><h3>Retention（継続・維持）</h3><span class=\"stage-badge\">Post-Purchase</span></div>\n      <div class=\"stage-cols\">\n        <div><label>顧客の状態</label><textarea>契約中。成果に満足しているか、継続判断を随時している。</textarea></div>\n        <div><label>施策・コンテンツ</label><textarea>月次定例レポート・レビュー、改善提案の継続実施、Slack等でのタイムリーな相談対応、アップセル提案。</textarea></div>\n        <div><label>KPI（指標）</label><textarea>継続率（リテンション率）、MRR（月次経常収益）、LTV、顧客満足度スコア。</textarea></div>\n      </div>\n    </div>\n    <div class=\"arrow\">▼</div>\n    <div class=\"funnel-stage\">\n      <div class=\"stage-header\"><h3>Advocacy（推奨・紹介）</h3><span class=\"stage-badge\">Loyalty</span></div>\n      <div class=\"stage-cols\">\n        <div><label>顧客の状態</label><textarea>自社サービスに満足し、他者に勧めたい気持ちがある。紹介・口コミ・レビュー投稿の可能性がある。</textarea></div>\n        <div><label>施策・コンテンツ</label><textarea>紹介プログラム（紹介者への謝礼）、事例インタビューの依頼、Googleビジネスレビュー促進、コミュニティ形成。</textarea></div>\n        <div><label>KPI（指標）</label><textarea>NPS（推奨度スコア）、紹介経由受注数、レビュー投稿数・評点、紹介CVR。</textarea></div>\n      </div>\n    </div>\n  </div>\n\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "MOFU（Middle of Funnel）のステージで最も適切な施策はどれですか？",
+            "options": [
+              "テレビCMや新聞広告での大規模認知施策",
+              "ブログ記事・ウェビナー・事例コンテンツなど検討を深める施策",
+              "割引クーポン・限定キャンペーンなど購買を促す施策",
+              "既存顧客へのアップセル提案"
+            ],
+            "correct": 1,
+            "explanation": "MOFUは「既に認知しているが購買前の検討段階」にある顧客向けのステージです。ブログ・事例・ウェビナーなど「検討に役立つ情報」を提供することで信頼を構築し、次のステージへ進んでもらいます。"
+          },
+          {
+            "q": "現代のマーケティングファネルにおいて「Advocacy（推奨）」ステージが重要視される理由として最も正しいのはどれですか？",
+            "options": [
+              "既存顧客からの推奨・口コミは新規顧客のTOFU（認知）に貢献するため",
+              "推奨顧客から直接収益を得られるため",
+              "推奨活動は法律で義務付けられているため",
+              "推奨顧客は割引なしで購買するため"
+            ],
+            "correct": 0,
+            "explanation": "推奨（口コミ・レビュー・紹介）はファネルのTOFUに影響します。顧客の推奨が新しい見込み客の認知を生み出すループ構造（フライホイール）が現代のマーケティングでは重要です。"
+          },
+          {
+            "q": "ファネル全体のCVR（コンバージョン率）を改善するための最初のステップとして最も適切なのはどれですか？",
+            "options": [
+              "すべてのステージのKPIを同時に改善する",
+              "TOFU（認知）の広告費を増やす",
+              "各ステージのデータを計測してボトルネック（最も離脱が多いステージ）を特定する",
+              "BOFUのLP（ランディングページ）だけを改善する"
+            ],
+            "correct": 2,
+            "explanation": "ファネル改善の第一歩は「どのステージで最も多く離脱しているか（ボトルネック）を特定する」ことです。ボトルネックを特定せずに施策を打っても非効率です。まずデータで現状を把握することが重要です。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール10-11 完了！\n\nマーケティングファネルの概念と設計方法を習得しました。\n\n## 習得したスキル\n\n✅ **TOFU/MOFU/BOFU**の概念と各ステージの特徴を説明できる\n✅ **6段階ファネル**（認知→興味→検討→購買→継続→推奨）を設計できる\n✅ **各ステージのKPI**を設定してファネルを計測できる\n✅ **ボトルネック特定**のアプローチを理解した\n\n## なぜこれが重要か\n\nファネル設計がないと「なんとなく広告を出す」「なんとなくコンテンツを作る」になります。各施策が「ファネルのどのステージの顧客に向けたものか」が明確になることで、投資対効果が劇的に改善します。\n\n## 次のステップ\n\n次のモジュール **「10-12: AIDMA/AISAS：購買行動モデルの比較」** では、顧客の購買心理の変化を時系列で捉えるフレームワークを学びます。",
+        "diagram": false
+      }
+    }
+  ]
+}

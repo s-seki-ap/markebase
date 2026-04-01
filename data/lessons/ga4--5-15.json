@@ -1,0 +1,82 @@
+{
+  "id": "ga4--5-15",
+  "moduleId": "5-15",
+  "categoryId": "ga4",
+  "title": "カスタムイベント命名規則と設計",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 命名規則を制す者がGA4を制す\n\nGA4の計測設計において、カスタムイベントの命名は見落とされがちですが非常に重要です。\n\n## 命名が重要な理由\n\n**問題事例**: 複数の開発者が独自にイベントを実装した結果...\n\n```\n同じ「バナークリック」を計測しているはずが...\n\n開発者A: banner_click\n開発者B: bannerClick\n開発者C: click_banner\n開発者D: click_top_banner_01\n```\n\nGA4では**イベント名が異なると別のイベントとして記録**されます。分析するたびに名前を調べ直す必要があり、レポートも複雑になります。\n\n## 命名規則がないと何が困るか\n\n1. BigQueryでのSQL集計が複雑になる\n2. GA4レポートに類似イベントが乱立する\n3. 予約済みイベント名と衝突してデータが欠損する\n4. チームが増えるほど混乱が拡大する\n\n## このモジュールで学ぶこと\n\nGA4の命名規則、予約済みイベント名の一覧、そして実務で使える命名設計の方法を習得します。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# カスタムイベントの命名ルール\n\n## GA4の技術的な制約\n\n```\n文字数: 最大40文字\n使用可能文字: 英数字、アンダースコア（_）\n先頭文字: 英字のみ（数字・アンダースコアは不可）\n大文字・小文字: 区別される（purchase ≠ Purchase）\n\nNG例:\n- 123_event     → 数字始まりは不可\n- click-banner  → ハイフンは不可\n- click banner  → スペースは不可\n- PURCHASE      → 大文字 → UAからの移行でよくある誤り\n```\n\n## GA4の予約済みイベント名（使用禁止）\n\n```\n絶対に使ってはいけないイベント名:\n- app_remove\n- error\n- first_open\n- first_visit\n- in_app_purchase\n- session_start\n- user_engagement\n\nGoogleの推奨イベント名（独自実装しない）:\n- purchase, add_to_cart, view_item, login など\n→ Googleが定めた仕様に従って実装すること\n```\n\n## 推奨命名規則: 動詞_名詞_修飾語\n\n```\nパターン: {動詞}_{名詞}_{修飾語（必要時）}\n\n例:\nclick_button_cta           → CTAボタンをクリック\nview_section_pricing       → 料金セクションを閲覧\nsubmit_form_contact        → お問い合わせフォームを送信\ndownload_pdf_whitepaper    → ホワイトペーパーをダウンロード\nplay_video_demo            → デモ動画を再生\nscroll_depth_50            → 50%スクロール到達\nopen_modal_login           → ログインモーダルを開く\n```\n\n## 命名設計書のテンプレート\n\n```\nイベント設計書テンプレート\n\n| イベント名           | 発火条件            | 主要パラメータ          | 担当者 |\n|---------------------|---------------------|------------------------|--------|\n| click_button_cta    | トップCTAボタン押下  | button_text, page_path | 田中   |\n| submit_form_contact | お問い合わせ送信完了 | form_id, lead_type     | 山田   |\n| view_section_pricing| 料金表示領域スクロール| section_name           | 田中   |\n```\n\n## 命名の「ブランチ」戦略\n\n```\nクライアントが複数サービスを持つ場合:\n\n{サービス略称}_{動詞}_{名詞}\n\nexample:\ner_{動詞}_{名詞}  → ERサービス（電子レンジ）\nec_{動詞}_{名詞}  → ECサービス\n\n統合GA4プロパティで複数ブランドを管理する場合に有効\n```",
+        "diagram": false
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: イベント命名規則を適用する\n\n以下の「NG命名」を正しい命名規則に修正してください。\n\n## 課題\n\n以下のJavaScriptオブジェクトにある誤ったイベント名を、命名規則（動詞_名詞_修飾語、小文字、アンダースコア）に従って修正してください。\n\n**修正ルール**:\n1. 小文字+アンダースコアのみ使用\n2. 動詞を先頭に（click、view、submit、download）\n3. 予約済みイベント名は使わない\n4. 40文字以内",
+        "starterCode": "// NG: 命名規則違反のイベント一覧\n// 各イベント名を正しく修正してください\n\nconst badEventNames = [\n  // 1. バナーをクリックしたとき\n  'BannerClick',\n\n  // 2. 動画を再生したとき（GA4予約済みイベント名と競合）\n  'video_start',\n\n  // 3. ハンバーガーメニューを開いたとき\n  'open-hamburger-menu',\n\n  // 4. 404エラーページを表示したとき（予約済みイベント名と競合）\n  'error',\n\n  // 5. キャンペーンバナーのCTAボタンをクリックしたとき\n  'click campaign banner CTA button'\n];\n\n// TODO: 正しいイベント名に修正した配列を作成してください\nconst goodEventNames = [\n  // 1.\n  '',\n  // 2.\n  '',\n  // 3.\n  '',\n  // 4.\n  '',\n  // 5.\n  ''\n];",
+        "hints": [
+          "1. キャメルケースをスネークケースに変換: `BannerClick` → `click_banner`",
+          "2. `video_start` はGA4の予約済みイベント名。カスタム計測ならフルに記述: `play_video_hero` など（動画の場所や種類を付与）",
+          "4. `error` はGA4予約済み。ページ表示なら `view_page_error` または `view_error_404` などが適切。5. スペースとハイフンは不可、40文字以内: `click_button_campaign_cta` など"
+        ],
+        "answer": "// NG: 命名規則違反のイベント一覧\nconst badEventNames = [\n  'BannerClick',\n  'video_start',\n  'open-hamburger-menu',\n  'error',\n  'click campaign banner CTA button'\n];\n\n// OK: 修正後のイベント名\nconst goodEventNames = [\n  // 1. 小文字+スネークケース、動詞始まり\n  'click_banner',\n\n  // 2. GA4予約済みのvideo_startは使わない\n  //    カスタム動画ならプレーヤー名などで区別する\n  'play_video_hero',\n\n  // 3. ハイフン不可 → アンダースコアに\n  'open_menu_hamburger',\n\n  // 4. 予約済みのerrorは使わない\n  'view_page_error_404',\n\n  // 5. スペース不可、40文字以内\n  'click_button_campaign_cta'\n];"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "GA4カスタムイベント名として技術的に正しいのはどれですか？",
+            "options": [
+              "1_click_button（数字始まり）",
+              "Click-Banner（ハイフン含む）",
+              "click_banner_top",
+              "click banner top（スペース含む）"
+            ],
+            "correct": 2,
+            "explanation": "GA4のイベント名は英字始まり、英数字とアンダースコアのみ使用可能、最大40文字です。`click_banner_top` はすべての条件を満たします。数字始まり・ハイフン・スペースは無効です。"
+          },
+          {
+            "q": "GA4で使用が禁止されている予約済みイベント名はどれですか？",
+            "options": [
+              "page_view_custom",
+              "session_start",
+              "generate_lead",
+              "custom_purchase"
+            ],
+            "correct": 1,
+            "explanation": "`session_start` はGA4が内部的に使用する予約済みイベント名です。この名前でカスタムイベントを実装すると、GA4の自動収集データと衝突してデータが正しく記録されません。`generate_lead` や `purchase` はGoogleの推奨イベントですが、正しい仕様で実装すれば使用できます。"
+          },
+          {
+            "q": "「動詞_名詞_修飾語」の命名規則に従っている組み合わせはどれですか？",
+            "options": [
+              "banner_click、form_submit、video_play（名詞_動詞の順）",
+              "click_banner、submit_form_contact、play_video_demo（動詞_名詞の順）",
+              "clicked_banner、submitted_form、played_video（過去形）",
+              "clicking_banner、submitting_form（現在進行形）"
+            ],
+            "correct": 1,
+            "explanation": "推奨は「動詞_名詞（_修飾語）」の順です。動詞を先頭にすることで「何をした（した結果起きた）」というアクション起点の命名になり、BigQueryでのクエリ時にWHERE event_name LIKE 'click_%'のようなパターン検索がしやすくなります。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール5-15 完了！\n\nカスタムイベントの命名規則を体系的に習得しました。\n\n## 習得したスキル\n\n✅ **GA4イベント名の技術制約**（文字種・文字数・先頭文字）を把握した\n✅ **予約済みイベント名の一覧**を確認し、衝突を避けられる\n✅ **動詞_名詞_修飾語**の命名規則パターンを適用できる\n✅ **イベント設計書のテンプレート**を使って命名を管理できる\n\n## チームへの展開方法\n\n1. イベント設計書（スプレッドシート）を作成してチームで共有\n2. 新しいイベント実装前にレビューするフローを作る\n3. 既存イベントの名前を棚卸しして設計書に記録する\n4. GTMの命名規則も合わせて統一する\n\n## 次のステップ\n\n次のモジュール **「5-16: イベントパラメータの上限と管理」** では、GA4のパラメータ管理における制限と上限対策を学びます。",
+        "diagram": false
+      }
+    }
+  ]
+}

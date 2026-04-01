@@ -1,0 +1,82 @@
+{
+  "id": "ga4--5-17",
+  "moduleId": "5-17",
+  "categoryId": "ga4",
+  "title": "ユーザープロパティの設計と実装",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# ユーザー属性でセグメントを深める\n\nGA4の「ユーザープロパティ」は、イベントではなく「ユーザー」に紐づく属性情報です。\n\n## イベントパラメータとの違い\n\n```\nイベントパラメータ:\n→ 「このイベントが起きたとき」の情報\n→ 例: 「このページビューのタイトルは○○」\n\nユーザープロパティ:\n→ 「このユーザー」の属性情報\n→ 一度設定すると継続して記録される\n→ 例: 「このユーザーの会員ランクはゴールド」\n```\n\n## ユーザープロパティの活用シーン\n\n**会員制サービス**: 会員ランク・登録日・プランタイプ\n\n**BtoBサービス**: 企業規模・業種・利用中のプラン\n\n**メディアサイト**: 購読ステータス・興味カテゴリ・ログイン状態\n\nこれらをユーザープロパティとして持つことで、「ゴールド会員はどのコンテンツをよく見るか」「フリープランユーザーはどこで離脱するか」といったセグメント分析が可能になります。\n\n## このモジュールで学ぶこと\n\nユーザープロパティの実装方法、設計のベストプラクティス、そしてGA4レポートでの活用方法を習得します。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# ユーザープロパティの仕様と実装\n\n## 技術的な上限\n\n```\nユーザープロパティ名: 最大24文字\nユーザープロパティ値: 最大36文字\nGA4標準プロパティの登録上限: 25個\n```\n\n## gtag.js での実装\n\n```javascript\n// ユーザープロパティの設定\ngtag('set', 'user_properties', {\n  member_rank: 'gold',        // 会員ランク\n  subscription_plan: 'pro',   // 利用プラン\n  login_status: 'logged_in',  // ログイン状態\n  user_type: 'b2b'            // ユーザータイプ\n});\n\n// ログイン後にユーザーIDも設定（推奨）\ngtag('config', 'G-XXXXXXXXXX', {\n  user_id: 'USER-12345'  // 自社ユーザーID\n});\n```\n\n## GTM（dataLayer）での実装\n\n```javascript\n// GTM経由でユーザープロパティを設定する\n// ページロード時やログイン完了時に実行\ndataLayer.push({\n  user_properties: {\n    member_rank: 'gold',\n    subscription_plan: 'pro',\n    login_status: 'logged_in'\n  }\n});\n\n// GTMのGA4設定タグで「ユーザープロパティ」として\n// {{DLV - user_properties.member_rank}} のように設定する\n```\n\n## ユーザープロパティの設計例\n\n```\nECサイトの場合:\n| プロパティ名      | 値の例                      | 設定タイミング |\n|-----------------|----------------------------|---------------|\n| member_rank     | 'bronze'/'silver'/'gold'   | ログイン時     |\n| purchase_count  | '0'/'1-5'/'6-20'/'21+'     | 購入完了時     |\n| registered_year | '2022'/'2023'/'2024'       | 初回ログイン時  |\n| login_status    | 'logged_in'/'guest'        | ページロード時  |\n\nSaaSサービスの場合:\n| プロパティ名       | 値の例                     | 設定タイミング |\n|-----------------|---------------------------|---------------|\n| plan_type       | 'free'/'starter'/'pro'    | ログイン時     |\n| company_size    | 'sme'/'mid'/'enterprise'  | 登録時         |\n| industry        | 'retail'/'finance'/'tech' | 登録時         |\n```\n\n## 重要な設計上の注意点\n\n```\n1. 値は「区分」で持つ（数値は範囲に変換する）\n   NG: purchase_count = 127  （連続値は分析しにくい）\n   OK: purchase_count = '21+'（カテゴリ値の方が使いやすい）\n\n2. 個人情報は絶対に送らない\n   NG: 氏名、メールアドレス、電話番号\n   → GA4のデータポリシー違反\n\n3. ユーザープロパティは「上書き」される\n   → 最新の値のみ保持される\n   → ランクが変わったタイミングで更新する設計に\n```",
+        "diagram": false
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: SaaSサービスのユーザープロパティを実装する\n\nSaaSダッシュボードのログイン後ページに、ユーザープロパティ設定を実装します。\n\n## 要件\n\nログイン成功後、以下のユーザー情報をGA4ユーザープロパティとして設定してください。\n\n- `plan_type`: ユーザーの利用プラン（値: `free` / `pro` / `enterprise`）\n- `login_status`: ログイン状態（値: `'logged_in'`）\n- `company_size`: 企業規模（値: `'sme'` / `'mid'` / `'enterprise'`）\n\nさらにユーザーIDも設定してください。\n\n**ユーザーオブジェクト（サーバーから渡される想定）**:\n```javascript\nconst currentUser = {\n  id: 'USR-20240115-001',\n  plan: 'pro',\n  companySize: 'mid'\n};\n```",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>ダッシュボード</title>\n  <script async src=\"https://www.googletagmanager.com/gtag/js?id=G-SAAS12345\"></script>\n  <script>\n    window.dataLayer = window.dataLayer || [];\n    function gtag(){dataLayer.push(arguments);}\n    gtag('js', new Date());\n    gtag('config', 'G-SAAS12345');\n  </script>\n</head>\n<body>\n  <h1>ダッシュボード</h1>\n\n  <script>\n    // ログインユーザー情報（サーバーから取得した想定）\n    const currentUser = {\n      id: 'USR-20240115-001',\n      plan: 'pro',\n      companySize: 'mid'\n    };\n\n    // TODO: user_idを設定する\n\n    // TODO: ユーザープロパティを設定する\n    // plan_type、login_status、company_sizeを送信する\n  </script>\n</body>\n</html>",
+        "hints": [
+          "user_idの設定: `gtag('config', 'G-SAAS12345', { user_id: currentUser.id })` で設定します。",
+          "ユーザープロパティの設定: `gtag('set', 'user_properties', { ... })` を使います。",
+          "完成形: `gtag('set', 'user_properties', { plan_type: currentUser.plan, login_status: 'logged_in', company_size: currentUser.companySize })` です。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>ダッシュボード</title>\n  <script async src=\"https://www.googletagmanager.com/gtag/js?id=G-SAAS12345\"></script>\n  <script>\n    window.dataLayer = window.dataLayer || [];\n    function gtag(){dataLayer.push(arguments);}\n    gtag('js', new Date());\n    gtag('config', 'G-SAAS12345');\n  </script>\n</head>\n<body>\n  <h1>ダッシュボード</h1>\n\n  <script>\n    const currentUser = {\n      id: 'USR-20240115-001',\n      plan: 'pro',\n      companySize: 'mid'\n    };\n\n    // user_idを設定（ログインユーザーのクロスデバイス計測に活用）\n    gtag('config', 'G-SAAS12345', {\n      user_id: currentUser.id\n    });\n\n    // ユーザープロパティを設定\n    gtag('set', 'user_properties', {\n      plan_type: currentUser.plan,\n      login_status: 'logged_in',\n      company_size: currentUser.companySize\n    });\n  </script>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "GA4のユーザープロパティに「メールアドレス」を設定することについて正しい説明はどれですか？",
+            "options": [
+              "ユーザー特定に役立つため、積極的に活用すべき",
+              "GA4のデータポリシー違反にあたるため設定してはいけない",
+              "ハッシュ化すれば設定しても問題ない",
+              "Google広告連携時のみ許可されている"
+            ],
+            "correct": 1,
+            "explanation": "メールアドレスや氏名などの個人を特定できる情報（PII）をGA4に送信することは、GoogleのMeasurement Policyおよびデータ収集利用規約に違反します。ハッシュ化していても同様です。ユーザー識別には自社システムの匿名ユーザーIDを使用します。"
+          },
+          {
+            "q": "GA4のユーザープロパティで「購入回数」を管理するとき、より分析に適した値の持ち方はどれですか？",
+            "options": [
+              "実際の購入回数をそのまま数値で設定する（例: 127）",
+              "購入回数を範囲カテゴリに変換して設定する（例: '21+'）",
+              "購入のたびに新しいユーザープロパティ名を作成する",
+              "購入回数はイベントパラメータで管理し、ユーザープロパティでは扱わない"
+            ],
+            "correct": 1,
+            "explanation": "ユーザープロパティの値は最大36文字で、範囲カテゴリ（例: '0'、'1-5'、'6-20'、'21+'）として設定すると分析しやすくなります。連続する数値はGA4レポートでのフィルタリングが難しく、セグメント作成にも不向きです。"
+          },
+          {
+            "q": "GA4でユーザーIDを設定する主な目的はどれですか？",
+            "options": [
+              "GA4のレポートにユーザー名を表示するため",
+              "Google広告のリターゲティングリストに追加するため",
+              "複数デバイス・ブラウザ間でユーザーのジャーニーを統合して計測するため",
+              "BigQueryエクスポートでユーザーデータを暗号化するため"
+            ],
+            "correct": 2,
+            "explanation": "ユーザーIDを設定することで、同一ユーザーがスマートフォンとPCなど複数デバイスからアクセスしても、同一ユーザーとして認識できます。これにより、マルチデバイスのカスタマージャーニー分析が可能になります。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール5-17 完了！\n\nユーザープロパティの設計と実装を習得しました。\n\n## 習得したスキル\n\n✅ **イベントパラメータとユーザープロパティの違い**を説明できる\n✅ **gtag('set', 'user_properties', {...})** でユーザープロパティを実装できる\n✅ **個人情報（PII）の送信禁止**を徹底できる\n✅ **値はカテゴリ範囲で持つ**設計パターンを適用できる\n✅ **user_idの設定**でクロスデバイス計測を有効化できる\n\n## 実務での設計ポイント\n\n- ユーザー登録・ログイン完了時に必ずユーザープロパティを更新する\n- 会員ランク変更・プランアップグレード時にも即座に更新する\n- GA4管理画面でカスタムディメンション（ユーザースコープ）として登録する\n\n## 次のステップ\n\n次のモジュール **「5-18: DebugViewを使ったリアルタイム計測確認」** では、実装の動作確認を効率的に行う方法を学びます。",
+        "diagram": false
+      }
+    }
+  ]
+}

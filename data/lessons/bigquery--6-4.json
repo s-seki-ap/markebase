@@ -1,0 +1,82 @@
+{
+  "id": "bigquery--6-4",
+  "moduleId": "6-4",
+  "categoryId": "bigquery",
+  "title": "AND/OR/NOT：複数条件でデータを絞り込む",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 現実の分析は複数の条件が組み合わさっている\n\n実際のマーケティング分析では「〇〇かつ△△の条件」「〇〇または△△のどちらか」といった複合条件が必要になります。\n\n**現実の分析要件の例**：\n- 「日本からのアクセス **かつ** モバイルユーザー **かつ** 購入した人」\n- 「organic流入 **または** direct流入のセッション」\n- 「ボットトラフィックでは **ない** ユーザー」\n\nこれらを実現するのが **AND・OR・NOT** の論理演算子です。\n\n## 演算子の優先順位\n\n数学の「×は＋より先に計算する」のと同様に、SQLにも優先順位があります。\n\n```\nNOT → AND → OR\n（NOTが最優先、ORが最後）\n```\n\n意図した通りに動かすために、括弧 `()` を使って優先順位を明示することが重要です。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# AND・OR・NOTの使い方\n\n## AND：すべての条件を満たす\n\n```sql\n-- 日本からのモバイルユーザーの購入イベントを取得\nSELECT\n  event_date,\n  user_pseudo_id\nFROM\n  `myproject.analytics_123456789.events_*`\nWHERE\n  event_name = 'purchase'\n  AND geo.country = 'Japan'\n  AND device.category = 'mobile'\n  AND _TABLE_SUFFIX BETWEEN '20240101' AND '20240131'\n```\n\n## OR：いずれかの条件を満たす\n\n```sql\n-- organicまたはdirect流入のイベントを取得\nSELECT\n  event_date,\n  event_name,\n  traffic_source.medium\nFROM\n  `myproject.analytics_123456789.events_20240115`\nWHERE\n  traffic_source.medium = 'organic'\n  OR traffic_source.medium = 'direct'\n```\n\n> 💡 同じ列に対する OR は `IN` で書き換えられます：\n> `WHERE traffic_source.medium IN ('organic', 'direct')`\n\n## NOT：条件を否定する\n\n```sql\n-- ボット判定されていないイベントを取得\nSELECT\n  event_name,\n  user_pseudo_id\nFROM\n  `myproject.analytics_123456789.events_20240115`\nWHERE\n  NOT (event_name = 'session_start' OR event_name = 'first_visit')\n```\n\n## 括弧による優先順位の制御\n\n```sql\n-- 括弧なし（意図しない結果になりやすい）\nWHERE event_name = 'purchase' AND geo.country = 'Japan' OR geo.country = 'US'\n-- 解釈：(購入かつ日本) または (US) → USのすべてのイベントが含まれてしまう\n\n-- 括弧あり（意図通り）\nWHERE event_name = 'purchase' AND (geo.country = 'Japan' OR geo.country = 'US')\n-- 解釈：購入 かつ (日本またはUS)\n```",
+        "diagram": false
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習：複合条件でGA4データを絞り込む\n\n## 課題\n\n以下の分析要件をSQLで書いてください。\n\n**分析要件**：\n「2024年3月に、日本またはアメリカからアクセスしたモバイルユーザーの購入イベントを取得したい」\n\n**条件の整理**：\n1. `_TABLE_SUFFIX BETWEEN '20240301' AND '20240331'`\n2. `event_name = 'purchase'`\n3. `geo.country` が `'Japan'` または `'United States'`\n4. `device.category = 'mobile'`\n\n> 💡 国と条件の組み合わせには括弧を使って優先順位を明示してください。",
+        "starterCode": "-- 2024年3月の日本・米国からのモバイル購入イベントを取得\n\nSELECT\n  event_date,\n  user_pseudo_id,\n  geo.country,\n  device.category\nFROM\n  `myproject.analytics_123456789.events_*`\nWHERE\n  -- 日付条件\n  _TABLE_SUFFIX BETWEEN '20240301' AND '20240331'\n  -- イベント名条件\n  AND event_name = '________'\n  -- 国条件（日本またはアメリカ）\n  AND (geo.country = '________' OR geo.country = '________')\n  -- デバイス条件\n  AND device.category = '________'",
+        "hints": [
+          "購入イベントの event_name は 'purchase' です。",
+          "Googleのデータでは国名は英語表記です。日本は 'Japan'、アメリカは 'United States' です。",
+          "OR条件は括弧で囲むことで、AND との優先順位が明確になります。`AND (条件A OR 条件B)` の形にします。"
+        ],
+        "answer": "-- 2024年3月の日本・米国からのモバイル購入イベントを取得\n\nSELECT\n  event_date,\n  user_pseudo_id,\n  geo.country,\n  device.category\nFROM\n  `myproject.analytics_123456789.events_*`\nWHERE\n  _TABLE_SUFFIX BETWEEN '20240301' AND '20240331'\n  AND event_name = 'purchase'\n  AND (geo.country = 'Japan' OR geo.country = 'United States')\n  AND device.category = 'mobile'"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "AND・OR・NOTの優先順位として正しいものはどれですか？",
+            "options": [
+              "OR → AND → NOT",
+              "AND → OR → NOT",
+              "NOT → AND → OR",
+              "NOT → OR → AND"
+            ],
+            "correct": 2,
+            "explanation": "SQLの論理演算子の優先順位は NOT → AND → OR の順です。意図した順序で評価させるために、括弧 () を使って明示的に優先順位を指定することが推奨されます。"
+          },
+          {
+            "q": "次のWHERE句の結果として正しい説明はどれですか？\n`WHERE event_name = 'purchase' AND geo.country = 'Japan' OR geo.country = 'US'`",
+            "options": [
+              "購入イベントで、かつ日本またはUSのデータ",
+              "(購入イベントかつ日本)、またはUSのすべてのイベント",
+              "購入イベントではないが日本かUSのデータ",
+              "日本とUSの購入イベントのみ"
+            ],
+            "correct": 1,
+            "explanation": "ANDはORより優先されるため、`(event_name='purchase' AND geo.country='Japan') OR geo.country='US'` と解釈されます。意図通りにするには `AND (geo.country='Japan' OR geo.country='US')` と括弧が必要です。"
+          },
+          {
+            "q": "`WHERE traffic_source.medium IN ('organic', 'cpc', 'email')` と同じ結果になる書き方はどれですか？",
+            "options": [
+              "`WHERE traffic_source.medium = 'organic' AND traffic_source.medium = 'cpc' AND traffic_source.medium = 'email'`",
+              "`WHERE traffic_source.medium = 'organic' OR traffic_source.medium = 'cpc' OR traffic_source.medium = 'email'`",
+              "`WHERE traffic_source.medium BETWEEN 'organic' AND 'email'`",
+              "`WHERE traffic_source.medium LIKE 'organic|cpc|email'`"
+            ],
+            "correct": 1,
+            "explanation": "`IN (値1, 値2, 値3)` は `= 値1 OR = 値2 OR = 値3` と同じ意味です。INの方が記述が簡潔で読みやすいため推奨されます。ANDを使うと「同時に複数の値に等しい」という不可能な条件になってしまいます。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール6-4 完了！\n\n複数条件の組み合わせ方をマスターしました。\n\n## 習得したスキル\n\n✅ **AND**：すべての条件を満たすデータを取得できる\n✅ **OR**：いずれかの条件を満たすデータを取得できる\n✅ **NOT**：条件を否定してデータを除外できる\n✅ **括弧による優先順位制御**：意図通りの条件式を書ける\n\n## 実務でよく使うパターン\n\n```sql\n-- よく使う複合条件のパターン\nWHERE\n  _TABLE_SUFFIX = '20240115'          -- 日付固定\n  AND event_name IN ('purchase', 'add_to_cart')  -- 複数イベント\n  AND geo.country = 'Japan'           -- 国絞り込み\n  AND NOT device.category = 'tablet'  -- タブレット除外\n```\n\n## 次のステップ\n\n次のモジュール **「6-5: ORDER BY」** では、取得したデータを好みの順番に並べ替える方法を学びます。",
+        "diagram": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "id": "javascript--3-17",
+  "moduleId": "3-17",
+  "categoryId": "javascript",
+  "title": "break・continueでループを制御する",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "## break・continueでループを制御する\n\n配列から特定の条件に合う最初の要素が見つかったらループを止めたい、エラーデータはスキップして処理を続けたい——こうした「ループの途中で処理を変えたい」場面で `break` と `continue` が役立ちます。\n\nGTM/GA4の実装では、dataLayer内のイベント検索や、不正なデータを除外しながらitemsを構築する処理でよく使います。\n\n**このモジュールで学ぶこと**\n- `break` でループを即座に終了する\n- `continue` で現在のイテレーションをスキップする\n- `switch` 文の `break` との違い\n- GTMタグでの実用的な使い方",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "## breakの基本\n\n`break` はループを即座に終了し、ループの後の処理に移ります。\n\n```javascript\nvar items = ['item_a', 'item_b', 'target_item', 'item_c'];\nvar found = null;\n\nfor (var i = 0; i < items.length; i++) {\n  if (items[i] === 'target_item') {\n    found = items[i];\n    break;  // 見つかったらループを終了\n  }\n}\nconsole.log(found);  // 'target_item'\n```\n\n## continueの基本\n\n`continue` は現在のイテレーションの残りの処理をスキップし、次のイテレーションに進みます。\n\n```javascript\nvar numbers = [1, -2, 3, -4, 5];\nvar positiveSum = 0;\n\nfor (var i = 0; i < numbers.length; i++) {\n  if (numbers[i] < 0) {\n    continue;  // 負の数はスキップ\n  }\n  positiveSum += numbers[i];  // 正の数のみ加算\n}\nconsole.log(positiveSum);  // 9（1+3+5）\n```\n\n### GTM実例①：dataLayerから特定イベントを検索\n\n```javascript\n<script>\n  var dataLayer = window.dataLayer || [];\n  var purchaseEvent = null;\n\n  // dataLayerを新しい順に検索し、最初のpurchaseを取得\n  for (var i = dataLayer.length - 1; i >= 0; i--) {\n    if (dataLayer[i] && dataLayer[i].event === 'purchase') {\n      purchaseEvent = dataLayer[i];\n      break;  // 見つかったらループを終了（残りを検索しない）\n    }\n  }\n\n  if (purchaseEvent) {\n    console.log('購入金額:', purchaseEvent.ecommerce.value);\n  }\n</script>\n```\n\n### GTM実例②：不正アイテムを除外してGA4 itemsを構築\n\n```javascript\n<script>\n  var rawItems = {{Raw Product Data}};\n  var validItems = [];\n\n  for (var i = 0; i < rawItems.length; i++) {\n    var item = rawItems[i];\n\n    // 必須パラメータがない場合はスキップ\n    if (!item.id || !item.name || !item.price) {\n      continue;  // このアイテムは処理せず次へ\n    }\n\n    // 価格が不正（0以下）な場合はスキップ\n    if (item.price <= 0) {\n      continue;\n    }\n\n    // 有効なアイテムのみGA4形式に変換\n    validItems.push({\n      'item_id': item.id,\n      'item_name': item.name,\n      'price': item.price,\n      'quantity': item.quantity || 1\n    });\n  }\n\n  window.dataLayer = window.dataLayer || [];\n  window.dataLayer.push({\n    'event': 'view_item_list',\n    'ecommerce': { 'items': validItems }\n  });\n</script>\n```\n\n### breakとcontinueの違いの整理\n\n```javascript\nvar data = [1, 2, 'STOP', 3, 4];\n\n// break：'STOP'に到達したらループ全体を終了\nfor (var i = 0; i < data.length; i++) {\n  if (data[i] === 'STOP') break;\n  console.log(data[i]);  // 1, 2\n}\n\n// continue：'STOP'をスキップして続行\nfor (var i = 0; i < data.length; i++) {\n  if (data[i] === 'STOP') continue;\n  console.log(data[i]);  // 1, 2, 3, 4\n}\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "## 練習：GA4 itemsを検証しながら構築する\n\n商品データ配列から有効なアイテムのみをGA4形式に変換するコードを `continue` と `break` を使って完成させてください。\n\n**条件**\n- `item_id` または `item_name` が空の場合は `continue` でスキップ\n- `price` が `10000` を超える場合は高額商品とみなし `break` でループを中断\n- 有効なアイテムを `ga4Items` に追加する",
+        "starterCode": "<script>\n  window.dataLayer = window.dataLayer || [];\n  var products = {{Product Array}};\n  var ga4Items = [];\n\n  for (var i = 0; i < products.length; i++) {\n    var p = products[i];\n\n    // 必須項目がない場合はスキップ\n    if (!p.item_id || !p.item_name) {\n      ______;\n    }\n\n    // 高額商品（10000円超）でループ中断\n    if (p.price > 10000) {\n      ______;\n    }\n\n    ga4Items.push({\n      'item_id': p.item_id,\n      'item_name': p.item_name,\n      'price': p.price\n    });\n  }\n\n  window.dataLayer.push({\n    'event': 'view_item_list',\n    'ecommerce': { 'items': ga4Items }\n  });\n</script>",
+        "hints": [
+          "現在のループ処理をスキップして次の要素に進むには `continue` を使います",
+          "ループ全体を即座に終了するには `break` を使います",
+          "`continue` は「このアイテムを無視して次へ」、`break` は「処理をここで打ち切る」という違いがあります"
+        ],
+        "answer": "<script>\n  window.dataLayer = window.dataLayer || [];\n  var products = {{Product Array}};\n  var ga4Items = [];\n\n  for (var i = 0; i < products.length; i++) {\n    var p = products[i];\n\n    // 必須項目がない場合はスキップ\n    if (!p.item_id || !p.item_name) {\n      continue;\n    }\n\n    // 高額商品（10000円超）でループ中断\n    if (p.price > 10000) {\n      break;\n    }\n\n    ga4Items.push({\n      'item_id': p.item_id,\n      'item_name': p.item_name,\n      'price': p.price\n    });\n  }\n\n  window.dataLayer.push({\n    'event': 'view_item_list',\n    'ecommerce': { 'items': ga4Items }\n  });\n</script>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "question": "`continue` を使った場合、ループはどのように動作しますか？",
+            "options": [
+              "ループ全体を終了し、ループ後の処理に移る",
+              "現在のイテレーションの残り処理をスキップし、次のイテレーションに進む",
+              "ループを一時停止して後で再開する",
+              "エラーを発生させてスクリプトを停止する"
+            ],
+            "correct": 1,
+            "explanation": "`continue` は現在のループのイテレーションの残りの処理をスキップし、次のイテレーション（次のインデックス）から処理を続けます。ループ自体は終了しません。不正なデータや不要な要素を除外しながら処理を続けたい場合に使います。"
+          },
+          {
+            "question": "以下のコードで出力される値はどれですか？\n```javascript\nvar arr = [1, 2, 3, 4, 5];\nvar result = 0;\nfor (var i = 0; i < arr.length; i++) {\n  if (arr[i] === 3) break;\n  result += arr[i];\n}\nconsole.log(result);\n```",
+            "options": [
+              "15",
+              "12",
+              "3",
+              "3（1+2=3の時点でbreakするため）"
+            ],
+            "correct": 2,
+            "explanation": "ループは i=0（値1）、i=1（値2）と進み、i=2（値3）で `break` が実行されます。この時点で `result` は 1 + 2 = 3 です。`break` によりループが終了するため、4と5は加算されません。"
+          },
+          {
+            "question": "GTMカスタムHTMLタグで `continue` を使う典型的なユースケースはどれですか？",
+            "options": [
+              "ループを一定回数実行した後に停止する",
+              "無効なデータや不要な要素をスキップして、有効なデータのみを処理する",
+              "ループ内でエラーが発生したときにエラーハンドリングを行う",
+              "ループの実行順序を逆にする"
+            ],
+            "correct": 1,
+            "explanation": "`continue` はGTMタグで商品データのバリデーションや、不正なGA4パラメータを除外する処理でよく使われます。必須項目が欠けている、価格が0以下など「処理してはいけないデータ」をスキップすることで、後続の処理にクリーンなデータのみを渡せます。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "## まとめ：break・continueでループを制御する\n\n✅ `break` はループを即座に終了し、ループ後の処理に移る\n\n✅ `continue` は現在のイテレーションをスキップし、次のイテレーションに進む\n\n✅ `break` はdataLayer内の特定イベント検索で「見つかったら終了」に使える\n\n✅ `continue` はGA4 itemsの不正データ除外処理でよく活用される\n\n✅ `switch` 文の `break` はcaseの処理終了のためで、ループの `break` とは別の役割\n\n**次のモジュールでは** 三項演算子でコンパクトな条件分岐を書く方法を学びます。",
+        "diagram": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "id": "bigquery--6-2",
+  "moduleId": "6-2",
+  "categoryId": "bigquery",
+  "title": "SELECT・FROMの基本：データを取り出す最初の一歩",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# データを「取り出す」ことから始まるSQL\n\nSQLで最も頻繁に使う操作が「データの取り出し（SELECT）」です。INSERT（挿入）・UPDATE（更新）・DELETE（削除）もありますが、マーケターが日常的に使うのはほぼ100%「SELECTだけ」といっても過言ではありません。\n\n## SELECT文の役割\n\nSELECT文は「テーブルから指定した列を取り出す」命令です。\n\nイメージとしては：\n\n- Excelで特定の列だけを表示する「列の非表示」の逆操作\n- 「このスプレッドシートのA列・C列・E列だけ見せて」という指示\n\n## なぜ列を選んで取得するのか\n\nGA4のBigQueryテーブルには100以上のカラムが存在します。すべてを毎回取得すると：\n\n- クエリが遅くなる\n- BigQueryの課金額が増える（読み込みデータ量に比例）\n- 結果が見づらくなる\n\n必要な列だけを指定するSELECTの書き方が、コスト削減と可読性向上の第一歩です。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# SELECT・FROMの構文\n\n## 基本構文\n\n```sql\nSELECT 列名1, 列名2, 列名3\nFROM `プロジェクト.データセット.テーブル名`\n```\n\n## すべての列を取得する（アスタリスク）\n\n```sql\n-- すべての列を取得（BigQueryでは課金が増えるので注意）\nSELECT *\nFROM `myproject.analytics_123456789.events_20240101`\n```\n\n## 特定の列だけを取得する\n\n```sql\n-- GA4イベントテーブルからよく使う列だけを取得\nSELECT\n  event_date,\n  event_name,\n  user_pseudo_id,\n  platform,\n  geo.country\nFROM\n  `myproject.analytics_123456789.events_20240101`\n```\n\n## GA4テーブルの主要カラム一覧\n\n| カラム名 | 内容 |\n|----------|------|\n| `event_date` | イベント発生日（YYYYMMDD形式） |\n| `event_name` | イベント名（page_view, purchaseなど） |\n| `event_timestamp` | イベント発生時刻（マイクロ秒） |\n| `user_pseudo_id` | 匿名ユーザーID |\n| `platform` | WEB / IOS / ANDROID |\n| `geo.country` | ユーザーの国 |\n| `traffic_source.medium` | 流入メディア |\n| `device.category` | デバイス種別 |\n\n## 文字列リテラルを列として返す\n\n```sql\n-- 固定文字列を列として追加することもできる\nSELECT\n  event_name,\n  'GA4データ' AS data_source\nFROM\n  `myproject.analytics_123456789.events_20240101`\n```",
+        "diagram": false
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習：GA4イベントデータの列を選んで取得する\n\n## 課題\n\nGA4のBigQueryエクスポートテーブル `myproject.analytics_123456789.events_20240115` から以下の列を取得するSQLを書いてください。\n\n1. `event_date`（イベント日付）\n2. `event_name`（イベント名）\n3. `user_pseudo_id`（ユーザーID）\n4. `platform`（プラットフォーム）\n5. `traffic_source.medium`（流入メディア）\n\n> 💡 ネストしたフィールド（`traffic_source.medium` のようなドット区切り）もそのまま列名として指定できます。",
+        "starterCode": "-- GA4の2024年1月15日のイベントデータから\n-- 必要な列だけを取得する\n\nSELECT\n  -- 5つの列名をここに書いてください\n  \nFROM\n  -- テーブル名をここに書いてください（バッククォートで囲む）\n  ",
+        "hints": [
+          "SELECT の後に列名をカンマ(,)で区切って並べます。最後の列名の後にカンマは不要です。",
+          "テーブル名はバッククォート(`)で囲みます。`myproject.analytics_123456789.events_20240115` のように書きます。",
+          "ネストしたフィールドはドット(.)でつなぎます。`traffic_source.medium` はそのまま列名として書けます。"
+        ],
+        "answer": "-- GA4の2024年1月15日のイベントデータから\n-- 必要な列だけを取得する\n\nSELECT\n  event_date,\n  event_name,\n  user_pseudo_id,\n  platform,\n  traffic_source.medium\nFROM\n  `myproject.analytics_123456789.events_20240115`"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "SELECT文で「すべての列を取得する」ときに使う記号はどれですか？",
+            "options": [
+              "%（パーセント）",
+              "#（シャープ）",
+              "*（アスタリスク）",
+              "?（クエスチョン）"
+            ],
+            "correct": 2,
+            "explanation": "`SELECT *` と書くとテーブルのすべての列を取得します。ただしBigQueryでは読み込みデータ量が増えて課金が増えるため、必要な列だけを指定することを推奨します。"
+          },
+          {
+            "q": "BigQueryで `SELECT *` より特定列を指定する `SELECT 列名` が推奨される最大の理由はどれですか？",
+            "options": [
+              "SQLの文法上 * は使用できないから",
+              "読み込みデータ量が減り、コスト削減になるから",
+              "* を使うとエラーになるテーブルがあるから",
+              "列を指定しないとデータが並び替えられてしまうから"
+            ],
+            "correct": 1,
+            "explanation": "BigQueryは読み込んだデータ量（バイト数）に応じて課金されます。`SELECT *` では全列を読み込むため、必要な列だけを指定することで課金を大幅に削減できます。"
+          },
+          {
+            "q": "GA4のBigQueryテーブルで「ユーザーの流入メディア」を取得するカラム名はどれですか？",
+            "options": [
+              "source.medium",
+              "user_traffic.medium",
+              "traffic_source.medium",
+              "acquisition.medium"
+            ],
+            "correct": 2,
+            "explanation": "GA4のBigQueryエクスポートでは `traffic_source.medium` でセッションの流入メディアを取得できます。ネスト構造のフィールドはドット(.)でつないでアクセスします。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール6-2 完了！\n\nSQLの根幹となるSELECT・FROMを習得しました。\n\n## 習得したスキル\n\n✅ **SELECT文の基本構文**を書けるようになった\n✅ **特定の列だけを取得する**方法を理解した\n✅ **GA4テーブルの主要カラム**の意味を把握した\n✅ **アスタリスク(\\*)の使いどころと注意点**を理解した\n\n## 実務でのポイント\n\nGA4のBigQueryテーブルには100以上のカラムがありますが、日常の分析で使うのは10〜20カラム程度です。よく使うカラム名を覚えておくと、クエリ作成のスピードが上がります。\n\n## 次のステップ\n\n次のモジュール **「6-3: WHERE句」** では、取得するデータを条件で絞り込む方法を学びます。特定のイベントだけ、特定の日付だけを取り出す方法です。",
+        "diagram": false
+      }
+    }
+  ]
+}

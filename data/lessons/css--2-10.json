@@ -1,0 +1,67 @@
+{
+  "id": "css--2-10",
+  "moduleId": "2-10",
+  "categoryId": "css",
+  "title": "DevToolsのStylesパネルでのCSSリアルタイムデバッグ",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# マーケターの最強ツール：ブラウザのDevTools\n\nDevTools（開発者ツール）は、Webページの構造・スタイル・パフォーマンスをリアルタイムで確認・編集できるブラウザの組み込みツールです。CSSの基礎知識とDevToolsを組み合わせると、マーケターの仕事の質が劇的に上がります。\n\n## DevToolsでできること（マーケター視点）\n\n**1. LP改修の事前検証**\nデザイナーやエンジニアに依頼する前に、DevToolsでCSSをリアルタイム変更してボタンの色・サイズ・配置を試せます。「こんな感じ」という共通認識が生まれ、手戻りが減ります。\n\n**2. 競合サイトの分析**\n競合のLPがどんなフォント・色・余白を使っているか、DevToolsで正確な値を確認できます。「なんとなくいい感じ」ではなく「font-size: 1.125rem, line-height: 1.8, color: #2d3748」という具体的な情報を得られます。\n\n**3. GA4タグの実装確認**\nDevToolsのConsoleでGA4のdataLayerを確認したり、NetworkタブでGA4へのリクエストを確認したりできます。タグが正しく動いているかを自分で確認できます。\n\n**4. モバイル表示の確認**\nDevice Modeでスマートフォンの表示をシミュレーションできます。LPのモバイル最適化の確認に使えます。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# DevToolsのStylesパネル使い方完全ガイド\n\n## DevToolsの開き方\n\n```\nWindows: F12 または Ctrl + Shift + I\nMac: Cmd + Option + I\n右クリック → 検証（Inspect）\n```\n\n## ElementsパネルとStylesパネルの関係\n\n```\n[DevTools画面の構成]\n┌─────────────────────────────────┐\n│ Elements | Console | Network ... │ ← タブ選択\n├─────────────────────────────────┤\n│ [HTMLツリー]    │ [Stylesパネル] │\n│ <html>         │ element.style{ │\n│   <body>       │ }              │\n│     <h1>       │ .hero h1 {     │\n│     </h1>      │   color: red;  │\n│     <div>      │ }              │\n└─────────────────────────────────┘\n```\n\n## Stylesパネルの読み方\n\n### 1. 適用されているCSSの確認\n\n```\nStyles パネルの表示例：\n┌─────────────────────────────────────────┐\n│ element.style {         ← インラインCSS │\n│   color: red;                            │\n│ }                                        │\n│                                          │\n│ .hero h1 {              ← 適用中のCSS   │\n│   font-size: 2rem;                       │\n│   ~~color: blue;~~      ← 打ち消し線    │\n│ }                       ← 上書きされた  │\n│                                          │\n│ h1 {                    ← 詳細度が低い  │\n│   ~~font-size: 3rem;~~  ← 負けたCSS    │\n│ }                                        │\n└─────────────────────────────────────────┘\n```\n\n- **打ち消し線のあるプロパティ**: 詳細度が低いか `!important` で上書きされたスタイル\n- **element.style**: インラインCSS\n- **上から順に**: 詳細度が高いものから表示\n\n### 2. リアルタイム編集\n\n```\n① 要素を右クリック → 「検証」でその要素を選択\n② Stylesパネルで値をクリックして直接編集\n③ 変更はリアルタイムでページに反映（保存はされない）\n④ ページをリロードすると元に戻る\n```\n\n### 3. 新しいスタイルを追加\n\n```\n① Stylesパネルの「+」ボタンをクリック\n② または `element.style {}` の中をクリック\n③ プロパティ名を入力 → Tabキー → 値を入力\n```\n\n### 4. Computedタブの活用\n\n```\nStylesの右に「Computed」タブがある\n- 継承を含む最終的に適用された値を確認\n- rem・%などが実際のpx値で表示される\n- プロパティを展開するとどのCSSが適用されているか追跡できる\n```\n\n### 5. Boxモデルの確認\n\n```\nStyles/Computedパネルの上部に Box Model 図が表示される\n┌─────────────────────────────┐\n│          margin             │\n│   ┌─────────────────────┐   │\n│   │      border         │   │\n│   │  ┌───────────────┐  │   │\n│   │  │    padding    │  │   │\n│   │  │  ┌─────────┐  │  │   │\n│   │  │  │ content │  │  │   │\n│   │  │  │ 300×50  │  │  │   │\n│   │  │  └─────────┘  │  │   │\n│   │  └───────────────┘  │   │\n│   └─────────────────────┘   │\n└─────────────────────────────┘\n各数値をクリックして直接編集できる\n```\n\n## マーケターのDevTools実践テクニック\n\n### フォントサイズ・色を素早くコピー\n\n```\n1. 確認したい要素を右クリック → 検証\n2. Computedタブを開く\n3. \"font-size\"・\"color\"・\"font-family\" の値を確認\n4. 値をメモするか、コピーして仕様書に貼り付ける\n```\n\n### CSSの変更をコピーして共有\n\n```\n1. DevToolsで変更したCSSを確認\n2. Stylesパネルで変更した箇所を右クリック\n3. 「Copy declaration」や「Copy all declarations」でコピー\n4. エンジニアにSlackで貼り付けて依頼\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: DevToolsで確認しながらスタイルをデバッグ\n\n意図的にCSSの競合を起こし、DevToolsで問題を特定して修正しましょう。\n\n## 課題\n\n以下のHTMLには、意図通りに表示されない問題があります。DevToolsで確認しながらCSSを修正してください：\n\n1. `.hero` の `h1` が赤になるはずなのに青のまま → 詳細度の問題を確認して修正\n2. `.button` のfont-sizeが20pxになるはずなのに14px → 競合を確認して修正\n3. `.card` のwidthが300pxになるはずなのにpaddingで広がっている → box-sizingの問題を修正",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>DevToolsデバッグ練習</title>\n  <style>\n    body {\n      font-family: sans-serif;\n      margin: 0;\n      padding: 20px;\n      background: #f0f0f0;\n    }\n\n    /* 問題①: この.hero h1の赤色が適用されない理由は？ */\n    .hero h1 {\n      color: red;\n      font-size: 2rem;\n    }\n\n    /* 問題①の原因: こちらの詳細度が高い */\n    #main .hero h1 {\n      color: blue;\n    }\n\n    /* 問題②: .buttonのfont-sizeが20pxにならない理由は？ */\n    .button {\n      font-size: 20px;\n      background: #e94560;\n      color: white;\n      padding: 10px 20px;\n      border: none;\n      border-radius: 6px;\n      cursor: pointer;\n    }\n\n    /* 問題②の原因 */\n    #main .hero .button {\n      font-size: 14px !important;\n    }\n\n    /* 問題③: .cardのwidthを300pxにしているのに実際は広くなる */\n    /* box-sizingのデフォルトはcontent-boxのため */\n    .card {\n      width: 300px;\n      padding: 20px;\n      background: white;\n      border-radius: 8px;\n      margin-bottom: 16px;\n      /* box-sizing: border-box; ← これを追加すると解決 */\n    }\n\n    .hero {\n      background: #f0f4ff;\n      padding: 40px 30px;\n      border-radius: 8px;\n      margin-bottom: 20px;\n    }\n  </style>\n</head>\n<body>\n  <div id=\"main\">\n    <section class=\"hero\">\n      <h1>デバッグ練習（本来は赤のはず）</h1>\n      <button class=\"button\">クリック（本来は20pxのはず）</button>\n    </section>\n\n    <div class=\"card\">\n      <h3>カード（widthは300pxのはず）</h3>\n      <p>DevToolsのBoxモデルで実際のwidthを確認してみましょう。</p>\n    </div>\n  </div>\n</body>\n</html>",
+        "hints": [
+          "問題①: DevToolsのStylesパネルで .hero h1 のcolorを確認すると、#main .hero h1の方に詳細度で負けているのが分かります。解決策: IDをコントロールできる場合はIDセレクタを追加するか、!importantを使います。",
+          "問題②: !importantがついているCSSには詳細度では勝てません。こちらも !important を使う必要があります。",
+          "問題③: box-sizing: border-box を .card に追加することで、paddingを含めてwidth: 300pxに収まります。DevToolsのBoxモデルで変化を確認できます。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>DevToolsデバッグ練習（修正済み）</title>\n  <style>\n    body {\n      font-family: sans-serif;\n      margin: 0;\n      padding: 20px;\n      background: #f0f0f0;\n    }\n\n    /* 修正①: !importantを追加して詳細度を上回る */\n    .hero h1 {\n      color: red !important;\n      font-size: 2rem;\n    }\n\n    #main .hero h1 {\n      color: blue;\n    }\n\n    /* 修正②: !importantで上書き */\n    .button {\n      font-size: 20px !important;\n      background: #e94560;\n      color: white;\n      padding: 10px 20px;\n      border: none;\n      border-radius: 6px;\n      cursor: pointer;\n    }\n\n    #main .hero .button {\n      font-size: 14px !important;\n    }\n\n    /* 修正③: box-sizing: border-boxを追加 */\n    .card {\n      box-sizing: border-box;\n      width: 300px;\n      padding: 20px;\n      background: white;\n      border-radius: 8px;\n      margin-bottom: 16px;\n    }\n\n    .hero {\n      background: #f0f4ff;\n      padding: 40px 30px;\n      border-radius: 8px;\n      margin-bottom: 20px;\n    }\n  </style>\n</head>\n<body>\n  <div id=\"main\">\n    <section class=\"hero\">\n      <h1>デバッグ練習（赤に修正された）</h1>\n      <button class=\"button\">クリック（20pxに修正された）</button>\n    </section>\n\n    <div class=\"card\">\n      <h3>カード（300pxに修正された）</h3>\n      <p>DevToolsのBoxモデルで確認すると、paddingを含めてwidth: 300pxになっています。</p>\n    </div>\n  </div>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "DevToolsのStylesパネルでCSSプロパティに取り消し線が引かれている場合、何を意味しますか？",
+            "options": ["そのプロパティは非推奨で廃止される", "詳細度の競合や!importantで上書きされ、適用されていない", "ブラウザがそのプロパティをサポートしていない", "値が間違って入力されている"],
+            "correct": 1,
+            "explanation": "DevToolsのStylesパネルで取り消し線が引かれたCSSは、詳細度の高い別のスタイルまたは!importantによって上書きされており、実際には適用されていません。これで「どのCSSが勝って、どのCSSが負けているか」をひと目で確認できます。"
+          },
+          {
+            "q": "DevToolsで競合他社のLPのフォントサイズを正確に調べる最適な方法はどれですか？",
+            "options": ["ページのHTMLソースを表示する", "対象テキストを右クリック→検証でElements/Stylesを開き、Computedタブで確認する", "スクリーンショットを撮って目視で推測する", "Webアーカイブで過去のコードを確認する"],
+            "correct": 1,
+            "explanation": "テキストを右クリック→検証でDevToolsのElementsパネルが開き、Stylesパネルで適用されているCSSが確認できます。さらにComputedタブでは、remや%などが実際のpx値に変換された計算値が表示されます。"
+          },
+          {
+            "q": "DevToolsのStylesパネルでリアルタイムに変更したCSSは、ページをリロードするとどうなりますか？",
+            "options": ["自動的にサーバーに保存される", "元の状態（変更前）に戻る", "CSSファイルに上書きされる", "ブラウザキャッシュに保存される"],
+            "correct": 1,
+            "explanation": "DevToolsでのCSSの変更はメモリ上の一時的なものです。ページをリロードすると元の状態に戻ります。これは「壊れても元に戻せる」安全な実験環境として非常に便利です。変更を保存したい場合は、Sourcesパネルの「Local Overrides」機能を使います。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール2-10 完了！\n\n## 習得したスキル\n\n✅ **DevToolsの開き方**（F12・右クリック→検証）を習得した\n✅ **Stylesパネルの読み方**（適用スタイル・打ち消し線の意味）を理解した\n✅ **リアルタイムCSS編集**でLP改修案を事前検証できる\n✅ **Computedタブ**で最終的な計算値を確認できる\n✅ **BoxモデルUI**でmargin・padding・borderの実際の値を確認できる\n\n## CSSの基礎編（2-1〜2-10）完了\n\nここまでのモジュールでCSSの基本的な仕組みをすべて学びました。次のセクション（2-11〜）からは実際のデザインプロパティを学んでいきます。\n\n> 実務チャレンジ: 競合サイトのCTAボタンをDevToolsで調べ、background-color・padding・font-sizeの値を書き出してみましょう。自社LPとの比較分析に使えます。",
+        "diagram": false
+      }
+    }
+  ]
+}

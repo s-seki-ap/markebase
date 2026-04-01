@@ -1,0 +1,82 @@
+{
+  "id": "javascript--3-12",
+  "moduleId": "3-12",
+  "categoryId": "javascript",
+  "title": "switchで多分岐処理を読みやすくする",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "## switchで多分岐処理を読みやすくする\n\n前のモジュールで学んだ `if`・`else if` は柔軟な条件分岐に優れていますが、同じ変数を多くの値と比較する場合はコードが冗長になりがちです。\n\n`switch` 文は「1つの値に対して複数の選択肢を比較する」ケースに特化した構文で、コードの可読性を大幅に高めます。GTMのイベント種別マッピングやGA4パラメータの変換処理でよく活用されます。\n\n**このモジュールで学ぶこと**\n- `switch` 文の基本構文\n- `break` の役割とフォールスルーのリスク\n- `default` ケースの使い方\n- GTMタグでのswitch活用パターン",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "## switch文の基本構文\n\n```javascript\nswitch (式) {\n  case 値1:\n    // 式 === 値1 のとき実行\n    break;\n  case 値2:\n    // 式 === 値2 のとき実行\n    break;\n  default:\n    // どのcaseにも一致しないとき実行\n}\n```\n\n**重要：** 各 `case` の末尾に `break` がないと、次の `case` の処理も続けて実行されます（フォールスルー）。意図しない場合はバグになるので必ず `break` を書きましょう。\n\n### if-else ifとswitchの比較\n\n```javascript\n// if-else if（同じ変数を繰り返し書く）\nif (pageType === 'top') {\n  eventName = 'view_top';\n} else if (pageType === 'product') {\n  eventName = 'view_item';\n} else if (pageType === 'cart') {\n  eventName = 'view_cart';\n} else if (pageType === 'thankyou') {\n  eventName = 'purchase';\n}\n\n// switch（比較対象が1つにまとまり読みやすい）\nswitch (pageType) {\n  case 'top':\n    eventName = 'view_top';\n    break;\n  case 'product':\n    eventName = 'view_item';\n    break;\n  case 'cart':\n    eventName = 'view_cart';\n    break;\n  case 'thankyou':\n    eventName = 'purchase';\n    break;\n  default:\n    eventName = 'view_page';\n}\n```\n\n### フォールスルーを意図的に使うパターン\n\n複数のケースで同じ処理をしたいときは、意図的にフォールスルーを活用できます。\n\n```javascript\n<script>\n  var channel = {{Traffic Source}};\n  var channelGroup;\n\n  switch (channel) {\n    case 'google_cpc':\n    case 'yahoo_cpc':\n    case 'line_ads':\n      // 複数のケースで同じ処理\n      channelGroup = 'paid_search';\n      break;\n    case 'google_organic':\n    case 'yahoo_organic':\n      channelGroup = 'organic_search';\n      break;\n    case 'email':\n    case 'newsletter':\n      channelGroup = 'email_marketing';\n      break;\n    default:\n      channelGroup = 'other';\n  }\n\n  window.dataLayer = window.dataLayer || [];\n  window.dataLayer.push({\n    'event': 'set_channel_group',\n    'channel_group': channelGroup\n  });\n</script>\n```\n\n### GA4イベントパラメータのマッピング例\n\n```javascript\n<script>\n  var productCategory = {{Product Category}};\n  var ga4Category;\n\n  switch (productCategory) {\n    case 'mens-wear':\n    case 'mens-shoes':\n      ga4Category = 'メンズ';\n      break;\n    case 'womens-wear':\n    case 'womens-shoes':\n      ga4Category = 'レディース';\n      break;\n    case 'kids':\n      ga4Category = 'キッズ';\n      break;\n    default:\n      ga4Category = 'その他';\n  }\n\n  window.dataLayer.push({\n    'event': 'view_item',\n    'item_category': ga4Category\n  });\n</script>\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "## 練習：メディアソースをチャネルグループにマッピングする\n\nGTMカスタムJavaScript変数で、UTMソース（`{{utm_source}}`）に基づいてGA4のチャネルグループを返す関数を `switch` 文で完成させてください。\n\n**マッピング仕様**\n- `'google'`、`'yahoo'` → `'Paid Search'`（フォールスルーを活用）\n- `'facebook'`、`'instagram'` → `'Paid Social'`\n- `'line'` → `'LINE'`\n- それ以外 → `'Other'`",
+        "starterCode": "// GTMカスタムJavaScript変数\nfunction() {\n  var source = {{utm_source}};\n  var channelGroup;\n\n  ______ (source) {\n    case 'google':\n    ______ 'yahoo':\n      channelGroup = 'Paid Search';\n      ______;\n    case 'facebook':\n    case 'instagram':\n      channelGroup = 'Paid Social';\n      break;\n    ______ 'line':\n      channelGroup = 'LINE';\n      break;\n    ______:\n      channelGroup = 'Other';\n  }\n\n  return channelGroup;\n}",
+        "hints": [
+          "`switch` 文はキーワード `switch` で始まります",
+          "フォールスルーで複数のケースに同じ処理をする場合、`case '値':` を `break` なしで連続して書きます",
+          "どのケースにも一致しない場合の処理には `default:` を使います"
+        ],
+        "answer": "// GTMカスタムJavaScript変数\nfunction() {\n  var source = {{utm_source}};\n  var channelGroup;\n\n  switch (source) {\n    case 'google':\n    case 'yahoo':\n      channelGroup = 'Paid Search';\n      break;\n    case 'facebook':\n    case 'instagram':\n      channelGroup = 'Paid Social';\n      break;\n    case 'line':\n      channelGroup = 'LINE';\n      break;\n    default:\n      channelGroup = 'Other';\n  }\n\n  return channelGroup;\n}"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "question": "switch文で `break` を書き忘れた場合、どのような動作になりますか？",
+            "options": [
+              "エラーが発生してスクリプトが停止する",
+              "そのcaseのみ実行され次のcaseはスキップされる",
+              "一致したcaseから次のbreakまたはswitch終了まで連続して実行される（フォールスルー）",
+              "defaultケースにジャンプする"
+            ],
+            "correct": 2,
+            "explanation": "`break` がない場合、一致したcaseの処理が終わっても次のcaseの処理も続けて実行されます（フォールスルー）。これは意図的に使う場合（複数のcaseに同じ処理をさせる）と意図しないバグになる場合があります。通常は各caseに `break` を書くことを推奨します。"
+          },
+          {
+            "question": "switch文の `default:` ケースはどのような役割ですか？",
+            "options": [
+              "最初に実行されるデフォルトの処理を定義する",
+              "どのcaseにも一致しなかった場合に実行される処理を定義する",
+              "必ず書かなければエラーになる必須の構文",
+              "switch文の初期化処理を行う"
+            ],
+            "correct": 1,
+            "explanation": "`default:` はswitch文の中でどのcaseにも一致しなかった場合に実行されるフォールバック処理です。省略可能ですが、GTMタグでは予期しない値が来た場合の安全網として `default:` を書くことを推奨します。"
+          },
+          {
+            "question": "switch文とif-else if文を使い分ける際の判断基準として最も適切なのはどれですか？",
+            "options": [
+              "switchは必ずif-else ifより高速なので常にswitchを使う",
+              "1つの変数を複数の固定値と比較する場合はswitch、範囲比較や複合条件にはif-else ifが向いている",
+              "switchはES6の構文なのでGTMでは使えない",
+              "条件が3つ以上ある場合は必ずswitchを使わなければならない"
+            ],
+            "correct": 1,
+            "explanation": "switchは「1つの変数 === 固定値」の比較に特化しており、コードが読みやすくなります。一方、`age > 18` のような範囲比較や `a === 1 && b === 2` のような複合条件はswitchでは書けないため、if-else ifを使います。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "## まとめ：switchで多分岐処理を読みやすくする\n\n✅ `switch` は1つの変数を複数の固定値と比較する場合にif-else ifより読みやすい\n\n✅ 各 `case` の末尾には必ず `break` を書く（意図的なフォールスルー以外）\n\n✅ `default:` でどのcaseにも一致しない場合のフォールバック処理を定義する\n\n✅ フォールスルーを活用して複数のcaseに同じ処理をまとめて書ける\n\n✅ GTMでのチャネルグループ分類・イベント名マッピングにswitchが活躍する\n\n**次のモジュールでは** `for` ループを使って繰り返し処理を書く方法を学びます。",
+        "diagram": false
+      }
+    }
+  ]
+}

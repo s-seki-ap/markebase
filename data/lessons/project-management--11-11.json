@@ -1,0 +1,82 @@
+{
+  "id": "project-management--11-11",
+  "moduleId": "11-11",
+  "categoryId": "project-management",
+  "title": "要件ヒアリングの技術と実践設計",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 「言われたことをそのまま作る」のがPMの仕事ではない\n\nクライアントが「これを作ってください」と言ったことを、そのまま作るだけなら誰でもできます。PMの真価は**「本当に必要なもの」を引き出す力**にあります。\n\n## ヒアリングなき開発の典型的末路\n\n**クライアントの言葉**: 「SNS連携ボタンをLPに追加してください」\n\n**ヒアリングなしで実装した場合**: Facebook・Twitter・LINEのシェアボタンを設置\n\n**3週間後**: 「あ、私が言いたかったのはInstagramのフォローボタンでした。しかも今回の目的はフォロワー獲得ではなくブランド認知なので、シェアより"保存"ボタンの方がいいかも」\n\n→ 手戻り発生。ヒアリング30分をケチったことで3日の作業が無駄に。\n\n## ヒアリングで明らかにすべきこと\n\n1. **ビジネス課題**（なぜそれが必要か）\n2. **本当の目標**（何を達成したいか）\n3. **ユーザーの文脈**（誰がどのように使うか）\n4. **制約条件**（予算・期間・技術・組織）\n5. **成功の定義**（どうなれば満足か）",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# 要件ヒアリングの体系的アプローチ\n\n## ヒアリング前の準備\n\n```\n□ クライアントの業界・ビジネスモデルを事前調査\n□ 競合他社のサイト・マーケティング手法を確認\n□ 現状課題の仮説を3つ用意（ヒアリングの「仮説検証」として活用）\n□ ヒアリングシートを作成\n□ 録音許可の確認（後の要件定義書作成のため）\n```\n\n## 質問技法: 5つのWとHのフレームワーク\n\n| 質問 | 聞くこと | デジタルマーケでの例 |\n|------|---------|--------------------|\n| **Why** | なぜそれが必要か | 「なぜLPリニューアルが必要だと判断されましたか？」 |\n| **Who** | 誰が使うか | 「このサイトの主なターゲットユーザーはどなたですか？」 |\n| **What** | 何を達成したいか | 「このプロジェクトで最も実現したいことは何ですか？」 |\n| **When** | いつ必要か | 「リリースの理想的な時期はいつですか？その理由は？」 |\n| **Where** | どこで使われるか | 「ユーザーはPCとスマホどちらで閲覧しますか？」 |\n| **How** | どのくらいの規模・予算か | 「今回の投資規模のイメージはありますか？」 |\n\n## ヒアリングの4段階モデル\n\n**Step 1: アイスブレイク（5分）**\n→ 雑談・自己紹介。心理的安全性を作る。\n\n**Step 2: 現状把握（15分）**\n→「現在の状況を教えてください」「今、一番困っていることは何ですか？」\n\n**Step 3: 理想状態の確認（15分）**\n→「このプロジェクトが成功した3ヶ月後、どんな状態になっていたいですか？」\n\n**Step 4: 制約条件の確認（10分）**\n→「予算・期間・社内承認フロー・使えないツール等の制約はありますか？」\n\n## アンチパターン: やってはいけないヒアリング\n\n```\n✗ 解決策を先に提示する\n  「それはABテストをすれば解決できますよ！」\n  → 問題を十分に理解する前に答えを出してはいけない\n\n✗ クローズドクエスチョンだけで進める\n  「予算は100万円以上ですか？はい、いいえ？」\n  → 本音を引き出すにはオープンクエスチョンが必要\n\n✗ 社内用語・専門用語を使う\n  「CVRを改善するためのCTAのUX改善が必要ですね」\n  → クライアントが理解できない言葉を使うと本音が出ない\n```",
+        "diagram": false
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: ヒアリングシートの作成\n\nECサイトリニューアルのヒアリングシートを作成してください。\n\n## 課題\n\n以下のテンプレートに質問を追加・完成させてください。\n- 各カテゴリに最低2つの質問を記入する\n- オープンクエスチョン（Why/What/How）を中心にする\n- 専門用語を避けてクライアントが答えやすい言葉にする",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>ヒアリングシート</title>\n  <style>\n    body { font-family: sans-serif; max-width: 800px; margin: 40px auto; background: #f8fafc; color: #1e293b; }\n    h1 { border-left: 4px solid #0ea5e9; padding-left: 12px; }\n    .section { background: white; border-radius: 8px; padding: 20px; margin: 16px 0; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }\n    .section h2 { color: #0ea5e9; margin-top: 0; font-size: 1em; }\n    .question { background: #f0f9ff; border-left: 3px solid #0ea5e9; padding: 10px 12px; margin: 8px 0; border-radius: 0 4px 4px 0; }\n    .answer-line { border-bottom: 1px solid #e2e8f0; margin: 4px 0; height: 24px; }\n    .meta { background: #e0f2fe; border-radius: 6px; padding: 12px; margin-bottom: 16px; font-size: 0.9em; }\n  </style>\n</head>\n<body>\n  <h1>要件ヒアリングシート</h1>\n  <div class=\"meta\">\n    <strong>プロジェクト:</strong> ECサイトリニューアル　\n    <strong>日時:</strong> ___________　\n    <strong>ヒアリング担当:</strong> ___________\n  </div>\n\n  <div class=\"section\">\n    <h2>1. 現状と課題</h2>\n    <div class=\"question\">現在のECサイトについて、一番困っていることや改善したいことを教えてください。</div>\n    <div class=\"answer-line\"></div>\n    <!-- もう1つ質問を追加してください -->\n    <div class=\"question\">（追加の質問を記入してください）</div>\n    <div class=\"answer-line\"></div>\n  </div>\n\n  <div class=\"section\">\n    <h2>2. 目標・成功の定義</h2>\n    <div class=\"question\">このリニューアルが成功したと感じるのは、どんな状態になった時ですか？</div>\n    <div class=\"answer-line\"></div>\n    <!-- もう1つ質問を追加してください -->\n    <div class=\"question\">（追加の質問を記入してください）</div>\n    <div class=\"answer-line\"></div>\n  </div>\n\n  <div class=\"section\">\n    <h2>3. ターゲットユーザー</h2>\n    <!-- 2つの質問を記入してください -->\n    <div class=\"question\">（質問を記入してください）</div>\n    <div class=\"answer-line\"></div>\n    <div class=\"question\">（質問を記入してください）</div>\n    <div class=\"answer-line\"></div>\n  </div>\n\n  <div class=\"section\">\n    <h2>4. 制約条件</h2>\n    <div class=\"question\">（質問を記入してください）</div>\n    <div class=\"answer-line\"></div>\n    <div class=\"question\">（質問を記入してください）</div>\n    <div class=\"answer-line\"></div>\n  </div>\n\n</body>\n</html>",
+        "hints": [
+          "現状課題の追加質問例: 「現在のECサイトで直近3ヶ月の購入完了率（コンバージョン率）はどのくらいですか？」",
+          "ターゲットユーザーの質問例: 「御社のメインの購入者層（年齢・性別・購買動機等）はどのようなお客様ですか？」",
+          "制約条件の質問例: 「社内の承認フローで、デザイン確認には何名が関与しますか？承認にかかる期間は通常どのくらいですか？」"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>ヒアリングシート</title>\n  <style>\n    body { font-family: sans-serif; max-width: 800px; margin: 40px auto; background: #f8fafc; color: #1e293b; }\n    h1 { border-left: 4px solid #0ea5e9; padding-left: 12px; }\n    .section { background: white; border-radius: 8px; padding: 20px; margin: 16px 0; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }\n    .section h2 { color: #0ea5e9; margin-top: 0; font-size: 1em; }\n    .question { background: #f0f9ff; border-left: 3px solid #0ea5e9; padding: 10px 12px; margin: 8px 0; border-radius: 0 4px 4px 0; }\n    .answer-line { border-bottom: 1px solid #e2e8f0; margin: 4px 0; height: 24px; }\n    .meta { background: #e0f2fe; border-radius: 6px; padding: 12px; margin-bottom: 16px; font-size: 0.9em; }\n  </style>\n</head>\n<body>\n  <h1>要件ヒアリングシート</h1>\n  <div class=\"meta\">\n    <strong>プロジェクト:</strong> ECサイトリニューアル　\n    <strong>日時:</strong> 2025/05/08　\n    <strong>ヒアリング担当:</strong> PM 山田太郎\n  </div>\n  <div class=\"section\">\n    <h2>1. 現状と課題</h2>\n    <div class=\"question\">現在のECサイトについて、一番困っていることや改善したいことを教えてください。</div>\n    <div class=\"answer-line\"></div>\n    <div class=\"question\">現在のサイトで「こんな機能があればよかった」と感じたことはありますか？具体的なエピソードがあれば教えてください。</div>\n    <div class=\"answer-line\"></div>\n  </div>\n  <div class=\"section\">\n    <h2>2. 目標・成功の定義</h2>\n    <div class=\"question\">このリニューアルが成功したと感じるのは、どんな状態になった時ですか？</div>\n    <div class=\"answer-line\"></div>\n    <div class=\"question\">リニューアル後3ヶ月で、どの数値がどの程度改善されていれば「成功」と判断しますか？</div>\n    <div class=\"answer-line\"></div>\n  </div>\n  <div class=\"section\">\n    <h2>3. ターゲットユーザー</h2>\n    <div class=\"question\">御社のメインの購入者層（年齢・性別・購買動機等）はどのようなお客様ですか？</div>\n    <div class=\"answer-line\"></div>\n    <div class=\"question\">お客様はどのような状況でこのサイトを訪れることが多いですか？（検索で来る・SNSから来る・リピート等）</div>\n    <div class=\"answer-line\"></div>\n  </div>\n  <div class=\"section\">\n    <h2>4. 制約条件</h2>\n    <div class=\"question\">デザインや仕様の確認・承認には、社内で何名が関与しますか？承認にかかる期間はどのくらいですか？</div>\n    <div class=\"answer-line\"></div>\n    <div class=\"question\">既存のシステム（受注管理・在庫管理等）との連携が必要な機能はありますか？</div>\n    <div class=\"answer-line\"></div>\n  </div>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "要件ヒアリングで「オープンクエスチョン」を使う主な目的はどれですか？",
+            "options": [
+              "ヒアリング時間を短縮するため",
+              "クライアントの本音・詳細な情報・背景を引き出すため",
+              "クライアントに「はい/いいえ」で答えさせて確認を効率化するため",
+              "議事録を取りやすくするため"
+            ],
+            "correct": 1,
+            "explanation": "オープンクエスチョン（Why/What/How等で始まる質問）は、相手が自由に語れる質問形式です。クライアントの本音・背景・詳細情報を引き出すのに適しています。「はい/いいえ」で答えるクローズドクエスチョンだけでは表面的な情報しか得られません。"
+          },
+          {
+            "q": "ヒアリングの「Step 3: 理想状態の確認」で効果的な質問はどれですか？",
+            "options": [
+              "「予算はいくらですか？」",
+              "「どのCMSを使いたいですか？」",
+              "「このプロジェクトが成功した3ヶ月後、どんな状態になっていたいですか？」",
+              "「競合他社のサイトを教えてください」"
+            ],
+            "correct": 2,
+            "explanation": "「〇ヶ月後にどんな状態になっていたいか」という質問は、クライアントの「本当のゴール」を引き出す最も効果的な質問の一つです。現状の問題解決を超えた「理想の姿」を語ってもらうことで、真の要件が見えてきます。"
+          },
+          {
+            "q": "ヒアリングのアンチパターンとして最も避けるべき行動はどれですか？",
+            "options": [
+              "事前にクライアントの業界を調査してから臨む",
+              "問題を十分に理解する前に解決策を提示する",
+              "会話を録音する許可を取る",
+              "ヒアリング後に議事録を送付する"
+            ],
+            "correct": 1,
+            "explanation": "「解決策の早期提示」は最も危険なアンチパターンです。問題を十分に理解する前に「それはABテストで解決できます」と言うと、クライアントは「解決策を決められた」と感じて本音を話さなくなります。まず傾聴・理解を優先すべきです。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール11-11 完了！\n\n要件ヒアリングの体系的アプローチを習得しました。\n\n## 習得したスキル\n\n✅ **5W1Hフレームワーク**：Why/Who/What/When/Where/Howで要件を多角的に把握した\n✅ **4段階ヒアリングモデル**：アイスブレイク→現状把握→理想状態→制約条件の流れを習得した\n✅ **アンチパターン**：解決策先行・クローズドクエスチョン多用・専門用語使用を避ける重要性を理解した\n✅ **ヒアリングシート設計**：クライアントが答えやすい質問の書き方を実践した\n\n## 次のステップ\n\n次のモジュール **「11-12: 要件定義書の作成と合意形成」** では、ヒアリングで得た情報を構造化した「要件定義書」に落とし込み、クライアントとの合意を取る手法を学びます。\n\n> 実務チャレンジ: 次のクライアントMTGの前に「今日確認したい5W1H質問リスト」を5つ作成してください。事前準備の有無でヒアリングの質が3倍変わります。",
+        "diagram": false
+      }
+    }
+  ]
+}

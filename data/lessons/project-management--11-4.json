@@ -1,0 +1,82 @@
+{
+  "id": "project-management--11-4",
+  "moduleId": "11-4",
+  "categoryId": "project-management",
+  "title": "PMBOKとアジャイルの使い分け",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 「正しい手法」は案件によって変わる\n\nPMの世界には大きく2つのアプローチがあります。「PMBOK（ウォーターフォール系）」と「アジャイル」です。\n\nどちらが優れているという話ではなく、**プロジェクトの性質によって使い分けることが重要**です。\n\n## 実際にあった失敗例\n\n**失敗例1: アジャイルで進めるべき案件をPMBOKで固めすぎた**\n→ LPの改善A/Bテストを水面下で6ヶ月かけて計画書作成→実装→検証と進めたが、その間に市場トレンドが変わり、作ったLPが陳腐化した。\n\n**失敗例2: ウォーターフォールで進めるべき案件をアジャイルにした**\n→ 法的要件の厳しいプライバシーポリシー改定プロジェクトを「とりあえずリリースして改善」で進めた結果、法令違反のリスクが生じた。\n\nこのモジュールでは、2つのフレームワークの特徴と判断基準を学びます。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# PMBOKとアジャイルの比較\n\n## PMBOK（Project Management Body of Knowledge）\n\nPMIが策定したプロジェクトマネジメントの国際標準知識体系。\n\n**特徴**:\n- 5つのプロセス群（立上げ→計画→実行→監視・コントロール→終結）\n- 10の知識エリア（スコープ・スケジュール・コスト・品質・リスク等）\n- 事前に詳細な計画を立てて実行する「予測型」\n- 成果物・承認・ドキュメントが明確\n\n## アジャイル\n\n変化に適応しながら短期サイクルで開発・改善を繰り返す手法群。\n\n**特徴**:\n- スプリント/イテレーション（1〜4週）で繰り返しリリース\n- 優先度の高いものから順に着手\n- 顧客との継続的コラボレーション\n- 変化を受け入れる「適応型」\n\n## 使い分け判断マトリクス\n\n| 判断軸 | PMBOK向き | アジャイル向き |\n|--------|-----------|----------------|\n| **要件の明確さ** | 最初から固定・明確 | 走りながら変化する |\n| **変更の頻度** | 低い（承認ベース） | 高い（随時対応） |\n| **リリース方式** | 一括リリース | 段階的・継続的リリース |\n| **チーム規模** | 大規模・分散 | 小規模・密連携 |\n| **リスク許容度** | 低い（慎重） | 高い（試行錯誤OK） |\n| **クライアント関与** | 节目ごとの承認 | 毎スプリントで確認 |\n\n## デジタルマーケ案件での使い分け\n\n**PMBOK向き**:\n- ECサイト大規模リニューアル（要件固定・予算確定）\n- 基幹システム連携（法的要件・セキュリティ要件厳格）\n- 組織横断のMA/CRM導入プロジェクト\n\n**アジャイル向き**:\n- LP継続改善・CRO（継続的な仮説検証）\n- SNS・コンテンツマーケティング戦略\n- データ分析ダッシュボードの段階的構築\n- 広告クリエイティブの反復最適化\n\n## ハイブリッドアプローチ（実務では最多）\n\n多くのデジタルマーケプロジェクトでは、**フェーズによって使い分ける**ハイブリッドが現実的です。\n\n```\n要件定義フェーズ → PMBOK（しっかり定義・合意）\n設計・開発フェーズ → アジャイル（週次リリース・フィードバック反映）\n移行・完了フェーズ → PMBOK（品質確認・引き渡し・ドキュメント整備）\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: 案件別フレームワーク選定シート\n\n以下の4つのデジタルマーケ案件について、最適なPM手法を判断してください。\n\n## 課題\n\n各案件カードに以下を記入してください：\n1. 推奨手法（PMBOK / アジャイル / ハイブリッド）\n2. 選択理由（判断根拠を1〜2文で）\n3. 最大のリスクポイント\n\n完成したら **[▶ 実行]** でプレビューを確認してください。",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>PM手法選定シート</title>\n  <style>\n    body { font-family: sans-serif; max-width: 800px; margin: 40px auto; background: #f8fafc; color: #1e293b; }\n    h1 { border-left: 4px solid #8b5cf6; padding-left: 12px; }\n    .card { background: white; border-radius: 8px; padding: 20px; margin: 16px 0; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }\n    .case-title { font-size: 1.1em; font-weight: bold; color: #1e293b; margin-bottom: 12px; }\n    .case-desc { background: #f1f5f9; padding: 10px; border-radius: 6px; font-size: 0.9em; margin-bottom: 12px; }\n    .field { margin: 8px 0; }\n    .field label { font-weight: bold; color: #64748b; display: block; margin-bottom: 4px; }\n    .badge-pmbok { background: #ede9fe; color: #6d28d9; padding: 2px 10px; border-radius: 12px; }\n    .badge-agile { background: #d1fae5; color: #065f46; padding: 2px 10px; border-radius: 12px; }\n    .badge-hybrid { background: #fef3c7; color: #92400e; padding: 2px 10px; border-radius: 12px; }\n  </style>\n</head>\n<body>\n  <h1>PM手法選定シート</h1>\n\n  <div class=\"card\">\n    <div class=\"case-title\">案件1: ECサイト全面リニューアル</div>\n    <div class=\"case-desc\">予算2,000万円・期間8ヶ月・要件は詳細な機能仕様書あり・決済システム連携必須</div>\n    <div class=\"field\"><label>推奨手法:</label><span class=\"badge-pmbok\">（手法を選択）</span></div>\n    <div class=\"field\"><label>選択理由:</label>（記入してください）</div>\n    <div class=\"field\"><label>最大リスク:</label>（記入してください）</div>\n  </div>\n\n  <div class=\"card\">\n    <div class=\"case-title\">案件2: LP継続改善プロジェクト</div>\n    <div class=\"case-desc\">月次でA/Bテスト実施・CVR改善・仮説は都度変更・クライアントと週次で確認</div>\n    <div class=\"field\"><label>推奨手法:</label><span class=\"badge-agile\">（手法を選択）</span></div>\n    <div class=\"field\"><label>選択理由:</label>（記入してください）</div>\n    <div class=\"field\"><label>最大リスク:</label>（記入してください）</div>\n  </div>\n\n  <div class=\"card\">\n    <div class=\"case-title\">案件3: MA（マーケティングオートメーション）ツール導入</div>\n    <div class=\"case-desc\">ツール選定〜設定〜シナリオ設計〜本番運用まで。要件は初期固定・運用後に改善継続</div>\n    <div class=\"field\"><label>推奨手法:</label><span class=\"badge-hybrid\">（手法を選択）</span></div>\n    <div class=\"field\"><label>選択理由:</label>（記入してください）</div>\n    <div class=\"field\"><label>最大リスク:</label>（記入してください）</div>\n  </div>\n\n  <div class=\"card\">\n    <div class=\"case-title\">案件4: コンテンツマーケティング戦略立案・実行</div>\n    <div class=\"case-desc\">月4本の記事制作・SEO改善・KPIは流入数。テーマは市場動向で毎月調整</div>\n    <div class=\"field\"><label>推奨手法:</label><span class=\"badge-agile\">（手法を選択）</span></div>\n    <div class=\"field\"><label>選択理由:</label>（記入してください）</div>\n    <div class=\"field\"><label>最大リスク:</label>（記入してください）</div>\n  </div>\n\n</body>\n</html>",
+        "hints": [
+          "要件が最初から固定されているか、変化し続けるかが最大の判断軸です",
+          "決済システム連携や法的要件がある案件はPMBOK（予測型）が安全です",
+          "ハイブリッドは「立ち上げ・要件定義はPMBOK、実行フェーズはアジャイル」のような分け方が典型パターンです"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>PM手法選定シート</title>\n  <style>\n    body { font-family: sans-serif; max-width: 800px; margin: 40px auto; background: #f8fafc; color: #1e293b; }\n    h1 { border-left: 4px solid #8b5cf6; padding-left: 12px; }\n    .card { background: white; border-radius: 8px; padding: 20px; margin: 16px 0; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }\n    .case-title { font-size: 1.1em; font-weight: bold; color: #1e293b; margin-bottom: 12px; }\n    .case-desc { background: #f1f5f9; padding: 10px; border-radius: 6px; font-size: 0.9em; margin-bottom: 12px; }\n    .field { margin: 8px 0; }\n    .field label { font-weight: bold; color: #64748b; display: block; margin-bottom: 4px; }\n    .badge-pmbok { background: #ede9fe; color: #6d28d9; padding: 2px 10px; border-radius: 12px; }\n    .badge-agile { background: #d1fae5; color: #065f46; padding: 2px 10px; border-radius: 12px; }\n    .badge-hybrid { background: #fef3c7; color: #92400e; padding: 2px 10px; border-radius: 12px; }\n  </style>\n</head>\n<body>\n  <h1>PM手法選定シート</h1>\n  <div class=\"card\">\n    <div class=\"case-title\">案件1: ECサイト全面リニューアル</div>\n    <div class=\"case-desc\">予算2,000万円・期間8ヶ月・要件は詳細な機能仕様書あり・決済システム連携必須</div>\n    <div class=\"field\"><label>推奨手法:</label><span class=\"badge-pmbok\">PMBOK（予測型）</span></div>\n    <div class=\"field\"><label>選択理由:</label>要件が詳細に固定されており、決済連携など法的・セキュリティ要件があるため、変更を厳格に管理するPMBOKが適切。</div>\n    <div class=\"field\"><label>最大リスク:</label>スコープクリープ（追加要件の無制限な受け入れ）による予算・スケジュールの超過</div>\n  </div>\n  <div class=\"card\">\n    <div class=\"case-title\">案件2: LP継続改善プロジェクト</div>\n    <div class=\"case-desc\">月次でA/Bテスト実施・CVR改善・仮説は都度変更・クライアントと週次で確認</div>\n    <div class=\"field\"><label>推奨手法:</label><span class=\"badge-agile\">アジャイル</span></div>\n    <div class=\"field\"><label>選択理由:</label>仮説が毎月変わり、週次でクライアントとフィードバックループを回す案件のため、短いサイクルで適応するアジャイルが最適。</div>\n    <div class=\"field\"><label>最大リスク:</label>方向性が毎回変わりすぎて、学習が蓄積されない「場当たり的改善」に陥ること</div>\n  </div>\n  <div class=\"card\">\n    <div class=\"case-title\">案件3: MAツール導入</div>\n    <div class=\"case-desc\">ツール選定〜設定〜シナリオ設計〜本番運用まで。要件は初期固定・運用後に改善継続</div>\n    <div class=\"field\"><label>推奨手法:</label><span class=\"badge-hybrid\">ハイブリッド</span></div>\n    <div class=\"field\"><label>選択理由:</label>導入フェーズ（選定・設定）はPMBOKで厳格管理し、運用開始後の改善フェーズはアジャイルで柔軟に回す2段階アプローチが現実的。</div>\n    <div class=\"field\"><label>最大リスク:</label>導入と運用のフェーズ切り替えタイミングが曖昧になり、責任の所在が不明確になること</div>\n  </div>\n  <div class=\"card\">\n    <div class=\"case-title\">案件4: コンテンツマーケティング戦略立案・実行</div>\n    <div class=\"case-desc\">月4本の記事制作・SEO改善・KPIは流入数。テーマは市場動向で毎月調整</div>\n    <div class=\"field\"><label>推奨手法:</label><span class=\"badge-agile\">アジャイル</span></div>\n    <div class=\"field\"><label>選択理由:</label>市場トレンドや検索ニーズが変化し続けるため、月次サイクルで優先テーマを見直し、柔軟に対応するアジャイルアプローチが適切。</div>\n    <div class=\"field\"><label>最大リスク:</label>「とりあえず公開」が続き、コンテンツ全体の戦略的一貫性が失われること</div>\n  </div>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "PMBOKの5つのプロセス群の正しい順序はどれですか？",
+            "options": [
+              "計画→立上げ→実行→終結→監視・コントロール",
+              "立上げ→計画→実行→監視・コントロール→終結",
+              "立上げ→実行→計画→監視・コントロール→終結",
+              "計画→立上げ→監視・コントロール→実行→終結"
+            ],
+            "correct": 1,
+            "explanation": "PMBOKの5プロセス群は「立上げ→計画→実行→監視・コントロール→終結」の順です。実行と監視・コントロールは並行して繰り返し行われる点が特徴です。"
+          },
+          {
+            "q": "アジャイル手法が最も適しているプロジェクトの特性はどれですか？",
+            "options": [
+              "要件が詳細に固定されており、変更が発生しないプロジェクト",
+              "法的要件やセキュリティ基準が厳格に規定されているプロジェクト",
+              "要件が変化し続け、顧客との継続的なフィードバックが必要なプロジェクト",
+              "予算・期間・品質がすべて最初から確定しているプロジェクト"
+            ],
+            "correct": 2,
+            "explanation": "アジャイルの本質は「変化への適応」です。要件が変化し、顧客と頻繁にフィードバックを取りながら短いサイクルで成果を届けるプロジェクトに最も適しています。"
+          },
+          {
+            "q": "デジタルマーケのプロジェクトで「ハイブリッドアプローチ」が選ばれる典型的なシナリオはどれですか？",
+            "options": [
+              "完全に新しいプロダクトを1週間で開発するケース",
+              "要件定義フェーズはPMBOKで厳格に固め、実装・改善フェーズはアジャイルで柔軟に進めるケース",
+              "すべてのフェーズをウォーターフォールで進め、最後にアジャイルに切り替えるケース",
+              "2つの異なるチームが別々の手法でプロジェクトを並行進行するケース"
+            ],
+            "correct": 1,
+            "explanation": "ハイブリッドの典型パターンは、初期の要件定義・計画はPMBOKで厳格に行い、実行・改善フェーズはアジャイルで柔軟に進める「フェーズ別使い分け」です。MAツール導入などがその好例です。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール11-4 完了！\n\n2大PMフレームワークの使い分け判断力を習得しました。\n\n## 習得したスキル\n\n✅ **PMBOKの特徴**：予測型・5プロセス群・詳細計画先行型を理解した\n✅ **アジャイルの特徴**：適応型・スプリント反復・継続的フィードバック型を理解した\n✅ **使い分け判断マトリクス**：要件明確性・変更頻度・リリース方式などの判断軸を習得した\n✅ **ハイブリッドアプローチ**：フェーズ別に手法を使い分ける実践的パターンを学んだ\n\n## 次のステップ\n\n次のモジュール **「11-5: ウォーターフォールとアジャイルの比較」** では、さらに詳細なレベルで両手法の具体的なプロセスと実践手法を比較します。\n\n> 実務チャレンジ: 今担当しているプロジェクトはPMBOK向き・アジャイル向き・ハイブリッドのどれが最適か、判断マトリクスで評価してみましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

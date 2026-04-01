@@ -1,0 +1,82 @@
+{
+  "id": "bigquery--6-7",
+  "moduleId": "6-7",
+  "categoryId": "bigquery",
+  "title": "DISTINCT：重複を除いてユニークな値を取得",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 「ユニークユーザー数」をSQLで数える\n\nマーケティング分析でよく使われる指標の1つが「ユニークユーザー数（UU）」です。同じユーザーが1日に10回アクセスしても「1人」とカウントする考え方です。\n\nGA4の管理画面では「アクティブユーザー数」として表示されますが、BigQueryで独自に計算したい場合、**DISTINCT** が重要な役割を果たします。\n\n## DISTINCT がなぜ必要か\n\nGA4のevents_*テーブルでは、1人のユーザーが複数のイベントを発生させると、`user_pseudo_id` が複数行に現れます。\n\n```\nuser_pseudo_id | event_name\nabc123         | page_view     ← 同じユーザーが\nabc123         | scroll        ←\nabc123         | purchase      ←\ndef456         | page_view\n```\n\nこのまま `user_pseudo_id` を取得すると重複が発生します。DISTINCTを使うことで重複を排除し、ユニークな値だけを取得できます。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# DISTINCTの構文と使い方\n\n## 基本構文\n\n```sql\nSELECT DISTINCT 列名\nFROM テーブル名\nWHERE 条件\n```\n\n## ユニークなイベント名の一覧を取得\n\n```sql\n-- GA4テーブルに存在するイベント名の一覧（重複なし）\nSELECT DISTINCT event_name\nFROM `myproject.analytics_123456789.events_20240115`\nORDER BY event_name\n```\n\n## ユニークユーザーのリストを取得\n\n```sql\n-- 2024年1月に購入したユニークユーザーのリスト\nSELECT DISTINCT user_pseudo_id\nFROM `myproject.analytics_123456789.events_*`\nWHERE\n  event_name = 'purchase'\n  AND _TABLE_SUFFIX BETWEEN '20240101' AND '20240131'\n```\n\n## COUNT + DISTINCT でユニーク数を集計\n\n```sql\n-- 2024年1月の購入ユニークユーザー数を集計\nSELECT\n  COUNT(DISTINCT user_pseudo_id) AS unique_buyers\nFROM\n  `myproject.analytics_123456789.events_*`\nWHERE\n  event_name = 'purchase'\n  AND _TABLE_SUFFIX BETWEEN '20240101' AND '20240131'\n```\n\n## 複数列のDISTINCT\n\n```sql\n-- 日付とデバイスの組み合わせのユニーク一覧\nSELECT DISTINCT\n  event_date,\n  device.category\nFROM\n  `myproject.analytics_123456789.events_*`\nWHERE\n  _TABLE_SUFFIX BETWEEN '20240101' AND '20240107'\nORDER BY\n  event_date, device.category\n```\n\n> 💡 複数列のDISTINCTは「列の組み合わせ」が重複している行を除きます。event_dateとdevice.categoryの両方が同じ行が重複扱いになります。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習：日別のユニーク購入者数を取得する\n\n## 課題\n\n2024年1月のGA4データから、日別のユニーク購入者数を取得するSQLを完成させてください。\n\n**取得内容**：\n- `event_date`（日付）\n- `COUNT(DISTINCT user_pseudo_id)` でユニーク購入者数（`AS unique_buyers` で別名）\n\n**条件**：\n- テーブル：`myproject.analytics_123456789.events_*`\n- 期間：2024年1月\n- イベント：`purchase` のみ\n- 集計単位：`event_date` でGROUP BY\n- 並び順：日付の昇順\n\n> 💡 `COUNT(DISTINCT 列名)` は「重複を除いた件数」を返す強力な集計関数です。",
+        "starterCode": "-- 2024年1月の日別ユニーク購入者数\n\nSELECT\n  event_date,\n  -- ユニーク購入者数を集計（DISTINCTを使う）\n  COUNT(________ user_pseudo_id) AS unique_buyers\nFROM\n  `myproject.analytics_123456789.events_*`\nWHERE\n  _TABLE_SUFFIX BETWEEN '20240101' AND '20240131'\n  AND event_name = 'purchase'\nGROUP BY\n  event_date\nORDER BY\n  event_date ASC",
+        "hints": [
+          "COUNT(DISTINCT 列名) と書くことで重複を除いた件数を取得できます。",
+          "COUNT(*) は全行数、COUNT(DISTINCT user_pseudo_id) はユニークユーザー数です。",
+          "DISTINCTは COUNT の括弧の中に書きます。`COUNT(DISTINCT user_pseudo_id)` の形です。"
+        ],
+        "answer": "-- 2024年1月の日別ユニーク購入者数\n\nSELECT\n  event_date,\n  COUNT(DISTINCT user_pseudo_id) AS unique_buyers\nFROM\n  `myproject.analytics_123456789.events_*`\nWHERE\n  _TABLE_SUFFIX BETWEEN '20240101' AND '20240131'\n  AND event_name = 'purchase'\nGROUP BY\n  event_date\nORDER BY\n  event_date ASC"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "GA4データで「1ヶ月間にサイトを訪問したユニークユーザー数」を取得する最も適切なSQLはどれですか？",
+            "options": [
+              "`SELECT COUNT(*) FROM events_*`",
+              "`SELECT COUNT(user_pseudo_id) FROM events_*`",
+              "`SELECT COUNT(DISTINCT user_pseudo_id) FROM events_*`",
+              "`SELECT DISTINCT COUNT(user_pseudo_id) FROM events_*`"
+            ],
+            "correct": 2,
+            "explanation": "`COUNT(DISTINCT user_pseudo_id)` が正解です。`COUNT(*)` は全行数（イベント数）、`COUNT(user_pseudo_id)` はNULL以外の行数ですが重複を含みます。`COUNT(DISTINCT)` だけが重複を除いたユニーク数を返します。"
+          },
+          {
+            "q": "SELECT DISTINCT で複数列を指定した場合、どのような行が除かれますか？",
+            "options": [
+              "最初の列の値が重複している行",
+              "すべての列の値の組み合わせが重複している行",
+              "いずれかの列の値が重複している行",
+              "最後の列の値が重複している行"
+            ],
+            "correct": 1,
+            "explanation": "SELECT DISTINCT で複数列を指定すると、指定したすべての列の値の「組み合わせ」が同じ行を重複とみなして除きます。例えば `DISTINCT event_date, device.category` では、日付とデバイスの両方が同じ行が除かれます。"
+          },
+          {
+            "q": "次の2つのクエリの結果は何が違いますか？\n① `SELECT COUNT(*) FROM events WHERE event_name='purchase'`\n② `SELECT COUNT(DISTINCT user_pseudo_id) FROM events WHERE event_name='purchase'`",
+            "options": [
+              "①は購入イベントの総数、②は購入したユニークユーザー数",
+              "①と②は常に同じ結果になる",
+              "①はユニークユーザー数、②は購入イベントの総数",
+              "①はNULLを含む件数、②はNULLを除いた件数"
+            ],
+            "correct": 0,
+            "explanation": "①の `COUNT(*)` は購入イベントの発生総数（1人が複数回購入すれば複数カウント）、②の `COUNT(DISTINCT user_pseudo_id)` は少なくとも1回購入したユニークユーザーの数です。マーケティングでは両方の指標が使われます。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール6-7 完了！\n\nDISTINCTを使ったユニーク値の取得をマスターしました。\n\n## 習得したスキル\n\n✅ **DISTINCT の基本構文**で重複を除いたデータを取得できる\n✅ **COUNT(DISTINCT)** でユニーク件数を集計できる\n✅ **複数列のDISTINCT** の動作を理解した\n✅ **ユニークユーザー数の計算**がSQLでできるようになった\n\n## 実務での使いどころ\n\n- `COUNT(DISTINCT user_pseudo_id)` → ユニークユーザー数\n- `SELECT DISTINCT event_name` → テーブルに存在するイベント一覧の確認\n- `SELECT DISTINCT geo.country` → アクセスのある国一覧の確認\n- `SELECT DISTINCT device.category` → デバイス種別の一覧確認\n\n## 次のステップ\n\n次のモジュール **「6-8: ASエイリアス」** では、列名やテーブル名に分かりやすい別名をつける方法を学びます。クエリの可読性が大幅に向上します。",
+        "diagram": false
+      }
+    }
+  ]
+}

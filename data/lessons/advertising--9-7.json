@@ -1,0 +1,82 @@
+{
+  "id": "advertising--9-7",
+  "moduleId": "9-7",
+  "categoryId": "advertising",
+  "title": "広告アカウントの権限管理とセキュリティ設定",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# アカウント管理ミスが引き起こす現実的なリスク\n\n広告アカウントの権限管理は地味に見えますが、**実務で最も重大なミスにつながりやすい領域**のひとつです。\n\n## 実際に起きるトラブル例\n\n- 退職した担当者がアカウントにアクセスし続ける\n- 代理店に管理者権限を与えてしまい、クライアントが主導権を失う\n- 請求情報を見せるべきでないスタッフが確認できる状態になっている\n- フィッシング攻撃でアカウントが乗っ取られ、不正広告を配信される\n\n## この学習で得られること\n\n- Google広告のアカウント権限の種類と設定方法を習得する\n- MCC（管理者アカウント）とクライアントアカウントの関係を理解する\n- 安全な権限管理のベストプラクティスを実践できる\n\n> **重要性**: 権限設定は一度間違えると被害が大きく、後から修正が困難です。最初から正しく設計することが求められます。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# Google広告の権限管理体系\n\n## アクセスレベルの種類\n\n| アクセスレベル | できること | 誰に付与するか |\n|-------------|-----------|---------------|\n| 管理者 | 全設定変更・ユーザー管理・アカウント削除 | 自社の責任者のみ |\n| 標準 | キャンペーン作成・編集・レポート閲覧 | 運用担当者 |\n| 読み取り専用 | レポート・データの閲覧のみ | クライアント・上長確認用 |\n| 請求のみ | 請求情報の確認・管理 | 経理担当者 |\n| メールのみ | パフォーマンスメールの受信のみ | 概況確認者 |\n\n## MCC（マイクライアントセンター）の仕組み\n\n```\nMCCアカウント（代理店・管理者）\n├── クライアントA のアカウント\n├── クライアントB のアカウント\n├── クライアントC のアカウント\n└── クライアントD のアカウント\n```\n\n**MCCの利点**:\n- 複数アカウントを1つのログインで管理\n- 全アカウントの横断レポートが作成できる\n- 一括予算管理が可能\n\n## 権限設計のベストプラクティス\n\n**最小権限の原則**\n```\n必要最低限の権限のみ付与する\n\n悪い例: 全員に管理者権限\n良い例:\n  - 運用担当者 → 標準\n  - クライアント担当者 → 読み取り専用\n  - 経理 → 請求のみ\n  - 代理店 → 標準（管理者は自社が保有）\n```\n\n**所有権の確保（重要）**\n```\n代理店に運用を依頼する場合:\n\n【NG】代理店が作成したアカウントに招待してもらう\n  → 代理店変更時にアカウントを失うリスク\n\n【OK】自社でアカウントを作成し、代理店を招待する\n  → アカウントの所有権は常に自社が持つ\n```\n\n## セキュリティ設定チェックリスト\n\n```\n□ 2段階認証（2FA）を全ユーザーで有効化\n□ 管理者は最小人数（1〜2名）に限定\n□ 退職・担当変更時に即座にアクセス削除\n□ 月次でユーザー一覧を棚卸し\n□ 請求先メールアドレスを専用アドレスに設定\n□ 異常な費用急増の通知アラートを設定\n```",
+        "diagram": false
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: 権限管理チェックシートを作成する\n\nあなたは新しいクライアントの広告アカウントを引き継ぐ際のチェックシートを作成します。\n\n## 課題\n\n以下のHTMLを完成させ、権限管理の確認項目と現状ステータスを整理したチェックシートを作成してください。\n\n1. 各確認項目の行を追加する（最低5項目）\n2. 各項目に「確認済み（OK）」「要対応（NG）」「未確認（?）」のステータスを設定する\n3. 優先度（高/中/低）を設定する",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>広告アカウント権限管理チェックシート</title>\n  <style>\n    body { font-family: 'Noto Sans JP', sans-serif; background: #f8fafc; padding: 20px; color: #1e293b; }\n    h1 { font-size: 18px; }\n    table { border-collapse: collapse; width: 100%; margin-top: 16px; font-size: 13px; }\n    th { background: #1e293b; color: white; padding: 8px 12px; text-align: left; }\n    td { border: 1px solid #e2e8f0; padding: 8px 12px; vertical-align: top; }\n    .ok   { background: #dcfce7; color: #16a34a; font-weight: bold; text-align: center; }\n    .ng   { background: #fee2e2; color: #dc2626; font-weight: bold; text-align: center; }\n    .unknown { background: #fef9c3; color: #b45309; font-weight: bold; text-align: center; }\n    .high { color: #dc2626; font-weight: bold; }\n    .mid  { color: #d97706; }\n    .low  { color: #64748b; }\n  </style>\n</head>\n<body>\n  <h1>広告アカウント 権限管理チェックシート</h1>\n  <table>\n    <thead>\n      <tr>\n        <th>#</th>\n        <th>確認項目</th>\n        <th>ステータス</th>\n        <th>優先度</th>\n        <th>対応内容・メモ</th>\n      </tr>\n    </thead>\n    <tbody>\n      <!-- 確認項目を5つ以上追加してください -->\n    </tbody>\n  </table>\n</body>\n</html>",
+        "hints": [
+          "確認項目の例: 「アカウントの所有者は自社か？」「管理者権限は何名に付与されているか？」",
+          "ステータスは <td class=\"ok\">OK</td>、<td class=\"ng\">NG</td>、<td class=\"unknown\">?</td> で色分けできます。",
+          "優先度は <span class=\"high\">高</span>、<span class=\"mid\">中</span>、<span class=\"low\">低</span> でクラスを使ってください。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>広告アカウント権限管理チェックシート</title>\n  <style>\n    body { font-family: 'Noto Sans JP', sans-serif; background: #f8fafc; padding: 20px; color: #1e293b; }\n    h1 { font-size: 18px; }\n    table { border-collapse: collapse; width: 100%; margin-top: 16px; font-size: 13px; }\n    th { background: #1e293b; color: white; padding: 8px 12px; text-align: left; }\n    td { border: 1px solid #e2e8f0; padding: 8px 12px; vertical-align: top; }\n    .ok   { background: #dcfce7; color: #16a34a; font-weight: bold; text-align: center; }\n    .ng   { background: #fee2e2; color: #dc2626; font-weight: bold; text-align: center; }\n    .unknown { background: #fef9c3; color: #b45309; font-weight: bold; text-align: center; }\n    .high { color: #dc2626; font-weight: bold; }\n    .mid  { color: #d97706; }\n    .low  { color: #64748b; }\n  </style>\n</head>\n<body>\n  <h1>広告アカウント 権限管理チェックシート</h1>\n  <table>\n    <thead>\n      <tr><th>#</th><th>確認項目</th><th>ステータス</th><th>優先度</th><th>対応内容・メモ</th></tr>\n    </thead>\n    <tbody>\n      <tr>\n        <td>1</td>\n        <td>アカウントの所有者は自社（クライアント）のメールアドレスか？</td>\n        <td class=\"ng\">NG</td>\n        <td><span class=\"high\">高</span></td>\n        <td>現在は前代理店名義。自社メールアドレスへの移管を要請する</td>\n      </tr>\n      <tr>\n        <td>2</td>\n        <td>管理者権限の付与人数は適切か？（1〜2名推奨）</td>\n        <td class=\"unknown\">?</td>\n        <td><span class=\"high\">高</span></td>\n        <td>ユーザー一覧を確認中。退職者が含まれていないか確認が必要</td>\n      </tr>\n      <tr>\n        <td>3</td>\n        <td>2段階認証（2FA）が全ユーザーで有効になっているか？</td>\n        <td class=\"ng\">NG</td>\n        <td><span class=\"high\">高</span></td>\n        <td>一部ユーザーで未設定。全員への設定を依頼する</td>\n      </tr>\n      <tr>\n        <td>4</td>\n        <td>請求先メールアドレスは専用・管理可能なアドレスか？</td>\n        <td class=\"ok\">OK</td>\n        <td><span class=\"mid\">中</span></td>\n        <td>経理部門のメールアドレスに設定済み</td>\n      </tr>\n      <tr>\n        <td>5</td>\n        <td>代理店（自社）のアクセスレベルは「標準」に限定されているか？</td>\n        <td class=\"unknown\">?</td>\n        <td><span class=\"mid\">中</span></td>\n        <td>管理者権限が付与されている場合は標準へ変更を依頼</td>\n      </tr>\n      <tr>\n        <td>6</td>\n        <td>異常な費用急増を検知する予算アラートが設定されているか？</td>\n        <td class=\"ng\">NG</td>\n        <td><span class=\"mid\">中</span></td>\n        <td>自動アラートを日予算超過時に設定する</td>\n      </tr>\n    </tbody>\n  </table>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "代理店に広告運用を依頼する際の正しいアカウント作成方法はどれですか？",
+            "options": [
+              "代理店にアカウントを作成してもらい、共同管理する",
+              "自社でアカウントを作成し、代理店を標準ユーザーとして招待する",
+              "代理店のMCCアカウント配下にアカウントを作成してもらう",
+              "Googleに直接依頼してアカウントを発行してもらう"
+            ],
+            "correct": 1,
+            "explanation": "自社でアカウントを作成し、代理店を招待する方法が正解です。代理店が作成したアカウントに招待される形だと、代理店変更時にアカウントの所有権を失うリスクがあります。「アカウントの所有権は常に自社」が鉄則です。"
+          },
+          {
+            "q": "Google広告の「読み取り専用」アクセスレベルの説明として正しいのはどれですか？",
+            "options": [
+              "キャンペーンの作成と編集ができる",
+              "請求情報の確認と変更ができる",
+              "レポートとデータの閲覧のみができる",
+              "ユーザーの追加・削除ができる"
+            ],
+            "correct": 2,
+            "explanation": "「読み取り専用」はレポートやデータの閲覧のみが許可されるアクセスレベルです。クライアント担当者や上長の確認用に付与する際に適しています。設定変更はできないため、誤操作リスクを排除できます。"
+          },
+          {
+            "q": "「最小権限の原則」とはどのような考え方ですか？",
+            "options": [
+              "できるだけ少人数でアカウントを運用する",
+              "各ユーザーに業務に必要な最低限の権限のみを付与する",
+              "管理者権限を1名のみに集中させる",
+              "外部委託を最小限にしてセキュリティを高める"
+            ],
+            "correct": 1,
+            "explanation": "最小権限の原則とは、各ユーザーが業務を遂行するために必要な最低限の権限だけを付与するセキュリティの考え方です。不必要な権限を持つユーザーがいると、誤操作・不正利用・情報漏洩のリスクが高まります。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール9-7 完了！\n\n広告アカウントの権限管理とセキュリティ設定を習得しました。\n\n## 習得したスキル\n\n✅ **Google広告の5段階アクセスレベル**の違いを説明できる\n✅ **MCCの仕組み**と複数アカウント管理の方法を理解した\n✅ **アカウント所有権は自社で保持する**原則を説明できる\n✅ 最小権限の原則に基づいた権限設計ができる\n\n## 次のステップ\n\n次のモジュール **「9-8: 広告ポリシーと審査・配信停止リスクを理解する」** では、Google広告の審査基準と配信停止を避けるための実践知識を学びます。\n\n> **実務チャレンジ**: 担当している広告アカウントのユーザー一覧を今すぐ確認してください。退職者・不要な管理者権限・把握できないユーザーがいないか棚卸ししてみましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

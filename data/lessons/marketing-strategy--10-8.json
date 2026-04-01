@@ -1,0 +1,82 @@
+{
+  "id": "marketing-strategy--10-8",
+  "moduleId": "10-8",
+  "categoryId": "marketing-strategy",
+  "title": "バリューチェーン分析：価値連鎖プロセスの解剖",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# バリューチェーン：どこで価値が生まれているかを見る\n\n競争優位はどこから生まれるのでしょうか？「なんとなく強い」ではなく、**具体的にどの活動から強みが生まれているか**を特定するツールが **バリューチェーン分析** です。\n\n## バリューチェーン（価値連鎖）とは\n\nポーターが提唱したフレームワークで、企業の活動を「**主活動**」と「**支援活動**」に分解し、どの活動が顧客への価値を生み出しているかを分析します。\n\n## なぜ重要か\n\n- 自社のどの活動が競合優位の源泉かを特定できる\n- コストがかかっているのにバリューが生まれていない活動を発見できる\n- 競合との比較でどこに差があるかが明確になる\n\n**実務での活用**: 「営業は強いが、マーケから受注までのプロセスにボトルネックがある」などの発見に使えます。\n\n**あなたへの問い**: 自社で最も「顧客への価値」を生み出している活動はどこですか？",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# バリューチェーンの構造と分析方法\n\n## バリューチェーンの2つの活動\n\n### 主活動（Primary Activities）\n\n製品・サービスの提供に直接関わる活動：\n\n| 活動 | 内容 | デジタルマーケの例 |\n|------|------|--------------------|\n| **購買物流（Inbound Logistics）** | 原材料・情報の調達 | データ収集、ツール導入 |\n| **製造・オペレーション（Operations）** | 製品・サービスの製造 | コンテンツ制作、広告設定 |\n| **出荷物流（Outbound Logistics）** | 完成品の配送 | レポート納品、施策の展開 |\n| **マーケティング・営業（Marketing & Sales）** | 販売促進活動 | LP制作、営業提案 |\n| **サービス（Service）** | アフターサービス | 月次レビュー、改善提案 |\n\n### 支援活動（Support Activities）\n\n主活動を支える間接活動：\n\n- **全社インフラ（Firm Infrastructure）**: 経営管理、財務、法務\n- **人的資源管理（Human Resource Management）**: 採用、教育、評価\n- **技術開発（Technology Development）**: R&D、システム開発\n- **調達（Procurement）**: 外部リソースの調達\n\n## バリューチェーン分析のステップ\n\n```\nStep 1: 自社の全活動を主活動・支援活動に分類する\nStep 2: 各活動のコストと創出する価値（利益貢献）を評価する\nStep 3: 競合と比較して「強い活動」「弱い活動」を特定する\nStep 4: 強みの活動をさらに強化する or 弱い活動をアウトソースする戦略を立てる\n```\n\n## マーケターとしてのバリューチェーン活用\n\n**顧客のバリューチェーンを理解する**ことも重要です。\n\n自社のサービスが顧客企業のバリューチェーンの**どの活動を改善・強化するか**を明確にすることで、提案の説得力が増します。\n\n```\n例：\nSNS運用代行サービス\n→ 顧客のバリューチェーンの「マーケティング・営業」活動を強化\n→ 「月間リーチ3倍・問い合わせ数2倍」という具体的な価値貢献を示せる\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: バリューチェーン分析シートを作成する\n\n自社（または想定する企業）のバリューチェーンを整理し、各活動の強弱を評価してください。\n\n## 課題\n\n以下のHTMLテンプレートを完成させ、主活動5つと支援活動を含むバリューチェーン図を作成してください。各活動に「強み/普通/弱み」の評価も追加してください。",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>バリューチェーン分析</title>\n  <style>\n    body { font-family: sans-serif; max-width: 900px; margin: 40px auto; padding: 20px; }\n    .vc-container { border: 2px solid #e2e8f0; border-radius: 8px; overflow: hidden; }\n    .support-row { background: #f1f5f9; padding: 12px 16px; border-bottom: 1px solid #e2e8f0; }\n    .primary-row { display: flex; }\n    .activity-cell { flex: 1; padding: 16px; border-right: 1px solid #e2e8f0; }\n    .activity-cell:last-child { border-right: none; }\n    textarea { width: 100%; height: 60px; padding: 6px; border: 1px solid #e2e8f0; border-radius: 4px; font-size: 0.8rem; resize: vertical; }\n  </style>\n</head>\n<body>\n  <h1>バリューチェーン分析</h1>\n  <p>分析対象: <input type=\"text\" placeholder=\"企業・サービス名\" style=\"padding:4px 8px; border:1px solid #ccc; border-radius:4px; width:260px;\"/></p>\n\n  <!-- バリューチェーン図をここに作成 -->\n  <!-- 上部に支援活動、下部に主活動5つ（横並び） -->\n\n</body>\n</html>",
+        "hints": [
+          "バリューチェーン図は「支援活動（上部）」と「主活動（下部・横並び）」の構成にします。主活動は5つを横並びにし、矢印の流れを表現しましょう。",
+          "各主活動のセルに「活動内容テキストエリア」「評価バッジ（強み/普通/弱み）」「競合との差別化ポイントテキストエリア」を含めましょう。",
+          "最後に「バリュー創出の重点領域」としてどの活動が最も競争優位を生んでいるかをまとめるセクションを追加します。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>バリューチェーン分析</title>\n  <style>\n    body { font-family: sans-serif; max-width: 960px; margin: 40px auto; padding: 20px; background: #f8fafc; }\n    h1, h2 { color: #1e293b; }\n    .vc-container { border: 2px solid #334155; border-radius: 10px; overflow: hidden; }\n    .support-section { background: #1e293b; color: #e2e8f0; padding: 0; }\n    .support-row { display: flex; border-bottom: 1px solid #334155; }\n    .support-cell { flex: 1; padding: 10px 14px; border-right: 1px solid #334155; font-size: 0.85rem; }\n    .support-cell:last-child { border-right: none; }\n    .support-cell strong { display: block; color: #94a3b8; font-size: 0.75rem; margin-bottom: 4px; }\n    .primary-section { background: white; }\n    .primary-label { background: #475569; color: white; padding: 8px 16px; font-size: 0.85rem; font-weight: bold; }\n    .primary-row { display: flex; }\n    .activity-cell { flex: 1; padding: 14px; border-right: 1px solid #e2e8f0; }\n    .activity-cell:last-child { border-right: none; background: #fef3c7; }\n    .activity-cell h4 { margin: 0 0 6px; font-size: 0.85rem; color: #1e293b; }\n    .badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: bold; margin-bottom: 6px; }\n    .strong-badge { background: #dcfce7; color: #16a34a; }\n    .normal-badge { background: #f1f5f9; color: #64748b; }\n    .weak-badge { background: #fee2e2; color: #dc2626; }\n    textarea { width: 100%; height: 55px; padding: 6px; border: 1px solid #e2e8f0; border-radius: 4px; font-size: 0.78rem; resize: vertical; }\n    .margin-cell { background: #fbbf24; color: #1e293b; font-weight: bold; display: flex; align-items: center; justify-content: center; writing-mode: vertical-rl; padding: 20px 10px; font-size: 0.9rem; border-left: 2px solid #f59e0b; }\n    .insight { background: #1e293b; color: #e2e8f0; border-radius: 8px; padding: 20px; margin-top: 20px; }\n    .insight h2 { color: #fbbf24; margin-top: 0; }\n    .insight textarea { background: #334155; color: white; border-color: #475569; height: 70px; }\n    .insight label { color: #94a3b8; font-size: 0.85rem; font-weight: bold; display: block; margin-bottom: 4px; }\n  </style>\n</head>\n<body>\n  <h1>バリューチェーン分析</h1>\n  <p>分析対象: <input type=\"text\" value=\"デジタルマーケティング支援会社\" style=\"padding:4px 8px; border:1px solid #ccc; border-radius:4px; width:280px;\"/></p>\n\n  <div class=\"vc-container\">\n    <div class=\"support-section\">\n      <div class=\"support-row\">\n        <div class=\"support-cell\"><strong>全社インフラ</strong>経営管理・プロジェクト管理ツール（Notion）・財務管理</div>\n        <div class=\"support-cell\"><strong>人的資源管理</strong>マーケ専門家の採用・育成・評価制度</div>\n        <div class=\"support-cell\"><strong>技術開発</strong>GA4・BigQuery分析基盤の構築・AIツール活用研究</div>\n        <div class=\"support-cell\"><strong>調達</strong>外部ライター・デザイナー・ツール（広告媒体・MAツール）</div>\n      </div>\n    </div>\n\n    <div class=\"primary-section\">\n      <div class=\"primary-label\">主活動（Primary Activities）→ 価値の流れ</div>\n      <div style=\"display:flex;\">\n        <div class=\"primary-row\" style=\"flex:1;\">\n          <div class=\"activity-cell\">\n            <h4>購買物流</h4>\n            <span class=\"badge strong-badge\">強み</span>\n            <textarea>GA4・BigQueryによるデータ収集基盤。顧客データの取得・整理が他社より高精度。ツール選定力が高い。</textarea>\n          </div>\n          <div class=\"activity-cell\">\n            <h4>オペレーション</h4>\n            <span class=\"badge normal-badge\">普通</span>\n            <textarea>コンテンツ制作・広告設定・レポート作成。品質は安定しているが、スケールに課題。AIツール活用で改善中。</textarea>\n          </div>\n          <div class=\"activity-cell\">\n            <h4>出荷物流</h4>\n            <span class=\"badge strong-badge\">強み</span>\n            <textarea>月次レポートのデータ可視化が高品質。担当者固定で継続的な改善提案。顧客満足度が高い。</textarea>\n          </div>\n          <div class=\"activity-cell\">\n            <h4>マーケ・営業</h4>\n            <span class=\"badge weak-badge\">弱み</span>\n            <textarea>自社のブランド認知度が低い。営業専任がいない。SEOとWebサイトからの自然流入は少ない。紹介依存が高い。</textarea>\n          </div>\n          <div class=\"activity-cell\">\n            <h4>サービス</h4>\n            <span class=\"badge strong-badge\">強み</span>\n            <textarea>月次定例会でのデータ説明・改善提案が顧客に高評価。問い合わせ対応スピードが速い。継続率85%超。</textarea>\n          </div>\n        </div>\n        <div class=\"margin-cell\">利益<br>マージン</div>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"insight\">\n    <h2>バリュー創出の重点領域と戦略的示唆</h2>\n    <label>最も価値を生み出している活動</label>\n    <textarea>「購買物流（データ収集基盤）」と「サービス（継続的改善提案）」が最大の競争優位。データ分析力×継続サポートの組み合わせが他社との差別化軸。</textarea>\n    <label>最も改善が必要な活動</label>\n    <textarea>「マーケ・営業」が弱点。良いサービスを作っても顧客に届かない状態。自社Webサイトのリニューアル・SEO・事例コンテンツの拡充が急務。</textarea>\n  </div>\n\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "バリューチェーン分析の「主活動（Primary Activities）」に含まれないものはどれですか？",
+            "options": [
+              "製造・オペレーション",
+              "マーケティング・営業",
+              "人的資源管理",
+              "アフターサービス"
+            ],
+            "correct": 2,
+            "explanation": "「人的資源管理（Human Resource Management）」は「支援活動（Support Activities）」に分類されます。主活動は「購買物流・製造・出荷物流・マーケティング営業・サービス」の5つです。"
+          },
+          {
+            "q": "バリューチェーン分析を使って競争優位を特定する手順として最も適切なものはどれですか？",
+            "options": [
+              "全活動を分類する → コストと価値を評価する → 競合と比較する → 戦略を立てる",
+              "競合分析から始める → 自社の活動を模倣する → コストを削減する",
+              "利益率の高い活動だけに集中し、他はすべてアウトソースする",
+              "支援活動だけを分析し、主活動は変更しない"
+            ],
+            "correct": 0,
+            "explanation": "バリューチェーン分析の正しい手順は「全活動を主活動・支援活動に分類する→各活動のコストと価値を評価する→競合と比較して強弱を特定する→強みを強化・弱みを改善またはアウトソースする戦略を立てる」です。"
+          },
+          {
+            "q": "マーケターが顧客企業のバリューチェーンを理解する目的として最も適切なのはどれですか？",
+            "options": [
+              "顧客の競合企業の活動を調査するため",
+              "自社サービスが顧客のどの活動を改善・強化するかを明確にして提案に活かすため",
+              "顧客のコスト構造を把握して価格交渉に使うため",
+              "顧客の内部情報を競合に提供するため"
+            ],
+            "correct": 1,
+            "explanation": "顧客のバリューチェーンを理解することで「自社サービスが顧客のどの活動をどれだけ改善するか」を具体的に示せます。これにより提案の説得力が増し、価値ベースの価格設定も可能になります。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール10-8 完了！\n\nバリューチェーン分析で価値創出の源泉を特定する方法を習得しました。\n\n## 習得したスキル\n\n✅ **主活動5つ**（購買物流・製造・出荷物流・マーケ営業・サービス）を説明できる\n✅ **支援活動4つ**（全社インフラ・人的資源管理・技術開発・調達）を分類できる\n✅ **各活動のコストと価値を評価**して競争優位の源泉を特定できる\n✅ **顧客のバリューチェーン**を理解して提案に活かす視点を持てる\n\n## なぜこれが重要か\n\nバリューチェーン分析は「なんとなく強い」を「どの活動が強いから強い」に変換します。競争優位の源泉が特定できれば、投資を集中させるべき場所が明確になります。\n\n## 次のステップ\n\n次のモジュール **「10-9: ポジショニングマップの作成と活用」** では、競合との相対的な位置関係を視覚化し、自社の差別化ポジションを設計する方法を学びます。",
+        "diagram": false
+      }
+    }
+  ]
+}

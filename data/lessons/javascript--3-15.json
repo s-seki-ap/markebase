@@ -1,0 +1,82 @@
+{
+  "id": "javascript--3-15",
+  "moduleId": "3-15",
+  "categoryId": "javascript",
+  "title": "for...ofで配列をシンプルに走査する",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "## for...ofで配列をシンプルに走査する\n\n`for` ループで配列を処理するとき、`i` というカウンター変数を管理し `arr[i]` と書く必要がありました。ES6で導入された `for...of` を使うと、インデックスを気にせず配列の各要素に直接アクセスでき、コードがシンプルになります。\n\nGA4 ecommerceのitemsアレイ処理や、複数のDOM要素への一括処理など、現代のGA4実装では `for...of` が多く使われます。\n\n**このモジュールで学ぶこと**\n- `for...of` の基本構文\n- `for` ループとの違いと使い分け\n- 配列の各要素を直接使うパターン\n- GTMタグでの実用例",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "## for...ofの基本構文\n\n```javascript\nfor (var 変数名 of 配列) {\n  // 配列の各要素が変数名に代入されて繰り返される\n}\n```\n\n### forループとfor...ofの比較\n\n```javascript\nvar eventNames = ['page_view', 'scroll', 'click', 'form_submit'];\n\n// 従来のforループ\nfor (var i = 0; i < eventNames.length; i++) {\n  console.log(eventNames[i]);\n}\n\n// for...of（シンプル）\nfor (var name of eventNames) {\n  console.log(name);\n}\n```\n\n### GTM実例①：複数ボタンへのイベントリスナー設定\n\n```javascript\n<script>\n  // ページ内の「カートに追加」ボタン全体にイベントを設定\n  var addToCartButtons = document.querySelectorAll('.add-to-cart-btn');\n\n  for (var btn of addToCartButtons) {\n    btn.addEventListener('click', function() {\n      var productId = this.getAttribute('data-product-id');\n      var productName = this.getAttribute('data-product-name');\n      var price = parseFloat(this.getAttribute('data-price'));\n\n      window.dataLayer = window.dataLayer || [];\n      window.dataLayer.push({\n        'event': 'add_to_cart',\n        'ecommerce': {\n          'items': [{\n            'item_id': productId,\n            'item_name': productName,\n            'price': price,\n            'quantity': 1\n          }]\n        }\n      });\n    });\n  }\n</script>\n```\n\n### GTM実例②：GA4 itemsアレイの検証\n\n```javascript\n<script>\n  var items = {{Ecommerce Items}};  // GA4 items配列\n  var totalRevenue = 0;\n  var invalidItems = [];\n\n  for (var item of items) {\n    // 各商品の必須パラメータをチェック\n    if (!item.item_id || !item.item_name) {\n      invalidItems.push(item);\n    }\n    // 売上合計を計算\n    totalRevenue += item.price * item.quantity;\n  }\n\n  // 検証結果をdataLayerに送信\n  window.dataLayer = window.dataLayer || [];\n  window.dataLayer.push({\n    'event': 'ecommerce_validation',\n    'total_revenue': totalRevenue,\n    'invalid_item_count': invalidItems.length\n  });\n</script>\n```\n\n### for...ofの注意点：インデックスが不要な場合に使う\n\n```javascript\nvar items = ['a', 'b', 'c'];\n\n// インデックスが必要な場合はforを使う\nfor (var i = 0; i < items.length; i++) {\n  console.log(i + ': ' + items[i]);  // 0: a, 1: b, 2: c\n}\n\n// インデックスが不要な場合はfor...ofが読みやすい\nfor (var item of items) {\n  console.log(item);  // a, b, c\n}\n```\n\n**GTM互換性の注意：** `for...of` はES6の構文です。IE11サポートが必要な環境では `forEach` または従来の `for` ループを使いましょう。現代的なブラウザのみが対象であれば `for...of` は問題なく使えます。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "## 練習：商品リストの合計金額と商品名リストを取得する\n\n`for...of` を使って、GA4 itemsアレイから合計金額と商品名の配列を取得するコードを完成させてください。\n\n**要件**\n- `items` 配列の各要素を `for...of` で走査する\n- `price * quantity` を加算して `totalAmount` を計算する\n- `item_name` を `itemNames` 配列に追加する\n- 結果をdataLayerにプッシュする",
+        "starterCode": "<script>\n  window.dataLayer = window.dataLayer || [];\n  var items = {{Ecommerce Items}};\n  var totalAmount = 0;\n  var itemNames = [];\n\n  for (var ______ of ______) {\n    totalAmount += item.______ * item.______;\n    itemNames.______(item.item_name);\n  }\n\n  window.dataLayer.push({\n    'event': 'cart_summary',\n    'total_amount': ______,\n    'item_names': itemNames.join(', ')\n  });\n</script>",
+        "hints": [
+          "`for (var item of items)` のように書くと、`items` 配列の各要素が `item` に代入されて繰り返されます",
+          "合計金額は `item.price * item.quantity` で1商品の小計を計算し、`+=` で `totalAmount` に加算します",
+          "配列に要素を追加するには `.push()` メソッドを使います。`itemNames.push(item.item_name)` でOKです"
+        ],
+        "answer": "<script>\n  window.dataLayer = window.dataLayer || [];\n  var items = {{Ecommerce Items}};\n  var totalAmount = 0;\n  var itemNames = [];\n\n  for (var item of items) {\n    totalAmount += item.price * item.quantity;\n    itemNames.push(item.item_name);\n  }\n\n  window.dataLayer.push({\n    'event': 'cart_summary',\n    'total_amount': totalAmount,\n    'item_names': itemNames.join(', ')\n  });\n</script>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "question": "`for...of` と `for` ループの使い分けとして最も適切なのはどれですか？",
+            "options": [
+              "for...ofは常にforより高速なので常にfor...ofを使う",
+              "配列のインデックスが必要な場合はfor、各要素の値だけ必要な場合はfor...ofが読みやすい",
+              "for...ofはオブジェクトの走査専用",
+              "for...ofはIE11で完全にサポートされているのでGTMでも安全"
+            ],
+            "correct": 1,
+            "explanation": "`for...of` はインデックスを使わずに配列の各要素にアクセスできるため、要素の値だけが必要な処理でコードが読みやすくなります。一方、要素のインデックス番号が必要な場合（GA4の `index` パラメータ設定など）は従来の `for` ループを使います。"
+          },
+          {
+            "question": "以下のコードの実行結果として正しいのはどれですか？\n```javascript\nvar prices = [100, 200, 300];\nvar total = 0;\nfor (var p of prices) { total += p; }\nconsole.log(total);\n```",
+            "options": [
+              "100",
+              "300",
+              "600",
+              "123"
+            ],
+            "correct": 2,
+            "explanation": "`for...of` で `prices` 配列の各要素（100, 200, 300）が `p` に代入され、`total` に加算されます。100 + 200 + 300 = 600 が結果です。"
+          },
+          {
+            "question": "`document.querySelectorAll('.btn')` の返り値をfor...ofで処理できる理由はどれですか？",
+            "options": [
+              "querySelectorAllは配列を返すため",
+              "querySelectorAllはNodeList（反復可能なオブジェクト）を返すため",
+              "for...ofはすべてのDOMメソッドに使えるため",
+              "ブラウザが自動的に配列に変換するため"
+            ],
+            "correct": 1,
+            "explanation": "`querySelectorAll()` は配列ではなくNodeListを返しますが、NodeListは `Symbol.iterator` を持つ反復可能（iterable）なオブジェクトです。`for...of` はiterableなオブジェクトをすべて走査できるため、NodeListにも使えます。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "## まとめ：for...ofで配列をシンプルに走査する\n\n✅ `for (var 要素 of 配列)` で配列の各要素に直接アクセスできる\n\n✅ インデックス管理が不要なため、forループより読みやすいコードになる\n\n✅ `querySelectorAll()` の返すNodeListなどiterableなオブジェクトにも使える\n\n✅ GA4 itemsアレイの合計計算・バリデーション処理でよく活用される\n\n✅ IE11対応が必要な場合は従来の `for` ループまたは `forEach` を使う\n\n**次のモジュールでは** `for...in` でオブジェクトのプロパティを列挙する方法を学びます。",
+        "diagram": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "id": "project-management--11-8",
+  "moduleId": "11-8",
+  "categoryId": "project-management",
+  "title": "キックオフミーティングの設計と進行",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# キックオフMTGはプロジェクトの「発射台」\n\nプロジェクト憲章が承認されたら、次は全関係者が一堂に会する**キックオフミーティング（KOM）**です。\n\nキックオフMTGは単なる「顔合わせ」ではありません。**チーム全員が同じ方向を向いてプロジェクトをスタートする**ための最重要セレモニーです。\n\n## キックオフを省略したプロジェクトの末路\n\n**よくある失敗パターン**:\n- メンバーそれぞれが「自分の理解」でプロジェクトを進める\n- 3週間後に「えっ、そんな仕様でしたっけ？」が多発する\n- クライアントは「もっと頻繁に進捗を報告してほしかった」と後から言う\n\nキックオフは「全員の認識を揃える」唯一の機会です。ここを疎かにするプロジェクトは、後半で必ず問題が噴出します。\n\n## キックオフで解決する5つの「認識のズレ」\n\n1. プロジェクトの**目的とゴール**の理解の違い\n2. **スコープ**（何をやる・やらない）の認識の違い\n3. **役割と責任**の理解の違い\n4. **コミュニケーション方法**（報告頻度・ツール）の違い\n5. **リスクと懸念事項**の共有不足",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# キックオフMTGの設計\n\n## アジェンダの標準構成（60〜90分）\n\n| 時間 | セクション | 内容 | ファシリ担当 |\n|------|------------|------|-------------|\n| 5分 | 開会・挨拶 | 参加者紹介・MTGの目的説明 | PM |\n| 10分 | 背景・目的 | なぜこのプロジェクトが必要か | PM or クライアント |\n| 15分 | 目標・成功基準 | KPI・完了条件の共有 | PM |\n| 15分 | スコープの確認 | スコープ内・外の合意確認 | PM |\n| 10分 | 体制・役割確認 | RACI図の共有・Q&A | PM |\n| 10分 | スケジュール共有 | マイルストーン・重要日程 | PM |\n| 5分 | コミュニケーション設計 | 報告頻度・ツール・エスカレーション先 | PM |\n| 10分 | Q&A・懸念事項 | 参加者からの質問・リスク収集 | 全員 |\n| 5分 | クロージング | 次のアクションと次回MTG設定 | PM |\n\n## 効果的なキックオフの3原則\n\n**原則1: 一方通行にしない**\n→ プレゼンではなく「対話」として設計する。参加者の発言機会を意図的に作る。\n\n**原則2: 懸念事項を歓迎する**\n→ 「この段階での懸念は正常です。今出してもらえるとプロジェクトが守られます」と場を作る。\n\n**原則3: 次のアクションで終わる**\n→ MTGの最後に「誰が・何を・いつまでに」という具体的なNextActionを全員で確認する。\n\n## キックオフ前の準備チェックリスト\n\n```\n□ プロジェクト憲章（承認済み）を準備\n□ WBS（作業分解構造）のドラフトを準備\n□ RACI図を準備\n□ スケジュール（ガントチャート）を準備\n□ コミュニケーション計画を準備\n□ 参加者全員に事前に資料を送付（1〜2日前）\n□ 会議室/オンラインURL を確保\n□ 議事録テンプレートを準備\n```\n\n## オンラインキックオフの注意点\n\nリモートワーク環境では、キックオフMTGで特に以下を確認する：\n- **コミュニケーションツール**: Slack/ChatWork/Teamsのどれを使うか\n- **ファイル共有方法**: Google Drive/SharePoint/Notion等\n- **緊急時の連絡方法**: 担当者の直通連絡先（電話番号等）",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: キックオフMTGアジェンダの作成\n\n以下のシナリオでキックオフMTGのアジェンダと議事録テンプレートを作成してください。\n\n## シナリオ\n\n- プロジェクト: SNSキャンペーン専用LPの制作（期間2ヶ月）\n- 参加者: PM（あなた）、デザイナー、エンジニア、クライアント担当者2名\n- 形式: オンライン（Zoom）、90分\n\n## 課題\n\nアジェンダの各セクションに「目的・主な内容・担当者・時間」を記入してください。\n議事録テンプレートも作成してください。",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>キックオフMTGアジェンダ</title>\n  <style>\n    body { font-family: sans-serif; max-width: 800px; margin: 40px auto; background: #fff; color: #1e293b; }\n    h1 { border-bottom: 3px solid #3b82f6; padding-bottom: 8px; }\n    .meta { background: #eff6ff; border-radius: 8px; padding: 16px; margin: 16px 0; }\n    table { width: 100%; border-collapse: collapse; margin: 16px 0; }\n    th { background: #3b82f6; color: white; padding: 10px; text-align: left; }\n    td { padding: 10px; border-bottom: 1px solid #e2e8f0; vertical-align: top; }\n    tr:nth-child(even) { background: #f8fafc; }\n    h2 { border-left: 4px solid #3b82f6; padding-left: 12px; margin-top: 32px; }\n    .action-box { border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; margin: 8px 0; }\n  </style>\n</head>\n<body>\n  <h1>キックオフミーティング アジェンダ</h1>\n\n  <div class=\"meta\">\n    <strong>プロジェクト名:</strong> SNSキャンペーンLP制作プロジェクト<br>\n    <strong>日時:</strong> （記入してください）<br>\n    <strong>形式:</strong> オンライン（Zoom）<br>\n    <strong>参加者:</strong> PM、デザイナー、エンジニア、クライアント担当者2名\n  </div>\n\n  <h2>アジェンダ</h2>\n  <table>\n    <tr>\n      <th>時間</th>\n      <th>セクション</th>\n      <th>内容</th>\n      <th>担当</th>\n    </tr>\n    <tr>\n      <td>5分</td>\n      <td>開会・挨拶</td>\n      <td>（記入してください）</td>\n      <td>PM</td>\n    </tr>\n    <tr>\n      <td>15分</td>\n      <td>プロジェクト概要</td>\n      <td>（記入してください）</td>\n      <td>（担当者）</td>\n    </tr>\n    <tr>\n      <td>15分</td>\n      <td>スコープ確認</td>\n      <td>（記入してください）</td>\n      <td>（担当者）</td>\n    </tr>\n    <tr>\n      <td>10分</td>\n      <td>体制・役割</td>\n      <td>（記入してください）</td>\n      <td>（担当者）</td>\n    </tr>\n    <tr>\n      <td>15分</td>\n      <td>スケジュール共有</td>\n      <td>（記入してください）</td>\n      <td>（担当者）</td>\n    </tr>\n    <tr>\n      <td>10分</td>\n      <td>コミュニケーション設計</td>\n      <td>（記入してください）</td>\n      <td>（担当者）</td>\n    </tr>\n    <tr>\n      <td>15分</td>\n      <td>Q&amp;A・懸念事項</td>\n      <td>（記入してください）</td>\n      <td>全員</td>\n    </tr>\n    <tr>\n      <td>5分</td>\n      <td>クロージング</td>\n      <td>（記入してください）</td>\n      <td>PM</td>\n    </tr>\n  </table>\n\n  <h2>議事録テンプレート</h2>\n  <div class=\"action-box\">\n    <strong>決定事項:</strong><br>\n    1. （記入してください）<br>\n    2. （記入してください）\n  </div>\n  <div class=\"action-box\">\n    <strong>ネクストアクション（誰が・何を・いつまでに）:</strong><br>\n    | 担当者 | アクション | 期限 |<br>\n    |--------|-----------|------|<br>\n    | （名前） | （タスク） | （日付） |\n  </div>\n  <div class=\"action-box\">\n    <strong>懸念事項・リスク:</strong><br>\n    （記入してください）\n  </div>\n\n</body>\n</html>",
+        "hints": [
+          "「開会・挨拶」では参加者の自己紹介とMTGの目的（今日の終了状態）を明確にします",
+          "「コミュニケーション設計」では使用ツール（Slack等）・週次定例の曜日時間・緊急時の連絡先を決めます",
+          "「クロージング」では「全員が今日決まったことと次のアクションを理解している」状態で終わることが目標です"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>キックオフMTGアジェンダ</title>\n  <style>\n    body { font-family: sans-serif; max-width: 800px; margin: 40px auto; background: #fff; color: #1e293b; }\n    h1 { border-bottom: 3px solid #3b82f6; padding-bottom: 8px; }\n    .meta { background: #eff6ff; border-radius: 8px; padding: 16px; margin: 16px 0; }\n    table { width: 100%; border-collapse: collapse; margin: 16px 0; }\n    th { background: #3b82f6; color: white; padding: 10px; text-align: left; }\n    td { padding: 10px; border-bottom: 1px solid #e2e8f0; vertical-align: top; }\n    tr:nth-child(even) { background: #f8fafc; }\n    h2 { border-left: 4px solid #3b82f6; padding-left: 12px; margin-top: 32px; }\n    .action-box { border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; margin: 8px 0; }\n  </style>\n</head>\n<body>\n  <h1>キックオフミーティング アジェンダ</h1>\n  <div class=\"meta\">\n    <strong>プロジェクト名:</strong> SNSキャンペーンLP制作プロジェクト<br>\n    <strong>日時:</strong> 2025/05/08（木）14:00〜15:30<br>\n    <strong>形式:</strong> オンライン（Zoom）<br>\n    <strong>参加者:</strong> PM（山田）、デザイナー（佐藤）、エンジニア（田中）、クライアント担当者2名（鈴木様・渡辺様）\n  </div>\n  <h2>アジェンダ</h2>\n  <table>\n    <tr>\n      <th>時間</th>\n      <th>セクション</th>\n      <th>内容</th>\n      <th>担当</th>\n    </tr>\n    <tr>\n      <td>5分</td>\n      <td>開会・挨拶</td>\n      <td>参加者自己紹介・MTGの目的説明（今日の終わりに全員が目標と役割を理解している状態にする）</td>\n      <td>PM</td>\n    </tr>\n    <tr>\n      <td>15分</td>\n      <td>プロジェクト概要</td>\n      <td>背景・目的・成功基準の共有。KPI（CVR・コンバージョン数）の確認</td>\n      <td>PM + クライアント</td>\n    </tr>\n    <tr>\n      <td>15分</td>\n      <td>スコープ確認</td>\n      <td>スコープ内（LP制作・SP対応・フォーム設置）とスコープ外（SNS広告設定・GA4実装）の確認・合意</td>\n      <td>PM</td>\n    </tr>\n    <tr>\n      <td>10分</td>\n      <td>体制・役割</td>\n      <td>RACI図の共有・各自の担当タスクの確認・承認フローの確認</td>\n      <td>PM</td>\n    </tr>\n    <tr>\n      <td>15分</td>\n      <td>スケジュール共有</td>\n      <td>マイルストーン一覧の共有・重要日程の確認（コンテンツ提供期限・デザイン承認日等）</td>\n      <td>PM</td>\n    </tr>\n    <tr>\n      <td>10分</td>\n      <td>コミュニケーション設計</td>\n      <td>使用ツール（Slack）・週次定例（毎水曜16時）・報告フォーマット・エスカレーション先の決定</td>\n      <td>PM</td>\n    </tr>\n    <tr>\n      <td>15分</td>\n      <td>Q&amp;A・懸念事項</td>\n      <td>参加者からの質問・リスクや懸念の収集・対応方針の議論</td>\n      <td>全員</td>\n    </tr>\n    <tr>\n      <td>5分</td>\n      <td>クロージング</td>\n      <td>決定事項の確認・ネクストアクションの読み上げ・次回MTG（週次定例）の日程確認</td>\n      <td>PM</td>\n    </tr>\n  </table>\n  <h2>議事録テンプレート</h2>\n  <div class=\"action-box\">\n    <strong>決定事項:</strong><br>\n    1. スコープ外にGA4実装・SNS広告設定を明記し、双方合意済み<br>\n    2. 週次定例は毎週水曜16:00〜16:30（Zoom）で設定<br>\n    3. コミュニケーションはSlackの専用チャンネルを使用\n  </div>\n  <div class=\"action-box\">\n    <strong>ネクストアクション（誰が・何を・いつまでに）:</strong><br>\n    PM 山田：要件定義書ドラフト作成 → 5/15まで<br>\n    クライアント 鈴木様：ブランドガイドライン共有 → 5/12まで<br>\n    デザイナー 佐藤：競合LP調査3サイト → 5/15まで\n  </div>\n  <div class=\"action-box\">\n    <strong>懸念事項・リスク:</strong><br>\n    ・コンテンツ（コピー）の提供が遅れた場合、デザインフェーズが遅延するリスクあり → 提供期限5/20を厳守で合意\n  </div>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "キックオフミーティングの主要な目的として最も正確なものはどれですか？",
+            "options": [
+              "プロジェクトの技術的な設計を完成させること",
+              "全関係者が同じ方向を向いてスタートするため、目標・スコープ・役割・進め方の認識を揃えること",
+              "クライアントへの最終成果物を発表すること",
+              "チームメンバーの能力評価を行うこと"
+            ],
+            "correct": 1,
+            "explanation": "キックオフMTGの本質は「全員の認識を揃えること」です。目的・スコープ・役割・コミュニケーション方法について全員が同じ理解を持ってプロジェクトをスタートすることで、後半の手戻りや認識ズレを防ぎます。"
+          },
+          {
+            "q": "キックオフMTGのクロージング（締め）で必ず行うべきことはどれですか？",
+            "options": [
+              "プレゼンテーションの完成度を参加者に採点してもらう",
+              "「誰が・何を・いつまでに」というネクストアクションを全員で確認する",
+              "プロジェクトのリスクを全て解決する",
+              "次のプロジェクトの提案を行う"
+            ],
+            "correct": 1,
+            "explanation": "キックオフMTGは「次のアクション」で終わる必要があります。「誰が・何を・いつまでに」が全員に明確になることで、MTGが具体的な前進につながります。アクション不明確で終わるMTGは「よかった会」になりがちです。"
+          },
+          {
+            "q": "オンラインキックオフMTGで対面より特に注意して確認すべき事項はどれですか？",
+            "options": [
+              "参加者の服装と背景",
+              "カメラのオン・オフルール",
+              "使用コミュニケーションツール・ファイル共有方法・緊急時の直通連絡先",
+              "インターネット回線の速度"
+            ],
+            "correct": 2,
+            "explanation": "オンライン環境では、コミュニケーションが途絶えやすいため「使用ツール・ファイル共有方法・緊急時連絡先」を明確にしておくことが特に重要です。これを決めずに進むと、報告の遅延・情報の散逸が起きやすくなります。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール11-8 完了！\n\nキックオフMTGの設計・運営スキルを習得しました。\n\n## 習得したスキル\n\n✅ **キックオフの目的**：全関係者の認識を揃える「発射台」であることを理解した\n✅ **90分アジェンダの構成**：9セクションの標準アジェンダと各セクションの目的を習得した\n✅ **3原則**：双方向・懸念歓迎・アクションで終わるを理解した\n✅ **オンライン対応**：リモート環境での特有の確認事項を把握した\n\n## 次のステップ\n\n次のモジュール **「11-9: プロジェクト計画書の作成」** では、キックオフ後に作成するプロジェクト計画書（WBS・ガントチャート・リスク台帳を含む）の構造と作成手法を学びます。\n\n> 実務チャレンジ: 次のMTGで、終了前5分に「今日決まったことと、誰が何をいつまでにやるか」を読み上げて全員に確認してもらいましょう。この習慣だけでMTGの質が劇的に変わります。",
+        "diagram": false
+      }
+    }
+  ]
+}

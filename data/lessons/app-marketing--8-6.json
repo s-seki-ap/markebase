@@ -1,0 +1,82 @@
+{
+  "id": "app-marketing--8-6",
+  "moduleId": "8-6",
+  "categoryId": "app-marketing",
+  "title": "ディープリンクの仕組みと活用",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# ディープリンクとは何か\n\nWebの世界では「URLをクリックすれば特定のページに飛ぶ」のが当たり前です。しかしアプリでは、URLをクリックしてもアプリのトップ画面が開くだけ——という状況が長く続いていました。これを解決するのが**ディープリンク**です。\n\n## ディープリンクが解決すること\n\n- メールの「特集ページを見る」ボタン → アプリ内の該当特集に直接遷移\n- 広告の「今すぐ購入」 → アプリ内の商品詳細ページに直接遷移\n- SNSシェア → 未インストールユーザーはストアへ、インストール済みはアプリ内に直接遷移\n\n## なぜマーケターが知るべきか\n\nディープリンクはメール配信・プッシュ通知・SNS広告・リターゲティング広告のすべてで使われます。仕組みを知らないと「なぜこのリンクはここに飛ぶのか」「なぜ古いユーザーは違う画面に行くのか」を説明できません。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# ディープリンクの3種類\n\n## 1. URLスキーム（カスタムスキーム）\n\n```\nmyapp://products/detail?id=12345\n```\n\n- 最も古い方式。アプリが独自の「プロトコル」を持つ\n- 欠点: アプリが未インストールの場合にエラーになる\n- 現在は単独での使用は少ない\n\n## 2. Universal Links（iOS）/ App Links（Android）\n\n```\nhttps://www.example.com/products/detail?id=12345\n```\n\n- 通常のHTTPS URLをアプリで開く仕組み\n- アプリがインストールされていればアプリが開く\n- 未インストールならブラウザでWebページが開く（フォールバック）\n- Apple/Googleが推奨する現代の標準方式\n\n## 3. Firebase Dynamic Links（統合型）\n\n```\nhttps://example.page.link/xyz123\n```\n\n- iOSとAndroidを1つのリンクで対応\n- 未インストール → ストアへ誘導 → インストール後、指定画面に遷移（Deferred Deep Link）\n- マーケティングキャンペーンで最もよく使われる\n\n> 注意: Firebase Dynamic Linksは2025年8月に廃止予定。後継はFirebase App Hosting + Branch等のサードパーティツール\n\n## Deferred Deep Link（遅延ディープリンク）の仕組み\n\n```\n[ユーザーがリンクをクリック]\n    ↓\n[未インストールを検出]\n    ↓\n[App Storeへリダイレクト（クリック情報を保存）]\n    ↓\n[インストール完了・初回起動]\n    ↓\n[保存された情報を参照して指定画面に自動遷移]\n```\n\n## マーケティングでの活用パターン\n\n| シナリオ | ディープリンクの役割 |\n|---|---|\n| メルマガ配信 | セール商品ページに直接誘導 |\n| プッシュ通知 | 期間限定クーポン画面に直接遷移 |\n| SNS広告 | 未インストールはストアへ、済みはキャンペーンページへ |\n| QRコード施策 | スキャン後にアプリ内の特定コンテンツに遷移 |",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: ディープリンクのパラメータを解析する\n\nマーケティングで使われるディープリンクのURLを解析して、パラメータを取り出す関数を実装してください。\n\n## 課題\n\n`parseDeepLink()` 関数を実装して、ディープリンクのスキーム・パス・パラメータを取り出してください。",
+        "starterCode": "// ディープリンクURL解析\n// 例: myapp://products/detail?id=12345&source=email&campaign=summer2024\n\nfunction parseDeepLink(url) {\n  // URLをスキーム・パス・パラメータに分解して返す\n  // 返り値の形式:\n  // {\n  //   scheme: 'myapp',      // プロトコル部分\n  //   path: 'products/detail',  // パス部分\n  //   params: { id: '12345', source: 'email', campaign: 'summer2024' }\n  // }\n  \n  // ここに実装してください\n  return {};\n}\n\n// テストケース（変更不要）\nconst testUrl = 'myapp://products/detail?id=12345&source=email&campaign=summer2024';\nconst result = parseDeepLink(testUrl);\n\nconsole.log('スキーム:', result.scheme);\nconsole.log('パス:', result.path);\nconsole.log('パラメータ:', JSON.stringify(result.params));\nconsole.log('商品ID:', result.params && result.params.id);\nconsole.log('流入元:', result.params && result.params.source);",
+        "hints": [
+          "URLを '://' で分割すると scheme と残りに分けられます。split('://')[0] でスキームを取得。",
+          "残りの部分を '?' で分割すると path と queryString に分けられます。",
+          "queryString を '&' で分割し、さらに '=' で分割してオブジェクトに変換します。"
+        ],
+        "answer": "function parseDeepLink(url) {\n  const [scheme, rest] = url.split('://');\n  const [path, queryString] = rest.split('?');\n  \n  const params = {};\n  if (queryString) {\n    queryString.split('&').forEach(pair => {\n      const [key, value] = pair.split('=');\n      params[key] = decodeURIComponent(value);\n    });\n  }\n  \n  return { scheme, path, params };\n}\n\nconst testUrl = 'myapp://products/detail?id=12345&source=email&campaign=summer2024';\nconst result = parseDeepLink(testUrl);\n\nconsole.log('スキーム:', result.scheme);\nconsole.log('パス:', result.path);\nconsole.log('パラメータ:', JSON.stringify(result.params));\nconsole.log('商品ID:', result.params && result.params.id);\nconsole.log('流入元:', result.params && result.params.source);"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "Deferred Deep Link（遅延ディープリンク）の説明として正しいものはどれですか？",
+            "options": [
+              "アプリが起動してから3秒後に遷移するディープリンク",
+              "未インストールでもインストール後に指定画面に遷移できるディープリンク",
+              "プッシュ通知専用のディープリンク方式",
+              "AndroidのみでiOSでは使えない方式"
+            ],
+            "correct": 1,
+            "explanation": "Deferred Deep Linkは「遅延型」のディープリンクです。リンクをクリック時にアプリが未インストールでもクリック情報を保存し、インストール後の初回起動時に指定画面へ自動遷移させる仕組みです。新規ユーザー獲得キャンペーンで特に有効です。"
+          },
+          {
+            "q": "iOSのUniversal Linksの特徴として正しいものはどれですか？",
+            "options": [
+              "myapp://から始まるカスタムURLスキームを使う",
+              "アプリが未インストールの場合はエラーになる",
+              "通常のHTTPS URLをアプリで開く仕組みで、未インストール時はWebページが開く",
+              "Android専用の仕組みでiOSでは使えない"
+            ],
+            "correct": 2,
+            "explanation": "Universal Links（iOS）はhttps://から始まる通常のWebURLをアプリで開く仕組みです。アプリがインストールされていればアプリが開き、されていなければWebブラウザでページが開くフォールバック機能があります。Androidの同等機能はApp Linksです。"
+          },
+          {
+            "q": "マーケティングキャンペーンでメルマガのCTAボタンにディープリンクを設定する主な目的はどれですか？",
+            "options": [
+              "メールの開封率を上げるため",
+              "アプリ内の特定画面（特集・商品等）に直接遷移させてCVRを向上させるため",
+              "配信コストを削減するため",
+              "スパムフィルターを回避するため"
+            ],
+            "correct": 1,
+            "explanation": "ディープリンクをCTAに使う目的は、ユーザーをアプリのトップ画面ではなくメールのコンテキストに合った特定画面（特集・商品詳細・クーポン等）に直接誘導し、余分な操作を減らしてCVRを向上させることです。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール8-6 完了！\n\nディープリンクの仕組みとマーケティング活用を習得しました。\n\n## 習得したスキル\n\n✅ **ディープリンクの3種類**（URLスキーム・Universal Links・Dynamic Links）を説明できる\n✅ **Deferred Deep Linkの仕組み**（未インストール→ストア→起動後に指定画面）を理解した\n✅ **マーケティングへの活用パターン**（メルマガ・プッシュ通知・広告）を把握した\n✅ **URLパラメータの解析**をコードで実装できた\n\n## 次のステップ\n\n次のモジュール **「8-7: アプリ内イベント設計の考え方」** では、Firebase/GA4に送信するカスタムイベントをどう設計するかを学びます。",
+        "diagram": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "id": "html--1-8",
+  "moduleId": "1-8",
+  "categoryId": "html",
+  "title": "コメント記法（<!-- -->）とデバッグ時の活用",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# HTMLコメントでデバッグ効率を上げる\n\nHTMLコメントは、ブラウザには表示されないがソースコード内に残せるメモです。開発者同士の情報共有やデバッグに不可欠なツールです。\n\n## マーケターが活用する場面\n\n**1. GTMタグのテスト時の一時無効化**\n特定のスクリプトを一時的に無効化してデバッグする際、コメントアウトが使えます。\n\n**2. LP修正箇所の特定**\nエンジニアがコメントで「ここがCTAセクション」と記しているコードを読めると、修正依頼が正確になります。\n\n**3. ABテストのバリアント管理**\n現行版とテスト版のコードをコメントで切り替えることがあります。\n\nこのモジュールでは、HTMLコメントの構文とデバッグ時の活用法を学びます。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# HTMLコメントの構文\n\n## 基本構文\n\n```html\n<!-- これはコメントです。ブラウザには表示されません。 -->\n```\n\n- `<!--` で開始\n- `-->` で終了\n- 間に書いた内容はブラウザに表示されません\n\n## 複数行コメント\n\n```html\n<!--\n  このセクションは2024年春キャンペーン用です。\n  キャンペーン終了後にコードごと削除してください。\n  担当: マーケティング部 田中\n-->\n```\n\n## コメントアウトによるデバッグ\n\n「コメントアウト」とは、コードをコメントで囲んで一時的に無効化する手法です。\n\n```html\n<!-- デバッグ: このスクリプトを一時無効化 -->\n<!--\n<script>\n  dataLayer.push({\n    'event': 'purchase',\n    'value': 9800\n  });\n</script>\n-->\n```\n\n## GTMデバッグでの実例\n\n### ケース: 複数のトラッキングコードの切り分け\n\n```html\n<head>\n  <!-- GTM (本番用) -->\n  <script>...('GTM-PROD001');</script>\n  \n  <!-- GTM (テスト用) - 現在テスト中 -->\n  <script>...('GTM-TEST001');</script>\n  \n  <!-- Facebook Pixel -->\n  <!-- テスト中のため一時無効化\n  <script>\n    !function(f,b,e,v,n,t,s){...};\n    fbq('init', '1234567890');\n    fbq('track', 'PageView');\n  </script>\n  -->\n</head>\n```\n\n本番GTMとテストGTMを同時に設置し、Facebook Pixelは一時的にコメントアウトして問題を切り分けています。\n\n## コメントの注意点\n\n| やること | やらないこと |\n|---------|-------------|\n| セクションの目的を説明する | パスワードやAPIキーを書く |\n| 一時無効化の理由を明記する | コメントをネストする（`<!-- <!-- --> -->`） |\n| 担当者名・日付を書く | `--` をコメント内に使う |\n\n### セキュリティに注意\n\nHTMLコメントはブラウザに表示されませんが、ページソース（Ctrl+U）で**誰でも読めます**。\n\n```html\n<!-- NG: 絶対にやってはいけない -->\n<!-- 管理画面URL: https://admin.example.com -->\n<!-- パスワード: admin123 -->\n<!-- APIキー: sk-xxxxxxxxxxxx -->\n```\n\nコメントに機密情報を書くのは絶対にNGです。",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: コメントアウトでデバッグする\n\nGA4のイベントが二重に発火している問題が発生しました。原因を切り分けるため、カスタムスクリプトをコメントアウトして確認しましょう。\n\n## 課題\n\n1. Facebook Pixelのスクリプトをコメントアウト（一時無効化）する\n2. GA4カスタムイベントのスクリプトをコメントアウトする\n3. それぞれにコメントアウトの理由を説明するコメントを追加する",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>イベント二重発火のデバッグ</title>\n\n  <!-- Google Tag Manager -->\n  <script>(function(w,d,s,l,i){w[l]=w[l]||[];})(window,document,'script','dataLayer','GTM-XXXXX');</script>\n\n  <!-- Facebook Pixel - コメントアウトしてください -->\n  <script>\n    fbq('init', '1234567890');\n    fbq('track', 'PageView');\n  </script>\n\n</head>\n<body>\n  <noscript><iframe src=\"https://www.googletagmanager.com/ns.html?id=GTM-XXXXX\" height=\"0\" width=\"0\" style=\"display:none;visibility:hidden\"></iframe></noscript>\n\n  <h1>商品購入完了</h1>\n  <p>ご注文ありがとうございます。</p>\n\n  <!-- GA4カスタムイベント - コメントアウトしてください -->\n  <script>\n    dataLayer.push({\n      'event': 'purchase',\n      'transaction_id': 'T-12345',\n      'value': 9800\n    });\n  </script>\n\n</body>\n</html>",
+        "hints": [
+          "コメントアウトは <!-- と --> でコードを囲みます。例: <!-- <script>...</script> -->",
+          "コメントアウトの前に理由を書きましょう。例: <!-- デバッグ: 二重発火切り分けのため一時無効化 -->",
+          "GTMのコードはコメントアウトしないでください。GTMは問題の原因ではない前提でテストします。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>イベント二重発火のデバッグ</title>\n\n  <!-- Google Tag Manager -->\n  <script>(function(w,d,s,l,i){w[l]=w[l]||[];})(window,document,'script','dataLayer','GTM-XXXXX');</script>\n\n  <!-- デバッグ: 二重発火切り分けのためFacebook Pixelを一時無効化（2024/01/15） -->\n  <!--\n  <script>\n    fbq('init', '1234567890');\n    fbq('track', 'PageView');\n  </script>\n  -->\n\n</head>\n<body>\n  <noscript><iframe src=\"https://www.googletagmanager.com/ns.html?id=GTM-XXXXX\" height=\"0\" width=\"0\" style=\"display:none;visibility:hidden\"></iframe></noscript>\n\n  <h1>商品購入完了</h1>\n  <p>ご注文ありがとうございます。</p>\n\n  <!-- デバッグ: 二重発火切り分けのためGA4カスタムイベントを一時無効化（2024/01/15） -->\n  <!--\n  <script>\n    dataLayer.push({\n      'event': 'purchase',\n      'transaction_id': 'T-12345',\n      'value': 9800\n    });\n  </script>\n  -->\n\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "HTMLコメントの正しい構文はどれですか？",
+            "options": ["// これはコメント", "/* これはコメント */", "<!-- これはコメント -->", "# これはコメント"],
+            "correct": 2,
+            "explanation": "HTMLコメントは <!-- で始まり --> で終わります。// はJavaScript、/* */ はCSS、# はPythonやシェルスクリプトのコメント構文です。"
+          },
+          {
+            "q": "HTMLコメントについて正しい記述はどれですか？",
+            "options": ["コメントはページソース（Ctrl+U）でも見えない", "コメントはブラウザに表示されないが、ソースコードでは誰でも読める", "コメントはサーバー側でのみ確認できる", "コメント内にHTMLタグを書くと実行される"],
+            "correct": 1,
+            "explanation": "HTMLコメントはブラウザの画面には表示されませんが、ページソース（Ctrl+U）では誰でも読めます。そのため、パスワードやAPIキーなどの機密情報をコメントに書いてはいけません。"
+          },
+          {
+            "q": "GTMタグのデバッグ時、特定のスクリプトを一時的に無効化する方法として適切なのはどれですか？",
+            "options": ["スクリプトのファイルを削除する", "<!-- --> でスクリプトをコメントアウトする", "スクリプトのURLを間違ったものに変更する", "ブラウザのキャッシュをクリアする"],
+            "correct": 1,
+            "explanation": "コメントアウト（<!-- -->で囲む）は、コードを削除せずに一時的に無効化できる安全なデバッグ手法です。問題の切り分けが終わったらコメントを外して元に戻せます。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール1-8 完了！\n\nHTMLコメントの構文とデバッグでの活用方法を習得しました。\n\n## 習得したスキル\n\n✅ **HTMLコメント** `<!-- -->` の構文を正しく書ける\n✅ **コメントアウト**でスクリプトを一時無効化できる\n✅ コメントの**セキュリティリスク**（ソースコードで閲覧可能）を理解した\n✅ **GTMデバッグ**でのコメント活用法を習得した\n\n## 次のステップ\n\n次のモジュール **「1-9: HTMLエンティティ」** では、`&amp;` `&lt;` `&gt;` `&nbsp;` などの特殊文字表記を学び、LPの表示崩れを修正する方法を習得します。\n\n> 💡 **実務チャレンジ**: 自社サイトのソースコードを Ctrl+U で開いて、HTMLコメントを探してみましょう。エンジニアが残したセクション説明やTODOメモが見つかるかもしれません。",
+        "diagram": false
+      }
+    }
+  ]
+}

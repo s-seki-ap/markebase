@@ -1,0 +1,67 @@
+{
+  "id": "html--1-2",
+  "moduleId": "1-2",
+  "categoryId": "html",
+  "title": "タグ・属性・値の構文ルール",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# タグ・属性・値を正確に書く力\n\nHTMLの構文ルールは非常にシンプルですが、1文字のミスでページ全体が崩れることがあります。\n\n## なぜマーケターに構文知識が必要か\n\n**GTMカスタムHTMLタグ**を設定するとき、属性の引用符を閉じ忘れただけでタグが動作しません。LP修正でエンジニアに依頼する際も、正確な構文用語で伝えられると修正スピードが格段に上がります。\n\n**ABテストツール**（Google Optimize、VWOなど）でHTML要素を直接編集するとき、構文エラーがあるとテストバリアントが正しく表示されません。\n\nこのモジュールでは、開始タグ・終了タグ・空要素の3つの記法を確実に書けるようにします。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# HTMLタグの3つの記法\n\nHTMLタグには大きく3つのパターンがあります。\n\n## 1. 開始タグと終了タグのペア\n\nほとんどのHTML要素は開始タグと終了タグのペアで構成されます。\n\n```html\n<p class=\"intro\">これは段落です</p>\n```\n\n- `<p class=\"intro\">` — 開始タグ（属性付き）\n- `これは段落です` — コンテンツ\n- `</p>` — 終了タグ（スラッシュ `/` が入る）\n\n## 2. 空要素（自己閉じタグ）\n\nコンテンツを持たないタグは空要素と呼ばれます。\n\n```html\n<br>\n<hr>\n<img src=\"banner.jpg\" alt=\"キャンペーンバナー\">\n<meta charset=\"UTF-8\">\n<input type=\"text\" name=\"email\">\n```\n\nこれらは終了タグが不要です。HTML5では `<br />` のようなスラッシュも不要です。\n\n## 3. 属性の構文ルール\n\n```html\n<a href=\"https://example.com\" target=\"_blank\" rel=\"noopener\">リンク</a>\n```\n\n| 構成要素 | 説明 | 例 |\n|----------|------|----|\n| 属性名 | 小文字で書く | `href`, `target` |\n| `=` | 属性名と値をつなぐ | `href=` |\n| 属性値 | ダブルクォートで囲む | `\"https://example.com\"` |\n| スペース | 属性間を半角スペースで区切る | `href=\"...\" target=\"...\"` |\n\n## よくある構文ミス\n\n```html\n<!-- NG: 引用符の閉じ忘れ -->\n<a href=\"https://example.com>リンク</a>\n\n<!-- NG: 終了タグのスラッシュ忘れ -->\n<p>テキスト<p>\n\n<!-- NG: 属性値に引用符がない -->\n<img src=banner.jpg alt=バナー>\n\n<!-- OK: 正しい書き方 -->\n<a href=\"https://example.com\">リンク</a>\n<p>テキスト</p>\n<img src=\"banner.jpg\" alt=\"バナー\">\n```\n\n## GTMでの実例\n\nGTMのカスタムHTMLタグに埋め込むコードも同じルールです。\n\n```html\n<script>\n  dataLayer.push({\n    'event': 'button_click',\n    'button_id': 'cta-main'\n  });\n</script>\n```\n\n`<script>` は開始タグと終了タグのペアが必須。閉じ忘れるとページの表示が壊れます。",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: 構文ルールを正しく適用する\n\nあなたはLPのHTMLを修正しています。構文エラーが複数あるので、正しく修正してください。\n\n## 課題\n\n以下のHTMLには構文エラーが5つあります。すべて修正してください：\n\n1. `img` タグの `alt` 属性の引用符を閉じる\n2. `h1` の終了タグを正しく書く\n3. `p` タグの終了タグを追加する\n4. `a` タグの `href` 属性に引用符を追加する\n5. `meta` タグの属性値の引用符を修正する",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=UTF-8>\n  <title>春のキャンペーンLP</title>\n</head>\n<body>\n\n  <img src=\"hero.jpg\" alt=\"春のキャンペーン画像>\n\n  <h1>春の特別キャンペーン<h1>\n\n  <p>期間限定で全商品20%OFF！この機会をお見逃しなく。\n\n  <a href=https://example.com/campaign>キャンペーン詳細を見る</a>\n\n</body>\n</html>",
+        "hints": [
+          "img タグの alt 属性は alt=\"春のキャンペーン画像\" のように閉じの引用符が必要です。",
+          "終了タグにはスラッシュが必要です。<h1> の終了タグは </h1> と書きます。",
+          "属性値はダブルクォートで囲みましょう。href=\"https://example.com/campaign\" のように書きます。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>春のキャンペーンLP</title>\n</head>\n<body>\n\n  <img src=\"hero.jpg\" alt=\"春のキャンペーン画像\">\n\n  <h1>春の特別キャンペーン</h1>\n\n  <p>期間限定で全商品20%OFF！この機会をお見逃しなく。</p>\n\n  <a href=\"https://example.com/campaign\">キャンペーン詳細を見る</a>\n\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "次のうち「空要素」として正しいものはどれですか？",
+            "options": ["<p>テキスト</p>", "<br>", "<div></div>", "<a href=\"#\">リンク</a>"],
+            "correct": 1,
+            "explanation": "<br> は改行を表す空要素で、コンテンツを持たず終了タグも不要です。<p> や <div>、<a> はコンテンツを持つため開始タグと終了タグのペアが必要です。"
+          },
+          {
+            "q": "HTML属性値を囲む記号として最も推奨されるものはどれですか？",
+            "options": ["シングルクォート（'）", "ダブルクォート（\"）", "バッククォート（`）", "囲まなくてよい"],
+            "correct": 1,
+            "explanation": "HTML属性値はダブルクォートで囲むのが最も一般的で推奨される書き方です。シングルクォートも動作しますが、ダブルクォートが業界標準です。"
+          },
+          {
+            "q": "GTMのカスタムHTMLタグで<script>タグの終了タグを書き忘れた場合、何が起きますか？",
+            "options": ["ブラウザが自動補完するので問題ない", "スクリプトだけが動作しない", "そのタグ以降のページ表示が壊れる可能性がある", "GTMがエラーを表示して自動修正する"],
+            "correct": 2,
+            "explanation": "<script>の終了タグがないと、ブラウザはそれ以降のHTMLもスクリプトの一部として解釈しようとします。結果、ページの表示が大きく壊れる可能性があります。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール1-2 完了！\n\nお疲れ様でした。HTMLの構文ルールを正確に書く力が身につきました。\n\n## 習得したスキル\n\n✅ **開始タグ・終了タグのペア**を正しく書ける\n✅ **空要素**（br, img, meta, input, hr）の特性を理解した\n✅ **属性名=属性値**の構文をダブルクォートで正確に書ける\n✅ **よくある構文ミス**を見つけて修正できる\n\n## 次のステップ\n\n次のモジュール **「1-3: HTML文書の骨格」** では、DOCTYPE・html・head・bodyの4つの必須要素を学び、ゼロからHTMLファイルを書く力を身につけます。\n\n> 💡 **実務チャレンジ**: GTMのカスタムHTMLタグを設定するとき、必ずHTML構文チェッカー（W3C Validator）で検証してから公開しましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

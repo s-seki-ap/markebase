@@ -1,0 +1,82 @@
+{
+  "id": "javascript--3-16",
+  "moduleId": "3-16",
+  "categoryId": "javascript",
+  "title": "for...inでオブジェクトのプロパティを列挙する",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "## for...inでオブジェクトのプロパティを列挙する\n\ndataLayerのオブジェクトを動的に処理する、GTM変数のマッピングテーブルを走査する、GA4イベントパラメータを一括で変換する——こうした「オブジェクトのキーをすべて処理したい」場面で `for...in` が活躍します。\n\n配列に対して使う `for...of` とは異なり、`for...in` はオブジェクトのプロパティ名（キー）を列挙します。\n\n**このモジュールで学ぶこと**\n- `for...in` の基本構文\n- `for...of` との違いと使い分け\n- `hasOwnProperty` を使った安全な列挙\n- GTMでのオブジェクト処理パターン",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "## for...inの基本構文\n\n```javascript\nfor (var キー in オブジェクト) {\n  // キー：プロパティ名（文字列）\n  // オブジェクト[キー]：そのプロパティの値\n}\n```\n\n### 基本的な例\n\n```javascript\nvar eventParams = {\n  'event_category': 'engagement',\n  'event_label': 'button_click',\n  'value': 100\n};\n\nfor (var key in eventParams) {\n  console.log(key + ': ' + eventParams[key]);\n  // event_category: engagement\n  // event_label: button_click\n  // value: 100\n}\n```\n\n### hasOwnPropertyによる安全な列挙\n\nJavaScriptのオブジェクトはプロトタイプチェーンを持つため、継承したプロパティも `for...in` で列挙される場合があります。`hasOwnProperty()` で自分自身のプロパティのみに限定するのが安全です。\n\n```javascript\nfor (var key in obj) {\n  if (obj.hasOwnProperty(key)) {\n    // 自分自身のプロパティのみ処理\n    console.log(key, obj[key]);\n  }\n}\n```\n\n### GTM実例①：イベントパラメータの動的コピー\n\n既存のdataLayerオブジェクトに追加パラメータをマージする処理です。\n\n```javascript\n<script>\n  window.dataLayer = window.dataLayer || [];\n\n  // ベースとなるイベントオブジェクト\n  var baseEvent = {\n    'event': 'custom_event',\n    'page_type': {{Page Type}}\n  };\n\n  // 追加パラメータ（GTM変数から取得）\n  var extraParams = {{Extra Event Params}};  // {param1: val1, param2: val2, ...}\n\n  // extraParamsの全プロパティをbaseEventにコピー\n  if (extraParams) {\n    for (var key in extraParams) {\n      if (extraParams.hasOwnProperty(key)) {\n        baseEvent[key] = extraParams[key];\n      }\n    }\n  }\n\n  window.dataLayer.push(baseEvent);\n</script>\n```\n\n### GTM実例②：パラメータ名の変換マッピング\n\n旧来のUAカスタムディメンション名をGA4パラメータ名に変換するパターンです。\n\n```javascript\n<script>\n  // UA→GA4パラメータ名マッピングテーブル\n  var paramMapping = {\n    'dimension1': 'user_id',\n    'dimension2': 'member_rank',\n    'dimension3': 'login_status',\n    'metric1': 'lifetime_value'\n  };\n\n  var uaParams = {{UA Parameters}};  // UAのディメンション/メトリクス\n  var ga4Params = { 'event': 'page_view' };\n\n  for (var uaKey in paramMapping) {\n    if (paramMapping.hasOwnProperty(uaKey) && uaParams[uaKey]) {\n      var ga4Key = paramMapping[uaKey];\n      ga4Params[ga4Key] = uaParams[uaKey];\n    }\n  }\n\n  window.dataLayer = window.dataLayer || [];\n  window.dataLayer.push(ga4Params);\n</script>\n```\n\n### for...inとfor...ofの使い分け\n\n| 状況 | 使うべきループ |\n|------|----------|\n| 配列の各要素を処理したい | `for...of` または `for` |\n| オブジェクトのキーと値を処理したい | `for...in` |\n| 配列のインデックスが必要 | `for` |\n\n**注意：** `for...in` を配列に使うと数値インデックスが文字列として列挙され、意図しない動作になる場合があります。配列には `for` または `for...of` を使いましょう。",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "## 練習：UTMパラメータをdataLayerに動的にマッピングする\n\nURL内のUTMパラメータ名とGA4パラメータ名のマッピングオブジェクトを `for...in` で走査し、対応するGA4パラメータをdataLayerに送信するコードを完成させてください。\n\n**マッピング定義**\n```javascript\nvar utmToGa4 = {\n  'utm_source': 'source',\n  'utm_medium': 'medium',\n  'utm_campaign': 'campaign_name',\n  'utm_content': 'creative_name'\n};\n```\n\n**要件**\n- `for...in` でマッピングオブジェクトを走査する\n- `hasOwnProperty` で安全に処理する\n- GTM変数 `{{utm_source}}` 等から値を取得（ここではオブジェクト `utmValues` に格納済みとする）",
+        "starterCode": "<script>\n  window.dataLayer = window.dataLayer || [];\n\n  var utmToGa4 = {\n    'utm_source': 'source',\n    'utm_medium': 'medium',\n    'utm_campaign': 'campaign_name',\n    'utm_content': 'creative_name'\n  };\n\n  var utmValues = {\n    'utm_source': {{utm_source}},\n    'utm_medium': {{utm_medium}},\n    'utm_campaign': {{utm_campaign}},\n    'utm_content': {{utm_content}}\n  };\n\n  var eventData = { 'event': 'utm_capture' };\n\n  for (var utmKey ______ utmToGa4) {\n    if (utmToGa4.______(utmKey) && utmValues[utmKey]) {\n      var ga4Key = utmToGa4[______];\n      eventData[ga4Key] = ______[utmKey];\n    }\n  }\n\n  window.dataLayer.push(eventData);\n</script>",
+        "hints": [
+          "`for...in` の構文は `for (var key in object)` です",
+          "プロトタイプチェーンの継承プロパティを除外するには `object.hasOwnProperty(key)` を使います",
+          "`utmToGa4[utmKey]` でGTMパラメータ名（utmKey）に対応するGA4パラメータ名が取得できます。`utmValues[utmKey]` でUTMの値を取得します"
+        ],
+        "answer": "<script>\n  window.dataLayer = window.dataLayer || [];\n\n  var utmToGa4 = {\n    'utm_source': 'source',\n    'utm_medium': 'medium',\n    'utm_campaign': 'campaign_name',\n    'utm_content': 'creative_name'\n  };\n\n  var utmValues = {\n    'utm_source': {{utm_source}},\n    'utm_medium': {{utm_medium}},\n    'utm_campaign': {{utm_campaign}},\n    'utm_content': {{utm_content}}\n  };\n\n  var eventData = { 'event': 'utm_capture' };\n\n  for (var utmKey in utmToGa4) {\n    if (utmToGa4.hasOwnProperty(utmKey) && utmValues[utmKey]) {\n      var ga4Key = utmToGa4[utmKey];\n      eventData[ga4Key] = utmValues[utmKey];\n    }\n  }\n\n  window.dataLayer.push(eventData);\n</script>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "question": "`for...in` ループで列挙されるのは何ですか？",
+            "options": [
+              "オブジェクトの値（value）",
+              "オブジェクトのキー名（プロパティ名）",
+              "オブジェクトのインデックス番号",
+              "オブジェクトのメソッド一覧"
+            ],
+            "correct": 1,
+            "explanation": "`for...in` はオブジェクトのプロパティ名（キー）を文字列として列挙します。対応する値にアクセスするには `object[key]` のブラケット記法を使います。"
+          },
+          {
+            "question": "`for...in` で `hasOwnProperty()` を使うべき理由として正しいのはどれですか？",
+            "options": [
+              "処理速度を向上させるため",
+              "プロトタイプチェーンから継承したプロパティを除外し、自分自身のプロパティのみを安全に処理するため",
+              "undefinedのプロパティをスキップするため",
+              "for...inの構文エラーを防ぐため"
+            ],
+            "correct": 1,
+            "explanation": "JavaScriptのオブジェクトはプロトタイプを持ち、親オブジェクトのプロパティも `for...in` で列挙される場合があります。`hasOwnProperty(key)` を使うことで、そのオブジェクト自身が直接持つプロパティのみを処理でき、意図しないプロパティの処理を避けられます。"
+          },
+          {
+            "question": "dataLayerオブジェクトから特定のキーをすべて取得して別のオブジェクトにコピーしたい場合、最も適切なアプローチはどれですか？",
+            "options": [
+              "for...ofを使ってプロパティを走査する",
+              "for...inとhasOwnPropertyを組み合わせてプロパティをコピーする",
+              "forループとインデックスでオブジェクトを走査する",
+              "whileループでオブジェクトのキー数分繰り返す"
+            ],
+            "correct": 1,
+            "explanation": "オブジェクトのプロパティを走査するには `for...in` が適しています。`hasOwnProperty` と組み合わせることで継承プロパティを除外した安全なコピーができます。`for...of` は配列などiterableオブジェクト向けであり、通常のオブジェクトには使えません。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "## まとめ：for...inでオブジェクトのプロパティを列挙する\n\n✅ `for (var key in obj)` でオブジェクトのプロパティ名を列挙できる\n\n✅ 値へのアクセスは `obj[key]` のブラケット記法を使う\n\n✅ `obj.hasOwnProperty(key)` で継承プロパティを除外した安全な処理ができる\n\n✅ 配列には `for...in` でなく `for` または `for...of` を使う\n\n✅ GTMでのパラメータマッピング・オブジェクトマージ処理でfor...inが活躍する\n\n**次のモジュールでは** `break`・`continue` でループの流れを細かく制御する方法を学びます。",
+        "diagram": false
+      }
+    }
+  ]
+}

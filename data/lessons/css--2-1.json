@@ -1,0 +1,67 @@
+{
+  "id": "css--2-1",
+  "moduleId": "2-1",
+  "categoryId": "css",
+  "title": "CSSとは何か：スタイルシートがブラウザに何を伝えるか",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# なぜマーケターがCSSを学ぶのか\n\nHTMLがWebページの「骨格」なら、CSSは「見た目」を決めるスタイルシートです。\n\n## マーケターのCSS活用場面\n\n**1. LPのデザイン修正依頼**\nエンジニアに「ボタンの色を変えて」と伝えるとき、CSSを理解していれば具体的なプロパティ名（`background-color`）で指示でき、コミュニケーションコストが劇的に下がります。\n\n**2. ABテストのバリエーション作成**\nGoogle OptimizeやVWOでABテストを実装する際、CSSでテキストサイズやボタン色を変更します。CSSの基本を知っていれば、エンジニアに頼まず自分でバリエーションを作成できます。\n\n**3. GTMでのカスタムHTML**\nGTMのカスタムHTMLタグでポップアップやバナーを表示するとき、見た目を制御するのはCSSです。\n\n**4. メールマーケティング**\nHTMLメールのデザイン調整にはインラインCSSの知識が必要です。\n\n## 今日から変わること\n\nCSSを知ることで、Webページの「なぜこの見た目なのか」が理解できるようになります。DevToolsでスタイルを確認・変更する力は、マーケターの大きな武器になります。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# CSSの基本構造\n\nCSS（Cascading Style Sheets）は、HTMLの各要素に「どんな見た目にするか」を指示する言語です。\n\n## CSSルールの構造\n\n```css\nセレクタ {\n  プロパティ: 値;\n}\n```\n\n具体例を見てみましょう：\n\n```css\nh1 {\n  color: #333333;\n  font-size: 32px;\n}\n```\n\nこのルールは「h1タグの文字色を`#333333`に、文字サイズを`32px`にする」という意味です。\n\n## CSSの3つの構成要素\n\n| 要素 | 役割 | 例 |\n|------|------|----|\n| **セレクタ** | どのHTML要素に適用するか | `h1`, `.btn`, `#header` |\n| **プロパティ** | 何を変えるか | `color`, `font-size`, `background` |\n| **値** | どう変えるか | `red`, `16px`, `#f0f0f0` |\n\n## HTMLとCSSの関係\n\n```html\n<h1>マーケティングダッシュボード</h1>\n<p class=\"description\">GA4データをリアルタイムで分析</p>\n```\n\n```css\nh1 {\n  color: #1a73e8;\n  font-weight: bold;\n}\n\n.description {\n  color: #666666;\n  font-size: 14px;\n}\n```\n\nHTMLが「何を表示するか（構造）」を定義し、CSSが「どう表示するか（見た目）」を定義します。この分離がWebの基本原則です。\n\n## マーケターが知るべきCSS活用例\n\n| 活用シーン | CSSで変えるもの | ビジネス効果 |\n|-----------|----------------|-------------|\n| CTAボタン最適化 | `background-color`, `font-size` | CVR改善 |\n| ファーストビュー改善 | `height`, `padding`, `background-image` | 直帰率低下 |\n| フォーム改善 | `border`, `padding`, `font-size` | EFO効果 |\n| モバイル対応 | `@media`クエリ | モバイルCVR改善 |",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: はじめてのCSS\n\nあなたはLPのヘッダー部分をスタイリングしようとしています。CSSの基本構文を使って見た目を整えましょう。\n\n## 課題\n\n以下を完成させてください：\n\n1. `h1` の文字色を `#1a73e8`（Googleブルー）にする\n2. `.subtitle` の文字サイズを `18px` にする\n3. `.cta-button` の背景色を `#ea4335`（赤）にし、文字色を `white` にする",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>LP Header</title>\n  <style>\n    /* ① h1の文字色を #1a73e8 にしてください */\n    \n\n    /* ② .subtitleの文字サイズを 18px にしてください */\n    \n\n    /* ③ .cta-buttonの背景色を #ea4335、文字色を white にしてください */\n    \n  </style>\n</head>\n<body>\n  <h1>GA4で始めるデータドリブン</h1>\n  <p class=\"subtitle\">あなたのサイトを数字で理解しよう</p>\n  <button class=\"cta-button\">無料で始める</button>\n</body>\n</html>",
+        "hints": [
+          "CSSの基本構文は `セレクタ { プロパティ: 値; }` です。",
+          "文字色は `color` プロパティ、背景色は `background-color` プロパティを使います。",
+          "クラスセレクタはドット（`.`）を先頭に付けます。例：`.subtitle { ... }`"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>LP Header</title>\n  <style>\n    h1 {\n      color: #1a73e8;\n    }\n\n    .subtitle {\n      font-size: 18px;\n    }\n\n    .cta-button {\n      background-color: #ea4335;\n      color: white;\n    }\n  </style>\n</head>\n<body>\n  <h1>GA4で始めるデータドリブン</h1>\n  <p class=\"subtitle\">あなたのサイトを数字で理解しよう</p>\n  <button class=\"cta-button\">無料で始める</button>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "CSSルールの基本構造として正しいのはどれですか？",
+            "options": ["セレクタ(プロパティ: 値)", "セレクタ { プロパティ: 値; }", "セレクタ [プロパティ = 値]", "セレクタ -> プロパティ: 値"],
+            "correct": 1,
+            "explanation": "CSSルールは `セレクタ { プロパティ: 値; }` の形式で書きます。波括弧 `{}` でプロパティと値のペアを囲み、セミコロン `;` で終端します。"
+          },
+          {
+            "q": "HTMLが定義するものとCSSが定義するものの組み合わせとして正しいのはどれですか？",
+            "options": ["HTML=見た目、CSS=構造", "HTML=構造、CSS=見た目", "HTML=動き、CSS=構造", "HTML=見た目、CSS=動き"],
+            "correct": 1,
+            "explanation": "HTMLはWebページの「構造（何を表示するか）」を定義し、CSSは「見た目（どう表示するか）」を定義します。この役割分担がWebの基本原則です。"
+          },
+          {
+            "q": "ABテストでCTAボタンの色を変更したい場合、変更するCSSプロパティはどれですか？",
+            "options": ["font-size", "background-color", "text-align", "margin"],
+            "correct": 1,
+            "explanation": "`background-color` プロパティでボタンの背景色を変更できます。ABテストでボタン色を変えてCVRの違いを検証するのは、マーケターの代表的なCSS活用シーンです。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール2-1 完了！\n\nお疲れ様でした。このモジュールで学んだことを振り返りましょう。\n\n## 習得したスキル\n\n✅ **CSSはWebページの見た目を制御する言語**であることを理解した\n✅ **CSSルールの構造**（セレクタ・プロパティ・値）を習得した\n✅ **HTMLとCSSの役割分担**（構造と見た目の分離）を理解した\n✅ **マーケティングでのCSS活用シーン**を把握した\n\n## 次のステップ\n\n次のモジュール **「2-2: CSSセレクタの基本」** では、GTMで頻繁に使うCSSセレクタの書き方を学びます。要素・クラス・ID・複合セレクタをマスターしましょう。\n\n> 💡 **実務チャレンジ**: 自分の担当サイトでDevTools（F12）を開き、Stylesパネルでボタンの `background-color` を変更してみましょう。ページをリロードすると元に戻るので安心して試せます。",
+        "diagram": false
+      }
+    }
+  ]
+}

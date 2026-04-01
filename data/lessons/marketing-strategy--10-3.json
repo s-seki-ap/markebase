@@ -1,0 +1,82 @@
+{
+  "id": "marketing-strategy--10-3",
+  "moduleId": "10-3",
+  "categoryId": "marketing-strategy",
+  "title": "STP：セグメンテーション・ターゲティング・ポジショニング",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# STPで「誰に・どう戦うか」を決める\n\n3C分析で市場の現状を把握したら、次は**戦略の方向性を決める**ステップです。それが **STP分析** です。\n\n## STPとは\n\n- **S（Segmentation）セグメンテーション**: 市場を細分化する\n- **T（Targeting）ターゲティング**: どの市場を狙うか選ぶ\n- **P（Positioning）ポジショニング**: 競合の中でどう位置づけるか決める\n\n## なぜSTPが必要か\n\n「全員に売ろう」は最も危険な戦略です。\n\n- リソースが分散し、どこにも強みが出ない\n- メッセージが曖昧になり、誰にも刺さらない\n- 競合との差別化ができない\n\n**絞ることで強くなる**のがSTPの思想です。\n\n> フィリップ・コトラーは「マーケティング戦略の核心はSTPにある」と言いました。\n\n**あなたへの問い**: 今の自社のターゲットは明確に絞られていますか？",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# STPの各ステップと実践方法\n\n## Step 1: Segmentation（セグメンテーション）\n\n市場を共通の特性を持つグループに分類します。\n\n### 4つのセグメンテーション軸\n\n| 軸 | 変数例 | 活用場面 |\n|----|--------|----------|\n| **地理的変数** | 地域、都市規模、気候 | 店舗展開、ローカライズ |\n| **人口統計的変数** | 年齢、性別、職業、年収 | 最も一般的な軸 |\n| **心理的変数** | ライフスタイル、価値観、性格 | ブランド・高関与商品 |\n| **行動変数** | 購買頻度、使用場面、ベネフィット求 | デジタルマーケ向き |\n\n### 有効なセグメントの条件（4R）\n\n```\nReachable（到達可能）: そのセグメントにリーチできるか\nResponsive（反応可能）: マーケ施策に反応するか\nRealistic（収益性）:    十分な規模・収益が見込めるか\nRankable（優先順位）:   他セグメントと優先度を比較できるか\n```\n\n## Step 2: Targeting（ターゲティング）\n\n複数のセグメントの中から、どこを狙うかを決めます。\n\n| 戦略 | 内容 | 例 |\n|------|------|----|\n| **無差別型** | 全市場に同一施策 | コカ・コーラ（初期） |\n| **差別型** | 複数セグメントに個別施策 | トヨタ（プリウス・レクサス等） |\n| **集中型** | 特定セグメントに特化 | 高級時計ブランド |\n| **ニッチ型** | 超特定の小さな市場に集中 | スタートアップに多い |\n\n**スタートアップ・中小企業は「集中型」または「ニッチ型」が有効**\n\n## Step 3: Positioning（ポジショニング）\n\n選んだターゲットに対して、競合と比較したときの「自社の立ち位置」を決めます。\n\n### ポジショニングの定義式\n\n```\n[ターゲット] にとって、[ブランド名] は\n[差別化ポイント] を提供する [カテゴリ名] です。\nなぜなら [根拠・証明] があるからです。\n```\n\n**例**: 忙しいビジネスパーソンにとって、〇〇は「データで成果が見えるSNS運用代行」です。なぜなら月次レポートで改善点を明示するからです。",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: STP分析シートを作成する\n\n任意の製品・サービスを対象に、STP分析を実施してください。\n\n## 課題\n\n以下のHTMLテンプレートを完成させ、セグメンテーション・ターゲティング・ポジショニングの3ステップを記述してください。",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>STP分析シート</title>\n  <style>\n    body { font-family: sans-serif; max-width: 750px; margin: 40px auto; padding: 20px; }\n    .step { border-left: 4px solid #3b82f6; padding: 16px 20px; margin: 20px 0; background: #f8fafc; border-radius: 0 8px 8px 0; }\n    .step h2 { margin-top: 0; color: #1e293b; }\n    textarea { width: 100%; height: 100px; padding: 8px; border: 1px solid #cbd5e1; border-radius: 4px; resize: vertical; }\n    label { display: block; font-weight: bold; margin: 10px 0 4px; font-size: 0.9rem; color: #475569; }\n  </style>\n</head>\n<body>\n  <h1>STP分析シート</h1>\n  <p>対象: <input type=\"text\" placeholder=\"製品・サービス名\" style=\"padding: 4px 8px; border: 1px solid #ccc; border-radius: 4px; width: 260px;\" /></p>\n\n  <!-- Sステップ -->\n  <!-- Tステップ -->\n  <!-- Pステップ -->\n\n</body>\n</html>",
+        "hints": [
+          "Segmentationステップでは「地理的・人口統計・心理的・行動」の4軸でセグメントを書き出しましょう。",
+          "Targetingステップでは「どのセグメントを選んだか」と「その理由（なぜそのセグメントが有望か）」を記述します。",
+          "Positioningステップでは「[ターゲット]にとって、[ブランド]は[差別化]を提供する[カテゴリ]です」の定義式を使って記述しましょう。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>STP分析シート</title>\n  <style>\n    body { font-family: sans-serif; max-width: 750px; margin: 40px auto; padding: 20px; }\n    .step { border-left: 4px solid; padding: 16px 20px; margin: 20px 0; background: #f8fafc; border-radius: 0 8px 8px 0; }\n    .s { border-color: #10b981; }\n    .t { border-color: #3b82f6; }\n    .p { border-color: #8b5cf6; }\n    .step h2 { margin-top: 0; }\n    .s h2 { color: #10b981; }\n    .t h2 { color: #3b82f6; }\n    .p h2 { color: #8b5cf6; }\n    textarea { width: 100%; height: 90px; padding: 8px; border: 1px solid #cbd5e1; border-radius: 4px; resize: vertical; }\n    label { display: block; font-weight: bold; margin: 10px 0 4px; font-size: 0.9rem; color: #475569; }\n    .positioning-formula { background: #1e293b; color: #e2e8f0; padding: 16px; border-radius: 8px; font-family: monospace; line-height: 1.8; }\n  </style>\n</head>\n<body>\n  <h1>STP分析シート</h1>\n  <p>対象: <input type=\"text\" value=\"中小企業向けデジタルマーケ支援サービス\" style=\"padding: 4px 8px; border: 1px solid #ccc; border-radius: 4px; width: 300px;\" /></p>\n\n  <div class=\"step s\">\n    <h2>S: Segmentation（市場細分化）</h2>\n    <label>人口統計的セグメント</label>\n    <textarea>従業員数10〜100名の中小企業。BtoB・BtoC問わず。経営者または販売・マーケ担当が意思決定者。年商1億〜10億円規模。</textarea>\n    <label>行動的セグメント</label>\n    <textarea>「SNSを始めたいが何から手をつければよいかわからない」層。現状はほぼデジタルマーケ未着手か、着手したが成果が出ていない企業。</textarea>\n    <label>心理的セグメント</label>\n    <textarea>「専門家に任せて確実に成果を出したい」志向。コスト意識が強く、費用対効果を重視。</textarea>\n  </div>\n\n  <div class=\"step t\">\n    <h2>T: Targeting（ターゲット選定）</h2>\n    <label>選択したターゲットセグメント</label>\n    <textarea>従業員30名以下・年商3億円未満のBtoB中小企業のマーケ担当兼任者（経営者または総務兼務）。デジタルマーケ着手から1年未満で成果に悩んでいる層。</textarea>\n    <label>選定理由（なぜこのセグメントか）</label>\n    <textarea>①市場規模が大きい（全国に数十万社）②予算が確保可能（月3〜10万円）③競合の大手代理店が参入しにくい規模感④リテンション率が高い（一度信頼されると長期継続しやすい）</textarea>\n  </div>\n\n  <div class=\"step p\">\n    <h2>P: Positioning（ポジショニング）</h2>\n    <label>ポジショニング定義式</label>\n    <div class=\"positioning-formula\">\n      [デジタルマーケ未着手〜着手初期の中小企業経営者・担当者] にとって、<br>\n      [本サービス] は「データに基づく改善提案つき、伴走型デジタルマーケ支援」を提供する<br>\n      [中小企業向けマーケ支援サービス] です。<br>\n      なぜなら [GA4・BigQueryを活用した月次レポートで、費用対効果を可視化する仕組みがある] からです。\n    </div>\n    <label>競合との差別化ポイント</label>\n    <textarea>大手代理店との差別化：低価格・小回り・担当者固定。フリーランスとの差別化：チーム体制の安心感・データ分析力・継続的な改善提案。</textarea>\n  </div>\n\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "有効なセグメントの条件「4R」に含まれないものはどれですか？",
+            "options": [
+              "Reachable（到達可能）",
+              "Responsive（反応可能）",
+              "Realistic（収益性）",
+              "Revolutionary（革新性）"
+            ],
+            "correct": 3,
+            "explanation": "4RはReachable（到達可能）・Responsive（反応可能）・Realistic（収益性）・Rankable（優先順位）です。Revolutionary（革新性）は含まれません。"
+          },
+          {
+            "q": "スタートアップや中小企業にとって最も適したターゲティング戦略はどれですか？",
+            "options": [
+              "無差別型マーケティング",
+              "差別型マーケティング",
+              "集中型またはニッチ型マーケティング",
+              "全セグメントに同時展開"
+            ],
+            "correct": 2,
+            "explanation": "リソースが限られるスタートアップや中小企業は「集中型」または「ニッチ型」が有効です。特定セグメントに集中することで、大企業には真似できない強みを発揮できます。"
+          },
+          {
+            "q": "ポジショニングの目的として最も正しいのはどれですか？",
+            "options": [
+              "最も多くの顧客に認知してもらうこと",
+              "ターゲット顧客の頭の中に競合と異なる独自の位置づけを作ること",
+              "製品の価格を最も低く設定すること",
+              "競合他社を市場から排除すること"
+            ],
+            "correct": 1,
+            "explanation": "ポジショニングとは「ターゲット顧客の心の中に、競合と比較したときの明確な位置づけを作ること」です。顧客が「この課題ならこのブランド」と想起できる状態を作ることが目的です。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール10-3 完了！\n\nSTP分析の考え方と実践手順を習得しました。\n\n## 習得したスキル\n\n✅ **セグメンテーションの4軸**（地理・人口統計・心理・行動）で市場を細分化できる\n✅ **4R基準**（到達可能・反応可能・収益性・優先順位）でセグメントを評価できる\n✅ **4つのターゲティング戦略**を場面に応じて選択できる\n✅ **ポジショニング定義式**を使って自社の立ち位置を言語化できる\n\n## なぜこれが重要か\n\nSTPが明確であれば、後続のすべてのマーケティング活動（広告・コンテンツ・価格・チャネル）に一貫性が生まれます。「誰に・何を・なぜ」が決まっていない状態で施策を積み重ねても、効果は分散するだけです。\n\n## 次のステップ\n\n次のモジュール **「10-4: 4P/4C：マーケティングミックスの設計」** では、STPで決めたターゲット・ポジショニングに基づいて、具体的な施策を設計する方法を学びます。",
+        "diagram": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "id": "javascript--3-14",
+  "moduleId": "3-14",
+  "categoryId": "javascript",
+  "title": "whileループと条件付きループ処理",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "## whileループと条件付きループ処理\n\n`for` ループは繰り返し回数があらかじめわかっている場合に適しています。一方、「特定の条件が満たされるまで処理を続けたい」場合は `while` ループが有効です。\n\nGTM/GA4の実装では、DOMの準備待ちやリトライ処理など、回数が決まらない繰り返し処理で `while` が活躍します。\n\n**このモジュールで学ぶこと**\n- `while` ループの基本構文\n- `do...while` ループの使いどころ\n- 無限ループのリスクと回避方法\n- GTMタグでの実用的なwhile活用パターン",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "## whileループの基本構文\n\n```javascript\nwhile (条件) {\n  // 条件がtrueの間、繰り返し実行\n}\n```\n\n条件が最初から `false` の場合、一度も実行されません。\n\n### do...whileループ\n\n```javascript\ndo {\n  // 最低1回は必ず実行される\n} while (条件);\n```\n\n`do...while` は最初に処理を実行してから条件をチェックします。\n\n### whileとforの使い分け\n\n```javascript\n// for：繰り返し回数が決まっている場合\nfor (var i = 0; i < items.length; i++) { ... }\n\n// while：条件が満たされるまで処理する場合\nvar retryCount = 0;\nvar maxRetry = 5;\nwhile (!window.ga && retryCount < maxRetry) {\n  // GAオブジェクトが準備できるまで待つ（簡易版）\n  retryCount++;\n}\n```\n\n### GTM実例①：DOM要素の探索\n\n親要素を辿って特定のデータ属性を持つ要素を見つける処理です。\n\n```javascript\n<script>\n  // クリックされた要素から最も近いdata-product-idを持つ要素を探す\n  var clickedElement = {{Click Element}};\n  var currentEl = clickedElement;\n  var productId = null;\n  var maxDepth = 10;  // 無限ループ防止\n  var depth = 0;\n\n  while (currentEl && depth < maxDepth) {\n    if (currentEl.getAttribute && currentEl.getAttribute('data-product-id')) {\n      productId = currentEl.getAttribute('data-product-id');\n      break;\n    }\n    currentEl = currentEl.parentElement;\n    depth++;\n  }\n\n  if (productId) {\n    window.dataLayer = window.dataLayer || [];\n    window.dataLayer.push({\n      'event': 'product_click',\n      'product_id': productId\n    });\n  }\n</script>\n```\n\n### GTM実例②：dataLayer履歴の検索\n\n```javascript\n<script>\n  // dataLayerから直近のpurchaseイベントを探す\n  var dataLayer = window.dataLayer || [];\n  var i = dataLayer.length - 1;  // 末尾から逆順に検索\n  var purchaseData = null;\n\n  while (i >= 0) {\n    if (dataLayer[i].event === 'purchase') {\n      purchaseData = dataLayer[i];\n      break;  // 見つかったらループを抜ける\n    }\n    i--;\n  }\n\n  if (purchaseData) {\n    console.log('購入データ発見:', purchaseData);\n  }\n</script>\n```\n\n### 無限ループの防止\n\n`while` を使う際は必ず終了条件を確保してください。\n\n```javascript\n// 危険：無限ループになる可能性\nwhile (!window.someLib) {\n  // window.someLibが永遠にundefinedだと無限ループ\n}\n\n// 安全：最大試行回数で強制終了\nvar attempts = 0;\nvar maxAttempts = 100;\nwhile (!window.someLib && attempts < maxAttempts) {\n  attempts++;\n}\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "## 練習：クリック要素からカテゴリデータを取得する\n\nクリックされたDOM要素（`{{Click Element}}`）から `data-category` 属性を持つ親要素を探し、その値をGA4イベントに送信するコードを完成させてください。\n\n**処理の流れ**\n1. クリックされた要素から開始\n2. `data-category` 属性があれば取得してループを終了\n3. なければ親要素に移動して繰り返す\n4. 最大10階層まで探索し、見つからなければ `'unknown'` を使う",
+        "starterCode": "<script>\n  window.dataLayer = window.dataLayer || [];\n  var el = {{Click Element}};\n  var category = null;\n  var depth = 0;\n\n  ______ (el && depth < 10) {\n    if (el.getAttribute('data-category')) {\n      category = el.______('data-category');\n      break;\n    }\n    el = el.______;  // 親要素に移動\n    ______++;        // 深さカウンターをインクリメント\n  }\n\n  window.dataLayer.push({\n    'event': 'category_click',\n    'item_category': category ______ 'unknown'\n  });\n</script>",
+        "hints": [
+          "条件がtrueの間繰り返すには `while` キーワードを使います",
+          "DOM要素の属性値を取得するメソッドは `getAttribute('属性名')` です",
+          "親要素に移動するプロパティは `parentElement` です。カテゴリが見つからなかった場合の値は `||` を使ったデフォルト値として設定します"
+        ],
+        "answer": "<script>\n  window.dataLayer = window.dataLayer || [];\n  var el = {{Click Element}};\n  var category = null;\n  var depth = 0;\n\n  while (el && depth < 10) {\n    if (el.getAttribute('data-category')) {\n      category = el.getAttribute('data-category');\n      break;\n    }\n    el = el.parentElement;  // 親要素に移動\n    depth++;                // 深さカウンターをインクリメント\n  }\n\n  window.dataLayer.push({\n    'event': 'category_click',\n    'item_category': category || 'unknown'\n  });\n</script>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "question": "`while` ループと `for` ループの使い分けとして最も適切な説明はどれですか？",
+            "options": [
+              "whileの方が高速なので常にwhileを使うべき",
+              "forは繰り返し回数が事前に決まっている場合に、whileは条件が満たされるまで繰り返す場合に向いている",
+              "whileはES6の機能なのでGTMでは使えない",
+              "forとwhileは完全に同じで使い分けは不要"
+            ],
+            "correct": 1,
+            "explanation": "`for` ループは配列の全要素処理のように繰り返し回数が明確な場合に読みやすいコードになります。`while` ループは「特定のオブジェクトが初期化されるまで」「見つかるまで探索する」など終了条件が実行時に決まる場合に適しています。"
+          },
+          {
+            "question": "`do...while` ループの特徴として正しいのはどれですか？",
+            "options": [
+              "条件がfalseの場合は一度も実行されない",
+              "条件に関わらず最低1回は実行される",
+              "breakなしには抜けられない特殊なループ",
+              "非同期処理専用のループ構文"
+            ],
+            "correct": 1,
+            "explanation": "`do...while` は処理ブロックを先に実行し、その後に条件をチェックします。そのため条件が最初から `false` であっても、処理は必ず1回実行されます。これは「初回実行が保証されている場合」に適しています。"
+          },
+          {
+            "question": "GTMカスタムHTMLタグでDOM要素を親方向に辿る処理をwhileで書く際、無限ループを防ぐ最善の方法はどれですか？",
+            "options": [
+              "try-catchで囲む",
+              "最大探索深度のカウンターを設けて上限に達したらループを終了する",
+              "while(true)にしてbreakのみで抜ける",
+              "setTimeoutで時間制限をかける"
+            ],
+            "correct": 1,
+            "explanation": "DOM探索のようなwhileループでは、対象の属性が見つからない場合にdomツリーの頂点（document）まで到達してしまう可能性があります。`depth < maxDepth` のようなカウンター条件を加えることで、見つからない場合の無限ループを確実に防げます。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "## まとめ：whileループと条件付きループ処理\n\n✅ `while (条件)` は条件がtrueの間繰り返し実行される\n\n✅ `do...while` は最低1回実行されてから条件をチェックする\n\n✅ 繰り返し回数が不明な場合（DOM探索・リトライ処理）に `while` が有効\n\n✅ 必ずカウンター変数などで最大繰り返し数を制限し無限ループを防ぐ\n\n✅ GTMでの親要素探索・dataLayer履歴検索はwhileの典型的な活用例\n\n**次のモジュールでは** `for...of` ループで配列をシンプルに走査する方法を学びます。",
+        "diagram": false
+      }
+    }
+  ]
+}

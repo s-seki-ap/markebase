@@ -1,0 +1,67 @@
+{
+  "id": "css--2-7",
+  "moduleId": "2-7",
+  "categoryId": "css",
+  "title": "CSS継承とデフォルトスタイル（User Agent Stylesheet）",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# なぜ何もCSSを書いていないのにスタイルが付いているのか\n\nHTMLを書いてブラウザで開くと、CSSを一行も書いていないのに見出しが大きくなり、リンクが青色で下線付きになります。これは「ブラウザのデフォルトスタイル」のおかげです。\n\n## マーケターがこの仕組みを知るべき理由\n\n**1. ブラウザ間のデザイン差異の理解**\nChrome、Safari、Firefoxでは微妙にデフォルトスタイルが異なります。クライアントから「Safariだけ見た目が違う」と指摘されたとき、原因がデフォルトスタイルの違いだと理解できます。\n\n**2. CSSリセットの必要性の理解**\nなぜ多くのサイトがリセットCSSを使うのか、その理由が分かります。\n\n**3. DevToolsでの効率的なデバッグ**\n「自分が書いたCSS」と「ブラウザが勝手に付けたCSS」を区別できるようになります。\n\n## このモジュールで得られること\n\nCSS継承の仕組みとUser Agent Stylesheetの概念を理解し、意図しないスタイルの原因を特定できるようになります。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# CSS継承とUser Agent Stylesheet\n\n## User Agent Stylesheet（ブラウザデフォルト）\n\nブラウザには標準の「デフォルトCSS」が組み込まれています。これを **User Agent Stylesheet** と呼びます。\n\n```css\n/* ブラウザのデフォルト（例） */\nh1 {\n  display: block;\n  font-size: 2em;\n  margin-top: 0.67em;\n  margin-bottom: 0.67em;\n  font-weight: bold;\n}\n\na {\n  color: blue;\n  text-decoration: underline;\n}\n\nul, ol {\n  padding-left: 40px;\n}\n```\n\nDevToolsのStylesパネルで「user agent stylesheet」と表示されるスタイルがこれです。\n\n## CSS継承（Inheritance）\n\n一部のCSSプロパティは、親要素から子要素に自動的に引き継がれます。\n\n```html\n<div style=\"color: #333; font-family: 'Noto Sans JP';\">\n  <h1>この見出しも#333でNoto Sans JP</h1>\n  <p>この段落も#333でNoto Sans JP</p>\n</div>\n```\n\n親の `<div>` に設定した `color` と `font-family` が、子の `<h1>` と `<p>` に自動で継承されます。\n\n## 継承されるプロパティ・されないプロパティ\n\n| 継承される | 継承されない |\n|-----------|-------------|\n| `color` | `background-color` |\n| `font-family` | `border` |\n| `font-size` | `padding` |\n| `font-weight` | `margin` |\n| `line-height` | `width` / `height` |\n| `text-align` | `display` |\n| `letter-spacing` | `position` |\n| `visibility` | `box-shadow` |\n\n**覚え方**: テキストに関するプロパティは継承される。ボックスモデル（サイズ・余白・枠線）に関するプロパティは継承されない。\n\n## 継承を活用した効率的なCSS\n\n```css\n/* body に書けばサイト全体に継承される */\nbody {\n  color: #333;\n  font-family: 'Noto Sans JP', sans-serif;\n  font-size: 16px;\n  line-height: 1.6;\n}\n\n/* 個別に変えたい要素だけ上書き */\nh1 {\n  color: #1a73e8;\n  font-size: 2rem;\n}\n```\n\n## inherit・initial・unsetキーワード\n\n```css\n/* 親の値を明示的に継承 */\n.child {\n  color: inherit;\n}\n\n/* ブラウザデフォルトに戻す */\n.reset {\n  color: initial;\n}\n\n/* 継承プロパティはinherit、非継承プロパティはinitialとして動作 */\n.clean {\n  color: unset;\n}\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: 継承を活用してLPをスタイリング\n\nCSS継承を活用して、最小限のCSSでLP全体のスタイルを統一しましょう。\n\n## 課題\n\n1. `body` に `color: #333`、`font-family: 'Noto Sans JP', sans-serif`、`line-height: 1.8` を設定して全体に継承させる\n2. `.hero-title` だけ `color: #1a73e8` で上書きする\n3. `.cta-button` に `background-color: #ea4335` と `color: white` を設定する（background-colorは継承されないので明示指定が必要）",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>継承の活用</title>\n  <style>\n    /* ① body にサイト全体の基本スタイルを設定 */\n    \n\n    /* ② .hero-title の文字色を上書き */\n    \n\n    /* ③ .cta-button の背景色と文字色を設定 */\n    \n  </style>\n</head>\n<body>\n  <header>\n    <h1 class=\"hero-title\">データで変わるマーケティング</h1>\n    <p>GA4とBigQueryを活用した次世代の分析基盤</p>\n  </header>\n  <main>\n    <h2>サービスの特徴</h2>\n    <p>リアルタイムデータ分析で、意思決定のスピードを10倍に。</p>\n    <button class=\"cta-button\">無料で始める</button>\n  </main>\n</body>\n</html>",
+        "hints": [
+          "bodyに設定したcolor、font-family、line-heightは子要素全てに継承されます。",
+          "個別の要素で異なる色にしたい場合は、その要素のセレクタでcolorを上書きします。",
+          "background-colorは継承されないプロパティなので、必要な要素に直接指定します。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>継承の活用</title>\n  <style>\n    body {\n      color: #333;\n      font-family: 'Noto Sans JP', sans-serif;\n      line-height: 1.8;\n    }\n\n    .hero-title {\n      color: #1a73e8;\n    }\n\n    .cta-button {\n      background-color: #ea4335;\n      color: white;\n    }\n  </style>\n</head>\n<body>\n  <header>\n    <h1 class=\"hero-title\">データで変わるマーケティング</h1>\n    <p>GA4とBigQueryを活用した次世代の分析基盤</p>\n  </header>\n  <main>\n    <h2>サービスの特徴</h2>\n    <p>リアルタイムデータ分析で、意思決定のスピードを10倍に。</p>\n    <button class=\"cta-button\">無料で始める</button>\n  </main>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "CSSで継承されるプロパティはどれですか？",
+            "options": ["color", "background-color", "border", "padding"],
+            "correct": 0,
+            "explanation": "`color`（文字色）は継承されるプロパティです。親要素に設定すると子要素にも自動で適用されます。`background-color`、`border`、`padding`は継承されません。"
+          },
+          {
+            "q": "DevToolsで「user agent stylesheet」と表示されるスタイルは何ですか？",
+            "options": ["ブラウザが持つデフォルトのCSS", "開発者が書いたCSS", "サーバーから配信されるCSS", "JavaScriptで動的に追加されたCSS"],
+            "correct": 0,
+            "explanation": "「user agent stylesheet」はブラウザに組み込まれたデフォルトのCSSです。見出しが太字になったり、リンクが青色になるのはこのスタイルのおかげです。"
+          },
+          {
+            "q": "サイト全体のフォントと文字色を統一する最も効率的な方法はどれですか？",
+            "options": ["bodyに設定してCSS継承を利用する", "全ての要素に個別にCSSを書く", "JavaScriptで全要素のスタイルを変更する", "HTMLの各タグにstyle属性を書く"],
+            "correct": 0,
+            "explanation": "`body`に`font-family`と`color`を設定すれば、CSS継承により全ての子要素に自動で適用されます。個別の要素だけ上書きすれば効率的です。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール2-7 完了！\n\nお疲れ様でした。このモジュールで学んだことを振り返りましょう。\n\n## 習得したスキル\n\n✅ **User Agent Stylesheet**（ブラウザデフォルトCSS）の存在を理解した\n✅ **CSS継承の仕組み**（親から子への自動引き継ぎ）を習得した\n✅ **継承されるプロパティ・されないプロパティ**の区別ができるようになった\n✅ **bodyへの設定で効率的にスタイルを統一**する方法を学んだ\n\n## 次のステップ\n\n次のモジュール **「2-8: CSS値の4つの概念」** では、初期値・計算値・使用値・実際値という値の解決プロセスを学びます。\n\n> 💡 **実務チャレンジ**: DevToolsで任意のページを開き、Stylesパネルで「user agent stylesheet」のセクションを確認してみましょう。ブラウザがどんなデフォルトスタイルを適用しているか観察できます。",
+        "diagram": false
+      }
+    }
+  ]
+}

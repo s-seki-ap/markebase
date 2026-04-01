@@ -1,0 +1,82 @@
+{
+  "id": "app-marketing--8-13",
+  "moduleId": "8-13",
+  "categoryId": "app-marketing",
+  "title": "GA4とFirebaseの関係と統合設定",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# なぜ「統合」が必要なのか\n\nGA4はWebとアプリを一元管理できる設計になっています。しかし何もしなければWebのデータとアプリのデータは別々のプロパティに入ります。これを**1つのGA4プロパティ**に統合することで、Webとアプリをまたいだユーザーの行動を追跡できます。\n\n## 統合のメリット\n\n- **クロスプラットフォーム分析**: Webで商品を見て、アプリで購入するユーザーを1人として計測\n- **広告最適化**: WebとアプリのコンバージョンをまとめてGoogle広告に送る\n- **BigQueryで統合データ分析**: Web・アプリのイベントが同じBQテーブルに入る\n\n## 2つの統合パターン\n\n1. **新規**: Firebaseプロジェクトを作成し、そこにGA4プロパティを紐づける\n2. **既存GA4がある場合**: GA4プロパティの管理画面でアプリデータストリームを追加し、Firebaseプロジェクトとリンクする",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# GA4とFirebaseの統合手順\n\n## パターン1: Firebaseプロジェクトから始める場合\n\n```\n手順:\n1. Firebase Console（console.firebase.google.com）にアクセス\n2. 「プロジェクトを追加」でFirebaseプロジェクト作成\n3. Google Analyticsを有効にする（設定画面で選択）\n4. 新しいGA4プロパティが自動作成される\n5. iOS / Android アプリを追加\n6. SDKをアプリに組み込む（8-16/8-17で学習）\n```\n\n## パターン2: 既存GA4プロパティにアプリを追加する場合\n\n```\n手順:\n1. GA4管理画面 → 「データストリーム」→「ストリームを追加」\n2. iOS または Android を選択\n3. バンドルID（iOS）またはパッケージ名（Android）を入力\n4. 作成されたgoogle-services.json / GoogleService-Info.plist をダウンロード\n5. Firebaseプロジェクトとのリンク設定（任意）\n```\n\n## 統合後に確認すること\n\n| 確認項目 | 確認場所 |\n|---|---|\n| アプリデータストリームが追加されているか | GA4管理 → データストリーム |\n| アプリのイベントが届いているか | GA4リアルタイムレポート |\n| Firebaseとのリンク状態 | Firebase Console → Analytics連携 |\n| BigQueryエクスポートの設定 | Firebase Console → プロジェクト設定 → 統合タブ |\n\n## よくある設定ミスと対処\n\n```\n問題1: GA4にアプリのデータが届かない\n→ SDKの初期化コードにgoogle-services.jsonが正しく配置されているか確認\n\n問題2: WebとアプリでユーザーIDが紐づかない\n→ ログインユーザーに対してfirebase.analytics().setUserId() の実装が必要\n\n問題3: FirebaseのイベントがGA4に表示されない\n→ データ反映には最大24時間かかる。DebugViewでリアルタイム確認をすること\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: 統合設定チェックリストを実装する\n\nGA4とFirebaseの統合設定が完了しているかを確認するチェックリストをJavaScriptで実装してください。\n\n## 課題\n\n`checkIntegration()` 関数を実装して、各設定項目のチェック結果とスコアを返してください。",
+        "starterCode": "// 統合設定の状態（実際の設定確認では各項目をAPIや目視で確認する）\nconst integrationStatus = {\n  firebaseProjectCreated: true,\n  googleAnalyticsEnabled: true,\n  appStreamAdded: true,\n  sdkInstalled: true,\n  googleServicesFileAdded: true,\n  bigqueryExportEnabled: false,  // まだ設定していない\n  userIdImplemented: false       // まだ実装していない\n};\n\n// 統合チェック関数\n// 各項目のチェック結果とスコア（完了数/全項目数）を返す\nfunction checkIntegration(status) {\n  const checkItems = [\n    { key: 'firebaseProjectCreated', label: 'Firebaseプロジェクト作成' },\n    { key: 'googleAnalyticsEnabled', label: 'Google Analytics有効化' },\n    { key: 'appStreamAdded', label: 'アプリデータストリーム追加' },\n    { key: 'sdkInstalled', label: 'Firebase SDK組み込み' },\n    { key: 'googleServicesFileAdded', label: '設定ファイル（google-services）追加' },\n    { key: 'bigqueryExportEnabled', label: 'BigQueryエクスポート設定' },\n    { key: 'userIdImplemented', label: 'ユーザーID実装' }\n  ];\n  \n  // 各項目の結果を配列で返してください\n  // 形式: [{ label, done: true/false }]\n  const results = checkItems.map(item => ({\n    label: item.label,\n    done: false  // status[item.key] を使って実装してください\n  }));\n  \n  // 完了数を計算してください\n  const completedCount = 0;  // results.filter(r => r.done).length で計算\n  \n  return {\n    results,\n    score: `${completedCount} / ${checkItems.length}`,\n    isReady: completedCount >= 5  // 5項目以上でOKとする\n  };\n}\n\n// 結果出力（変更不要）\nconst check = checkIntegration(integrationStatus);\nconsole.log('統合設定スコア:', check.score);\nconsole.log('計測開始可能:', check.isReady ? 'はい' : 'いいえ（要確認）');\ncheck.results.forEach(r => {\n  console.log(`  ${r.done ? '✅' : '⬜'} ${r.label}`);\n});",
+        "hints": [
+          "done: status[item.key] で各statusの値をマッピングできます。",
+          "completedCount = results.filter(r => r.done).length で完了数を計算します。",
+          "isReadyの判定はすでに書かれているので、completedCountを正しく計算するだけです。"
+        ],
+        "answer": "const integrationStatus = {\n  firebaseProjectCreated: true,\n  googleAnalyticsEnabled: true,\n  appStreamAdded: true,\n  sdkInstalled: true,\n  googleServicesFileAdded: true,\n  bigqueryExportEnabled: false,\n  userIdImplemented: false\n};\n\nfunction checkIntegration(status) {\n  const checkItems = [\n    { key: 'firebaseProjectCreated', label: 'Firebaseプロジェクト作成' },\n    { key: 'googleAnalyticsEnabled', label: 'Google Analytics有効化' },\n    { key: 'appStreamAdded', label: 'アプリデータストリーム追加' },\n    { key: 'sdkInstalled', label: 'Firebase SDK組み込み' },\n    { key: 'googleServicesFileAdded', label: '設定ファイル（google-services）追加' },\n    { key: 'bigqueryExportEnabled', label: 'BigQueryエクスポート設定' },\n    { key: 'userIdImplemented', label: 'ユーザーID実装' }\n  ];\n  \n  const results = checkItems.map(item => ({\n    label: item.label,\n    done: status[item.key]\n  }));\n  \n  const completedCount = results.filter(r => r.done).length;\n  \n  return {\n    results,\n    score: `${completedCount} / ${checkItems.length}`,\n    isReady: completedCount >= 5\n  };\n}\n\nconst check = checkIntegration(integrationStatus);\nconsole.log('統合設定スコア:', check.score);\nconsole.log('計測開始可能:', check.isReady ? 'はい' : 'いいえ（要確認）');\ncheck.results.forEach(r => {\n  console.log(`  ${r.done ? '✅' : '⬜'} ${r.label}`);\n});"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "FirebaseプロジェクトとGA4の統合において `google-services.json` ファイルの役割はどれですか？",
+            "options": [
+              "プッシュ通知の設定情報を含むファイル",
+              "Firebaseプロジェクト設定情報を含み、AndroidアプリのSDK初期化に使われるファイル",
+              "BigQueryのスキーマ定義ファイル",
+              "iOSアプリ専用の設定ファイル"
+            ],
+            "correct": 1,
+            "explanation": "`google-services.json` はFirebaseプロジェクトのID・APIキー等の設定情報を含むAndroid用ファイルです。iOSでは `GoogleService-Info.plist` が対応します。これをアプリのプロジェクトに配置することでSDKが正しいプロジェクトに接続されます。"
+          },
+          {
+            "q": "WebとアプリのユーザーをGA4で同一人物として紐付けるために必要な実装はどれですか？",
+            "options": [
+              "同じIPアドレスで判定するため特別な実装は不要",
+              "firebase.analytics().setUserId() でログインユーザーに同じIDを設定する",
+              "CookieをアプリのWebViewで共有する",
+              "GA4のクロスデバイスレポートを有効にするだけ"
+            ],
+            "correct": 1,
+            "explanation": "WebとアプリでユーザーIDを紐付けるには、ログイン後に `firebase.analytics().setUserId()` でWebとアプリ共通のIDを設定する必要があります。これにより「Webで見てアプリで購入」のようなクロスプラットフォームの行動を同一ユーザーとして分析できます。"
+          },
+          {
+            "q": "Firebase ConsoleでGA4を有効にした場合、イベントデータがGA4に反映されるまでの時間の目安はどれですか？",
+            "options": [
+              "即時（リアルタイム）",
+              "約1時間",
+              "最大24時間",
+              "最大72時間"
+            ],
+            "correct": 2,
+            "explanation": "GA4のレポートへのデータ反映は最大24時間かかります。ただしDebugViewやリアルタイムレポートは遅延なく確認できます。実装直後は「DebugViewでリアルタイム確認→翌日以降に通常レポートで確認」という流れが標準です。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール8-13 完了！\n\nGA4とFirebaseの統合設定の考え方を習得しました。\n\n## 習得したスキル\n\n✅ **統合の2パターン**（Firebaseから始める / 既存GA4にアプリを追加する）を説明できる\n✅ **`google-services.json` と `GoogleService-Info.plist`** の役割を理解した\n✅ **統合後の確認項目**（データストリーム・リアルタイム・BQエクスポート）を把握した\n✅ **クロスプラットフォーム計測**にユーザーIDの統一が必要だと理解した\n\n## 次のステップ\n\n次のモジュール **「8-14: Firebase Consoleの基本操作」** では、Firebase ConsoleのUIを実際に操作する際のポイントを学びます。",
+        "diagram": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "id": "ga4--5-18",
+  "moduleId": "5-18",
+  "categoryId": "ga4",
+  "title": "DebugViewを使ったリアルタイム計測確認",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 「送ったつもり」を「確実に届いた」に変える\n\nGA4の実装で最もリスクが高いのは、「データが正しく送信されているかどうかわからないまま本番公開する」ことです。\n\n## 実際に起きる問題\n\n- GTMでタグを設定して公開したが、イベントが発火していなかった\n- パラメータ名を間違えてデータが記録されていなかった\n- 二重計測が発生してコンバージョン数が2倍になっていた\n- DebugViewで確認したらecommerceデータが空だった\n\n## GA4のデバッグ手段\n\n```\n3つのデバッグ方法:\n\n1. GA4 DebugView（管理画面）\n   → リアルタイムで特定デバイスのイベントを確認\n   → GTMプレビューと組み合わせて使う\n\n2. GA4リアルタイムレポート\n   → 過去30分のイベント全体を確認\n   → デバッグには情報が少なすぎる場合も\n\n3. ChromeデベロッパーツールのNetworkタブ\n   → GA4への実際のHTTPリクエストを確認\n   → 最も詳細なデバッグが可能\n```\n\nこのモジュールではDebugViewの使い方を中心に、効率的な計測確認の手順を習得します。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# DebugViewの設定と使い方\n\n## 1. DebugViewを有効化する方法\n\n**方法A: GTMプレビューモード（推奨）**\n\n```\n手順:\n1. GTMのプレビューモードを起動\n2. プレビュー対象のブラウザでサイトにアクセス\n3. GA4管理 → DebugView を開く\n4. 自分のデバイスがリストに表示される\n```\n\n**方法B: Chrome拡張機能**\n\n```\nGoogle Analytics Debugger 拡張機能をインストール\n→ 拡張機能をONにするとDebugモードが有効化\n→ DebugViewに自分のデバイスが表示される\n```\n\n**方法C: URLパラメータ**\n\n```\nURLに ?_ga4debug=1 を追加\n（一部の実装でのみ有効）\n```\n\n## 2. DebugViewの読み方\n\n```\nDebugView画面の構成:\n\n┌─────────────────────────────────────────┐\n│ ← 過去        イベントタイムライン        →直近 │\n│                                         │\n│  ●session_start                        │\n│  ●page_view                            │\n│    └ page_title: トップページ            │\n│    └ page_location: https://...         │\n│  ●click_button_cta  ← クリックで詳細展開│\n│    └ button_text: 無料で始める           │\n│    └ page_path: /                       │\n│  ●purchase                              │\n│    └ transaction_id: T-001              │\n│    └ value: 29800                       │\n│    └ currency: JPY                      │\n└─────────────────────────────────────────┘\n```\n\n## 3. 確認チェックリスト\n\n```\n実装後に確認すべき項目:\n\n[ ] イベントが発火しているか（タイムラインに表示されるか）\n[ ] イベント名が正しいか（スペルミスはないか）\n[ ] 必須パラメータがすべて含まれているか\n[ ] パラメータ値が正しい型か（数値なのに文字列になっていないか）\n[ ] 二重発火していないか（同じイベントが連続して2回ない）\n[ ] ecommerceデータが空でないか\n[ ] ユーザープロパティが設定されているか\n```\n\n## 4. Networkタブでの詳細確認\n\n```\nChromeデベロッパーツールでのGA4リクエスト確認:\n\n1. F12 → Network タブ\n2. フィルタに \"collect\" と入力\n3. GA4に送信されるリクエストが表示される\n4. Payload タブでイベントデータを確認\n\n送信先URL: https://www.google-analytics.com/g/collect\n\nリクエストPayloadの例:\n  en=purchase          ← event_name\n  ep.transaction_id=T-001  ← event_params\n  ep.value=29800\n  up.member_rank=gold  ← user_properties\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: DebugView確認シミュレーション\n\nDebugViewに表示されたデータから、実装の問題点を特定します。\n\n## 課題\n\n以下はDebugViewで確認したpurchaseイベントのデータです。**3つの問題点**を指摘し、修正したdataLayer.push()コードを書いてください。\n\n```javascript\n// DebugViewで確認されたデータ\n// event_name: purchase\n// event_params:\n//   transaction_id: undefined\n//   value: \"29800\"       ← 文字列で記録されている\n//   currency: \"jpy\"      ← 小文字\n//   items: []            ← 空配列\n```\n\n## 元のコード（バグあり）\n\n```javascript\nconst orderId = document.getElementById('order-id'); // テキスト取得を忘れている\n\ndataLayer.push({\n  event: 'purchase',\n  ecommerce: {\n    transaction_id: orderId, // DOM要素がそのまま入っている\n    value: '29800',          // 文字列になっている\n    currency: 'jpy',         // 小文字\n    items: []                // 商品データが空\n  }\n});\n```",
+        "starterCode": "// 問題のあるコードを修正してください\n\n// ページのHTMLに以下の要素があると想定:\n// <span id=\"order-id\">ORD-2024-001</span>\n// <span id=\"order-total\">29800</span>\n\nconst orderId = document.getElementById('order-id'); // Bug: .textContent を忘れている\n\ndataLayer.push({ ecommerce: null }); // クリア（これはOK）\n\ndataLayer.push({\n  event: 'purchase',\n  ecommerce: {\n    transaction_id: orderId,    // Bug1: DOMエレメント\n    value: '29800',             // Bug2: 文字列\n    currency: 'jpy',            // Bug3: 小文字\n    items: []                   // Bug4: 商品なし\n  }\n});",
+        "hints": [
+          "Bug1: `orderId.textContent` または `document.getElementById('order-id').textContent` で文字列を取得します。",
+          "Bug2: `value` は数値型で設定します。`Number('29800')` または `29800` のように数値にします。",
+          "Bug3: currencyは大文字の `'JPY'` が正しい通貨コードです。Bug4: items配列には最低1件の商品オブジェクトを入れます。"
+        ],
+        "answer": "// 修正済みコード\n\n// DOM要素から正しく値を取得\nconst orderId = document.getElementById('order-id').textContent;\nconst orderTotal = Number(document.getElementById('order-total').textContent);\n\ndataLayer.push({ ecommerce: null }); // クリア\n\ndataLayer.push({\n  event: 'purchase',\n  ecommerce: {\n    transaction_id: orderId,    // Fix1: .textContentで文字列を取得\n    value: orderTotal,          // Fix2: Number()で数値型に変換\n    currency: 'JPY',            // Fix3: 大文字のISOコード\n    items: [                    // Fix4: 商品データを正しく設定\n      {\n        item_id: 'SKU-001',\n        item_name: 'サンプル商品',\n        price: orderTotal,\n        quantity: 1\n      }\n    ]\n  }\n});"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "GA4のDebugViewに自分のデバイスを表示させるための最も一般的な方法はどれですか？",
+            "options": [
+              "GA4管理画面でIPアドレスを手動登録する",
+              "GTMのプレビューモードを起動してサイトにアクセスする",
+              "GA4のリアルタイムレポートに24時間以内にアクセスする",
+              "Googleアカウントにログインしているブラウザからサイトにアクセスする"
+            ],
+            "correct": 1,
+            "explanation": "GTMのプレビューモードを起動してサイトにアクセスすると、そのデバイスのGA4データがDebugViewに表示されます。GTMプレビューがGA4タグにデバッグモードのパラメータを自動付与するためです。Google Analytics Debugger拡張機能を使う方法もあります。"
+          },
+          {
+            "q": "DebugViewでpurchaseイベントのitemパラメータが確認できない原因として最も可能性が高いのはどれですか？",
+            "options": [
+              "GA4の1イベントあたりのパラメータ上限（25個）を超えた",
+              "ecommerceオブジェクトのitemsが空配列または設定されていない",
+              "purchaseイベントはDebugViewで表示されない仕様",
+              "itemsパラメータはBigQueryエクスポート後にのみ確認できる"
+            ],
+            "correct": 1,
+            "explanation": "itemsが空配列（`[]`）だったり、ecommerceオブジェクト自体が正しく設定されていない場合、DebugViewでitem情報が表示されません。dataLayer.pushでecommerceをクリアしてから正しいitemsを持つオブジェクトを送信しているかを確認します。"
+          },
+          {
+            "q": "ChromeデベロッパーツールのNetworkタブでGA4の送信リクエストをフィルタリングするとき、入力すべき文字列はどれですか？",
+            "options": [
+              "ga4",
+              "analytics",
+              "collect",
+              "gtag"
+            ],
+            "correct": 2,
+            "explanation": "GA4はデータを `https://www.google-analytics.com/g/collect` エンドポイントに送信します。NetworkタブのフィルタにはURLの一部である `collect` を入力することで、GA4のリクエストを絞り込めます。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール5-18 完了！\n\nDebugViewを使ったリアルタイム計測確認の方法を習得しました。\n\n## 習得したスキル\n\n✅ **DebugViewの有効化方法**（GTMプレビュー / 拡張機能）を実行できる\n✅ **DebugViewの読み方**（イベントタイムライン・パラメータ確認）を理解した\n✅ **7項目の確認チェックリスト**を使って実装検証ができる\n✅ **Networkタブ**でGA4リクエストのペイロードを直接確認できる\n✅ **よくある実装バグ**（型の誤り・DOM要素の取り忘れ）を特定できる\n\n## 本番公開前の必須手順\n\n1. GTMプレビューモードでDebugViewを有効化\n2. 全コンバージョンイベントを実際に操作して確認\n3. パラメータ値・型・二重発火を全項目チェック\n4. Networkタブで実際のリクエストを目視確認\n5. 問題なければGTM公開\n\n## 次のステップ\n\n次のモジュール **「5-19: イベント計測設計書の作成」** では、実装の全体像をドキュメント化する設計書の作り方を学びます。",
+        "diagram": false
+      }
+    }
+  ]
+}

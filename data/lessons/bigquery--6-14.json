@@ -1,0 +1,82 @@
+{
+  "id": "bigquery--6-14",
+  "moduleId": "6-14",
+  "categoryId": "bigquery",
+  "title": "INNER JOIN：共通キーで2テーブルを結合する",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 複数のテーブルを「つなぐ」技術\n\n現実のデータ分析では、必要な情報が複数のテーブルに分散していることがよくあります。\n\n**例えば**：\n- GA4イベントデータ（`events_*`）：ユーザーの行動記録\n- 会員マスタテーブル（`users`）：ユーザーの属性情報\n- 商品マスタテーブル（`products`）：商品の詳細情報\n\n「購入したユーザーの会員ランク別集計」のような分析には、GA4データと会員マスタを「つなぐ」必要があります。これを実現するのが **JOIN** です。\n\n## INNER JOINとは\n\nINNER JOINは「2つのテーブルに共通して存在するキーを持つ行だけ」を結合します。\n\n```\nテーブルA    テーブルB    INNER JOIN結果\nid=1         id=1         → 含まれる（両方に存在）\nid=2         id=3         → 含まれない（Aにしかない）\nid=4         id=4         → 含まれる（両方に存在）\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# INNER JOINの構文\n\n## 基本構文\n\n```sql\nSELECT\n  テーブル1のエイリアス.列名,\n  テーブル2のエイリアス.列名\nFROM\n  テーブル1 AS エイリアス1\nINNER JOIN\n  テーブル2 AS エイリアス2\n  ON エイリアス1.結合キー = エイリアス2.結合キー\n```\n\n## GA4データと会員マスタを結合する\n\n```sql\n/*\n  GA4購入イベントに会員情報を結合する\n  events.*    : GA4 BigQueryエクスポート（購入イベント）\n  members     : 会員マスタ（user_id, rank, registration_dateなど）\n*/\nSELECT\n  e.event_date,\n  e.user_pseudo_id,\n  m.user_rank,        -- 会員マスタからの情報\n  m.age_group,        -- 会員マスタからの情報\n  e.event_value_in_usd AS purchase_value\nFROM\n  `myproject.analytics_123456789.events_*` AS e\nINNER JOIN\n  `myproject.master.members` AS m\n  ON e.user_pseudo_id = m.user_pseudo_id  -- 共通キーで結合\nWHERE\n  e.event_name = 'purchase'\n  AND e._TABLE_SUFFIX BETWEEN '20240101' AND '20240131'\n```\n\n## INNER JOINで絞り込まれる点に注意\n\n```sql\n-- events.*に存在するuser_pseudo_idが\n-- membersテーブルにも存在する行だけが結果に含まれる\n-- → 非会員ユーザーのイベントは結果から除外される\n\n-- もし非会員も含めたい場合はLEFT JOINを使う（次のモジュール）\n```\n\n## 複数テーブルの結合\n\n```sql\n-- 3テーブルの結合例\nSELECT\n  e.event_date,\n  m.user_rank,\n  p.product_category,\n  SUM(e.event_value_in_usd) AS revenue\nFROM\n  `myproject.analytics_123456789.events_*` AS e\nINNER JOIN\n  `myproject.master.members` AS m\n  ON e.user_pseudo_id = m.user_pseudo_id\nINNER JOIN\n  `myproject.master.products` AS p\n  ON e.item_id = p.product_id\nWHERE\n  e.event_name = 'purchase'\nGROUP BY\n  e.event_date, m.user_rank, p.product_category\n```",
+        "diagram": false
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習：GA4購入データに商品カテゴリを結合する\n\n## 課題\n\nGA4の購入イベントデータ（`events_*`）と商品マスタ（`myproject.master.products`）をINNER JOINで結合し、商品カテゴリ別の売上を集計するSQLを完成させてください。\n\n**テーブル情報**：\n- `events_*`：`user_pseudo_id`, `event_name`, `event_value_in_usd`, `item_id`\n- `products`：`product_id`, `product_name`, `category`, `unit_price`\n\n**取得内容**：\n- 商品カテゴリ（`p.category`）\n- 注文数（`COUNT(*) AS orders`）\n- 売上合計（`SUM(e.event_value_in_usd) AS revenue`）\n\n**並び順**：売上合計の多い順",
+        "starterCode": "-- 商品カテゴリ別売上集計（2024年1月）\n\nSELECT\n  p.category,\n  COUNT(*) AS orders,\n  SUM(e.event_value_in_usd) AS revenue\nFROM\n  `myproject.analytics_123456789.events_*` AS e\n-- productsテーブルをINNER JOINで結合してください\n________ JOIN\n  `myproject.master.products` AS p\n  ON ________ = ________  -- 結合キーを指定\nWHERE\n  e.event_name = 'purchase'\n  AND e._TABLE_SUFFIX BETWEEN '20240101' AND '20240131'\nGROUP BY\n  p.category\nORDER BY\n  revenue DESC",
+        "hints": [
+          "INNER JOINは `INNER JOIN テーブル名 AS エイリアス ON 結合条件` と書きます。",
+          "eventsテーブルのitem_idとproductsテーブルのproduct_idが共通キーです。`ON e.item_id = p.product_id` と書きます。",
+          "INNER JOINでは両方のテーブルにキーが存在する行だけが結果に含まれます。"
+        ],
+        "answer": "-- 商品カテゴリ別売上集計（2024年1月）\n\nSELECT\n  p.category,\n  COUNT(*) AS orders,\n  SUM(e.event_value_in_usd) AS revenue\nFROM\n  `myproject.analytics_123456789.events_*` AS e\nINNER JOIN\n  `myproject.master.products` AS p\n  ON e.item_id = p.product_id\nWHERE\n  e.event_name = 'purchase'\n  AND e._TABLE_SUFFIX BETWEEN '20240101' AND '20240131'\nGROUP BY\n  p.category\nORDER BY\n  revenue DESC"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "INNER JOINの結果に含まれる行はどれですか？",
+            "options": [
+              "左テーブルのすべての行",
+              "右テーブルのすべての行",
+              "両方のテーブルに結合キーが存在する行のみ",
+              "どちらか一方にしか存在しない行のみ"
+            ],
+            "correct": 2,
+            "explanation": "INNER JOINは「両方のテーブルに結合キーが存在する行だけ」を結合します。片方のテーブルにしか存在しないキーの行は結果から除外されます。これがINNER JOINの最大の特徴です。"
+          },
+          {
+            "q": "JOIN時にテーブルエイリアスを使う主な理由はどれですか？",
+            "options": [
+              "JOIN時にはエイリアスが必須であり、省略するとエラーになる",
+              "長いテーブル名を短縮し、同名列が複数テーブルにある際にどのテーブルの列かを明示するため",
+              "エイリアスを使うとクエリの実行速度が上がるから",
+              "エイリアスなしではWHERE句が動作しないから"
+            ],
+            "correct": 1,
+            "explanation": "JOIN時にテーブルエイリアスを使う主な理由は2つです。①長いテーブル名を短縮してSQLを書きやすくする、②複数テーブルに同じ列名（例：`event_date`）がある場合に `e.event_date` のように「どのテーブルの列か」を明示するためです。"
+          },
+          {
+            "q": "ON句の役割として正しい説明はどれですか？",
+            "options": [
+              "JOINするテーブル名を指定する",
+              "2つのテーブルを結合するキー条件（どの列を使って結合するか）を指定する",
+              "JOINした後に適用するWHERE条件を書く",
+              "GROUP BYの前処理として集計条件を指定する"
+            ],
+            "correct": 1,
+            "explanation": "ON句はJOINの条件（結合キー）を指定します。`ON e.user_pseudo_id = m.user_pseudo_id` のように「左テーブルのどの列と右テーブルのどの列が一致したら結合するか」を定義します。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール6-14 完了！\n\nINNER JOINによるテーブル結合をマスターしました。\n\n## 習得したスキル\n\n✅ **INNER JOINの基本構文**（FROM・JOIN・ON）を書ける\n✅ **結合キーの指定**（ON句）を理解した\n✅ **テーブルエイリアス**（AS e, AS m）を活用できる\n✅ **INNER JOINの性質**（共通キーがある行のみ結合）を理解した\n\n## INNER JOINの活用例\n\n- GA4イベント × 会員マスタ → 会員ランク別分析\n- GA4イベント × 商品マスタ → カテゴリ別売上分析\n- GA4イベント × キャンペーンマスタ → キャンペーン効果測定\n\n## 次のステップ\n\n次のモジュール **「6-15: LEFT JOIN」** では、マスタに存在しない行も含めて結合する方法を学びます。INNER JOINとの使い分けが重要です。",
+        "diagram": false
+      }
+    }
+  ]
+}

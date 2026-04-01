@@ -1,0 +1,82 @@
+{
+  "id": "marketing-strategy--10-10",
+  "moduleId": "10-10",
+  "categoryId": "marketing-strategy",
+  "title": "USP：独自の強みと差別化メッセージの設計",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# USP：「なぜあなたから買うのか」への答え\n\n顧客は毎日何十もの広告・メッセージを受け取ります。その中で「これは私のためのものだ」と感じてもらうために必要なのが **USP（Unique Selling Proposition）** です。\n\n## USPとは\n\n**独自の売り（Unique Selling Proposition）**: 競合他社にはない、自社・自社製品だけが提供できる独自の価値・ベネフィット。\n\n## USPが必要な理由\n\n- 競合が多い市場では「何となく良さそう」では選ばれない\n- 顧客は選ぶ理由を探している（選択を正当化したい）\n- 強いUSPがあれば、価格競争に巻き込まれにくくなる\n\n## USPの例\n\n- FedEx（初期）: **「翌日までに届けます。絶対に」**\n- Domino's Pizza（初期）: **「30分以内にお届け、できなければ無料」**\n- M&M's: **「口の中でとける、手の中でとけない」**\n\n共通しているのは「具体的・約束・競合にはない」の3点です。\n\n**あなたへの問い**: 自社・自社サービスのUSPを今すぐ一文で言えますか？",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# USPの設計方法と構成要素\n\n## 強いUSPの3条件\n\n```\n1. Unique（独自性）: 競合が提供していない、または同様に主張していない\n2. Selling（販売力）: 顧客の購買意欲を刺激する\n3. Proposition（約束）: 具体的かつ信頼できる価値の提案\n```\n\n## USP設計の4ステップ\n\n### Step 1: 顧客ニーズの深掘り\n\n顧客が本当に欲しいのは**表面的なニーズの奥にある深層ニーズ**です。\n\n```\n表面ニーズ: 「SNS運用を代行してほしい」\n深層ニーズ: 「SNSで集客し、売上を上げたい」\n根本欲求:   「ビジネスを成長させ、経営を安定させたい」\n```\n\n### Step 2: 競合分析\n\n競合が主張していること・していないことを整理し、**差別化できる空白**を探します。\n\n### Step 3: 自社の強みとのマッチング\n\n「顧客が求めている × 競合が提供していない × 自社が提供できる」の重なりを探します（3C分析のKSFと同じ構造）。\n\n### Step 4: USPの言語化\n\n**USP言語化の公式**:\n\n```\n[ターゲット顧客]のための\n[独自の価値・ベネフィット]を提供します。\n他社と違って[差別化ポイント]だから。\n```\n\n## USPをマーケティングに活用する\n\n| 活用場面 | USPの使い方 |\n|----------|-------------|\n| Webサイトのキャッチコピー | ファーストビューに明確に表示 |\n| 広告コピー | 見出し・説明文に組み込む |\n| 営業トーク | 商談冒頭の自己紹介に使う |\n| 提案書 | 競合比較表で優位性を示す |\n| メールマーケ | 件名・書き出しに反映する |\n\n## USPとブランドメッセージの違い\n\n```\nUSP: 理性に訴える（スペック・実績・約束）\n     → 「30分以内に届けなければ無料」\n\nブランドメッセージ: 感情に訴える（世界観・価値観）\n     → 「Just Do It.」（Nike）\n\n→ 両方を組み合わせて使うのがベスト\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: USP設計シートを作成する\n\n自社（または想定するサービス）のUSPを、4ステップで設計してください。\n\n## 課題\n\n以下のHTMLテンプレートを完成させ、USP設計シートを作成してください。最終的に「USPの一文」を記述できるところまで進めてください。",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>USP設計シート</title>\n  <style>\n    body { font-family: sans-serif; max-width: 750px; margin: 40px auto; padding: 20px; }\n    .step { padding: 20px; margin: 16px 0; border-radius: 8px; }\n    textarea { width: 100%; height: 80px; padding: 8px; border: 1px solid #e2e8f0; border-radius: 4px; resize: vertical; }\n    label { display: block; font-weight: bold; margin: 10px 0 4px; font-size: 0.9rem; }\n    .usp-box { background: #1e293b; color: #fbbf24; font-size: 1.2rem; font-weight: bold; text-align: center; padding: 24px; border-radius: 8px; margin-top: 20px; }\n  </style>\n</head>\n<body>\n  <h1>USP設計シート</h1>\n  <p>対象: <input type=\"text\" placeholder=\"製品・サービス名\" style=\"padding:4px 8px; border:1px solid #ccc; border-radius:4px; width:260px;\"/></p>\n\n  <!-- Step 1〜4のカードをここに作成 -->\n\n  <!-- USP最終一文ボックス -->\n\n</body>\n</html>",
+        "hints": [
+          "Step 1「顧客ニーズの深掘り」には「表面ニーズ→深層ニーズ→根本欲求」の3段階を記述するテキストエリアを用意しましょう。",
+          "Step 3「強みのマッチング」では「顧客が求めている / 競合が提供していない / 自社が提供できる」の3つのテキストエリアを横並びにしましょう。",
+          "最後の「USP一文」ボックスには大きな文字で記述できるtextareaを配置し、背景を濃い色にして目立たせましょう。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>USP設計シート</title>\n  <style>\n    body { font-family: sans-serif; max-width: 760px; margin: 40px auto; padding: 20px; background: #f8fafc; }\n    h1 { color: #1e293b; }\n    .step { background: white; padding: 20px; margin: 16px 0; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }\n    .step-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }\n    .step-number { background: #3b82f6; color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.9rem; flex-shrink: 0; }\n    .step-title { font-size: 1rem; font-weight: bold; color: #1e293b; }\n    textarea { width: 100%; padding: 8px; border: 1px solid #e2e8f0; border-radius: 4px; resize: vertical; font-size: 0.88rem; }\n    label { display: block; font-weight: bold; margin: 10px 0 4px; font-size: 0.84rem; color: #475569; }\n    .needs-flow { display: grid; grid-template-columns: 1fr 20px 1fr 20px 1fr; align-items: center; gap: 4px; }\n    .needs-flow .arrow { text-align: center; color: #94a3b8; font-size: 1.2rem; }\n    .match-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }\n    .match-cell { background: #f1f5f9; border-radius: 6px; padding: 10px; }\n    .match-cell label { color: #64748b; }\n    .usp-final { background: #1e293b; color: white; border-radius: 8px; padding: 24px; margin-top: 20px; }\n    .usp-final h2 { color: #fbbf24; margin-top: 0; }\n    .usp-final textarea { background: transparent; color: #fbbf24; border: 1px solid #475569; font-size: 1.1rem; font-weight: bold; height: 80px; }\n    .usp-preview { background: #fbbf24; color: #1e293b; border-radius: 6px; padding: 16px; margin-top: 12px; font-size: 1rem; font-weight: bold; min-height: 60px; display: flex; align-items: center; justify-content: center; text-align: center; }\n  </style>\n</head>\n<body>\n  <h1>USP設計シート</h1>\n  <p>対象: <input type=\"text\" value=\"中小企業向けデジタルマーケ支援サービス\" style=\"padding:4px 8px; border:1px solid #ccc; border-radius:4px; width:300px;\"/></p>\n\n  <div class=\"step\">\n    <div class=\"step-header\">\n      <div class=\"step-number\">1</div>\n      <div class=\"step-title\">顧客ニーズの深掘り</div>\n    </div>\n    <div class=\"needs-flow\">\n      <div>\n        <label>表面ニーズ</label>\n        <textarea style=\"height:60px;\">SNS運用・デジタルマーケを代行してほしい</textarea>\n      </div>\n      <div class=\"arrow\">→</div>\n      <div>\n        <label>深層ニーズ</label>\n        <textarea style=\"height:60px;\">デジタルで集客・問い合わせを増やして売上を上げたい</textarea>\n      </div>\n      <div class=\"arrow\">→</div>\n      <div>\n        <label>根本欲求</label>\n        <textarea style=\"height:60px;\">ビジネスを安定・成長させ、経営者として安心したい</textarea>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"step\">\n    <div class=\"step-header\">\n      <div class=\"step-number\">2</div>\n      <div class=\"step-title\">競合分析：差別化の空白を探す</div>\n    </div>\n    <label>競合が主張していること（コモディティ化したメッセージ）</label>\n    <textarea>「実績○件」「充実したサポート」「リーズナブルな価格」「SNS・Web・広告に対応」</textarea>\n    <label>競合が主張していないこと（差別化できる空白）</label>\n    <textarea>「データ（GA4/BQ）に基づいた改善提案まで込み」「業種特化の専門知識」「成果を数字で証明するレポート」「担当者固定の長期伴走」</textarea>\n  </div>\n\n  <div class=\"step\">\n    <div class=\"step-header\">\n      <div class=\"step-number\">3</div>\n      <div class=\"step-title\">強みのマッチング（KSF特定）</div>\n    </div>\n    <div class=\"match-grid\">\n      <div class=\"match-cell\">\n        <label>顧客が求めていること</label>\n        <textarea style=\"height:70px;\">成果が数字で見えること。費用対効果が実感できること。専門家に任せて安心できること。</textarea>\n      </div>\n      <div class=\"match-cell\">\n        <label>競合が提供していないこと</label>\n        <textarea style=\"height:70px;\">GA4・BQ活用のデータドリブンな改善提案。業種特化のコンテンツ。担当者が変わらない長期伴走モデル。</textarea>\n      </div>\n      <div class=\"match-cell\">\n        <label>自社が提供できること</label>\n        <textarea style=\"height:70px;\">データ分析基盤（GA4/BQ）を活用した月次改善レポート。IT・製造・小売業種特化の実績。担当者固定の3年平均継続率。</textarea>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"step\">\n    <div class=\"step-header\">\n      <div class=\"step-number\">4</div>\n      <div class=\"step-title\">USPの言語化</div>\n    </div>\n    <label>ドラフト（複数作る）</label>\n    <textarea style=\"height:70px;\">案1: 「データが証明する成果。担当者固定で伴走する、中小企業のためのデジタルマーケ支援。」\n案2: 「GA4・データ分析で成果を可視化。中小企業専門のマーケ伴走サービス。」\n案3: 「広告費ゼロでも集客できる仕組みを、データで作る。」</textarea>\n  </div>\n\n  <div class=\"usp-final\">\n    <h2>決定版 USP</h2>\n    <textarea id=\"uspText\" oninput=\"updatePreview()\" placeholder=\"USPの一文をここに記述\">データで成果を証明し、担当者固定で長期伴走する。中小企業専門のデジタルマーケティング支援。</textarea>\n    <div class=\"usp-preview\" id=\"uspPreview\">データで成果を証明し、担当者固定で長期伴走する。中小企業専門のデジタルマーケティング支援。</div>\n  </div>\n\n  <script>\n    function updatePreview() {\n      document.getElementById('uspPreview').textContent = document.getElementById('uspText').value;\n    }\n  </script>\n\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "USP（Unique Selling Proposition）に含まれる3つの条件として正しいものはどれですか？",
+            "options": [
+              "Unique（独自性）・Selling（販売力）・Proposition（約束）",
+              "Universal（普遍性）・Selling（販売力）・Performance（実績）",
+              "Unique（独自性）・Strategy（戦略）・Promotion（宣伝）",
+              "Universal（普遍性）・Simple（シンプル）・Powerful（力強さ）"
+            ],
+            "correct": 0,
+            "explanation": "USPはUnique（競合にない独自性）・Selling（顧客の購買意欲を刺激する販売力）・Proposition（具体的かつ信頼できる価値の約束）の3要素で構成されます。"
+          },
+          {
+            "q": "顧客ニーズを深掘りする「表面ニーズ→深層ニーズ→根本欲求」の例として正しい順序はどれですか？",
+            "options": [
+              "「売上を上げたい」→「SNS運用を代行してほしい」→「ビジネスを安定させたい」",
+              "「SNS運用を代行してほしい」→「集客・売上を増やしたい」→「ビジネスを安定・成長させたい」",
+              "「ビジネスを安定させたい」→「集客したい」→「SNSをやりたい」",
+              "「SNSが流行っているから」→「競合がやっているから」→「SNS運用代行が欲しい」"
+            ],
+            "correct": 1,
+            "explanation": "正しい深掘りの順序は「表面ニーズ（SNS運用代行）→深層ニーズ（集客・売上増加）→根本欲求（ビジネスの安定・成長）」です。根本欲求に応えるUSPほど強く顧客に刺さります。"
+          },
+          {
+            "q": "USPとブランドメッセージの違いとして正しいのはどれですか？",
+            "options": [
+              "USPは長期的、ブランドメッセージは短期的なものである",
+              "USPは理性に訴える具体的な約束、ブランドメッセージは感情に訴える世界観・価値観である",
+              "USPは企業向け、ブランドメッセージは消費者向けである",
+              "USPとブランドメッセージに違いはない"
+            ],
+            "correct": 1,
+            "explanation": "USPは「30分以内に届けます」のような理性に訴える具体的な約束・スペック・実績です。ブランドメッセージは「Just Do It.」のような感情・世界観に訴えるものです。両方を組み合わせることが効果的です。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール10-10 完了！\n\nUSPの設計と差別化メッセージの言語化方法を習得しました。\n\n## 習得したスキル\n\n✅ **USPの3条件**（Unique・Selling・Proposition）を説明できる\n✅ **顧客ニーズの深掘り**（表面→深層→根本欲求）で真のニーズを特定できる\n✅ **4ステップのUSP設計**を実践できる\n✅ **USPとブランドメッセージの違い**を理解し、使い分けられる\n\n## なぜこれが重要か\n\n強いUSPがあれば、広告・LP・営業トーク・メール・提案書のすべてに一貫性が生まれます。「なぜあなたから買うのか」への明確な答えは、デジタルマーケターが作るすべてのコンテンツの基盤です。\n\n## 次のステップ\n\n次のモジュール **「10-11: ファネル概念の概要と設計」** では、顧客が認知から購買・推奨へと進む「ファネル」の概念と設計方法を学びます。",
+        "diagram": false
+      }
+    }
+  ]
+}

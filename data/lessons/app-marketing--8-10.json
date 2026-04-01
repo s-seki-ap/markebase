@@ -1,0 +1,82 @@
+{
+  "id": "app-marketing--8-10",
+  "moduleId": "8-10",
+  "categoryId": "app-marketing",
+  "title": "アプリグロースの全体フレームワーク",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# グロースとは「全体を見る目」を持つこと\n\nアプリの成長を担うマーケターは、広告だけ・通知だけ・分析だけを見ていては不十分です。グロース（成長）を達成するには、**ユーザーのライフサイクル全体**を俯瞰し、最もインパクトのある改善点を特定して優先的に投資する必要があります。\n\n## グロースフレームワークが必要な理由\n\n施策が失敗する典型パターン:\n- 広告費を増やしてもチャーンが多くてMAUが増えない\n- エンゲージメント施策をしても収益化ができていない\n- 収益化を急いで体験が悪化し、Retentionが落ちた\n\nこれらはフレームワーク（全体像）なしに部分最適化した結果です。\n\n## このモジュールで学ぶこと\n\nアプリグロースで使われる代表的なフレームワーク「AARRR（パイレーツ・メトリクス）」と、実務での優先度判断の方法を習得します。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# AARRRフレームワーク\n\n## 5つのフェーズ\n\n```\nA - Acquisition（獲得）\n  → ユーザーをどう集めるか\n  → KPI: インストール数、CPI、チャンネル別CVR\n\nA - Activation（活性化）\n  → 最初の体験で価値を感じてもらえるか\n  → KPI: Day1 Retention、first_open→コアアクション率\n\nR - Retention（継続）\n  → 繰り返し使ってもらえるか\n  → KPI: Day7/Day30 Retention、DAU/MAU（Stickiness）\n\nR - Revenue（収益化）\n  → ビジネスとして成立しているか\n  → KPI: ARPU、ARPPU、課金転換率、LTV\n\nR - Referral（紹介）\n  → ユーザーが自ら広めてくれるか\n  → KPI: NPS、シェア率、招待送付率\n```\n\n## どのフェーズに集中すべきか\n\n```\n診断チェック:\n\n1. Activationが低い（Day1 Retention < 15%）\n   → 広告費増加より先にオンボーディング改善が最優先\n\n2. Retentionが低い（Day30 < 3%）\n   → エンゲージメント施策・プッシュ通知設計を見直す\n\n3. Revenueが低い（課金転換率 < 1%）\n   → 課金導線・プライシング・バリュープロポジション再設計\n\n4. すべて良好\n   → Acquisitionへの投資拡大・Referral施策の追加\n```\n\n## 実務での優先度判断\n\n| フェーズ | 問題の発見方法 | 典型的な施策 |\n|---|---|---|\n| Acquisition | CPI・チャンネル別CVR分析 | クリエイティブ改善・媒体最適化 |\n| Activation | オンボーディングのファネル分析 | チュートリアル簡略化・初期報酬 |\n| Retention | コホート分析・チャーン分析 | プッシュ通知・ストリーク機能 |\n| Revenue | 課金ファネル分析・ARPU推移 | アップセル・サブスク価格最適化 |\n| Referral | シェア率・招待コンバージョン | 紹介プログラム・SNSシェア機能 |\n\n## グロースの黄金ルール\n\n> **「漏れているバケツを先に直してから、水（広告費）を注ぐ」**\n\nRetentionが悪い状態で広告費を投下しても、獲得したユーザーがすぐ離脱するため無駄になります。まずActivation・Retentionを改善してからAcquisitionに投資するのがグロースの原則です。",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: AARRRのボトルネック診断\n\n以下のアプリデータからAARRRの各フェーズを評価し、最優先改善ポイントを特定してください。\n\n## 課題\n\n`diagnoseAAARR()` 関数を実装して、各フェーズのスコアと最優先課題を返してください。",
+        "starterCode": "// アプリのAARRRデータ\nconst aarrData = {\n  acquisition: {\n    cpi: 1800,            // CPI（円）\n    monthlyInstalls: 8000 // 月間インストール数\n  },\n  activation: {\n    day1Retention: 18     // Day1 Retention（%）\n  },\n  retention: {\n    day30Retention: 4     // Day30 Retention（%）\n  },\n  revenue: {\n    payingRate: 2.5,      // 課金転換率（%）\n    arpu: 950             // 月次ARPU（円）\n  },\n  referral: {\n    shareRate: 3          // シェア率（%）\n  }\n};\n\n// 各フェーズを評価して問題レベルを返す\n// 返り値: { phase: フェーズ名, level: '正常'|'要注意'|'問題あり', reason: 理由 }\nfunction diagnoseAARRR(data) {\n  const issues = [];\n  \n  // Activation診断: Day1 Retention < 20% なら '要注意'、< 15% なら '問題あり'\n  if (data.activation.day1Retention < 15) {\n    issues.push({ phase: 'Activation', level: '問題あり', reason: 'Day1 Retentionが15%未満' });\n  } else if (data.activation.day1Retention < 20) {\n    // ここに '要注意' を追加する処理を書いてください\n  } else {\n    issues.push({ phase: 'Activation', level: '正常', reason: 'Day1 Retentionが良好' });\n  }\n  \n  // Retention診断: Day30 Retention < 3% なら '問題あり'、< 5% なら '要注意'\n  // ここに実装してください\n  \n  // Revenue診断: 課金転換率 < 1% なら '問題あり'、< 3% なら '要注意'\n  // ここに実装してください\n  \n  return issues;\n}\n\n// 結果出力（変更不要）\nconst diagnosis = diagnoseAARRR(aarrData);\ndiagnosis.forEach(d => {\n  console.log(`[${d.phase}] ${d.level}: ${d.reason}`);\n});",
+        "hints": [
+          "Activation の '要注意' 追加: issues.push({ phase: 'Activation', level: '要注意', reason: 'Day1 Retentionが20%未満' })",
+          "Retention診断は data.retention.day30Retention を使って同様に if/else で条件分岐します。",
+          "Revenue診断は data.revenue.payingRate を使って同様のパターンで実装します。"
+        ],
+        "answer": "const aarrData = {\n  acquisition: { cpi: 1800, monthlyInstalls: 8000 },\n  activation: { day1Retention: 18 },\n  retention: { day30Retention: 4 },\n  revenue: { payingRate: 2.5, arpu: 950 },\n  referral: { shareRate: 3 }\n};\n\nfunction diagnoseAARRR(data) {\n  const issues = [];\n  \n  if (data.activation.day1Retention < 15) {\n    issues.push({ phase: 'Activation', level: '問題あり', reason: 'Day1 Retentionが15%未満' });\n  } else if (data.activation.day1Retention < 20) {\n    issues.push({ phase: 'Activation', level: '要注意', reason: 'Day1 Retentionが20%未満' });\n  } else {\n    issues.push({ phase: 'Activation', level: '正常', reason: 'Day1 Retentionが良好' });\n  }\n  \n  if (data.retention.day30Retention < 3) {\n    issues.push({ phase: 'Retention', level: '問題あり', reason: 'Day30 Retentionが3%未満' });\n  } else if (data.retention.day30Retention < 5) {\n    issues.push({ phase: 'Retention', level: '要注意', reason: 'Day30 Retentionが5%未満' });\n  } else {\n    issues.push({ phase: 'Retention', level: '正常', reason: 'Day30 Retentionが良好' });\n  }\n  \n  if (data.revenue.payingRate < 1) {\n    issues.push({ phase: 'Revenue', level: '問題あり', reason: '課金転換率が1%未満' });\n  } else if (data.revenue.payingRate < 3) {\n    issues.push({ phase: 'Revenue', level: '要注意', reason: '課金転換率が3%未満' });\n  } else {\n    issues.push({ phase: 'Revenue', level: '正常', reason: '課金転換率が良好' });\n  }\n  \n  return issues;\n}\n\nconst diagnosis = diagnoseAARRR(aarrData);\ndiagnosis.forEach(d => {\n  console.log(`[${d.phase}] ${d.level}: ${d.reason}`);\n});"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "AARRRフレームワークの「Activation（活性化）」フェーズで主に使われるKPIはどれですか？",
+            "options": [
+              "月間インストール数",
+              "Day30 Retention",
+              "Day1 Retention・初回コアアクション率",
+              "NPS（推奨度スコア）"
+            ],
+            "correct": 2,
+            "explanation": "Activationは「最初の体験で価値を感じてもらえるか」を測るフェーズです。Day1 RetentionやインストールからコアアクションへのCVRが主なKPIです。Day30 RetentionはRetentionフェーズ、NPSはReferralフェーズの指標です。"
+          },
+          {
+            "q": "グロースの原則「漏れているバケツを先に直す」が意味することはどれですか？",
+            "options": [
+              "バグ修正をしてからリリースする",
+              "RetentionやActivationを改善してからAcquisitionに投資する",
+              "収益化を最初に実装する",
+              "競合分析をしてから施策を打つ"
+            ],
+            "correct": 1,
+            "explanation": "Retentionが悪い状態（バケツに穴）で広告費（水）を投下しても、獲得ユーザーがすぐ離脱して無駄になります。まずActivation・Retentionという「穴」を修正してから、Acquisitionへの投資拡大を行うのがグロースの基本原則です。"
+          },
+          {
+            "q": "AARRRの「Referral（紹介）」フェーズを改善する施策として最も適切なものはどれですか？",
+            "options": [
+              "プッシュ通知の送信頻度を増やす",
+              "App Storeのスクリーンショットを改善する",
+              "友人招待ボーナスや紹介プログラムの導入",
+              "課金プランの価格を下げる"
+            ],
+            "correct": 2,
+            "explanation": "Referralはユーザーが自発的にアプリを広めてくれる状態を作るフェーズです。友人招待ボーナス・シェア機能・紹介コードプログラムが代表的な施策です。バイラル係数（1ユーザーが何人を招待するか）がKPIになります。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール8-10 完了！\n\nアプリグロースの全体フレームワークを習得しました。\n\n## 習得したスキル\n\n✅ **AARRRの5フェーズ**（獲得・活性化・継続・収益・紹介）を説明できる\n✅ **各フェーズの診断KPI**と改善施策を対応させて説明できる\n✅ **グロースのボトルネック**を発見して優先順位を判断できる\n✅ **「穴を直してから水を注ぐ」原則**を実務判断に使えるようになった\n\n## カテゴリ前半を振り返って\n\nここまで（8-1〜8-10）でアプリマーケティングの**概念・KPI・グロース思考**を習得しました。後半（8-11〜8-20）では、実際のツールである**Firebase**の使い方を実践的に学びます。",
+        "diagram": false
+      }
+    }
+  ]
+}

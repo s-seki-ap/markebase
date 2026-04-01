@@ -1,0 +1,67 @@
+{
+  "id": "css--2-9",
+  "moduleId": "2-9",
+  "categoryId": "css",
+  "title": "CSSリセット（normalize.css・reset.css）の役割と選び方",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# Chromeで正常でもSafariで崩れる問題の原因\n\n「ChromeではOKなのにSafariやEdgeで見た目が少し違う」という経験はないでしょうか。これはブラウザごとのUser Agent Stylesheetの差異が原因です。CSSリセットはこの問題を解決するための基盤となるCSSです。\n\n## マーケターがリセットCSSを知るべき理由\n\n**1. クロスブラウザ対応のLP品質管理**\nLPがChrome・Safari・Firefoxで同じように見えるかを確認するのはマーケターの重要な仕事です。リセットCSSが正しく適用されているかどうかが、クロスブラウザ対応の基盤です。\n\n**2. WordPressテーマのCSSの理解**\nWordPressの多くのテーマはnormalize.cssやカスタムリセットCSSを含んでいます。「どのテーマを選ぶか」の基準の一つになります。\n\n**3. メールHTMLのリセット**\nメールHTMLではブラウザ以上に各メールクライアントのデフォルトスタイルが異なります。メールテンプレートにリセットスタイルを含めることで、Outlook・Gmail・Apple Mailで統一した表示が可能になります。\n\n**4. GTMで注入するHTML要素のスタイル保護**\nGTMで注入したバナーやポップアップが、サイトのリセットCSSの影響を受けて意図しない見た目になることがあります。原因を理解して対処できます。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# CSSリセットの種類と選び方\n\n## なぜリセットCSSが必要か\n\n各ブラウザのデフォルトスタイルには差異があります：\n\n| プロパティ | Chrome | Firefox | Safari |\n|-----------|--------|---------|--------|\n| body margin | 8px | 8px | 8px |\n| ul padding-left | 40px | 40px | 40px |\n| button font | システムフォント | システムフォント | システムUI |\n| input border | 1px solid #767676 | 2px inset | 1px solid |\n\n## 1. reset.css（Eric Meyer方式）\n\nすべてのデフォルトスタイルを0・noneに初期化します。\n\n```css\n/* Eric Meyer's Reset CSS（一部抜粋） */\nhtml, body, div, span, h1, h2, h3, h4, h5, h6,\np, a, img, ul, ol, li, form, input, button {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline;\n}\n\nbody {\n  line-height: 1;\n}\n\nol, ul {\n  list-style: none;\n}\n```\n\n**特徴**: 完全にゼロから書き直す「白紙」アプローチ\n**メリット**: ブラウザ差異をなくせる、自分のスタイルが確実に反映される\n**デメリット**: アクセシビリティ的なデフォルト（リストの意味など）まで消える\n\n## 2. normalize.css\n\nブラウザ間の差異のみを平準化し、有用なデフォルトは維持します。\n\n```css\n/* normalize.css（一部抜粋） */\n/* ブラウザ間の差異のみを修正 */\nhtml {\n  line-height: 1.15;\n  -webkit-text-size-adjust: 100%;\n}\n\nbody {\n  margin: 0;  /* bodyのmarginだけ消す */\n}\n\nh1 {\n  font-size: 2em;\n  margin: 0.67em 0;\n}\n\nbutton, input, optgroup, select, textarea {\n  font-family: inherit;\n  font-size: 100%;\n  line-height: 1.15;\n  margin: 0;\n}\n```\n\n**特徴**: 「正規化」アプローチ。有用なデフォルトは残す\n**メリット**: アクセシビリティを維持、バグ修正に集中\n**デメリット**: 完全なゼロスタートではない\n\n## 3. modern-normalize / CSS Reset 2023\n\n現代的なブラウザに対応した軽量なリセットです。\n\n```css\n/* 現代的なリセットCSS（一部抜粋） */\n*, *::before, *::after {\n  box-sizing: border-box;  /* 重要: padding込みで幅を計算 */\n}\n\n* {\n  margin: 0;\n}\n\nbody {\n  line-height: 1.5;\n  -webkit-font-smoothing: antialiased;\n}\n\nimg, picture, video, canvas, svg {\n  display: block;\n  max-width: 100%;\n}\n\ninput, button, textarea, select {\n  font: inherit;  /* フォントを継承 */\n}\n```\n\n## box-sizing: border-boxの重要性\n\n```css\n/* デフォルト（content-box）: widthにpaddingとborderが含まれない */\n.box-default {\n  width: 200px;\n  padding: 20px;\n  border: 5px solid black;\n  /* 実際の幅: 200 + 40 + 10 = 250px */\n}\n\n/* border-box: widthにpaddingとborderが含まれる */\n.box-border {\n  box-sizing: border-box;\n  width: 200px;\n  padding: 20px;\n  border: 5px solid black;\n  /* 実際の幅: 200px（widthの値と一致する） */\n}\n```\n\n`box-sizing: border-box` はLP設計で非常に重要です。幅の計算が直感的になります。\n\n## 選び方の指針\n\n| 用途 | 推奨 |\n|------|------|\n| 新規のWebサイト・LP | modern normalize + box-sizing: border-box |\n| WordPressテーマ開発 | normalize.css（テーマ標準で含まれることも多い） |\n| メールHTML | インラインでマージン・パディングを0に設定 |\n| GTMの注入バナー | 要素に明示的にスタイル指定（リセット不要） |",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: 現代的なリセットCSSをLPに適用する\n\nリセットCSSを適用することで、ブラウザのデフォルトスタイルが除去された状態からLPを作り始める体験をしましょう。\n\n## 課題\n\n1. `*` セレクタで `box-sizing: border-box` を全要素に適用する\n2. `*` で `margin: 0`, `padding: 0` を設定する\n3. `body` のデフォルトスタイルを設定する（font-family・line-height）\n4. `img` に `max-width: 100%` と `display: block` を設定する\n5. `button, input` に `font: inherit` を設定する",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>リセットCSS練習</title>\n  <style>\n    /* ① * セレクタでbox-sizing: border-boxを全要素に適用 */\n\n\n    /* ② * セレクタでmargin: 0, padding: 0を設定 */\n    /* （①と同じ * ブロックにまとめてもOK） */\n\n\n    /* ③ bodyのスタイルを設定 */\n    body {\n      background: #f8f9fa;\n    }\n\n    /* ④ imgにmax-width: 100%とdisplay: blockを設定 */\n\n\n    /* ⑤ button, inputにfont: inheritを設定 */\n\n\n    /* ---- リセット後のスタイル ---- */\n    .container {\n      max-width: 900px;\n      margin: 40px auto;\n      padding: 0 20px;\n    }\n\n    header {\n      background: #1a1a2e;\n      color: white;\n      padding: 20px 30px;\n    }\n\n    h1 { font-size: 1.8rem; margin-bottom: 8px; }\n    h2 { font-size: 1.3rem; margin: 20px 0 10px; color: #333; }\n    p { margin-bottom: 12px; color: #555; line-height: 1.7; }\n\n    ul {\n      margin-bottom: 12px;\n      padding-left: 1.5rem;\n    }\n    li { margin-bottom: 4px; color: #555; }\n\n    .cta-button {\n      background: #e94560;\n      color: white;\n      padding: 12px 28px;\n      border: none;\n      border-radius: 6px;\n      cursor: pointer;\n      margin-top: 16px;\n    }\n  </style>\n</head>\n<body>\n  <header>\n    <h1>MarkeBase - データドリブンマーケティング学習</h1>\n  </header>\n\n  <div class=\"container\">\n    <h2>リセットCSSを適用した後の表示確認</h2>\n    <p>box-sizing: border-boxが適用されると、paddingを含めた幅が直感的に計算できます。</p>\n    <ul>\n      <li>Chrome・Firefox・Safariで統一した表示</li>\n      <li>デフォルトのmargin・paddingが除去される</li>\n      <li>フォームコントロールもbodyのフォントを継承</li>\n    </ul>\n    <input type=\"text\" placeholder=\"テキスト入力\" style=\"padding: 8px 12px; border: 1px solid #ccc; border-radius: 4px;\">\n    <button class=\"cta-button\">登録する</button>\n  </div>\n</body>\n</html>",
+        "hints": [
+          "`*` はすべての要素を選択するセレクタです（全称セレクタ）。`*, *::before, *::after` とすると疑似要素にも適用されます。",
+          "`box-sizing: border-box` にすると、width: 300pxと設定したとき、paddingやborderを加えても幅は300pxのままになります。",
+          "`font: inherit` は `font-family`・`font-size`・`font-weight` などフォント関連プロパティをまとめて親から継承するショートハンドです。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>リセットCSS練習</title>\n  <style>\n    *, *::before, *::after {\n      box-sizing: border-box;\n      margin: 0;\n      padding: 0;\n    }\n\n    body {\n      font-family: 'Helvetica Neue', sans-serif;\n      line-height: 1.6;\n      background: #f8f9fa;\n    }\n\n    img {\n      max-width: 100%;\n      display: block;\n    }\n\n    button, input {\n      font: inherit;\n    }\n\n    .container {\n      max-width: 900px;\n      margin: 40px auto;\n      padding: 0 20px;\n    }\n\n    header {\n      background: #1a1a2e;\n      color: white;\n      padding: 20px 30px;\n    }\n\n    h1 { font-size: 1.8rem; margin-bottom: 8px; }\n    h2 { font-size: 1.3rem; margin: 20px 0 10px; color: #333; }\n    p { margin-bottom: 12px; color: #555; line-height: 1.7; }\n\n    ul {\n      margin-bottom: 12px;\n      padding-left: 1.5rem;\n    }\n    li { margin-bottom: 4px; color: #555; }\n\n    .cta-button {\n      background: #e94560;\n      color: white;\n      padding: 12px 28px;\n      border: none;\n      border-radius: 6px;\n      cursor: pointer;\n      margin-top: 16px;\n    }\n  </style>\n</head>\n<body>\n  <header>\n    <h1>MarkeBase - データドリブンマーケティング学習</h1>\n  </header>\n\n  <div class=\"container\">\n    <h2>リセットCSSを適用した後の表示確認</h2>\n    <p>box-sizing: border-boxが適用されると、paddingを含めた幅が直感的に計算できます。</p>\n    <ul>\n      <li>Chrome・Firefox・Safariで統一した表示</li>\n      <li>デフォルトのmargin・paddingが除去される</li>\n      <li>フォームコントロールもbodyのフォントを継承</li>\n    </ul>\n    <input type=\"text\" placeholder=\"テキスト入力\" style=\"padding: 8px 12px; border: 1px solid #ccc; border-radius: 4px;\">\n    <button class=\"cta-button\">登録する</button>\n  </div>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "normalize.cssとreset.cssの主な違いはどれですか？",
+            "options": ["normalize.cssはすべてをゼロにリセットし、reset.cssは差異だけを修正する", "reset.cssはすべてをゼロにリセットし、normalize.cssはブラウザ間の差異だけを修正する", "normalize.cssはCSSファイルを読み込むが、reset.cssはJavaScriptを使う", "どちらも全く同じ機能を提供する"],
+            "correct": 1,
+            "explanation": "reset.cssはすべてのブラウザデフォルトスタイルをゼロ・noneに初期化します。normalize.cssはブラウザ間の差異のみを平準化し、有用なデフォルトスタイルは維持します。normalize.cssの方がアクセシビリティに配慮したアプローチです。"
+          },
+          {
+            "q": "`box-sizing: border-box` を設定すると何が変わりますか？",
+            "options": ["ボックスの外側にボーダーが表示される", "widthにpaddingとborderが含まれるため、計算が直感的になる", "ボックスが正方形になる", "自動的にpadding: 0が適用される"],
+            "correct": 1,
+            "explanation": "デフォルトの `content-box` では、widthはコンテンツ幅のみでpaddingとborderは追加されます。`border-box` にすると、widthにpaddingとborderが含まれるため、width: 200pxと設定した要素の実際の幅は必ず200pxになります。"
+          },
+          {
+            "q": "メールHTMLでリセットスタイルが特に重要な理由はどれですか？",
+            "options": ["メールはHTMLをサポートしていないから", "GmailやOutlookなど各メールクライアントのデフォルトスタイルが大きく異なるから", "メールのファイルサイズを小さくするため", "スパムフィルターを回避するため"],
+            "correct": 1,
+            "explanation": "GmailのWebアプリ、Outlook、Apple Mailなど各メールクライアントはそれぞれ独自のデフォルトスタイルを持ち、その差は大きいです。メールHTMLではインラインスタイルでリセット相当の設定を行うことで、どのクライアントでも統一した表示を実現します。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール2-9 完了！\n\n## 習得したスキル\n\n✅ **CSSリセットが必要な理由**（ブラウザ間のデフォルトスタイルの差異）を説明できる\n✅ **reset.css**（ゼロリセット）と **normalize.css**（差異修正）の違いを把握した\n✅ **box-sizing: border-box** の仕組みとLPでの重要性を理解した\n✅ **現代的なリセットCSS** の最小構成を実装できる\n✅ **メールHTMLでのリセット**の必要性を説明できる\n\n## 次のステップ\n\n次のモジュール **「2-10: DevToolsのStylesパネルでのCSSリアルタイムデバッグ」** では、ここまで学んだCSSの知識をDevToolsでリアルタイムに確認・修正する実践的なデバッグ方法を学びます。\n\n> 実務チャレンジ: 担当しているLPをDevToolsで開き、bodyのmarginが0になっているか確認しましょう。8pxのままならリセットCSSが適用されていません。",
+        "diagram": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "id": "marketing-strategy--10-2",
+  "moduleId": "10-2",
+  "categoryId": "marketing-strategy",
+  "title": "3C分析：市場・競合・自社の把握",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 3C分析：戦略の出発点\n\nマーケティング戦略を立てる前に、まず「現状を正確に把握する」必要があります。その最初のステップが **3C分析** です。\n\n## 3Cとは\n\n3Cとは以下の3つの英単語の頭文字です：\n\n- **Customer（市場・顧客）**: 誰が、どんなニーズを持っているか\n- **Competitor（競合）**: 競合他社はどう動いているか\n- **Company（自社）**: 自社の強み・弱みは何か\n\n## なぜこの順番が重要か\n\n多くの企業は「自社の話」から始めてしまいます。しかし、正しい順序は**顧客から始める**ことです。\n\n```\n❌ 誤り: 自社の強み → 競合 → 顧客ニーズ\n✅ 正解: 顧客ニーズ → 競合 → 自社の強み\n```\n\n顧客視点なき戦略は、どれだけ精緻に作っても市場で受け入れられません。\n\n**あなたへの問い**: 今の自社の戦略は、顧客のニーズから出発していますか？",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# 3C分析の各要素と分析ポイント\n\n## Customer（市場・顧客）\n\n顧客・市場について明らかにすべき問い：\n\n| 分析軸 | 問い | 調査方法 |\n|--------|------|----------|\n| 市場規模 | TAM/SAM/SOMはいくらか | 統計データ、業界レポート |\n| 顧客ニーズ | どんな課題・欲求があるか | インタビュー、アンケート |\n| 購買行動 | どこで・どうやって選んでいるか | 行動観察、GA4分析 |\n| トレンド | 市場は成長・縮小どちらか | 時系列データ |\n\n## Competitor（競合）\n\n競合分析で把握すべき内容：\n\n```\n直接競合: 同じ課題に同じ方法で応えている企業\n間接競合: 同じ課題を異なる方法で解決している企業\n代替品:   課題自体をなくしてしまう可能性のある選択肢\n```\n\n**分析観点**: 競合の製品・価格・チャネル・プロモーション・ポジショニング\n\n## Company（自社）\n\n自社の現状把握：\n\n- **強み（Strength）**: 競合に勝っている点\n- **弱み（Weakness）**: 競合に劣っている点\n- **リソース**: ヒト・モノ・カネ・情報・ブランド\n- **ケイパビリティ**: 組織が持つ固有の能力\n\n## 3C分析から「KSF」を導く\n\n3Cを分析した後、**KSF（Key Success Factor：成功要因）**を特定します。\n\n```\nKSF = 顧客が求めていること（C1）\n      ×\n      競合が提供できていないこと（C2）\n      ×\n      自社が提供できること（C3）\n\nこの3つが重なる領域が、戦略の核心となる。\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: 3C分析シートを作成する\n\n想定する企業・サービスの3C分析を行い、KSFを導いてください。\n\n## 課題\n\n以下のHTMLテンプレートを使い、3C分析の各項目を埋め、最後にKSFを記述してください。\n\n> 例として「中小企業向けSNS運用代行サービス」を使っても構いません。",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>3C分析シート</title>\n  <style>\n    body { font-family: sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; background: #f8f9fa; }\n    h1 { color: #1e293b; }\n    .grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin: 20px 0; }\n    .card { background: white; border-radius: 8px; padding: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }\n    .card h2 { margin-top: 0; font-size: 1rem; }\n    textarea { width: 100%; height: 120px; resize: vertical; border: 1px solid #e2e8f0; border-radius: 4px; padding: 8px; font-size: 0.9rem; }\n    .ksf { background: #1e293b; color: white; border-radius: 8px; padding: 20px; margin-top: 16px; }\n    .ksf h2 { margin-top: 0; color: #fbbf24; }\n    .ksf textarea { background: #334155; color: white; border-color: #475569; }\n  </style>\n</head>\n<body>\n  <h1>3C分析シート</h1>\n  <p>分析対象: <input type=\"text\" placeholder=\"例：中小企業向けSNS運用代行サービス\" style=\"width:300px; padding:4px 8px; border:1px solid #ccc; border-radius:4px;\" /></p>\n\n  <div class=\"grid\">\n    <!-- Customerカード -->\n    <!-- Competitorカード -->\n    <!-- Companyカード -->\n  </div>\n\n  <!-- KSFセクション -->\n\n</body>\n</html>",
+        "hints": [
+          "Customerカードには「市場規模」「顧客ニーズ」「購買行動」の3つのテキストエリアを用意しましょう。",
+          "Competitorカードには「直接競合」「競合の強み」「競合の弱み」を記述する欄を作りましょう。",
+          "KSFは「顧客が求めていて、競合が提供できておらず、自社が提供できること」という定義に基づいて記述します。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>3C分析シート</title>\n  <style>\n    body { font-family: sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; background: #f8f9fa; }\n    h1 { color: #1e293b; }\n    .grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin: 20px 0; }\n    .card { background: white; border-radius: 8px; padding: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }\n    .card h2 { margin-top: 0; font-size: 1.1rem; }\n    .customer h2 { color: #10b981; }\n    .competitor h2 { color: #ef4444; }\n    .company h2 { color: #3b82f6; }\n    label { font-size: 0.85rem; font-weight: bold; display: block; margin-top: 10px; color: #64748b; }\n    textarea { width: 100%; height: 70px; resize: vertical; border: 1px solid #e2e8f0; border-radius: 4px; padding: 8px; font-size: 0.85rem; margin-top: 4px; }\n    .ksf { background: #1e293b; color: white; border-radius: 8px; padding: 20px; margin-top: 16px; }\n    .ksf h2 { margin-top: 0; color: #fbbf24; }\n    .ksf label { color: #94a3b8; }\n    .ksf textarea { background: #334155; color: white; border-color: #475569; height: 80px; }\n  </style>\n</head>\n<body>\n  <h1>3C分析シート</h1>\n  <p>分析対象: <input type=\"text\" value=\"中小企業向けSNS運用代行サービス\" style=\"width:300px; padding:4px 8px; border:1px solid #ccc; border-radius:4px;\" /></p>\n\n  <div class=\"grid\">\n    <div class=\"card customer\">\n      <h2>Customer（顧客）</h2>\n      <label>市場規模・ターゲット</label>\n      <textarea>従業員50名以下の中小企業。SNS担当を置けない規模感。市場規模は国内中小企業約350万社のうち数十万社が潜在顧客。</textarea>\n      <label>顧客ニーズ</label>\n      <textarea>「SNSをやりたいが時間も知識もない」「安価でプロに任せたい」「成果が見えると安心できる」</textarea>\n      <label>購買行動</label>\n      <textarea>Google検索・知人紹介で情報収集。比較サイトで料金確認後、無料相談で判断する傾向。</textarea>\n    </div>\n\n    <div class=\"card competitor\">\n      <h2>Competitor（競合）</h2>\n      <label>直接競合</label>\n      <textarea>大手SNS代行会社（月5〜20万円）、フリーランスSNS運用者（月2〜5万円）</textarea>\n      <label>競合の強み</label>\n      <textarea>大手：実績・ブランド力。フリーランス：低価格・柔軟性。</textarea>\n      <label>競合の弱み</label>\n      <textarea>大手：高価格・画一的対応。フリーランス：品質のばらつき・突然の離脱リスク。</textarea>\n    </div>\n\n    <div class=\"card company\">\n      <h2>Company（自社）</h2>\n      <label>強み</label>\n      <textarea>データ分析力（GA4・BQ活用）、業種特化の専門知識、小回りの効くチーム体制。</textarea>\n      <label>弱み</label>\n      <textarea>ブランド認知度が低い、営業リソースが限られる。</textarea>\n      <label>保有リソース</label>\n      <textarea>デジタルマーケ専門人材、分析ツール・データ基盤、クライアント実績。</textarea>\n    </div>\n  </div>\n\n  <div class=\"ksf\">\n    <h2>KSF（成功要因）</h2>\n    <label>3Cの重なりから導いたKSF</label>\n    <textarea>中小企業が求める「低価格×データに基づく改善提案」を、大手にはできないスピード感と柔軟性、フリーランスにはないチーム体制の安心感で提供する。具体的には「月3万円台・毎月レポート付き・担当者固定」のパッケージが差別化ポイントとなる。</textarea>\n  </div>\n\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "3C分析において正しい分析の順序はどれですか？",
+            "options": [
+              "自社 → 競合 → 顧客",
+              "競合 → 顧客 → 自社",
+              "顧客 → 競合 → 自社",
+              "どの順番でも変わらない"
+            ],
+            "correct": 2,
+            "explanation": "3C分析は「顧客ニーズの把握」から始めるのが正しい順序です。顧客起点で考えることで、競合分析や自社分析が意味を持ちます。自社の話から始めると主観的な分析になりがちです。"
+          },
+          {
+            "q": "KSF（Key Success Factor）を導くための3Cの組み合わせとして正しいのはどれですか？",
+            "options": [
+              "顧客が求めている × 競合が提供している × 自社が提供できない",
+              "顧客が求めている × 競合が提供できていない × 自社が提供できる",
+              "顧客が求めていない × 競合が提供できていない × 自社が提供できる",
+              "顧客が求めている × 競合が提供している × 自社が提供できる"
+            ],
+            "correct": 1,
+            "explanation": "KSFは「顧客が求めていて、競合がまだ提供できておらず、自社が提供できる」3つが重なる領域から導きます。これが真の差別化ポイントとなります。"
+          },
+          {
+            "q": "3C分析のCompetitor（競合）分析で考慮すべきものとして最も適切な組み合わせはどれですか？",
+            "options": [
+              "直接競合のみ",
+              "直接競合と間接競合",
+              "直接競合・間接競合・代替品",
+              "自社と同規模の企業のみ"
+            ],
+            "correct": 2,
+            "explanation": "競合分析では「直接競合（同じ方法で同じ課題を解決）」「間接競合（異なる方法で同じ課題を解決）」「代替品（課題自体をなくす選択肢）」の3つを考慮する必要があります。代替品を見落とすと、市場変化に気づくのが遅れます。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール10-2 完了！\n\n3C分析の考え方と実践方法を習得しました。\n\n## 習得したスキル\n\n✅ **3C（顧客・競合・自社）**の各要素と分析ポイントを説明できる\n✅ **正しい分析の順序**（顧客起点）を理解した\n✅ **競合の3分類**（直接・間接・代替品）を区別できる\n✅ **KSFの導き方**（3つの重なり領域）を実践できる\n\n## なぜこれが重要か\n\n3C分析はマーケティング戦略の土台です。この分析が甘いと、後続のSTPやマーケティングミックスがどれだけ精緻でも的外れになります。「分析に時間をかけすぎる」より「分析なしで走り出す」ほうが危険です。\n\n## 次のステップ\n\n次のモジュール **「10-3: STP：セグメンテーション・ターゲティング・ポジショニング」** では、3C分析の結果を受けて「誰に・どう」戦うかを決める戦略フレームワークを学びます。",
+        "diagram": false
+      }
+    }
+  ]
+}

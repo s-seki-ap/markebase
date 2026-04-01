@@ -1,0 +1,67 @@
+{
+  "id": "html--1-14",
+  "moduleId": "1-14",
+  "categoryId": "html",
+  "title": "small・mark・del・ins タグの用途と適切な使用場面",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# マーケティングで活躍するテキスト装飾タグ\n\nECサイトやLPでよく見る「取り消し線の旧価格」「ハイライトされたキーワード」「注釈テキスト」。これらはHTML標準のタグで意味的に正しく表現できます。\n\n## マーケターが活用する場面\n\n**1. セール価格の表現**\n旧価格に取り消し線を引く `<del>` と新価格を示す `<ins>` で、値引きの視覚的インパクトを出す。\n\n**2. キーワードのハイライト**\n検索結果風のUIや注目ポイントに `<mark>` でハイライトを付ける。\n\n**3. 注釈・免責事項**\nキャンペーン条件の小さな注釈に `<small>` を使って適切にマークアップする。\n\nこのモジュールでは、これら4つのタグの正しい使い方をマーケティング実例で学びます。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# 4つのテキスト装飾タグ\n\n## del（削除されたテキスト）\n\n```html\n<p>通常価格: <del>¥5,980</del> → セール価格: ¥2,980</p>\n```\n\n表示: 通常価格: ~~¥5,980~~ → セール価格: ¥2,980\n\n- 取り消し線が表示される\n- 「以前あったが削除/無効になった情報」を意味する\n- 検索エンジンが「この価格は現在無効」と理解できる\n\n### datetime属性\n\n```html\n<del datetime=\"2024-03-01\">旧価格: ¥5,980</del>\n```\n\n`datetime` 属性で変更日を機械可読にできます。\n\n## ins（挿入されたテキスト）\n\n```html\n<p>価格: <del>¥5,980</del> <ins>¥2,980</ins></p>\n```\n\n- 下線が表示される（デフォルト）\n- 「新しく追加された情報」を意味する\n- delと組み合わせて使うことが多い\n\n## mark（ハイライト）\n\n```html\n<p>当社の化粧品は<mark>天然由来成分100%</mark>を実現しました。</p>\n```\n\n- 黄色い背景でハイライト表示される（デフォルト）\n- 「ユーザーの関心に関連する部分」を示す\n- 検索結果のキーワードハイライトに使われる\n\n### CSSでカスタマイズ\n\n```css\nmark {\n  background-color: #fef08a;  /* 薄い黄色 */\n  padding: 2px 4px;\n  border-radius: 2px;\n}\n```\n\n## small（注釈・細則）\n\n```html\n<p>初回限定30%OFF！</p>\n<p><small>※ おひとり様1回限り。他のクーポンとの併用はできません。</small></p>\n```\n\n- 小さいフォントで表示される\n- 「免責事項、注釈、著作権表示」などの補足情報を意味する\n- 法的な注意書きやキャンペーン条件に最適\n\n## マーケティング実例\n\n### ECサイトの価格表示\n\n```html\n<div class=\"price-box\">\n  <p class=\"original-price\"><del>&yen;5,980</del></p>\n  <p class=\"sale-price\"><ins>&yen;2,980</ins> <mark>50%OFF</mark></p>\n  <p><small>※ セール期間: 2024年3月1日〜3月31日</small></p>\n</div>\n```\n\n### LPのキャンペーン告知\n\n```html\n<section class=\"campaign\">\n  <h2>春の特別キャンペーン</h2>\n  <p><mark>今だけ送料無料</mark> + 初回購入<del>10%OFF</del><ins>30%OFF</ins>！</p>\n  <p><small>※ 在庫がなくなり次第終了。一部地域は送料が発生します。</small></p>\n</section>\n```\n\n### CSSでのスタイリング例\n\n```css\ndel {\n  color: #9ca3af;          /* グレーアウト */\n  text-decoration: line-through;\n}\n\nins {\n  color: #dc2626;          /* 赤色で目立たせる */\n  text-decoration: none;   /* 下線を消す */\n  font-weight: bold;\n  font-size: 1.5em;\n}\n\nsmall {\n  color: #6b7280;\n  font-size: 0.8em;\n}\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: ECサイトの商品カードを作る\n\nセール中の商品カードをHTMLで作成してください。del、ins、mark、smallの4つのタグをすべて使います。\n\n## 課題\n\n1. 旧価格に `<del>` で取り消し線を引く\n2. 新価格を `<ins>` で表示する\n3. 割引率を `<mark>` でハイライトする\n4. キャンペーン条件を `<small>` で注釈表示する",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>商品カード</title>\n  <style>\n    .product-card {\n      border: 1px solid #e5e7eb;\n      border-radius: 12px;\n      padding: 24px;\n      max-width: 360px;\n      font-family: sans-serif;\n    }\n    .product-card h2 { margin-top: 0; }\n    del { color: #9ca3af; }\n    ins { color: #dc2626; text-decoration: none; font-weight: bold; font-size: 1.4em; }\n    mark { background: #fef08a; padding: 2px 8px; border-radius: 4px; font-weight: bold; }\n    small { color: #6b7280; }\n  </style>\n</head>\n<body>\n\n  <div class=\"product-card\">\n    <h2>ナチュラルフェイスクリーム</h2>\n    <p>天然由来成分100%の保湿クリーム。敏感肌にもやさしい処方。</p>\n\n    <!-- ① 旧価格にdelタグを使ってください -->\n    <!-- ② 新価格にinsタグを使ってください -->\n    <p class=\"price\">\n      通常価格: ¥4,980 → 特別価格: ¥2,490\n    </p>\n\n    <!-- ③ 割引率にmarkタグを使ってください -->\n    <p>今だけ 50%OFF !</p>\n\n    <!-- ④ 注釈にsmallタグを使ってください -->\n    <p>※ おひとり様2個まで。在庫限り。</p>\n  </div>\n\n</body>\n</html>",
+        "hints": [
+          "旧価格は <del>&yen;4,980</del> のように del タグで囲みます。",
+          "新価格は <ins>&yen;2,490</ins> のように ins タグで囲みます。",
+          "割引率は <mark>50%OFF</mark> のように mark タグでハイライトします。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>商品カード</title>\n  <style>\n    .product-card {\n      border: 1px solid #e5e7eb;\n      border-radius: 12px;\n      padding: 24px;\n      max-width: 360px;\n      font-family: sans-serif;\n    }\n    .product-card h2 { margin-top: 0; }\n    del { color: #9ca3af; }\n    ins { color: #dc2626; text-decoration: none; font-weight: bold; font-size: 1.4em; }\n    mark { background: #fef08a; padding: 2px 8px; border-radius: 4px; font-weight: bold; }\n    small { color: #6b7280; }\n  </style>\n</head>\n<body>\n\n  <div class=\"product-card\">\n    <h2>ナチュラルフェイスクリーム</h2>\n    <p>天然由来成分100%の保湿クリーム。敏感肌にもやさしい処方。</p>\n\n    <p class=\"price\">\n      通常価格: <del>&yen;4,980</del> &rarr; 特別価格: <ins>&yen;2,490</ins>\n    </p>\n\n    <p>今だけ <mark>50%OFF</mark> !</p>\n\n    <p><small>※ おひとり様2個まで。在庫限り。</small></p>\n  </div>\n\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "ECサイトで旧価格に取り消し線を引くとき、セマンティクスとして正しいタグはどれですか？",
+            "options": ["<s>", "<del>", "<strike>", "<line-through>"],
+            "correct": 1,
+            "explanation": "<del>は「削除された（もはや有効でない）テキスト」を意味するタグで、旧価格の表現に最適です。<s>も取り消し線を表示しますが、<del>の方がより明確に「以前の情報が無効になった」ことを示します。"
+          },
+          {
+            "q": "<mark>タグのデフォルトの表示スタイルはどれですか？",
+            "options": ["太字テキスト", "下線付きテキスト", "黄色い背景のハイライト", "赤い文字"],
+            "correct": 2,
+            "explanation": "<mark>タグはデフォルトで黄色い背景のハイライトを表示します。検索結果のキーワードハイライトのように「ユーザーの関心に関連する部分」を示すために使います。CSSでカスタマイズも可能です。"
+          },
+          {
+            "q": "キャンペーンの注釈「※ おひとり様1回限り」に最適なHTMLタグはどれですか？",
+            "options": ["<p>", "<small>", "<span>", "<aside>"],
+            "correct": 1,
+            "explanation": "<small>は免責事項、注釈、著作権表示などの補足情報を表すタグです。キャンペーンの適用条件や注意書きに最適で、デフォルトで小さいフォントサイズで表示されます。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール1-14 完了！\n\nsmall・mark・del・insの4つのテキスト装飾タグを習得しました。\n\n## 習得したスキル\n\n✅ **del/ins** で価格変更を意味的に正しく表現できる\n✅ **mark** でキーワードをハイライトできる\n✅ **small** で注釈・免責事項を適切にマークアップできる\n✅ CSSでこれらのタグのスタイルを**カスタマイズ**できることを知った\n\n## 次のステップ\n\n次のモジュール **「1-15: blockquote・citeタグと引用元の構造化」** では、メディアサイトで引用コンテンツを正しくマークアップする方法を学びます。\n\n> 💡 **実務チャレンジ**: 自社ECサイトのセール価格表示を確認しましょう。CSSの `text-decoration: line-through` だけで取り消し線を引いている場合、`<del>` タグの使用を提案すると、セマンティクスとSEOが改善します。",
+        "diagram": false
+      }
+    }
+  ]
+}

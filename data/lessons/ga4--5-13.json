@@ -1,0 +1,82 @@
+{
+  "id": "ga4--5-13",
+  "moduleId": "5-13",
+  "categoryId": "ga4",
+  "title": "Eコマース計測イベント：purchase・add_to_cartの実装",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# ECサイト計測の核心\n\nGA4のEコマース計測はデジタルマーケターが最も深く関わる実装領域です。正しく実装できると、商品別の購入率・カート離脱率・収益貢献などを詳細に分析できます。\n\n## Googleが定める推奨Eコマースイベント\n\nGoogleはEコマースサイトで使うべきイベントの名前とパラメータを明確に定めています。この命名規則に従うことで、GA4の標準レポートやLooker Studioテンプレートがそのまま使えます。\n\n```\nEコマースイベントの購買ファネル\n\nview_item_list  → 商品一覧を見た\n        ↓\nview_item       → 商品詳細ページを見た\n        ↓\nadd_to_cart     → カートに追加した\n        ↓\nbegin_checkout  → チェックアウトを開始した\n        ↓\nadd_payment_info → 支払い情報を入力した\n        ↓\npurchase        → 購入完了した\n```\n\n## このモジュールで学ぶこと\n\n`purchase` と `add_to_cart` を中心に、正しいイベント実装パターンを習得します。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# purchase・add_to_cartの実装仕様\n\n## purchaseイベントの必須パラメータ\n\n```javascript\n// purchaseイベント（購入完了ページで実装）\ndataLayer.push({\n  event: 'purchase',\n  ecommerce: {\n    transaction_id: 'T-20240115-001',  // 必須・ユニークであること\n    value: 29800,                       // 必須・合計金額\n    tax: 2709,                          // 消費税\n    shipping: 550,                      // 送料\n    currency: 'JPY',                    // 必須・通貨コード\n    coupon: 'SUMMER20',                 // クーポンコード（任意）\n    items: [                            // 必須・商品リスト\n      {\n        item_id: 'SKU-001',             // 必須・商品ID\n        item_name: 'プレミアムTシャツ',  // 必須・商品名\n        item_brand: 'BrandX',\n        item_category: 'アパレル',\n        item_category2: 'トップス',\n        item_variant: 'M / ブルー',\n        price: 3980,                    // 単価\n        quantity: 2,                    // 数量\n        coupon: 'ITEM10'\n      },\n      {\n        item_id: 'SKU-042',\n        item_name: 'コットンパンツ',\n        item_category: 'アパレル',\n        price: 5980,\n        quantity: 1\n      }\n    ]\n  }\n});\n```\n\n## add_to_cartイベントの実装\n\n```javascript\n// add_to_cartイベント（カート追加ボタンクリック時）\ndataLayer.push({\n  event: 'add_to_cart',\n  ecommerce: {\n    currency: 'JPY',\n    value: 3980,        // カートに追加した商品の合計金額\n    items: [\n      {\n        item_id: 'SKU-001',\n        item_name: 'プレミアムTシャツ',\n        item_category: 'アパレル',\n        price: 3980,\n        quantity: 1\n      }\n    ]\n  }\n});\n```\n\n## 重要な実装ルール\n\n```\n1. ecommerce オブジェクトをクリアしてから送信する\n   → 前のイベントデータが混入するのを防ぐ\n\n   // 悪い例（前のデータが残る）\n   dataLayer.push({ event: 'add_to_cart', ecommerce: {...} });\n   \n   // 良い例（必ずクリアしてから送信）\n   dataLayer.push({ ecommerce: null });  // クリア\n   dataLayer.push({ event: 'add_to_cart', ecommerce: {...} });\n\n2. transaction_id は必ず一意にする\n   → 同じIDが重複すると購入が二重カウントされる\n\n3. 金額はVAT（税金）込みか税抜きかを統一する\n   → value パラメータの定義をチームで統一すること\n```\n\n## GTMでの実装パターン\n\n```\nGTMタグ設定（GA4イベントタグ）:\n- イベント名: 変数「{{DLV - event}}」\n- ecommerceデータを送信: ON\n\n※ ecommerceオブジェクトはdataLayerから自動取得されます\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: 購入完了ページにpurchaseイベントを実装する\n\n以下の注文情報をGA4の `purchase` イベントとして正しく実装してください。\n\n## 注文情報\n\n- 注文ID: `ORD-2024-9988`\n- 合計金額（税込）: ¥12,760\n- 消費税: ¥1,160\n- 送料: ¥550\n- 通貨: JPY\n- 商品1: 商品ID=`ITEM-A1`, 商品名=`オーガニックコーヒー200g`, カテゴリ=`食品/飲料`, 単価=¥1,980, 数量=2\n- 商品2: 商品ID=`ITEM-B3`, 商品名=`コーヒーフィルター100枚`, カテゴリ=`食品/消耗品`, 単価=¥850, 数量=1\n\n## 課題\n\n`dataLayer.push()` を使って正しく実装してください。ecommerceのクリアも忘れずに。",
+        "starterCode": "<script>\n  // Step 1: ecommerceオブジェクトをクリアする（必須）\n\n\n  // Step 2: purchaseイベントを送信する\n  dataLayer.push({\n    event: 'purchase',\n    ecommerce: {\n      // 注文情報をここに入力\n      transaction_id: '',\n      value: 0,\n      tax: 0,\n      shipping: 0,\n      currency: '',\n      items: [\n        // 商品1\n        {\n          item_id: '',\n          item_name: '',\n          item_category: '',\n          price: 0,\n          quantity: 0\n        },\n        // 商品2\n        {\n          item_id: '',\n          item_name: '',\n          item_category: '',\n          price: 0,\n          quantity: 0\n        }\n      ]\n    }\n  });\n</script>",
+        "hints": [
+          "ecommerceのクリアは `dataLayer.push({ ecommerce: null });` です。",
+          "`item_category` はカテゴリの最初の部分のみを使います。`食品/飲料` の場合は `item_category: '食品'`, `item_category2: '飲料'` に分けるのがGA4の推奨です。",
+          "`value` は合計金額（税込）を入れます。今回は12760です。"
+        ],
+        "answer": "<script>\n  // Step 1: ecommerceオブジェクトをクリアする（必須）\n  dataLayer.push({ ecommerce: null });\n\n  // Step 2: purchaseイベントを送信する\n  dataLayer.push({\n    event: 'purchase',\n    ecommerce: {\n      transaction_id: 'ORD-2024-9988',\n      value: 12760,\n      tax: 1160,\n      shipping: 550,\n      currency: 'JPY',\n      items: [\n        {\n          item_id: 'ITEM-A1',\n          item_name: 'オーガニックコーヒー200g',\n          item_category: '食品',\n          item_category2: '飲料',\n          price: 1980,\n          quantity: 2\n        },\n        {\n          item_id: 'ITEM-B3',\n          item_name: 'コーヒーフィルター100枚',\n          item_category: '食品',\n          item_category2: '消耗品',\n          price: 850,\n          quantity: 1\n        }\n      ]\n    }\n  });\n</script>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "GA4のpurchaseイベントで必須とされているパラメータの組み合わせはどれですか？",
+            "options": [
+              "transaction_id、value、currency、items",
+              "transaction_id、value、items（currencyは任意）",
+              "value、currency、items（transaction_idは任意）",
+              "transaction_id、currency（valueとitemsは任意）"
+            ],
+            "correct": 0,
+            "explanation": "purchaseイベントの必須パラメータは `transaction_id`、`value`、`currency`、`items` の4つです。特に `transaction_id` の重複は購入数の二重カウントに直結するため、ユニークな値を必ず設定します。"
+          },
+          {
+            "q": "複数のEコマースイベントを連続して送信するとき、データの混入を防ぐために推奨される対策はどれですか？",
+            "options": [
+              "各イベントに異なるGA4プロパティIDを使用する",
+              "各イベント送信前に `dataLayer.push({ ecommerce: null })` でクリアする",
+              "イベント間に1秒のdelayを入れる",
+              "GTMのタグシーケンシングで順番を制御する"
+            ],
+            "correct": 1,
+            "explanation": "DataLayerはオブジェクトが蓄積される仕組みのため、前のecommerceデータが次のイベントに混入するリスクがあります。各Eコマースイベントを送信する前に `dataLayer.push({ ecommerce: null })` でクリアするのがGoogleの公式推奨です。"
+          },
+          {
+            "q": "GA4のitemsパラメータ内で商品カテゴリを複数階層で表現する場合、正しい方法はどれですか？",
+            "options": [
+              "item_category に `食品 > 飲料` のように `>` で区切って記述する",
+              "item_category に `食品/飲料` のように `/` で区切って記述する",
+              "item_category2, item_category3 など番号付きパラメータを使う",
+              "categories という配列パラメータに複数の値を入れる"
+            ],
+            "correct": 2,
+            "explanation": "GA4では商品カテゴリの階層を `item_category`（第1階層）、`item_category2`（第2階層）、`item_category3`〜`item_category5`（第3〜5階層）と番号付きパラメータで表現します。スラッシュや `>` で連結する方法は推奨されません。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール5-13 完了！\n\nGA4のEコマース計測イベントの実装方法を習得しました。\n\n## 習得したスキル\n\n✅ **Eコマースファネルの全イベント**（view_item_list → purchase）の流れを説明できる\n✅ **purchaseイベントの必須パラメータ**（transaction_id・value・currency・items）を実装できる\n✅ **add_to_cartイベント**の正しい実装パターンを書ける\n✅ **ecommerceクリア**（`{ ecommerce: null }`）の重要性を理解した\n✅ **item_category階層構造**（item_category〜item_category5）を使える\n\n## 実務チェックポイント\n\n- 購入完了イベントのtransaction_idに重複がないかテストする\n- 金額の定義（税込/税抜）をクライアントと合意する\n- DebugViewで実際のecommerceデータが正しく送信されているか確認する\n\n## 次のステップ\n\n次のモジュール **「5-14: リード獲得計測イベント generate_lead設計」** では、BtoBサイトやリードフォームの計測実装を学びます。",
+        "diagram": false
+      }
+    }
+  ]
+}

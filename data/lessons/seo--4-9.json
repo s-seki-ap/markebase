@@ -1,0 +1,83 @@
+{
+  "id": "seo--4-9",
+  "moduleId": "4-9",
+  "categoryId": "seo",
+  "title": "品質評価ガイドラインとE-E-A-Tの位置づけ",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# Googleの「品質評価者」が見ているものを知る\n\nGoogleには「検索品質評価者（Search Quality Rater）」と呼ばれる実際の人間による評価チームが存在します。彼らが使うガイドライン「General Guidelines」は公開されており、Googleが何を「良いコンテンツ」と考えているかを直接知ることができます。\n\n## E-E-A-Tとは\n\nGoogleの品質評価ガイドラインで重視される4つの要素の頭文字です。\n\n- **E**xperience（経験）：実際の体験に基づいた情報か\n- **E**xpertise（専門性）：その分野の専門知識があるか\n- **A**uthoritativeness（権威性）：その分野で認められた存在か\n- **T**rustworthiness（信頼性）：情報の正確性・サイトの安全性\n\n## なぜマーケターが知るべきか\n\nE-E-A-Tはコンテンツ戦略の設計に直接影響します。「誰が書くか」「どのような根拠を示すか」「サイトの信頼性をどう担保するか」という問いへの答えがE-E-A-T対策です。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# E-E-A-Tの各要素と実装方法\n\n## Experience（経験）\n\n**2022年12月に追加された最新要素**。実際にその商品を使った・場所に行った・体験した一次情報が評価されます。\n\n### 実装例\n- 「実際に使ってみた」レビュー記事\n- 著者自身の具体的なエピソード・データ\n- 写真・動画など一次情報の証拠\n\n## Expertise（専門性）\n\n**コンテンツ作成者の専門知識**が問われます。資格・職歴・実績が判断基準になります。\n\n### 実装例\n- 著者プロフィールページの整備（資格・経歴を明記）\n- 記事への著者情報の掲載\n- 参考文献・出典の明記\n\n## Authoritativeness（権威性）\n\n**サイト・著者がその分野で認められているか**。被リンク・メディア掲載・受賞歴などで判断されます。\n\n### 実装例\n- 権威あるメディアへの寄稿・取材掲載\n- 業界団体への参加・認定\n- Googleビジネスプロフィールの整備\n\n## Trustworthiness（信頼性）\n\n**E-E-A-Tの中核**とGoogleは位置づけています。情報の正確性・透明性・セキュリティが対象です。\n\n### 実装例\n- HTTPS対応（SSL証明書）\n- 会社概要・特定商取引法表記の充実\n- プライバシーポリシーの整備\n- 情報の更新日・正確性の担保\n\n## YMYL（Your Money or Your Life）とE-E-A-T\n\nYMYLとは「お金・健康・安全・幸福」に影響するトピックです。このジャンルではE-E-A-Tの評価が特に厳しくなります。\n\n| YMYLジャンル | 例 |\n|------------|----|\n| 医療・健康 | 薬の飲み合わせ・症状診断 |\n| 金融 | 投資・ローン・税金 |\n| 法律 | 契約・権利・法的手続き |\n| 安全 | 災害・緊急情報 |\n\n## 著者情報のHTML実装（Person Schema）\n\n```json\n{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"Person\",\n  \"name\": \"山田 太郎\",\n  \"jobTitle\": \"デジタルマーケティングコンサルタント\",\n  \"affiliation\": {\n    \"@type\": \"Organization\",\n    \"name\": \"株式会社マーケベース\"\n  },\n  \"url\": \"https://example.com/author/yamada/\",\n  \"sameAs\": [\n    \"https://twitter.com/yamada_taro\",\n    \"https://www.linkedin.com/in/yamada-taro\"\n  ]\n}\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: E-E-A-T対応の著者情報と信頼性シグナルの実装\n\nE-E-A-Tを高めるための著者情報・信頼性シグナルをHTMLとJSON-LDで実装しましょう。\n\n## 課題\n\n以下のブログ記事ページに、E-E-A-T強化のための要素を追加してください：\n\n1. **著者情報のJSON-LD**（Person Schema）\n2. **記事の構造化データ**（Article Schema with author）\n3. **信頼性シグナル**：著者プロフィールへのリンク・更新日・参考文献\n\n## 著者情報\n- 名前：鈴木 花子\n- 役職：SEOコンサルタント（5年の実務経験）\n- 所属：株式会社マーケベース\n- 著者ページURL：`/author/suzuki/`",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>E-E-A-T対策完全ガイド | MarkeBase</title>\n\n  <!-- ① Person SchemaとArticle Schemaを実装してください -->\n  <script type=\"application/ld+json\">\n  {\n    \"@context\": \"https://schema.org\",\n    \"@type\": \"Article\",\n    \"headline\": \"E-E-A-T対策完全ガイド\",\n    \"author\": {\n      \"@type\": \"\",\n      \"name\": \"\",\n      \"jobTitle\": \"\",\n      \"url\": \"\"\n    },\n    \"datePublished\": \"2024-04-01\",\n    \"dateModified\": \"\"\n  }\n  </script>\n\n</head>\n<body>\n\n  <article>\n    <h1>E-E-A-T対策完全ガイド：信頼されるコンテンツの作り方</h1>\n\n    <!-- ② 著者情報のHTMLマークアップ -->\n    <div>\n      <p>著者：</p>\n      <!-- 著者名・役職・著者ページへのリンクを追加してください -->\n      <!-- 公開日と更新日も追加してください -->\n    </div>\n\n    <p>E-E-A-Tとは、Googleが重視するコンテンツ品質評価の4要素です。</p>\n\n    <!-- ③ 参考文献セクションを追加（信頼性シグナル） -->\n\n  </article>\n\n</body>\n</html>",
+        "hints": [
+          "Article SchemaのauthorにPersonオブジェクトをネストします：`\"author\": {\"@type\": \"Person\", \"name\": \"鈴木 花子\", ...}`",
+          "dateModifiedは更新日です。今日の日付（2024-04-01）を入れます",
+          "著者へのリンク：`<a href=\"/author/suzuki/\" rel=\"author\">鈴木 花子</a>` のように rel=\"author\" を使います",
+          "公開日は `<time datetime=\"2024-04-01\">2024年4月1日</time>` のようにtimeタグを使うと機械読み取り可能になります"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>E-E-A-T対策完全ガイド | MarkeBase</title>\n\n  <script type=\"application/ld+json\">\n  {\n    \"@context\": \"https://schema.org\",\n    \"@type\": \"Article\",\n    \"headline\": \"E-E-A-T対策完全ガイド\",\n    \"author\": {\n      \"@type\": \"Person\",\n      \"name\": \"鈴木 花子\",\n      \"jobTitle\": \"SEOコンサルタント\",\n      \"url\": \"https://example.com/author/suzuki/\"\n    },\n    \"datePublished\": \"2024-04-01\",\n    \"dateModified\": \"2024-04-01\",\n    \"publisher\": {\n      \"@type\": \"Organization\",\n      \"name\": \"株式会社マーケベース\"\n    }\n  }\n  </script>\n\n</head>\n<body>\n\n  <article>\n    <h1>E-E-A-T対策完全ガイド：信頼されるコンテンツの作り方</h1>\n\n    <div>\n      <p>\n        著者：<a href=\"/author/suzuki/\" rel=\"author\">鈴木 花子</a>\n        （SEOコンサルタント・実務経験5年）\n      </p>\n      <p>\n        公開日：<time datetime=\"2024-04-01\">2024年4月1日</time>\n        ／ 更新日：<time datetime=\"2024-04-01\">2024年4月1日</time>\n      </p>\n    </div>\n\n    <p>E-E-A-Tとは、Googleが重視するコンテンツ品質評価の4要素です。</p>\n\n    <section>\n      <h2>参考文献</h2>\n      <ul>\n        <li><a href=\"https://developers.google.com/search/docs/fundamentals/creating-helpful-content\" rel=\"noopener noreferrer\" target=\"_blank\">Google - 役立つコンテンツの作成</a></li>\n        <li><a href=\"https://static.googleusercontent.com/media/guidelines.raterhub.com/ja//searchqualityevaluatorguidelines.pdf\" rel=\"noopener noreferrer\" target=\"_blank\">Google 検索品質評価ガイドライン（PDF）</a></li>\n      </ul>\n    </section>\n\n  </article>\n\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "2022年にGoogleがE-A-TにEを追加してE-E-A-Tとなりました。追加された「E」は何を意味しますか？",
+            "options": [
+              "Education（教育歴）",
+              "Experience（実際の体験・経験）",
+              "Evidence（証拠・エビデンス）",
+              "Engagement（ユーザーエンゲージメント）"
+            ],
+            "correct": 1,
+            "explanation": "2022年12月に追加された最初の「E」はExperience（経験・体験）です。実際にその商品を使った・場所を訪れた・体験したことに基づく一次情報が評価されます。AIが生成したコンテンツとの差別化にも重要な要素です。"
+          },
+          {
+            "q": "YMYLコンテンツとして最も当てはまるものはどれですか？",
+            "options": [
+              "おすすめのカフェ紹介記事",
+              "投資信託の選び方と税金の計算方法",
+              "人気映画のレビュー記事",
+              "旅行先の観光スポット紹介"
+            ],
+            "correct": 1,
+            "explanation": "YMYLはYour Money or Your Lifeの略で、「お金・健康・安全・幸福」に直接影響するコンテンツです。投資・税金・ローンなどの金融情報はYMYLの典型例で、E-E-A-Tの評価が特に厳しく、専門資格者による監修が推奨されます。"
+          },
+          {
+            "q": "著者のE-E-A-TをHTMLで示す最も効果的な方法はどれですか？",
+            "options": [
+              "著者名を太字で表示するだけ",
+              "Person SchemaのJSON-LDと、著者プロフィールページへのrel=authorリンクを実装する",
+              "記事の文字数を増やす",
+              "ページにGoogle広告を設置する"
+            ],
+            "correct": 1,
+            "explanation": "Person SchemaのJSON-LDで著者の役職・所属・URLをGoogleに構造化データとして伝え、rel=\"author\"でプロフィールページへリンクすることで、著者の専門性・権威性を機械的に伝えられます。著者プロフィールページには資格・経歴・実績を詳しく記載します。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール4-9 完了！\n\n## 習得したスキル\n\n✅ **E-E-A-Tの4要素**（経験・専門性・権威性・信頼性）の意味と実装方法を理解した\n✅ **Experience（経験）**が2022年に追加された背景と、一次情報の重要性を把握した\n✅ **YMYLジャンル**（医療・金融・法律・安全）でE-E-A-Tが特に重要なことを理解した\n✅ **Person Schema・Article Schema**で著者情報を構造化データとして実装できた\n✅ **信頼性シグナル**（著者ページ・更新日・参考文献・timeタグ）の実装を実践した\n\n## 次のステップ\n\n次のモジュール **「4-10: Googleの最新コアアップデートの傾向を読む」** では、近年のコアアップデートのパターンから今後のSEO戦略を考えます。\n\n> 実務チャレンジ: 自社サイトで最も重要な記事3本の著者情報を確認し、Person SchemaとプロフィールページへのリンクをE-E-A-Tの観点で改善できるかチェックしましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

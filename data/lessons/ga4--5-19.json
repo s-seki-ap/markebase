@@ -1,0 +1,82 @@
+{
+  "id": "ga4--5-19",
+  "moduleId": "5-19",
+  "categoryId": "ga4",
+  "title": "イベント計測設計書の作成",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 設計書がなければ計測は「ブラックボックス」になる\n\nGA4の実装が完了したあと、多くの現場で起きること：\n\n- 「このイベント、誰が実装したの？」がわからない\n- パラメータの定義が人によって微妙に違う\n- 担当者が変わると計測の意図が引き継げない\n- 「このデータの定義は何？」がBigQueryを見ても不明\n\n## 計測設計書の役割\n\n計測設計書（Measurement Plan / タグ仕様書とも呼ばれる）は：\n\n1. **計測の意図**を記録する（なぜこのイベントを取るのか）\n2. **技術仕様**を定義する（イベント名・パラメータ・型・値の範囲）\n3. **実装状況**を管理する（誰が・いつ・どこに実装したか）\n4. **変更履歴**を追跡する（何をいつ変更したか）\n\n## このモジュールで学ぶこと\n\n実務で使えるイベント計測設計書のテンプレートと記入方法を習得します。また設計書をBigQueryのスキーマドキュメントとして活用する方法も紹介します。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# 計測設計書の構成と記入方法\n\n## 設計書の構成（推奨スプレッドシート構成）\n\n```\nシート構成:\n1. イベント一覧（メインシート）\n2. パラメータ定義\n3. ユーザープロパティ定義\n4. 変更履歴\n```\n\n## イベント一覧シートのカラム定義\n\n```\n| カラム名         | 説明                            | 例 |\n|----------------|--------------------------------|----|\n| イベント名       | GA4に送信するイベント名          | purchase |\n| カテゴリ         | イベントの分類                  | Eコマース |\n| 発火条件         | いつ発火するかの説明             | 注文完了ページ表示時 |\n| 実装方法         | GTM / gtag.js / SDK             | GTM |\n| 実装箇所         | 実装ページ・コンポーネント名    | /thankyou.html |\n| 優先度           | High / Medium / Low             | High |\n| ステータス       | 設計中/実装中/完了/停止         | 完了 |\n| 実装日           | YYYY-MM-DD                      | 2024-01-15 |\n| 担当者           | 実装した人                      | 田中 |\n| 備考             | 注意事項・依存関係              | ecommerceクリア必須 |\n```\n\n## パラメータ定義シートのカラム\n\n```\n| カラム名         | 説明                     | 例 |\n|----------------|-------------------------|----|\n| イベント名       | 対象イベント             | purchase |\n| パラメータ名     | key名                   | transaction_id |\n| スコープ         | event / user            | event |\n| 型              | string / number          | string |\n| 必須/任意        | 必須 / 任意              | 必須 |\n| 値の定義         | 設定される値の説明       | 注文IDの文字列（例: ORD-2024-001） |\n| カスタムDIM登録  | GA4に登録済みか          | YES |\n| BigQueryフィールド| BQでの取得方法          | ep.transaction_id |\n```\n\n## 実際の設計書記入例\n\n```\nイベント: generate_lead\n──────────────────────────────────────\n発火条件: お問い合わせフォーム送信完了時\n実装方法: GTM（カスタムHTMLタグ）\n実装箇所: /contact/thanks.html または 動的サンクス表示\nステータス: 完了（2024-01-20）\n担当: 山田\n\nパラメータ:\n- lead_type   | string | 必須 | 'contact_form' / 'document_dl' / 'seminar'\n- value       | number | 推奨 | リード推定価値（例: 30000）\n- currency    | string | 推奨 | 'JPY'\n- form_name   | string | 任意 | フォーム識別名\n- lead_source_detail | string | 任意 | window.location.pathname\n\n備考: sessionStorageで二重送信防止済み\n```\n\n## 設計書メンテナンスのルール\n\n```\n1. 実装前に設計書に記入してレビューする\n2. 実装完了後に「ステータス」を「完了」に更新\n3. 設計変更時は「変更履歴」シートに記録\n4. 四半期に1回、全イベントの棚卸しをする\n5. BigQueryのイベント実績と設計書を突合して乖離を確認する\n```",
+        "diagram": false
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: 計測設計書をJSONで表現する\n\n設計書はスプレッドシートで管理することが多いですが、プログラムで扱うためにJSON形式でも表現できます。\n\n## 課題\n\n以下の要件に基づき、計測設計書のJSON構造を完成させてください。\n\n**追加するイベント**: `view_section_pricing`（料金ページの料金セクションが画面に入った時）\n- 実装方法: GTM（Intersection Observer トリガー）\n- 実装箇所: /pricing ページ\n- 優先度: Medium\n- ステータス: 設計中\n- パラメータ:\n  - `section_name`: 文字列、必須、値 = `'pricing'`\n  - `plan_highlighted`: 文字列、任意、ホバー中のプラン名",
+        "starterCode": "// 計測設計書のJSONスキーマ\nconst measurementPlan = {\n  property: 'G-EXAMPLE123',\n  lastUpdated: '2024-01-20',\n  events: [\n    {\n      eventName: 'generate_lead',\n      category: 'リード獲得',\n      trigger: 'お問い合わせフォーム送信完了',\n      implementation: 'GTM',\n      location: '/contact',\n      priority: 'High',\n      status: '完了',\n      implementedAt: '2024-01-15',\n      owner: '山田',\n      parameters: [\n        { name: 'lead_type', type: 'string', required: true, description: 'リードの種類' },\n        { name: 'value', type: 'number', required: false, description: '推定リード価値' }\n      ],\n      notes: 'sessionStorageで二重送信防止済み'\n    },\n    // TODO: view_section_pricing イベントをここに追加する\n  ]\n};\n\nconsole.log(JSON.stringify(measurementPlan, null, 2));",
+        "hints": [
+          "イベントオブジェクトは既存の `generate_lead` と同じ構造で追加します。",
+          "`eventName: 'view_section_pricing'` から始めて、すべてのフィールドを埋めます。",
+          "parametersには `section_name`（required: true）と `plan_highlighted`（required: false）の2つを追加します。"
+        ],
+        "answer": "// 計測設計書のJSONスキーマ\nconst measurementPlan = {\n  property: 'G-EXAMPLE123',\n  lastUpdated: '2024-01-20',\n  events: [\n    {\n      eventName: 'generate_lead',\n      category: 'リード獲得',\n      trigger: 'お問い合わせフォーム送信完了',\n      implementation: 'GTM',\n      location: '/contact',\n      priority: 'High',\n      status: '完了',\n      implementedAt: '2024-01-15',\n      owner: '山田',\n      parameters: [\n        { name: 'lead_type', type: 'string', required: true, description: 'リードの種類' },\n        { name: 'value', type: 'number', required: false, description: '推定リード価値' }\n      ],\n      notes: 'sessionStorageで二重送信防止済み'\n    },\n    {\n      eventName: 'view_section_pricing',\n      category: 'コンテンツ閲覧',\n      trigger: '料金ページの料金セクションが画面に入った時（Intersection Observer）',\n      implementation: 'GTM',\n      location: '/pricing',\n      priority: 'Medium',\n      status: '設計中',\n      implementedAt: null,\n      owner: null,\n      parameters: [\n        {\n          name: 'section_name',\n          type: 'string',\n          required: true,\n          description: '表示されたセクション名。値: \\'pricing\\''\n        },\n        {\n          name: 'plan_highlighted',\n          type: 'string',\n          required: false,\n          description: 'ホバー中または強調表示中のプラン名'\n        }\n      ],\n      notes: '一度だけ発火させる（IntersectionObserver once: true オプション使用）'\n    }\n  ]\n};\n\nconsole.log(JSON.stringify(measurementPlan, null, 2));"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "計測設計書（Measurement Plan）に記録すべき内容として、最も重要な項目の組み合わせはどれですか？",
+            "options": [
+              "イベント名・コンバージョン率・月次レポート結果",
+              "イベント名・発火条件・パラメータ定義・実装ステータス",
+              "イベント名・BigQueryコスト・Google広告キャンペーンID",
+              "イベント名・UIデザイン仕様・A/Bテスト結果"
+            ],
+            "correct": 1,
+            "explanation": "計測設計書の核心は「イベント名・発火条件・パラメータ定義・実装ステータス」です。これにより技術的な実装仕様と現在の状態が一元管理でき、チームの引き継ぎや計測の再現性が確保されます。"
+          },
+          {
+            "q": "計測設計書のメンテナンスにおける推奨プラクティスはどれですか？",
+            "options": [
+              "実装完了後に一度だけ作成し、以後は更新しない",
+              "実装前にレビューし、完了後にステータス更新、定期的に棚卸しする",
+              "BigQueryのデータから自動生成するため手動更新は不要",
+              "GA4管理画面のイベント一覧が設計書の代わりになる"
+            ],
+            "correct": 1,
+            "explanation": "計測設計書は生きたドキュメントとして管理します。実装前にレビューして品質を担保し、完了後にステータスを更新し、定期的（四半期ごと推奨）に棚卸しして不要なイベントをアーカイブします。"
+          },
+          {
+            "q": "計測設計書でパラメータの「型」を明示する主な理由はどれですか？",
+            "options": [
+              "GA4がパラメータの型を間違えると送信を拒否するため",
+              "BigQueryでのデータ取得方法が型によって異なるため（string_value vs int_value）",
+              "GTMの変数設定で型を指定する必要があるため",
+              "Googleアナリティクスのサポートに型情報を提出する必要があるため"
+            ],
+            "correct": 1,
+            "explanation": "BigQueryではevent_paramsの値を取得するとき、文字列は `value.string_value`、整数は `value.int_value`、浮動小数点数は `value.float_value` と型別に取得する必要があります。設計書で型を明示することでSQLのミスを防ぎ、分析の効率が上がります。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール5-19 完了！\n\nイベント計測設計書の作成方法と管理の仕組みを習得しました。\n\n## 習得したスキル\n\n✅ **計測設計書の4つの役割**（意図・仕様・実装管理・変更履歴）を説明できる\n✅ **イベント一覧シートとパラメータ定義シート**の記入方法を理解した\n✅ **JSON形式**でプログラマブルな設計書を表現できる\n✅ **設計書メンテナンスのルール**を実務に適用できる\n\n## クライアント提案での活用\n\n計測設計書はクライアントへの提案・納品物としても活用できます：\n\n- 計測対象の優先度をクライアントと合意するツール\n- 実装後の品質保証エビデンス\n- 引き継ぎ・運用体制構築のドキュメント\n- BigQuery分析の「データ辞書」としての役割\n\n## 次のステップ\n\n次のモジュール **「5-20: Googleシグナルと広告パーソナライズ設定」** では、GA4とGoogle広告の連携設定を学びます。",
+        "diagram": false
+      }
+    }
+  ]
+}

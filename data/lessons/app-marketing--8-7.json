@@ -1,0 +1,82 @@
+{
+  "id": "app-marketing--8-7",
+  "moduleId": "8-7",
+  "categoryId": "app-marketing",
+  "title": "アプリ内イベント設計の考え方",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 「とりあえず全部計測」は失敗する\n\nFirebaseでアプリ計測を始めると、「何でもかんでも計測しよう」という誘惑に駆られます。しかしイベントを闇雲に増やすと、データが増えるだけで意思決定に使えない「計測の墓場」ができあがります。\n\n## イベント設計の本質\n\nイベント設計とは「**ビジネス上の問いに答えるために、何を計測するかを決める設計作業**」です。\n\n良いイベント設計は:\n- 施策の効果測定に直結する\n- レポートを見るだけで改善アクションが判断できる\n- エンジニアへの実装依頼の根拠になる\n\n悪いイベント設計は:\n- 「とりあえず全画面遷移を計測した」\n- イベント名が統一されていない（screen_view / pageView / page_view が混在）\n- パラメータが多すぎてどれを見るか分からない\n\n## このモジュールで学ぶこと\n\nユーザーのジャーニー（旅）に沿ったイベント設計の考え方と、命名規則・パラメータ設計の実践的な方法を習得します。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# イベント設計の3ステップ\n\n## Step 1: ビジネス上の問いを定義する\n\n```\n悪い出発点: 「全部計測しよう」\n良い出発点: 「なぜユーザーは購入せずに離脱するのか？」\n\n問いから逆算すると:\n→ カート追加 → 決済画面遷移 → 購入完了 の各ステップが必要\n→ 各ステップでのイベントを設計する\n```\n\n## Step 2: イベント命名規則を決める\n\nFirebaseの推奨命名規則:\n- スネークケース（小文字+アンダースコア）\n- `動詞_名詞` の形式\n- 英語で統一\n\n| 悪い例 | 良い例 |\n|---|---|\n| `ButtonTapped` | `button_tap` |\n| `product-view` | `view_item` |\n| `clickBuy` | `begin_checkout` |\n| `page_viewed_detail` | `screen_view` + screen_name パラメータ |\n\n## Step 3: パラメータ設計\n\n```javascript\n// 良いイベント設計例: 商品詳細閲覧\nfirebase.analytics().logEvent('view_item', {\n  item_id: 'SKU-001',          // 商品ID\n  item_name: '夏季限定Tシャツ', // 商品名\n  item_category: 'apparel',    // カテゴリ\n  price: 3980,                 // 価格\n  currency: 'JPY'              // 通貨\n});\n\n// 良いイベント設計例: チュートリアル完了\nfirebase.analytics().logEvent('tutorial_complete', {\n  tutorial_id: 'onboarding_v2', // どのチュートリアルか\n  completion_time_sec: 145      // 何秒かかったか\n});\n```\n\n## イベント設計チェックリスト\n\n```\n✅ このイベントで何の問いに答えられるか？\n✅ 命名はスネークケース・動詞_名詞形式か？\n✅ Googleの推奨イベント名と被っていないか？\n✅ パラメータは必要最低限か（多すぎないか）？\n✅ エンジニアに実装依頼できる粒度か？\n```\n\n## ユーザージャーニー別の主要イベント設計例（ECアプリ）\n\n| フェーズ | イベント | 主なパラメータ |\n|---|---|---|\n| 商品閲覧 | `view_item` | item_id, price |\n| カート追加 | `add_to_cart` | item_id, quantity |\n| 決済開始 | `begin_checkout` | value, currency |\n| 購入完了 | `purchase` | transaction_id, value |\n| レビュー投稿 | `submit_review` | item_id, rating |",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: フィットネスアプリのイベント設計\n\nフィットネスアプリのユーザージャーニーに沿ってイベント設計をしてください。\n\n## 課題\n\n`eventSchema` オブジェクトに各フェーズのイベント名とパラメータを設定してください。命名規則（スネークケース）に従うこと。",
+        "starterCode": "// フィットネスアプリのイベント設計\nconst eventSchema = {\n  // ワークアウト開始イベント\n  workoutStart: {\n    // イベント名をスネークケースで入力してください\n    eventName: '',\n    params: {\n      // ワークアウトの種類（例: 'running', 'yoga'）\n      workout_type: '',\n      // 目標時間（分）\n      target_duration_min: 0\n    }\n  },\n  \n  // ワークアウト完了イベント\n  workoutComplete: {\n    eventName: '',\n    params: {\n      // ワークアウトの種類\n      workout_type: '',\n      // 実際の時間（分）\n      actual_duration_min: 0,\n      // 消費カロリー\n      calories_burned: 0\n    }\n  },\n  \n  // プレミアムプラン購入イベント（Googleの推奨イベント名を使うこと）\n  premiumPurchase: {\n    eventName: '',  // 'purchase' を使う\n    params: {\n      transaction_id: '',\n      value: 0,\n      currency: 'JPY'\n    }\n  }\n};\n\n// 確認出力（変更不要）\nObject.entries(eventSchema).forEach(([key, schema]) => {\n  console.log(`[${key}]`);\n  console.log('  イベント名:', schema.eventName);\n  console.log('  パラメータ:', Object.keys(schema.params).join(', '));\n});",
+        "hints": [
+          "ワークアウト開始は 'workout_start'（動詞_名詞）という命名が自然です。",
+          "ワークアウト完了は 'workout_complete' が適切です。",
+          "購入イベントはGoogleの推奨イベント名 'purchase' を使います。"
+        ],
+        "answer": "const eventSchema = {\n  workoutStart: {\n    eventName: 'workout_start',\n    params: {\n      workout_type: 'running',\n      target_duration_min: 30\n    }\n  },\n  workoutComplete: {\n    eventName: 'workout_complete',\n    params: {\n      workout_type: 'running',\n      actual_duration_min: 28,\n      calories_burned: 320\n    }\n  },\n  premiumPurchase: {\n    eventName: 'purchase',\n    params: {\n      transaction_id: 'TXN-20240801-001',\n      value: 980,\n      currency: 'JPY'\n    }\n  }\n};\n\nObject.entries(eventSchema).forEach(([key, schema]) => {\n  console.log(`[${key}]`);\n  console.log('  イベント名:', schema.eventName);\n  console.log('  パラメータ:', Object.keys(schema.params).join(', '));\n});"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "Firebaseのイベント命名規則として正しいものはどれですか？",
+            "options": [
+              "キャメルケース（例: addToCart）",
+              "パスカルケース（例: AddToCart）",
+              "スネークケース（例: add_to_cart）",
+              "ケバブケース（例: add-to-cart）"
+            ],
+            "correct": 2,
+            "explanation": "Firebaseのイベント命名はスネークケース（小文字+アンダースコア）が推奨されています。Googleの推奨イベントもすべてこの形式です。統一することでBigQueryのクエリが書きやすくなり、レポートの可読性も上がります。"
+          },
+          {
+            "q": "イベント設計の出発点として最も正しいアプローチはどれですか？",
+            "options": [
+              "全画面遷移と全ボタンクリックを計測する",
+              "競合アプリのイベント設計を真似する",
+              "ビジネス上の問い（分析したいこと）から逆算して計測対象を決める",
+              "Firebaseが自動収集するイベントだけを使う"
+            ],
+            "correct": 2,
+            "explanation": "良いイベント設計はビジネス上の問いから逆算します。「なぜ離脱するのか？」「どの施策が効くか？」という問いがあってはじめて、計測すべきイベントが決まります。闇雲な計測はデータの墓場を作るだけです。"
+          },
+          {
+            "q": "ECアプリで「決済プロセスの開始」を計測する際に使うGoogleの推奨イベント名はどれですか？",
+            "options": [
+              "start_payment",
+              "checkout_begin",
+              "begin_checkout",
+              "payment_start"
+            ],
+            "correct": 2,
+            "explanation": "`begin_checkout` はGoogleが定義した推奨イベント名で、決済プロセスの開始を示します。推奨イベント名を使うとGoogle広告やGA4の標準レポートとの自動連携が有効になるため、カスタム名より優先して使うべきです。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール8-7 完了！\n\nアプリ内イベント設計の思考法と実践を習得しました。\n\n## 習得したスキル\n\n✅ **イベント設計3ステップ**（問いの定義→命名規則→パラメータ設計）を実践できる\n✅ **スネークケース命名規則**とGoogleの推奨イベント名を理解した\n✅ **パラメータ設計**（必要最低限・意味のある情報だけ）の考え方を身につけた\n✅ **ユーザージャーニーに沿ったイベント設計**をコードで表現できた\n\n## 次のステップ\n\n次のモジュール **「8-8: LTV（顧客生涯価値）の概要と計算」** では、アプリビジネスで最重要な長期的収益指標を学びます。",
+        "diagram": false
+      }
+    }
+  ]
+}

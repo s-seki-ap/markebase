@@ -1,0 +1,82 @@
+{
+  "id": "advertising--9-12",
+  "moduleId": "9-12",
+  "categoryId": "advertising",
+  "title": "Google検索キャンペーンの設計と目標設定",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 検索キャンペーンの設定は「目標」から始める\n\nGoogle検索キャンペーンを作成する際、多くの担当者が「キャンペーン名を入れて、予算を設定して...」と手順通りに進めます。しかし本来は**「このキャンペーンで何を達成するか」という目標設定が最初**です。\n\n## 目標設定がなぜ重要か\n\n目標設定がアカウントの多くの設定を決定します：\n\n- **入札戦略**: 目標CPA・目標ROAS・クリック数最大化のどれを選ぶか\n- **コンバージョン設定**: 何をコンバージョンとして計測するか\n- **予算**: 目標達成に必要な予算はいくらか\n- **成功基準**: いつ「成功」「失敗」と判断するか\n\n> **現場での問い**: 「なんとなく月¥30万の予算で始める」のか、「月50件の申込獲得のために必要な¥30万を投資する」のかでは、その後の判断が全く変わります。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# 検索キャンペーン設定の全項目\n\n## キャンペーン目標の選択\n\nGoogle広告では作成時に「目標」を選択します：\n\n| 目標 | 選択する場面 |\n|------|-------------|\n| 販売 | EC・商品購入 |\n| リード | 資料請求・問い合わせ・申込 |\n| ウェブサイトのトラフィック | サイト集客・認知 |\n| ブランド認知度とリーチ | 認知拡大 |\n| 目標なし | 手動で全設定をコントロールしたい場合 |\n\n## 必須設定項目チェックリスト\n\n```\n【基本設定】\n□ キャンペーン名（命名規則: 目的_媒体_KW種別_開始日）\n□ キャンペーン目標の選択\n□ キャンペーンタイプ: 検索\n\n【配信設定】\n□ 検索ネットワーク: Google検索のみ（GDNは除外推奨）\n□ ディスプレイネットワーク: オフ（デフォルトはオンに注意！）\n□ 配信地域: 対象地域のみ指定\n□ 言語: 日本語（+すべての言語 推奨）\n\n【入札設定】\n□ 入札戦略の選択\n□ 予算（日予算・月予算の換算確認）\n□ 広告のローテーション設定\n\n【コンバージョン設定】\n□ コンバージョンアクションの設定\n□ コンバージョン計測の確認（テスト）\n```\n\n## 落とし穴：デフォルト設定の罠\n\n```\n【必ず変更すべきデフォルト設定】\n\n1. ディスプレイネットワーク → デフォルトON\n   → 「検索キャンペーン」なのにバナー広告が配信される\n   → 必ずOFFに変更\n\n2. 広告ローテーション → デフォルト「最もパフォーマンスの高い広告を優先」\n   → テスト初期は「均等ローテーション」にしてA/Bテストを実施\n\n3. 動的検索広告 → デフォルトで有効になる場合がある\n   → 意図しないキーワードで表示されるリスクがあるため確認が必要\n```\n\n## コンバージョン計測の設定\n\n```\n【主なコンバージョンアクション】\n・フォーム送信完了ページへの到達\n・電話番号クリック\n・購入完了（EC）\n・特定ページの滞在時間\n・PDFダウンロード\n\n【計測方法】\n・Googleタグ直接設置（gtag.js）\n・GTM経由でのタグ設置（推奨）\n・GA4とのリンクによるインポート\n```",
+        "diagram": false
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: キャンペーン設定仕様書を作成する\n\n新規キャンペーンの設定仕様書をHTMLで作成します。\n\n**シナリオ**: 弁護士事務所の「相談予約フォーム送信」を獲得する検索キャンペーンを新規作成します。\n\n## 課題\n\n以下のHTMLに、キャンペーン設定の全項目を埋めてください。条件は以下の通りです。\n\n- 目的: 相談予約の獲得（CPA目標 ¥15,000以下）\n- 配信地域: 東京都・神奈川県\n- 月予算: ¥300,000\n- 入札戦略: 目標CPA",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>キャンペーン設定仕様書</title>\n  <style>\n    body { font-family: 'Noto Sans JP', sans-serif; background: #f8fafc; padding: 20px; color: #1e293b; }\n    h1 { font-size: 18px; }\n    table { border-collapse: collapse; width: 100%; margin-top: 16px; font-size: 13px; }\n    th { background: #334155; color: white; padding: 8px 12px; text-align: left; width: 30%; }\n    td { border: 1px solid #e2e8f0; padding: 8px 12px; }\n    .section-header { background: #eff6ff; font-weight: bold; color: #1e40af; padding: 6px 12px; border: 1px solid #bfdbfe; }\n    .warning { background: #fef9c3; color: #b45309; font-size: 12px; }\n  </style>\n</head>\n<body>\n  <h1>検索キャンペーン 設定仕様書</h1>\n  <table>\n    <tbody>\n      <tr><td colspan=\"2\" class=\"section-header\">基本設定</td></tr>\n      <tr><th>キャンペーン名</th><td><!-- 命名規則に従って入力 --></td></tr>\n      <tr><th>キャンペーン目標</th><td><!-- 目標を入力 --></td></tr>\n      <tr><th>キャンペーンタイプ</th><td><!-- タイプを入力 --></td></tr>\n\n      <tr><td colspan=\"2\" class=\"section-header\">配信設定</td></tr>\n      <tr><th>検索ネットワーク</th><td><!-- ON/OFFと理由 --></td></tr>\n      <tr><th>ディスプレイネットワーク</th><td><!-- ON/OFFと理由（注意） --></td></tr>\n      <tr><th>配信地域</th><td><!-- 地域を入力 --></td></tr>\n      <tr><th>言語</th><td><!-- 言語設定 --></td></tr>\n\n      <tr><td colspan=\"2\" class=\"section-header\">予算・入札設定</td></tr>\n      <tr><th>日予算</th><td><!-- 月予算から逆算 --></td></tr>\n      <tr><th>入札戦略</th><td><!-- 戦略と目標値 --></td></tr>\n\n      <tr><td colspan=\"2\" class=\"section-header\">コンバージョン設定</td></tr>\n      <tr><th>コンバージョンアクション</th><td><!-- 何をCVとするか --></td></tr>\n      <tr><th>計測方法</th><td><!-- タグの設置方法 --></td></tr>\n    </tbody>\n  </table>\n</body>\n</html>",
+        "hints": [
+          "キャンペーン名の命名規則例: 「リード_検索_弁護士相談_250401」のように目的・媒体・内容・開始日を含めます。",
+          "日予算 = 月予算 ÷ 30.4（日数）。¥300,000 ÷ 30.4 ≒ ¥9,868 → 約¥10,000に設定します。",
+          "ディスプレイネットワークは必ずOFFに設定し、その理由（意図しないバナー配信を避けるため）も記載しましょう。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>キャンペーン設定仕様書</title>\n  <style>\n    body { font-family: 'Noto Sans JP', sans-serif; background: #f8fafc; padding: 20px; color: #1e293b; }\n    h1 { font-size: 18px; }\n    table { border-collapse: collapse; width: 100%; margin-top: 16px; font-size: 13px; }\n    th { background: #334155; color: white; padding: 8px 12px; text-align: left; width: 30%; }\n    td { border: 1px solid #e2e8f0; padding: 8px 12px; }\n    .section-header { background: #eff6ff; font-weight: bold; color: #1e40af; padding: 6px 12px; border: 1px solid #bfdbfe; }\n    .warning { background: #fef9c3; color: #b45309; font-size: 12px; }\n  </style>\n</head>\n<body>\n  <h1>検索キャンペーン 設定仕様書</h1>\n  <table>\n    <tbody>\n      <tr><td colspan=\"2\" class=\"section-header\">基本設定</td></tr>\n      <tr><th>キャンペーン名</th><td>リード_検索_弁護士相談予約_250401</td></tr>\n      <tr><th>キャンペーン目標</th><td>リード（相談予約フォーム送信の獲得）</td></tr>\n      <tr><th>キャンペーンタイプ</th><td>検索</td></tr>\n      <tr><td colspan=\"2\" class=\"section-header\">配信設定</td></tr>\n      <tr><th>検索ネットワーク</th><td>ON（Google検索結果ページのみ）</td></tr>\n      <tr><th>ディスプレイネットワーク</th><td class=\"warning\">OFF（必須）: デフォルトONのため必ず変更。検索意図のないユーザーへのバナー配信を避けるため</td></tr>\n      <tr><th>配信地域</th><td>東京都・神奈川県（対象エリアのみ。全国設定は予算の無駄）</td></tr>\n      <tr><th>言語</th><td>日本語 + すべての言語（言語設定が日本語以外でも日本語で検索するユーザーをカバー）</td></tr>\n      <tr><td colspan=\"2\" class=\"section-header\">予算・入札設定</td></tr>\n      <tr><th>日予算</th><td>¥10,000/日（¥300,000 ÷ 30.4日 ≒ ¥9,868 → 切り上げ）</td></tr>\n      <tr><th>入札戦略</th><td>目標コンバージョン単価（目標CPA: ¥15,000）※初期2週間はCV実績収集のため「クリック数の最大化」を使用し、30CV以上獲得後に切り替え</td></tr>\n      <tr><td colspan=\"2\" class=\"section-header\">コンバージョン設定</td></tr>\n      <tr><th>コンバージョンアクション</th><td>相談予約フォーム送信完了ページ（/contact/thanks）への到達</td></tr>\n      <tr><th>計測方法</th><td>GTM経由でGoogleタグを設置。GA4イベントのインポートを併用して計測精度を担保</td></tr>\n    </tbody>\n  </table>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "検索キャンペーン作成時に「ディスプレイネットワーク」をOFFにすべき理由として正しいのはどれですか？",
+            "options": [
+              "ディスプレイ広告は費用が高いため",
+              "デフォルトでONになっており、意図しないバナー広告が配信されるリスクがあるため",
+              "ディスプレイネットワークはGoogle広告では利用できないため",
+              "ディスプレイネットワークはリターゲティングにしか使えないため"
+            ],
+            "correct": 1,
+            "explanation": "検索キャンペーン作成時、ディスプレイネットワークはデフォルトでONになっています。このままだと検索以外のWebサイトにもバナー広告が配信され、検索意図のないユーザーに広告が届いてしまいます。必ずOFFに変更する必要があります。"
+          },
+          {
+            "q": "月予算¥300,000を日予算に換算する場合、適切な計算方法はどれですか？",
+            "options": [
+              "¥300,000 ÷ 30日 = ¥10,000",
+              "¥300,000 ÷ 30.4日 ≒ ¥9,868（切り上げて¥10,000）",
+              "¥300,000 ÷ 20日（平日のみ）= ¥15,000",
+              "¥300,000をそのまま日予算として設定"
+            ],
+            "correct": 1,
+            "explanation": "Googleは月の日数を30.4日で計算します。¥300,000 ÷ 30.4 ≒ ¥9,868となります。実務では切り上げて¥10,000に設定することが多いです。Google広告は月全体の超過が日予算×30.4倍を超えないように制御されています。"
+          },
+          {
+            "q": "「目標コンバージョン単価（目標CPA）」入札戦略を設定する際に必要な前提条件はどれですか？",
+            "options": [
+              "キャンペーンの開始から1ヶ月以上経過していること",
+              "過去30日間に最低30件以上のコンバージョン実績があること",
+              "月予算が¥100万円以上あること",
+              "Googleの認定パートナーエージェンシーが運用していること"
+            ],
+            "correct": 1,
+            "explanation": "目標CPA入札には機械学習のためのデータが必要で、一般的に過去30日間に最低30件（理想は50件以上）のコンバージョン実績が推奨されます。実績がない初期段階では「クリック数の最大化」でデータを蓄積してから切り替えます。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール9-12 完了！\n\nGoogle検索キャンペーンの設計と目標設定を習得しました。\n\n## 習得したスキル\n\n✅ **キャンペーン目標の5種類**と選択基準を説明できる\n✅ **必須設定項目**（ディスプレイNW OFF等のデフォルト罠を含む）を把握した\n✅ **日予算の計算方法**（月予算÷30.4日）を習得した\n✅ **コンバージョン計測の設定方法**を理解した\n\n## 次のステップ\n\n次のモジュール **「9-13: 広告グループの粒度設計とSKAGの適用判断」** では、広告グループの細かさをどう設計するかと、SKAGという設計手法について学びます。\n\n> **実務チャレンジ**: 担当しているキャンペーンの設定画面を開き、「ディスプレイネットワーク」がOFFになっているか今すぐ確認してください。ONになっていれば即座にOFFに変更しましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

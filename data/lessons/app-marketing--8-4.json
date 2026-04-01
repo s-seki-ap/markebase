@@ -1,0 +1,82 @@
+{
+  "id": "app-marketing--8-4",
+  "moduleId": "8-4",
+  "categoryId": "app-marketing",
+  "title": "DAU / MAU / ARPUの計算と活用",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# アプリ事業の健全性を測る3本柱\n\nアプリ事業の経営会議やクライアントへのレポートで必ずと言っていいほど登場するのが **DAU・MAU・ARPU** の3指標です。この3つを正確に計算・解釈できれば、アプリビジネスの状態を素早く診断できます。\n\n## 3指標の直感的な理解\n\n- **DAU**（Daily Active Users）: 「今日、何人がアプリを使ったか」\n- **MAU**（Monthly Active Users）: 「今月、何人がアプリを使ったか」\n- **ARPU**（Average Revenue Per User）: 「1ユーザーから平均いくら稼いでいるか」\n\n## これらを組み合わせると何がわかるか\n\n```\nARPU = 月次売上 / MAU\n\nDAU / MAU = Stickiness（習慣化度）\n\n月次売上 = MAU × ARPU\n```\n\nたとえば「MAUが増えてもARPUが下がっている」なら、ライトユーザーは増えているが課金ユーザーへの転換ができていないと判断できます。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# DAU・MAU・ARPUの詳細と活用法\n\n## DAU（Daily Active Users）\n\n```\nDAU = 特定の1日にアプリを起動したユニークユーザー数\n\n注意点:\n- 「起動」の定義をFirebaseの設定に合わせること\n- 週末・平日でDAUが変動するため、7日間移動平均が実用的\n- ゲームアプリ: 高DAUが必須 / 業務ツール: 平日DAU重視\n```\n\n## MAU（Monthly Active Users）\n\n```\nMAU = 過去30日間にアプリを起動したユニークユーザー数\n\n活用:\n- 事業規模・成長率の基準指標\n- 月次レポートの最重要KPI\n- MAU成長率 = (今月MAU - 先月MAU) / 先月MAU × 100\n```\n\n## ARPU と ARPPU の違い\n\n| 指標 | 計算式 | 意味 |\n|---|---|---|\n| **ARPU** | 月次売上 ÷ MAU | 全ユーザー平均単価 |\n| **ARPPU** | 月次売上 ÷ 課金ユーザー数 | 課金ユーザー平均単価 |\n\n**使い分け**:\n- ARPUはビジネス全体の効率性を示す。MAUを維持しながらARPUを上げることが理想\n- ARPPUは課金ユーザーの価値評価。ARPPUが高すぎると課金ユーザーが少ないサインかも\n\n## 業界別の目安値\n\n| カテゴリ | DAU/MAU目安 | ARPU目安（月） |\n|---|---|---|\n| ソーシャルゲーム | 30〜50% | ¥1,500〜¥3,000 |\n| ECアプリ | 10〜20% | ¥3,000〜¥10,000 |\n| フィットネス | 20〜35% | ¥500〜¥1,500 |\n| ニュース | 40〜60% | ¥100〜¥500（広告） |",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: DAU・MAU・ARPUを計算してアプリ診断する\n\n以下のデータからアプリの健全性を診断してください。\n\n## 課題\n\n1. `calcMetrics()` 関数を完成させる（MAU成長率・ARPU・Stickiness・ARPPU）\n2. `diagnose()` 関数でStickinessが20%以上かどうかを判定する",
+        "starterCode": "// アプリデータ\nconst appData = {\n  // 今月\n  currentMonth: {\n    mau: 250000,\n    dau: 62500,\n    revenue: 37500000,  // 円\n    payingUsers: 12500\n  },\n  // 先月\n  lastMonth: {\n    mau: 210000\n  }\n};\n\nfunction calcMetrics(data) {\n  const curr = data.currentMonth;\n  const last = data.lastMonth;\n  \n  return {\n    // MAU成長率（%）を計算してください\n    mauGrowthRate: 0,\n    \n    // ARPU（円）を計算してください\n    arpu: 0,\n    \n    // ARPPU（円）を計算してください\n    arppu: 0,\n    \n    // Stickiness（%）を計算してください\n    stickiness: 0\n  };\n}\n\nfunction diagnose(stickiness) {\n  // stickinessが20以上なら '健全' を、未満なら '要改善' を返してください\n  return '';\n}\n\n// 結果出力（変更不要）\nconst metrics = calcMetrics(appData);\nconsole.log('MAU成長率:', metrics.mauGrowthRate.toFixed(1) + '%');\nconsole.log('ARPU:', '¥' + metrics.arpu.toLocaleString());\nconsole.log('ARPPU:', '¥' + metrics.arppu.toLocaleString());\nconsole.log('Stickiness:', metrics.stickiness.toFixed(1) + '%');\nconsole.log('診断:', diagnose(metrics.stickiness));",
+        "hints": [
+          "MAU成長率 = (currentMAU - lastMAU) / lastMAU * 100",
+          "ARPU = revenue / mau、ARPPU = revenue / payingUsers",
+          "diagnoseはif文でstickinessが20以上かどうかを判定します。"
+        ],
+        "answer": "const appData = {\n  currentMonth: {\n    mau: 250000,\n    dau: 62500,\n    revenue: 37500000,\n    payingUsers: 12500\n  },\n  lastMonth: {\n    mau: 210000\n  }\n};\n\nfunction calcMetrics(data) {\n  const curr = data.currentMonth;\n  const last = data.lastMonth;\n  return {\n    mauGrowthRate: (curr.mau - last.mau) / last.mau * 100,\n    arpu: curr.revenue / curr.mau,\n    arppu: curr.revenue / curr.payingUsers,\n    stickiness: curr.dau / curr.mau * 100\n  };\n}\n\nfunction diagnose(stickiness) {\n  return stickiness >= 20 ? '健全' : '要改善';\n}\n\nconst metrics = calcMetrics(appData);\nconsole.log('MAU成長率:', metrics.mauGrowthRate.toFixed(1) + '%');\nconsole.log('ARPU:', '¥' + metrics.arpu.toLocaleString());\nconsole.log('ARPPU:', '¥' + metrics.arppu.toLocaleString());\nconsole.log('Stickiness:', metrics.stickiness.toFixed(1) + '%');\nconsole.log('診断:', diagnose(metrics.stickiness));"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "月次売上が3,000万円でMAUが10万人の場合、ARPUはいくらですか？",
+            "options": [
+              "¥300",
+              "¥3,000",
+              "¥30,000",
+              "¥300,000"
+            ],
+            "correct": 1,
+            "explanation": "ARPU = 月次売上 ÷ MAU = 30,000,000 ÷ 100,000 = ¥300となります。この¥300というARPUが業界平均と比べて高いか低いかを判断することで、収益構造の改善余地がわかります。"
+          },
+          {
+            "q": "ARPUとARPPUの違いについて正しい説明はどれですか？",
+            "options": [
+              "ARPUは日次、ARPPUは月次の指標である",
+              "ARPUは全MAUで割り、ARPPUは課金ユーザー数のみで割る",
+              "ARPPUはARPUの1/10程度になることが多い",
+              "ARPUはiOS専用、ARPPUはAndroid専用の指標"
+            ],
+            "correct": 1,
+            "explanation": "ARPUは月次売上を全MAUで割った「全ユーザー平均単価」です。ARPPUは月次売上を課金ユーザー数で割った「課金ユーザー平均単価」です。課金転換率が低いアプリではARPPUがARPUの数十倍になります。"
+          },
+          {
+            "q": "「MAUは増加しているがARPUが低下している」状況が示すものとして最も適切な解釈はどれですか？",
+            "options": [
+              "アプリのバグが増えている",
+              "ライトユーザーは獲得できているが課金ユーザーへの転換ができていない",
+              "プッシュ通知の送信頻度が高すぎる",
+              "競合アプリに乗り換えが起きている"
+            ],
+            "correct": 1,
+            "explanation": "MAU増加はユーザー獲得が順調なことを示しますが、ARPUの低下は新規ユーザーが課金に至っていないことを意味します。オンボーディングの改善や課金導線の最適化、フリーミアムの転換施策が必要なサインです。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール8-4 完了！\n\nアプリ事業の健全性を測る3本柱を習得しました。\n\n## 習得したスキル\n\n✅ **DAU・MAU・ARPU・ARPPU**の計算式を正確に説明できる\n✅ **MAU成長率**を計算してビジネスの成長性を評価できる\n✅ **StickinessとARPU**を組み合わせてアプリ診断ができる\n✅ **カテゴリ別の目安値**を使って自社アプリを評価する視点を持てた\n\n## 次のステップ\n\n次のモジュール **「8-5: インストールから初回起動までの計測」** では、ユーザーの最初のタッチポイントから起動に至るまでの計測フローを学びます。",
+        "diagram": false
+      }
+    }
+  ]
+}

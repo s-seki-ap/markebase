@@ -1,0 +1,67 @@
+{
+  "id": "html--1-17",
+  "moduleId": "1-17",
+  "categoryId": "html",
+  "title": "水平線（hr）とセクション分割の視覚的・意味的使い方",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 水平線hrとセクション分割を使い分ける\n\nLPでセクションを区切るとき、`<hr>` を使うべきか、`<div>` にCSSで区切りをつけるべきか、迷ったことはありませんか？\n\n## マーケターが知るべき理由\n\n**1. LPのセクション設計**\nヒーロー → 特徴 → お客様の声 → 料金 → CTAという典型的なLPの構造で、セクション間の区切りをどう表現するかはデザインとセマンティクスの両方に関わります。\n\n**2. アクセシビリティ**\nスクリーンリーダーは `<hr>` を「区切り線」として読み上げます。適切に使えばコンテンツの構造がユーザーに伝わります。\n\n**3. SEOでのコンテンツ構造**\n検索エンジンはHTML5のセマンティック要素（section, article）を使ってコンテンツの構造を理解します。\n\nこのモジュールでは、hrタグの正しい使い方とセクション分割の方法を学びます。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# hrタグとセクション分割\n\n## hrタグの基本\n\n```html\n<h2>第1章: 基礎知識</h2>\n<p>基礎知識の内容...</p>\n\n<hr>\n\n<h2>第2章: 応用テクニック</h2>\n<p>応用テクニックの内容...</p>\n```\n\n- **意味**: テーマや話題の切り替わり（Thematic Break）\n- **表示**: 水平線（デフォルトはグレーの線）\n- **要素タイプ**: 空要素（終了タグ不要）\n- **ブロック要素**: 前後に改行される\n\n## hrの適切な使用場面\n\n```html\n<!-- OK: 記事内の話題の切り替わり -->\n<article>\n  <p>前半の話題...</p>\n  <hr>\n  <p>後半の別の話題...</p>\n</article>\n\n<!-- OK: フッター前の区切り -->\n<hr>\n<footer>\n  <p>&copy; 2024 会社名</p>\n</footer>\n```\n\n## hrを使うべきでない場面\n\n```html\n<!-- NG: 単なるデザイン上の装飾線 -->\n<h1>タイトル</h1>\n<hr>  <!-- 見た目のための装飾ならCSSを使う -->\n<p>本文</p>\n\n<!-- NG: LPのセクション間の視覚的な区切り -->\n<section class=\"features\">\n  ...\n</section>\n<hr>  <!-- sectionタグ自体が区切りの意味を持つ -->\n<section class=\"pricing\">\n  ...\n</section>\n```\n\n## LPのセクション分割: section vs div vs hr\n\n| 方法 | 意味 | 使い場面 |\n|------|------|----------|\n| `<section>` | 意味的なセクション区切り | 独立したテーマを持つコンテンツ群 |\n| `<div>` + CSS | 意味なし（視覚的な区切りのみ） | デザイン目的のグルーピング |\n| `<hr>` | テーマの切り替わり | 同一セクション内の話題転換 |\n\n### LP構造のベストプラクティス\n\n```html\n<body>\n  <header>\n    <nav>...</nav>\n  </header>\n\n  <main>\n    <section class=\"hero\">\n      <h1>メインキャッチコピー</h1>\n      <p>サブコピー</p>\n    </section>\n\n    <section class=\"features\">\n      <h2>特徴・メリット</h2>\n      <div class=\"feature-grid\">\n        <div class=\"feature-card\">...</div>\n        <div class=\"feature-card\">...</div>\n      </div>\n    </section>\n\n    <section class=\"testimonials\">\n      <h2>お客様の声</h2>\n      ...\n    </section>\n\n    <section class=\"pricing\">\n      <h2>料金プラン</h2>\n      ...\n    </section>\n\n    <section class=\"cta\">\n      <h2>今すぐ始めましょう</h2>\n      <a href=\"/signup\" class=\"cta-btn\">無料で始める</a>\n    </section>\n  </main>\n\n  <footer>...</footer>\n</body>\n```\n\n## CSSで装飾的な区切りを作る\n\n```css\n/* sectionの間に装飾的な区切り線 */\nsection + section {\n  border-top: 1px solid #e5e7eb;\n  padding-top: 60px;\n  margin-top: 60px;\n}\n\n/* hrのスタイリング */\nhr {\n  border: none;\n  border-top: 2px solid #e5e7eb;\n  margin: 2em 0;\n}\n\n/* おしゃれな区切り線 */\nhr.decorative {\n  border: none;\n  height: 3px;\n  background: linear-gradient(to right, transparent, #3b82f6, transparent);\n}\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: LPのセクション構造を正しく設計する\n\nLPのHTML構造を、sectionタグとhrタグを適切に使い分けて設計してください。\n\n## 課題\n\n1. 各コンテンツブロックを `<section>` で囲む\n2. 記事内容の話題の切り替わりに `<hr>` を使う\n3. セクション間の視覚的な区切りはCSSで表現する（hrは使わない）",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>商品LP</title>\n  <style>\n    body { font-family: sans-serif; margin: 0; }\n    section { padding: 40px 20px; max-width: 800px; margin: 0 auto; }\n    section + section { border-top: 1px solid #e5e7eb; }\n    hr { border: none; border-top: 1px dashed #d1d5db; margin: 2em 0; }\n    .cta-btn { display: inline-block; background: #10b981; color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; }\n  </style>\n</head>\n<body>\n\n  <!-- ① heroセクションをsectionタグで囲んでください -->\n  <h1>ナチュラルスキンケアシリーズ</h1>\n  <p>自然の力で、あなたの肌を美しく。</p>\n\n  <!-- ② 特徴セクションをsectionタグで囲んでください -->\n  <h2>3つの特徴</h2>\n  <p>天然由来成分100%の安心処方です。</p>\n  <!-- 話題が切り替わる部分にhrを入れてください -->\n  <p>さらに、全商品が国内工場で製造されています。</p>\n\n  <!-- ③ CTAセクションをsectionタグで囲んでください -->\n  <h2>今すぐお試しください</h2>\n  <p>初回限定30%OFFでご提供中です。</p>\n  <a href=\"/order\" class=\"cta-btn\">注文する</a>\n\n</body>\n</html>",
+        "hints": [
+          "各コンテンツブロックを <section> タグで囲みます。<section class=\"hero\">...</section> のように。",
+          "<hr> は同一セクション内の話題の切り替わりに使います。セクション間には使いません。",
+          "セクション間の視覚的な区切りはCSSの border-top で実現しています。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>商品LP</title>\n  <style>\n    body { font-family: sans-serif; margin: 0; }\n    section { padding: 40px 20px; max-width: 800px; margin: 0 auto; }\n    section + section { border-top: 1px solid #e5e7eb; }\n    hr { border: none; border-top: 1px dashed #d1d5db; margin: 2em 0; }\n    .cta-btn { display: inline-block; background: #10b981; color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; }\n  </style>\n</head>\n<body>\n\n  <section class=\"hero\">\n    <h1>ナチュラルスキンケアシリーズ</h1>\n    <p>自然の力で、あなたの肌を美しく。</p>\n  </section>\n\n  <section class=\"features\">\n    <h2>3つの特徴</h2>\n    <p>天然由来成分100%の安心処方です。</p>\n    <hr>\n    <p>さらに、全商品が国内工場で製造されています。</p>\n  </section>\n\n  <section class=\"cta\">\n    <h2>今すぐお試しください</h2>\n    <p>初回限定30%OFFでご提供中です。</p>\n    <a href=\"/order\" class=\"cta-btn\">注文する</a>\n  </section>\n\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "HTML5における<hr>タグの意味的な役割は何ですか？",
+            "options": ["見た目の装飾線", "テーマや話題の切り替わり（Thematic Break）", "ページの終了", "セクションの開始"],
+            "correct": 1,
+            "explanation": "HTML5では<hr>は「Thematic Break（テーマの区切り）」を表します。単なる装飾線ではなく、話題や場面の転換を意味するセマンティックな要素です。"
+          },
+          {
+            "q": "LPのセクション（ヒーロー→特徴→料金→CTA）を区切るのに最適な方法はどれですか？",
+            "options": ["各セクション間に<hr>を入れる", "<br>を複数入れて空白を作る", "<section>タグで囲み、CSSで視覚的な区切りをつける", "<div>にstyle属性で線を引く"],
+            "correct": 2,
+            "explanation": "LPのセクション分割には<section>タグを使い、CSSのborder-topやmarginで視覚的な区切りを表現するのがベストプラクティスです。各sectionは独立した意味的なまとまりを持ちます。"
+          },
+          {
+            "q": "<hr>タグは空要素ですが、正しい書き方はどれですか？",
+            "options": ["<hr></hr>", "<hr>", "<hr/>（必須）", "<horizontal-rule>"],
+            "correct": 1,
+            "explanation": "HTML5では<hr>と書きます。空要素なので終了タグは不要です。<hr />（スラッシュ付き）も許容されますが必須ではありません。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール1-17 完了！\n\n水平線hrとセクション分割の正しい使い分けを習得しました。\n\n## 習得したスキル\n\n✅ **hr** はテーマの切り替わりに使う意味的な要素であることを理解した\n✅ **section** タグでLPのセクション構造を設計できる\n✅ **CSSで視覚的な区切り**を表現する方法を知った\n✅ hrを使うべき場面と使うべきでない場面を**判断**できる\n\n## 次のステップ\n\n次のモジュール **「1-18: abbr・acronymタグと略語の展開表示」** では、GA4やGTMなどの略語に正式名称を付与してアクセシビリティを高める方法を学びます。\n\n> 💡 **実務チャレンジ**: 自社LPのHTMLを確認して、セクション分割が `<div>` だけで行われていないかチェックしましょう。`<section>` への変更を提案するとSEOとアクセシビリティが改善します。",
+        "diagram": false
+      }
+    }
+  ]
+}

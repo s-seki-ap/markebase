@@ -1,0 +1,82 @@
+{
+  "id": "bigquery--6-10",
+  "moduleId": "6-10",
+  "categoryId": "bigquery",
+  "title": "NULL値の扱い：IS NULL/IS NOT NULLの正しい使い方",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# GA4データには「NULL」が多く含まれる\n\nGA4のBigQueryエクスポートデータを扱う際、NULL値への対処は避けられません。\n\n**NULLが発生する代表的なシーン**：\n- `traffic_source.medium` が `null`：ダイレクトアクセスや未設定のUTMパラメータ\n- `geo.city` が `null`：位置情報が取得できなかったセッション\n- `user_id` が `null`：ログインしていないユーザー（匿名ユーザー）\n- イベントパラメータの一部が設定されていない場合\n\n## NULLとは何か\n\nNULLは「値がない・不明・未設定」を意味します。`0`（ゼロ）や`''`（空文字）とは**まったく異なる概念**です。\n\n| 値 | 意味 |\n|----|------|\n| `0` | 数値のゼロ（確定した値） |\n| `''` | 空の文字列（確定した値） |\n| `NULL` | 値が存在しない・不明 |\n\n## NULLの「罠」\n\n```sql\n-- これは動かない！NULLの比較に = は使えない\nWHERE traffic_source.medium = NULL  -- NG\n\n-- 正しい書き方\nWHERE traffic_source.medium IS NULL  -- OK\n```",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# NULL値の操作\n\n## IS NULL / IS NOT NULL\n\n```sql\n-- traffic_source.mediumがNULL（ダイレクトアクセス等）のデータを取得\nSELECT\n  event_date,\n  user_pseudo_id,\n  traffic_source.medium\nFROM\n  `myproject.analytics_123456789.events_20240115`\nWHERE\n  traffic_source.medium IS NULL\n\n-- user_idがセットされているユーザー（ログイン済み）のみ取得\nSELECT\n  event_date,\n  user_id,\n  event_name\nFROM\n  `myproject.analytics_123456789.events_20240115`\nWHERE\n  user_id IS NOT NULL\n```\n\n## COALESCE：NULLを別の値に置き換える\n\n```sql\n-- NULLの場合は '(direct)' に置き換えて表示\nSELECT\n  event_date,\n  COALESCE(traffic_source.medium, '(direct)') AS medium\nFROM\n  `myproject.analytics_123456789.events_20240115`\n```\n\n## IFNULL：BigQuery特有のNULL置換（COALESCEの2引数版）\n\n```sql\n-- IFNULLはBigQueryの組み込み関数（2つの引数のみ）\nSELECT\n  IFNULL(traffic_source.medium, '(not set)') AS medium,\n  COUNT(*) AS event_count\nFROM\n  `myproject.analytics_123456789.events_20240115`\nGROUP BY medium\n```\n\n## NULLと集計関数の関係\n\n```sql\n-- COUNT(*) はNULLを含むすべての行をカウント\n-- COUNT(列名) はその列がNULLでない行だけをカウント\nSELECT\n  COUNT(*)                AS total_events,    -- NULLを含む全イベント数\n  COUNT(user_id)          AS logged_in_events, -- user_idがNULLでないイベント数\n  COUNT(DISTINCT user_id) AS unique_logged_in_users  -- ログイン済みユニークユーザー数\nFROM\n  `myproject.analytics_123456789.events_20240115`\n```",
+        "diagram": false
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習：NULL値を適切に処理する\n\n## 課題\n\n以下の分析要件をSQLで実装してください。\n\n**要件**：2024年1月の流入メディア別イベント数を集計する。ただし、`traffic_source.medium` がNULLの場合は `'(direct)'` と表示すること。\n\n**条件**：\n- テーブル：`myproject.analytics_123456789.events_*`\n- 期間：2024年1月\n- 取得列：流入メディア（NULL→`'(direct)'`に変換）、イベント数\n- 集計：メディア別にGROUP BY\n- 並び順：イベント数の多い順\n\n> 💡 `COALESCE(列名, 'デフォルト値')` でNULLを別の値に置き換えられます。",
+        "starterCode": "-- 2024年1月の流入メディア別イベント数（NULLは(direct)として表示）\n\nSELECT\n  -- traffic_source.mediumがNULLのときは'(direct)'に置換\n  COALESCE(________, '(direct)') AS medium,\n  COUNT(*) AS event_count\nFROM\n  `myproject.analytics_123456789.events_*`\nWHERE\n  _TABLE_SUFFIX BETWEEN '20240101' AND '20240131'\nGROUP BY\n  medium\nORDER BY\n  event_count DESC",
+        "hints": [
+          "COALESCE(値, デフォルト値) の第1引数に NULL が含まれうる列名を入れます。",
+          "traffic_source.medium が NULL のときに '(direct)' を返したい場合: `COALESCE(traffic_source.medium, '(direct)')` です。",
+          "COALESCEで変換した列にASでエイリアス名(medium)をつけ、GROUP BY ではそのエイリアスを使います。"
+        ],
+        "answer": "-- 2024年1月の流入メディア別イベント数（NULLは(direct)として表示）\n\nSELECT\n  COALESCE(traffic_source.medium, '(direct)') AS medium,\n  COUNT(*) AS event_count\nFROM\n  `myproject.analytics_123456789.events_*`\nWHERE\n  _TABLE_SUFFIX BETWEEN '20240101' AND '20240131'\nGROUP BY\n  medium\nORDER BY\n  event_count DESC"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "NULLを条件で絞り込む正しい書き方はどれですか？",
+            "options": [
+              "`WHERE column = NULL`",
+              "`WHERE column == NULL`",
+              "`WHERE column IS NULL`",
+              "`WHERE column EQUALS NULL`"
+            ],
+            "correct": 2,
+            "explanation": "NULLは「値が存在しない」状態であるため、`=`（等号）では比較できません。`IS NULL` または `IS NOT NULL` を使う必要があります。`column = NULL` は常に FALSE（または UNKNOWN）を返します。"
+          },
+          {
+            "q": "`COUNT(*)`と`COUNT(列名)`の違いとして正しい説明はどれですか？",
+            "options": [
+              "どちらも完全に同じ結果を返す",
+              "`COUNT(*)`は全行数を返し、`COUNT(列名)`はその列がNULLでない行数を返す",
+              "`COUNT(*)`はNULLを除いた行数、`COUNT(列名)`はNULLを含む全行数を返す",
+              "`COUNT(列名)`の方が常に高速に実行される"
+            ],
+            "correct": 1,
+            "explanation": "`COUNT(*)` はNULLを含むすべての行数を返します。`COUNT(列名)` はその列の値がNULLでない行だけをカウントします。例えば `COUNT(user_id)` はログイン済みユーザーのイベント数（user_idがNULLでないもの）になります。"
+          },
+          {
+            "q": "`COALESCE(traffic_source.medium, '(direct)')` の説明として正しいものはどれですか？",
+            "options": [
+              "traffic_source.mediumが '(direct)' の行だけを取得する",
+              "traffic_source.mediumがNULLでない場合は '(direct)' を返す",
+              "traffic_source.mediumがNULLの場合は '(direct)'、それ以外はtraffic_source.mediumの値を返す",
+              "traffic_source.mediumと '(direct)' を文字列連結する"
+            ],
+            "correct": 2,
+            "explanation": "`COALESCE(値1, 値2)` は値1がNULLでなければ値1を返し、NULLであれば値2を返します。`COALESCE(traffic_source.medium, '(direct)')` はmediumがNULLのときだけ '(direct)' が返り、値があればその値がそのまま返ります。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール6-10 完了！\n\nNULL値の正しい扱い方をマスターしました。\n\n## 習得したスキル\n\n✅ **NULLとは何か**（0や空文字との違い）を説明できる\n✅ **IS NULL / IS NOT NULL** でNULLを条件指定できる\n✅ **COALESCE / IFNULL** でNULLを別の値に置き換えられる\n✅ **COUNT(*) と COUNT(列名)** の違いを理解した\n\n## GA4データでよく使うNULL処理\n\n```sql\n-- ダイレクト流入を明示する\nCOALESCE(traffic_source.medium, '(direct)')\n\n-- ログイン済みユーザーのみ絞り込む\nWHERE user_id IS NOT NULL\n\n-- 未設定のキャンペーンを除外する\nWHERE traffic_source.name IS NOT NULL\n```\n\n## 次のステップ\n\n次のモジュール **「6-11: GROUP BY」** では、データを集計する際の基本であるGROUP BYの使い方を学びます。日別・メディア別・デバイス別などの集計が自在にできるようになります。",
+        "diagram": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "id": "javascript--3-10",
+  "moduleId": "3-10",
+  "categoryId": "javascript",
+  "title": "ES5構文でGTM互換JSを書く方法",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "## ES5構文でGTM互換JSを書く方法\n\nGTMのカスタムHTMLタグは、Internet Explorer 11を含む古いブラウザでも動作する必要があります。そのため、最新のES6+構文（`const`、`let`、アロー関数など）はGTM環境では予期しない動作を引き起こすことがあります。\n\nこのモジュールでは、GTMで安全に使えるES5ベースの書き方を習得します。\n\n**このモジュールで学ぶこと**\n- ES5とES6+の違いとGTMにおけるリスク\n- `var` を使った変数宣言\n- 通常の関数式・関数宣言の書き方\n- ES5互換の配列・オブジェクト操作",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "## ES5 vs ES6+：GTMで気をつける構文の違い\n\n### 変数宣言\n\n```javascript\n// ES6（GTMでリスクあり）\nconst userId = '12345';\nlet pageType = 'top';\n\n// ES5（GTM推奨）\nvar userId = '12345';\nvar pageType = 'top';\n```\n\n### 関数の定義\n\n```javascript\n// ES6 アロー関数（古いブラウザで非対応）\nvar getLabel = (category, action) => category + '_' + action;\n\n// ES5 関数式（GTM推奨）\nvar getLabel = function(category, action) {\n  return category + '_' + action;\n};\n\n// ES5 関数宣言（こちらも安全）\nfunction getLabel(category, action) {\n  return category + '_' + action;\n}\n```\n\n### 文字列の結合\n\n```javascript\n// ES6 テンプレートリテラル（バッククォート）\nvar message = `ユーザー ${userId} がログインしました`;\n\n// ES5 文字列結合（GTM推奨）\nvar message = 'ユーザー ' + userId + ' がログインしました';\n```\n\n### 配列の操作\n\n```javascript\n// ES6 スプレッド構文\nvar newArray = [...array1, ...array2];\n\n// ES5 concat（GTM推奨）\nvar newArray = array1.concat(array2);\n```\n\n### GTMカスタムHTMLタグの実例（ES5互換）\n\n```javascript\n<script>\n  (function() {\n    // var で変数宣言\n    var dataLayer = window.dataLayer = window.dataLayer || [];\n\n    // 通常の関数でイベントを送信\n    function pushEvent(eventName, params) {\n      var eventData = { 'event': eventName };\n      // オブジェクトのプロパティを手動でコピー（ES5）\n      for (var key in params) {\n        if (params.hasOwnProperty(key)) {\n          eventData[key] = params[key];\n        }\n      }\n      dataLayer.push(eventData);\n    }\n\n    // 文字列結合で動的なイベント名を生成\n    var category = {{Click Element Classes}};\n    var eventName = 'click_' + category;\n\n    pushEvent(eventName, {\n      'click_category': category,\n      'click_url': {{Click URL}}\n    });\n  })();\n</script>\n```\n\n**GTM互換JSの3原則**\n1. `const`/`let` の代わりに `var` を使う\n2. アロー関数の代わりに `function` キーワードを使う\n3. テンプレートリテラルの代わりに `+` で文字列を結合する",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "## 練習：ES6コードをES5互換に書き直す\n\n以下のES6で書かれたGTMカスタムHTMLタグをES5互換に書き直してください。\n\n**変換ポイント**\n- `const` → `var`\n- アロー関数 → 通常の関数式\n- テンプレートリテラル → 文字列結合",
+        "starterCode": "// 変換前（ES6）\n<script>\n  const userId = {{User ID}};\n  const pageType = {{Page Type}};\n\n  const buildEventLabel = (uid, ptype) => `user_${uid}_page_${ptype}`;\n\n  window.dataLayer = window.dataLayer || [];\n  window.dataLayer.push({\n    'event': 'page_view_custom',\n    'event_label': buildEventLabel(userId, pageType)\n  });\n</script>\n\n// 変換後（ES5）を書いてください\n<script>\n  // ここに書く\n</script>",
+        "hints": [
+          "`const` はすべて `var` に置き換えます。`let` も同様です",
+          "アロー関数 `(uid, ptype) => ...` は `function(uid, ptype) { return ...; }` の形式に変換します",
+          "テンプレートリテラルの `\\`user_${uid}_page_${ptype}\\`` は `'user_' + uid + '_page_' + ptype` のように `+` で結合します"
+        ],
+        "answer": "<script>\n  var userId = {{User ID}};\n  var pageType = {{Page Type}};\n\n  var buildEventLabel = function(uid, ptype) {\n    return 'user_' + uid + '_page_' + ptype;\n  };\n\n  window.dataLayer = window.dataLayer || [];\n  window.dataLayer.push({\n    'event': 'page_view_custom',\n    'event_label': buildEventLabel(userId, pageType)\n  });\n</script>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "question": "GTMカスタムHTMLタグでES5準拠の変数宣言として正しいのはどれですか？",
+            "options": [
+              "const eventName = 'click';",
+              "let eventName = 'click';",
+              "var eventName = 'click';",
+              "def eventName = 'click';"
+            ],
+            "correct": 2,
+            "explanation": "GTMは古いブラウザ（IE11等）への対応が求められることがあります。`const` と `let` はES6の構文でIE11では動作しません。`var` はES5の構文で広くサポートされており、GTMカスタムHTMLタグで安全に使えます。"
+          },
+          {
+            "question": "ES5互換の文字列結合で `'GA4_' + eventType + '_event'` と同じ結果をES6で書くと？",
+            "options": [
+              "\"GA4_\" + eventType + \"_event\"",
+              "`GA4_${eventType}_event`",
+              "'GA4_' . eventType . '_event'",
+              "concat('GA4_', eventType, '_event')"
+            ],
+            "correct": 1,
+            "explanation": "ES6のテンプレートリテラル（バッククォートで囲み `${}` で変数を埋め込む記法）は、`+` による文字列結合と同じ結果を生成します。ただしGTMで使う場合は古いブラウザ対応のために `+` による結合（ES5）を推奨します。"
+          },
+          {
+            "question": "以下のES6アロー関数をES5に変換した場合、正しいのはどれですか？\n`var send = (name) => dataLayer.push({'event': name});`",
+            "options": [
+              "var send = function(name) { dataLayer.push({'event': name}); };",
+              "var send = def(name) { dataLayer.push({'event': name}); };",
+              "function send = (name) { dataLayer.push({'event': name}); };",
+              "var send = lambda(name) { dataLayer.push({'event': name}); };"
+            ],
+            "correct": 0,
+            "explanation": "アロー関数 `(name) => { ... }` は関数式 `function(name) { ... }` に変換できます。変数への代入形式（関数式）を使う場合は `var send = function(name) { ... };` と書きます。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "## まとめ：ES5でGTM互換JSを書く\n\n✅ 変数宣言は `const`/`let` でなく `var` を使う\n\n✅ 関数はアロー関数でなく `function` キーワードで定義する\n\n✅ 文字列結合はテンプレートリテラルでなく `+` 演算子を使う\n\n✅ 配列の結合は `concat()` を使う（スプレッド構文は避ける）\n\n✅ ES5準拠で書くことで IE11 を含む広いブラウザ環境でも安全に動作する\n\n**次のモジュールでは** `if`・`else if` による条件分岐を学びます。GTMタグでよく使うページ種別判定や条件付きイベント送信のパターンを習得しましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

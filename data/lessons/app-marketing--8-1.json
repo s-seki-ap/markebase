@@ -1,0 +1,82 @@
+{
+  "id": "app-marketing--8-1",
+  "moduleId": "8-1",
+  "categoryId": "app-marketing",
+  "title": "アプリ市場の現状と規模感",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# アプリ市場はどれだけ大きいか\n\nスマートフォンが普及して15年以上が経ち、アプリはビジネスの主戦場のひとつになりました。マーケターとして「アプリ市場の規模と構造」を把握することは、提案・施策立案の基礎となります。\n\n## 世界のアプリ市場規模\n\n- 世界のアプリダウンロード数: **年間約3,500億件**（2023年）\n- App Store / Google Play 合計の消費者支出: **年間約17兆円**\n- 日本のスマホ利用率: **約92%**（2024年総務省調査）\n\n## 日本市場の特徴\n\nゲーム、エンタメ、フィンテック、EC、ヘルスケアがアプリ収益の上位カテゴリを占めています。特に**サブスクリプション型**と**アプリ内課金**が収益モデルの中心です。\n\n## なぜマーケターにアプリ知識が必要か\n\nWebサイトとアプリでは**計測方法・KPI・広告手法がまったく異なります**。Web中心のマーケターがアプリ施策に関わる場面は増えており、基礎知識なしに議論に参加できない状況が生まれています。\n\n**このカテゴリで学ぶこと**: アプリ計測の仕組み、主要KPI、Firebaseの活用まで、実務で通用するアプリマーケティング基礎を習得します。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# アプリ市場の構造と主要プレイヤー\n\n## プラットフォーム別シェア（ダウンロード数ベース）\n\n| プラットフォーム | 世界シェア | 特徴 |\n|---|---|---|\n| Google Play（Android） | 約70% | 新興国・低価格帯デバイスが多い |\n| App Store（iOS） | 約30% | 先進国・高課金ユーザーが多い |\n\n収益ベースではApp Storeがほぼ同等か逆転するケースも多い点に注意が必要です。\n\n## アプリカテゴリ別の市場特性\n\n```\n収益上位カテゴリ（日本市場）\n1. ゲーム        → 高ARPU・インアプリ課金中心\n2. エンタメ      → サブスク型（動画・音楽）\n3. フィンテック  → 決済・投資・保険\n4. ショッピング  → ECアプリ（楽天・Amazon等）\n5. ヘルスケア    → フィットネス・医療\n```\n\n## アプリ収益モデルの4分類\n\n| モデル | 例 | 特徴 |\n|---|---|---|\n| 無料（広告収益） | ゲーム・ニュース | DAUが収益に直結 |\n| フリーミアム | Spotify・Slack | 無料→有料転換率がKPI |\n| サブスクリプション | Netflix・fitbit | 継続率（チャーン）が最重要 |\n| 買い切り | ビジネスツール | 初期獲得コストとLTVのバランス |\n\n## マーケターが押さえるべき市場トレンド\n\n- **プライバシー規制強化**: iOS 14.5以降、ATT（App Tracking Transparency）によりIDFAの収集が制限。計測の精度が低下し、SKAdNetworkへの対応が必須に\n- **Google Play データセーフティ**: データ収集内容の開示義務化\n- **AI・パーソナライゼーション**: プッシュ通知・コンテンツ最適化にAIが活用される",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: アプリ市場調査レポートのデータを整理する\n\n以下のJavaScriptオブジェクトに、アプリ市場の主要指標データを入力してください。\n\n## 課題\n\n1. `marketData` オブジェクトに指定の値を設定する\n2. `calcRevenueShare()` 関数でApp Storeの収益シェアを計算する\n3. `topCategories` 配列に日本市場のトップ3カテゴリを設定する\n\n> 実務では市場調査データを構造化してレポートに活用します。",
+        "starterCode": "// アプリ市場データ整理\nconst marketData = {\n  // 世界年間ダウンロード数（億件）を入力\n  globalDownloads: 0,\n  \n  // 日本のスマホ利用率（%）を入力\n  japanSmartphoneRate: 0,\n  \n  // プラットフォーム別シェア\n  platformShare: {\n    googlePlay: 0,  // %\n    appStore: 0     // %\n  }\n};\n\n// App Storeのダウンロードシェアを計算する関数\nfunction calcRevenueShare(totalDownloads, appStoreShare) {\n  // App Storeのダウンロード数（億件）を返す計算式を書いてください\n  return 0;\n}\n\n// 日本市場トップ3カテゴリ（文字列の配列）\nconst topCategories = [];\n\n// 確認用出力（変更不要）\nconsole.log('世界ダウンロード数:', marketData.globalDownloads, '億件');\nconsole.log('App Storeダウンロード数:', calcRevenueShare(marketData.globalDownloads, marketData.platformShare.appStore), '億件');\nconsole.log('日本トップカテゴリ:', topCategories.join(' / '));",
+        "hints": [
+          "世界年間ダウンロード数は約3,500億件 = 3500（億件）です。",
+          "calcRevenueShare は totalDownloads * (appStoreShare / 100) で計算できます。",
+          "topCategories には 'ゲーム'、'エンタメ'、'フィンテック' を設定しましょう。"
+        ],
+        "answer": "// アプリ市場データ整理\nconst marketData = {\n  globalDownloads: 3500,\n  japanSmartphoneRate: 92,\n  platformShare: {\n    googlePlay: 70,\n    appStore: 30\n  }\n};\n\nfunction calcRevenueShare(totalDownloads, appStoreShare) {\n  return totalDownloads * (appStoreShare / 100);\n}\n\nconst topCategories = ['ゲーム', 'エンタメ', 'フィンテック'];\n\nconsole.log('世界ダウンロード数:', marketData.globalDownloads, '億件');\nconsole.log('App Storeダウンロード数:', calcRevenueShare(marketData.globalDownloads, marketData.platformShare.appStore), '億件');\nconsole.log('日本トップカテゴリ:', topCategories.join(' / '));"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "ダウンロード数ベースで見た場合、Google PlayとApp Storeのシェアの組み合わせとして正しいものはどれですか？",
+            "options": [
+              "Google Play 50% / App Store 50%",
+              "Google Play 70% / App Store 30%",
+              "Google Play 30% / App Store 70%",
+              "Google Play 80% / App Store 20%"
+            ],
+            "correct": 1,
+            "explanation": "ダウンロード数ベースではGoogle Playが約70%を占めます。ただし収益ベースではApp Storeが逆転するケースもあり、ターゲットユーザーによってどちらを重視するか戦略が変わります。"
+          },
+          {
+            "q": "iOS 14.5以降に導入されたATT（App Tracking Transparency）が与えた主な影響はどれですか？",
+            "options": [
+              "アプリのダウンロード数が大幅に減少した",
+              "IDFAの収集が制限され、広告計測の精度が低下した",
+              "App Storeへの審査期間が長くなった",
+              "Google Playとの互換性がなくなった"
+            ],
+            "correct": 1,
+            "explanation": "ATTによりユーザーの明示的な同意なしにIDFA（広告識別子）を収集できなくなりました。これにより広告効果計測の精度が低下し、SKAdNetworkなどの代替計測手法への移行が必要になりました。"
+          },
+          {
+            "q": "フリーミアムモデルのアプリにおいて最も重要なKPIはどれですか？",
+            "options": [
+              "総ダウンロード数",
+              "1日あたりのセッション数",
+              "無料から有料への転換率",
+              "アプリストアのレビュー評価"
+            ],
+            "correct": 2,
+            "explanation": "フリーミアムモデルでは無料ユーザーを有料プランに転換することが収益の核心です。DAUが多くても転換率が低ければ収益につながりません。転換率の改善がグロース施策の中心となります。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール8-1 完了！\n\nアプリ市場の全体像と規模感を把握しました。\n\n## 習得したスキル\n\n✅ **世界・日本のアプリ市場規模**の数値感を身につけた\n✅ **Google PlayとApp Storeのシェア**の違いを説明できる\n✅ **4つの収益モデル**（広告・フリーミアム・サブスク・買い切り）を理解した\n✅ **ATTとプライバシー規制**がマーケティング計測に与える影響を把握した\n\n## 次のステップ\n\n次のモジュール **「8-2: WebサイトとアプリのKPI違い」** では、Webマーケターが最初にぶつかる壁である「KPIの概念の違い」を丁寧に解説します。",
+        "diagram": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "id": "bigquery--6-8",
+  "moduleId": "6-8",
+  "categoryId": "bigquery",
+  "title": "ASエイリアス：列名とテーブル名を読みやすく変換",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# クエリの「読みやすさ」は分析チームの生産性を左右する\n\nSQLは一度書いたら終わりではありません。翌日・翌週に自分が読み返したり、チームメンバーが引き継いだりします。\n\n読みにくいSQLの例：\n```\nSELECT COUNT(DISTINCT user_pseudo_id), SUM(...), AVG(...)\n```\n\n読みやすいSQLの例：\n```\nSELECT\n  COUNT(DISTINCT user_pseudo_id) AS unique_users,\n  SUM(purchase_value)            AS total_revenue,\n  AVG(purchase_value)            AS avg_order_value\n```\n\n**ASエイリアス**は列名・テーブル名に「別名（エイリアス）」を付ける機能です。\n\n## エイリアスが特に重要な場面\n\n1. 集計関数の結果に名前をつける（`COUNT(*) AS total`）\n2. 長いテーブル名を短縮する（JOINで使用）\n3. 計算結果に意味のある名前をつける\n4. 英語カラム名を日本語にする（レポート出力時）",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# ASエイリアスの構文\n\n## 列のエイリアス\n\n```sql\n-- 基本形\nSELECT\n  元の列名 AS エイリアス名\nFROM テーブル名\n\n-- 実例：GA4集計クエリ\nSELECT\n  event_date                           AS 日付,\n  COUNT(*)                             AS イベント数,\n  COUNT(DISTINCT user_pseudo_id)       AS ユニークユーザー数\nFROM\n  `myproject.analytics_123456789.events_20240115`\nGROUP BY\n  event_date\n```\n\n## AS は省略できる（が、省略しない方が読みやすい）\n\n```sql\n-- AS省略形（動作は同じだが推奨しない）\nSELECT COUNT(*) total\nFROM `myproject.analytics_123456789.events_20240115`\n\n-- AS明示形（推奨）\nSELECT COUNT(*) AS total\nFROM `myproject.analytics_123456789.events_20240115`\n```\n\n## テーブルのエイリアス（JOIN時に重要）\n\n```sql\n-- テーブル名が長い場合に短縮形をつける\nSELECT\n  e.event_date,\n  e.event_name,\n  e.user_pseudo_id\nFROM\n  `myproject.analytics_123456789.events_20240115` AS e\nWHERE\n  e.event_name = 'purchase'\n```\n\n## エイリアスの命名ルール（実務慣習）\n\n| 状況 | 推奨 | 例 |\n|------|------|----|\n| 集計結果 | 内容を表す名前 | `total_users`, `event_count` |\n| 計算式 | 意味が分かる名前 | `revenue_per_user` |\n| テーブル | 短い略称 | `e`（events）, `u`（users） |\n| 日本語 | スプレッドシート出力時 | `ユーザー数`, `売上合計` |",
+        "diagram": false
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習：分析レポート向けにエイリアスを整える\n\n## 課題\n\n以下のSQLはGA4データの日別集計ですが、列名が読みにくい状態です。ASエイリアスを追加して、レポートで使えるように整えてください。\n\n**追加するエイリアス**：\n- `event_date` → `日付`\n- `COUNT(*)` → `総イベント数`\n- `COUNT(DISTINCT user_pseudo_id)` → `ユニークユーザー数`\n- `COUNT(DISTINCT CASE WHEN event_name = 'purchase' THEN user_pseudo_id END)` → `購入者数`\n\n> 💡 CASE WHEN は6-20で詳しく学びますが、ここでは「購入イベントのユーザーだけを対象にしたCOUNT DISTINCT」として使います。",
+        "starterCode": "-- 2024年1月の日別集計レポート\n-- エイリアスを追加して読みやすくしてください\n\nSELECT\n  event_date,\n  COUNT(*),\n  COUNT(DISTINCT user_pseudo_id),\n  COUNT(DISTINCT CASE WHEN event_name = 'purchase' THEN user_pseudo_id END)\nFROM\n  `myproject.analytics_123456789.events_*`\nWHERE\n  _TABLE_SUFFIX BETWEEN '20240101' AND '20240131'\nGROUP BY\n  event_date\nORDER BY\n  event_date ASC",
+        "hints": [
+          "列名の後に AS エイリアス名 を追加します。例: `event_date AS 日付`",
+          "日本語のエイリアスはそのまま書けます（BigQueryは日本語のエイリアスに対応しています）。",
+          "集計関数の後にもASを追加できます。例: `COUNT(*) AS 総イベント数`"
+        ],
+        "answer": "-- 2024年1月の日別集計レポート\n\nSELECT\n  event_date                                                                         AS 日付,\n  COUNT(*)                                                                           AS 総イベント数,\n  COUNT(DISTINCT user_pseudo_id)                                                     AS ユニークユーザー数,\n  COUNT(DISTINCT CASE WHEN event_name = 'purchase' THEN user_pseudo_id END)          AS 購入者数\nFROM\n  `myproject.analytics_123456789.events_*`\nWHERE\n  _TABLE_SUFFIX BETWEEN '20240101' AND '20240131'\nGROUP BY\n  event_date\nORDER BY\n  event_date ASC"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "ASエイリアスで付けた列名は、同じクエリのWHERE句で使えますか？",
+            "options": [
+              "使える",
+              "使えない（ORDER BYとHAVINGでは使える）",
+              "すべての句で使える",
+              "FROM句でのみ使える"
+            ],
+            "correct": 1,
+            "explanation": "SQLの実行順序は「FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY」です。SELECTで定義されたエイリアスはWHEREより後に処理されるため、WHERE句では使えません。ORDER BYとHAVING句では使えます（BigQueryはHAVINGでのエイリアス使用を許可しています）。"
+          },
+          {
+            "q": "次のSQLで `total` はどの結果を指しますか？\n`SELECT COUNT(*) AS total FROM events`",
+            "options": [
+              "テーブル名の別名",
+              "COUNT(*) の計算結果につけた別名",
+              "event_name列の別名",
+              "FROMの後のテーブルの別名"
+            ],
+            "correct": 1,
+            "explanation": "`COUNT(*) AS total` は `COUNT(*)` の計算結果に `total` という別名をつけています。結果セットの列名が `total` になります。エイリアスがないと列名が `f0_` のような自動生成名になってしまいます。"
+          },
+          {
+            "q": "テーブルエイリアスが特に重要になるのはどのような場合ですか？",
+            "options": [
+              "SELECTで1列だけ取得するとき",
+              "WHERE句で条件を指定するとき",
+              "複数のテーブルをJOINするとき",
+              "ORDER BYで並べ替えるとき"
+            ],
+            "correct": 2,
+            "explanation": "テーブルエイリアスはJOIN（複数テーブルの結合）時に特に重要です。同じ列名が複数テーブルに存在する場合、どのテーブルの列かを `テーブルエイリアス.列名` の形で明示する必要があります。また長いテーブル名を短縮することでSQLが書きやすくなります。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール6-8 完了！\n\nASエイリアスを使ったクエリの可読性向上をマスターしました。\n\n## 習得したスキル\n\n✅ **列のエイリアス**（`列名 AS 別名`）で結果を分かりやすく表示できる\n✅ **テーブルのエイリアス**でSQL記述を簡潔にできる\n✅ **エイリアスの使用可能範囲**（WHERE不可、ORDER BY・HAVING可）を理解した\n✅ **命名規則**（snake_case推奨、日本語も可）を把握した\n\n## 実務でのベストプラクティス\n\n- 集計関数（COUNT, SUM, AVG）の結果には必ずエイリアスをつける\n- テーブルエイリアスはJOIN時に1文字〜3文字の略称を使う\n- 日本語エイリアスはスプレッドシート連携時（Lookerなど）に便利\n\n## 次のステップ\n\n次のモジュール **「6-9: SQLコメント」** では、クエリに説明文を入れて保守性を高める方法を学びます。チームでのSQL共有に欠かせないスキルです。",
+        "diagram": false
+      }
+    }
+  ]
+}

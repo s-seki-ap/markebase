@@ -1,0 +1,82 @@
+{
+  "id": "bigquery--6-11",
+  "moduleId": "6-11",
+  "categoryId": "bigquery",
+  "title": "GROUP BY：集計の基本とグループ化の仕組み",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# マーケターが最も頻繁に使うSQL機能のひとつ\n\nデータ分析の多くは「集計」です。「日別のページビュー数」「デバイス別のユーザー数」「流入経路別の購入数」——これらはすべてGROUP BYで実現します。\n\n**GROUP BYとは**：データを「同じ値を持つグループ」にまとめて、そのグループごとに集計を行う機能です。\n\n## Excelのピボットテーブルとの対応\n\nExcelでピボットテーブルを作るとき：\n1. 行フィールドに「日付」を設定\n2. 値フィールドに「合計 売上」を設定\n\nSQLでは：\n```sql\nGROUP BY event_date      -- 行フィールド\nSELECT SUM(purchase_value)  -- 値フィールド\n```\n\nこのように、GROUP BYはSQLのピボットテーブル機能に相当します。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# GROUP BYの構文と使い方\n\n## 基本構文\n\n```sql\nSELECT\n  グループ化する列,\n  集計関数(列名) AS 集計結果名\nFROM テーブル名\nWHERE 条件\nGROUP BY グループ化する列\n```\n\n## 単一列でのグループ化\n\n```sql\n-- イベント名ごとの発生回数\nSELECT\n  event_name,\n  COUNT(*) AS event_count\nFROM\n  `myproject.analytics_123456789.events_20240115`\nGROUP BY\n  event_name\nORDER BY\n  event_count DESC\n```\n\n## 複数列でのグループ化\n\n```sql\n-- デバイス種別×流入メディア の組み合わせ別ユーザー数\nSELECT\n  device.category              AS device,\n  traffic_source.medium        AS medium,\n  COUNT(DISTINCT user_pseudo_id) AS users\nFROM\n  `myproject.analytics_123456789.events_*`\nWHERE\n  _TABLE_SUFFIX BETWEEN '20240101' AND '20240131'\nGROUP BY\n  device,     -- エイリアスで参照可能（BigQuery）\n  medium\nORDER BY\n  users DESC\n```\n\n## GROUP BYのルール（重要）\n\n```sql\n-- NG：SELECTに集計されていない列がある\nSELECT\n  event_date,\n  event_name,       -- GROUP BYに含めないとエラー\n  COUNT(*) AS cnt\nFROM ...\nGROUP BY event_date  -- event_nameが漏れている\n\n-- OK：SELECTの非集計列はすべてGROUP BYに含める\nSELECT\n  event_date,\n  event_name,\n  COUNT(*) AS cnt\nFROM ...\nGROUP BY event_date, event_name\n```\n\n> 重要ルール：SELECTに書く列は「集計関数の中にある」か「GROUP BYに含まれている」かのどちらかでなければなりません。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習：日別・デバイス別のページビュー数を集計する\n\n## 課題\n\n2024年1月のGA4データから、日別×デバイス別のページビュー数を集計するSQLを完成させてください。\n\n**取得内容**：\n- `event_date`（日付）\n- `device.category`（デバイス種別）\n- `page_view` イベントの件数（`AS page_view_count`）\n\n**条件**：\n- テーブル：`myproject.analytics_123456789.events_*`\n- 期間：2024年1月\n- イベント：`page_view` のみ\n- 集計：`event_date` と `device.category` でグループ化\n- 並び順：日付昇順、デバイス種別昇順",
+        "starterCode": "-- 2024年1月 日別×デバイス別 ページビュー数\n\nSELECT\n  event_date,\n  device.category AS device_type,\n  COUNT(*) AS page_view_count\nFROM\n  `myproject.analytics_123456789.events_*`\nWHERE\n  _TABLE_SUFFIX BETWEEN '20240101' AND '20240131'\n  AND event_name = 'page_view'\nGROUP BY\n  -- グループ化する列を指定してください（2列）\n  ________, ________\nORDER BY\n  event_date ASC,\n  device_type ASC",
+        "hints": [
+          "GROUP BY にはSELECTで使っている非集計列をすべて含める必要があります。",
+          "SELECTで `device.category AS device_type` と書いた場合、GROUP BY では `device_type`（エイリアス）または `device.category`（元の列名）のどちらでも指定できます（BigQuery）。",
+          "2列でグループ化するにはカンマで区切ります。`GROUP BY event_date, device_type` の形です。"
+        ],
+        "answer": "-- 2024年1月 日別×デバイス別 ページビュー数\n\nSELECT\n  event_date,\n  device.category AS device_type,\n  COUNT(*) AS page_view_count\nFROM\n  `myproject.analytics_123456789.events_*`\nWHERE\n  _TABLE_SUFFIX BETWEEN '20240101' AND '20240131'\n  AND event_name = 'page_view'\nGROUP BY\n  event_date, device_type\nORDER BY\n  event_date ASC,\n  device_type ASC"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "GROUP BYを使う際のSQLのルールとして正しいものはどれですか？",
+            "options": [
+              "SELECTのすべての列をGROUP BYに含める必要がある",
+              "GROUP BYはWHEREの前に書く必要がある",
+              "SELECTの非集計列はすべてGROUP BYに含める必要がある",
+              "GROUP BYはORDER BYと一緒に使えない"
+            ],
+            "correct": 2,
+            "explanation": "GROUP BYのルールは「SELECTに書く列のうち、集計関数（COUNT, SUM等）の中にないものはすべてGROUP BYに含める」です。COUNT(*)などの集計関数の結果はGROUP BYに含める必要はありません。"
+          },
+          {
+            "q": "次のSQLは何を集計していますか？\n`SELECT geo.country, COUNT(DISTINCT user_pseudo_id) AS users FROM events GROUP BY geo.country`",
+            "options": [
+              "国別のイベント総数",
+              "国別のユニークユーザー数",
+              "国別のページビュー数",
+              "国別のセッション数"
+            ],
+            "correct": 1,
+            "explanation": "`COUNT(DISTINCT user_pseudo_id)` は重複を除いたユーザー数（ユニークユーザー数）を返します。それを `geo.country` でGROUP BYしているため、「国別のユニークユーザー数」が結果として得られます。"
+          },
+          {
+            "q": "GROUP BYとExcelのどの機能が最も近い対応関係にありますか？",
+            "options": [
+              "VLOOKUPとINDEX/MATCH",
+              "条件付き書式",
+              "ピボットテーブル",
+              "データの入力規則"
+            ],
+            "correct": 2,
+            "explanation": "GROUP BYはExcelのピボットテーブルに最も近い機能です。「行フィールド=GROUP BYの列」「値フィールド=集計関数（SUM, COUNT等）」に対応します。GROUP BYはより大量のデータを素早く集計できます。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール6-11 完了！\n\nGROUP BYによるデータ集計の基本をマスターしました。\n\n## 習得したスキル\n\n✅ **GROUP BYの基本構文**でデータを集計できる\n✅ **複数列でのグループ化**ができる\n✅ **GROUP BYのルール**（非集計列は必ずGROUP BYに含める）を理解した\n✅ **Excelピボットとの対応**を理解した\n\n## よく使う集計パターン\n\n```sql\n-- 日別集計\nGROUP BY event_date\n\n-- 月別集計\nGROUP BY FORMAT_DATE('%Y-%m', PARSE_DATE('%Y%m%d', event_date))\n\n-- デバイス×流入の組み合わせ集計\nGROUP BY device.category, traffic_source.medium\n```\n\n## 次のステップ\n\n次のモジュール **「6-12: HAVING」** では、GROUP BYで集計した後の結果をさらに条件で絞り込む方法を学びます。「月に10件以上購入したユーザーだけ」のような集計後フィルタが可能になります。",
+        "diagram": false
+      }
+    }
+  ]
+}

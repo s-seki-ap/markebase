@@ -1,0 +1,82 @@
+{
+  "id": "app-marketing--8-2",
+  "moduleId": "8-2",
+  "categoryId": "app-marketing",
+  "title": "WebサイトとアプリのKPI違い",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# Webのノリでアプリを語ってはいけない\n\nWebマーケティングに慣れたマーケターがアプリ担当者と話すとき、よくすれ違いが起きます。「PVはどれくらいですか？」「CVRはどの程度ですか？」——これらの質問はアプリの文脈では**意味が変わるか、そもそも使わない概念**です。\n\n## なぜKPIが違うのか\n\nWebとアプリでは**ユーザーとの関係性が根本的に異なります**。\n\n- Web: ユーザーは訪問するたびに新鮮な接点。ブックマークしない限り再訪は保証されない\n- アプリ: ユーザーはインストールという「契約」をしている。ホーム画面に常駐する\n\nこの違いが、計測すべき指標を大きく変えます。\n\n## アプリKPIを理解する意味\n\nクライアントへの提案でアプリ施策を含む場合、WEB系KPIとアプリKPIを混在させると提案書の説得力がなくなります。適切なKPIを設定できるマーケターは、エンジニアやプロダクトマネージャーと対等に議論できます。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# WebとアプリのKPI対比表\n\n## 取得・認知フェーズ\n\n| フェーズ | WebサイトのKPI | アプリのKPI |\n|---|---|---|\n| 到達 | セッション数・PV数 | **インストール数（Installs）** |\n| コスト効率 | CPC・CPM | **CPI（Cost Per Install）** |\n| 流入元 | 参照元・メディア | **メディアソース（MMP計測）** |\n\n## エンゲージメントフェーズ\n\n| フェーズ | WebサイトのKPI | アプリのKPI |\n|---|---|---|\n| 利用頻度 | セッション数/日 | **DAU / MAU** |\n| 滞在 | 平均セッション時間 | **セッション時間・スクリーン数** |\n| 離脱 | 直帰率 | **Day1/Day7/Day30 Retention** |\n\n## 収益・LTVフェーズ\n\n| フェーズ | WebサイトのKPI | アプリのKPI |\n|---|---|---|\n| 収益 | CVR・売上 | **ARPU / ARPPU** |\n| 顧客価値 | LTV | **LTV（計算方法が異なる）** |\n| 解約 | ー（概念が薄い） | **チャーンレート** |\n\n## 特にアプリ固有の重要KPI\n\n```\nRetention Rate（継続率）\n  → インストール後X日後にも起動しているユーザーの割合\n  → Day1: 25〜40%, Day7: 10〜20%, Day30: 5〜10% が業界目安\n\nStickiness（粘着率）\n  → DAU / MAU × 100（%）\n  → 高いほどユーザーが習慣的にアプリを使っている\n  → 目安: 20%以上で優秀、SNS系は50%超も\n```\n\n## まとめ: Webにない概念ベスト3\n\n1. **Retention（継続率）**: 離脱しないかの計測。Webの直帰率とは別概念\n2. **DAU/MAU**: アクティブユーザーの日次・月次計測\n3. **チャーンレート**: サブスクアプリでの解約率",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: KPI変換表を完成させる\n\nWebマーケターの視点をアプリKPIに変換する練習です。\n\n## 課題\n\n`kpiTranslation` オブジェクトを完成させてください。各WebKPIに対応するアプリKPIを文字列で設定します。\n\nその後、`calcStickiness()` 関数を実装して粘着率（Stickiness）を計算してください。",
+        "starterCode": "// WebKPI → アプリKPI 変換オブジェクト\nconst kpiTranslation = {\n  // セッション数に対応するアプリKPIを入力\n  sessions: '',\n  \n  // CPCに対応するアプリKPIを入力（Cost Per ___）\n  cpc: '',\n  \n  // 直帰率に対応するアプリKPIを入力（Day1 ___）\n  bounceRate: '',\n  \n  // 平均セッション時間に対応するアプリKPIを入力\n  avgSessionDuration: ''\n};\n\n// Stickiness（粘着率）を計算する関数\n// 計算式: DAU / MAU * 100\nfunction calcStickiness(dau, mau) {\n  // ここに計算式を書いてください\n  return 0;\n}\n\n// テストケース（変更不要）\nconsole.log('セッション数 →', kpiTranslation.sessions);\nconsole.log('CPC →', kpiTranslation.cpc);\nconsole.log('直帰率 →', kpiTranslation.bounceRate);\nconsole.log('平均セッション時間 →', kpiTranslation.avgSessionDuration);\n\nconst dau = 50000;\nconst mau = 300000;\nconsole.log('Stickiness:', calcStickiness(dau, mau).toFixed(1) + '%');",
+        "hints": [
+          "セッション数に相当するアプリKPIは 'DAU / MAU' です。",
+          "CPCのアプリ版はインストール単価。'CPI（Cost Per Install）' です。",
+          "Stickiness は dau / mau * 100 で計算します。"
+        ],
+        "answer": "const kpiTranslation = {\n  sessions: 'DAU / MAU',\n  cpc: 'CPI（Cost Per Install）',\n  bounceRate: 'Day1 Retention',\n  avgSessionDuration: 'セッション時間・スクリーン数'\n};\n\nfunction calcStickiness(dau, mau) {\n  return (dau / mau) * 100;\n}\n\nconsole.log('セッション数 →', kpiTranslation.sessions);\nconsole.log('CPC →', kpiTranslation.cpc);\nconsole.log('直帰率 →', kpiTranslation.bounceRate);\nconsole.log('平均セッション時間 →', kpiTranslation.avgSessionDuration);\n\nconst dau = 50000;\nconst mau = 300000;\nconsole.log('Stickiness:', calcStickiness(dau, mau).toFixed(1) + '%');"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "アプリマーケティングにおいて「Stickiness（粘着率）」の計算式として正しいものはどれですか？",
+            "options": [
+              "MAU / DAU × 100",
+              "DAU / MAU × 100",
+              "インストール数 / セッション数 × 100",
+              "Day1継続率 / Day30継続率 × 100"
+            ],
+            "correct": 1,
+            "explanation": "StickinessはDAU ÷ MAU × 100で計算します。この値が高いほど、月間アクティブユーザーが毎日アプリを使っていることを意味し、習慣化されたアプリと言えます。20%以上が優秀とされています。"
+          },
+          {
+            "q": "WebサイトのCPCに対応するアプリ広告のコスト指標はどれですか？",
+            "options": [
+              "CPM（Cost Per Mille）",
+              "CPA（Cost Per Acquisition）",
+              "CPI（Cost Per Install）",
+              "CPV（Cost Per View）"
+            ],
+            "correct": 2,
+            "explanation": "CPI（Cost Per Install）はアプリが1件インストールされるのにかかったコストです。Webでのクリック課金（CPC）に相当するアプリ特有の指標で、UAC（Universal App Campaign）などの広告評価に使います。"
+          },
+          {
+            "q": "アプリのDay1 Retentionの業界平均として最も近いものはどれですか？",
+            "options": [
+              "1〜5%",
+              "25〜40%",
+              "60〜70%",
+              "80〜90%"
+            ],
+            "correct": 1,
+            "explanation": "Day1 Retentionの業界平均は25〜40%程度です。つまりインストールした翌日には6〜7割のユーザーがアプリを開かなくなるのが普通です。この最初の離脱を防ぐオンボーディング設計が非常に重要です。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール8-2 完了！\n\nWebとアプリのKPIの違いを体系的に理解しました。\n\n## 習得したスキル\n\n✅ **WebKPIとアプリKPIの対応関係**を説明できる\n✅ **Stickiness（粘着率）**の計算式と意味を理解した\n✅ **Day1/Day7/Day30 Retention**の業界目安を把握した\n✅ **CPI**がアプリ広告における基本コスト指標であることを理解した\n\n## 次のステップ\n\n次のモジュール **「8-3: アプリの計測単位と指標の体系」** では、各KPIをどの計測ツールでどう取得するかの全体像を学びます。",
+        "diagram": false
+      }
+    }
+  ]
+}

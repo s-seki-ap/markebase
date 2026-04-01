@@ -1,0 +1,72 @@
+{
+  "id": "advertising--9-1",
+  "moduleId": "9-1",
+  "categoryId": "advertising",
+  "title": "デジタル広告の歴史と現在のエコシステム全体像",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# デジタル広告はどのように進化してきたか\n\nデジタル広告の歴史は、1994年のバナー広告誕生から30年以上が経過しました。この間、広告技術は劇的に進化し、現在では**1秒以下のオークションで最適な広告が自動配信される**複雑なエコシステムが形成されています。\n\n## なぜ歴史を学ぶのか\n\nデジタル広告の「なぜそうなっているのか」を理解するには、歴史的背景が不可欠です。現在の仕組みは偶然生まれたものではなく、広告主・メディア・ユーザーそれぞれの課題を解決するために積み重ねられた技術革新の結果です。\n\n## この学習で得られること\n\n- デジタル広告エコシステムの全体像を俯瞰できる\n- 各プレイヤーの役割と利害関係を理解できる\n- 現在の広告技術がなぜ存在するかを説明できる\n\n> **現場での価値**: クライアントに「なぜRTBが普及したのか」「なぜクッキーレス対応が必要なのか」を論理的に説明できるマーケターになることが目標です。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# デジタル広告の歴史的変遷\n\n## タイムライン\n\n| 年代 | 出来事 | 技術的意義 |\n|------|--------|------------|\n| 1994年 | 最初のバナー広告（AT&T）クリック率44% | デジタル広告の誕生 |\n| 2000年代初 | Google AdWords開始・検索連動型広告 | 意図に合わせた広告配信 |\n| 2007年 | Facebook広告開始・ソーシャル広告 | 属性・興味関心でのターゲティング |\n| 2009年 | RTB（リアルタイム入札）の普及 | 1インプレッションごとのオークション |\n| 2012年 | プログラマティック広告の主流化 | 広告売買の完全自動化 |\n| 2018年 | GDPR施行・プライバシー規制強化 | データ活用の制限と再設計 |\n| 2020年代 | クッキーレス移行・AIによる最適化 | プライバシー保護と精度両立 |\n\n## 現在のエコシステム全体像\n\n```\n【広告主側】                    【メディア側】\n広告主（Advertiser）            パブリッシャー（Publisher）\n    ↓ 予算・クリエイティブ           ↑ 広告枠・オーディエンス\n  エージェンシー                 アドネットワーク\n    ↓                               ↑\n  DSP ←─── 広告取引所（Ad Exchange） ───→ SSP\n    ↓         （RTBオークション）         ↑\n  DMP ─────────────────────────────── データ\n```\n\n## 主要プレイヤーの役割\n\n| プレイヤー | 役割 | 代表例 |\n|-----------|------|--------|\n| 広告主 | 広告費を支払い、認知・獲得を目指す | 一般企業 |\n| エージェンシー | 広告主の代理で運用・戦略立案 | 電通・博報堂 |\n| DSP | 広告主が複数メディアを一括購入 | DV360・The Trade Desk |\n| SSP | メディアが広告枠を複数広告主に販売 | Google Ad Manager |\n| Ad Exchange | DSPとSSPをつなぐ取引市場 | Google Ad Exchange |\n| DMP | オーディエンスデータを管理・活用 | Adobe Audience Manager |\n| パブリッシャー | 広告枠を持つメディア・サイト | ニュースサイト・ブログ |\n\n## Googleのエコシステムにおける独占的地位\n\nGoogleは広告主側（Google広告）・取引所（Google Ad Exchange）・メディア側（Google Ad Manager）の**すべての層を握っています**。これがGoogleが広告市場で圧倒的シェアを持つ理由です。",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: エコシステムの構造を整理する\n\nあなたは新入社員に対してデジタル広告エコシステムの説明資料を作成します。\n\n## 課題\n\n以下のHTMLを完成させ、エコシステムの主要プレイヤーと役割を整理した表を作成してください。\n\n1. 広告主側のプレイヤー（広告主、エージェンシー、DSP、DMP）の行を追加する\n2. メディア側のプレイヤー（パブリッシャー、SSP）の行を追加する\n3. 中立プレイヤー（Ad Exchange）の行を追加する",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>デジタル広告エコシステム</title>\n  <style>\n    body { font-family: 'Noto Sans JP', sans-serif; padding: 20px; background: #f8fafc; }\n    h1 { color: #1e293b; font-size: 20px; }\n    table { border-collapse: collapse; width: 100%; margin-top: 16px; }\n    th { background: #3b82f6; color: white; padding: 10px 14px; text-align: left; }\n    td { border: 1px solid #e2e8f0; padding: 8px 14px; }\n    tr:nth-child(even) { background: #f1f5f9; }\n    .advertiser { background: #dbeafe !important; }\n    .publisher  { background: #dcfce7 !important; }\n    .neutral    { background: #fef9c3 !important; }\n  </style>\n</head>\n<body>\n  <h1>デジタル広告エコシステム 主要プレイヤー一覧</h1>\n  <table>\n    <thead>\n      <tr>\n        <th>プレイヤー</th>\n        <th>立場</th>\n        <th>主な役割</th>\n        <th>代表例</th>\n      </tr>\n    </thead>\n    <tbody>\n      <!-- ここに各プレイヤーの行を追加してください -->\n    </tbody>\n  </table>\n</body>\n</html>",
+        "hints": [
+          "<tr class=\"advertiser\"> を使うと広告主側の行を青色にできます。",
+          "class=\"publisher\" で緑色（メディア側）、class=\"neutral\" で黄色（中立）になります。",
+          "各行は <tr><td>プレイヤー名</td><td>立場</td><td>役割</td><td>代表例</td></tr> の形式です。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>デジタル広告エコシステム</title>\n  <style>\n    body { font-family: 'Noto Sans JP', sans-serif; padding: 20px; background: #f8fafc; }\n    h1 { color: #1e293b; font-size: 20px; }\n    table { border-collapse: collapse; width: 100%; margin-top: 16px; }\n    th { background: #3b82f6; color: white; padding: 10px 14px; text-align: left; }\n    td { border: 1px solid #e2e8f0; padding: 8px 14px; }\n    tr:nth-child(even) { background: #f1f5f9; }\n    .advertiser { background: #dbeafe !important; }\n    .publisher  { background: #dcfce7 !important; }\n    .neutral    { background: #fef9c3 !important; }\n  </style>\n</head>\n<body>\n  <h1>デジタル広告エコシステム 主要プレイヤー一覧</h1>\n  <table>\n    <thead>\n      <tr>\n        <th>プレイヤー</th>\n        <th>立場</th>\n        <th>主な役割</th>\n        <th>代表例</th>\n      </tr>\n    </thead>\n    <tbody>\n      <tr class=\"advertiser\">\n        <td>広告主</td>\n        <td>広告主側</td>\n        <td>広告費を支払い、認知・獲得を目指す</td>\n        <td>一般企業</td>\n      </tr>\n      <tr class=\"advertiser\">\n        <td>エージェンシー</td>\n        <td>広告主側</td>\n        <td>広告主の代理で運用・戦略立案</td>\n        <td>電通・博報堂・広告代理店</td>\n      </tr>\n      <tr class=\"advertiser\">\n        <td>DSP</td>\n        <td>広告主側</td>\n        <td>複数メディアへの広告を一括購入・入札</td>\n        <td>DV360・The Trade Desk</td>\n      </tr>\n      <tr class=\"advertiser\">\n        <td>DMP</td>\n        <td>広告主側</td>\n        <td>オーディエンスデータを管理・活用</td>\n        <td>Adobe Audience Manager</td>\n      </tr>\n      <tr class=\"neutral\">\n        <td>Ad Exchange</td>\n        <td>中立（取引所）</td>\n        <td>DSPとSSPをつなぐリアルタイム入札市場</td>\n        <td>Google Ad Exchange</td>\n      </tr>\n      <tr class=\"publisher\">\n        <td>SSP</td>\n        <td>メディア側</td>\n        <td>広告枠を複数広告主に販売・収益最大化</td>\n        <td>Google Ad Manager</td>\n      </tr>\n      <tr class=\"publisher\">\n        <td>パブリッシャー</td>\n        <td>メディア側</td>\n        <td>広告枠を持つメディア・コンテンツ提供者</td>\n        <td>ニュースサイト・ブログ・アプリ</td>\n      </tr>\n    </tbody>\n  </table>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "世界初のバナー広告が掲載されたのはいつ頃ですか？",
+            "options": ["1990年", "1994年", "1998年", "2001年"],
+            "correct": 1,
+            "explanation": "1994年にAT&Tがウェブサイト「HotWired」に最初のバナー広告を掲載しました。当時のクリック率は驚異の44%でしたが、現在のバナー広告のクリック率は0.1%前後です。"
+          },
+          {
+            "q": "GoogleがDSP・Ad Exchange・SSPのすべての層を持っていることを何と表現しますか？",
+            "options": ["フルスタック戦略", "垂直統合", "水平展開", "プログラマティック独占"],
+            "correct": 1,
+            "explanation": "Googleは広告主向けツール（Google広告）、取引所（Google Ad Exchange）、メディア向けツール（Google Ad Manager）を全て保有する垂直統合モデルです。これが広告市場での圧倒的シェアの背景にあります。"
+          },
+          {
+            "q": "DMPの主な役割はどれですか？",
+            "options": [
+              "広告クリエイティブの制作・管理",
+              "メディアへの広告枠の自動販売",
+              "オーディエンスデータの収集・管理・活用",
+              "リアルタイムでの入札価格の決定"
+            ],
+            "correct": 2,
+            "explanation": "DMP（Data Management Platform）はオーディエンスデータを一元管理し、広告ターゲティングに活用するプラットフォームです。どんなユーザーに広告を届けるかを定義する役割を担います。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール9-1 完了！\n\nデジタル広告の歴史とエコシステム全体像を習得しました。\n\n## 習得したスキル\n\n✅ **デジタル広告の30年の変遷**を時系列で説明できる\n✅ **エコシステムの主要プレイヤー**（DSP・SSP・DMP・Ad Exchange）の役割を理解した\n✅ **Googleの垂直統合モデル**がなぜ強力かを説明できる\n✅ **クッキーレスへの移行**が歴史的必然であることを理解した\n\n## 次のステップ\n\n次のモジュール **「9-2: DSP・SSP・DMPの役割と広告配信の仕組み」** では、各プラットフォームの内部構造と実際の広告配信フローを詳しく学びます。\n\n> **実務チャレンジ**: 今日見たWeb広告を1つ選び、「この広告はどのDSP・SSPを経由して表示されたか」を想像してみましょう。広告に右クリックや「この広告について」から情報が確認できる場合があります。",
+        "diagram": false
+      }
+    }
+  ]
+}

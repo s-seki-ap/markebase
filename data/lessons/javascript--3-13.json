@@ -1,0 +1,82 @@
+{
+  "id": "javascript--3-13",
+  "moduleId": "3-13",
+  "categoryId": "javascript",
+  "title": "forループで繰り返し処理を書く",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "## forループで繰り返し処理を書く\n\nECサイトのカート内商品をすべてdataLayerに送りたい、複数のフォームフィールドを一括でチェックしたい——こうした「配列内の要素を全件処理する」場面は、GTM/GA4の実装で頻繁に登場します。\n\n`for` ループはこのような繰り返し処理を実現する最も基本的な構文です。\n\n**このモジュールで学ぶこと**\n- `for` ループの基本構文（初期化・条件・更新）\n- 配列の全要素を処理するパターン\n- GA4 ecommerceのitemsアレイを構築する実例\n- ループのカウンター変数の使い方",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "## forループの基本構文\n\n```javascript\nfor (初期化; 条件; 更新) {\n  // 条件がtrueの間、繰り返し実行される処理\n}\n```\n\n**3つのパーツ**\n1. **初期化**：ループ開始前に1回実行（例：`var i = 0`）\n2. **条件**：各繰り返しの前にチェック（例：`i < 5`）\n3. **更新**：各繰り返しの後に実行（例：`i++`）\n\n### 基本的な例\n\n```javascript\n// 0から4まで5回繰り返す\nfor (var i = 0; i < 5; i++) {\n  console.log(i);  // 0, 1, 2, 3, 4\n}\n\n// 配列の全要素を処理\nvar fruits = ['apple', 'banana', 'cherry'];\nfor (var i = 0; i < fruits.length; i++) {\n  console.log(fruits[i]);  // apple, banana, cherry\n}\n```\n\n### GTM実例①：GA4 ecommerce itemsアレイの構築\n\nカートや注文データから GA4 の `items` 配列を構築する典型的なパターンです。\n\n```javascript\n<script>\n  // dataLayerから商品リストを取得（例：独自形式）\n  var cartProducts = {{Cart Products}};  // [{name, sku, price, qty}, ...]\n\n  // GA4形式のitemsアレイを構築\n  var ga4Items = [];\n\n  for (var i = 0; i < cartProducts.length; i++) {\n    var product = cartProducts[i];\n    ga4Items.push({\n      'item_id': product.sku,\n      'item_name': product.name,\n      'price': product.price,\n      'quantity': product.qty,\n      'index': i  // アレイ内の位置（0始まり）\n    });\n  }\n\n  window.dataLayer = window.dataLayer || [];\n  window.dataLayer.push({\n    'event': 'view_cart',\n    'ecommerce': {\n      'items': ga4Items\n    }\n  });\n</script>\n```\n\n### GTM実例②：フォームフィールドのバリデーション\n\n```javascript\n<script>\n  var requiredFields = ['name', 'email', 'phone', 'company'];\n  var isValid = true;\n  var emptyFields = [];\n\n  for (var i = 0; i < requiredFields.length; i++) {\n    var fieldName = requiredFields[i];\n    var fieldEl = document.getElementById(fieldName);\n\n    if (fieldEl && fieldEl.value === '') {\n      isValid = false;\n      emptyFields.push(fieldName);\n    }\n  }\n\n  window.dataLayer = window.dataLayer || [];\n  if (!isValid) {\n    window.dataLayer.push({\n      'event': 'form_validation_error',\n      'empty_fields': emptyFields.join(','),\n      'empty_count': emptyFields.length\n    });\n  }\n</script>\n```\n\n**`i++` と `i--`**\n- `i++` は `i = i + 1`（インクリメント）\n- `i--` は `i = i - 1`（デクリメント）\n- 逆順ループは `for (var i = arr.length - 1; i >= 0; i--)` と書く",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "## 練習：impressionアレイからGA4 itemsを構築する\n\n検索結果ページの商品表示（impression）データをGA4の `view_item_list` イベント用 `items` 配列に変換するコードを完成させてください。\n\n**入力データ（`impressions` 変数に格納済み）**\n```\n[ {id: 'SKU001', name: '商品A', category: 'tops', price: 3000},\n  {id: 'SKU002', name: '商品B', category: 'bottoms', price: 5000}, ... ]\n```\n\n**出力（GA4 items形式）**\n```\n[ {item_id: 'SKU001', item_name: '商品A', item_category: 'tops', price: 3000, index: 0},\n  {item_id: 'SKU002', item_name: '商品B', item_category: 'bottoms', price: 5000, index: 1}, ... ]\n```",
+        "starterCode": "<script>\n  window.dataLayer = window.dataLayer || [];\n  var impressions = {{Impression Data}};\n  var ga4Items = [];\n\n  for (var ______ = 0; i < impressions.______; i++) {\n    var item = impressions[______];\n    ga4Items.push({\n      'item_id': item.______,\n      'item_name': item.name,\n      'item_category': item.category,\n      'price': item.price,\n      'index': ______\n    });\n  }\n\n  window.dataLayer.push({\n    'event': 'view_item_list',\n    'ecommerce': { 'items': ga4Items }\n  });\n</script>",
+        "hints": [
+          "ループカウンター変数は慣例として `i` を使います。`var i = 0` で初期化します",
+          "配列の要素数は `.length` プロパティで取得します。`impressions.length` が終了条件になります",
+          "配列のi番目の要素は `impressions[i]` でアクセスします。`item_id` は入力データの `id` プロパティから取得します"
+        ],
+        "answer": "<script>\n  window.dataLayer = window.dataLayer || [];\n  var impressions = {{Impression Data}};\n  var ga4Items = [];\n\n  for (var i = 0; i < impressions.length; i++) {\n    var item = impressions[i];\n    ga4Items.push({\n      'item_id': item.id,\n      'item_name': item.name,\n      'item_category': item.category,\n      'price': item.price,\n      'index': i\n    });\n  }\n\n  window.dataLayer.push({\n    'event': 'view_item_list',\n    'ecommerce': { 'items': ga4Items }\n  });\n</script>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "question": "`for (var i = 0; i < 3; i++)` のループは何回実行されますか？",
+            "options": [
+              "2回（i=0, 1）",
+              "3回（i=0, 1, 2）",
+              "4回（i=0, 1, 2, 3）",
+              "無限ループになる"
+            ],
+            "correct": 1,
+            "explanation": "`i = 0` から始まり、`i < 3` の条件が満たされる間（i=0, 1, 2）ループします。`i = 3` になると条件が `false` となりループが終了します。合計3回実行されます。"
+          },
+          {
+            "question": "配列 `var items = ['a', 'b', 'c']` の全要素をforループで処理する場合、条件式として正しいのはどれですか？",
+            "options": [
+              "i <= items.length",
+              "i < items.length",
+              "i < items.length - 1",
+              "i <= 3"
+            ],
+            "correct": 1,
+            "explanation": "配列のインデックスは0始まりなので、3要素の配列のインデックスは0, 1, 2です。`i < items.length`（つまり `i < 3`）とすることで i=0, 1, 2 の全要素にアクセスできます。`i <= items.length` とすると最後に `items[3]`（undefined）にアクセスしてしまいます。"
+          },
+          {
+            "question": "GA4のecommerceイベントで `items` 配列内の各商品に `index` パラメータを設定する目的は何ですか？",
+            "options": [
+              "商品IDを数値で表現するため",
+              "リスト内の商品の表示順位をGA4に伝えるため",
+              "商品の在庫数を示すため",
+              "配列のJavaScriptインデックスをGTMが自動生成するため"
+            ],
+            "correct": 1,
+            "explanation": "GA4の `items` 配列における `index` パラメータは、商品リスト内での商品の表示順位（位置）を示します。これによりGA4のレポートで「何番目に表示された商品がクリック・購入されたか」というリスト内位置の分析が可能になります。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "## まとめ：forループで繰り返し処理を書く\n\n✅ `for (初期化; 条件; 更新)` の3パーツでループを制御する\n\n✅ 配列の全要素処理には `for (var i = 0; i < arr.length; i++)` を使う\n\n✅ 配列のインデックスは0始まり。`arr[i]` で各要素にアクセスする\n\n✅ GA4 ecommerceの `items` 配列構築はforループの典型的な活用例\n\n✅ ループ内でカウンター `i` を `index` パラメータに使うと商品の表示順を記録できる\n\n**次のモジュールでは** `while` ループで条件に基づく繰り返し処理を書く方法を学びます。",
+        "diagram": false
+      }
+    }
+  ]
+}

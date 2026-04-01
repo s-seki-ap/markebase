@@ -1,0 +1,67 @@
+{
+  "id": "css--2-6",
+  "moduleId": "2-6",
+  "categoryId": "css",
+  "title": "!importantの使いどころと乱用しない設計方針",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# !importantは最終手段\n\n`!important` はCSSの優先順位を強制的に最高にする宣言です。便利ですが、乱用するとCSSが破綻します。\n\n## マーケターが!importantに出会う場面\n\n**1. ABテストの強制適用**\nサイト側のCSSの詳細度が高すぎて、テストバリエーションのスタイルが反映されないとき、`!important` で強制上書きすることがあります。\n\n**2. GTMカスタムHTMLでのスタイル競合**\nGTMで挿入したバナーやポップアップのスタイルが、サイト側のCSSと競合するときに使います。\n\n**3. サードパーティツールのスタイル上書き**\nチャットウィジェットやフォームツールのデフォルトスタイルを変更する際に必要になることがあります。\n\n## このモジュールで得られること\n\n`!important` の正しい使い方と、使わずに済ませる設計の考え方を学びます。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# !importantの仕組みと使い分け\n\n## 基本構文\n\n```css\n.btn {\n  background-color: red !important;  /* 最優先で適用される */\n}\n```\n\nプロパティの値の後、セミコロンの前に `!important` を記述します。\n\n## !importantの優先順位\n\nカスケードの優先順位に`!important`を加えると：\n\n| 優先度 | ルール |\n|--------|--------|\n| 1位（最高） | `!important` 付きインラインCSS |\n| 2位 | `!important` 付き内部/外部CSS |\n| 3位 | インラインCSS（style属性） |\n| 4位 | IDセレクタ |\n| 5位 | クラスセレクタ |\n| 6位 | 要素セレクタ |\n| 7位（最低） | ブラウザデフォルト |\n\n## !importantが適切な場面\n\n```css\n/* 適切: サードパーティウィジェットの上書き */\n.chat-widget .close-btn {\n  display: block !important;\n}\n\n/* 適切: ABテストの一時的な変更 */\n.hero-cta {\n  background-color: #ea4335 !important;\n}\n\n/* 適切: ユーティリティクラス */\n.hidden {\n  display: none !important;\n}\n```\n\n## !importantを使うべきでない場面\n\n```css\n/* 不適切: 通常のスタイリング */\nh1 {\n  color: blue !important;\n}\n\n/* 不適切: !important同士の戦い */\n.btn {\n  background: red !important;\n}\n#main .btn {\n  background: green !important;\n}\n```\n\n## !importantを使わない設計方針\n\n### 方針1: 詳細度を調整する\n\n```css\n/* 詳細度を上げる */\n.section .btn {\n  color: red;\n}\n```\n\n### 方針2: セレクタの記述順序を利用する\n\n```css\n/* 後に書いたものが勝つ */\n.btn { color: blue; }\n.btn { color: red; }\n```\n\n### 方針3: BEM記法でクラス名を設計する\n\n```css\n/* 詳細度が均一になり競合しにくい */\n.card__title { }\n.card__button { }\n.card__button--primary { }\n```\n\n## !important乱用のリスク\n\n| リスク | 説明 |\n|--------|------|\n| 保守性の低下 | !importantを上書きするには、さらに詳細度の高い!importantが必要 |\n| デバッグの困難 | DevToolsで原因を追跡しにくくなる |\n| チーム開発の混乱 | 他の人のCSSを壊す可能性がある |\n| パフォーマンス | ブラウザのスタイル計算が複雑になる |",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: !importantを正しく使う\n\nサードパーティのチャットウィジェットのスタイルを上書きし、同時に通常のスタイリングは!importantを使わずに解決しましょう。\n\n## 課題\n\n1. `.widget-banner` の `display` を `none` に変更してください（`!important` を使用してOK。サードパーティの上書きのため）\n2. `.main-content .cta` の背景色を `#ea4335` にしてください（`!important` を使わず、詳細度で勝つセレクタを使用）",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>!important練習</title>\n  <style>\n    /* サードパーティウィジェットのCSS（変更不可） */\n    .widget-banner {\n      display: block;\n      background: #333;\n      color: white;\n      padding: 10px;\n      text-align: center;\n    }\n\n    /* サイト既存のCSS（変更不可） */\n    .cta {\n      background-color: gray;\n      color: white;\n      padding: 12px 24px;\n      border: none;\n    }\n\n    /* ① .widget-banner を !important で非表示にしてください */\n    \n\n    /* ② .main-content .cta の背景色を #ea4335 に（!important なしで） */\n    \n  </style>\n</head>\n<body>\n  <div class=\"widget-banner\">チャットサポート利用可能</div>\n  <div class=\"main-content\">\n    <h1>サービス紹介</h1>\n    <button class=\"cta\">お問い合わせ</button>\n  </div>\n</body>\n</html>",
+        "hints": [
+          "!importantは `display: none !important;` のように値の後に付けます。",
+          ".cta の詳細度は (0,1,0) なので、親要素のクラスを追加して (0,2,0) にすれば勝てます。",
+          "`.main-content .cta` で詳細度 (0,2,0) となり、`.cta` (0,1,0) に勝ちます。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>!important練習</title>\n  <style>\n    /* サードパーティウィジェットのCSS（変更不可） */\n    .widget-banner {\n      display: block;\n      background: #333;\n      color: white;\n      padding: 10px;\n      text-align: center;\n    }\n\n    /* サイト既存のCSS（変更不可） */\n    .cta {\n      background-color: gray;\n      color: white;\n      padding: 12px 24px;\n      border: none;\n    }\n\n    .widget-banner {\n      display: none !important;\n    }\n\n    .main-content .cta {\n      background-color: #ea4335;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"widget-banner\">チャットサポート利用可能</div>\n  <div class=\"main-content\">\n    <h1>サービス紹介</h1>\n    <button class=\"cta\">お問い合わせ</button>\n  </div>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "!importantを使うのが適切な場面はどれですか？",
+            "options": ["サードパーティウィジェットのスタイルを上書きするとき", "通常のページデザインで色を変えるとき", "他のCSSに勝つために毎回付けるとき", "チーム開発で自分のCSSを最優先にしたいとき"],
+            "correct": 0,
+            "explanation": "`!important` は自分でコントロールできないサードパーティのCSSを上書きする場合に適切です。通常のスタイリングでは詳細度の調整で対応すべきです。"
+          },
+          {
+            "q": "!importantの正しい記述位置はどこですか？",
+            "options": ["プロパティの値の後、セミコロンの前", "セレクタの前", "プロパティ名の前", "波括弧の外"],
+            "correct": 0,
+            "explanation": "`!important` はプロパティの値の後、セミコロンの前に記述します。例: `color: red !important;`"
+          },
+          {
+            "q": "!importantを乱用した場合の最大のリスクはどれですか？",
+            "options": ["!importantを上書きするにはさらに詳細度の高い!importantが必要になり保守性が崩壊する", "ページの表示速度が半分になる", "SEOのランキングが下がる", "ブラウザがCSSを無視するようになる"],
+            "correct": 0,
+            "explanation": "`!important` の上書きには、さらに詳細度の高いセレクタ + `!important` が必要になり、際限のないエスカレーションが発生します。これをCSS設計の「詳細度戦争」と呼びます。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール2-6 完了！\n\nお疲れ様でした。このモジュールで学んだことを振り返りましょう。\n\n## 習得したスキル\n\n✅ **!importantの構文と優先順位**を理解した\n✅ **適切な使い方**（サードパーティ上書き、ABテスト）を把握した\n✅ **乱用のリスク**（保守性崩壊、詳細度戦争）を理解した\n✅ **!importantを使わない設計方針**（詳細度調整、BEM記法）を学んだ\n\n## 次のステップ\n\n次のモジュール **「2-7: CSS継承とデフォルトスタイル」** では、親要素のスタイルが子要素に自動的に引き継がれる「継承」の仕組みを学びます。\n\n> 💡 **実務チャレンジ**: 自社サイトのCSSファイルを開いて `!important` が何箇所で使われているか検索してみましょう。多ければ多いほどCSS設計に課題がある可能性があります。",
+        "diagram": false
+      }
+    }
+  ]
+}

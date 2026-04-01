@@ -1,0 +1,82 @@
+{
+  "id": "ga4--5-10",
+  "moduleId": "5-10",
+  "categoryId": "ga4",
+  "title": "参照元トラフィック除外とクロスドメイン計測",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 「おかしなデータ」の原因を取り除く\n\nGA4を運用していると、こんな状況に遭遇することがあります。\n\n## よくある問題事例\n\n**問題1: 決済代行サービスが参照元になってしまう**\n\nユーザーが購入フローで外部決済サービス（例: GMOペイメント、Stripe）に飛んで戻ってくると、GA4はその決済サービスを「参照元」として記録します。本来の流入元（例: Google広告）が上書きされてしまいます。\n\n**問題2: サブドメイン間でセッションが途切れる**\n\n`www.example.com` から `shop.example.com` に移動すると、GA4は別のセッションとしてカウントします。ユーザーのジャーニーが分断されます。\n\n**問題3: 社内からのアクセスがデータを汚染する**\n\n自社IPからのアクセスが実データに混入します。\n\n## このモジュールで解決すること\n\n- 決済サービスなど外部サービスを「参照元除外」に設定する方法\n- 複数ドメイン・サブドメインを横断するクロスドメイン計測の実装\n- 社内IPフィルタの設定（Googleシグナル未対応のため代替手段）",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# 参照元除外の設定\n\n## 1. 参照元除外リストとは\n\n特定のドメインを「参照元」として記録しないよう設定する機能です。\n\n**設定場所**: GA4管理 → データストリーム → タグ設定 → 参照元除外リスト\n\n```\n除外すべきドメインの例\n- 決済系: gmo-pg.com, stripe.com, paypal.com\n- SSO系: accounts.google.com（自社Googleログイン）\n- 自社ドメイン: example.com（クロスドメイン設定前の暫定）\n```\n\n**効果**: これらのドメインからの流入はセッションを切らず、元の参照元を維持します。\n\n## 2. クロスドメイン計測の仕組み\n\nGA4はURLに `_gl` パラメータを付与して、ドメイン間でユーザーを識別します。\n\n```\nユーザーが辿るURL例:\n\n1. www.example.com/product  ← GA4セッション開始\n        ↓ リンクをクリック\n2. checkout.example-pay.com/?_gl=1*abc123*...  ← _glパラメータで識別\n        ↓ 決済完了後\n3. www.example.com/thankyou  ← 同一セッションとして継続\n```\n\n## 3. クロスドメイン計測の設定方法\n\n**方法A: GTMのGA4設定タグで設定（推奨）**\n\n```javascript\n// GTM カスタムHTMLタグ または GA4設定タグの「ドメイン設定」\ngtag('set', 'linker', {\n  domains: ['checkout.example-pay.com', 'shop.example.com']\n});\n```\n\n**方法B: GA4管理画面から設定**\n```\nGA4管理 → データストリーム → 該当ストリーム\n→ タグ設定 → ドメインの設定\n→ 「条件を追加」→ 対象ドメインを入力\n```\n\n## 4. 設定後の確認方法\n\n```\n確認手順:\n1. DebugViewでセッションが途切れないか確認\n2. クロスドメイン遷移後のURLに \"_gl=\" が含まれているか確認\n3. GA4レポートの参照元/メディアに除外したドメインが出ないか確認\n```\n\n## 5. サブドメインの扱い\n\nGA4はデフォルトで同一ドメイン（サブドメイン含む）をまとめて扱います。\n\n```\n同一ドメインとして扱われる例:\nwww.example.com ← example.comのcookieを共有\nshop.example.com ← 同じcookie\nblog.example.com ← 同じcookie\n```\n\n通常はサブドメイン間ではクロスドメイン設定不要です。",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: クロスドメイン計測を実装する\n\nECサイト `www.shop-example.com` と外部決済サービス `payment.example-pay.com` をまたいだ計測を実装します。\n\n## 課題\n\n以下のgtag.jsコードを完成させてください。\n\n1. GA4の計測IDは `G-SHOP12345`\n2. `payment.example-pay.com` をクロスドメイン対象に追加する\n3. 同時に `payment.example-pay.com` を参照元除外するため、`ignore_referrer` を設定する\n\n> `gtag('config')` と `gtag('set')` の使い方に注意してください。",
+        "starterCode": "<!-- GA4 gtag.js 実装 -->\n<script async src=\"https://www.googletagmanager.com/gtag/js?id=G-SHOP12345\"></script>\n<script>\n  window.dataLayer = window.dataLayer || [];\n  function gtag(){dataLayer.push(arguments);}\n  gtag('js', new Date());\n\n  // TODO: GA4設定（計測IDを指定）\n  gtag('config', '');\n\n  // TODO: クロスドメインリンカー設定\n  // payment.example-pay.com をドメインリストに追加する\n  gtag('set', 'linker', {\n    // ここを完成させる\n  });\n</script>",
+        "hints": [
+          "`gtag('config', 'G-SHOP12345')` で計測IDを設定します。",
+          "linkerの `domains` プロパティに対象ドメインの配列を渡します: `domains: ['payment.example-pay.com']`",
+          "`gtag('set', 'linker', { domains: ['payment.example-pay.com'], decorate_forms: true })` とすると、フォームの送信もクロスドメイン対応になります。参照元除外はGA4管理画面の「参照元除外リスト」から `example-pay.com` を追加します。"
+        ],
+        "answer": "<!-- GA4 gtag.js 実装 -->\n<script async src=\"https://www.googletagmanager.com/gtag/js?id=G-SHOP12345\"></script>\n<script>\n  window.dataLayer = window.dataLayer || [];\n  function gtag(){dataLayer.push(arguments);}\n  gtag('js', new Date());\n\n  // GA4設定\n  gtag('config', 'G-SHOP12345');\n\n  // クロスドメインリンカー設定\n  // payment.example-pay.com をリンク先ドメインとして指定\n  // decorate_forms: フォーム送信時もリンカーパラメータを付与\n  gtag('set', 'linker', {\n    domains: ['payment.example-pay.com'],\n    decorate_forms: true\n  });\n\n  // 参照元除外は GA4管理画面で設定:\n  // 管理 → データストリーム → タグ設定 → 参照元除外リスト\n  // → 「example-pay.com」を追加\n</script>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "決済代行サービス（例: Stripe）を経由したユーザーが戻ってきたとき、GA4が正しく元の流入元を記録するために必要な設定はどれですか？",
+            "options": [
+              "ストライプのドメインをクロスドメイン計測の対象に追加する",
+              "ストライプのドメインを参照元除外リストに追加する",
+              "ストライプへのリンクにUTMパラメータを付与する",
+              "ストライプのドメインをIPフィルタに追加する"
+            ],
+            "correct": 1,
+            "explanation": "決済代行サービスなど、自社の購入フローに含まれる外部サービスは「参照元除外リスト」に追加します。これにより、そのサービスから戻ってきたときにセッションが切れず、元の流入元（Google広告など）が保持されます。"
+          },
+          {
+            "q": "GA4のクロスドメイン計測が機能しているとき、ドメインをまたいだURLに付与されるパラメータはどれですか？",
+            "options": [
+              "utm_source",
+              "_ga",
+              "_gl",
+              "gclid"
+            ],
+            "correct": 2,
+            "explanation": "`_gl` パラメータはGA4のリンカーパラメータです。クロスドメイン設定をすると、対象ドメインへのリンクに自動で `_gl=` が付与され、ドメイン間でユーザーとセッションを識別できます。"
+          },
+          {
+            "q": "`www.example.com` と `shop.example.com` 間の計測について、GA4のデフォルト動作として正しいのはどれですか？",
+            "options": [
+              "サブドメイン間はデフォルトで別セッションとなり、クロスドメイン設定が必須",
+              "サブドメイン間はデフォルトで同一セッションとして扱われる",
+              "サブドメイン間はクロスドメイン設定をしてもセッションを維持できない",
+              "サブドメインの計測にはFirebase SDKが必要"
+            ],
+            "correct": 1,
+            "explanation": "GA4はデフォルトでサブドメイン間をまたいだ計測に対応しています。同じ親ドメイン（example.com）のCookieが共有されるため、`www.example.com` と `shop.example.com` 間ではクロスドメイン設定は通常不要です。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール5-10 完了！\n\n参照元トラフィック除外とクロスドメイン計測を実装できるようになりました。\n\n## 習得したスキル\n\n✅ **参照元除外リスト**の設定対象（決済サービス等）と設定方法を理解した\n✅ **クロスドメイン計測の仕組み**（`_gl` パラメータ）を説明できる\n✅ **`gtag('set', 'linker')`** でクロスドメイン設定を実装できる\n✅ **サブドメインはデフォルト対応済み**であることを把握した\n\n## 実務チェックリスト\n\n- 自社の購入フローに外部サービス（決済・ログイン）が含まれる場合は参照元除外を設定する\n- EC系クライアントでは必ず決済代行サービスのドメインを確認する\n- 設定後はDebugViewと実際のレポートで検証する\n\n## 次のステップ\n\n次のモジュール **「5-11: 自動収集イベント一覧」** では、GA4が追加実装なしで自動的に計測するイベントの全体像を学びます。",
+        "diagram": false
+      }
+    }
+  ]
+}

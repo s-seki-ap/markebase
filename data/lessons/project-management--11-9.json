@@ -1,0 +1,82 @@
+{
+  "id": "project-management--11-9",
+  "moduleId": "11-9",
+  "categoryId": "project-management",
+  "title": "プロジェクト計画書の作成",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 計画なきプロジェクトは「行き当たりばったり」\n\nキックオフが終わったあと、多くの初級PMが犯すミスが「計画書を作らずにいきなり実行する」ことです。\n\n## 計画書なしで起きること\n\n- **スケジュールが崩れてもどこが原因か分からない**\n- **タスクの抜け漏れが後から発覚する**\n- **リソース（人・時間）の配分が偏る**\n- **リスクが発生した時に対応が後手に回る**\n\nプロジェクト計画書とは、**「どうやってゴールまで辿り着くか」の詳細なロードマップ**です。\n\n## プロジェクト計画書 ≠ プロジェクト憲章\n\n| 文書 | タイミング | 目的 | 詳細度 |\n|------|-----------|------|--------|\n| プロジェクト憲章 | プロジェクト立上げ | 何をやるかの合意 | 概要レベル |\n| プロジェクト計画書 | キックオフ後 | どうやってやるかの詳細設計 | 実行レベル |",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# プロジェクト計画書の主要コンポーネント\n\n## 1. WBS（Work Breakdown Structure）作業分解構造\n\nプロジェクト全体の作業を階層的に分解したリストです。\n\n```\nプロジェクト（Level 0）\n├── 要件定義フェーズ（Level 1）\n│   ├── ヒアリング実施（Level 2）\n│   ├── 要件定義書作成（Level 2）\n│   └── クライアント承認（Level 2）\n├── 設計フェーズ（Level 1）\n│   ├── ワイヤーフレーム制作（Level 2）\n│   └── デザインカンプ制作（Level 2）\n└── 実装フェーズ（Level 1）\n    ├── フロントエンド実装（Level 2）\n    └── GA4計測設定（Level 2）\n```\n\n**WBS作成の鉄則**: 1つの作業パッケージは「1人・1週間以内」で完了できるサイズに分解する。\n\n## 2. ガントチャート（スケジュール）\n\nWBSの各作業を時間軸に配置し、依存関係を可視化したチャートです。\n\n```\nタスク名          | 5/1  5/8  5/15 5/22 5/29\n要件ヒアリング    |████░░░░░░░░░░░░\nWF制作            |     ████████░░░░\nデザイン制作      |          ████████\n実装              |               ████████\n```\n\n**重要概念**: \n- **クリティカルパス**: 遅延するとプロジェクト全体が遅れるタスクの連鎖\n- **バッファ**: 不確実性に備えた予備時間（全体の10〜20%が目安）\n\n## 3. リスク管理台帳\n\n| リスク | 発生確率 | 影響度 | 対応策 |\n|--------|----------|--------|--------|\n| コンテンツ提供の遅延 | 高 | 高 | 提供期限を1週間前倒しでリクエスト |\n| デザインの大幅修正発生 | 中 | 高 | 修正回数の上限を契約書に記載 |\n| 担当エンジニアの離脱 | 低 | 高 | バックアップ要員を事前確認 |\n\n## 4. コミュニケーション計画\n\n| 情報 | 対象 | 頻度 | 手段 | 担当 |\n|------|------|------|------|------|\n| 進捗報告 | クライアント | 週次 | MTG + メール | PM |\n| タスク進捗 | チーム内 | 日次 | Slack | 各自 |\n| リスク報告 | PM・上長 | 随時 | Slack DM | 各自 |\n| マイルストーン報告 | 全関係者 | 節目ごと | メール | PM |",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: 簡易プロジェクト計画書の作成\n\nLPリニューアルプロジェクト（6週間）の計画書を作成してください。\n\n## 課題\n\n1. WBSをフェーズ・タスクに分解して記入する\n2. 簡易ガントチャートに各タスクの期間を記入する\n3. リスクを2つ以上挙げて対応策を書く\n\n完成したら **[▶ 実行]** でプレビューを確認してください。",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>プロジェクト計画書</title>\n  <style>\n    body { font-family: sans-serif; max-width: 900px; margin: 40px auto; background: #f8fafc; color: #1e293b; }\n    h1 { border-bottom: 3px solid #6366f1; padding-bottom: 8px; }\n    h2 { border-left: 4px solid #6366f1; padding-left: 12px; margin-top: 32px; }\n    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9em; }\n    th { background: #1e293b; color: white; padding: 8px; }\n    td { padding: 8px; border-bottom: 1px solid #e2e8f0; vertical-align: middle; }\n    .bar { height: 20px; background: #6366f1; border-radius: 4px; }\n    .bar-design { background: #f59e0b; }\n    .bar-dev { background: #10b981; }\n    .empty-bar { height: 20px; background: #e2e8f0; border-radius: 4px; }\n    .risk-high { color: #dc2626; font-weight: bold; }\n    .risk-mid { color: #d97706; font-weight: bold; }\n    .risk-low { color: #64748b; }\n  </style>\n</head>\n<body>\n  <h1>プロジェクト計画書: LPリニューアル</h1>\n\n  <h2>1. WBS（作業分解構造）</h2>\n  <table>\n    <tr><th>フェーズ</th><th>タスク</th><th>担当者</th><th>工数（日）</th></tr>\n    <!-- 各行を記入してください（最低6タスク） -->\n    <tr><td>要件定義</td><td>（タスク名）</td><td>（担当）</td><td>（日数）</td></tr>\n    <tr><td>要件定義</td><td>（タスク名）</td><td>（担当）</td><td>（日数）</td></tr>\n    <tr><td>設計・デザイン</td><td>（タスク名）</td><td>（担当）</td><td>（日数）</td></tr>\n    <tr><td>設計・デザイン</td><td>（タスク名）</td><td>（担当）</td><td>（日数）</td></tr>\n    <tr><td>実装</td><td>（タスク名）</td><td>（担当）</td><td>（日数）</td></tr>\n    <tr><td>テスト・リリース</td><td>（タスク名）</td><td>（担当）</td><td>（日数）</td></tr>\n  </table>\n\n  <h2>2. 簡易ガントチャート（6週間）</h2>\n  <table>\n    <tr><th>タスク</th><th>W1</th><th>W2</th><th>W3</th><th>W4</th><th>W5</th><th>W6</th></tr>\n    <!-- 各行のセルに class=\"bar\"（または bar-design / bar-dev）をつけると色が変わります -->\n    <tr><td>要件定義</td><td><div class=\"bar\"></div></td><td></td><td></td><td></td><td></td><td></td></tr>\n    <tr><td>（タスク名）</td><td></td><td><div class=\"empty-bar\"></div></td><td></td><td></td><td></td><td></td></tr>\n    <tr><td>（タスク名）</td><td></td><td></td><td><div class=\"empty-bar\"></div></td><td></td><td></td><td></td></tr>\n    <tr><td>（タスク名）</td><td></td><td></td><td></td><td><div class=\"empty-bar\"></div></td><td></td><td></td></tr>\n    <tr><td>（タスク名）</td><td></td><td></td><td></td><td></td><td><div class=\"empty-bar\"></div></td><td></td></tr>\n    <tr><td>テスト・リリース</td><td></td><td></td><td></td><td></td><td></td><td><div class=\"empty-bar\"></div></td></tr>\n  </table>\n\n  <h2>3. リスク管理台帳</h2>\n  <table>\n    <tr><th>リスク</th><th>確率</th><th>影響度</th><th>対応策</th></tr>\n    <tr><td>（記入してください）</td><td class=\"risk-high\">（高/中/低）</td><td class=\"risk-high\">（高/中/低）</td><td>（対応策）</td></tr>\n    <tr><td>（記入してください）</td><td class=\"risk-mid\">（高/中/低）</td><td class=\"risk-high\">（高/中/低）</td><td>（対応策）</td></tr>\n  </table>\n\n</body>\n</html>",
+        "hints": [
+          "WBSのタスクは「ヒアリング実施・要件定義書作成・ワイヤーフレーム制作・デザインカンプ制作・実装・テスト・リリース」が典型的な流れです",
+          "ガントチャートは各タスクのバーが重なる（並行作業）かどうかを意識してください。要件定義が終わらないとデザインが始まれない、という依存関係があります",
+          "リスクとして「コンテンツ提供の遅延」「デザイン修正の大幅発生」「エンジニアの突発欠勤」などが典型例です"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>プロジェクト計画書</title>\n  <style>\n    body { font-family: sans-serif; max-width: 900px; margin: 40px auto; background: #f8fafc; color: #1e293b; }\n    h1 { border-bottom: 3px solid #6366f1; padding-bottom: 8px; }\n    h2 { border-left: 4px solid #6366f1; padding-left: 12px; margin-top: 32px; }\n    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9em; }\n    th { background: #1e293b; color: white; padding: 8px; }\n    td { padding: 8px; border-bottom: 1px solid #e2e8f0; vertical-align: middle; }\n    .bar { height: 20px; background: #6366f1; border-radius: 4px; }\n    .bar-design { background: #f59e0b; height: 20px; border-radius: 4px; }\n    .bar-dev { background: #10b981; height: 20px; border-radius: 4px; }\n    .bar-test { background: #ef4444; height: 20px; border-radius: 4px; }\n    .risk-high { color: #dc2626; font-weight: bold; }\n    .risk-mid { color: #d97706; font-weight: bold; }\n    .risk-low { color: #64748b; }\n  </style>\n</head>\n<body>\n  <h1>プロジェクト計画書: LPリニューアル</h1>\n  <h2>1. WBS（作業分解構造）</h2>\n  <table>\n    <tr><th>フェーズ</th><th>タスク</th><th>担当者</th><th>工数（日）</th></tr>\n    <tr><td>要件定義</td><td>クライアントヒアリング実施</td><td>PM</td><td>2日</td></tr>\n    <tr><td>要件定義</td><td>要件定義書作成・承認</td><td>PM</td><td>3日</td></tr>\n    <tr><td>設計・デザイン</td><td>ワイヤーフレーム制作</td><td>デザイナー</td><td>3日</td></tr>\n    <tr><td>設計・デザイン</td><td>デザインカンプ制作・承認</td><td>デザイナー</td><td>5日</td></tr>\n    <tr><td>実装</td><td>フロントエンド実装（HTML/CSS/JS）</td><td>エンジニア</td><td>7日</td></tr>\n    <tr><td>テスト・リリース</td><td>動作テスト・修正・本番リリース</td><td>PM + エンジニア</td><td>3日</td></tr>\n  </table>\n  <h2>2. 簡易ガントチャート（6週間）</h2>\n  <table>\n    <tr><th>タスク</th><th>W1</th><th>W2</th><th>W3</th><th>W4</th><th>W5</th><th>W6</th></tr>\n    <tr><td>ヒアリング・要件定義</td><td><div class=\"bar\"></div></td><td><div class=\"bar\"></div></td><td></td><td></td><td></td><td></td></tr>\n    <tr><td>ワイヤーフレーム制作</td><td></td><td><div class=\"bar-design\"></div></td><td><div class=\"bar-design\"></div></td><td></td><td></td><td></td></tr>\n    <tr><td>デザインカンプ制作</td><td></td><td></td><td><div class=\"bar-design\"></div></td><td><div class=\"bar-design\"></div></td><td></td><td></td></tr>\n    <tr><td>フロントエンド実装</td><td></td><td></td><td></td><td><div class=\"bar-dev\"></div></td><td><div class=\"bar-dev\"></div></td><td></td></tr>\n    <tr><td>テスト・バグ修正</td><td></td><td></td><td></td><td></td><td><div class=\"bar-test\"></div></td><td><div class=\"bar-test\"></div></td></tr>\n    <tr><td>本番リリース</td><td></td><td></td><td></td><td></td><td></td><td><div class=\"bar\"></div></td></tr>\n  </table>\n  <h2>3. リスク管理台帳</h2>\n  <table>\n    <tr><th>リスク</th><th>確率</th><th>影響度</th><th>対応策</th></tr>\n    <tr><td>コンテンツ（テキスト・画像）の提供遅延</td><td class=\"risk-high\">高</td><td class=\"risk-high\">高</td><td>提供期限を実際の必要日から1週間前倒しでリクエスト。遅延時はテキストなしでデザインを先行</td></tr>\n    <tr><td>デザイン修正が5回以上発生する</td><td class=\"risk-mid\">中</td><td class=\"risk-high\">高</td><td>修正回数上限（3回）を契約書に明記。超過分は別途見積もりとする</td></tr>\n    <tr><td>エンジニアの突発的な離脱・体調不良</td><td class=\"risk-low\">低</td><td class=\"risk-high\">高</td><td>バックアップエンジニアを事前に確認し、コードレビューで引き継ぎ可能な状態を維持</td></tr>\n  </table>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "WBS（Work Breakdown Structure）の「作業パッケージ」の適切なサイズの目安はどれですか？",
+            "options": [
+              "1人・1ヶ月で完了できるサイズ",
+              "チーム全員で1週間かけるサイズ",
+              "1人・1週間以内で完了できるサイズ",
+              "1人・1年かけてでも完了できるサイズ"
+            ],
+            "correct": 2,
+            "explanation": "WBSの作業パッケージは「1人・1週間以内」で完了できるサイズが目安です。これより大きいと進捗把握が困難になり、遅延の発見が遅れます。細かく分解することで、問題の早期発見と正確な工数見積もりが可能になります。"
+          },
+          {
+            "q": "ガントチャートにおける「クリティカルパス」の説明として正しいものはどれですか？",
+            "options": [
+              "プロジェクトで最も難しい技術的なタスクの連鎖",
+              "遅延するとプロジェクト全体の完了日が遅れるタスクの連鎖",
+              "最も予算がかかるタスクの系列",
+              "PMが直接担当するタスクの系列"
+            ],
+            "correct": 1,
+            "explanation": "クリティカルパスは「プロジェクトの最長経路」であり、このパス上のタスクが1日遅延するとプロジェクト全体が1日遅延します。PMはクリティカルパス上のタスクを優先的に監視・管理する必要があります。"
+          },
+          {
+            "q": "リスク管理台帳に記載すべき内容として最も適切なものはどれですか？",
+            "options": [
+              "リスクの名前だけを列挙したリスト",
+              "すでに発生した問題の記録だけ",
+              "リスクの内容・発生確率・影響度・対応策をセットで記録したもの",
+              "プロジェクトの失敗事例のまとめ"
+            ],
+            "correct": 2,
+            "explanation": "リスク管理台帳には「リスクの内容・発生確率・影響度・対応策」をセットで記録します。「対応策」がセットになって初めてリスク管理として機能します。リスクを列挙するだけで対応策がないと、問題発生時に右往左往することになります。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール11-9 完了！\n\nプロジェクト計画書の主要コンポーネントを習得しました。\n\n## 習得したスキル\n\n✅ **WBSの作成**：作業を1人1週間のサイズに分解する手法を習得した\n✅ **ガントチャート**：タスクの依存関係とクリティカルパスの概念を理解した\n✅ **リスク管理台帳**：確率・影響度・対応策をセットで管理する手法を習得した\n✅ **コミュニケーション計画**：情報を誰に・どの頻度で・どのツールで届けるか設計した\n\n## 次のステップ\n\n次のモジュール **「11-10: プロジェクトライフサイクルの全体像」** では、立上げから終結まで全フェーズを俯瞰し、各フェーズで何をすべきかのマップを習得します。\n\n> 実務チャレンジ: 今日、現在のプロジェクトのリスクを3つ書き出してください。各リスクに「発生確率・影響度・対応策」を付けてリスク台帳の第一歩を踏み出しましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

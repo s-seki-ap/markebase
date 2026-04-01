@@ -1,0 +1,82 @@
+{
+  "id": "marketing-strategy--10-7",
+  "moduleId": "10-7",
+  "categoryId": "marketing-strategy",
+  "title": "ポーターの5Forces分析",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 5Forces：業界の競争構造を解剖する\n\n「この業界は儲かるのか？」「なぜあの企業は高利益率を維持できるのか？」\n\nこの問いに答えるフレームワークが、マイケル・ポーター（ハーバード・ビジネス・スクール教授）が1979年に提唱した **5Forces分析** です。\n\n## 5Forcesとは\n\n業界の収益性を決める5つの競争要因：\n\n1. **既存競合同士の競争**: 業界内の競合関係の激しさ\n2. **新規参入の脅威**: 新しいプレイヤーが入ってくる可能性\n3. **代替品の脅威**: まったく異なるアプローチで顧客ニーズを満たすものの登場\n4. **買い手（顧客）の交渉力**: 顧客が価格を下げさせる力\n5. **売り手（サプライヤー）の交渉力**: 仕入先が価格を上げる力\n\n## なぜ重要か\n\n5つの力が強いほど業界の収益性は低くなります。逆に5つの力が弱い業界は高収益を維持しやすい。\n\n**あなたへの問い**: 自社が属する業界の「最大の競争要因」はどれですか？",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# 5つの競争要因の詳細\n\n## 1. 既存競合同士の競争（Rivalry Among Existing Competitors）\n\n競争が激しくなる条件：\n- 競合の数が多い・規模が拮抗している\n- 業界の成長率が低い（シェアの奪い合い）\n- 差別化が難しい（コモディティ化）\n- 撤退障壁が高い\n\n**評価**: 競合が多く成長が鈍化した市場は価格競争に陥りやすい\n\n## 2. 新規参入の脅威（Threat of New Entrants）\n\n参入障壁が低いほど新規参入の脅威が高い。\n\n**参入障壁の要因**:\n- 規模の経済（大量生産でコスト優位）\n- ブランドロイヤルティ\n- 規制・免許\n- 初期投資の大きさ\n- 流通チャネルのアクセス難易度\n\n## 3. 代替品の脅威（Threat of Substitutes）\n\n代替品とは異なるカテゴリで同じ顧客ニーズを満たすもの。\n\n**例**: タクシー vs ライドシェア / 専門書 vs YouTube動画 / 社員食堂 vs フードデリバリー\n\n## 4. 買い手の交渉力（Bargaining Power of Buyers）\n\n買い手が強くなる条件：\n- 購入量が多い（大口顧客）\n- 代替品が豊富で乗り換えコストが低い\n- 製品が標準化されている\n\n**デジタルマーケへの影響**: 比較サイトの普及で買い手の情報力が向上→交渉力強まる\n\n## 5. 売り手（サプライヤー）の交渉力（Bargaining Power of Suppliers）\n\nサプライヤーが強くなる条件：\n- 供給者が少ない\n- 代替の仕入先がない\n- 仕入品が差別化されている\n\n**例**: 広告プラットフォーム（Google・Meta）は強力なサプライヤー。広告費を一方的に引き上げられる。\n\n## 5Forces分析の使い方\n\n```\n各Force → 「強い/中/弱い」で評価\n    ↓\n業界全体の収益構造を把握\n    ↓\n参入すべきか / どこで戦うか / どう収益性を守るかを戦略化\n```\n\n| Force | 強い場合 | 弱い場合 |\n|-------|----------|----------|\n| 既存競合 | 価格戦争、低利益率 | 安定した収益 |\n| 新規参入 | シェア喪失リスク | 高い参入障壁で守られる |\n| 代替品 | 市場自体が縮小 | 固定客が維持できる |\n| 買い手 | 値引き圧力 | 価格設定の自由度が高い |\n| 売り手 | コスト上昇 | 安定調達、利益率確保 |",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: 5Forces分析シートを作成する\n\n任意の業界について5Forces分析を実施し、各Forceの強弱と業界収益性を評価してください。\n\n## 課題\n\n以下のHTMLテンプレートを完成させ、5つの競争要因の評価と戦略的示唆を記述してください。",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>5Forces分析シート</title>\n  <style>\n    body { font-family: sans-serif; max-width: 780px; margin: 40px auto; padding: 20px; }\n    .force-card { border-radius: 8px; padding: 16px 20px; margin: 12px 0; background: white; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }\n    .strength-bar { display: flex; gap: 8px; margin-top: 8px; }\n    .level { padding: 4px 12px; border-radius: 12px; cursor: pointer; font-size: 0.85rem; font-weight: bold; }\n    textarea { width: 100%; height: 70px; padding: 8px; border: 1px solid #e2e8f0; border-radius: 4px; resize: vertical; }\n    label { display: block; font-weight: bold; margin: 8px 0 4px; font-size: 0.85rem; color: #475569; }\n  </style>\n</head>\n<body>\n  <h1>5Forces分析シート</h1>\n  <p>分析業界: <input type=\"text\" placeholder=\"例：Webマーケティング代行業界\" style=\"padding:4px 8px; border:1px solid #ccc; border-radius:4px; width:280px;\"/></p>\n\n  <!-- 5つのForceカードをここに作成 -->\n  <!-- 各カードに：Force名、強弱レベル（強/中/弱）ボタン、根拠テキストエリア、影響テキストエリア -->\n\n  <!-- 総合評価セクション -->\n\n</body>\n</html>",
+        "hints": [
+          "5つのForceカードのタイトルは「既存競合」「新規参入」「代替品」「買い手（顧客）」「売り手（サプライヤー）」の5つです。",
+          "強弱レベルを示すボタン（強・中・弱）に色分けをしましょう。強=赤、中=オレンジ、弱=緑が直感的です。",
+          "最後に「業界総合評価」として収益性の評価と戦略的示唆をまとめるセクションを追加してください。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>5Forces分析シート</title>\n  <style>\n    body { font-family: sans-serif; max-width: 780px; margin: 40px auto; padding: 20px; background: #f8fafc; }\n    h1, h2 { color: #1e293b; }\n    .force-card { border-radius: 8px; padding: 16px 20px; margin: 12px 0; background: white; box-shadow: 0 1px 4px rgba(0,0,0,0.08); border-left: 4px solid #3b82f6; }\n    .force-header { display: flex; align-items: center; justify-content: space-between; }\n    .force-header h3 { margin: 0; color: #1e293b; }\n    .strength-badge { padding: 4px 14px; border-radius: 12px; font-size: 0.85rem; font-weight: bold; }\n    .strong { background: #fee2e2; color: #dc2626; }\n    .medium { background: #fef3c7; color: #d97706; }\n    .weak { background: #dcfce7; color: #16a34a; }\n    textarea { width: 100%; height: 65px; padding: 8px; border: 1px solid #e2e8f0; border-radius: 4px; resize: vertical; font-size: 0.85rem; margin-top: 4px; }\n    label { display: block; font-weight: bold; margin: 10px 0 2px; font-size: 0.82rem; color: #64748b; }\n    .summary { background: #1e293b; color: #e2e8f0; border-radius: 8px; padding: 20px; margin-top: 20px; }\n    .summary h2 { color: #fbbf24; margin-top: 0; }\n    .summary label { color: #94a3b8; }\n    .summary textarea { background: #334155; color: white; border-color: #475569; }\n    .score-row { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; }\n    .score-label { font-size: 0.85rem; width: 120px; color: #94a3b8; }\n    .bar-wrap { flex: 1; background: #475569; border-radius: 4px; height: 8px; }\n    .bar-fill { height: 8px; border-radius: 4px; background: #ef4444; }\n  </style>\n</head>\n<body>\n  <h1>5Forces分析シート</h1>\n  <p>分析業界: <input type=\"text\" value=\"Webマーケティング代行業界（中小企業向け）\" style=\"padding:4px 8px; border:1px solid #ccc; border-radius:4px; width:340px;\"/></p>\n\n  <div class=\"force-card\">\n    <div class=\"force-header\">\n      <h3>既存競合同士の競争</h3>\n      <span class=\"strength-badge strong\">強い</span>\n    </div>\n    <label>競争が強い根拠</label>\n    <textarea>プレイヤーが多数（大手代理店・中堅・フリーランス）。サービスの差別化が難しくコモディティ化が進む。価格競争が激しく、入札案件では安値合戦になる傾向がある。</textarea>\n    <label>自社への影響</label>\n    <textarea>価格だけで勝負すると消耗戦になる。専門性・データ活用・業種特化で差別化を明確にする必要がある。</textarea>\n  </div>\n\n  <div class=\"force-card\">\n    <div class=\"force-header\">\n      <h3>新規参入の脅威</h3>\n      <span class=\"strength-badge strong\">強い</span>\n    </div>\n    <label>参入障壁が低い根拠</label>\n    <textarea>初期投資が少なく、フリーランスが個人でも参入できる。AIツール普及でコンテンツ制作も低コスト化。専門資格が不要。</textarea>\n    <label>自社への影響</label>\n    <textarea>常に新規参入者との競争にさらされる。実績・ブランド・長期契約関係の構築が参入障壁になる。</textarea>\n  </div>\n\n  <div class=\"force-card\">\n    <div class=\"force-header\">\n      <h3>代替品の脅威</h3>\n      <span class=\"strength-badge medium\">中程度</span>\n    </div>\n    <label>代替品の例</label>\n    <textarea>自社内製（インハウスマーケ）、AIツール活用による自動化、ノーコードマーケツール（HubSpot等）の自己運用。</textarea>\n    <label>自社への影響</label>\n    <textarea>特に中規模企業でのインハウス化が進む可能性。「外注 vs 内製」の選択肢として常に比較される。コンサル要素の強化が対策になる。</textarea>\n  </div>\n\n  <div class=\"force-card\">\n    <div class=\"force-header\">\n      <h3>買い手（顧客）の交渉力</h3>\n      <span class=\"strength-badge medium\">中程度</span>\n    </div>\n    <label>交渉力が強い根拠</label>\n    <textarea>比較サイト・口コミサイトで価格・評判が透明化。複数社に見積もりを取る文化がある。乗り換えコストは比較的低い。</textarea>\n    <label>自社への影響</label>\n    <textarea>初期の価格交渉を受けやすい。長期契約・成果保証・解約ペナルティなどで乗り換えコストを設計することが重要。</textarea>\n  </div>\n\n  <div class=\"force-card\">\n    <div class=\"force-header\">\n      <h3>売り手（サプライヤー）の交渉力</h3>\n      <span class=\"strength-badge strong\">強い</span>\n    </div>\n    <label>交渉力が強い根拠</label>\n    <textarea>Google・Metaなどの広告プラットフォームは独占的。広告費・手数料を一方的に変更できる。優秀なフリーランサー・ライターは希少で単価が上昇傾向。</textarea>\n    <label>自社への影響</label>\n    <textarea>プラットフォーム依存度を下げ、SEO・SNS有機投稿・メールなど広告非依存チャネルを組み合わせることが重要。</textarea>\n  </div>\n\n  <div class=\"summary\">\n    <h2>業界総合評価</h2>\n    <div class=\"score-row\"><span class=\"score-label\">既存競合</span><div class=\"bar-wrap\"><div class=\"bar-fill\" style=\"width:85%\"></div></div><span style=\"font-size:0.85rem;\">強い(85%)</span></div>\n    <div class=\"score-row\"><span class=\"score-label\">新規参入</span><div class=\"bar-wrap\"><div class=\"bar-fill\" style=\"width:80%\"></div></div><span style=\"font-size:0.85rem;\">強い(80%)</span></div>\n    <div class=\"score-row\"><span class=\"score-label\">代替品</span><div class=\"bar-wrap\"><div class=\"bar-fill\" style=\"width:50%; background:#f59e0b;\"></div></div><span style=\"font-size:0.85rem;\">中(50%)</span></div>\n    <div class=\"score-row\"><span class=\"score-label\">買い手</span><div class=\"bar-wrap\"><div class=\"bar-fill\" style=\"width:55%; background:#f59e0b;\"></div></div><span style=\"font-size:0.85rem;\">中(55%)</span></div>\n    <div class=\"score-row\"><span class=\"score-label\">売り手</span><div class=\"bar-wrap\"><div class=\"bar-fill\" style=\"width:75%\"></div></div><span style=\"font-size:0.85rem;\">強い(75%)</span></div>\n    <label>業界収益性の評価と戦略的示唆</label>\n    <textarea>競争圧力が全体的に強く、業界の平均収益性は低め。生き残るには「特定業種・特定課題への専門特化」「データ活用力による差別化」「長期契約型の収益モデル設計」が不可欠。価格競争に巻き込まれない独自ポジションの確立が最重要課題。</textarea>\n  </div>\n\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "ポーターの5Forces分析の主な目的として正しいのはどれですか？",
+            "options": [
+              "自社の強みと弱みを整理すること",
+              "業界の収益性と競争構造を評価すること",
+              "顧客のニーズを特定すること",
+              "新製品のアイデアを生み出すこと"
+            ],
+            "correct": 1,
+            "explanation": "5Forces分析の主な目的は「業界の競争構造を分析し、収益性の高低を評価すること」です。5つの力が強いほど業界の収益性は低く、弱いほど収益を維持しやすい構造です。"
+          },
+          {
+            "q": "Google・Metaなどの広告プラットフォームは5Forces分析のどの要因に該当しますか？",
+            "options": [
+              "既存競合同士の競争",
+              "新規参入の脅威",
+              "買い手の交渉力",
+              "売り手（サプライヤー）の交渉力"
+            ],
+            "correct": 3,
+            "explanation": "広告プラットフォーム（Google・Meta）はデジタルマーケ代行業にとって「売り手（サプライヤー）」です。独占的な立場から広告費・手数料を一方的に変更できるため、売り手の交渉力が非常に強い状態です。"
+          },
+          {
+            "q": "参入障壁が高くなる要因として正しくないものはどれですか？",
+            "options": [
+              "規模の経済（大量生産によるコスト優位）",
+              "強いブランドロイヤルティ",
+              "初期投資が少ない",
+              "厳格な規制・免許制度"
+            ],
+            "correct": 2,
+            "explanation": "「初期投資が少ない」ことは参入しやすくなる条件であり、参入障壁を低くします。参入障壁を高くするのは「規模の経済・ブランドロイヤルティ・規制・免許・高い初期投資」などです。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール10-7 完了！\n\nポーターの5Forces分析で業界の競争構造を評価する方法を習得しました。\n\n## 習得したスキル\n\n✅ **5つの競争要因**（既存競合・新規参入・代替品・買い手・売り手）を説明できる\n✅ **各Forceの強弱**を根拠とともに評価できる\n✅ **業界収益性との関係**（Forceが強いほど収益性が低い）を理解した\n✅ **参入障壁の構成要素**を特定できる\n\n## なぜこれが重要か\n\n5Forces分析は「どの業界に参入するか」「どうポジションを守るか」の判断に使います。競合だけでなく「代替品」「サプライヤー」という視点を持つことで、業界全体の構造を俯瞰できるようになります。\n\n## 次のステップ\n\n次のモジュール **「10-8: バリューチェーン分析：価値連鎖プロセスの解剖」** では、自社の活動プロセスを分解して、どこで競争優位が生まれているかを分析する方法を学びます。",
+        "diagram": false
+      }
+    }
+  ]
+}

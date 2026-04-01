@@ -1,0 +1,67 @@
+{
+  "id": "html--1-3",
+  "moduleId": "1-3",
+  "categoryId": "html",
+  "title": "HTML文書の骨格（DOCTYPE・html・head・body）",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# HTML文書の骨格を理解する\n\nすべてのWebページは同じ「骨格」を持っています。この骨格を理解することは、マーケターがWebサイトを操作する上で最も基本的なスキルです。\n\n## マーケティングでの活用場面\n\n**1. LPの新規作成**\nキャンペーン用のシンプルなLPを自分で作成するとき、骨格をゼロから書ける必要があります。\n\n**2. GTMのタグ設置位置の理解**\nGTMスニペットは `<head>` と `<body>` の特定の位置に貼ります。この構造を知らないと設置場所を間違えます。\n\n**3. SEOメタタグの確認**\n`<head>` 内にある `<title>` や `<meta description>` はSEOの基本。どこに書かれているか確認するには骨格の知識が必須です。\n\nこのモジュールでは、最小構成のHTMLをゼロから書いて、構造を体で覚えます。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# HTML文書の4つの必須パーツ\n\n```html\n<!DOCTYPE html>          <!-- ① 文書型宣言 -->\n<html lang=\"ja\">         <!-- ② ルート要素 -->\n<head>                   <!-- ③ メタ情報領域 -->\n  <meta charset=\"UTF-8\">\n  <title>ページタイトル</title>\n</head>\n<body>                   <!-- ④ 表示領域 -->\n  <h1>見出し</h1>\n  <p>本文テキスト</p>\n</body>\n</html>\n```\n\n## ① DOCTYPE宣言\n\n```html\n<!DOCTYPE html>\n```\n\n「このファイルはHTML5です」とブラウザに伝えます。これがないとブラウザが古い互換モードで表示し、CSSのレイアウトが崩れることがあります。\n\n## ② html要素（ルート要素）\n\n```html\n<html lang=\"ja\">\n...\n</html>\n```\n\n文書全体を囲む最上位の要素です。`lang=\"ja\"` は日本語コンテンツであることを示し、スクリーンリーダーや翻訳ツールが正しく動作するために重要です。\n\n## ③ head要素（メタ情報領域）\n\n```html\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>キャンペーンLP | ブランド名</title>\n  <meta name=\"description\" content=\"春の特別キャンペーン...\">\n</head>\n```\n\nブラウザ画面には直接表示されない情報を格納します。\n\n| 要素 | 役割 | マーケティング関連度 |\n|------|------|--------------------|\n| `<meta charset>` | 文字コード指定 | 文字化け防止 |\n| `<meta viewport>` | レスポンシブ設定 | モバイル対応 |\n| `<title>` | ページタイトル | SEO最重要 |\n| `<meta description>` | ページ説明 | 検索結果の説明文 |\n| `<script>` | GTM/GA4タグ | 計測設置 |\n\n## ④ body要素（表示領域）\n\n```html\n<body>\n  <!-- GTM (noscript) -->\n  <noscript>...</noscript>\n  \n  <header>ヘッダー</header>\n  <main>メインコンテンツ</main>\n  <footer>フッター</footer>\n</body>\n```\n\nユーザーがブラウザで実際に見る部分がすべてbody内に入ります。GTMのnoscriptタグは `<body>` の直後に配置します。",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: 最小構成のHTMLをゼロから書く\n\nあなたは新規キャンペーンLP用のHTMLファイルをゼロから作成します。\n\n## 課題\n\n以下の要素を含むHTML文書を完成させてください：\n\n1. DOCTYPE宣言を追加する\n2. `<html>` タグに `lang=\"ja\"` を指定する\n3. `<head>` 内に文字コード（UTF-8）とタイトル「夏のセールLP」を設定する\n4. `<body>` 内に `<h1>` で「夏の特別セール」、`<p>` で説明文を書く",
+        "starterCode": "<!-- ① DOCTYPE宣言を書いてください -->\n\n<!-- ② html要素を開始してください（lang属性付き） -->\n\n<!-- ③ head要素を書いてください -->\n\n  <!-- meta charsetを書いてください -->\n\n  <!-- titleを書いてください -->\n\n<!-- head要素を閉じてください -->\n\n<!-- ④ body要素を書いてください -->\n\n  <!-- h1で見出しを書いてください -->\n\n  <!-- pで説明文を書いてください -->\n\n<!-- body要素を閉じてください -->\n\n<!-- html要素を閉じてください -->",
+        "hints": [
+          "DOCTYPE宣言は <!DOCTYPE html> と書きます。タグではなく「宣言」なので閉じタグはありません。",
+          "head内には最低限 <meta charset=\"UTF-8\"> と <title>ページタイトル</title> が必要です。",
+          "body内に実際にユーザーが見るコンテンツ（h1やpなど）を配置します。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>夏のセールLP</title>\n</head>\n<body>\n\n  <h1>夏の特別セール</h1>\n  <p>期間限定で全商品が最大50%OFF！今すぐチェックしてください。</p>\n\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "GTMのメインスクリプトタグ（<script>部分）は、HTML文書のどこに設置するのが推奨されていますか？",
+            "options": ["<body>の末尾", "<head>の中", "<footer>の中", "<html>タグの外"],
+            "correct": 1,
+            "explanation": "GTMの公式ドキュメントでは、メインのスクリプトタグは<head>内のできるだけ上部に配置することが推奨されています。これによりページ読み込み時に最も早くタグが発火します。"
+          },
+          {
+            "q": "SEOにおいて、<head>内で最も重要な要素はどれですか？",
+            "options": ["<meta charset>", "<meta viewport>", "<title>", "<script>"],
+            "correct": 2,
+            "explanation": "<title>タグはGoogleの検索結果のタイトルとして表示され、SEOランキングに直接影響する最重要要素です。32〜60文字程度で、主要キーワードを含めるのがベストプラクティスです。"
+          },
+          {
+            "q": "<html lang=\"ja\">のlang属性を正しく設定する主な理由はどれですか？",
+            "options": ["ページの表示速度が向上する", "スクリーンリーダーや翻訳ツールが言語を正しく認識する", "検索エンジンのランキングが大幅に向上する", "CSSのフォント指定が不要になる"],
+            "correct": 1,
+            "explanation": "lang属性はスクリーンリーダーが正しい言語で読み上げるため、またGoogle翻訳などのツールが言語を正しく認識するために重要です。アクセシビリティの基本要素です。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール1-3 完了！\n\nHTML文書の骨格をゼロから書けるようになりました。\n\n## 習得したスキル\n\n✅ **DOCTYPE宣言**の役割を理解した\n✅ **html・head・body**の3層構造を理解した\n✅ **head内のメタ情報**（charset, title, description）の役割を把握した\n✅ **GTMタグの設置位置**をHTML構造の中で理解した\n\n## 次のステップ\n\n次のモジュール **「1-4: 文字コード宣言と文字化け防止」** では、meta charsetの仕組みと日本語LPで文字化けが起きる原因を学びます。\n\n> 💡 **実務チャレンジ**: 自社サイトのソースコード（Ctrl+U）を開いて、head内にどんなメタタグが入っているか確認してみましょう。title、description、GTMスニペットが見つかるはずです。",
+        "diagram": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "id": "bigquery--6-6",
+  "moduleId": "6-6",
+  "categoryId": "bigquery",
+  "title": "LIMIT：取得件数を制限してコストを節約する",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# BigQueryは「読み込んだデータ量」に課金される\n\nBigQueryの課金モデルはデータの読み込み量（バイト数）に基づいています。GA4のevents_*テーブルは1日で数GBになることがあり、不用意なクエリは高額な請求につながります。\n\n**LIMIT を使うべき場面**：\n- データの構造や中身を確認したいとき（探索的分析）\n- クエリの動作確認をしたいとき（本番実行前のテスト）\n- TOP N件だけ必要なとき（ランキングなど）\n\n## LIMIT の重要な誤解\n\n> **LIMIT はコストを削減しない場合がある**\n\nBigQueryでは、WHEREで絞り込まれていないデータはLIMITを指定してもフルスキャンされることがあります。コスト削減の本命はあくまで **WHERE句による絞り込みと列の選択** です。LIMITは「出力件数の制限」が主目的です。\n\nただし、探索的分析の際にLIMITを使うことで、意図せず大量の結果セットを返してしまうリスクを防げます。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# LIMITの構文と使い方\n\n## 基本構文\n\n```sql\nSELECT 列名\nFROM テーブル名\nWHERE 条件\nORDER BY 列名\nLIMIT 件数\n```\n\n## テーブルの中身を素早く確認する\n\n```sql\n-- GA4テーブルの構造を確認するためのサンプル取得\nSELECT *\nFROM `myproject.analytics_123456789.events_20240115`\nLIMIT 10\n```\n\n## ORDER BY + LIMIT でTOP N分析\n\n```sql\n-- アクセス数TOP10のページを取得\nSELECT\n  (SELECT value.string_value\n   FROM UNNEST(event_params)\n   WHERE key = 'page_location') AS page_url,\n  COUNT(*) AS page_views\nFROM\n  `myproject.analytics_123456789.events_*`\nWHERE\n  event_name = 'page_view'\n  AND _TABLE_SUFFIX BETWEEN '20240101' AND '20240131'\nGROUP BY\n  page_url\nORDER BY\n  page_views DESC\nLIMIT 10\n```\n\n## 開発時のベストプラクティス\n\n```sql\n-- STEP1: まず小さく試す（LIMITで件数制限）\nSELECT *\nFROM `myproject.analytics_123456789.events_20240115`\nWHERE event_name = 'purchase'\nLIMIT 100\n\n-- STEP2: 動作確認後、LIMITを外して本番実行\nSELECT *\nFROM `myproject.analytics_123456789.events_*`\nWHERE\n  event_name = 'purchase'\n  AND _TABLE_SUFFIX BETWEEN '20240101' AND '20240131'\n```\n\n## OFFSETと組み合わせたページング（参考）\n\n```sql\n-- 11件目から20件目を取得（ページング）\nSELECT event_name, user_pseudo_id\nFROM `myproject.analytics_123456789.events_20240115`\nLIMIT 10 OFFSET 10\n```",
+        "diagram": false
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習：先週のTOP5購入ユーザーを取得する\n\n## 課題\n\n2024年1月のGA4データから、購入回数TOP5のユーザーを取得するSQLを完成させてください。\n\n**取得内容**：\n- `user_pseudo_id`\n- 購入回数（`COUNT(*) AS purchase_count`）\n\n**条件**：\n- テーブル：`myproject.analytics_123456789.events_*`\n- 期間：2024年1月\n- イベント：`purchase` のみ\n- 並び順：購入回数の多い順\n- 件数：上位5件のみ\n\n> 💡 ORDER BY + LIMIT の組み合わせはTOP N分析の基本パターンです。",
+        "starterCode": "-- 2024年1月の購入回数TOP5ユーザーを取得\n\nSELECT\n  user_pseudo_id,\n  COUNT(*) AS purchase_count\nFROM\n  `myproject.analytics_123456789.events_*`\nWHERE\n  _TABLE_SUFFIX BETWEEN '20240101' AND '20240131'\n  AND event_name = 'purchase'\nGROUP BY\n  user_pseudo_id\nORDER BY\n  purchase_count DESC\n-- 上位5件に制限してください\n________",
+        "hints": [
+          "LIMITの後に取得したい件数（整数）を書きます。",
+          "LIMIT 5 と書くと上位5件だけが返ってきます。",
+          "ORDER BY DESC と LIMIT を組み合わせると「上位N件」のパターンが完成します。"
+        ],
+        "answer": "-- 2024年1月の購入回数TOP5ユーザーを取得\n\nSELECT\n  user_pseudo_id,\n  COUNT(*) AS purchase_count\nFROM\n  `myproject.analytics_123456789.events_*`\nWHERE\n  _TABLE_SUFFIX BETWEEN '20240101' AND '20240131'\n  AND event_name = 'purchase'\nGROUP BY\n  user_pseudo_id\nORDER BY\n  purchase_count DESC\nLIMIT 5"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "BigQueryの課金の主な基準はどれですか？",
+            "options": [
+              "クエリの実行回数",
+              "クエリの実行時間",
+              "クエリで読み込まれたデータ量（バイト数）",
+              "取得した行数（レコード数）"
+            ],
+            "correct": 2,
+            "explanation": "BigQueryはクエリで読み込んだデータ量（バイト数）に応じて課金されます。LIMITで行数を制限しても読み込まれるデータ量が変わらないケースがあるため、コスト削減にはWHERE句による絞り込みと必要な列だけのSELECTが重要です。"
+          },
+          {
+            "q": "BigQueryでLIMITを使う主な目的として最も適切なものはどれですか？",
+            "options": [
+              "クエリの課金を確実に削減するため",
+              "クエリの実行速度を上げるため",
+              "返却される結果の件数を制限するため",
+              "テーブルのデータを物理的に削除するため"
+            ],
+            "correct": 2,
+            "explanation": "LIMITの主な目的は「返却される結果の件数を制限すること」です。探索的分析でのサンプル確認や、TOP N件の取得に使います。BigQueryではWHEREなしのフルスキャンではLIMITをかけてもコストが変わらない場合があります。"
+          },
+          {
+            "q": "`ORDER BY page_views DESC LIMIT 10` の説明として正しいものはどれですか？",
+            "options": [
+              "page_viewsが10以上の行を降順で返す",
+              "全データを降順に並べた後、先頭10件を返す",
+              "ランダムに10件を選んで降順に並べる",
+              "page_viewsが上位10%の行を返す"
+            ],
+            "correct": 1,
+            "explanation": "ORDER BY col DESC LIMIT 10 は「colの値が大きい順に並べた結果の先頭10件」を返します。これはランキング（TOP 10）分析の典型的なパターンです。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール6-6 完了！\n\nLIMITを使ったコスト管理と効率的なクエリ作成を学びました。\n\n## 習得したスキル\n\n✅ **LIMITの構文**で取得件数を制限できる\n✅ **ORDER BY + LIMIT** でTOP N分析ができる\n✅ **BigQueryの課金モデル**を理解した\n✅ **開発時の探索クエリ**にLIMITを活用できる\n\n## BigQueryのコスト削減チェックリスト\n\n1. `SELECT *` を避けて必要な列だけ指定する\n2. `WHERE _TABLE_SUFFIX` で日付範囲を絞り込む\n3. `WHERE event_name = '...'` でイベントを絞り込む\n4. 開発時は `LIMIT 100` などで動作確認してから本番実行する\n\n## 次のステップ\n\n次のモジュール **「6-7: DISTINCT」** では、重複を除いてユニークな値だけを取得する方法を学びます。ユニークユーザー数の集計などに使います。",
+        "diagram": false
+      }
+    }
+  ]
+}

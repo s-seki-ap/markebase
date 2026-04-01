@@ -1,0 +1,82 @@
+{
+  "id": "project-management--11-6",
+  "moduleId": "11-6",
+  "categoryId": "project-management",
+  "title": "PMの役割と責任の明確化",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 「誰がやるの？」が最大のプロジェクトリスク\n\nプロジェクトの失敗原因の多くは、技術的な問題ではなく**「誰が何をやるかが曖昧だった」**という人的問題です。\n\n## よくある責任の空白シナリオ\n\n**シナリオ: ECサイトリニューアルの検収作業**\n\n「テストは誰がやりますか？」\n- PM：「エンジニアがやると思ってました」\n- エンジニア：「クライアント側でやると思ってました」\n- クライアント：「制作会社がやると思ってました」\n\n→ リリース直前に誰もテストしていないことが発覚。リリース延期。\n\nこのような悲劇を防ぐのが、**RACI図（責任分担マトリクス）**です。\n\n## なぜ役割明確化がPMの仕事なのか\n\nPMは「自分が全部やる人」ではなく「**誰が何をやるかを設計・合意する人**」です。チームの役割を曖昧にしたまま進行を許すことが、PMの最大の怠慢といえます。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# RACI図（責任分担マトリクス）\n\nRACIは役割を4つのカテゴリで定義するフレームワークです。\n\n## RACIの定義\n\n| 記号 | 英語 | 日本語 | 役割 |\n|------|------|--------|------|\n| **R** | Responsible | 実行責任者 | 実際の作業を行う人 |\n| **A** | Accountable | 説明責任者 | 最終的な結果に責任を持つ人（承認者）|\n| **C** | Consulted | 相談先 | 意見・専門知識を提供する人 |\n| **I** | Informed | 報告先 | 結果の報告を受ける人 |\n\n**重要ルール**:\n- **AはTASKにつき1人のみ**（複数にすると責任が分散する）\n- RとAを一人が担うことは多い（ただし承認が必要な重要作業は分離する）\n\n## デジタルマーケプロジェクトのRACIサンプル\n\n| タスク | PM | デザイナー | エンジニア | クライアント | 上長 |\n|--------|----|-----------|-----------|--------------|----- |\n| 要件定義書の作成 | R/A | C | C | C | I |\n| ワイヤーフレーム制作 | A | R | C | C | I |\n| デザインカンプ承認 | A | R | I | C | I |\n| フロントエンド実装 | A | C | R | I | - |\n| GA4計測設計 | A | - | R | C | I |\n| 最終品質確認 | A | C | R | C | I |\n| リリース承認 | C | - | C | A/R | I |\n\n## RACIを作成する手順\n\n```\nStep 1: 全タスクをリストアップ（WBSの作業パッケージレベル）\nStep 2: 関係者（ステークホルダー）を列挙\nStep 3: 各タスクに対してR/A/C/Iを割り当て\nStep 4: 「Aが複数いるタスク」「Rが誰もいないタスク」がないか確認\nStep 5: 関係者全員でレビュー・合意\n```\n\n## デジタルマーケPMが担う典型的役割一覧\n\n- プロジェクト計画書・スケジュールの作成・管理（R/A）\n- キックオフMTGの設計・ファシリテーション（R/A）\n- 週次進捗報告のとりまとめ（R）\n- リスク管理台帳の維持（R）\n- スコープ変更の評価・判断（A）\n- ステークホルダーとの期待値調整（R）\n- 最終成果物のクライアント引き渡し（R/A）",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: RACI図の作成\n\nSNSキャンペーンサイト制作プロジェクトのRACIマトリクスを完成させましょう。\n\n## 課題\n\n以下のHTMLテンプレートのRACIマトリクスを完成させてください。\n\n1. 空欄のセルに R / A / C / I のいずれかを記入する\n2. 各行で「A（説明責任者）」が1人だけになっているか確認する\n3. 「Rが誰もいない」行がないか確認する\n\n完成したら **[▶ 実行]** でプレビューを確認してください。",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>RACI マトリクス</title>\n  <style>\n    body { font-family: sans-serif; max-width: 900px; margin: 40px auto; background: #f8fafc; color: #1e293b; }\n    h1 { border-left: 4px solid #ef4444; padding-left: 12px; }\n    table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 0.9em; }\n    th { background: #1e293b; color: white; padding: 10px 8px; text-align: center; }\n    th.task-col { text-align: left; width: 30%; }\n    td { padding: 10px 8px; border-bottom: 1px solid #e2e8f0; text-align: center; }\n    td.task-name { text-align: left; font-weight: 500; }\n    .r { color: #dc2626; font-weight: bold; }\n    .a { color: #d97706; font-weight: bold; }\n    .c { color: #2563eb; font-weight: bold; }\n    .i { color: #64748b; }\n    .empty { color: #cbd5e1; }\n    .legend { display: flex; gap: 20px; margin: 16px 0; font-size: 0.85em; }\n    .legend span { padding: 4px 10px; border-radius: 4px; background: #f1f5f9; }\n  </style>\n</head>\n<body>\n  <h1>RACI マトリクス: SNSキャンペーンサイト制作</h1>\n  <div class=\"legend\">\n    <span class=\"r\">R = 実行責任</span>\n    <span class=\"a\">A = 説明責任（1人のみ）</span>\n    <span class=\"c\">C = 相談先</span>\n    <span class=\"i\">I = 報告先</span>\n  </div>\n  <table>\n    <tr>\n      <th class=\"task-col\">タスク</th>\n      <th>PM</th>\n      <th>デザイナー</th>\n      <th>エンジニア</th>\n      <th>コピー<br>ライター</th>\n      <th>クライアント</th>\n    </tr>\n    <tr>\n      <td class=\"task-name\">要件ヒアリング実施</td>\n      <td class=\"r\">R/A</td>\n      <td class=\"c\">C</td>\n      <td class=\"c\">C</td>\n      <td class=\"c\">C</td>\n      <td class=\"c\">C</td>\n    </tr>\n    <tr>\n      <td class=\"task-name\">キャンペーンコピー制作</td>\n      <td class=\"empty\">（?）</td>\n      <td class=\"empty\">（?）</td>\n      <td class=\"empty\">（?）</td>\n      <td class=\"empty\">（?）</td>\n      <td class=\"empty\">（?）</td>\n    </tr>\n    <tr>\n      <td class=\"task-name\">LP デザインカンプ制作</td>\n      <td class=\"empty\">（?）</td>\n      <td class=\"empty\">（?）</td>\n      <td class=\"empty\">（?）</td>\n      <td class=\"empty\">（?）</td>\n      <td class=\"empty\">（?）</td>\n    </tr>\n    <tr>\n      <td class=\"task-name\">フロントエンド実装</td>\n      <td class=\"empty\">（?）</td>\n      <td class=\"empty\">（?）</td>\n      <td class=\"empty\">（?）</td>\n      <td class=\"empty\">（?）</td>\n      <td class=\"empty\">（?）</td>\n    </tr>\n    <tr>\n      <td class=\"task-name\">GA4計測実装・確認</td>\n      <td class=\"empty\">（?）</td>\n      <td class=\"empty\">（?）</td>\n      <td class=\"empty\">（?）</td>\n      <td class=\"empty\">（?）</td>\n      <td class=\"empty\">（?）</td>\n    </tr>\n    <tr>\n      <td class=\"task-name\">リリース前最終承認</td>\n      <td class=\"empty\">（?）</td>\n      <td class=\"empty\">（?）</td>\n      <td class=\"empty\">（?）</td>\n      <td class=\"empty\">（?）</td>\n      <td class=\"empty\">（?）</td>\n    </tr>\n  </table>\n</body>\n</html>",
+        "hints": [
+          "各行のAは必ず1人（1セル）だけにしてください。Aが複数いると責任が分散します",
+          "「キャンペーンコピー制作」のRはコピーライター、Aはコピーライター承認の権限を持つPMかクライアントになります",
+          "「リリース前最終承認」はクライアントがA（最終意思決定者）になるのが一般的です"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>RACI マトリクス</title>\n  <style>\n    body { font-family: sans-serif; max-width: 900px; margin: 40px auto; background: #f8fafc; color: #1e293b; }\n    h1 { border-left: 4px solid #ef4444; padding-left: 12px; }\n    table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 0.9em; }\n    th { background: #1e293b; color: white; padding: 10px 8px; text-align: center; }\n    th.task-col { text-align: left; width: 30%; }\n    td { padding: 10px 8px; border-bottom: 1px solid #e2e8f0; text-align: center; }\n    td.task-name { text-align: left; font-weight: 500; }\n    .r { color: #dc2626; font-weight: bold; }\n    .a { color: #d97706; font-weight: bold; }\n    .c { color: #2563eb; font-weight: bold; }\n    .i { color: #64748b; }\n    .legend { display: flex; gap: 20px; margin: 16px 0; font-size: 0.85em; }\n    .legend span { padding: 4px 10px; border-radius: 4px; background: #f1f5f9; }\n  </style>\n</head>\n<body>\n  <h1>RACI マトリクス: SNSキャンペーンサイト制作</h1>\n  <div class=\"legend\">\n    <span class=\"r\">R = 実行責任</span>\n    <span class=\"a\">A = 説明責任（1人のみ）</span>\n    <span class=\"c\">C = 相談先</span>\n    <span class=\"i\">I = 報告先</span>\n  </div>\n  <table>\n    <tr>\n      <th class=\"task-col\">タスク</th>\n      <th>PM</th>\n      <th>デザイナー</th>\n      <th>エンジニア</th>\n      <th>コピーライター</th>\n      <th>クライアント</th>\n    </tr>\n    <tr>\n      <td class=\"task-name\">要件ヒアリング実施</td>\n      <td class=\"r\">R/A</td>\n      <td class=\"c\">C</td>\n      <td class=\"c\">C</td>\n      <td class=\"c\">C</td>\n      <td class=\"c\">C</td>\n    </tr>\n    <tr>\n      <td class=\"task-name\">キャンペーンコピー制作</td>\n      <td class=\"a\">A</td>\n      <td class=\"c\">C</td>\n      <td class=\"i\">I</td>\n      <td class=\"r\">R</td>\n      <td class=\"c\">C</td>\n    </tr>\n    <tr>\n      <td class=\"task-name\">LPデザインカンプ制作</td>\n      <td class=\"a\">A</td>\n      <td class=\"r\">R</td>\n      <td class=\"c\">C</td>\n      <td class=\"c\">C</td>\n      <td class=\"c\">C</td>\n    </tr>\n    <tr>\n      <td class=\"task-name\">フロントエンド実装</td>\n      <td class=\"a\">A</td>\n      <td class=\"c\">C</td>\n      <td class=\"r\">R</td>\n      <td class=\"i\">I</td>\n      <td class=\"i\">I</td>\n    </tr>\n    <tr>\n      <td class=\"task-name\">GA4計測実装・確認</td>\n      <td class=\"r\">R/A</td>\n      <td class=\"i\">I</td>\n      <td class=\"r\">R</td>\n      <td class=\"i\">I</td>\n      <td class=\"c\">C</td>\n    </tr>\n    <tr>\n      <td class=\"task-name\">リリース前最終承認</td>\n      <td class=\"r\">R</td>\n      <td class=\"c\">C</td>\n      <td class=\"c\">C</td>\n      <td class=\"i\">I</td>\n      <td class=\"a\">A</td>\n    </tr>\n  </table>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "RACI図の「A（Accountable）」について正しい説明はどれですか？",
+            "options": [
+              "実際の作業を行う担当者であり、複数人が割り当てられることが多い",
+              "1つのタスクに対して1人のみ割り当てられ、最終的な結果に説明責任を持つ人",
+              "作業の進捗を定期的に報告される立場の人",
+              "専門的な意見やアドバイスを提供する外部の専門家"
+            ],
+            "correct": 1,
+            "explanation": "Accountable（説明責任者）は1タスクにつき必ず1人のみ割り当てられます。複数人にAを割り当てると「誰もが誰かがやると思っていた」という責任の空白が生まれます。"
+          },
+          {
+            "q": "RACI図で「Rが誰もいないタスク」が存在する場合、PMはどう対応すべきですか？",
+            "options": [
+              "そのタスクはスコープ外として削除する",
+              "PMが自動的にRを引き受ける",
+              "誰かを必ずRとして明示的に割り当て、合意を取る",
+              "クライアントにRを割り当てる"
+            ],
+            "correct": 2,
+            "explanation": "Rが誰もいないタスクは「実行者不在」の状態であり、必ず誰かを担当者として明示的に割り当てる必要があります。PMが自動的に引き受けるのではなく、適切な担当者を決定して合意を得ることが重要です。"
+          },
+          {
+            "q": "デジタルマーケプロジェクトで「リリース前最終承認」のA（説明責任者）として最も適切な人物はどれですか？",
+            "options": [
+              "プロジェクトマネージャー（PM）",
+              "フロントエンドエンジニア",
+              "クライアント側の意思決定者",
+              "デザイナー"
+            ],
+            "correct": 2,
+            "explanation": "リリース前最終承認のAはクライアント側の意思決定者が担うのが原則です。PMは確認・調整（R）を担いますが、最終的にリリースを承認する説明責任はクライアントにあります。これにより「リリースしたけど聞いてない」というトラブルを防げます。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール11-6 完了！\n\n役割・責任の明確化手法を習得しました。\n\n## 習得したスキル\n\n✅ **RACI図の4要素**：R（実行）・A（説明）・C（相談）・I（報告）の定義を理解した\n✅ **RACIの作成ルール**：1タスクにAは1人のみというルールを習得した\n✅ **デジタルマーケへの適用**：LP制作・計測設定等での典型的RACI割り当てを把握した\n✅ **責任の空白防止**：「誰もRがいないタスク」「Aが複数いるタスク」の危険性を理解した\n\n## 次のステップ\n\n次のモジュール **「11-7: プロジェクト憲章の作成方法」** では、プロジェクト開始時に作成する最重要ドキュメント「プロジェクト憲章」の構造と作成手法を学びます。\n\n> 実務チャレンジ: 現在のプロジェクトで「誰が最終承認者か」が不明確なタスクを一つ特定し、今日中に明確にしてください。それだけでプロジェクトリスクが一つ消えます。",
+        "diagram": false
+      }
+    }
+  ]
+}

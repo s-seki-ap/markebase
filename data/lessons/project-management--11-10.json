@@ -1,0 +1,82 @@
+{
+  "id": "project-management--11-10",
+  "moduleId": "11-10",
+  "categoryId": "project-management",
+  "title": "プロジェクトライフサイクルの全体像",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# プロジェクトには「一生」がある\n\nすべてのプロジェクトは生まれて（立上げ）、育って（計画・実行）、終わります（終結）。この一連の流れを**プロジェクトライフサイクル**と呼びます。\n\n## ライフサイクルを理解する重要性\n\nライフサイクルを理解していないと、こんな問題が起きます：\n\n- **立上げ不足**: 要件が曖昧なまま走り出して後半に大炎上\n- **計画省略**: 「まず作ってみよう」で進めて後から手戻り続出\n- **終結なし**: リリースしたらそのまま放置。教訓が次に活かされない\n\n## デジタルマーケプロジェクトの典型的な悩み\n\n「プロジェクトが終わらない」「同じミスを何度も繰り返す」という組織は、ほぼ例外なく**終結フェーズ**を省略しています。終結フェーズでの振り返り（レトロスペクティブ）が組織の学習を促します。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# プロジェクトライフサイクルの5フェーズ\n\n## フェーズ概要\n\n```\n┌──────────┐   ┌──────────┐   ┌──────────┐   ┌──────────┐   ┌──────────┐\n│  立上げ   │→  │  計画    │→  │  実行    │→  │監視・制御│→  │  終結    │\n│ Initiating│   │ Planning │   │Executing │   │Monitoring│   │ Closing  │\n└──────────┘   └──────────┘   └──────────┘   └──────────┘   └──────────┘\n```\n\n## 各フェーズの詳細\n\n### フェーズ1: 立上げ（Initiating）\n\n**目的**: プロジェクトの存在を正式に認可する\n\n**主な活動**:\n- ビジネスケースの作成（なぜやるか）\n- ステークホルダーの特定\n- プロジェクト憲章の作成・承認\n\n**成果物**: プロジェクト憲章\n\n### フェーズ2: 計画（Planning）\n\n**目的**: どうやってゴールに辿り着くかを詳細設計する\n\n**主な活動**:\n- WBS・スケジュール・予算の作成\n- リスク管理計画\n- コミュニケーション計画\n- キックオフMTGの実施\n\n**成果物**: プロジェクト計画書一式\n\n### フェーズ3: 実行（Executing）\n\n**目的**: 計画に基づいて実際の作業を進める\n\n**主な活動**:\n- タスクの実行・進捗確認\n- 品質マネジメント\n- チームマネジメント・コミュニケーション\n\n**成果物**: プロジェクトの成果物（LP・システム・レポート等）\n\n### フェーズ4: 監視・制御（Monitoring & Controlling）\n\n**目的**: 計画との乖離を把握し、是正アクションを取る\n\n**主な活動**:\n- 進捗・コスト・品質の測定\n- スコープ変更の評価・管理\n- リスクの監視と対応\n\n**特徴**: 実行フェーズと並行して継続的に行う\n\n### フェーズ5: 終結（Closing）\n\n**目的**: プロジェクトを正式に完了させ、教訓を次に活かす\n\n**主な活動**:\n- 成果物の引き渡し・クライアント承認\n- プロジェクト完了報告書の作成\n- 教訓（ lessons learned）のドキュメント化\n- チームへの感謝・解散\n\n**成果物**: 完了報告書・教訓集\n\n## コスト・リスク・ステークホルダー影響の変化\n\n```\n影響力\n高  | ステークホルダーの影響力\n    |    変更コスト\n    |        リスク\n低  |________________________\n    立上げ  計画  実行  終結\n\n```\n\n**立上げ段階での変更は安く、終盤の変更は高くつく。**これがプロジェクト前半に十分な時間を使うべき理由です。",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: ライフサイクルマッピング\n\nGA4導入プロジェクトを例に、各フェーズで行うべき活動と成果物をマッピングしてください。\n\n## 課題\n\n各フェーズカードに「主要活動」と「成果物」を記入してください。GA4導入という文脈で具体的に考えてください。",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>プロジェクトライフサイクルマッピング</title>\n  <style>\n    body { font-family: sans-serif; max-width: 900px; margin: 40px auto; background: #f8fafc; color: #1e293b; }\n    h1 { border-left: 4px solid #10b981; padding-left: 12px; }\n    .lifecycle { display: flex; gap: 8px; margin: 24px 0; flex-wrap: wrap; }\n    .phase { flex: 1; min-width: 140px; border-radius: 8px; padding: 16px; }\n    .ph1 { background: #dbeafe; border-top: 4px solid #3b82f6; }\n    .ph2 { background: #ede9fe; border-top: 4px solid #8b5cf6; }\n    .ph3 { background: #d1fae5; border-top: 4px solid #10b981; }\n    .ph4 { background: #fef3c7; border-top: 4px solid #f59e0b; }\n    .ph5 { background: #fce7f3; border-top: 4px solid #ec4899; }\n    .phase h3 { margin: 0 0 8px; font-size: 0.95em; }\n    .phase ul { padding-left: 16px; margin: 0; font-size: 0.85em; }\n    .phase li { margin: 4px 0; }\n    .output { font-size: 0.8em; margin-top: 8px; padding: 6px; background: rgba(255,255,255,0.6); border-radius: 4px; }\n    .arrow { font-size: 1.5em; display: flex; align-items: center; color: #94a3b8; }\n  </style>\n</head>\n<body>\n  <h1>GA4導入プロジェクト: ライフサイクルマッピング</h1>\n  <div class=\"lifecycle\">\n    <div class=\"phase ph1\">\n      <h3>立上げ</h3>\n      <ul>\n        <li>（活動を記入）</li>\n        <li>（活動を記入）</li>\n      </ul>\n      <div class=\"output\">成果物: （記入）</div>\n    </div>\n    <div class=\"arrow\">→</div>\n    <div class=\"phase ph2\">\n      <h3>計画</h3>\n      <ul>\n        <li>（活動を記入）</li>\n        <li>（活動を記入）</li>\n      </ul>\n      <div class=\"output\">成果物: （記入）</div>\n    </div>\n    <div class=\"arrow\">→</div>\n    <div class=\"phase ph3\">\n      <h3>実行</h3>\n      <ul>\n        <li>（活動を記入）</li>\n        <li>（活動を記入）</li>\n      </ul>\n      <div class=\"output\">成果物: （記入）</div>\n    </div>\n    <div class=\"arrow\">→</div>\n    <div class=\"phase ph4\">\n      <h3>監視・制御</h3>\n      <ul>\n        <li>（活動を記入）</li>\n        <li>（活動を記入）</li>\n      </ul>\n      <div class=\"output\">成果物: （記入）</div>\n    </div>\n    <div class=\"arrow\">→</div>\n    <div class=\"phase ph5\">\n      <h3>終結</h3>\n      <ul>\n        <li>（活動を記入）</li>\n        <li>（活動を記入）</li>\n      </ul>\n      <div class=\"output\">成果物: （記入）</div>\n    </div>\n  </div>\n</body>\n</html>",
+        "hints": [
+          "GA4立上げフェーズ: 現状のUA計測状況調査・GA4導入の必要性整理・プロジェクト憲章作成",
+          "GA4計画フェーズ: 計測設計書（イベント定義）の作成・GTM設定計画・テスト計画",
+          "GA4終結フェーズ: UAとGA4の並行計測確認・クライアントへの操作引き継ぎ・計測仕様書の最終版提出"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>プロジェクトライフサイクルマッピング</title>\n  <style>\n    body { font-family: sans-serif; max-width: 950px; margin: 40px auto; background: #f8fafc; color: #1e293b; }\n    h1 { border-left: 4px solid #10b981; padding-left: 12px; }\n    .lifecycle { display: flex; gap: 6px; margin: 24px 0; align-items: flex-start; }\n    .phase { flex: 1; border-radius: 8px; padding: 14px; }\n    .ph1 { background: #dbeafe; border-top: 4px solid #3b82f6; }\n    .ph2 { background: #ede9fe; border-top: 4px solid #8b5cf6; }\n    .ph3 { background: #d1fae5; border-top: 4px solid #10b981; }\n    .ph4 { background: #fef3c7; border-top: 4px solid #f59e0b; }\n    .ph5 { background: #fce7f3; border-top: 4px solid #ec4899; }\n    .phase h3 { margin: 0 0 8px; font-size: 0.95em; }\n    .phase ul { padding-left: 16px; margin: 0; font-size: 0.82em; }\n    .phase li { margin: 4px 0; }\n    .output { font-size: 0.8em; margin-top: 8px; padding: 6px; background: rgba(255,255,255,0.6); border-radius: 4px; }\n    .arrow { font-size: 1.2em; display: flex; align-items: center; color: #94a3b8; padding-top: 40px; }\n  </style>\n</head>\n<body>\n  <h1>GA4導入プロジェクト: ライフサイクルマッピング</h1>\n  <div class=\"lifecycle\">\n    <div class=\"phase ph1\">\n      <h3>立上げ</h3>\n      <ul>\n        <li>UA計測状況の現状調査</li>\n        <li>GA4導入の目的・スコープ合意</li>\n        <li>プロジェクト憲章作成・承認</li>\n      </ul>\n      <div class=\"output\">成果物: プロジェクト憲章</div>\n    </div>\n    <div class=\"arrow\">→</div>\n    <div class=\"phase ph2\">\n      <h3>計画</h3>\n      <ul>\n        <li>計測設計書（イベント定義）作成</li>\n        <li>GTM設定計画・スケジュール策定</li>\n        <li>テスト計画の作成</li>\n        <li>キックオフMTG実施</li>\n      </ul>\n      <div class=\"output\">成果物: 計測設計書・実装計画書</div>\n    </div>\n    <div class=\"arrow\">→</div>\n    <div class=\"phase ph3\">\n      <h3>実行</h3>\n      <ul>\n        <li>GTMによるGA4タグ実装</li>\n        <li>カスタムイベントの設定</li>\n        <li>コンバージョン設定</li>\n      </ul>\n      <div class=\"output\">成果物: GA4設定完了・計測稼働開始</div>\n    </div>\n    <div class=\"arrow\">→</div>\n    <div class=\"phase ph4\">\n      <h3>監視・制御</h3>\n      <ul>\n        <li>計測データの精度検証</li>\n        <li>UAとGA4の数値差異確認</li>\n        <li>実装漏れ・エラーの検出と修正</li>\n      </ul>\n      <div class=\"output\">成果物: 計測検証レポート</div>\n    </div>\n    <div class=\"arrow\">→</div>\n    <div class=\"phase ph5\">\n      <h3>終結</h3>\n      <ul>\n        <li>クライアントへの操作引き継ぎ</li>\n        <li>計測仕様書の最終版提出</li>\n        <li>教訓まとめ・完了報告書作成</li>\n      </ul>\n      <div class=\"output\">成果物: 完了報告書・計測仕様書最終版</div>\n    </div>\n  </div>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "プロジェクトライフサイクルの「監視・制御フェーズ」の特徴として正しいものはどれですか？",
+            "options": [
+              "プロジェクト完了後にまとめて実施するフェーズ",
+              "計画フェーズが完了してから初めて始まるフェーズ",
+              "実行フェーズと並行して継続的に行われるフェーズ",
+              "クライアントのみが担当するフェーズ"
+            ],
+            "correct": 2,
+            "explanation": "監視・制御フェーズは実行フェーズと並行して継続的に行われます。計画と実績の乖離を随時確認し、是正アクションを取ることで、問題が大きくなる前に対処できます。"
+          },
+          {
+            "q": "プロジェクトの「変更コスト」に関して正しい説明はどれですか？",
+            "options": [
+              "プロジェクト後半（実行・終結フェーズ）になるほど変更コストは下がる",
+              "プロジェクトのどのフェーズでも変更コストは同じである",
+              "プロジェクト前半（立上げ・計画フェーズ）の変更コストは低く、後半になるほど高くなる",
+              "変更コストはスコープの大きさにのみ依存する"
+            ],
+            "correct": 2,
+            "explanation": "変更コストはプロジェクトが進むほど高くなります。立上げ段階での要件変更はほぼコスト無しですが、実装完了後の仕様変更は再設計・再実装・再テストが必要になり、膨大なコストがかかります。これが前半フェーズへの投資が重要な理由です。"
+          },
+          {
+            "q": "プロジェクトの「終結フェーズ」で最も軽視されがちで、かつ組織の成長に欠かせない活動はどれですか？",
+            "options": [
+              "クライアントへの請求書の発行",
+              "プロジェクトメンバーの評価面談",
+              "教訓（Lessons Learned）のドキュメント化と共有",
+              "使用したツールのアカウント削除"
+            ],
+            "correct": 2,
+            "explanation": "終結フェーズで最も重要かつ省略されがちなのが「教訓のドキュメント化」です。何がうまくいったか・何が問題だったか・次回への改善策を記録することで、組織の集合知が蓄積され、同じミスの繰り返しを防げます。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール11-10 完了！\n\nプロジェクトライフサイクルの全体像を習得しました。\n\n## 習得したスキル\n\n✅ **5フェーズの構造**：立上げ・計画・実行・監視制御・終結の役割を理解した\n✅ **変更コストの原則**：前半の変更は安く、後半は高い。前半投資の重要性を理解した\n✅ **終結フェーズの価値**：教訓ドキュメント化が組織学習の源泉であることを理解した\n✅ **GA4文脈での適用**：デジタルマーケ案件での各フェーズ活動をマッピングした\n\n## セクション2スタート\n\n次のモジュール **「11-11: 要件ヒアリングの技術と実践設計」** からは「要件定義・スコープ管理」セクションに入ります。クライアントから正確な要件を引き出すプロのヒアリング技法を学びます。\n\n> 実務チャレンジ: 最近完了したプロジェクト（または進行中）について「終結フェーズの教訓リスト」を3つ書き出してみましょう。「よかった点」1つと「改善点」2つが理想的な構成です。",
+        "diagram": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "id": "css--2-12",
+  "moduleId": "2-12",
+  "categoryId": "css",
+  "title": "font-familyとWebフォント（Google Fonts）の読み込み設定",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# フォントはブランドの第一印象を決める\n\nWebサイトのフォントは、ユーザーが最初に感じる「ブランドの雰囲気」を大きく左右します。統一したフォントを使うことはブランドの一貫性に直結します。\n\n## マーケターがWebフォントを知るべき理由\n\n**1. ブランドイメージの統一**\nLPやバナーで使用するフォントがサイト本体と異なると、ブランドの一貫性が損なわれます。GTMで挿入するバナーにも適切なフォントを設定することが重要です。\n\n**2. ページパフォーマンスへの影響（Core Web Vitals）**\nWebフォントの読み込みはCLS（累積レイアウトシフト）やLCP（最大コンテンツ描画）に影響します。GA4のCore Web Vitalsレポートでスコアが低い場合、フォントの読み込み方法が原因になっていることがあります。\n\n**3. SEOへの影響**\nページパフォーマンスはGoogleのランキング要因です。フォントの最適化はページスピードスコアの向上に寄与します。\n\n**4. LPの日本語フォント設定**\nLPに日本語Webフォントを使う場合、ファイルサイズが大きくなりがちです。Google Fontsの正しい読み込み方法を知ることで、表示速度を維持しながらブランドフォントを使えます。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# font-familyとWebフォントの設定方法\n\n## font-familyの基本\n\n```css\nbody {\n  font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif;\n}\n```\n\n- **複数指定**: カンマで区切って優先順位順に指定\n- **最後はジェネリックフォント**: `sans-serif` / `serif` / `monospace` などのフォールバック\n- **フォント名にスペースがある場合**: シングルまたはダブルクォートで囲む\n\n## ジェネリックフォントファミリー\n\n```css\nfont-family: sans-serif;  /* ゴシック系（Helvetica, Arial, Hiragino, Meiryo） */\nfont-family: serif;       /* 明朝系（Times New Roman, Georgia, Yu Mincho） */\nfont-family: monospace;   /* 等幅フォント（Courier New, Monaco） */\nfont-family: cursive;     /* 手書き系 */\nfont-family: fantasy;     /* 装飾系 */\n```\n\n## Webフォントの種類\n\n### システムフォントスタック（読み込み不要・高速）\n\n```css\nbody {\n  /* Apple・Windows・Linux・Androidの標準フォントを順に指定 */\n  font-family:\n    -apple-system,          /* macOS Safari・iOS */\n    BlinkMacSystemFont,     /* macOS Chrome */\n    'Segoe UI',             /* Windows */\n    Roboto,                 /* Android・Chrome OS */\n    'Noto Sans JP',         /* Google Fonts（日本語） */\n    sans-serif;\n}\n```\n\n**メリット**: HTTPリクエストが不要、CLSが発生しない\n\n### Google Fonts（外部Webフォント）\n\n**方法1: `<link>`タグで読み込む（HTMLに記述）**\n\n```html\n<head>\n  <!-- preconnect（DNS解決を先行して高速化） -->\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n\n  <!-- フォントの読み込み -->\n  <link href=\"https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap\" rel=\"stylesheet\">\n</head>\n```\n\n**方法2: CSSの`@import`で読み込む**\n\n```css\n/* CSSファイルの先頭に記述 */\n@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap');\n\nbody {\n  font-family: 'Noto Sans JP', sans-serif;\n}\n```\n\n**注意**: `@import` は `<link>` より読み込みが遅い。本番サイトでは `<link>` を推奨。\n\n## Google Fontsのfont-display設定\n\n```css\n/* font-face定義でのdisplay設定 */\n@font-face {\n  font-family: 'Noto Sans JP';\n  src: url('...');\n  font-display: swap;  /* フォント読み込み中はシステムフォントで表示 */\n}\n```\n\n`display=swap` をURLに追加することでも指定できます:\n```html\nhttps://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap\n```\n\n| font-display値 | 挙動 | CLSリスク |\n|---------------|------|----------|\n| `swap` | 即座にシステムフォント表示→Webフォントに切り替え | あり（フォント差替でずれる） |\n| `block` | 短時間透明→Webフォント表示 | 低い |\n| `optional` | ネットワーク状況によりWebフォントを使わないことも | 最低 |\n\n## よく使われる日本語Webフォント\n\n```css\n/* Noto Sans JP（Google推奨の日本語フォント） */\nfont-family: 'Noto Sans JP', sans-serif;\n\n/* Zen Kaku Gothic（モダンなゴシック体） */\nfont-family: 'Zen Kaku Gothic New', sans-serif;\n\n/* M PLUS Rounded 1c（丸ゴシック、LPに人気） */\nfont-family: 'M PLUS Rounded 1c', sans-serif;\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: Google FontsをLPに適用する\n\nGoogle FontsのNoto Sans JPを読み込み、LPに適用してみましょう。\n\n## 課題\n\n1. `<head>` 内に Google Fonts の preconnect と link タグを追加する\n   - Noto Sans JP（ウェイト: 400, 700）を読み込む\n   - `display=swap` を指定する\n2. `body` の `font-family` に `'Noto Sans JP', sans-serif` を設定する\n3. `.serif-text` に `font-family: serif` を設定し、ゴシック体との違いを比較する\n4. `code` タグに `font-family: monospace` を設定する",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>Webフォント練習</title>\n\n  <!-- ① ここにGoogle Fontsのpreconnectとlinkタグを追加してください -->\n  <!-- Noto Sans JP wght@400;700, display=swap を読み込む -->\n\n  <style>\n    /* ② bodyにfont-family: 'Noto Sans JP', sans-serifを設定 */\n    body {\n      margin: 0;\n      padding: 30px;\n      background: #fafafa;\n      color: #333;\n      line-height: 1.8;\n    }\n\n    .card {\n      background: white;\n      padding: 24px;\n      border-radius: 8px;\n      margin-bottom: 20px;\n      box-shadow: 0 1px 3px rgba(0,0,0,0.1);\n    }\n\n    /* ③ .serif-textにfont-family: serifを設定 */\n    .serif-text {\n      font-size: 1.1rem;\n    }\n\n    /* ④ codeタグにfont-family: monospaceを設定 */\n    code {\n      background: #f5f5f5;\n      padding: 2px 6px;\n      border-radius: 3px;\n      font-size: 0.9em;\n    }\n\n    h1 { font-size: 1.8rem; font-weight: 700; margin-bottom: 8px; }\n    h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 12px; color: #1a73e8; }\n    p { margin-bottom: 12px; }\n  </style>\n</head>\n<body>\n  <div class=\"card\">\n    <h1>Noto Sans JP で日本語テキスト</h1>\n    <p>Google Fontsを読み込むことで、どのデバイスでも同じフォントで表示されます。</p>\n    <p>font-weight: 400（標準）とfont-weight: 700（太字）の違いも確認してみましょう。</p>\n    <p><strong>太字（700）: データドリブンマーケティングを実現する</strong></p>\n  </div>\n\n  <div class=\"card\">\n    <h2>フォントファミリーの比較</h2>\n    <p>ゴシック体（sans-serif）: データ分析で成果を出す</p>\n    <p class=\"serif-text\">明朝体（serif）: データ分析で成果を出す</p>\n    <p>コード表示: <code>font-family: 'Noto Sans JP', sans-serif;</code></p>\n  </div>\n</body>\n</html>",
+        "hints": [
+          "Google Fontsのlinkタグは `<link href=\"https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap\" rel=\"stylesheet\">` です。",
+          "preconnectはフォント読み込みを高速化します: `<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">`",
+          "font-family設定のフォールバックを忘れずに: `font-family: 'Noto Sans JP', sans-serif;`"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>Webフォント練習</title>\n\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n  <link href=\"https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap\" rel=\"stylesheet\">\n\n  <style>\n    body {\n      margin: 0;\n      padding: 30px;\n      background: #fafafa;\n      color: #333;\n      line-height: 1.8;\n      font-family: 'Noto Sans JP', sans-serif;\n    }\n\n    .card {\n      background: white;\n      padding: 24px;\n      border-radius: 8px;\n      margin-bottom: 20px;\n      box-shadow: 0 1px 3px rgba(0,0,0,0.1);\n    }\n\n    .serif-text {\n      font-size: 1.1rem;\n      font-family: serif;\n    }\n\n    code {\n      background: #f5f5f5;\n      padding: 2px 6px;\n      border-radius: 3px;\n      font-size: 0.9em;\n      font-family: monospace;\n    }\n\n    h1 { font-size: 1.8rem; font-weight: 700; margin-bottom: 8px; }\n    h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 12px; color: #1a73e8; }\n    p { margin-bottom: 12px; }\n  </style>\n</head>\n<body>\n  <div class=\"card\">\n    <h1>Noto Sans JP で日本語テキスト</h1>\n    <p>Google Fontsを読み込むことで、どのデバイスでも同じフォントで表示されます。</p>\n    <p>font-weight: 400（標準）とfont-weight: 700（太字）の違いも確認してみましょう。</p>\n    <p><strong>太字（700）: データドリブンマーケティングを実現する</strong></p>\n  </div>\n\n  <div class=\"card\">\n    <h2>フォントファミリーの比較</h2>\n    <p>ゴシック体（sans-serif）: データ分析で成果を出す</p>\n    <p class=\"serif-text\">明朝体（serif）: データ分析で成果を出す</p>\n    <p>コード表示: <code>font-family: 'Noto Sans JP', sans-serif;</code></p>\n  </div>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "font-familyに複数のフォントをカンマで区切って指定する目的はどれですか？",
+            "options": ["複数のフォントが同時に適用される", "先頭のフォントが利用できない場合のフォールバックを設定するため", "フォントを混在させてデザインに変化をつけるため", "ファイルサイズを小さくするため"],
+            "correct": 1,
+            "explanation": "font-familyに複数を指定するのは「フォールバック」のためです。先頭のフォントが利用できない場合（未インストール・ネットワーク未取得など）、次のフォントが順に試されます。最後は必ずジェネリックフォント（sans-serifなど）を指定するのが慣例です。"
+          },
+          {
+            "q": "Google FontsをHTMLに読み込む際、`preconnect`を追加する目的はなんですか？",
+            "options": ["フォントをローカルにキャッシュするため", "フォントサーバーへのDNS解決・TCP接続を事前に行い読み込みを高速化するため", "フォントを圧縮して転送量を削減するため", "フォントのライセンス認証のため"],
+            "correct": 1,
+            "explanation": "`preconnect` はブラウザに「このドメインへの接続を早めに準備して」と指示します。DNS解決・TCPハンドシェイク・TLS接続を先行して行うことで、フォントの実際の読み込みが始まった際の待機時間を短縮できます。"
+          },
+          {
+            "q": "Google FontsのURLで `display=swap` を指定する効果はどれですか？",
+            "options": ["フォントを2つ同時に読み込む", "フォント読み込み中はシステムフォントで表示し、読み込み完了後にWebフォントに切り替える", "フォントをキャッシュしない設定にする", "テキストを非表示にしてフォント読み込みを待つ"],
+            "correct": 1,
+            "explanation": "`font-display: swap` はフォントが読み込まれるまでの間、システムフォントで即座に表示します。読み込み完了後にWebフォントに切り替わります。これにより「テキストが表示されない時間（FOIT）」を避けられます（ただしフォント切り替えによりCLSが生じる場合があります）。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール2-12 完了！\n\n## 習得したスキル\n\n✅ **font-familyの複数指定とフォールバック**の仕組みを理解した\n✅ **ジェネリックフォント**（sans-serif・serif・monospace）の違いを把握した\n✅ **Google Fontsのlinkタグとpreconnectによる読み込み**を実装できる\n✅ **font-display: swap** がページパフォーマンスに与える影響を理解した\n✅ **システムフォントスタック**で読み込み不要の高速設定ができる\n\n## 次のステップ\n\n次のモジュール **「2-13: font-size・font-weight・font-styleの基本設定」** では、フォントの太さ・斜体など、テキストの見た目を細かく制御するプロパティを学びます。LPの視覚的な階層設計に直結します。\n\n> 実務チャレンジ: 競合サイトをDevToolsのComputedタブで確認し、どのフォントが使われているかを調べてみましょう。font-familyの値が確認できます。",
+        "diagram": false
+      }
+    }
+  ]
+}

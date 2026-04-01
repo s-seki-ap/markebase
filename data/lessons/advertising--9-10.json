@@ -1,0 +1,82 @@
+{
+  "id": "advertising--9-10",
+  "moduleId": "9-10",
+  "categoryId": "advertising",
+  "title": "広告運用PDCAサイクルの基本フレームワーク",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 広告運用は「設定して終わり」ではない\n\n広告を出稿した後、何もしなければ成果は徐々に悪化します。競合の入札が変わり、ユーザーの行動が変化し、季節の需要が変動するからです。\n\n**継続的な改善（PDCA）こそが、広告運用の本質的な価値**です。\n\n## なぜPDCAが重要か\n\n- 自動入札アルゴリズムは「改善のチャンス」を与えてくれるが、「方向性の判断」は人間が行う必要がある\n- 競合が同じ自動化ツールを使っている以上、差別化は仮説と検証の速度で決まる\n- クライアントへの報告で「なぜ改善したか/悪化したか」を説明できることが信頼につながる\n\n## この学習で得られること\n\n広告運用のPDCAサイクルを週次・月次で回すための実践的なフレームワークを習得します。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# 広告運用PDCAの全体フレームワーク\n\n## 週次・月次サイクルの全体像\n\n```\n【Plan】目標・戦略設定\n  月初: KPI設定・予算配分・新施策の仮説立案\n\n【Do】施策実施\n  週次: キャンペーン設定・入札調整・クリエイティブ追加\n\n【Check】効果測定・分析\n  週次: 日次トレンド確認\n  月次: 全KPI評価・媒体比較・競合動向確認\n\n【Act】改善・次サイクルへ\n  月次: 予算再配分・施策廃止・次月計画策定\n```\n\n## 週次運用チェックポイント\n\n| チェック項目 | 判断基準 | アクション |\n|------------|---------|------------|\n| 予算消化率 | 日予算×7日の±20%以内か | 大幅超過/未達なら入札・予算調整 |\n| CPA推移 | 目標の±20%以内か | 悪化傾向なら入札・除外KW追加 |\n| 品質スコア | 6以上か | 低下なら広告文・LP改善 |\n| 新規除外KW | 検索語句に不要なワードがないか | 除外キーワードに追加 |\n| 競合動向 | オークション分析でシェア変化がないか | 入札額・広告文の見直し |\n\n## 月次レポートの構成（クライアント向け）\n\n```\n1. エグゼクティブサマリー（1ページ）\n   → 主要KPI・前月比・目標達成状況\n\n2. 媒体別実績\n   → 各媒体のCPC・CPM・CPA・ROAS\n\n3. 今月の主な施策と効果\n   → 実施した改善内容とその成果\n\n4. 次月の改善計画\n   → 仮説・検証すること・KPI目標\n```\n\n## A/Bテストの設計原則\n\n```\n【良いA/Bテストの条件】\n1. 変更は1変数のみ（見出しだけ変える、入札だけ変える）\n2. 十分なサンプル数（各バリアント最低100クリック以上）\n3. 検証期間を事前に決める（2〜4週間）\n4. 統計的有意性を確認してから判断\n\n【よくある失敗】\n✗ 複数要素を同時に変更して効果の原因が不明になる\n✗ 1週間で「効果なし」と判断して打ち切る\n✗ 感覚で「こっちの方が良さそう」と評価する\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: 週次運用ダッシュボードを作成する\n\n広告運用の週次チェックに使うダッシュボードのHTMLを作成します。\n\n## 課題\n\n以下のHTMLを完成させ、各KPIの現状と判定ステータスを表示するダッシュボードを作成してください。\n\n1. 各KPIカードに現在値・目標値・判定（OK/警告/要対応）を追加する\n2. 判定に応じて色を変える（緑/黄/赤）\n3. 最低5つのKPIカードを追加する",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>週次運用ダッシュボード</title>\n  <style>\n    body { font-family: 'Noto Sans JP', sans-serif; background: #0f172a; color: #e2e8f0; padding: 20px; }\n    h1 { color: #60a5fa; font-size: 18px; }\n    .date { color: #64748b; font-size: 12px; margin-bottom: 20px; }\n    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }\n    .card { background: #1e293b; border-radius: 8px; padding: 14px; border-left: 4px solid; }\n    .card.ok     { border-color: #10b981; }\n    .card.warn   { border-color: #f59e0b; }\n    .card.alert  { border-color: #ef4444; }\n    .kpi-name  { font-size: 11px; color: #64748b; margin-bottom: 6px; }\n    .kpi-value { font-size: 24px; font-weight: bold; margin-bottom: 4px; }\n    .kpi-target { font-size: 11px; color: #475569; }\n    .status { font-size: 11px; font-weight: bold; margin-top: 8px; }\n    .ok .status    { color: #34d399; }\n    .warn .status  { color: #fbbf24; }\n    .alert .status { color: #f87171; }\n  </style>\n</head>\n<body>\n  <h1>週次運用ダッシュボード</h1>\n  <div class=\"date\">レポート期間: 2025年3月24日〜3月30日</div>\n  <div class=\"grid\">\n    <!-- KPIカードを5つ以上追加してください -->\n    <!-- 例: <div class=\"card ok\">...</div> -->\n  </div>\n</body>\n</html>",
+        "hints": [
+          "カードの状態は class=\"card ok\"（緑）、class=\"card warn\"（黄）、class=\"card alert\"（赤）で切り替えます。",
+          "各カードの構造: <div class=\"kpi-name\">指標名</div><div class=\"kpi-value\">現在値</div><div class=\"kpi-target\">目標: 値</div><div class=\"status\">判定</div>",
+          "追加するKPI例: CPA・ROAS・CTR・CVR・消化率・週間CV数"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>週次運用ダッシュボード</title>\n  <style>\n    body { font-family: 'Noto Sans JP', sans-serif; background: #0f172a; color: #e2e8f0; padding: 20px; }\n    h1 { color: #60a5fa; font-size: 18px; }\n    .date { color: #64748b; font-size: 12px; margin-bottom: 20px; }\n    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }\n    .card { background: #1e293b; border-radius: 8px; padding: 14px; border-left: 4px solid; }\n    .card.ok    { border-color: #10b981; }\n    .card.warn  { border-color: #f59e0b; }\n    .card.alert { border-color: #ef4444; }\n    .kpi-name  { font-size: 11px; color: #64748b; margin-bottom: 6px; }\n    .kpi-value { font-size: 24px; font-weight: bold; margin-bottom: 4px; }\n    .kpi-target { font-size: 11px; color: #475569; }\n    .status { font-size: 11px; font-weight: bold; margin-top: 8px; }\n    .ok .status    { color: #34d399; }\n    .warn .status  { color: #fbbf24; }\n    .alert .status { color: #f87171; }\n  </style>\n</head>\n<body>\n  <h1>週次運用ダッシュボード</h1>\n  <div class=\"date\">レポート期間: 2025年3月24日〜3月30日</div>\n  <div class=\"grid\">\n    <div class=\"card ok\">\n      <div class=\"kpi-name\">週間CV数</div>\n      <div class=\"kpi-value\">23件</div>\n      <div class=\"kpi-target\">目標: 20件/週</div>\n      <div class=\"status\">OK: 目標達成（+15%）</div>\n    </div>\n    <div class=\"card ok\">\n      <div class=\"kpi-name\">CPA（獲得単価）</div>\n      <div class=\"kpi-value\">¥9,800</div>\n      <div class=\"kpi-target\">目標: ¥10,000以下</div>\n      <div class=\"status\">OK: 目標内</div>\n    </div>\n    <div class=\"card warn\">\n      <div class=\"kpi-name\">CTR（クリック率）</div>\n      <div class=\"kpi-value\">2.1%</div>\n      <div class=\"kpi-target\">目標: 3.0%以上</div>\n      <div class=\"status\">警告: 目標の70%。広告文の見直しを検討</div>\n    </div>\n    <div class=\"card ok\">\n      <div class=\"kpi-name\">予算消化率</div>\n      <div class=\"kpi-value\">96%</div>\n      <div class=\"kpi-target\">目標: 90〜100%</div>\n      <div class=\"status\">OK: 適切な消化ペース</div>\n    </div>\n    <div class=\"card alert\">\n      <div class=\"kpi-name\">CVR（コンバージョン率）</div>\n      <div class=\"kpi-value\">1.2%</div>\n      <div class=\"kpi-target\">目標: 2.0%以上</div>\n      <div class=\"status\">要対応: 目標比60%。LP改善が急務</div>\n    </div>\n    <div class=\"card ok\">\n      <div class=\"kpi-name\">ROAS</div>\n      <div class=\"kpi-value\">480%</div>\n      <div class=\"kpi-target\">目標: 400%以上</div>\n      <div class=\"status\">OK: 目標超過（+20%）</div>\n    </div>\n  </div>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "A/Bテストで正確な結論を出すために必要な条件として誤っているのはどれですか？",
+            "options": [
+              "変更は1変数のみに限定する",
+              "各バリアントで最低100クリック以上を取得する",
+              "結果が良い方が出た時点で即座に判断する",
+              "事前に検証期間を決めておく"
+            ],
+            "correct": 2,
+            "explanation": "「良い結果が出た時点で即座に判断する」は誤りです。統計的有意性を確認するために事前に決めた期間・サンプル数が必要です。初期の結果だけで判断すると偶然の変動を「効果あり」と誤認するリスクがあります。"
+          },
+          {
+            "q": "週次の広告運用チェックで「検索語句」を確認する主な目的はどれですか？",
+            "options": [
+              "入札単価が適切かどうかを確認するため",
+              "除外すべき不要なキーワードを特定するため",
+              "競合他社の広告コピーを確認するため",
+              "品質スコアが改善しているかを確認するため"
+            ],
+            "correct": 1,
+            "explanation": "検索語句レポートを確認する主な目的は、広告を表示させてしまった「意図しない検索語句」を発見して除外キーワードに追加することです。無関係な語句への広告表示を防ぐことでCPA改善につながります。"
+          },
+          {
+            "q": "クライアント向け月次レポートに「次月の改善計画」を含める理由として最も適切なのはどれですか？",
+            "options": [
+              "Googleの推奨フォーマットに従うため",
+              "クライアントとの信頼関係を構築し、継続的な改善の方向性を共有するため",
+              "法的な義務があるため",
+              "予算追加の交渉をしやすくするため"
+            ],
+            "correct": 1,
+            "explanation": "次月の改善計画を含めることで「過去の結果を報告するだけ」から「パートナーとして次の成果を一緒に作る」関係性に変わります。クライアントとの信頼構築と、改善の方向性に対する合意を得るために重要です。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール9-10 完了！\n\n広告運用PDCAサイクルの基本フレームワークを習得しました。\n\n## 習得したスキル\n\n✅ **週次・月次のPDCAサイクル**を設計・実行できる\n✅ **週次チェックポイント**（予算・CPA・品質スコア・除外KW）を把握した\n✅ **A/Bテストの正しい設計**（1変数・十分なサンプル・事前期間設定）を理解した\n✅ クライアント向け月次レポートの構成を説明できる\n\n## 次のステップ\n\n次のモジュール **「9-11: Google広告アカウント構成：MCC・キャンペーン・広告グループ」** では、Google広告の具体的なアカウント構成の設計方法を学びます。\n\n> **実務チャレンジ**: 今週の広告アカウントを開き、今日学んだ週次チェックポイント（予算消化率・CPA推移・検索語句）を実際に確認してみましょう。改善のヒントが必ず見つかります。",
+        "diagram": false
+      }
+    }
+  ]
+}

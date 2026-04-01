@@ -1,0 +1,82 @@
+{
+  "id": "advertising--9-11",
+  "moduleId": "9-11",
+  "categoryId": "advertising",
+  "title": "Google広告アカウント構成：MCC・キャンペーン・広告グループ",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# アカウント構成が運用効率と成果を左右する\n\nGoogle広告の管理は**階層構造**で成り立っています。この構造を正しく理解して設計することが、効率的な運用と成果改善の基礎になります。\n\n## 構成を間違えると起きること\n\n- キャンペーン間で予算の取り合いが発生する\n- 広告グループが大きすぎて最適化が効かない\n- どのキャンペーンが成果を出しているか分からない\n- 機械学習に必要なデータが分散して学習が進まない\n\n## この学習で得られること\n\n実際の広告運用現場で使える、Google広告の階層構造の正しい理解と設計の考え方を習得します。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# Google広告の階層構造\n\n## 全体の構成図\n\n```\nMCC（マイクライアントセンター）\n└── クライアントAアカウント\n    ├── キャンペーン1「ブランドキーワード」\n    │   ├── 広告グループ1-1「社名検索」\n    │   │   ├── キーワード\n    │   │   └── 広告\n    │   └── 広告グループ1-2「製品名検索」\n    ├── キャンペーン2「一般KW_獲得」\n    │   ├── 広告グループ2-1「商品カテゴリA」\n    │   └── 広告グループ2-2「商品カテゴリB」\n    └── キャンペーン3「リターゲティング」\n        └── 広告グループ3-1「サイト訪問者」\n```\n\n## 各階層の役割と設定できる項目\n\n| 階層 | 役割 | 主な設定項目 |\n|------|------|--------------|\n| アカウント | 全体管理 | 請求・通貨・タイムゾーン・ユーザー |\n| キャンペーン | 予算・戦略単位 | 予算・入札戦略・配信ネットワーク・地域・デバイス |\n| 広告グループ | ターゲティング単位 | キーワード・入札単価・広告・オーディエンス |\n| 広告 | クリエイティブ単位 | 見出し・説明文・URL |\n\n## キャンペーン設計の基本原則\n\n```\n【キャンペーンを分ける基準】\n\n1. 予算を独立させたい単位で分ける\n   例: ブランドKW専用キャンペーン（予算管理を独立させる）\n\n2. 入札戦略を変えたい単位で分ける\n   例: 獲得用（目標CPA）と認知用（目標インプレッション）\n\n3. 配信地域が異なる場合\n   例: 関東向けキャンペーン・関西向けキャンペーン\n\n4. 商品・サービスカテゴリが大きく異なる場合\n   例: 製品Aキャンペーン・製品Bキャンペーン\n```\n\n## 広告グループ設計の基本原則\n\n```\n【広告グループの粒度の考え方】\n\n粒度が粗すぎる（NG）:\n  広告グループ「スポーツ用品」\n  → キーワード: テニスラケット、野球グローブ、サッカーシューズ...\n  → 広告文を各キーワードに合わせられない\n\n粒度が適切（OK）:\n  広告グループ「テニスラケット」\n  → キーワード: テニスラケット 購入、テニスラケット おすすめ\n  → 広告文: 「テニスラケット専門ショップ」と訴求できる\n```\n\n## キャンペーンタイプの種類\n\n| タイプ | 配信先 | 主な用途 |\n|--------|--------|----------|\n| 検索 | Google検索結果 | 獲得・購入 |\n| ディスプレイ | GDN（Webサイト・アプリ） | 認知・リターゲティング |\n| ショッピング | 検索・ショッピングタブ | EC商品販売 |\n| 動画 | YouTube | 認知・検討 |\n| P-MAX | 全チャネル | 包括的な獲得 |",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: アカウント構成ツリーを作成する\n\n以下のクライアント条件に対してGoogle広告のアカウント構成をHTMLで可視化してください。\n\n**条件**: フィットネスジム（渋谷・新宿の2店舗）\n- 商品: 月会費プラン・パーソナルトレーニング・短期集中プラン\n- 目的: 入会申込獲得\n\n## 課題\n\n以下のHTMLに、適切なキャンペーン・広告グループの階層ツリーを追加してください（最低3キャンペーン、各2広告グループ以上）。",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>Googleアカウント構成ツリー</title>\n  <style>\n    body { font-family: 'Noto Sans JP', sans-serif; background: #0f172a; color: #e2e8f0; padding: 20px; }\n    h1 { color: #60a5fa; font-size: 18px; }\n    .tree { font-size: 13px; }\n    .account  { color: #f59e0b; font-weight: bold; margin: 4px 0; }\n    .campaign { color: #60a5fa; font-weight: bold; margin: 4px 0 4px 20px; }\n    .adgroup  { color: #34d399; margin: 2px 0 2px 40px; }\n    .keyword  { color: #94a3b8; margin: 2px 0 2px 60px; font-size: 12px; }\n    .budget   { color: #fbbf24; font-size: 11px; margin-left: 8px; }\n  </style>\n</head>\n<body>\n  <h1>Google広告 アカウント構成ツリー</h1>\n  <div class=\"tree\">\n    <div class=\"account\">アカウント: フィットネスジム株式会社</div>\n    <!-- キャンペーン・広告グループをここに追加してください -->\n  </div>\n</body>\n</html>",
+        "hints": [
+          "キャンペーンは <div class=\"campaign\">📁 キャンペーン名 <span class=\"budget\">日予算 ¥XX,XXX</span></div> の形式です。",
+          "広告グループは <div class=\"adgroup\">📂 広告グループ名</div> で追加します。",
+          "ブランドKW・一般KW・リターゲティング・エリア別など複数のキャンペーン分割軸を考えてみましょう。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>Googleアカウント構成ツリー</title>\n  <style>\n    body { font-family: 'Noto Sans JP', sans-serif; background: #0f172a; color: #e2e8f0; padding: 20px; }\n    h1 { color: #60a5fa; font-size: 18px; }\n    .tree { font-size: 13px; line-height: 1.8; }\n    .account  { color: #f59e0b; font-weight: bold; margin: 4px 0; }\n    .campaign { color: #60a5fa; font-weight: bold; margin: 4px 0 4px 20px; }\n    .adgroup  { color: #34d399; margin: 2px 0 2px 40px; }\n    .keyword  { color: #94a3b8; margin: 2px 0 2px 60px; font-size: 12px; }\n    .budget   { color: #fbbf24; font-size: 11px; margin-left: 8px; }\n  </style>\n</head>\n<body>\n  <h1>Google広告 アカウント構成ツリー</h1>\n  <div class=\"tree\">\n    <div class=\"account\">アカウント: フィットネスジム株式会社</div>\n    <div class=\"campaign\">📁 キャンペーン1: ブランドキーワード <span class=\"budget\">日予算 ¥3,000</span></div>\n    <div class=\"adgroup\">📂 広告グループ1-1: 店名・ブランド検索</div>\n    <div class=\"keyword\">└ キーワード: [フィットGYM渋谷], [フィットGYM 新宿]</div>\n    <div class=\"adgroup\">📂 広告グループ1-2: 競合指名検索</div>\n    <div class=\"keyword\">└ キーワード: [競合A ジム], [競合B フィットネス]</div>\n    <div class=\"campaign\">📁 キャンペーン2: 一般KW_月会費プラン <span class=\"budget\">日予算 ¥20,000</span></div>\n    <div class=\"adgroup\">📂 広告グループ2-1: ジム入会検索（渋谷エリア）</div>\n    <div class=\"keyword\">└ キーワード: 渋谷 ジム 入会, 渋谷 フィットネス 月額</div>\n    <div class=\"adgroup\">📂 広告グループ2-2: ジム入会検索（新宿エリア）</div>\n    <div class=\"keyword\">└ キーワード: 新宿 ジム 入会, 新宿 フィットネス 月額</div>\n    <div class=\"adgroup\">📂 広告グループ2-3: ジム一般検索（エリア不問）</div>\n    <div class=\"keyword\">└ キーワード: フィットネスジム おすすめ, ジム 入会 月額</div>\n    <div class=\"campaign\">📁 キャンペーン3: 一般KW_パーソナルトレーニング <span class=\"budget\">日予算 ¥10,000</span></div>\n    <div class=\"adgroup\">📂 広告グループ3-1: パーソナルトレーニング検索</div>\n    <div class=\"keyword\">└ キーワード: パーソナルトレーニング 渋谷, パーソナルトレーナー 新宿</div>\n    <div class=\"adgroup\">📂 広告グループ3-2: ダイエット・ボディメイク検索</div>\n    <div class=\"keyword\">└ キーワード: ダイエット ジム 渋谷, 体型改善 トレーニング</div>\n    <div class=\"campaign\">📁 キャンペーン4: リターゲティング <span class=\"budget\">日予算 ¥5,000</span></div>\n    <div class=\"adgroup\">📂 広告グループ4-1: サイト訪問者（未入会）</div>\n    <div class=\"adgroup\">📂 広告グループ4-2: 無料体験申込者（未入会）</div>\n  </div>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "Google広告の階層構造として正しいものはどれですか？",
+            "options": [
+              "アカウント → 広告グループ → キャンペーン → 広告",
+              "MCC → アカウント → キャンペーン → 広告グループ → 広告",
+              "MCC → キャンペーン → アカウント → 広告グループ → 広告",
+              "アカウント → キャンペーン → 広告 → 広告グループ"
+            ],
+            "correct": 1,
+            "explanation": "Google広告の正しい階層は「MCC → アカウント → キャンペーン → 広告グループ → 広告・キーワード」です。予算はキャンペーンレベルで設定し、キーワードと広告は広告グループでまとめます。"
+          },
+          {
+            "q": "キャンペーンを分割する適切な基準として最も重要なのはどれですか？",
+            "options": [
+              "広告の数が多くなったとき",
+              "キーワードが20個を超えたとき",
+              "予算・入札戦略・配信設定を独立させたい単位",
+              "クリック数が月1,000を超えたとき"
+            ],
+            "correct": 2,
+            "explanation": "キャンペーンを分割する主な理由は「予算を独立させたい」「入札戦略を変えたい」「配信地域・デバイスを分けたい」などです。キャンペーンは予算・戦略の管理単位であり、この軸を基準に設計します。"
+          },
+          {
+            "q": "P-MAX（パフォーマンス最大化）キャンペーンの特徴として正しいのはどれですか？",
+            "options": [
+              "Google検索結果にのみ広告を配信する",
+              "手動入札のみをサポートする",
+              "検索・ディスプレイ・YouTube・Gmailなど全チャネルに配信する",
+              "1つのキャンペーンに1つの広告グループのみ設定できる"
+            ],
+            "correct": 2,
+            "explanation": "P-MAX（Performance Max）は検索・ディスプレイ・YouTube・Gmail・マップなど全チャネルに自動で最適配信するキャンペーンタイプです。機械学習による自動最適化が強力で、包括的な獲得を目的とした際に有効です。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール9-11 完了！\n\nGoogle広告のアカウント構成設計を習得しました。\n\n## 習得したスキル\n\n✅ **MCC→アカウント→キャンペーン→広告グループ→広告**の階層構造を説明できる\n✅ **キャンペーン分割の基準**（予算・入札戦略・地域・商品カテゴリ）を理解した\n✅ **広告グループの適切な粒度**の考え方を説明できる\n✅ HTMLでアカウント構成ツリーを可視化できた\n\n## 次のステップ\n\n次のモジュール **「9-12: Google検索キャンペーンの設計と目標設定」** では、検索キャンペーンの具体的な設定手順と目標設定の方法を学びます。\n\n> **実務チャレンジ**: 担当しているアカウントのキャンペーン一覧を確認し、「なぜこの構成になっているか？」を考えてみましょう。不要な分割や逆に統合すべきキャンペーンがあるかもしれません。",
+        "diagram": false
+      }
+    }
+  ]
+}

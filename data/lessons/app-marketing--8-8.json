@@ -1,0 +1,82 @@
+{
+  "id": "app-marketing--8-8",
+  "moduleId": "8-8",
+  "categoryId": "app-marketing",
+  "title": "LTV（顧客生涯価値）の概要と計算",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 「1人のユーザーは生涯でいくら使うか」\n\nLTV（Life Time Value：顧客生涯価値）は、1人のユーザーがアプリを使い続ける間に生み出す総収益の予測値です。CPI（獲得コスト）との比較でビジネスの持続可能性を判断する、最も重要な事業指標のひとつです。\n\n## LTVが答える問い\n\n- 「CPI ¥2,000 を払ってまで広告を出す価値はあるか？」\n- 「どのユーザーセグメントが最も価値が高いか？」\n- 「チャーンレートを1%改善するとLTVはいくら変わるか？」\n\n## LTV > CPI でなければビジネスは成立しない\n\n```\nLTV > CPI（顧客獲得コスト）= ユニットエコノミクスが成立\n\n例:\n  LTV = ¥6,000\n  CPI = ¥1,800\n  → 1ユーザーあたり ¥4,200 の利益 ✅\n\n  LTV = ¥1,500\n  CPI = ¥2,000\n  → 獲得するたびに ¥500 の損失 ❌\n```",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# LTVの計算方法\n\n## シンプルなLTV計算式\n\n```\nLTV = ARPU × 平均継続期間（月）\n\n平均継続期間 = 1 / チャーンレート（月次）\n\n例:\n  ARPU = ¥980/月\n  チャーンレート = 5% = 0.05\n  平均継続期間 = 1 / 0.05 = 20ヶ月\n  LTV = ¥980 × 20 = ¥19,600\n```\n\n## コホート分析によるLTV計算\n\n実際の現場では、インストール日が同じグループ（コホート）の累積収益を追跡してLTVを実測します。\n\n```\nコホート: 2024年1月インストールユーザー（1,000人）\n\n月  | 累積収益（人）| LTV（累積）\n1ヶ月 | ¥5,200,000   | ¥5,200\n3ヶ月 | ¥8,900,000   | ¥8,900\n6ヶ月 | ¥12,300,000  | ¥12,300\n12ヶ月| ¥15,800,000  | ¥15,800 ← 実測LTV\n```\n\n## LTV向上の3つのレバー\n\n| レバー | 施策例 | 計算への影響 |\n|---|---|---|\n| ARPUを上げる | アップセル・クロスセル・価格改定 | LTV ↑ |\n| チャーンを下げる | オンボーディング改善・プッシュ通知最適化 | 継続期間 ↑ → LTV ↑ |\n| ユーザーセグメント最適化 | 高LTVセグメントに広告予算を集中 | 実質LTV ↑ |\n\n## LTV計算の注意点\n\n```\n注意1: LTVは将来予測。チャーンが変動すると大きく変わる\n注意2: 新規アプリはデータが短期間しかないため精度が低い\n注意3: 広告収益型は「1ユーザーあたりの広告収益」をARPUに含める\n注意4: 割引率（NPV: 正味現在価値）を考慮するとより精密になる\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: LTVとユニットエコノミクスを計算する\n\nサブスクリプションアプリのLTVを計算し、広告費の採算性を判断してください。\n\n## 課題\n\n1. `calcLTV()` 関数でLTVを計算する\n2. `calcPaybackPeriod()` 関数でCPI回収期間を計算する\n3. `isViable()` 関数でビジネスの成立性を判定する",
+        "starterCode": "// サブスクアプリデータ\nconst appMetrics = {\n  arpu: 1480,          // 月次ARPU（円）\n  churnRate: 0.04,     // 月次チャーンレート（4%）\n  cpi: 2500            // 顧客獲得コスト（円）\n};\n\n// LTVを計算する関数\n// 計算式: ARPU * (1 / churnRate)\nfunction calcLTV(arpu, churnRate) {\n  // ここに実装してください\n  return 0;\n}\n\n// CPI回収期間（月）を計算する関数\n// 計算式: CPI / ARPU\nfunction calcPaybackPeriod(cpi, arpu) {\n  // ここに実装してください\n  return 0;\n}\n\n// LTV > CPI * 3 であればビジネスが健全と判定する関数\n// （LTVはCPIの3倍以上が一般的な目安）\nfunction isViable(ltv, cpi) {\n  // ここに実装してください\n  return false;\n}\n\n// 結果出力（変更不要）\nconst ltv = calcLTV(appMetrics.arpu, appMetrics.churnRate);\nconst payback = calcPaybackPeriod(appMetrics.cpi, appMetrics.arpu);\nconsole.log('LTV:', '¥' + ltv.toFixed(0));\nconsole.log('CPI回収期間:', payback.toFixed(1) + 'ヶ月');\nconsole.log('ビジネス成立性:', isViable(ltv, appMetrics.cpi) ? '健全' : '要改善');",
+        "hints": [
+          "LTV = arpu * (1 / churnRate) です。churnRateが0.04なら平均25ヶ月継続。",
+          "CPI回収期間 = cpi / arpu です。CPIをARPUで割ると何ヶ月で回収できるかがわかります。",
+          "isViable は ltv >= cpi * 3 の条件で判定します。"
+        ],
+        "answer": "const appMetrics = {\n  arpu: 1480,\n  churnRate: 0.04,\n  cpi: 2500\n};\n\nfunction calcLTV(arpu, churnRate) {\n  return arpu * (1 / churnRate);\n}\n\nfunction calcPaybackPeriod(cpi, arpu) {\n  return cpi / arpu;\n}\n\nfunction isViable(ltv, cpi) {\n  return ltv >= cpi * 3;\n}\n\nconst ltv = calcLTV(appMetrics.arpu, appMetrics.churnRate);\nconst payback = calcPaybackPeriod(appMetrics.cpi, appMetrics.arpu);\nconsole.log('LTV:', '¥' + ltv.toFixed(0));\nconsole.log('CPI回収期間:', payback.toFixed(1) + 'ヶ月');\nconsole.log('ビジネス成立性:', isViable(ltv, appMetrics.cpi) ? '健全' : '要改善');"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "月次ARPUが¥1,200、月次チャーンレートが6%の場合、LTVはいくらですか？",
+            "options": [
+              "¥7,200",
+              "¥20,000",
+              "¥2,000",
+              "¥72,000"
+            ],
+            "correct": 1,
+            "explanation": "LTV = ARPU × (1 / チャーンレート) = ¥1,200 × (1 / 0.06) = ¥1,200 × 16.67 = ¥20,000です。チャーンレートが低いほど平均継続期間が長くなり、LTVは大きくなります。"
+          },
+          {
+            "q": "LTVとCPIの関係について、一般的に健全とされる目安はどれですか？",
+            "options": [
+              "LTV = CPI（回収できれば良い）",
+              "LTV ≥ CPI × 3（LTVがCPIの3倍以上）",
+              "LTV ≥ CPI × 10（LTVがCPIの10倍以上）",
+              "LTVとCPIは関係ない"
+            ],
+            "correct": 1,
+            "explanation": "SaaS・アプリビジネスでは「LTV ≥ CPI × 3」が健全性の一般的な目安です。これは獲得コストを回収した上で十分な利益余地があることを意味します。LTV/CPI比率が低い場合は獲得コスト削減かARPU向上が必要です。"
+          },
+          {
+            "q": "コホート分析でLTVを測定する利点として最も正しいものはどれですか？",
+            "options": [
+              "リアルタイムにLTVが計算できる",
+              "同じインストール時期のユーザー群の実際の収益推移を追跡できる",
+              "広告費を自動で最適化できる",
+              "チャーンレートを0にできる"
+            ],
+            "correct": 1,
+            "explanation": "コホート分析では同じインストール時期のユーザーグループを時系列で追跡するため、理論値ではなく実際の収益推移に基づいたLTVを測定できます。これにより施策の効果（オンボーディング改善前後の比較等）も正確に評価できます。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール8-8 完了！\n\nLTVの概念と計算、ビジネス活用を習得しました。\n\n## 習得したスキル\n\n✅ **LTVの計算式**（ARPU × 1/チャーンレート）を正確に説明できる\n✅ **LTV > CPI × 3** というユニットエコノミクスの基準を把握した\n✅ **LTV向上の3レバー**（ARPU向上・チャーン低減・セグメント最適化）を理解した\n✅ **コホート分析によるLTV実測**の考え方を身につけた\n\n## 次のステップ\n\n次のモジュール **「8-9: チャーンレートの定義と改善アプローチ」** では、LTVに直結するチャーン（解約・離脱）を深掘りします。",
+        "diagram": false
+      }
+    }
+  ]
+}

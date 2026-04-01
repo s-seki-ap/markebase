@@ -1,0 +1,82 @@
+{
+  "id": "bigquery--6-9",
+  "moduleId": "6-9",
+  "categoryId": "bigquery",
+  "title": "SQLコメント：クエリに説明を入れる習慣",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 「3ヶ月後の自分」が読んでも分かるSQLを書く\n\n分析業務でSQLを書く場合、そのクエリは一度だけでなく何度も再利用されます。しかし、「なぜこの条件なのか」「何を分析しているのか」が書かれていないと、後から読み返したときに意図が分からなくなります。\n\n**コメントがない場合の問題**：\n- 「このWHERE条件はなぜ必要なのか」が分からない\n- 「このクエリは何のために作ったのか」が分からない\n- チームメンバーへの引き継ぎが困難\n\n**コメントを書く習慣の効果**：\n- コードレビューが楽になる\n- トラブルシュートが速くなる\n- 自分自身が数週間後に見返しても即座に理解できる\n\nSQLのコメントは**コードの一部**です。分析の意図・条件の理由・注意事項を積極的に書きましょう。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# SQLコメントの書き方\n\n## 1行コメント（-- から行末まで）\n\n```sql\n-- これは1行コメントです\nSELECT\n  event_date,       -- イベント発生日\n  event_name,       -- イベント種別\n  user_pseudo_id    -- 匿名ユーザーID（個人を特定できない）\nFROM\n  `myproject.analytics_123456789.events_*`\n```\n\n## 複数行コメント（/* から */ まで）\n\n```sql\n/*\n  クエリ名: 月別購入コンバージョン率計算\n  作成者:   マーケ分析チーム\n  作成日:   2024-01-15\n  目的:     2023年通年の月別CVRを算出してダッシュボードに反映する\n  注意:     bot_in_event_count が 1 以上のデータは除外済み\n*/\nSELECT\n  FORMAT_DATE('%Y-%m', PARSE_DATE('%Y%m%d', event_date)) AS year_month,\n  COUNT(DISTINCT user_pseudo_id)                          AS total_users,\n  COUNT(DISTINCT CASE\n    WHEN event_name = 'purchase'\n    THEN user_pseudo_id\n  END)                                                    AS buyers,\n  ROUND(\n    COUNT(DISTINCT CASE WHEN event_name = 'purchase' THEN user_pseudo_id END)\n    / COUNT(DISTINCT user_pseudo_id) * 100,\n  2)                                                      AS cvr_percent\nFROM\n  `myproject.analytics_123456789.events_*`\nWHERE\n  _TABLE_SUFFIX BETWEEN '20230101' AND '20231231'\n  -- ボットトラフィックを除外\n  AND (SELECT value.int_value FROM UNNEST(event_params) WHERE key = 'ignore_referrer') IS NULL\nGROUP BY\n  year_month\nORDER BY\n  year_month\n```\n\n## コメントの実務活用パターン\n\n```sql\n-- =============================================\n-- [分析] キャンペーン別コンバージョン数集計\n-- 対象期間: 2024年Q1 (1〜3月)\n-- 依頼者: マーケティング部 〇〇さん\n-- =============================================\n\nSELECT\n  traffic_source.name  AS campaign_name,  -- キャンペーン名\n  traffic_source.medium AS medium,        -- メディア\n  COUNT(DISTINCT user_pseudo_id) AS cv_users  -- CV達成ユーザー数\nFROM\n  `myproject.analytics_123456789.events_*`\nWHERE\n  _TABLE_SUFFIX BETWEEN '20240101' AND '20240331'\n  AND event_name = 'purchase'\n  -- NOTE: traffic_source.name が NULL のものは (direct) として扱う\nGROUP BY\n  campaign_name, medium\nORDER BY\n  cv_users DESC\n```",
+        "diagram": false
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習：コメントを追加して保守しやすいSQLにする\n\n## 課題\n\n以下のSQLにコメントを追加して、後から見た人でも意図が分かるように整えてください。\n\n**追加してほしいコメント**：\n1. クエリ全体の説明を複数行コメント（`/* */`）でクエリの先頭に追加する\n   - クエリ名：「デバイス別・流入別 購入分析」\n   - 目的：「デバイスと流入メディアの組み合わせで購入数を比較する」\n2. `_TABLE_SUFFIX` の行に「2024年Q1のデータに限定」という1行コメントを追加\n3. `AND event_name = 'purchase'` の行に「購入イベントのみ」という1行コメントを追加\n\n> 💡 コメントはSQLの実行結果に影響しません。自由に追加できます。",
+        "starterCode": "SELECT\n  device.category          AS device_type,\n  traffic_source.medium    AS medium,\n  COUNT(DISTINCT user_pseudo_id) AS buyers\nFROM\n  `myproject.analytics_123456789.events_*`\nWHERE\n  _TABLE_SUFFIX BETWEEN '20240101' AND '20240331'\n  AND event_name = 'purchase'\nGROUP BY\n  device_type, medium\nORDER BY\n  buyers DESC",
+        "hints": [
+          "クエリの先頭に /* 〜 */ で複数行コメントを書きます。",
+          "行の後ろに -- コメント文 と書くと行末コメントになります。",
+          "コメントはSQL実行時には無視されるので、自由な内容で書けます。"
+        ],
+        "answer": "/*\n  クエリ名: デバイス別・流入別 購入分析\n  目的:     デバイスと流入メディアの組み合わせで購入数を比較する\n*/\nSELECT\n  device.category          AS device_type,\n  traffic_source.medium    AS medium,\n  COUNT(DISTINCT user_pseudo_id) AS buyers\nFROM\n  `myproject.analytics_123456789.events_*`\nWHERE\n  _TABLE_SUFFIX BETWEEN '20240101' AND '20240331'  -- 2024年Q1のデータに限定\n  AND event_name = 'purchase'                       -- 購入イベントのみ\nGROUP BY\n  device_type, medium\nORDER BY\n  buyers DESC"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "SQLの1行コメントを記述するときに使う記号はどれですか？",
+            "options": [
+              "// (ダブルスラッシュ)",
+              "# (シャープ)",
+              "-- (ダブルハイフン)",
+              "/* (スラッシュアスタリスク)"
+            ],
+            "correct": 2,
+            "explanation": "SQLの1行コメントは `--` で始まります。`--` から行末までがコメントとして扱われます。`//` はJavaScriptなどのコメント記法、`#` はMySQLでは使えますがBigQUeryでは標準ではありません。`/*` は複数行コメントの開始記号です。"
+          },
+          {
+            "q": "複数行コメントの正しい書き方はどれですか？",
+            "options": [
+              "`-- コメント開始\nコメント内容\nコメント終了 --`",
+              "`/* コメント内容 */`",
+              "`// コメント内容 //`",
+              "`# コメント内容 #`"
+            ],
+            "correct": 1,
+            "explanation": "複数行コメントは `/*` で始まり `*/` で終わります。この間に複数行にわたるコメントを書くことができます。クエリの目的・作成者・注意事項などを記述するヘッダーとして使われることが多いです。"
+          },
+          {
+            "q": "SQLコメントを書くことの実務的なメリットとして最も重要なものはどれですか？",
+            "options": [
+              "コメントを書くとSQLの実行速度が上がる",
+              "コメントを書くとBigQueryのコストが削減される",
+              "コメントを書くとクエリの意図が伝わり、保守・引き継ぎが容易になる",
+              "コメントを書かないとSQLが実行できない"
+            ],
+            "correct": 2,
+            "explanation": "SQLコメントの最大のメリットは「クエリの意図・条件の理由・注意事項を残すことで、後から見た人（自分を含む）が即座に理解できること」です。コメントはSQL実行には影響せず、あくまで人間が読むための情報です。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール6-9 完了！\n\nSQLコメントを使った保守性の高いクエリ作成をマスターしました。\n\n## 習得したスキル\n\n✅ **1行コメント**（`--`）でインラインの説明を書ける\n✅ **複数行コメント**（`/* */`）でクエリヘッダーを書ける\n✅ **コメントが実行に影響しない**ことを理解した\n✅ **実務でのコメント記法**（クエリ名・作成者・目的）を習得した\n\n## 推奨するコメントの書き方\n\n```sql\n/*\n  クエリ名: ○○分析\n  目的:     〜を算出する\n  作成日:   YYYY-MM-DD\n*/\nSELECT\n  col1,  -- 説明\n  col2   -- 説明\nFROM ...\nWHERE\n  condition1  -- 条件の理由\n```\n\n## 次のステップ\n\n次のモジュール **「6-10: NULL値の扱い」** では、データに欠損値があった場合の正しい処理方法を学びます。GA4データにも多くのNULLが含まれており、実務で必須の知識です。",
+        "diagram": false
+      }
+    }
+  ]
+}

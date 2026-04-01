@@ -1,0 +1,83 @@
+{
+  "id": "seo--4-3",
+  "moduleId": "4-3",
+  "categoryId": "seo",
+  "title": "インデックス：ページがGoogle検索に登録される仕組み",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 「クロールされた」≠「インデックスされた」\n\nGooglebotがページを訪問しても、必ずしも検索結果に表示されるわけではありません。クロールとインデックスは別のプロセスです。\n\n## よくある誤解\n\n- ❌ 「サイトマップを送ったから検索に出るはず」\n- ❌ 「Googlebotが来たからインデックスされた」\n- ✅ 「インデックスされるかはページの品質によって決まる」\n\n## インデックスとは\n\nインデックスとはGoogleの巨大なデータベースにページの情報が登録された状態です。インデックスされて初めて、そのページが検索結果に表示される可能性が生まれます。\n\n## マーケターが気にすべきポイント\n\n- 重要なページが本当にインデックスされているか確認する方法\n- インデックスを妨げている要素の特定方法\n- 不要なページをインデックスから除外する方法",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# インデックスの仕組みと制御方法\n\n## クロール→インデックスまでの流れ\n\n```\nGooglebotがページ取得\n    ↓\nHTMLをレンダリング（JS実行）\n    ↓\nコンテンツ・構造を解析\n    ↓\n品質評価（低品質なら除外）\n    ↓\nインデックスに登録\n    ↓\nランキング処理（検索結果へ）\n```\n\n## インデックスを制御する方法\n\n### 1. noindexタグ（最も確実）\n```html\n<meta name=\"robots\" content=\"noindex\">\n```\nページの `<head>` に設置。Googleがこのページを検索結果に表示しなくなります。\n\n### 2. X-Robots-Tag（HTTPヘッダー）\n```\nX-Robots-Tag: noindex\n```\nPDFや画像など、HTMLが使えないリソースのインデックスを制御できます。\n\n### 3. canonicalタグ（重複コンテンツ対策）\n```html\n<link rel=\"canonical\" href=\"https://example.com/main-page/\">\n```\n同じ内容のページが複数ある場合に、どれを正規ページとするかをGoogleに伝えます。\n\n## インデックスされないページの主な原因\n\n| 原因 | 確認場所 | 対処法 |\n|------|---------|--------|\n| noindexタグが設置されている | `<head>`内 | タグを削除 |\n| robots.txtでブロック | robots.txt | Disallowを修正 |\n| canonicalが他ページを指している | `<head>`内 | canonical URLを修正 |\n| コンテンツが薄い（ページ品質不足） | ページ内容 | コンテンツを充実させる |\n| ソフト404（実質404なのに200を返す） | サーバー設定 | 適切な404/301を返す |\n\n## インデックス確認方法\n\n```\n# Googleの検索バーで確認\nsite:example.com/blog/seo-guide/\n```\n結果が表示されればインデックス済みです。",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: インデックス制御の実装\n\nあなたはコーポレートサイトのSEO担当者です。ページごとに適切なインデックス設定をHTMLに実装してください。\n\n## ページ別の要件\n\n- **商品詳細ページ** : インデックス許可・リンクフォロー許可\n- **サンキューページ** : インデックス禁止（転換後のページのため）\n- **プリント用ページ** : インデックス禁止・リンクフォロー禁止\n\n## 課題\n\n3つのページに適切な `<meta name=\"robots\">` タグとcanonicalタグを設定してください。",
+        "starterCode": "<!-- ===== ページ1: 商品詳細ページ ===== -->\n<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>商品詳細 | ECサイト</title>\n  <!-- ① インデックス許可・フォロー許可のmetaタグ -->\n\n  <!-- ② canonical URLを設定 (https://example.com/products/item-001/) -->\n\n</head>\n<body><h1>商品詳細</h1></body>\n</html>\n\n\n<!-- ===== ページ2: サンキューページ ===== -->\n<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>お問い合わせありがとうございました</title>\n  <!-- ③ インデックス禁止のmetaタグ -->\n\n</head>\n<body><h1>お問い合わせありがとうございました</h1></body>\n</html>\n\n\n<!-- ===== ページ3: プリント用ページ ===== -->\n<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>印刷用 | ECサイト</title>\n  <!-- ④ インデックス禁止・フォロー禁止のmetaタグ -->\n\n</head>\n<body><h1>印刷用ページ</h1></body>\n</html>",
+        "hints": [
+          "インデックス許可・フォロー許可：`<meta name=\"robots\" content=\"index, follow\">`",
+          "インデックス禁止のみ：`<meta name=\"robots\" content=\"noindex\">` または `content=\"noindex, follow\"`",
+          "インデックス禁止・フォロー禁止：`<meta name=\"robots\" content=\"noindex, nofollow\">`",
+          "canonicalタグ：`<link rel=\"canonical\" href=\"https://example.com/products/item-001/\">`"
+        ],
+        "answer": "<!-- ===== ページ1: 商品詳細ページ ===== -->\n<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>商品詳細 | ECサイト</title>\n  <meta name=\"robots\" content=\"index, follow\">\n  <link rel=\"canonical\" href=\"https://example.com/products/item-001/\">\n</head>\n<body><h1>商品詳細</h1></body>\n</html>\n\n\n<!-- ===== ページ2: サンキューページ ===== -->\n<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>お問い合わせありがとうございました</title>\n  <meta name=\"robots\" content=\"noindex, follow\">\n</head>\n<body><h1>お問い合わせありがとうございました</h1></body>\n</html>\n\n\n<!-- ===== ページ3: プリント用ページ ===== -->\n<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>印刷用 | ECサイト</title>\n  <meta name=\"robots\" content=\"noindex, nofollow\">\n</head>\n<body><h1>印刷用ページ</h1></body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "`<meta name=\"robots\" content=\"noindex\">` を設定したページについて正しい説明はどれですか？",
+            "options": [
+              "Googlebotがそのページをクロールできなくなる",
+              "そのページが検索結果に表示されなくなる",
+              "そのページへの外部リンクがすべて無効になる",
+              "そのページのHTMLが暗号化される"
+            ],
+            "correct": 1,
+            "explanation": "noindexタグはGoogleに「このページを検索結果に表示しないでください」と指示するものです。クロールは引き続き行われる場合があります。サンキューページや管理ページなど、検索結果に出てほしくないページに設置します。"
+          },
+          {
+            "q": "canonicalタグの主な用途として最も適切なものはどれですか？",
+            "options": [
+              "ページの読み込み速度を向上させる",
+              "同じコンテンツが複数URLに存在する場合に正規ページをGoogleに伝える",
+              "ページのデザインをGoogleに伝える",
+              "古いページを新しいページにリダイレクトする"
+            ],
+            "correct": 1,
+            "explanation": "canonicalタグは重複コンテンツ問題を解決するために使います。例えば `https://example.com/page/` と `https://example.com/page/?utm_source=email` が同じ内容の場合、どちらを正規URLとするかをGoogleに伝えます。"
+          },
+          {
+            "q": "Google Search Consoleで特定ページのインデックス状況を調べる最も直接的な方法はどれですか？",
+            "options": [
+              "Googleアナリティクスのレポートを確認する",
+              "URL検査ツールにURLを入力して確認する",
+              "Google広告の管理画面を確認する",
+              "Googleマイビジネスで確認する"
+            ],
+            "correct": 1,
+            "explanation": "Google Search ConsoleのURL検査ツールは、特定URLのインデックス状況・クロール日時・インデックスされない理由などを詳細に確認できます。SEO担当者が日常的に使うべき重要ツールです。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール4-3 完了！\n\n## 習得したスキル\n\n✅ **クロールとインデックスは別プロセス**であることを理解した\n✅ **noindexタグ**の書き方と用途（サンキューページ・管理ページ等）を習得した\n✅ **canonicalタグ**で重複コンテンツ問題を解決する方法を習得した\n✅ **インデックスされない5つの原因**と確認・対処法を把握した\n✅ **`site:`コマンド**でインデックス状況を確認する方法を覚えた\n\n## 次のステップ\n\n次のモジュール **「4-4: 検索順位ランキングを決める200以上のシグナル概説」** では、インデックスされたページがどのような基準で順位付けされるかを学びます。\n\n> 実務チャレンジ: `site:自社ドメイン` でGoogleに登録されているページ数を確認し、想定より多い（薄いページが多い）または少ない（重要ページが未登録）状態がないかチェックしましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

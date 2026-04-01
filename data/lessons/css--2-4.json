@@ -1,0 +1,67 @@
+{
+  "id": "css--2-4",
+  "moduleId": "2-4",
+  "categoryId": "css",
+  "title": "インラインCSS・内部スタイルシート・外部CSSファイルの違い",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# CSSの3つの適用方法を使い分ける\n\nCSSをHTMLに適用する方法は3種類あります。それぞれの特徴を理解することで、適切な場面で正しい方法を選べるようになります。\n\n## マーケターが使い分けを知るべき理由\n\n**1. HTMLメールではインラインCSS一択**\nメールクライアント（Gmail、Outlookなど）は外部CSSや`<style>`タグをサポートしないことが多いため、HTMLメールではインラインCSSが必須です。\n\n**2. GTMカスタムHTMLでは内部スタイルシート**\nGTMのカスタムHTMLタグでポップアップやバナーを表示する際、`<style>`タグで内部スタイルシートを使います。\n\n**3. サイト全体のデザインは外部CSS**\n通常のWebサイトは外部CSSファイルでスタイルを管理します。サイトの表示速度（Core Web Vitals）にも影響します。\n\n## このモジュールで得られること\n\n3つのCSS適用方法の違いと、マーケティング実務での使い分けを習得します。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# CSS適用の3つの方法\n\n## 1. インラインCSS（style属性）\n\nHTMLタグに直接`style`属性を書きます。\n\n```html\n<h1 style=\"color: #1a73e8; font-size: 32px;\">見出し</h1>\n<p style=\"color: #666;\">本文テキスト</p>\n```\n\n**メリット**: 特定の要素だけにピンポイントで適用できる\n**デメリット**: 同じスタイルを何度も書く必要がある、保守性が低い\n**活用場面**: HTMLメール、一時的なスタイル変更\n\n## 2. 内部スタイルシート（`<style>`タグ）\n\nHTMLの`<head>`内に`<style>`タグで書きます。\n\n```html\n<head>\n  <style>\n    h1 {\n      color: #1a73e8;\n      font-size: 32px;\n    }\n    .btn {\n      background-color: #ea4335;\n      color: white;\n    }\n  </style>\n</head>\n```\n\n**メリット**: 1つのHTMLファイル内でスタイルを管理できる\n**デメリット**: 他のページとスタイルを共有できない\n**活用場面**: GTMカスタムHTML、単体のLP\n\n## 3. 外部CSSファイル（`<link>`タグ）\n\n別ファイル（.css）にCSSを書き、HTMLから読み込みます。\n\n```html\n<!-- HTML側 -->\n<head>\n  <link rel=\"stylesheet\" href=\"style.css\">\n</head>\n```\n\n```css\n/* style.css */\nh1 {\n  color: #1a73e8;\n  font-size: 32px;\n}\n.btn {\n  background-color: #ea4335;\n  color: white;\n}\n```\n\n**メリット**: 複数ページで共有、キャッシュで高速化、保守性が高い\n**デメリット**: 追加のHTTPリクエストが発生\n**活用場面**: 通常のWebサイト（最も一般的）\n\n## 3つの方法の比較\n\n| 項目 | インライン | 内部 | 外部 |\n|------|----------|------|------|\n| 書く場所 | style属性 | `<style>`タグ | .cssファイル |\n| 適用範囲 | その要素のみ | そのページ | 複数ページ |\n| 再利用性 | ✕ | △ | ◎ |\n| 保守性 | ✕ | △ | ◎ |\n| 表示速度 | ◎（リクエスト不要） | ○ | ○（キャッシュ有効） |\n| 優先順位 | 最も高い | 中 | 低い |\n\n## Core Web Vitalsへの影響\n\n外部CSSは「レンダリングブロッキングリソース」として、ページの初期表示を遅延させることがあります。LCP（Largest Contentful Paint）を改善するために、ファーストビューに必要なCSSだけをインラインや内部スタイルシートに記述する「クリティカルCSS」という手法もあります。",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: GTMカスタムHTML風のバナーを作る\n\nGTMのカスタムHTMLタグで表示するプロモーションバナーを、内部スタイルシートで作りましょう。\n\n## 課題\n\n`<style>`タグ内にCSSを書いて、以下のスタイルを適用してください：\n\n1. `.promo-banner` の背景色を `#1a73e8`、文字色を `white`、パディングを `16px`、テキスト中央揃え（`text-align: center`）にする\n2. `.promo-text` のフォントサイズを `18px` にする\n3. `.promo-link` の文字色を `#fbbf24`（黄色）、太字（`font-weight: bold`）にする",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>プロモーションバナー</title>\n  <style>\n    /* ① .promo-banner のスタイルを書いてください */\n    \n\n    /* ② .promo-text のフォントサイズを 18px に */\n    \n\n    /* ③ .promo-link の文字色を #fbbf24、太字に */\n    \n  </style>\n</head>\n<body>\n  <div class=\"promo-banner\">\n    <p class=\"promo-text\">期間限定キャンペーン実施中！</p>\n    <a class=\"promo-link\" href=\"/campaign\">詳しくはこちら →</a>\n  </div>\n</body>\n</html>",
+        "hints": [
+          "背景色は `background-color`、文字色は `color`、パディングは `padding` プロパティを使います。",
+          "テキスト中央揃えは `text-align: center;` です。",
+          "太字にするには `font-weight: bold;` を指定します。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>プロモーションバナー</title>\n  <style>\n    .promo-banner {\n      background-color: #1a73e8;\n      color: white;\n      padding: 16px;\n      text-align: center;\n    }\n\n    .promo-text {\n      font-size: 18px;\n    }\n\n    .promo-link {\n      color: #fbbf24;\n      font-weight: bold;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"promo-banner\">\n    <p class=\"promo-text\">期間限定キャンペーン実施中！</p>\n    <a class=\"promo-link\" href=\"/campaign\">詳しくはこちら →</a>\n  </div>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "HTMLメールでスタイルを適用する際、最も確実な方法はどれですか？",
+            "options": ["インラインCSS（style属性）", "内部スタイルシート（styleタグ）", "外部CSSファイル（linkタグ）", "JavaScriptでスタイルを動的に変更"],
+            "correct": 0,
+            "explanation": "HTMLメールでは、多くのメールクライアントが`<style>`タグや外部CSSをサポートしていないため、`style`属性によるインラインCSSが最も確実な方法です。"
+          },
+          {
+            "q": "外部CSSファイルの最大のメリットはどれですか？",
+            "options": ["表示速度が常に最速になる", "複数ページでスタイルを共有でき保守性が高い", "セレクタの優先順位が最も高くなる", "JavaScriptから操作しやすい"],
+            "correct": 1,
+            "explanation": "外部CSSファイルは複数のHTMLページから同じスタイルを共有でき、変更が1箇所で済むため保守性が高くなります。またブラウザキャッシュも活用できます。"
+          },
+          {
+            "q": "GTMのカスタムHTMLタグでバナーを表示する際、CSSを書く一般的な方法はどれですか？",
+            "options": ["外部CSSファイルをlinkタグで読み込む", "内部スタイルシート（styleタグ）を使う", "JavaScriptだけで全てのスタイルを設定する", "CSSは不要でHTMLだけで十分"],
+            "correct": 1,
+            "explanation": "GTMのカスタムHTMLタグは1つのHTMLブロックとして挿入されるため、`<style>`タグを含めた内部スタイルシートで記述するのが一般的です。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール2-4 完了！\n\nお疲れ様でした。このモジュールで学んだことを振り返りましょう。\n\n## 習得したスキル\n\n✅ **インラインCSS**（style属性）の書き方と活用場面を理解した\n✅ **内部スタイルシート**（`<style>`タグ）の使い方を習得した\n✅ **外部CSSファイル**（`<link>`タグ）による管理方法を理解した\n✅ **3つの方法の使い分け**（メール、GTM、通常サイト）を把握した\n\n## 次のステップ\n\n次のモジュール **「2-5: CSSカスケードの計算ルール」** では、複数のスタイルが競合したとき、どのスタイルが優先されるかのルールを学びます。\n\n> 💡 **実務チャレンジ**: 自分が受信したHTMLメールのソースコードを確認して、インラインCSSがどのように使われているか観察してみましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

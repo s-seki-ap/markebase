@@ -1,0 +1,82 @@
+{
+  "id": "bigquery--6-15",
+  "moduleId": "6-15",
+  "categoryId": "bigquery",
+  "title": "LEFT JOIN：マスタと実績を結合する必須テクニック",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 「売れなかった商品」を分析に含めるには？\n\nINNER JOINは「両方に存在するデータ」しか返しません。しかし実務の分析では「片方にしか存在しないデータ」も重要です。\n\n**LEFT JOINが必要になるシーン**：\n\n- 「全商品の一覧に、今月の売上を付加する」→ 売れなかった商品も一覧に残したい\n- 「全キャンペーンの一覧に、コンバージョン数を付加する」→ CVがゼロのキャンペーンも見たい\n- 「全ユーザーの一覧に、購入履歴を付加する」→ 未購入ユーザーも含めたい\n\n## LEFT JOINとINNER JOINの違い\n\n```\n左テーブル(A)  右テーブル(B)\nid=1           id=1   → INNER JOIN: ○  LEFT JOIN: ○\nid=2           id=3   → INNER JOIN: ✗  LEFT JOIN: ○（右はNULL）\nid=4           id=4   → INNER JOIN: ○  LEFT JOIN: ○\n```\n\nLEFT JOINは「左テーブルのすべての行を必ず結果に含める」のが最大の特徴です。右テーブルに対応するデータがない場合は、右テーブルの列がNULLになります。",
+        "diagram": true
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# LEFT JOINの構文と使い方\n\n## 基本構文\n\n```sql\nSELECT\n  左テーブル.列名,\n  右テーブル.列名  -- 対応データがない場合はNULL\nFROM\n  左テーブル AS l\nLEFT JOIN\n  右テーブル AS r\n  ON l.結合キー = r.結合キー\n```\n\n## 全商品リストに売上を付加する（LEFT JOIN典型例）\n\n```sql\n/*\n  全商品マスタに、2024年1月の購入実績を左結合する\n  → 売れなかった商品も一覧に含まれる（sale_countはNULL or 0）\n*/\nSELECT\n  p.product_id,\n  p.product_name,\n  p.category,\n  COUNT(e.event_name)        AS sale_count,   -- 売れていない場合は 0\n  SUM(e.event_value_in_usd)  AS revenue        -- 売れていない場合は NULL\nFROM\n  `myproject.master.products` AS p\nLEFT JOIN\n  `myproject.analytics_123456789.events_*` AS e\n  ON p.product_id = e.item_id\n  AND e.event_name = 'purchase'               -- JOIN条件にevent_nameも追加\n  AND e._TABLE_SUFFIX BETWEEN '20240101' AND '20240131'\nGROUP BY\n  p.product_id, p.product_name, p.category\nORDER BY\n  revenue DESC NULLS LAST\n```\n\n## 購入したことがないユーザーを抽出する\n\n```sql\n-- LEFT JOIN + WHERE NULLチェック で「未購入ユーザー」を抽出\nSELECT\n  u.user_id,\n  u.email,\n  u.registration_date\nFROM\n  `myproject.master.users` AS u\nLEFT JOIN\n  `myproject.analytics_123456789.events_*` AS e\n  ON u.user_id = e.user_pseudo_id\n  AND e.event_name = 'purchase'\n  AND e._TABLE_SUFFIX BETWEEN '20240101' AND '20240131'\nWHERE\n  e.user_pseudo_id IS NULL  -- 購入イベントが結合できなかったユーザー = 未購入\n```\n\n> 💡 「LEFT JOINしてWHERE右テーブルのキー IS NULL」パターンは「存在しないものを抽出」する定番テクニックです。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習：全流入メディア一覧に購入数を付加する\n\n## 課題\n\nメディアマスタ（`myproject.master.media_list`）に2024年1月の購入イベント数を左結合するSQLを完成させてください。\n\n**テーブル情報**：\n- `media_list`：`medium`（メディア名）, `media_type`（オーガニック/有料/その他）\n- `events_*`：`traffic_source.medium`, `event_name`, `user_pseudo_id`\n\n**取得内容**：\n- `m.medium`、`m.media_type`\n- 購入ユーザー数（`COUNT(DISTINCT e.user_pseudo_id) AS buyers`）\n  ※購入がないメディアは 0 で表示したい\n\n> 💡 `COUNT(DISTINCT)` はNULLを無視するため、購入がないメディアは自動的に 0 になります。",
+        "starterCode": "-- 全メディア一覧 + 2024年1月の購入ユーザー数\n\nSELECT\n  m.medium,\n  m.media_type,\n  COUNT(DISTINCT e.user_pseudo_id) AS buyers\nFROM\n  `myproject.master.media_list` AS m\n-- events_*をLEFT JOINしてください\n________ JOIN\n  `myproject.analytics_123456789.events_*` AS e\n  ON m.medium = e.traffic_source.medium\n  AND e.event_name = 'purchase'\n  AND e._TABLE_SUFFIX BETWEEN '20240101' AND '20240131'\nGROUP BY\n  m.medium, m.media_type\nORDER BY\n  buyers DESC",
+        "hints": [
+          "LEFT JOINは `LEFT JOIN テーブル名 AS エイリアス ON 結合条件` と書きます。",
+          "LEFT JOINを使うと、左テーブル（media_list）のすべての行が結果に含まれます。",
+          "JOINの ON 句に複数の条件を `AND` でつなぐことで、特定のイベントのみを結合対象にできます。"
+        ],
+        "answer": "-- 全メディア一覧 + 2024年1月の購入ユーザー数\n\nSELECT\n  m.medium,\n  m.media_type,\n  COUNT(DISTINCT e.user_pseudo_id) AS buyers\nFROM\n  `myproject.master.media_list` AS m\nLEFT JOIN\n  `myproject.analytics_123456789.events_*` AS e\n  ON m.medium = e.traffic_source.medium\n  AND e.event_name = 'purchase'\n  AND e._TABLE_SUFFIX BETWEEN '20240101' AND '20240131'\nGROUP BY\n  m.medium, m.media_type\nORDER BY\n  buyers DESC"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "LEFT JOINの特徴として正しい説明はどれですか？",
+            "options": [
+              "右テーブルのすべての行が結果に含まれる",
+              "左テーブルのすべての行が結果に含まれ、右テーブルに対応がない場合はNULLになる",
+              "両方のテーブルに共通するキーを持つ行のみ含まれる",
+              "左右どちらのテーブルにも存在しない行が結果に含まれる"
+            ],
+            "correct": 1,
+            "explanation": "LEFT JOINは左テーブルのすべての行を必ず結果に含めます。右テーブルに対応するデータがない場合、右テーブルの列はNULLになります。これにより「売れなかった商品」「未購入ユーザー」などゼロ件のデータも分析に含められます。"
+          },
+          {
+            "q": "「LEFT JOINを使い、右テーブルの結合キーがIS NULLのものだけをWHEREで絞り込む」パターンは何に使いますか？",
+            "options": [
+              "両テーブルに共通する行を取り出すため",
+              "右テーブルにしか存在しない行を取り出すため",
+              "左テーブルにしか存在しない行（右テーブルに対応がない行）を取り出すため",
+              "NULL値を0に変換するため"
+            ],
+            "correct": 2,
+            "explanation": "`LEFT JOIN ... WHERE 右テーブルのキー IS NULL` のパターンは「左テーブルには存在するが右テーブルには存在しない行」を抽出します。例えば「未購入ユーザーの一覧」「今月アクセスがなかったキャンペーン」などを取り出す際に使います。"
+          },
+          {
+            "q": "LEFT JOINで右テーブルとの結合条件（ON句）に追加の絞り込み条件（event_name = 'purchase'など）を書く場合と、WHERE句に書く場合の違いはどれですか？",
+            "options": [
+              "ON句に書いても WHERE句に書いても結果は完全に同じ",
+              "ON句に書くと結合の条件になり、WHERE句に書くとLEFT JOINの効果が消えてINNER JOINと同じになる",
+              "WHERE句の条件はON句より先に実行される",
+              "ON句には等号(=)しか書けないため、その他の条件はWHERE句に書く"
+            ],
+            "correct": 1,
+            "explanation": "LEFT JOINでは、追加条件をON句に書くと「その条件で絞り込んだ右テーブルで結合」します（左テーブルの全行は保持）。WHERE句に書くと結合後にフィルタされるため、右テーブルがNULLの行も除外され、INNER JOINと同じ結果になります。これは重要な落とし穴です。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール6-15 完了！\n\nLEFT JOINによるマスタ結合テクニックをマスターしました。\n\n## 習得したスキル\n\n✅ **LEFT JOINの基本構文**を書ける\n✅ **INNER JOINとLEFT JOINの使い分け**を判断できる\n✅ **「存在しないものを抽出」**（LEFT JOIN + IS NULL）パターンを使える\n✅ **ON句とWHERE句の違い**（LEFT JOINへの影響）を理解した\n\n## JOIN種類の使い分けまとめ\n\n| JOIN種類 | 使うとき |\n|---------|----------|\n| INNER JOIN | 両テーブルに一致するデータだけ欲しいとき |\n| LEFT JOIN | 左テーブルを基準にして、右テーブルのデータを補足するとき |\n\n## 次のステップ\n\n次のモジュール **「6-16: CROSS JOIN」** では、全組み合わせを生成するCROSS JOINの使い方と注意点を学びます。",
+        "diagram": false
+      }
+    }
+  ]
+}

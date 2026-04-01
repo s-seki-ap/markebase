@@ -1,0 +1,82 @@
+{
+  "id": "bigquery--6-16",
+  "moduleId": "6-16",
+  "categoryId": "bigquery",
+  "title": "CROSS JOIN：全組み合わせの生成と注意点",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# CROSS JOINは「かけ算」テーブル\n\nCROSS JOINは2つのテーブルのすべての行の組み合わせを生成します。ON句（結合条件）がなく、左テーブルのすべての行と右テーブルのすべての行をかけ合わせます。\n\n**例**：\n- 左テーブル：3行（商品A, B, C）\n- 右テーブル：4行（月1, 2, 3, 4）\n- CROSS JOIN結果：3 × 4 = **12行**（全組み合わせ）\n\n## マーケターが使うシーン\n\nCROSS JOINは一見あまり使わない機能に見えますが、特定の分析で非常に重要です。\n\n**典型的な使用例**：\n1. **カレンダー生成**：日付テーブルとカテゴリテーブルを掛け合わせて「日付×カテゴリ」の全組み合わせを作る\n2. **穴埋め集計**：データがない日付もゼロで表示するレポート\n3. **A/Bテスト設計**：条件の全組み合わせマトリクスの作成\n\n## 注意：データ量が爆発する\n\n左テーブル10万行 × 右テーブル10万行 = **100億行**になります。\n\nCROSS JOINを使う際は、必ず小さいテーブル同士（または一方をLIMITで制限）で使うことが鉄則です。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# CROSS JOINの構文と実用例\n\n## 基本構文\n\n```sql\nSELECT\n  テーブルA.列名,\n  テーブルB.列名\nFROM\n  テーブルA\nCROSS JOIN\n  テーブルB\n```\n\n## 日別×デバイス別の全組み合わせを作る\n\n```sql\n/*\n  日付テーブルとデバイス一覧を掛け合わせて\n  「日付×デバイス」の全組み合わせを生成する\n  → その後LEFT JOINで実績データを付加すると\n    データがない日もゼロで表示できる\n*/\nWITH\n  -- 2024年1月の日付一覧（小さいテーブル）\n  date_list AS (\n    SELECT event_date\n    FROM `myproject.analytics_123456789.events_*`\n    WHERE _TABLE_SUFFIX BETWEEN '20240101' AND '20240131'\n    GROUP BY event_date\n  ),\n  -- デバイス種別一覧（3種類: desktop, mobile, tablet）\n  device_list AS (\n    SELECT DISTINCT device.category AS device_type\n    FROM `myproject.analytics_123456789.events_20240115`\n  )\n\nSELECT\n  d.event_date,\n  v.device_type\nFROM\n  date_list AS d\nCROSS JOIN\n  device_list AS v\nORDER BY\n  d.event_date, v.device_type\n```\n\n## CROSS JOINの省略記法\n\n```sql\n-- ON句なしのカンマ結合（古い書き方。CROSS JOINと同じ）\nSELECT * FROM テーブルA, テーブルB\n\n-- 現代的な明示的記法（推奨）\nSELECT * FROM テーブルA CROSS JOIN テーブルB\n```\n\n## CROSS JOIN + LEFT JOINで穴埋め集計\n\n```sql\n/*\n  CROSS JOINで全組み合わせを作り\n  LEFT JOINで実績を付加 → ゼロの日も表示される\n*/\nWITH all_combinations AS (\n  SELECT d.event_date, v.device_type\n  FROM date_list AS d\n  CROSS JOIN device_list AS v\n)\nSELECT\n  c.event_date,\n  c.device_type,\n  COALESCE(COUNT(e.event_name), 0) AS page_views\nFROM all_combinations AS c\nLEFT JOIN events AS e\n  ON c.event_date = e.event_date\n  AND c.device_type = e.device.category\n  AND e.event_name = 'page_view'\nGROUP BY c.event_date, c.device_type\nORDER BY c.event_date, c.device_type\n```",
+        "diagram": false
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習：流入メディアと商品カテゴリの全組み合わせを生成する\n\n## 課題\n\n以下の2つの小さいテーブルをCROSS JOINして、全組み合わせの一覧を生成するSQLを完成させてください。\n\n**テーブル1**（`media_types`）：3行\n- `medium`: 'organic', 'cpc', 'email'\n\n**テーブル2**（`product_categories`）：4行\n- `category`: 'アパレル', '家電', '食品', 'コスメ'\n\n**期待される結果**：3 × 4 = 12行の全組み合わせ\n\n> 💡 CROSS JOINはON句（結合条件）を書きません。",
+        "starterCode": "-- 流入メディア × 商品カテゴリの全組み合わせ生成\n\nWITH\n  media_types AS (\n    SELECT medium FROM UNNEST(['organic', 'cpc', 'email']) AS medium\n  ),\n  product_categories AS (\n    SELECT category FROM UNNEST(['アパレル', '家電', '食品', 'コスメ']) AS category\n  )\n\nSELECT\n  m.medium,\n  p.category\nFROM\n  media_types AS m\n-- CROSS JOINを書いてください（ON句は不要）\n________ JOIN\n  product_categories AS p\nORDER BY\n  m.medium, p.category",
+        "hints": [
+          "CROSS JOINはON句が不要です。`CROSS JOIN テーブル名` とだけ書きます。",
+          "CROSS JOINは全行の組み合わせを生成するため、左テーブル3行 × 右テーブル4行 = 12行になります。",
+          "WITH句（CTE）はサブクエリを名前付きで定義する機能です（6-18で詳しく学びます）。"
+        ],
+        "answer": "-- 流入メディア × 商品カテゴリの全組み合わせ生成\n\nWITH\n  media_types AS (\n    SELECT medium FROM UNNEST(['organic', 'cpc', 'email']) AS medium\n  ),\n  product_categories AS (\n    SELECT category FROM UNNEST(['アパレル', '家電', '食品', 'コスメ']) AS category\n  )\n\nSELECT\n  m.medium,\n  p.category\nFROM\n  media_types AS m\nCROSS JOIN\n  product_categories AS p\nORDER BY\n  m.medium, p.category"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "テーブルA（100行）とテーブルB（200行）をCROSS JOINすると、結果は何行になりますか？",
+            "options": [
+              "100行",
+              "200行",
+              "300行（100+200）",
+              "20,000行（100×200）"
+            ],
+            "correct": 3,
+            "explanation": "CROSS JOINは両テーブルのすべての行の組み合わせを生成します。テーブルA（100行）× テーブルB（200行）= 20,000行になります。大きなテーブルを誤ってCROSS JOINすると膨大なデータになるため、注意が必要です。"
+          },
+          {
+            "q": "CROSS JOINが実務で有効に使われる典型的なシーンはどれですか？",
+            "options": [
+              "2つのテーブルの共通するキーを持つ行だけを結合するとき",
+              "日付×カテゴリなどの全組み合わせを生成し、その後LEFT JOINで実績データを付加するとき",
+              "重複行を除去してユニークな行だけを取得するとき",
+              "集計結果に条件をかけてフィルタリングするとき"
+            ],
+            "correct": 1,
+            "explanation": "CROSS JOINの典型的な使用例は「全組み合わせの生成」です。例えば「日付一覧×デバイス種別一覧」を掛け合わせて全組み合わせを作り、LEFT JOINで実績を付加することで、データがない日付もゼロとして表示するレポートが作れます。"
+          },
+          {
+            "q": "CROSS JOINを安全に使うために最も重要な注意点はどれですか？",
+            "options": [
+              "必ずINNER JOINと組み合わせて使う",
+              "ON句を省略してはいけない",
+              "大きなテーブル同士のCROSS JOINは行数が爆発するため、小さいテーブル同士で使う",
+              "CROSS JOINはWHERE句と組み合わせて使えない"
+            ],
+            "correct": 2,
+            "explanation": "CROSS JOINは行数が掛け算で増えます。100万行×100万行で1兆行になりBigQueryのコストが膨大になります。CROSS JOINは小さいテーブル（数十〜数百行）同士で使うことが鉄則です。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール6-16 完了！\n\nCROSS JOINの使い方と注意点をマスターしました。\n\n## 習得したスキル\n\n✅ **CROSS JOINの動作**（全組み合わせの生成）を理解した\n✅ **CROSS JOINの構文**（ON句が不要）を書ける\n✅ **データ量の爆発リスク**を理解し、適切な使い方を把握した\n✅ **CROSS JOIN + LEFT JOIN の組み合わせ**でゼロ埋め集計ができる\n\n## JOINの種類まとめ\n\n| JOIN | 結果の行 | ON句 |\n|------|----------|------|\n| INNER JOIN | 両テーブルに一致する行のみ | 必要 |\n| LEFT JOIN | 左テーブルすべて + 右テーブル（一致のみ） | 必要 |\n| CROSS JOIN | 全組み合わせ | 不要 |\n\n## 次のステップ\n\n次のモジュール **「6-17: UNION ALL」** では、複数のテーブルを縦方向に結合する方法を学びます。複数の期間のデータや複数サービスのデータをまとめる際に使います。",
+        "diagram": false
+      }
+    }
+  ]
+}

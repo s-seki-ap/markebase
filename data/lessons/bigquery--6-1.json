@@ -1,0 +1,82 @@
+{
+  "id": "bigquery--6-1",
+  "moduleId": "6-1",
+  "categoryId": "bigquery",
+  "title": "SQLとは：データベースと問い合わせ言語の基礎",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# SQLを学ぶ前に知っておくべきこと\n\nデジタルマーケターとして日々GA4の管理画面やスプレッドシートを使っているあなたも、「もっと自由にデータを引き出したい」「なぜこの数字になったのかを自分で確かめたい」と感じたことはありませんか？\n\nその答えが **SQL（Structured Query Language）** です。\n\n## SQLとは何か\n\nSQLは「データベースに対して問い合わせを行うための言語」です。Excelで言えば、フィルターや集計ピボットを「文章で命令する」イメージです。\n\n- Excel：マウスで操作して集計する\n- SQL：テキストで命令して集計する\n\n## なぜマーケターがSQLを学ぶのか\n\nGA4のBigQueryエクスポートを使うと、GA4管理画面では見られない**生のイベントデータ**に直接アクセスできます。\n\n- 「昨日の購入ユーザーのうち、初回訪問から何日で購入したか」\n- 「特定のキャンペーン経由ユーザーだけのコンバージョン率」\n- 「ページAを見た後にページBを見た人の割合」\n\nこれらはすべてSQLで答えを出せる問いです。GA4の画面では出せない答えが、SQLで出せるようになります。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# データベース・テーブル・SQLの関係\n\n## データベースの構造\n\nデータベースは「複数のテーブルをまとめた入れ物」です。\n\n```\nGA4 BigQueryプロジェクト（データベース）\n├── events_20240101  （テーブル：1月1日分のイベントデータ）\n├── events_20240102  （テーブル：1月2日分のイベントデータ）\n└── events_*         （ワイルドカード：全日付を横断）\n```\n\nテーブルは**行（レコード）**と**列（カラム）**で構成されています。Excelのシートをイメージすると分かりやすいです。\n\n| event_date | event_name | user_pseudo_id |\n|------------|------------|----------------|\n| 20240101   | page_view  | abc123         |\n| 20240101   | purchase   | def456         |\n\n## SQLの基本構文\n\nSQLは「SELECT（何を）FROM（どのテーブルから）WHERE（どんな条件で）」の3要素が基本です。\n\n```sql\n-- GA4のBigQueryテーブルからpage_viewイベントを取得する例\nSELECT\n  event_date,\n  event_name,\n  user_pseudo_id\nFROM\n  `project.dataset.events_*`\nWHERE\n  event_name = 'page_view'\n```\n\n## BigQueryの特徴\n\nBigQueryはGoogleが提供するクラウド上のデータウェアハウスです。\n\n- 数億行のデータでも数秒で集計できる\n- GA4のエクスポートデータを直接クエリできる\n- 読み込んだデータ量に応じて課金される（最初の1TB/月は無料）",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習：最初のSQLクエリを読んでみよう\n\n以下のSQLを読んで、何をしているクエリか理解してください。\n\n## 課題\n\n`events_*` テーブルから以下の条件でデータを取得するSQLを完成させてください。\n\n1. `event_date`、`event_name`、`user_pseudo_id` の3列を取得する\n2. テーブルは `myproject.analytics_123456789.events_*` を使う\n3. 2024年1月のデータに限定する（`_TABLE_SUFFIX` を使う）\n\n> 💡 BigQueryでは `events_*` のワイルドカードテーブルに対して `_TABLE_SUFFIX` で日付範囲を指定できます。",
+        "starterCode": "-- GA4 BigQueryエクスポートテーブルから\n-- 2024年1月のイベントデータを取得する\n\nSELECT\n  -- 取得する列を書いてください\n  \nFROM\n  -- テーブル名を書いてください\n  \nWHERE\n  -- 2024年1月のデータに限定してください\n  _TABLE_SUFFIX BETWEEN '________' AND '________'",
+        "hints": [
+          "SELECTの後に取得したい列名をカンマ区切りで書きます。例: `SELECT event_date, event_name`",
+          "FROMの後にはバッククォート(`)で囲んだテーブル名を書きます。例: `FROM \\`myproject.analytics_123456789.events_*\\``",
+          "_TABLE_SUFFIXはYYYYMMDD形式の文字列です。2024年1月は '20240101' から '20240131' です。"
+        ],
+        "answer": "-- GA4 BigQueryエクスポートテーブルから\n-- 2024年1月のイベントデータを取得する\n\nSELECT\n  event_date,\n  event_name,\n  user_pseudo_id\nFROM\n  `myproject.analytics_123456789.events_*`\nWHERE\n  _TABLE_SUFFIX BETWEEN '20240101' AND '20240131'"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "SQLの正式名称として正しいものはどれですか？",
+            "options": [
+              "Simple Query Language",
+              "Structured Query Language",
+              "Standard Question Logic",
+              "System Query Layer"
+            ],
+            "correct": 1,
+            "explanation": "SQLはStructured Query Language（構造化問い合わせ言語）の略です。データベースに対して「問い合わせ（クエリ）」を行うための標準的な言語です。"
+          },
+          {
+            "q": "GA4のBigQueryエクスポートについて正しい説明はどれですか？",
+            "options": [
+              "GA4 360（有料版）のみで利用できる機能である",
+              "無料で利用でき、生のイベントデータにSQLでアクセスできる",
+              "エクスポートできるのはセッション単位の集計データのみ",
+              "BigQueryへのエクスポートにはGTMの設定が必要"
+            ],
+            "correct": 1,
+            "explanation": "GA4のBigQueryエクスポートは無料プランでも利用できます。生のイベントデータにアクセスでき、SQLで柔軟な分析が可能です。UAと異なり360プランは不要です。"
+          },
+          {
+            "q": "BigQueryでGA4の全日付データをまとめて参照するときに使うテーブル名の書き方はどれですか？",
+            "options": [
+              "`project.dataset.events_all`",
+              "`project.dataset.events_%`",
+              "`project.dataset.events_*`",
+              "`project.dataset.events_?`"
+            ],
+            "correct": 2,
+            "explanation": "BigQueryでは `events_*` のようにアスタリスク(*)をワイルドカードとして使い、日付ごとに分割されたテーブルをまとめて参照できます。さらに `_TABLE_SUFFIX` で日付範囲を絞り込みます。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール6-1 完了！\n\nSQLとデータベースの基礎を理解しました。\n\n## 習得したスキル\n\n✅ **SQLとは何か**：データベースへの問い合わせ言語であることを説明できる\n✅ **データベース・テーブルの構造**：行と列で構成されることを理解した\n✅ **SQLの基本形**：SELECT・FROM・WHEREの3要素を把握した\n✅ **BigQueryとGA4の関係**：エクスポートされた生データをSQLで分析できることを理解した\n\n## なぜこれが重要か\n\nGA4管理画面では「用意されたレポート」しか見られません。しかしSQLを使えば、**自分が知りたい問いに直接答えるデータ**を引き出せます。これはマーケターとしての分析力を大きく高めます。\n\n## 次のステップ\n\n次のモジュール **「6-2: SELECT・FROMの基本」** では、実際にデータを取り出すための最も基本的な構文を手を動かして学びます。",
+        "diagram": false
+      }
+    }
+  ]
+}

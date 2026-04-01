@@ -1,0 +1,67 @@
+{
+  "id": "html--1-7",
+  "moduleId": "1-7",
+  "categoryId": "html",
+  "title": "ページソース表示とHTMLファイルの保存・開き方",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# ページソースを自分の目で確認する\n\n実務でHTMLを確認する場面は日常的にあります。GTMタグが正しく設置されているか、SEOメタタグが入っているか、競合サイトの構造はどうなっているか。\n\n## このモジュールで学ぶこと\n\n**1. Chromeでページソースを表示する方法**\nキーボードショートカットとメニューの両方を覚えます。\n\n**2. DevToolsのElementsパネルの使い方**\n特定の要素を素早く見つけるインスペクト機能を学びます。\n\n**3. HTMLファイルの保存と開き方**\n自分で書いたHTMLファイルをブラウザで確認する手順を覚えます。\n\nこれらは、マーケターが「HTMLが読めます」と言えるための最低限のスキルです。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# ページソース確認の3つの方法\n\n## 方法1: ページソース表示（Ctrl+U）\n\nブラウザでWebサイトを開いた状態で `Ctrl+U`（Mac: `Cmd+Option+U`）を押すと、そのページのHTMLソースコード全体が新しいタブに表示されます。\n\n```\n手順:\n1. 確認したいWebサイトをChromeで開く\n2. Ctrl+U を押す\n3. 新しいタブにHTMLソースが表示される\n4. Ctrl+F で検索（例: \"GTM-\" でGTMタグを検索）\n```\n\n### GTMタグの設置確認\n\nページソースで `Ctrl+F` → `GTM-` と検索すると、GTMコンテナIDが見つかります。\n\n```html\n<!-- 検索で見つかる箇所 -->\n<script>...('GTM-XXXXXXX');</script>\n```\n\n## 方法2: DevTools Elements パネル（F12）\n\n```\n手順:\n1. F12 を押す（または右クリック→「検証」）\n2. Elementsタブが表示される\n3. 左上の矢印アイコン（インスペクトモード）をクリック\n4. ページ上の要素をクリックすると、対応するHTMLが表示される\n```\n\n### Elementsパネルの利点\n\n| ページソース（Ctrl+U） | Elements パネル（F12） |\n|------------------------|----------------------|\n| 元のHTMLソースを表示 | 現在のDOM（JavaScript実行後）を表示 |\n| 静的な表示 | リアルタイムで編集可能 |\n| GTMの元コード確認に便利 | ABテスト要素の特定に便利 |\n\n## 方法3: 右クリック → 「検証」\n\n特定の要素を直接確認したいとき、その要素の上で右クリック→「検証」を選ぶと、DevToolsがその要素にフォーカスした状態で開きます。\n\n## HTMLファイルの保存と開き方\n\n### テキストエディタでHTMLを書く\n\n```\n手順:\n1. メモ帳やVS Codeを開く\n2. HTMLコードを書く\n3. 「名前を付けて保存」→ ファイル名を「test.html」にする\n4. 文字コードを「UTF-8」に設定して保存\n```\n\n### ブラウザで開く\n\n```\n手順:\n1. 保存した .html ファイルをダブルクリック\n2. または、Chromeにファイルをドラッグ＆ドロップ\n3. ブラウザにHTMLが表示される\n```\n\n### VS Codeのおすすめ拡張機能\n\n- **Live Server** — 保存するたびにブラウザが自動リロード\n- **HTML CSS Support** — コード補完が効く\n- **Prettier** — コードを自動整形",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: GTMタグの設置を確認できるHTMLを作る\n\nあなたはGTMの設置確認をするために、テスト用のHTMLページを作成します。GTMスニペットの正しい設置位置を練習しましょう。\n\n## 課題\n\n1. GTMのscriptタグを `<head>` 内に配置する（コンテナIDは `GTM-TEST123`）\n2. GTMのnoscriptタグを `<body>` 直後に配置する\n3. ページ内容として確認用のテキストを表示する",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>GTM設置テスト</title>\n\n  <!-- ① GTMのscriptタグをここに追加 -->\n  \n</head>\n<body>\n\n  <!-- ② GTMのnoscriptタグをここに追加 -->\n  \n\n  <h1>GTM設置確認ページ</h1>\n  <p>このページでGTMの設置位置を確認します。</p>\n  <p>Ctrl+U でページソースを表示して、GTM-TEST123 を検索してみましょう。</p>\n\n  <h2>確認ポイント</h2>\n  <ul>\n    <li>scriptタグは head 内にあるか？</li>\n    <li>noscriptタグは body 直後にあるか？</li>\n    <li>コンテナIDは正しいか？</li>\n  </ul>\n\n</body>\n</html>",
+        "hints": [
+          "GTMのscriptタグは <script>(function(w,d,s,l,i){w[l]=w[l]||[];})(window,document,'script','dataLayer','GTM-TEST123');</script> のように書きます。",
+          "noscriptタグは <noscript><iframe src=\"https://www.googletagmanager.com/ns.html?id=GTM-TEST123\" height=\"0\" width=\"0\" style=\"display:none;visibility:hidden\"></iframe></noscript> です。",
+          "scriptは <head> 内、noscriptは <body> の開始タグ直後に配置するのがGoogleの推奨位置です。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>GTM設置テスト</title>\n\n  <!-- Google Tag Manager -->\n  <script>(function(w,d,s,l,i){w[l]=w[l]||[];})(window,document,'script','dataLayer','GTM-TEST123');</script>\n  <!-- End Google Tag Manager -->\n\n</head>\n<body>\n\n  <!-- Google Tag Manager (noscript) -->\n  <noscript><iframe src=\"https://www.googletagmanager.com/ns.html?id=GTM-TEST123\" height=\"0\" width=\"0\" style=\"display:none;visibility:hidden\"></iframe></noscript>\n  <!-- End Google Tag Manager (noscript) -->\n\n  <h1>GTM設置確認ページ</h1>\n  <p>このページでGTMの設置位置を確認します。</p>\n  <p>Ctrl+U でページソースを表示して、GTM-TEST123 を検索してみましょう。</p>\n\n  <h2>確認ポイント</h2>\n  <ul>\n    <li>scriptタグは head 内にあるか？</li>\n    <li>noscriptタグは body 直後にあるか？</li>\n    <li>コンテナIDは正しいか？</li>\n  </ul>\n\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "ChromeでWebページのHTMLソースコードを表示するショートカットキーはどれですか？",
+            "options": ["Ctrl+S", "Ctrl+U", "Ctrl+P", "Ctrl+H"],
+            "correct": 1,
+            "explanation": "Ctrl+U でページのHTMLソースコードが新しいタブに表示されます。ここからCtrl+Fで検索して、GTMタグの設置やSEOメタタグの確認ができます。"
+          },
+          {
+            "q": "DevToolsのElementsパネルとページソース表示（Ctrl+U）の最大の違いは何ですか？",
+            "options": ["表示される文字の大きさ", "Elementsは JavaScript実行後のDOM、Ctrl+Uは元のHTMLソースを表示する", "Elementsは有料ツール", "Ctrl+Uの方が高機能"],
+            "correct": 1,
+            "explanation": "Ctrl+Uはサーバーから受け取った元のHTMLソースを表示します。一方、ElementsパネルはJavaScriptが実行された後の現在のDOMを表示します。GTMなどのJSで動的に追加された要素はElementsパネルで確認できます。"
+          },
+          {
+            "q": "HTMLファイルをブラウザで表示する方法として正しいものはどれですか？",
+            "options": ["HTMLファイルをExcelで開く", "HTMLファイルをダブルクリックする、またはブラウザにドラッグ＆ドロップする", "HTMLファイルを印刷する", "HTMLファイルをZIPに圧縮する"],
+            "correct": 1,
+            "explanation": ".htmlファイルをダブルクリックするとデフォルトのブラウザで開かれます。また、ブラウザのウィンドウにファイルをドラッグ＆ドロップしても表示できます。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール1-7 完了！\n\nページソースの確認方法とHTMLファイルの基本操作を習得しました。\n\n## 習得したスキル\n\n✅ **Ctrl+U** でページソースを表示できる\n✅ **F12（DevTools）** でElementsパネルを使って要素を特定できる\n✅ **右クリック→検証** で特定要素を直接確認できる\n✅ **HTMLファイルの保存**（UTF-8で.html拡張子）と**ブラウザでの表示**ができる\n✅ **GTMタグの設置確認**をページソースから行える\n\n## 次のステップ\n\n次のモジュール **「1-8: コメント記法とデバッグ時の活用」** では、HTMLコメント `<!-- -->` を使ってコードの説明やデバッグを行う方法を学びます。\n\n> 💡 **実務チャレンジ**: 今日からWebサイトを見るときに、右クリック→「検証」でHTMLを確認する習慣をつけましょう。競合サイトのCTAボタンのclass名を確認してみるのも面白いですよ。",
+        "diagram": false
+      }
+    }
+  ]
+}

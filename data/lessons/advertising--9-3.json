@@ -1,0 +1,72 @@
+{
+  "id": "advertising--9-3",
+  "moduleId": "9-3",
+  "categoryId": "advertising",
+  "title": "RTB：リアルタイム入札でどう広告が表示されるか",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 100ミリ秒の世界で起きていること\n\nあなたがWebページを開いた瞬間、広告枠をめぐって**数十社の広告主が入札オークションを実施し、落札した広告が表示される**。この全プロセスが100ミリ秒（0.1秒）以内に完了しています。\n\nこれが**RTB（Real-Time Bidding：リアルタイム入札）**です。\n\n## なぜRTBが革命的だったか\n\nRTB以前は「メディアの広告枠を一括買い付け」が主流でした。例えば「読売オンラインのトップバナー枠を1ヶ月100万円で購入」というやり方です。\n\nRTBにより**1インプレッション（1回の広告表示）ごとに入札**できるようになり：\n\n- 価値の高いユーザーには高く入札、低いユーザーには安く入札が可能に\n- 広告費の無駄が激減\n- 小予算でも大手メディアへの出稿が可能に\n\n> **実感を持つ問い**: あなたが1000人のサイト訪問者に広告を出す場合、「購入検討中の100人」と「偶然来た900人」に同じ金額を払うのは非効率です。RTBはこの問題を解決しました。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# RTBの詳細プロセス\n\n## RTBオークションのステップバイステップ\n\n```\n【ユーザーがページを開いた瞬間から約100ms以内】\n\n Step 1: ページ読み込み開始\n   ↓ パブリッシャーのサイトにアクセス\n\n Step 2: SSPへ入札リクエスト送信 (約10ms)\n   ↓ 「この広告枠に入札しますか？」\n   ↓ 送付情報: URLコンテキスト、Cookie/ユーザーID、\n              広告枠サイズ、フロアプライス\n\n Step 3: Ad Exchange経由でDSPへ配信 (約20ms)\n   ↓ 複数のDSPに同時に入札依頼\n\n Step 4: DSPがDMPと照合・入札額決定 (約50ms)\n   ↓ 「このユーザーはターゲットに合致するか？」\n   ↓ 「いくら入札すべきか？」\n\n Step 5: 入札額をAd Exchangeへ返信 (約70ms)\n   ↓ 各DSPが入札額を送信\n\n Step 6: 落札者決定・広告配信 (約100ms)\n   ↓ 最高入札額のDSPが落札\n   ↓ 広告クリエイティブをユーザーブラウザへ送信\n\n Step 7: 広告表示\n   → ユーザーには「ページが読み込まれた」だけに見える\n```\n\n## セカンドプライスオークション\n\nRTBの多くは**セカンドプライスオークション**方式です。\n\n```\n入札結果例:\n  DSP-A: ¥500\n  DSP-B: ¥430  \n  DSP-C: ¥380\n  DSP-D: ¥290\n\n落札者: DSP-A（最高額）\n実際の支払い: ¥431（2位の金額 + ¥1）\n\n→ DSP-Aは¥500で入札したが、¥431しか払わない\n→ 各DSPは「本当に支払えるギリギリ」を正直に入札できる\n```\n\n## プライベートマーケットプレイス（PMP）\n\nオープンなRTB以外に、特定の広告主とメディアが限定取引する**PMP（Private Marketplace）**もあります。\n\n| 取引形態 | 特徴 | 向いているケース |\n|---------|------|------------------|\n| Open RTB | 不特定多数が参加 | 量を重視、コスト効率を優先 |\n| PMP | 招待制・限定入札 | プレミアムメディア、ブランドセーフティ重視 |\n| Direct Deal | 1対1の固定取引 | 大型スポンサーシップ、確実な露出確保 |",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: RTBオークションシミュレーター\n\nRTBオークションの仕組みを理解するため、簡単なオークションシミュレーターを実装します。\n\n## 課題\n\n以下のJavaScriptを完成させてください。\n\n1. `runAuction()` 関数で各DSPの入札額を集計する\n2. 最高入札額のDSPを落札者として選ぶ\n3. セカンドプライス方式で実際の支払い額を計算する（2位の入札額 + 1円）",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>RTBオークションシミュレーター</title>\n  <style>\n    body { font-family: monospace; background: #0f172a; color: #e2e8f0; padding: 20px; }\n    h1 { color: #60a5fa; font-size: 18px; }\n    .bid-list { background: #1e293b; padding: 16px; border-radius: 8px; margin: 12px 0; }\n    .bid-item { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid #334155; }\n    .winner { color: #34d399; font-weight: bold; }\n    .result { background: #1e293b; padding: 16px; border-radius: 8px; margin-top: 12px; }\n    button { background: #3b82f6; color: white; border: none; padding: 10px 24px; border-radius: 6px; cursor: pointer; margin-top: 12px; }\n  </style>\n</head>\n<body>\n  <h1>RTBオークションシミュレーター</h1>\n  <p>ページロード時に100ms以内で実行されるオークションを再現します。</p>\n\n  <div class=\"bid-list\" id=\"bidList\">\n    <div style=\"color:#94a3b8; font-size:13px;\">「オークション実行」を押してください</div>\n  </div>\n\n  <button onclick=\"runAuction()\">オークション実行</button>\n\n  <div class=\"result\" id=\"result\" style=\"display:none;\"></div>\n\n  <script>\n    const dsps = [\n      { name: 'DSP-A（Google DV360）', baseBid: 400 },\n      { name: 'DSP-B（The Trade Desk）', baseBid: 350 },\n      { name: 'DSP-C（Amazon DSP）', baseBid: 480 },\n      { name: 'DSP-D（Xandr）', baseBid: 290 },\n    ];\n\n    function runAuction() {\n      // 各DSPにランダムな変動を加えた入札額を生成\n      const bids = dsps.map(dsp => ({\n        name: dsp.name,\n        bid: dsp.baseBid + Math.floor(Math.random() * 100) - 50\n      }));\n\n      // ここにオークションロジックを実装してください\n      // 1. bidsを入札額の降順でソート\n      // 2. 落札者 = bids[0]（最高額）\n      // 3. 実際の支払い = bids[1].bid + 1（セカンドプライス）\n\n      const winner = null;          // 落札者を入れてください\n      const actualPrice = null;     // 実際の支払い額を入れてください\n\n      // 結果を表示（変更不要）\n      displayResult(bids, winner, actualPrice);\n    }\n\n    function displayResult(bids, winner, actualPrice) {\n      const bidList = document.getElementById('bidList');\n      bidList.innerHTML = bids.map(b =>\n        `<div class=\"bid-item ${b === winner ? 'winner' : ''}\">\n          <span>${b.name}</span>\n          <span>¥${b.bid}${b === winner ? ' ← 落札' : ''}</span>\n        </div>`\n      ).join('');\n\n      const resultEl = document.getElementById('result');\n      resultEl.style.display = 'block';\n      resultEl.innerHTML = winner\n        ? `<div>落札者: <span style=\"color:#34d399\">${winner.name}</span></div>\n           <div>入札額: ¥${winner.bid} / 実際の支払い: <span style=\"color:#fbbf24\">¥${actualPrice}</span>（セカンドプライス）</div>`\n        : '<div style=\"color:#f87171\">winner と actualPrice を正しく設定してください</div>';\n    }\n  </script>\n</body>\n</html>",
+        "hints": [
+          "bids.sort((a, b) => b.bid - a.bid) で入札額の降順にソートできます。",
+          "ソート後、bids[0] が最高入札額（落札者）です。",
+          "セカンドプライスは bids[1].bid + 1 で計算できます。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>RTBオークションシミュレーター</title>\n  <style>\n    body { font-family: monospace; background: #0f172a; color: #e2e8f0; padding: 20px; }\n    h1 { color: #60a5fa; font-size: 18px; }\n    .bid-list { background: #1e293b; padding: 16px; border-radius: 8px; margin: 12px 0; }\n    .bid-item { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid #334155; }\n    .winner { color: #34d399; font-weight: bold; }\n    .result { background: #1e293b; padding: 16px; border-radius: 8px; margin-top: 12px; }\n    button { background: #3b82f6; color: white; border: none; padding: 10px 24px; border-radius: 6px; cursor: pointer; margin-top: 12px; }\n  </style>\n</head>\n<body>\n  <h1>RTBオークションシミュレーター</h1>\n  <p>ページロード時に100ms以内で実行されるオークションを再現します。</p>\n  <div class=\"bid-list\" id=\"bidList\">\n    <div style=\"color:#94a3b8; font-size:13px;\">「オークション実行」を押してください</div>\n  </div>\n  <button onclick=\"runAuction()\">オークション実行</button>\n  <div class=\"result\" id=\"result\" style=\"display:none;\"></div>\n  <script>\n    const dsps = [\n      { name: 'DSP-A（Google DV360）', baseBid: 400 },\n      { name: 'DSP-B（The Trade Desk）', baseBid: 350 },\n      { name: 'DSP-C（Amazon DSP）', baseBid: 480 },\n      { name: 'DSP-D（Xandr）', baseBid: 290 },\n    ];\n    function runAuction() {\n      const bids = dsps.map(dsp => ({\n        name: dsp.name,\n        bid: dsp.baseBid + Math.floor(Math.random() * 100) - 50\n      }));\n      bids.sort((a, b) => b.bid - a.bid);\n      const winner = bids[0];\n      const actualPrice = bids[1].bid + 1;\n      displayResult(bids, winner, actualPrice);\n    }\n    function displayResult(bids, winner, actualPrice) {\n      const bidList = document.getElementById('bidList');\n      bidList.innerHTML = bids.map(b =>\n        `<div class=\"bid-item ${b === winner ? 'winner' : ''}\">\n          <span>${b.name}</span>\n          <span>¥${b.bid}${b === winner ? ' ← 落札' : ''}</span>\n        </div>`\n      ).join('');\n      const resultEl = document.getElementById('result');\n      resultEl.style.display = 'block';\n      resultEl.innerHTML = `<div>落札者: <span style=\"color:#34d399\">${winner.name}</span></div>\n         <div>入札額: ¥${winner.bid} / 実際の支払い: <span style=\"color:#fbbf24\">¥${actualPrice}</span>（セカンドプライス）</div>`;\n    }\n  </script>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "RTBオークションが完了するまでの標準的な時間はどれくらいですか？",
+            "options": ["約1秒", "約500ミリ秒", "約100ミリ秒", "約10ミリ秒"],
+            "correct": 2,
+            "explanation": "RTBオークションは約100ミリ秒（0.1秒）以内に完了します。この短時間でSSPへの入札リクエスト送信、複数DSPによる入札、落札者決定、広告配信まで行われます。"
+          },
+          {
+            "q": "セカンドプライスオークションで、DSP-Aが¥600、DSP-Bが¥450で入札した場合、落札者が実際に支払う金額はいくらですか？",
+            "options": ["¥600", "¥451", "¥525（平均）", "¥450"],
+            "correct": 1,
+            "explanation": "セカンドプライスオークションでは、落札者は「2番目の入札額 + 1円」を支払います。DSP-Aが落札し、支払いは¥450 + ¥1 = ¥451です。これにより各入札者は正直に自分の上限額を入札できます。"
+          },
+          {
+            "q": "PMP（プライベートマーケットプレイス）の特徴として正しいものはどれですか？",
+            "options": [
+              "誰でも参加できるオープンなオークション",
+              "招待制で特定の広告主とメディアが限定取引する",
+              "入札なしで固定価格で売買される",
+              "Googleだけが運営できる特別な取引形態"
+            ],
+            "correct": 1,
+            "explanation": "PMP（プライベートマーケットプレイス）は招待制の限定オークションです。プレミアムメディアが選定した広告主のみが参加でき、ブランドセーフティの確保や高品質な広告枠へのアクセスが目的です。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール9-3 完了！\n\nRTBの仕組みとプログラマティック広告の全プロセスを習得しました。\n\n## 習得したスキル\n\n✅ **RTBの100ms以内のフロー**を7ステップで説明できる\n✅ **セカンドプライスオークション**の計算方法を理解した\n✅ **Open RTB・PMP・Direct Deal**の違いと使い分けを説明できる\n✅ JavaScriptでオークションロジックを実装できた\n\n## 次のステップ\n\n次のモジュール **「9-4: CPC・CPM・CPA・ROASの指標の意味と使い分け」** では、広告効果を測定するための核心指標とその使い方を学びます。\n\n> **実務チャレンジ**: Google広告の管理画面を開き「表示回数」「クリック数」「費用」の数値を確認してください。この1インプレッションごとに入札が発生しているとイメージすると、数値の意味が変わって見えます。",
+        "diagram": false
+      }
+    }
+  ]
+}

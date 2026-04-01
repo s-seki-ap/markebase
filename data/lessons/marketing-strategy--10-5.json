@@ -1,0 +1,82 @@
+{
+  "id": "marketing-strategy--10-5",
+  "moduleId": "10-5",
+  "categoryId": "marketing-strategy",
+  "title": "SWOT分析：強み弱み機会脅威の整理",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# SWOT分析：現状を4つの象限で整理する\n\n戦略立案の現場で最も使われるフレームワークの一つが **SWOT分析** です。どんな規模の企業でも、どんな場面でも活用できるシンプルかつ強力なツールです。\n\n## SWOTとは\n\n- **S（Strength）強み**: 自社の内部にある競争優位の源泉\n- **W（Weakness）弱み**: 自社の内部にある改善が必要な点\n- **O（Opportunity）機会**: 外部環境にある自社にとってのチャンス\n- **T（Threat）脅威**: 外部環境にある自社にとってのリスク\n\n## 内部環境と外部環境\n\n```\n内部環境（自社でコントロール可能）\n├── Strength（強み）\n└── Weakness（弱み）\n\n外部環境（自社でコントロール不可）\n├── Opportunity（機会）\n└── Threat（脅威）\n```\n\n**ポイント**: SWOTは「列挙」で終わっては意味がありません。重要なのは4つの組み合わせから「戦略オプション」を導く**クロスSWOT分析**です。\n\n**あなたへの問い**: 自社の「強み」を3つ即座に言えますか？",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# SWOT分析の実践とクロスSWOT\n\n## 良いSWOT分析の条件\n\n| NG例 | OK例 |\n|------|------|\n| 「品質が高い」（抽象的） | 「不良品率0.1%以下、業界平均の1/5」（具体的・比較あり） |\n| 「競合が多い」（当たり前） | 「低価格帯参入が増え、粗利率が前年比-5%」（影響が明確） |\n| 「市場が成長している」（主観） | 「国内市場規模5年間でCAGR12%成長（出典:○○調査）」（根拠あり） |\n\n## クロスSWOT分析（4つの戦略オプション）\n\nSWOTを組み合わせることで4つの戦略方向が生まれます：\n\n```\n         強み（S）              弱み（W）\n機会  ┌─────────────────┬──────────────────┐\n（O） │ SO戦略（積極攻勢） │ WO戦略（改善・克服） │\n     │ 強みで機会を最大化 │ 弱みを補って機会を得る│\n     ├─────────────────┼──────────────────┤\n脅威  │ ST戦略（差別化維持）│ WT戦略（撤退・縮小） │\n（T） │ 強みで脅威を回避   │ 弱みと脅威の最小化 │\n     └─────────────────┴──────────────────┘\n```\n\n### 4戦略の詳細\n\n**SO戦略（Strength × Opportunity）**: 最も積極的な戦略。自社の強みを活かして市場機会を最大限に取り込む。\n\n**WO戦略（Weakness × Opportunity）**: 弱みを改善・補完することで機会を獲得する。M&A・提携が選択肢。\n\n**ST戦略（Strength × Threat）**: 強みで脅威を跳ね返す。ブランド力・技術力で競合の追撃を防ぐ。\n\n**WT戦略（Weakness × Threat）**: 最も守りの戦略。撤退・縮小・リストラクチャリングを検討。\n\n## SWOT分析の落とし穴\n\n1. **強みと弱みが内部要因に限定されていない**（外部要因は機会・脅威に入れる）\n2. **ポジティブ思考バイアス**（強みを多く、弱みを少なく書きすぎる）\n3. **列挙で終わる**（クロスSWOTまで必ず実施する）",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: SWOT分析 + クロスSWOT戦略シートを作成する\n\n想定する企業・サービスについて、SWOT分析とクロスSWOT戦略を整理してください。\n\n## 課題\n\n以下のHTMLテンプレートを完成させ、4象限のSWOTシートとクロスSWOT戦略を記述してください。",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>SWOT分析シート</title>\n  <style>\n    body { font-family: sans-serif; max-width: 820px; margin: 40px auto; padding: 20px; }\n    .swot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 2px solid #e2e8f0; border-radius: 8px; overflow: hidden; }\n    .cell { padding: 20px; }\n    textarea { width: 100%; height: 100px; padding: 8px; border: 1px solid #e2e8f0; border-radius: 4px; resize: vertical; }\n  </style>\n</head>\n<body>\n  <h1>SWOT分析シート</h1>\n  <p>分析対象: <input type=\"text\" placeholder=\"企業・サービス名\" style=\"padding:4px 8px; border:1px solid #ccc; border-radius:4px; width:260px;\"/></p>\n\n  <!-- SWOTグリッド（4象限）をここに作成 -->\n\n  <!-- クロスSWOT戦略（4戦略）をここに追加 -->\n\n</body>\n</html>",
+        "hints": [
+          "SWOTグリッドは2×2のgridで作成します。S（強み）=緑、W（弱み）=赤、O（機会）=青、T（脅威）=オレンジで色分けすると見やすくなります。",
+          "各セルの見出しには「内部環境」「外部環境」のラベルと「プラス要因」「マイナス要因」のラベルを軸として表示しましょう。",
+          "クロスSWOT戦略は4つのカードを並べて、それぞれSO・WO・ST・WT戦略を記述します。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>SWOT分析シート</title>\n  <style>\n    body { font-family: sans-serif; max-width: 820px; margin: 40px auto; padding: 20px; background: #f8fafc; }\n    h1, h2 { color: #1e293b; }\n    .axis-labels { display: grid; grid-template-columns: 80px 1fr 1fr; gap: 0; margin-bottom: 0; }\n    .axis-label { text-align: center; font-size: 0.8rem; font-weight: bold; color: #64748b; padding: 4px; }\n    .swot-row { display: grid; grid-template-columns: 80px 1fr 1fr; gap: 0; }\n    .row-label { display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold; color: #64748b; writing-mode: vertical-rl; text-align: center; }\n    .cell { padding: 16px; border: 1px solid #e2e8f0; background: white; }\n    .cell h3 { margin-top: 0; font-size: 0.95rem; }\n    .s { border-top: 3px solid #10b981; }\n    .s h3 { color: #10b981; }\n    .w { border-top: 3px solid #ef4444; }\n    .w h3 { color: #ef4444; }\n    .o { border-top: 3px solid #3b82f6; }\n    .o h3 { color: #3b82f6; }\n    .t { border-top: 3px solid #f59e0b; }\n    .t h3 { color: #f59e0b; }\n    textarea { width: 100%; height: 100px; padding: 8px; border: 1px solid #e2e8f0; border-radius: 4px; resize: vertical; font-size: 0.85rem; }\n    .cross-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 24px; }\n    .cross-card { background: white; border-radius: 8px; padding: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }\n    .cross-card h3 { margin-top: 0; font-size: 0.95rem; }\n    .so h3 { color: #10b981; }\n    .wo h3 { color: #3b82f6; }\n    .st h3 { color: #f59e0b; }\n    .wt h3 { color: #ef4444; }\n  </style>\n</head>\n<body>\n  <h1>SWOT分析シート</h1>\n  <p>分析対象: <input type=\"text\" value=\"デジタルマーケ支援サービス会社A\" style=\"padding:4px 8px; border:1px solid #ccc; border-radius:4px; width:280px;\"/></p>\n\n  <div class=\"axis-labels\">\n    <div></div>\n    <div class=\"axis-label\">プラス要因</div>\n    <div class=\"axis-label\">マイナス要因</div>\n  </div>\n\n  <div class=\"swot-row\">\n    <div class=\"row-label\">内部環境</div>\n    <div class=\"cell s\">\n      <h3>S: 強み（Strength）</h3>\n      <textarea>・GA4/BigQueryを活用したデータ分析力\n・業種特化のコンテンツ制作力\n・担当者固定の丁寧なサポート体制\n・小回りが効く意思決定スピード</textarea>\n    </div>\n    <div class=\"cell w\">\n      <h3>W: 弱み（Weakness）</h3>\n      <textarea>・ブランド認知度が低い（創業3年）\n・営業専任人材がいない\n・対応可能クライアント数に上限がある\n・大手との価格競争になると不利</textarea>\n    </div>\n  </div>\n\n  <div class=\"swot-row\">\n    <div class=\"row-label\">外部環境</div>\n    <div class=\"cell o\">\n      <h3>O: 機会（Opportunity）</h3>\n      <textarea>・中小企業のDX化加速（補助金制度あり）\n・SNSマーケの重要性が高まりアウトソース需要増\n・GA4移行でデータ活用に困る企業が急増\n・リモート化で地方企業も対象になった</textarea>\n    </div>\n    <div class=\"cell t\">\n      <h3>T: 脅威（Threat）</h3>\n      <textarea>・AIツールの普及でSNS投稿が自動化される可能性\n・フリーランス増加による低価格競争\n・大手広告代理店の中小企業市場参入\n・景気悪化による中小企業の広告予算削減</textarea>\n    </div>\n  </div>\n\n  <h2 style=\"margin-top:32px;\">クロスSWOT戦略</h2>\n  <div class=\"cross-grid\">\n    <div class=\"cross-card so\">\n      <h3>SO戦略（積極攻勢）強み × 機会</h3>\n      <textarea style=\"height:80px;\">GA4移行対応に悩む中小企業に対して、データ分析力を前面に出した「GA4活用支援パッケージ」を補助金活用と組み合わせて提案。DX化需要の波に乗る。</textarea>\n    </div>\n    <div class=\"cross-card wo\">\n      <h3>WO戦略（改善・克服）弱み × 機会</h3>\n      <textarea style=\"height:80px;\">認知度の低さを補うため、SNSマーケが重要化している機会を活かして自社情報発信を強化。実績事例の積極的な公開でブランド構築を加速する。</textarea>\n    </div>\n    <div class=\"cross-card st\">\n      <h3>ST戦略（差別化維持）強み × 脅威</h3>\n      <textarea style=\"height:80px;\">AIツール台頭に対し「データ分析+人的な戦略提案」を強みとして、AIでは代替できない高付加価値サービスへシフト。単純作業自動化でコスト構造改善。</textarea>\n    </div>\n    <div class=\"cross-card wt\">\n      <h3>WT戦略（最小化）弱み × 脅威</h3>\n      <textarea style=\"height:80px;\">景気悪化リスクに備え、長期契約比率を高めて収益安定化。対応クライアント数の上限は標準化・テンプレート化で解消し、スケーラビリティを確保する。</textarea>\n    </div>\n  </div>\n\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "SWOT分析において「外部環境のマイナス要因」に該当するのはどれですか？",
+            "options": [
+              "Strength（強み）",
+              "Weakness（弱み）",
+              "Opportunity（機会）",
+              "Threat（脅威）"
+            ],
+            "correct": 3,
+            "explanation": "Threat（脅威）は外部環境のマイナス要因です。競合の参入・市場縮小・規制強化など、自社ではコントロールできない外部のリスクを指します。"
+          },
+          {
+            "q": "クロスSWOT分析の「WO戦略」の説明として正しいのはどれですか？",
+            "options": [
+              "自社の強みを使って外部の脅威を回避する戦略",
+              "自社の弱みを改善・補完して外部の機会を獲得する戦略",
+              "自社の強みを最大化して市場機会を取り込む積極的な戦略",
+              "弱みと脅威を最小化する守りの戦略"
+            ],
+            "correct": 1,
+            "explanation": "WO戦略（Weakness × Opportunity）は「弱みを改善・補完することで、外部にある機会を獲得する戦略」です。M&A・提携・外部リソース活用などが選択肢として挙がります。"
+          },
+          {
+            "q": "SWOT分析の落とし穴として正しくないものはどれですか？",
+            "options": [
+              "強みと弱みに外部要因を混在させる",
+              "クロスSWOTまで実施せずに列挙で終わる",
+              "強みを多く・弱みを少なく書くポジティブバイアス",
+              "機会と脅威を定量データで裏付ける"
+            ],
+            "correct": 3,
+            "explanation": "機会と脅威を定量データで裏付けることは「良いSWOT分析の条件」であり落とし穴ではありません。落とし穴は「内部・外部の混在」「列挙で終わる」「ポジティブバイアス」の3つです。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール10-5 完了！\n\nSWOT分析とクロスSWOT戦略の実践方法を習得しました。\n\n## 習得したスキル\n\n✅ **SWOT4象限**（強み・弱み・機会・脅威）を正確に分類できる\n✅ **内部環境と外部環境**の違いを理解した\n✅ **クロスSWOT分析**でSO・WO・ST・WT戦略を導ける\n✅ **良いSWOT分析の条件**（具体的・比較あり・根拠あり）を実践できる\n\n## なぜこれが重要か\n\nSWOTは「現状整理ツール」として使われがちですが、真の価値はクロスSWOTで「戦略オプションを生成する」ことにあります。分析を戦略に昇華させて初めてSWOTは機能します。\n\n## 次のステップ\n\n次のモジュール **「10-6: PEST分析：マクロ環境のスキャニング」** では、SWOTの「機会・脅威」をより深く分析するためのマクロ環境フレームワークを学びます。",
+        "diagram": false
+      }
+    }
+  ]
+}

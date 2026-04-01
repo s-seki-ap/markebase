@@ -1,0 +1,67 @@
+{
+  "id": "html--1-20",
+  "moduleId": "1-20",
+  "categoryId": "html",
+  "title": "span タグとクラス付与によるGTMターゲット設計",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# spanタグとdata属性でGTMのイベント計測を設計する\n\nGTMでクリックイベントを取得するとき、ターゲット要素を正確に特定する必要があります。`<span>` タグにクラスやdata属性を付けることで、GTMのCSSセレクタやカスタムJavaScript変数で簡単にイベントを取得できるようになります。\n\n## マーケターが知るべき理由\n\n**1. クリックイベントの正確な計測**\nLP上の特定のテキストやボタンのクリックを計測するには、HTML側にGTMが認識できるマーカーが必要です。\n\n**2. data属性によるイベントパラメータの受け渡し**\n`data-*` 属性を使えば、GTMに「どのボタンが」「どの商品の」クリックかという情報を渡せます。\n\n**3. エンジニアとの協業**\nマーケターが計測設計を理解していれば、「このボタンに `data-event=\"cta_click\"` を追加してください」と正確に依頼できます。\n\nこのモジュールでは、spanタグとdata属性を使ったGTMターゲット設計を学びます。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# spanタグとdata属性によるGTM連携\n\n## spanタグの復習\n\n```html\n<p>今なら <span class=\"highlight\">送料無料</span> でお届けします。</p>\n```\n\n- インライン要素（テキストの一部を囲む）\n- 意味を持たない汎用コンテナ\n- クラスやIDを付けてCSSやJavaScriptのターゲットにする\n\n## data属性（data-*）とは\n\nHTML5で追加されたカスタム属性です。`data-` から始まる任意の属性名を作れます。\n\n```html\n<button \n  class=\"cta-btn\"\n  data-event=\"cta_click\"\n  data-category=\"signup\"\n  data-label=\"hero_section\"\n>\n  今すぐ登録\n</button>\n```\n\n- `data-event` — GTMで取得するイベント名\n- `data-category` — イベントのカテゴリ\n- `data-label` — イベントのラベル（どの位置のボタンか）\n\n## GTMでのdata属性の取得方法\n\n### 1. クリック要素の属性を取得する変数\n\nGTMの「カスタムJavaScript変数」で data 属性の値を取得できます。\n\n```javascript\n// GTMカスタムJavaScript変数の例\nfunction() {\n  var el = {{Click Element}};\n  return el.getAttribute('data-event') || '';\n}\n```\n\n### 2. CSSセレクタでトリガーを設定\n\nGTMのクリックトリガーで、CSSセレクタを使って特定の要素のクリックだけを検出します。\n\n```\nトリガー条件: Click Element matches CSS selector\nセレクタ: [data-event=\"cta_click\"]\n```\n\n## 実装パターン\n\n### パターン1: CTAボタンの計測\n\n```html\n<a href=\"/signup\" \n   class=\"cta-btn\" \n   data-event=\"cta_click\" \n   data-location=\"hero\">\n  無料で始める\n</a>\n\n<a href=\"/signup\" \n   class=\"cta-btn\" \n   data-event=\"cta_click\" \n   data-location=\"footer\">\n  今すぐ登録\n</a>\n```\n\n同じCTAでも `data-location` で**どの位置のボタンがクリックされたか**を区別できます。\n\n### パターン2: 商品カードのクリック計測\n\n```html\n<div class=\"product-card\" \n     data-event=\"product_click\" \n     data-product-id=\"SKU-001\" \n     data-product-name=\"ナチュラルクリーム\"\n     data-price=\"2980\">\n  <h3>ナチュラルクリーム</h3>\n  <p>&yen;2,980</p>\n  <span class=\"badge\" data-event=\"badge_click\">人気No.1</span>\n</div>\n```\n\n### パターン3: spanでテキスト内の特定部分を計測\n\n```html\n<p>\n  詳しくは\n  <span class=\"track-link\" \n        data-event=\"inline_link_click\" \n        data-destination=\"faq\">\n    よくある質問\n  </span>\n  をご覧ください。\n</p>\n```\n\n## data属性の命名規則\n\n| 属性名 | 用途 | 例 |\n|--------|------|----|\n| `data-event` | GTMイベント名 | `cta_click`, `product_view` |\n| `data-category` | イベントカテゴリ | `signup`, `purchase` |\n| `data-label` | イベントラベル | `hero_cta`, `sidebar_cta` |\n| `data-location` | ページ内の位置 | `hero`, `footer`, `sidebar` |\n| `data-product-id` | 商品ID | `SKU-001` |\n| `data-product-name` | 商品名 | `ナチュラルクリーム` |\n| `data-price` | 価格 | `2980` |\n\n## GTM設定の全体像\n\n```\n[HTML]\ndata-event=\"cta_click\"\ndata-location=\"hero\"\n        ↓\n[GTMトリガー]\nCSSセレクタ: [data-event=\"cta_click\"]\n        ↓\n[GTM変数]\nClick Element の data-location 属性を取得\n        ↓\n[GTMタグ]\nGA4イベント: cta_click\nパラメータ: location = hero\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: GTMターゲット設計を実装する\n\nLPのCTAボタンと商品カードにdata属性を追加して、GTMでイベント計測できるようにしてください。\n\n## 課題\n\n1. ヒーローセクションのCTAボタンに `data-event` と `data-location` を追加する\n2. 商品カードに `data-event`、`data-product-id`、`data-product-name` を追加する\n3. フッターのCTAボタンにも同じ `data-event` で異なる `data-location` を設定する\n4. テキスト内のリンクテキストを `<span>` で囲んで `data-event` を追加する",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>商品LP</title>\n  <style>\n    body { font-family: sans-serif; margin: 0; }\n    section { padding: 40px 20px; max-width: 800px; margin: 0 auto; }\n    .cta-btn { display: inline-block; background: #10b981; color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; font-size: 1.1em; }\n    .product-card { border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; margin: 10px 0; cursor: pointer; }\n    .track-link { color: #3b82f6; text-decoration: underline; cursor: pointer; }\n  </style>\n</head>\n<body>\n\n  <!-- ヒーローセクション -->\n  <section class=\"hero\">\n    <h1>ナチュラルスキンケアシリーズ</h1>\n    <p>自然の力で、あなたの肌を美しく。</p>\n    <!-- ① data-event=\"cta_click\" と data-location=\"hero\" を追加 -->\n    <a href=\"/signup\" class=\"cta-btn\">無料サンプルを申し込む</a>\n  </section>\n\n  <!-- 商品セクション -->\n  <section class=\"products\">\n    <h2>おすすめ商品</h2>\n    <!-- ② data-event, data-product-id, data-product-name を追加 -->\n    <div class=\"product-card\">\n      <h3>ナチュラルクリーム</h3>\n      <p>&yen;2,980</p>\n    </div>\n    <div class=\"product-card\">\n      <h3>オーガニック美容液</h3>\n      <p>&yen;4,980</p>\n    </div>\n  </section>\n\n  <!-- 詳細情報 -->\n  <section>\n    <h2>よくある質問</h2>\n    <!-- ④ 「返品ポリシー」をspanで囲んでdata-eventを追加 -->\n    <p>商品の返品については返品ポリシーをご確認ください。</p>\n  </section>\n\n  <!-- フッターCTA -->\n  <section class=\"footer-cta\">\n    <!-- ③ data-event=\"cta_click\" と data-location=\"footer\" を追加 -->\n    <a href=\"/signup\" class=\"cta-btn\">今すぐ申し込む</a>\n  </section>\n\n</body>\n</html>",
+        "hints": [
+          "CTAボタンには data-event=\"cta_click\" data-location=\"hero\" のように複数のdata属性を追加します。",
+          "商品カードには data-event=\"product_click\" data-product-id=\"SKU-001\" data-product-name=\"ナチュラルクリーム\" を追加します。",
+          "テキスト内のリンクは <span class=\"track-link\" data-event=\"link_click\" data-destination=\"return_policy\">返品ポリシー</span> のようにspanで囲みます。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>商品LP</title>\n  <style>\n    body { font-family: sans-serif; margin: 0; }\n    section { padding: 40px 20px; max-width: 800px; margin: 0 auto; }\n    .cta-btn { display: inline-block; background: #10b981; color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; font-size: 1.1em; }\n    .product-card { border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; margin: 10px 0; cursor: pointer; }\n    .track-link { color: #3b82f6; text-decoration: underline; cursor: pointer; }\n  </style>\n</head>\n<body>\n\n  <!-- ヒーローセクション -->\n  <section class=\"hero\">\n    <h1>ナチュラルスキンケアシリーズ</h1>\n    <p>自然の力で、あなたの肌を美しく。</p>\n    <a href=\"/signup\" class=\"cta-btn\" data-event=\"cta_click\" data-location=\"hero\">無料サンプルを申し込む</a>\n  </section>\n\n  <!-- 商品セクション -->\n  <section class=\"products\">\n    <h2>おすすめ商品</h2>\n    <div class=\"product-card\" data-event=\"product_click\" data-product-id=\"SKU-001\" data-product-name=\"ナチュラルクリーム\">\n      <h3>ナチュラルクリーム</h3>\n      <p>&yen;2,980</p>\n    </div>\n    <div class=\"product-card\" data-event=\"product_click\" data-product-id=\"SKU-002\" data-product-name=\"オーガニック美容液\">\n      <h3>オーガニック美容液</h3>\n      <p>&yen;4,980</p>\n    </div>\n  </section>\n\n  <!-- 詳細情報 -->\n  <section>\n    <h2>よくある質問</h2>\n    <p>商品の返品については<span class=\"track-link\" data-event=\"link_click\" data-destination=\"return_policy\">返品ポリシー</span>をご確認ください。</p>\n  </section>\n\n  <!-- フッターCTA -->\n  <section class=\"footer-cta\">\n    <a href=\"/signup\" class=\"cta-btn\" data-event=\"cta_click\" data-location=\"footer\">今すぐ申し込む</a>\n  </section>\n\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "HTML5のdata属性（data-*）の正しい書き方はどれですか？",
+            "options": ["data:event=\"click\"", "data-event=\"click\"", "custom-event=\"click\"", "event-data=\"click\""],
+            "correct": 1,
+            "explanation": "data属性は data- から始まる任意の属性名を作れます。data-event=\"click\" のようにハイフンの後に任意の名前を付けます。JavaScriptからは element.dataset.event でアクセスできます。"
+          },
+          {
+            "q": "同じCTAボタンがページの上部と下部にある場合、GTMでどちらがクリックされたか区別する方法として最適なのはどれですか？",
+            "options": ["ボタンのテキストを変える", "data-location属性で位置（hero/footer）を区別する", "別々のページに配置する", "ボタンの色を変える"],
+            "correct": 1,
+            "explanation": "data-location属性にheroやfooterなどの位置情報を設定することで、GTMで同じイベント名でも「どの位置のCTAがクリックされたか」を区別して計測できます。"
+          },
+          {
+            "q": "GTMでdata-event=\"cta_click\"を持つ要素のクリックだけを検出するトリガー条件はどれですか？",
+            "options": ["Click URL contains cta_click", "Click Element matches CSS selector [data-event=\"cta_click\"]", "Page URL contains cta_click", "Click Text equals cta_click"],
+            "correct": 1,
+            "explanation": "GTMのクリックトリガーで「Click Element matches CSS selector」を選択し、[data-event=\"cta_click\"] というCSSの属性セレクタを指定することで、該当するdata属性を持つ要素のクリックだけを検出できます。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール1-20 完了！\n\nspanタグとdata属性によるGTMターゲット設計を習得しました。\n\n## 習得したスキル\n\n✅ **span** タグでテキスト内の要素にクラスやIDを付与できる\n✅ **data属性**（data-*）でカスタム情報をHTMLに埋め込める\n✅ **GTMのCSSセレクタ**でdata属性を使ったトリガー設計ができる\n✅ **位置の区別**（data-location）で同一CTAの計測を差別化できる\n✅ エンジニアに**具体的なdata属性の追加**を正確に依頼できる\n\n## HTMLモジュール1 完了！\n\nHTMLの基礎を一通り学びました。ここまでの知識で、以下のことができるようになっています：\n\n- LPのHTMLソースコードを読んで構造を理解する\n- GTMタグの設置位置を確認・修正する\n- SEOに必要なメタタグを確認する\n- エンジニアに正確なHTML用語で修正を依頼する\n- ABテストやイベント計測の要素をHTMLから特定する\n\n> 💡 **実務チャレンジ**: 次の計測設計案件で、「このボタンに data-event と data-location を追加してほしい」とエンジニアに依頼してみましょう。具体的な属性名と値を提示できれば、コミュニケーションが劇的にスムーズになります。",
+        "diagram": false
+      }
+    }
+  ]
+}

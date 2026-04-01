@@ -1,0 +1,82 @@
+{
+  "id": "ga4--5-16",
+  "moduleId": "5-16",
+  "categoryId": "ga4",
+  "title": "イベントパラメータの上限と管理",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 上限を超えると「見えなくなる」データがある\n\nGA4には様々な数値上限があります。これを知らずに実装すると、送信しているつもりのデータが実際にはGA4レポートに反映されないケースが発生します。\n\n## 実際に起きる問題\n\n**問題1**: カスタムディメンションの登録枠が埋まってしまい、新しいパラメータを追加できない\n\n**問題2**: 文字列値が切り捨てられて途中までしかデータが取れない\n\n**問題3**: イベント数の上限を超えてデータがサンプリングされる\n\n## 上限を知ることの価値\n\n上限を事前に把握することで：\n\n- 計測設計時に優先度の高いパラメータから登録できる\n- BigQueryエクスポートで上限を回避できる\n- クライアントへの過度な期待設定を防げる\n\nこのモジュールでは、GA4の主要な上限値と実務的な対策を学びます。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# GA4の主要な上限値一覧\n\n## 1. カスタムディメンション・指標の上限\n\n```\nGA4標準プロパティ（無料）:\n- イベントスコープのカスタムディメンション: 最大50個\n- ユーザースコープのカスタムディメンション: 最大25個\n- カスタム指標: 最大50個\n\nGA4 360（有料）:\n- イベントスコープのカスタムディメンション: 最大125個\n- ユーザースコープのカスタムディメンション: 最大100個\n\n重要: パラメータを送信しても、カスタムディメンションに登録しなければ\nGA4レポートUIでは見えない（BigQueryには記録される）\n```\n\n## 2. 文字数の上限\n\n```\nイベント名: 最大40文字\nパラメータ名: 最大40文字\nパラメータ値（文字列）: 最大100文字\nユーザープロパティ名: 最大24文字\nユーザープロパティ値: 最大36文字\n\n要注意: URLをパラメータ値として送る場合、100文字で切れる\n例: 'https://example.com/very-long-path/category/product-detail-page'\n      ↑ 長いURLはトリミングされる\n```\n\n## 3. イベントパラメータ数の上限\n\n```\n1イベントあたりのパラメータ数: 最大25個\n\n※ GA4が自動付与するパラメータ（page_location等）も\n  この25個にカウントされる場合があるため実質20個程度で設計\n```\n\n## 4. カスタムディメンション登録の考え方\n\n```\nBigQueryとGA4レポートの違いを理解する:\n\n送信するだけ（GTM設定）\n  → BigQueryには全パラメータが記録される\n  → GA4レポートUIには表示されない\n\nカスタムディメンションに登録\n  → GA4レポートUIで確認・フィルタできる\n  → 探索レポートで使える\n  → 上限50個という制約がある\n\n結論:\n「BigQueryで分析するだけでよい」パラメータは\nカスタムディメンション登録不要\n→ 登録枠を節約できる\n```\n\n## 5. 上限管理の実務Tips\n\n```python\n# BigQueryで現在送信しているイベントパラメータを棚卸しするクエリ\nSELECT\n  event_name,\n  ep.key AS param_name,\n  COUNT(*) AS occurrence_count\nFROM\n  `your-project.analytics_XXXXXXXX.events_20240101`,\n  UNNEST(event_params) AS ep\nGROUP BY 1, 2\nORDER BY 1, 3 DESC\nLIMIT 200\n```",
+        "diagram": false
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: BigQueryでパラメータの棚卸しクエリを書く\n\n実際のGA4データからイベントパラメータを棚卸しして、「使用頻度の高いパラメータ」の一覧を取得します。\n\n## 課題\n\n以下のBigQueryクエリを完成させてください。\n\n1. `events_20240101` テーブルを対象にする\n2. イベント名とパラメータ名でグループ化\n3. そのパラメータが送信された件数を集計\n4. パラメータ名のユニーク数が多い上位イベントを特定するため、件数の多い順に並べる\n5. パラメータ値が文字列か数値か（value_typeを判別）も取得する\n\n> `event_params` の値は `value.string_value`、`value.int_value`、`value.float_value`、`value.double_value` に格納されます。",
+        "starterCode": "-- GA4イベントパラメータ棚卸しクエリ\nSELECT\n  event_name,\n  ep.key AS param_name,\n  -- パラメータの型を判別する\n  CASE\n    WHEN ep.value.string_value IS NOT NULL THEN 'string'\n    WHEN ep.value.int_value IS NOT NULL THEN 'integer'\n    WHEN ep.value.float_value IS NOT NULL THEN 'float'\n    ELSE 'null'\n  END AS value_type,\n  -- 件数を集計\n  COUNT(*) AS occurrence_count,\n  -- 文字列値のサンプル（最初の1件）\n  -- TODO: MAX(ep.value.string_value) でサンプル値を取得\n  NULL AS sample_value\nFROM\n  -- TODO: テーブル名を指定\n  `your-project.analytics_XXXXXXXX.????`,\n  -- TODO: event_paramsをUNNESTする\n  ???\nGROUP BY 1, 2, 3\nORDER BY\n  event_name,\n  occurrence_count DESC",
+        "hints": [
+          "テーブル名は `your-project.analytics_XXXXXXXX.events_20240101` です。",
+          "`UNNEST(event_params) AS ep` をFROM句に追加します（カンマ区切りでJOIN不要）。",
+          "`sample_value` には `MAX(ep.value.string_value)` を使います。値がない場合はNULLになります。"
+        ],
+        "answer": "-- GA4イベントパラメータ棚卸しクエリ\nSELECT\n  event_name,\n  ep.key AS param_name,\n  CASE\n    WHEN ep.value.string_value IS NOT NULL THEN 'string'\n    WHEN ep.value.int_value IS NOT NULL THEN 'integer'\n    WHEN ep.value.float_value IS NOT NULL THEN 'float'\n    ELSE 'null'\n  END AS value_type,\n  COUNT(*) AS occurrence_count,\n  MAX(ep.value.string_value) AS sample_value\nFROM\n  `your-project.analytics_XXXXXXXX.events_20240101`,\n  UNNEST(event_params) AS ep\nGROUP BY 1, 2, 3\nORDER BY\n  event_name,\n  occurrence_count DESC"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "GA4標準プロパティ（無料）でイベントスコープのカスタムディメンションとして登録できる最大数はいくつですか？",
+            "options": [
+              "25個",
+              "50個",
+              "100個",
+              "制限なし"
+            ],
+            "correct": 1,
+            "explanation": "GA4標準プロパティのイベントスコープカスタムディメンションは最大50個です。ユーザースコープは25個です。GA4 360（有料）では各上限が引き上げられます。登録枠には上限があるため、優先度の高いパラメータから計画的に登録することが重要です。"
+          },
+          {
+            "q": "GA4でイベントパラメータに文字列値を設定するとき、切り捨てが発生する可能性がある文字数はどれですか？",
+            "options": [
+              "40文字を超えた場合",
+              "100文字を超えた場合",
+              "255文字を超えた場合",
+              "文字数制限はない"
+            ],
+            "correct": 1,
+            "explanation": "GA4のイベントパラメータの文字列値は最大100文字です。100文字を超えた場合は切り捨てられます。長いURLやJSONをパラメータ値として送信すると途中でカットされるため注意が必要です。"
+          },
+          {
+            "q": "GA4にカスタムイベントパラメータを送信しているが、GA4レポートのUIに表示されない。最も可能性の高い原因はどれですか？",
+            "options": [
+              "イベント名が40文字を超えているため",
+              "パラメータをGA4管理画面でカスタムディメンションとして登録していないため",
+              "BigQueryエクスポートが有効になっていないため",
+              "GTMの公開が完了していないため"
+            ],
+            "correct": 1,
+            "explanation": "GA4では、イベントパラメータをレポートUIで確認・フィルタするには「カスタムディメンション」として登録が必要です。パラメータを送信しているだけではBigQueryには記録されますが、GA4レポートのUIには表示されません。GA4管理 → カスタム定義 → カスタムディメンションから登録します。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール5-16 完了！\n\nGA4のイベントパラメータにおける各種上限値と管理方法を習得しました。\n\n## 習得したスキル\n\n✅ **カスタムディメンションの上限**（イベントスコープ50個、ユーザースコープ25個）を把握した\n✅ **文字数制限**（パラメータ値100文字）を意識して実装できる\n✅ **BigQueryとGA4レポートの関係**（登録なしでもBQには記録される）を理解した\n✅ **パラメータ棚卸しBigQueryクエリ**を書いて現状把握できる\n\n## 実務の優先順位付け\n\n1. BigQueryで分析するだけのパラメータ → カスタムディメンション登録不要\n2. GA4レポートのUIで確認したいパラメータ → 優先度順に登録\n3. 50枠に近づいたら棚卸しして不要なものをアーカイブ\n\n## 次のステップ\n\n次のモジュール **「5-17: ユーザープロパティの設計と実装」** では、ユーザー属性情報をGA4で管理する方法を学びます。",
+        "diagram": false
+      }
+    }
+  ]
+}

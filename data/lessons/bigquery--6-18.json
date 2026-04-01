@@ -1,0 +1,82 @@
+{
+  "id": "bigquery--6-18",
+  "moduleId": "6-18",
+  "categoryId": "bigquery",
+  "title": "サブクエリ：クエリの中にクエリを書く",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 複雑な分析を「段階的に」解決するアプローチ\n\nデータ分析の問いは「1つのSELECT」では答えられないことがよくあります。\n\n**例：「購入したユーザーの中で、平均購入額を上回った人の一覧を取得したい」**\n\nこれを1ステップで解くのは難しいですが、段階的に考えると：\n1. まず「平均購入額」を計算する\n2. 次に「平均購入額を超えたユーザー」を抽出する\n\nこの「段階的な計算」を実現するのが**サブクエリ**です。\n\n## サブクエリの3つの使い方\n\n| 使い方 | 場所 | 説明 |\n|--------|------|------|\n| FROM句サブクエリ | FROM の後 | 一時的なテーブルとして使う |\n| WHERE句サブクエリ | WHERE の後 | 条件の値を動的に計算する |\n| WITH句（CTE） | クエリの先頭 | 名前付きサブクエリ（最も読みやすい） |\n\n> 現代のSQLではWITH句（CTE: Common Table Expression）が最も読みやすく、BigQueryでも推奨されています。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# サブクエリの構文と実例\n\n## 1. WHERE句サブクエリ\n\n```sql\n-- 2024年1月の平均購入額以上の購入イベントを取得\nSELECT\n  event_date,\n  user_pseudo_id,\n  event_value_in_usd\nFROM\n  `myproject.analytics_123456789.events_*`\nWHERE\n  event_name = 'purchase'\n  AND _TABLE_SUFFIX BETWEEN '20240101' AND '20240131'\n  AND event_value_in_usd >= (\n    -- サブクエリ: 平均購入額を計算\n    SELECT AVG(event_value_in_usd)\n    FROM `myproject.analytics_123456789.events_*`\n    WHERE\n      event_name = 'purchase'\n      AND _TABLE_SUFFIX BETWEEN '20240101' AND '20240131'\n  )\n```\n\n## 2. FROM句サブクエリ\n\n```sql\n-- 購入ユーザーごとの集計結果をさらに集計する\nSELECT\n  AVG(purchase_count) AS avg_purchases_per_user,\n  MAX(purchase_count) AS max_purchases_per_user\nFROM (\n  -- サブクエリ: ユーザーごとの購入回数を集計\n  SELECT\n    user_pseudo_id,\n    COUNT(*) AS purchase_count\n  FROM\n    `myproject.analytics_123456789.events_*`\n  WHERE\n    event_name = 'purchase'\n    AND _TABLE_SUFFIX BETWEEN '20240101' AND '20240131'\n  GROUP BY\n    user_pseudo_id\n) AS user_purchases\n```\n\n## 3. WITH句（CTE）：最も読みやすい書き方（推奨）\n\n```sql\n/*\n  WITH句（CTE）で段階的に計算する\n  → FROM句サブクエリと同じ結果だが、はるかに読みやすい\n*/\nWITH\n  -- STEP1: ユーザーごとの購入回数を集計\n  user_purchases AS (\n    SELECT\n      user_pseudo_id,\n      COUNT(*) AS purchase_count\n    FROM\n      `myproject.analytics_123456789.events_*`\n    WHERE\n      event_name = 'purchase'\n      AND _TABLE_SUFFIX BETWEEN '20240101' AND '20240131'\n    GROUP BY\n      user_pseudo_id\n  ),\n  -- STEP2: 購入回数の統計量を計算\n  purchase_stats AS (\n    SELECT\n      AVG(purchase_count) AS avg_count,\n      MAX(purchase_count) AS max_count\n    FROM user_purchases\n  )\n\n-- STEP3: 最終結果\nSELECT * FROM purchase_stats\n```",
+        "diagram": false
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習：WITH句を使って購入コンバージョン率を計算する\n\n## 課題\n\n以下のSTEPをWITH句（CTE）で実装してください。\n\n**STEP1**（`total_users` CTE）：2024年1月の全ユニークユーザー数を集計\n- `COUNT(DISTINCT user_pseudo_id) AS total_users`\n\n**STEP2**（`buyers` CTE）：2024年1月の購入ユニークユーザー数を集計\n- WHERE `event_name = 'purchase'`\n- `COUNT(DISTINCT user_pseudo_id) AS buyer_count`\n\n**最終SELECT**：\n- `total_users`、`buyer_count`、コンバージョン率（`buyer_count / total_users * 100 AS cvr_percent`）\n\n> 💡 WITH句で2つのCTEを定義し、最後のSELECTでCROSS JOINして数値を並べます。",
+        "starterCode": "-- 2024年1月の購入コンバージョン率計算（WITH句を使用）\n\nWITH\n  -- STEP1: 全ユニークユーザー数\n  total_users AS (\n    SELECT\n      COUNT(DISTINCT user_pseudo_id) AS total_users\n    FROM\n      `myproject.analytics_123456789.events_*`\n    WHERE\n      _TABLE_SUFFIX BETWEEN '20240101' AND '20240131'\n  ),\n  -- STEP2: 購入ユニークユーザー数\n  buyers AS (\n    SELECT\n      COUNT(DISTINCT user_pseudo_id) AS buyer_count\n    FROM\n      `myproject.analytics_123456789.events_*`\n    WHERE\n      _TABLE_SUFFIX BETWEEN '20240101' AND '20240131'\n      AND event_name = '________'\n  )\n\n-- 最終SELECT: 2つのCTEをCROSS JOINで横並びにする\nSELECT\n  t.total_users,\n  b.buyer_count,\n  ROUND(b.buyer_count / t.total_users * 100, 2) AS cvr_percent\nFROM\n  total_users AS t\n  CROSS JOIN buyers AS b",
+        "hints": [
+          "購入イベントのevent_nameは 'purchase' です。",
+          "WITH句で定義したCTEは、その後のSELECT（またはさらに後のCTE）でテーブルのように参照できます。",
+          "CROSS JOINは1行同士の場合、単純に横並びにする用途で使えます。"
+        ],
+        "answer": "-- 2024年1月の購入コンバージョン率計算（WITH句を使用）\n\nWITH\n  total_users AS (\n    SELECT\n      COUNT(DISTINCT user_pseudo_id) AS total_users\n    FROM\n      `myproject.analytics_123456789.events_*`\n    WHERE\n      _TABLE_SUFFIX BETWEEN '20240101' AND '20240131'\n  ),\n  buyers AS (\n    SELECT\n      COUNT(DISTINCT user_pseudo_id) AS buyer_count\n    FROM\n      `myproject.analytics_123456789.events_*`\n    WHERE\n      _TABLE_SUFFIX BETWEEN '20240101' AND '20240131'\n      AND event_name = 'purchase'\n  )\n\nSELECT\n  t.total_users,\n  b.buyer_count,\n  ROUND(b.buyer_count / t.total_users * 100, 2) AS cvr_percent\nFROM\n  total_users AS t\n  CROSS JOIN buyers AS b"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "WITH句（CTE）の主なメリットはどれですか？",
+            "options": [
+              "WITH句を使うとクエリの実行速度が必ず速くなる",
+              "複雑なクエリを段階的に名前付きで定義でき、可読性と保守性が向上する",
+              "WITH句はBigQuery専用の機能で他のDBでは使えない",
+              "WITH句を使うと課金コストが削減される"
+            ],
+            "correct": 1,
+            "explanation": "WITH句（CTE: Common Table Expression）の最大のメリットは「複雑なクエリを段階的に名前付きで定義できること」です。FROM句サブクエリと同じ結果を得られますが、ネストが深くならず、各ステップに意味のある名前がつくため、はるかに読みやすくなります。"
+          },
+          {
+            "q": "WHERE句サブクエリ `WHERE col >= (SELECT AVG(col) FROM ...)` の動作として正しいものはどれですか？",
+            "options": [
+              "サブクエリは外側のクエリより後に実行される",
+              "サブクエリが先に実行されて平均値を返し、その値を使って外側の条件が評価される",
+              "サブクエリはWHERE句では使えないのでエラーになる",
+              "サブクエリと外側のクエリは同時に実行される"
+            ],
+            "correct": 1,
+            "explanation": "WHERE句のサブクエリは外側のクエリより先に実行されます。サブクエリが平均値（例：5000円）を返し、その値で `WHERE col >= 5000` として評価されます。この仕組みで「動的な条件値」を使った絞り込みが可能です。"
+          },
+          {
+            "q": "WITH句で定義した複数のCTE（例：cte1, cte2）について正しい説明はどれですか？",
+            "options": [
+              "cte1からcte2を参照することはできない",
+              "後に定義したCTEから先に定義したCTEを参照できる",
+              "CTEはすべて最後のSELECTからのみ参照できる",
+              "CTEはWHERE句では使えない"
+            ],
+            "correct": 1,
+            "explanation": "WITH句では後に定義したCTEから先に定義したCTEを参照できます。例えば `cte1` を定義した後 `cte2` を定義する際に `FROM cte1` と書けます。これにより「STEP1の結果をSTEP2で使い、STEP2の結果をSTEP3で使う」という段階的な計算が可能です。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール6-18 完了！\n\nサブクエリとWITH句を使った段階的な分析手法をマスターしました。\n\n## 習得したスキル\n\n✅ **WHERE句サブクエリ**で動的な条件値を使える\n✅ **FROM句サブクエリ**で集計結果をさらに集計できる\n✅ **WITH句（CTE）**で複雑なクエリを段階的・可読的に書ける\n✅ **複数のCTEを組み合わせた**多段階分析ができる\n\n## 実務での推奨パターン\n\n```sql\nWITH\n  step1 AS (...),  -- まずデータを絞り込み\n  step2 AS (...),  -- 次に集計する\n  step3 AS (...)   -- さらに加工する\nSELECT * FROM step3\n```\n\n## 次のステップ\n\n次のモジュール **「6-19: EXISTS」** では、サブクエリを使った「存在チェック」の方法を学びます。特定のユーザーが特定のアクションを取ったかどうかの判定に使います。",
+        "diagram": false
+      }
+    }
+  ]
+}

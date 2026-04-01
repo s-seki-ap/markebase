@@ -1,0 +1,82 @@
+{
+  "id": "marketing-strategy--10-9",
+  "moduleId": "10-9",
+  "categoryId": "marketing-strategy",
+  "title": "ポジショニングマップの作成と活用",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# ポジショニングマップ：競合の中で自分の立ち位置を可視化する\n\n「競合と比較して自社はどこにいるのか？」を一目でわかるようにするツールが **ポジショニングマップ** です。\n\n## ポジショニングマップとは\n\n2つの軸（縦・横）を設定し、自社と競合を座標上にプロットして**競合環境における自社の位置づけ**を視覚化するツールです。\n\n## なぜ視覚化が重要か\n\n- 「競合と差別化できている」つもりでも、実は似た位置にいることが多い\n- 市場に**空白地帯（Blue Ocean）**があることを発見できる\n- 社内で戦略の共通認識を持ちやすくなる\n\n## 活用場面\n\n- 新サービス立ち上げ時のポジション設計\n- 既存サービスのリポジショニング検討\n- 競合調査報告書・提案書の説得力向上\n\n**あなたへの問い**: 競合と比べて自社のサービスは「どこが違う」と言えますか？それは本当に差別化になっていますか？",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# ポジショニングマップの作り方\n\n## Step 1: 軸を選ぶ（最重要）\n\n軸の選び方でマップの価値が決まります。\n\n**良い軸の条件**:\n- 顧客が購買時に重視する要因であること\n- 競合間で差異が生まれやすいこと\n- 測定・評価が可能なこと\n\n**軸の例**:\n\n| 業界 | 軸の例 |\n|------|--------|\n| コーヒーチェーン | 価格（低〜高）× 品質・体験価値（低〜高） |\n| SaaSツール | 機能の豊富さ × 操作の簡単さ |\n| デジタルマーケ代行 | 価格（低〜高）× 専門性（汎用〜特化） |\n| EC | 品揃え × 配送速度 |\n\n## Step 2: 競合をプロットする\n\n各競合を2軸で評価し、座標にプロットします。\n\n```\n高価格\n  |\n  |  [高級ブランドA]        [自社]\n  |              [競合B]\n  +------------------------------------------→ 高専門性\n  |  [格安C]    [汎用大手D]\n  |\n低価格\n```\n\n## Step 3: 空白地帯を探す\n\n競合が密集している領域はレッドオーシャン。**誰もいない空白地帯**がブルーオーシャンの可能性を示しています。\n\n## Step 4: 自社のポジションを決める（または検証する）\n\n空白地帯が：\n- 顧客ニーズと合致しているか？（空白には理由がある場合も）\n- 自社が実現できるポジションか？\n\n## ポジショニングマップの注意点\n\n1. **軸は顧客視点で選ぶ**（自社に有利な軸を選びすぎない）\n2. **2軸が独立している**こと（高品質×高価格は相関関係なので情報量が少ない）\n3. **定期的に更新する**（競合の動きで地図は変わる）\n4. **2軸以外の要因も補足する**（マップに表れない差別化要素を言語化）",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: インタラクティブなポジショニングマップを作成する\n\nHTMLとJavaScriptを使って、競合をドラッグできるポジショニングマップを作成してください。\n\n## 課題\n\n以下のテンプレートを完成させ、2軸のポジショニングマップに競合と自社をプロットしてください。",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>ポジショニングマップ</title>\n  <style>\n    body { font-family: sans-serif; max-width: 700px; margin: 40px auto; padding: 20px; }\n    #map { position: relative; width: 560px; height: 560px; border: 2px solid #e2e8f0; background: #f8fafc; margin: 20px auto; }\n    .dot { position: absolute; width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: bold; text-align: center; cursor: pointer; transform: translate(-50%, -50%); border: 2px solid rgba(0,0,0,0.1); }\n    .axis-label { position: absolute; font-size: 0.8rem; color: #64748b; font-weight: bold; }\n  </style>\n</head>\n<body>\n  <h1>ポジショニングマップ</h1>\n\n  <div style=\"text-align:center;\">\n    <label>横軸（右が高い）: <input id=\"xAxis\" type=\"text\" value=\"専門性（汎用→特化）\" style=\"width:200px; padding:4px 8px; border:1px solid #ccc; border-radius:4px;\"/></label>\n    <label style=\"margin-left:16px;\">縦軸（上が高い）: <input id=\"yAxis\" type=\"text\" value=\"価格（低価格→高価格）\" style=\"width:200px; padding:4px 8px; border:1px solid #ccc; border-radius:4px;\"/></label>\n  </div>\n\n  <div id=\"map\">\n    <!-- 軸線と競合ドットをここに追加 -->\n  </div>\n\n</body>\n</html>",
+        "hints": [
+          "マップの中央に横軸（X軸）と縦軸（Y軸）を線で描きます。CSSのposition:absoluteで線を配置しましょう。",
+          "各競合をdivの.dotクラスで配置します。left%とtop%で座標を指定できます。例：left:70%; top:30%（右上エリア）",
+          "自社のドットは他の競合と異なる色（例：明るい黄色や赤）にして目立たせましょう。軸ラベルも4方向（上下左右の端）に配置します。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>ポジショニングマップ</title>\n  <style>\n    body { font-family: sans-serif; max-width: 700px; margin: 40px auto; padding: 20px; background: #f8fafc; }\n    h1 { color: #1e293b; }\n    #map { position: relative; width: 560px; height: 560px; border: 2px solid #cbd5e1; background: white; margin: 20px auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }\n    .x-line { position: absolute; width: 100%; height: 1px; background: #94a3b8; top: 50%; }\n    .y-line { position: absolute; height: 100%; width: 1px; background: #94a3b8; left: 50%; }\n    .dot { position: absolute; width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: bold; text-align: center; cursor: pointer; transform: translate(-50%, -50%); border: 3px solid rgba(255,255,255,0.8); box-shadow: 0 2px 6px rgba(0,0,0,0.2); transition: transform 0.1s; }\n    .dot:hover { transform: translate(-50%, -50%) scale(1.1); }\n    .axis-label { position: absolute; font-size: 0.78rem; color: #64748b; font-weight: bold; background: white; padding: 2px 6px; border-radius: 4px; }\n    .quadrant-label { position: absolute; font-size: 0.7rem; color: #94a3b8; }\n    .controls { text-align: center; margin-bottom: 8px; }\n    .controls label { font-size: 0.85rem; margin: 0 8px; }\n    input[type=text] { padding: 4px 8px; border: 1px solid #cbd5e1; border-radius: 4px; width: 180px; }\n    .legend { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 12px; }\n    .legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.82rem; }\n    .legend-dot { width: 16px; height: 16px; border-radius: 50%; }\n  </style>\n</head>\n<body>\n  <h1>ポジショニングマップ</h1>\n\n  <div class=\"controls\">\n    <label>横軸: <input id=\"xAxis\" type=\"text\" value=\"専門性（汎用 → 特化）\" oninput=\"updateLabels()\"/></label>\n    <label>縦軸: <input id=\"yAxis\" type=\"text\" value=\"価格（低価格 → 高価格）\" oninput=\"updateLabels()\"/></label>\n  </div>\n\n  <div id=\"map\">\n    <div class=\"x-line\"></div>\n    <div class=\"y-line\"></div>\n\n    <!-- 軸ラベル -->\n    <div class=\"axis-label\" style=\"bottom:4px; left:50%; transform:translateX(-50%);\" id=\"xLow\">汎用</div>\n    <div class=\"axis-label\" style=\"bottom:4px; right:4px;\" id=\"xHigh\">特化</div>\n    <div class=\"axis-label\" style=\"top:4px; left:50%; transform:translateX(-50%);\" id=\"yHigh\">高価格</div>\n    <div class=\"axis-label\" style=\"bottom:4px; left:4px;\" id=\"yLow\">低価格</div>\n\n    <!-- 象限ラベル -->\n    <div class=\"quadrant-label\" style=\"top:8%; left:8%;\">低価格×汎用</div>\n    <div class=\"quadrant-label\" style=\"top:8%; right:8%;\">高価格×特化</div>\n    <div class=\"quadrant-label\" style=\"bottom:8%; left:8%;\">低価格×汎用</div>\n    <div class=\"quadrant-label\" style=\"bottom:8%; right:8%;\">低価格×特化</div>\n\n    <!-- 競合プロット -->\n    <div class=\"dot\" style=\"background:#ef4444; color:white; left:25%; top:35%;\" title=\"大手代理店A\">大手<br>代理店A</div>\n    <div class=\"dot\" style=\"background:#3b82f6; color:white; left:30%; top:28%;\" title=\"大手代理店B\">大手<br>代理店B</div>\n    <div class=\"dot\" style=\"background:#6366f1; color:white; left:20%; top:65%;\" title=\"フリーランスC\">フリー<br>ランスC</div>\n    <div class=\"dot\" style=\"background:#06b6d4; color:white; left:35%; top:72%;\" title=\"格安代行D\">格安<br>代行D</div>\n    <div class=\"dot\" style=\"background:#8b5cf6; color:white; left:60%; top:40%;\" title=\"業種特化E\">業種<br>特化E</div>\n\n    <!-- 自社 -->\n    <div class=\"dot\" style=\"background:#fbbf24; color:#1e293b; left:75%; top:35%; border-color:#f59e0b; font-size:0.8rem;\" title=\"自社\">自社<br>★</div>\n  </div>\n\n  <div class=\"legend\">\n    <div class=\"legend-item\"><div class=\"legend-dot\" style=\"background:#ef4444;\"></div>大手代理店A</div>\n    <div class=\"legend-item\"><div class=\"legend-dot\" style=\"background:#3b82f6;\"></div>大手代理店B</div>\n    <div class=\"legend-item\"><div class=\"legend-dot\" style=\"background:#6366f1;\"></div>フリーランスC</div>\n    <div class=\"legend-item\"><div class=\"legend-dot\" style=\"background:#06b6d4;\"></div>格安代行D</div>\n    <div class=\"legend-item\"><div class=\"legend-dot\" style=\"background:#8b5cf6;\"></div>業種特化E</div>\n    <div class=\"legend-item\"><div class=\"legend-dot\" style=\"background:#fbbf24;\"></div>自社</div>\n  </div>\n\n  <script>\n    function updateLabels() {\n      const xVal = document.getElementById('xAxis').value;\n      const yVal = document.getElementById('yAxis').value;\n      const parts = xVal.split('→');\n      if (parts.length === 2) {\n        document.getElementById('xLow').textContent = parts[0].trim();\n        document.getElementById('xHigh').textContent = parts[1].trim();\n      }\n      const yParts = yVal.split('→');\n      if (yParts.length === 2) {\n        document.getElementById('yLow').textContent = yParts[0].trim();\n        document.getElementById('yHigh').textContent = yParts[1].trim();\n      }\n    }\n  </script>\n\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "ポジショニングマップの軸を選ぶ際の「良い軸の条件」として正しくないものはどれですか？",
+            "options": [
+              "顧客が購買時に重視する要因であること",
+              "競合間で差異が生まれやすいこと",
+              "自社が最も有利になる要因を選ぶこと",
+              "測定・評価が可能なこと"
+            ],
+            "correct": 2,
+            "explanation": "「自社が最も有利になる軸を選ぶ」は落とし穴です。自社に有利な軸を選ぶと実態から乖離したマップになります。軸は「顧客が重視する要因」「競合間で差異が生まれやすい要因」を基準に選ぶべきです。"
+          },
+          {
+            "q": "ポジショニングマップで「空白地帯」を発見したとき、すぐに参入すべきと判断するのは正しいですか？",
+            "options": [
+              "はい。空白は常にビジネスチャンスです",
+              "いいえ。空白には顧客ニーズがない・実現不可能など理由がある場合もあります",
+              "はい。空白地帯は競合がいないので必ず高収益になります",
+              "いいえ。空白地帯には法的規制が必ずあります"
+            ],
+            "correct": 1,
+            "explanation": "空白地帯には「顧客ニーズがそもそもない」「コスト的に実現不可能」「以前失敗した企業がいる」などの理由がある場合があります。空白の発見はスタート地点であり、必ず顧客ニーズとの整合性を確認する必要があります。"
+          },
+          {
+            "q": "2軸を「高品質×高価格」として設定した場合の問題点はどれですか？",
+            "options": [
+              "顧客には理解しにくい組み合わせである",
+              "2軸が相関関係にあるため情報量が少ないマップになる",
+              "測定が難しすぎる",
+              "この組み合わせは法律で禁止されている"
+            ],
+            "correct": 1,
+            "explanation": "「高品質」と「高価格」は一般的に正の相関関係にあります（品質が高いものは高い）。相関する2軸を使うと対角線上に企業が並ぶだけで、差別化ポイントが見えにくい情報量の少ないマップになります。独立した2軸を選ぶことが重要です。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール10-9 完了！\n\nポジショニングマップの作成と活用方法を習得しました。\n\n## 習得したスキル\n\n✅ **良い軸の条件**（顧客視点・差異が生まれやすい・測定可能）で軸を設計できる\n✅ **競合をプロット**して空白地帯を発見できる\n✅ **空白地帯の評価**（顧客ニーズとの整合・実現可能性）を正しく行える\n✅ **HTMLでポジショニングマップ**を視覚的に作成できる\n\n## なぜこれが重要か\n\nポジショニングマップは「戦略の地図」です。自分がどこにいるかわからなければ、どこに向かうべきかも決められません。定期的に更新することで、市場環境の変化を早期に察知できます。\n\n## 次のステップ\n\n次のモジュール **「10-10: USP：独自の強みと差別化メッセージの設計」** では、ポジショニングを言語化して顧客に伝わる差別化メッセージを設計する方法を学びます。",
+        "diagram": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "id": "ai-automation--7-9",
+  "moduleId": "7-9",
+  "categoryId": "ai-automation",
+  "title": "LLM（大規模言語モデル）の仕組み",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# ChatGPTはどうやって「賢い返答」を生成するのか\n\nLLM（Large Language Model：大規模言語モデル）は現代AIの中核技術です。ChatGPT・Claude・Geminiはすべてこの技術をベースにしています。\n\n「魔法のように答えを生成する」のではなく、**統計的なパターン補完**をしているという本質を理解することは、マーケターがLLMを正しく活用するうえで不可欠です。\n\n## この知識がマーケターに必要な理由\n\n- なぜ長い指示より短い指示のほうが良い場合があるのか\n- なぜ具体例を示すと精度が上がるのか\n- なぜ同じ質問でも毎回少し違う答えが返るのか\n- なぜ「嘘」をつくのか\n\nこれらはすべてLLMの仕組みを理解すると説明できます。\n\n**あなたへの問い**: ChatGPTに同じ質問を2回した際、まったく同じ答えが返ってきたことはありますか？",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# LLMの動作原理\n\n## 「次のトークン予測」の繰り返し\n\nLLMは本質的に「次に来るべき単語（トークン）の確率分布を予測する」モデルです。\n\n```\n入力: 「このメールの件名として最適なのは」\n\nLLMの内部処理:\n  「【重要】」: 15%\n  「お知らせ」: 12%\n  「ご案内」: 10%\n  「【必読】」: 8%\n  ...\n\n→ 確率に基づいてトークンを選択\n→ 選んだトークンを入力に追加して次を予測\n→ 繰り返す（自己回帰的生成）\n```\n\n## 事前学習とファインチューニング\n\n```\nPhase 1: 事前学習（Pre-training）\n  - WebテキストやBookを数兆トークン学習\n  - 「次のトークンを予測する」タスクのみ\n  - 言語の統計的パターンを習得\n  - この段階では指示に従う能力はない\n\nPhase 2: ファインチューニング（RLHF）\n  - 人間による評価データで追加学習\n  - 「有用で、無害で、誠実な」応答を強化\n  - この段階で「指示に従う」能力を獲得\n  - ChatGPTが「AIアシスタント」らしく振る舞う理由\n```\n\n## Temperatureパラメータ\n\n```\nTemperature = 0（決定論的）:\n  毎回同じ最高確率のトークンを選択\n  用途: コード生成、データ変換（正確性重視）\n\nTemperature = 0.7（バランス型）:\n  確率上位のトークンを確率的に選択\n  用途: 一般的な質問応答、マーケコピー\n\nTemperature = 1.5（高創造性）:\n  低確率トークンも選ばれる可能性あり\n  用途: 創作、アイデアブレスト\n```\n\n## なぜハルシネーションが起きるか（再確認）\n\n```\n学習データ:\n  「東京タワーの高さは333メートル」→ 正しく学習\n  「東京スカイツリーの高さは634メートル」→ 正しく学習\n\n問い合わせ:\n  「東京タワーの高さは？」→「333m」（正確）\n  「浜松タワーの高さは？」→「XXXm」（存在しないが生成）\n\n理由: 統計パターンで「タワー + 高さは + 数値」という\n  構造を学習しているため、実在しない情報でも生成してしまう\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 演習: LLMの「トークン予測」をシミュレートしよう\n\nマーケティングメールの件名生成でLLMがどう動作するかをシミュレートします。\n\n`temperature` の値を変えて、生成されるテキストの「多様性」がどう変わるか観察してください。",
+        "starterCode": "import random\n\n# メール件名生成のLLMシミュレーション\ntoken_probabilities = {\n    \"start\": {\n        \"【重要】\": 0.15,\n        \"【限定】\": 0.12,\n        \"【今週末まで】\": 0.10,\n        \"【お知らせ】\": 0.09,\n        \"季節の\": 0.08,\n        \"期間限定\": 0.08,\n        \"あなたへの\": 0.07,\n        \"特別な\": 0.06,\n        \"新商品\": 0.05,\n        \"ありがとう\": 0.04,\n    },\n    \"middle\": {\n        \"特別オファー\": 0.18,\n        \"セール開催中\": 0.15,\n        \"キャンペーン\": 0.13,\n        \"ご案内\": 0.12,\n        \"限定プレゼント\": 0.10,\n        \"お得情報\": 0.09,\n        \"割引クーポン\": 0.08,\n    },\n    \"end\": {\n        \"をお見逃しなく\": 0.20,\n        \"〜詳細はこちら\": 0.18,\n        \"が届いています\": 0.15,\n        \"のご連絡\": 0.12,\n        \"は本日限り！\": 0.10,\n    }\n}\n\ndef sample_token(prob_dict, temperature=1.0):\n    tokens = list(prob_dict.keys())\n    probs = list(prob_dict.values())\n    adjusted = [p ** (1 / temperature) for p in probs]\n    total = sum(adjusted)\n    adjusted = [p / total for p in adjusted]\n    return random.choices(tokens, weights=adjusted, k=1)[0]\n\n# Temperature を変えて試してください（0.1〜2.0）\ntemperature = 1.0\n\nprint(f\"=== メール件名生成シミュレーション (Temperature={temperature}) ===\")\nprint(\"同じ設定で5回生成:\\n\")\n\nfor i in range(5):\n    t1 = sample_token(token_probabilities[\"start\"], temperature)\n    t2 = sample_token(token_probabilities[\"middle\"], temperature)\n    t3 = sample_token(token_probabilities[\"end\"], temperature)\n    print(f\"  {i+1}: {t1}{t2}{t3}\")\n\nprint(\"\\n--- temperature=0.1（低多様性）に変えると毎回ほぼ同じ結果になります ---\")\nprint(\"--- temperature=1.8（高多様性）に変えると珍しい組み合わせが増えます ---\")",
+        "hints": [
+          "temperatureを0.1に設定すると、毎回ほぼ同じ件名が生成されます（最も確率の高いトークンが常に選ばれる）。",
+          "temperatureを1.8に設定すると、通常は選ばれにくいトークンも選ばれ、より「ユニーク」な件名が生成されます。",
+          "コード生成・データ変換には低Temperature（0.0〜0.3）、クリエイティブなコンテンツ生成には中〜高Temperature（0.7〜1.2）が一般的に推奨されます。"
+        ],
+        "answer": "import random\n\ntoken_probabilities = {\n    \"start\": {\n        \"【重要】\": 0.15, \"【限定】\": 0.12, \"【今週末まで】\": 0.10,\n        \"【お知らせ】\": 0.09, \"季節の\": 0.08, \"期間限定\": 0.08,\n        \"あなたへの\": 0.07, \"特別な\": 0.06, \"新商品\": 0.05, \"ありがとう\": 0.04,\n    },\n    \"middle\": {\n        \"特別オファー\": 0.18, \"セール開催中\": 0.15, \"キャンペーン\": 0.13,\n        \"ご案内\": 0.12, \"限定プレゼント\": 0.10, \"お得情報\": 0.09, \"割引クーポン\": 0.08,\n    },\n    \"end\": {\n        \"をお見逃しなく\": 0.20, \"〜詳細はこちら\": 0.18, \"が届いています\": 0.15,\n        \"のご連絡\": 0.12, \"は本日限り！\": 0.10,\n    }\n}\n\ndef sample_token(prob_dict, temperature=1.0):\n    tokens = list(prob_dict.keys())\n    probs = list(prob_dict.values())\n    adjusted = [p ** (1 / temperature) for p in probs]\n    total = sum(adjusted)\n    adjusted = [p / total for p in adjusted]\n    return random.choices(tokens, weights=adjusted, k=1)[0]\n\nfor temp in [0.3, 1.0, 1.8]:\n    print(f\"\\n=== Temperature={temp} ===\")\n    for i in range(3):\n        t1 = sample_token(token_probabilities[\"start\"], temp)\n        t2 = sample_token(token_probabilities[\"middle\"], temp)\n        t3 = sample_token(token_probabilities[\"end\"], temp)\n        print(f\"  {i+1}: {t1}{t2}{t3}\")"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "LLMが文章を生成する根本的な仕組みはどれですか？",
+            "options": [
+              "インターネットをリアルタイムで検索して回答を合成する",
+              "あらかじめ用意された回答テンプレートから選択する",
+              "次に来るべきトークンの確率分布を予測し、逐次的に生成する",
+              "専門家データベースを参照して正確な情報を出力する"
+            ],
+            "correct": 2,
+            "explanation": "LLMは「次のトークン予測」を繰り返すことで文章を生成します。この仕組みにより流暢な文章を生成できますが、事実確認機能はないため、統計的に「もっともらしい」内容でも事実と異なる場合があります（ハルシネーション）。"
+          },
+          {
+            "q": "マーケティングコピーのA/Bテスト用バリエーション生成でTemperatureを高めに設定する理由はどれですか？",
+            "options": [
+              "処理速度を上げるため",
+              "コスト削減のため",
+              "多様なバリエーションを生成して、意外な切り口のコピーを発見するため",
+              "出力の正確性を上げるため"
+            ],
+            "correct": 2,
+            "explanation": "A/Bテスト用コピー生成では多様性が重要です。高いTemperatureにすると通常は選ばれにくいトークンも選択されるため、意外な表現・新しい切り口のコピーが生まれやすくなります。ただし高すぎると文章として崩れる場合もあります。"
+          },
+          {
+            "q": "LLMがRLHF（人間フィードバックによる強化学習）で追加学習する主な目的はどれですか？",
+            "options": [
+              "より多くのパラメータを獲得するため",
+              "事前学習で習得した言語パターンを削除するため",
+              "有用・無害・誠実な応答ができるよう、指示への従い方を学習するため",
+              "計算コストを削減するため"
+            ],
+            "correct": 2,
+            "explanation": "事前学習だけでは「次のトークン予測」しかできないLLMに、RLHFを通じて「人間に役立つ応答をする」という能力を付加します。これによりChatGPTが「AIアシスタント」として機能するようになります。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール7-9 完了！\n\nLLMの動作原理と、マーケティング活用への実践的示唆を理解しました。\n\n## 習得したポイント\n\n✅ LLMが「次のトークン予測の繰り返し」で動作することを説明できる\n✅ 事前学習→RLHFの2段階学習プロセスを理解した\n✅ Temperatureパラメータとコンテンツ生成への影響を体験した\n✅ ハルシネーションの根本原因を技術的に説明できる\n\n## 次のステップ\n\n次のモジュール **「7-10: トークンとコンテキストウィンドウ」** では、LLMのコスト・能力に直結する「トークン」と「コンテキスト長」の概念を実務観点で学びます。\n\n> 実務チャレンジ: ChatGPTで同じプロンプトを Temperature=0（または再生成ボタンを使わず固定）と Temperature=1.5 で試して、回答の違いを観察してください。",
+        "diagram": false
+      }
+    }
+  ]
+}

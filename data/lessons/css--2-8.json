@@ -1,0 +1,68 @@
+{
+  "id": "css--2-8",
+  "moduleId": "2-8",
+  "categoryId": "css",
+  "title": "初期値・計算値・使用値・実際値の4つの値概念",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# DevToolsの「Computed」タブを正しく読むために\n\nDevToolsのStylesパネルには「Computed」タブがあります。ここには適用された最終的なスタイルが表示されますが、なぜその値になったのかが分からなければ有効に活用できません。\n\n## この知識がマーケターに役立つ場面\n\n**1. DevTools Computedタブの活用**\nGA4タグの実装確認やLP改修のデバッグ時に、Computedタブで最終的に適用されたCSSプロパティの実際の値を確認できます。「なぜ16pxと表示されているのか」を理解できるようになります。\n\n**2. レスポンシブデザインの検証**\nスマートフォンでのLP表示を確認するとき、remで指定したフォントサイズが実際に何pxで表示されているかをComputedタブで確認できます。\n\n**3. パフォーマンス改善のヒント**\nCSSの計算コストを理解することで、ページパフォーマンス（LCP・FIDなどCore Web Vitals）に影響するCSSの問題を特定しやすくなります。\n\n**4. フロントエンドエンジニアとの共通言語**\nエンジニアに「計算値ベースで16pxになっているはずなのに実際の表示は14px」という形で問題を伝えられると、デバッグが素早く進みます。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# 4つの値概念\n\nCSSのプロパティには4つの値のステージがあります。\n\n## 1. 初期値（Initial Value）\n\nCSSの仕様で各プロパティに定められた初期値です。CSSを何も書かない場合の値です。\n\n```css\n/* 各プロパティの初期値の例 */\ncolor: canvastext;        /* 初期値: ブラウザのデフォルト文字色 */\nfont-size: medium;         /* 初期値: ブラウザ標準サイズ（通常16px） */\nfont-weight: normal;       /* 初期値: 400（normal） */\ndisplay: inline;           /* 初期値: inline */\nmargin: 0;                 /* 初期値: 0 */\nwidth: auto;               /* 初期値: auto */\n```\n\n`initial` キーワードを使うと明示的に初期値に戻せます：\n```css\n.reset-font { font-size: initial; }  /* mediumに戻る */\n```\n\n## 2. 計算値（Computed Value）\n\n相対値を絶対値に変換した値です。DevToolsのComputedタブで見えるものが主にこれです。\n\n```css\nhtml { font-size: 16px; }\n\n.text {\n  font-size: 1.5rem;   /* 指定値 */\n  /* → 計算値: 24px（16px × 1.5） */\n\n  width: 50%;          /* 指定値 */\n  /* → 計算値: 親要素の幅の50%（親が1000pxなら500px） */\n\n  line-height: 1.5;    /* 指定値 */\n  /* → 計算値: 36px（24px × 1.5） */\n}\n```\n\n## 3. 使用値（Used Value）\n\nレイアウト計算後の実際に使用される値です。計算値から実際のレイアウトに基づいて決定されます。\n\n```css\n.container {\n  width: 100%;          /* 指定値 */\n  /* 計算値: 親の100% */\n  /* 使用値: 例えば1200px（実際の画面幅から計算） */\n}\n\n.item {\n  width: auto;          /* 指定値 */\n  /* 計算値: auto（変わらない） */\n  /* 使用値: 残りのスペースを計算した結果（例: 760px） */\n}\n```\n\n## 4. 実際値（Actual Value）\n\nブラウザがレンダリングに実際に使用する値です。デバイスの制約（ピクセル単位の丸め処理など）が適用されます。\n\n```css\n.fine-line {\n  border-width: 0.5px;  /* 指定値・計算値: 0.5px */\n  /* 実際値: デバイスによっては1pxまたは0.5px\n     （デバイスピクセル比の影響） */\n}\n```\n\n## まとめ: 4つの値の流れ\n\n```\n1. 初期値\n   ↓（CSSの指定で上書き）\n指定値（Specified Value）\n   ↓（relative → absolute に変換）\n2. 計算値（Computed Value）   ← DevToolsのComputedで確認\n   ↓（レイアウト計算）\n3. 使用値（Used Value）       ← 実際のレイアウトサイズ\n   ↓（ピクセル丸め処理等）\n4. 実際値（Actual Value）     ← スクリーンに描画される値\n```\n\n## DevToolsでの確認方法\n\n| DevToolsのパネル | 表示される値 |\n|-----------------|-------------|\n| Styles タブ | 指定値（書いたCSS） |\n| Computed タブ | 計算値・使用値 |\n| 要素をホバー時のBoxModel | 実際のpx値 |",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: 計算値を予測してDevToolsで確認\n\n以下のCSSを書き、DevToolsのComputedタブで計算値を確認してみましょう。\n\n## 課題\n\n以下のHTMLとCSSを書いて、各要素のfont-sizeの計算値を予測してください：\n\n1. `html` に `font-size: 16px` を設定\n2. `.parent` に `font-size: 1.25rem` を設定（計算値は何px？）\n3. `.child-em` に `font-size: 1.5em` を設定（計算値は何px？）\n4. `.child-rem` に `font-size: 2rem` を設定（計算値は何px？）\n5. 各要素のpaddingをremで設定し、計算値を確認する",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>計算値の練習</title>\n  <style>\n    /* ① htmlのfont-sizeを16pxに設定 */\n    html {\n    }\n\n    body {\n      font-family: sans-serif;\n      margin: 0;\n      padding: 20px;\n      background: #f0f0f0;\n    }\n\n    /* ② .parentのfont-sizeを1.25remに */\n    /* 計算値は？ → 16px × 1.25 = ___px */\n    .parent {\n      background: #dce8ff;\n      padding: 20px;\n      border-radius: 8px;\n      margin-bottom: 20px;\n    }\n\n    /* ③ .child-emのfont-sizeを1.5emに */\n    /* emは親要素基準なので計算値は？ → ___px × 1.5 = ___px */\n    .child-em {\n      background: #ffd6d6;\n      padding: 1rem;  /* paddingもremで設定 */\n      border-radius: 4px;\n    }\n\n    /* ④ .child-remのfont-sizeを2remに */\n    /* remはhtml基準なので計算値は？ → 16px × 2 = ___px */\n    .child-rem {\n      background: #d6ffd6;\n      padding: 1rem;\n      border-radius: 4px;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"parent\">\n    <p>親要素（1.25rem）のテキスト</p>\n    <div class=\"child-em\">\n      <p>emを使った子要素（1.5em）のテキスト</p>\n    </div>\n    <div class=\"child-rem\">\n      <p>remを使った子要素（2rem）のテキスト</p>\n    </div>\n  </div>\n\n  <div style=\"background: white; padding: 16px; border-radius: 8px;\">\n    <p><strong>予測:</strong></p>\n    <ul>\n      <li>.parent font-size: 1.25rem → <span id=\"parent-calc\">?</span>px</li>\n      <li>.child-em font-size: 1.5em → <span id=\"em-calc\">?</span>px</li>\n      <li>.child-rem font-size: 2rem → <span id=\"rem-calc\">?</span>px</li>\n    </ul>\n  </div>\n\n  <script>\n    // 実際の計算値を表示\n    const parent = document.querySelector('.parent p');\n    const childEm = document.querySelector('.child-em p');\n    const childRem = document.querySelector('.child-rem p');\n    document.getElementById('parent-calc').textContent =\n      getComputedStyle(parent).fontSize;\n    document.getElementById('em-calc').textContent =\n      getComputedStyle(childEm).fontSize;\n    document.getElementById('rem-calc').textContent =\n      getComputedStyle(childRem).fontSize;\n  </script>\n</body>\n</html>",
+        "hints": [
+          "remはhtmlのfont-sizeを基準とします。html=16pxなら、1.25rem = 16 × 1.25 = 20px。",
+          "emは親要素のfont-sizeを基準とします。親が20px（1.25remの計算値）なら、1.5em = 20 × 1.5 = 30px。",
+          "remはhtmlのfont-sizeが基準なので、どんなにネストが深くても16pxが基準です。2rem = 16 × 2 = 32px。",
+          "JavaScriptのgetComputedStyle()でも計算値を取得できます。これはGA4イベント実装でも使うテクニックです。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>計算値の練習</title>\n  <style>\n    html {\n      font-size: 16px;\n    }\n\n    body {\n      font-family: sans-serif;\n      margin: 0;\n      padding: 20px;\n      background: #f0f0f0;\n    }\n\n    /* 1.25rem = 16px × 1.25 = 20px */\n    .parent {\n      font-size: 1.25rem;\n      background: #dce8ff;\n      padding: 20px;\n      border-radius: 8px;\n      margin-bottom: 20px;\n    }\n\n    /* 1.5em = 親(20px) × 1.5 = 30px */\n    .child-em {\n      font-size: 1.5em;\n      background: #ffd6d6;\n      padding: 1rem;\n      border-radius: 4px;\n    }\n\n    /* 2rem = html(16px) × 2 = 32px */\n    .child-rem {\n      font-size: 2rem;\n      background: #d6ffd6;\n      padding: 1rem;\n      border-radius: 4px;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"parent\">\n    <p>親要素（1.25rem = 20px）のテキスト</p>\n    <div class=\"child-em\">\n      <p>emを使った子要素（1.5em = 30px）のテキスト</p>\n    </div>\n    <div class=\"child-rem\">\n      <p>remを使った子要素（2rem = 32px）のテキスト</p>\n    </div>\n  </div>\n\n  <div style=\"background: white; padding: 16px; border-radius: 8px;\">\n    <p><strong>計算結果:</strong></p>\n    <ul>\n      <li>.parent font-size: 1.25rem → <span id=\"parent-calc\">?</span></li>\n      <li>.child-em font-size: 1.5em → <span id=\"em-calc\">?</span></li>\n      <li>.child-rem font-size: 2rem → <span id=\"rem-calc\">?</span></li>\n    </ul>\n  </div>\n\n  <script>\n    const parent = document.querySelector('.parent > p');\n    const childEm = document.querySelector('.child-em p');\n    const childRem = document.querySelector('.child-rem p');\n    document.getElementById('parent-calc').textContent =\n      getComputedStyle(parent).fontSize;\n    document.getElementById('em-calc').textContent =\n      getComputedStyle(childEm).fontSize;\n    document.getElementById('rem-calc').textContent =\n      getComputedStyle(childRem).fontSize;\n  </script>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "DevToolsの「Computed」タブで確認できる値はどれですか？",
+            "options": ["初期値（CSSを何も書いていない場合のデフォルト値）", "計算値（rem・%などが実際のpxに変換された値）", "ソースコードに書いたCSSの値そのまま", "HTMLの属性値"],
+            "correct": 1,
+            "explanation": "DevToolsのComputedタブには、remや%などの相対値が実際のpx値に変換された「計算値」が表示されます。Stylesタブには書いたCSSの値（指定値）が表示されるのと対照的です。"
+          },
+          {
+            "q": "html要素のfont-sizeが16pxで、.parentのfont-sizeが1.5remのとき、.parentの中にある.childにfont-size: 2emを設定すると計算値は何pxになりますか？",
+            "options": ["32px", "48px", "24px", "16px"],
+            "correct": 1,
+            "explanation": ".parentのfont-size: 1.5rem = 16px × 1.5 = 24px。.childのfont-size: 2emは親(.parent)のfont-size(24px)を基準とするため、24px × 2 = 48pxになります。emはネストの影響を受けることに注意が必要です。"
+          },
+          {
+            "q": "`initial` キーワードをCSSで使うと、その値はどうなりますか？",
+            "options": ["親要素の値を継承する", "ブラウザのUser Agent Stylesheetの値になる", "CSSの仕様で定められた初期値になる", "0またはnoneになる"],
+            "correct": 2,
+            "explanation": "`initial` はCSSの仕様で各プロパティに定められた初期値（initial value）に戻します。例えばfont-sizeのinitialは 'medium'、colorのinitialは 'canvastext' です。User Agent Stylesheetの値とは異なります。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール2-8 完了！\n\n## 習得したスキル\n\n✅ **初期値**（CSSの仕様で定められたデフォルト値）を理解した\n✅ **計算値**（relativeが絶対値に変換されたもの）をDevToolsで確認できる\n✅ **使用値**と**実際値**の概念を把握した\n✅ **emとremの計算の違い**（em=親基準、rem=html基準）を正確に計算できる\n✅ **getComputedStyle()** でJavaScriptから計算値を取得できる\n\n## 次のステップ\n\n次のモジュール **「2-9: CSSリセット（normalize.css・reset.css）の役割と選び方」** では、ブラウザ間のデフォルトスタイルの差異を解消するCSSリセットの方法を学びます。クロスブラウザ対応の実務に直結します。\n\n> 実務チャレンジ: 現在関わっているサイトをDevToolsで開き、Computedタブでfont-sizeの計算値を確認してみましょう。remで指定されているか、pxで固定されているかも確認できます。",
+        "diagram": false
+      }
+    }
+  ]
+}

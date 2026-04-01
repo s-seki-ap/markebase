@@ -1,0 +1,82 @@
+{
+  "id": "app-marketing--8-16",
+  "moduleId": "8-16",
+  "categoryId": "app-marketing",
+  "title": "Firebase SDKのiOSインストール手順",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# マーケターがSDK手順を学ぶ意義\n\n「SDKのインストールはエンジニアの仕事」は半分正解です。しかし計測設定の依頼者はマーケターです。何が必要で、どの程度の工数がかかり、どんなリスクがあるかを理解してこそ、的確な依頼と期待値調整ができます。\n\n## このモジュールの目標\n\n- iOSアプリへのFirebase SDKインストール全体像を理解する\n- 各手順でマーケターが準備・確認すべき内容を把握する\n- エンジニアに「何を」「なぜ」依頼するかを説明できるようになる\n\n## iOSアプリ開発の基礎知識\n\n```\niOSアプリ開発の主要ツール:\n- Xcode: Appleの公式開発環境（IDE）\n- Swift / Objective-C: 開発言語\n- CocoaPods / Swift Package Manager（SPM）: ライブラリ管理ツール\n- バンドルID: com.company.appname 形式のアプリ識別子\n```",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# Firebase iOS SDKのインストール手順\n\n## 全体の流れ\n\n```\nStep 1: Firebase ConsoleにiOSアプリを登録\n  → バンドルIDを入力\n  → GoogleService-Info.plist をダウンロード\n\nStep 2: ライブラリ管理ツールでSDKを追加\n  → Swift Package Manager（推奨）またはCocoaPodsを使用\n\nStep 3: GoogleService-Info.plist をXcodeプロジェクトに追加\n  → ルートディレクトリに配置（コミットはしない）\n\nStep 4: AppDelegate.swift でFirebaseを初期化\n  → import Firebase + FirebaseApp.configure() を追加\n\nStep 5: 動作確認\n  → DebugViewでfirst_openイベントを確認\n```\n\n## Swift Package Managerでの追加手順\n\n```swift\n// Xcode → File → Add Package Dependencies\n// URLを入力: https://github.com/firebase/firebase-ios-sdk\n// 必要なパッケージを選択:\n//   - FirebaseAnalytics（必須）\n//   - FirebaseCrashlytics（推奨）\n//   - FirebaseMessaging（プッシュ通知を使う場合）\n```\n\n## AppDelegate.swift の初期化コード\n\n```swift\nimport UIKit\nimport Firebase\n\n@main\nclass AppDelegate: UIResponder, UIApplicationDelegate {\n  \n  func application(\n    _ application: UIApplication,\n    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?\n  ) -> Bool {\n    // Firebaseの初期化（この1行だけで計測が始まる）\n    FirebaseApp.configure()\n    return true\n  }\n}\n```\n\n## カスタムイベントのログ記録（Swift）\n\n```swift\nimport FirebaseAnalytics\n\n// 商品詳細ページを表示した時\nAnalytics.logEvent(\"view_item\", parameters: [\n  \"item_id\": \"SKU-001\",\n  \"item_name\": \"プレミアムプラン\",\n  \"price\": 980,\n  \"currency\": \"JPY\"\n])\n```\n\n## マーケターが準備・確認すること\n\n| タイミング | マーケターの役割 |\n|---|---|\n| 実装前 | バンドルIDの確認・GoogleService-Info.plistの取得・イベント設計書の作成 |\n| 実装中 | エンジニアへのイベント仕様書の提供（イベント名・パラメータ定義） |\n| 実装後 | DebugViewとGA4リアルタイムでのイベント確認 |",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: Firebaseカスタムイベントの仕様書を作成する\n\nエンジニアへの実装依頼用イベント仕様書をJavaScriptオブジェクトとして作成してください。\n\n## 課題\n\nフィットネスアプリの3つのカスタムイベント仕様を `eventSpec` 配列に定義してください。Swift実装例（文字列）も含めます。",
+        "starterCode": "// エンジニアへの実装依頼用イベント仕様書\nconst eventSpec = [\n  {\n    // ワークアウト開始イベント\n    eventName: '',         // スネークケースで入力\n    trigger: '',           // どんな操作で発火するか（日本語で）\n    params: {\n      workout_type: 'String',  // データ型も記載\n      target_duration_min: 'Int'\n    },\n    swiftExample: ''       // Analytics.logEvent(\"...\", parameters: [...]) の形式\n  },\n  {\n    // プレミアムプラン購入開始イベント\n    eventName: '',\n    trigger: '',\n    params: {\n      plan_id: 'String',\n      price: 'Double',\n      currency: 'String'\n    },\n    swiftExample: ''\n  },\n  {\n    // チュートリアル完了イベント\n    eventName: '',\n    trigger: '',\n    params: {\n      tutorial_id: 'String',\n      completion_time_sec: 'Int'\n    },\n    swiftExample: ''\n  }\n];\n\n// 仕様書として出力（変更不要）\neventSpec.forEach((spec, i) => {\n  console.log(`\\n--- イベント ${i + 1} ---`);\n  console.log('イベント名:', spec.eventName);\n  console.log('発火タイミング:', spec.trigger);\n  console.log('パラメータ:', Object.entries(spec.params).map(([k,v]) => `${k}(${v})`).join(', '));\n  console.log('Swift実装例:', spec.swiftExample);\n});",
+        "hints": [
+          "ワークアウト開始は 'workout_start'、購入開始は 'begin_checkout'（推奨イベント）、チュートリアル完了は 'tutorial_complete' が適切です。",
+          "swiftExampleは例えば 'Analytics.logEvent(\"workout_start\", parameters: [\"workout_type\": \"running\"])' のような文字列です。",
+          "triggerは「ワークアウト開始ボタンをタップした時」のように日本語で記載します。"
+        ],
+        "answer": "const eventSpec = [\n  {\n    eventName: 'workout_start',\n    trigger: 'ワークアウト開始ボタンをタップした時',\n    params: {\n      workout_type: 'String',\n      target_duration_min: 'Int'\n    },\n    swiftExample: 'Analytics.logEvent(\"workout_start\", parameters: [\"workout_type\": \"running\", \"target_duration_min\": 30])'\n  },\n  {\n    eventName: 'begin_checkout',\n    trigger: 'プレミアムプランの購入ボタンをタップした時',\n    params: {\n      plan_id: 'String',\n      price: 'Double',\n      currency: 'String'\n    },\n    swiftExample: 'Analytics.logEvent(\"begin_checkout\", parameters: [\"plan_id\": \"premium_monthly\", \"price\": 980.0, \"currency\": \"JPY\"])'\n  },\n  {\n    eventName: 'tutorial_complete',\n    trigger: 'チュートリアルの最終ステップを完了した時',\n    params: {\n      tutorial_id: 'String',\n      completion_time_sec: 'Int'\n    },\n    swiftExample: 'Analytics.logEvent(\"tutorial_complete\", parameters: [\"tutorial_id\": \"onboarding_v2\", \"completion_time_sec\": 145])'\n  }\n];\n\neventSpec.forEach((spec, i) => {\n  console.log(`\\n--- イベント ${i + 1} ---`);\n  console.log('イベント名:', spec.eventName);\n  console.log('発火タイミング:', spec.trigger);\n  console.log('パラメータ:', Object.entries(spec.params).map(([k,v]) => `${k}(${v})`).join(', '));\n  console.log('Swift実装例:', spec.swiftExample);\n});"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "iOSアプリにFirebase SDKを組み込む際に必要な設定ファイルはどれですか？",
+            "options": [
+              "google-services.json",
+              "firebase-config.xml",
+              "GoogleService-Info.plist",
+              "AppConfig.swift"
+            ],
+            "correct": 2,
+            "explanation": "`GoogleService-Info.plist` はiOSアプリ用のFirebase設定ファイルです。AndroidではXML形式の `google-services.json` を使います。どちらもFirebase ConsoleのプロジェクトコンソールからダウンロードでGitにはコミットしないよう注意が必要です。"
+          },
+          {
+            "q": "iOSアプリでFirebaseを初期化するコードを記述する場所として正しいものはどれですか？",
+            "options": [
+              "どのViewControllerでも初期化できる",
+              "AppDelegate.swift の application(_:didFinishLaunchingWithOptions:) メソッド内",
+              "Info.plist ファイルの中",
+              "URLSession のdelegateメソッド内"
+            ],
+            "correct": 1,
+            "explanation": "`FirebaseApp.configure()` はアプリ起動時の最初のポイントである `AppDelegate.swift` の `application(_:didFinishLaunchingWithOptions:)` に記述します。ここで初期化することで、アプリ起動の瞬間から計測が始まります。"
+          },
+          {
+            "q": "iOSアプリでカスタムイベントを記録するメソッドとして正しいものはどれですか？",
+            "options": [
+              "Firebase.log(eventName:, params:)",
+              "Analytics.logEvent(_:parameters:)",
+              "FirebaseAnalytics.sendEvent(name:, data:)",
+              "GA4.trackEvent(name:, parameters:)"
+            ],
+            "correct": 1,
+            "explanation": "iOSでのカスタムイベント記録は `Analytics.logEvent(_:parameters:)` を使います。`import FirebaseAnalytics` が必要です。イベント名は文字列で指定し、パラメータは `[String: Any]` の辞書形式で渡します。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール8-16 完了！\n\nFirebase iOS SDKのインストール手順を習得しました。\n\n## 習得したスキル\n\n✅ **iOS SDKインストールの5ステップ**（登録→ライブラリ追加→設定ファイル配置→初期化→確認）を説明できる\n✅ **`GoogleService-Info.plist`** の役割と取得方法を理解した\n✅ **`FirebaseApp.configure()`** の初期化コードの記述場所を把握した\n✅ **エンジニアへのイベント仕様書**の形式を身につけた\n\n## 次のステップ\n\n次のモジュール **「8-17: Firebase SDKのAndroidインストール手順」** では、Android向けの手順とiOSとの違いを学びます。",
+        "diagram": false
+      }
+    }
+  ]
+}

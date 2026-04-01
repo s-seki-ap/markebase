@@ -1,0 +1,82 @@
+{
+  "id": "javascript--3-20",
+  "moduleId": "3-20",
+  "categoryId": "javascript",
+  "title": "短絡評価でデフォルト値とガード節を書く",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "## 短絡評価でデフォルト値とガード節を書く\n\n`window.dataLayer = window.dataLayer || []` — GTMのカスタムHTMLタグで必ず目にするこのコードは、**短絡評価**（ショートサーキット評価）を使ったデフォルト値パターンです。\n\n短絡評価とは「左辺の評価結果によって右辺を評価するかどうかを決める」動作のことです。これを活用すると、null/undefinedチェック、デフォルト値設定、ガード節を簡潔に書けます。\n\n**このモジュールで学ぶこと**\n- `||` による短絡評価とデフォルト値パターン\n- `&&` による短絡評価とガード節パターン\n- GTMタグで頻出する短絡評価のイディオム\n- 短絡評価を使った安全なオブジェクトアクセス",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "## ||による短絡評価：デフォルト値パターン\n\n`||` は左辺が **falsy** の場合に右辺を返します。\n\n```javascript\n// 左辺がtruthyならそのまま返す\n// 左辺がfalsyなら右辺を返す\nvar result = 左辺 || 右辺;\n```\n\n```javascript\n// 典型的なデフォルト値パターン\nvar value = {{GA4 User ID}} || 'anonymous';  // 未定義なら'anonymous'\nvar quantity = {{Item Quantity}} || 1;        // 未定義なら1\nvar currency = {{Currency}} || 'JPY';         // 未定義なら'JPY'\n\n// dataLayerの安全な初期化（最もよく見るパターン）\nwindow.dataLayer = window.dataLayer || [];\n```\n\n**短絡評価の仕組み：** `||` は左辺が truthy なら右辺を評価せずに左辺を返す。左辺が falsy なら右辺を評価して返す。\n\n## &&による短絡評価：ガード節パターン\n\n`&&` は左辺が **falsy** の場合に右辺を評価しません（左辺を返す）。\n\n```javascript\n// 左辺がtruthyなら右辺を評価して返す\n// 左辺がfalsyなら右辺を評価せず左辺を返す\nvar result = 左辺 && 右辺;\n```\n\n```javascript\n// ガード節：条件が満たされる場合のみ右辺を実行\nwindow.ga && window.ga('send', 'pageview');  // gaが存在する場合のみ実行\ndataLayer && dataLayer.push({ event: 'click' });  // dataLayerが存在する場合のみ\n```\n\n### GTM実例①：安全なネストしたオブジェクトアクセス\n\n```javascript\n<script>\n  window.dataLayer = window.dataLayer || [];\n\n  // ネストしたオブジェクトを安全に参照\n  var ecommerceData = {{Ecommerce Data Object}};  // { purchase: { actionField: {...}, products: [...] } }\n\n  // ecommerceData が存在し、かつ purchase が存在する場合のみアクセス\n  var transactionId = ecommerceData\n    && ecommerceData.purchase\n    && ecommerceData.purchase.actionField\n    && ecommerceData.purchase.actionField.id;\n\n  // transactionId が取得できた場合のみ送信\n  if (transactionId) {\n    window.dataLayer.push({\n      'event': 'transaction_check',\n      'transaction_id': transactionId\n    });\n  }\n</script>\n```\n\n### GTM実例②：デフォルト値を使ったGA4パラメータの安全な構築\n\n```javascript\n<script>\n  window.dataLayer = window.dataLayer || [];\n\n  // 各GTM変数が未定義の場合のデフォルト値を設定\n  var eventParams = {\n    'event': 'page_view',\n    'page_type': {{Page Type}} || 'unknown',\n    'user_id': {{User ID}} || null,\n    'member_rank': {{Member Rank}} || 'none',\n    'item_count': {{Cart Item Count}} || 0,\n    'currency': {{Currency Code}} || 'JPY'\n  };\n\n  // user_idがnullの場合はパラメータを削除（GA4にundefinedを送らない）\n  if (!eventParams.user_id) {\n    delete eventParams.user_id;\n  }\n\n  window.dataLayer.push(eventParams);\n</script>\n```\n\n### GTM実例③：関数実行のガード節\n\n```javascript\n<script>\n  // gtagが関数として存在する場合のみ呼び出す（ガード節）\n  typeof window.gtag === 'function' && window.gtag('event', 'conversion', {\n    'send_to': 'AW-XXXXXXXXX/XXXXXXXXX'\n  });\n\n  // 短絡評価を使った安全なメソッド呼び出し\n  var form = document.querySelector('#contact-form');\n  form && form.addEventListener('submit', function() {\n    window.dataLayer.push({ 'event': 'form_submit' });\n  });\n</script>\n```\n\n### ||と&&の短絡評価まとめ\n\n| 演算子 | 左辺がtruthyの場合 | 左辺がfalsyの場合 | 用途 |\n|--------|-----------------|-----------------|------|\n| `\\|\\|` | 左辺を返す（右辺は評価しない） | 右辺を返す | デフォルト値 |\n| `&&` | 右辺を返す | 左辺を返す（右辺は評価しない） | ガード節 |",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "## 練習：短絡評価でGA4パラメータを安全に構築する\n\n短絡評価を使って以下の要件を満たすGTMカスタムHTMLタグを完成させてください。\n\n**要件**\n1. `window.dataLayer` が未定義なら空配列で初期化する（`||` のデフォルト値パターン）\n2. `productName` が空の場合は `'商品名不明'` をデフォルト値にする\n3. `productPrice` が falsy（0や未定義）の場合は `0` をデフォルト値にする\n4. `ga4Object` が存在する場合のみ `ga4Object.send()` を呼び出す（ガード節）",
+        "starterCode": "<script>\n  // 1. dataLayerの安全な初期化\n  window.dataLayer = window.dataLayer ______ [];\n\n  var productName = {{Product Name}};\n  var productPrice = {{Product Price}};\n  var ga4Object = {{GA4 Custom Object}};\n\n  // 2. デフォルト値の設定\n  var safeName = productName ______ '商品名不明';\n  var safePrice = productPrice ______ 0;\n\n  window.dataLayer.push({\n    'event': 'view_item',\n    'item_name': safeName,\n    'price': safePrice\n  });\n\n  // 3. ga4Objectが存在する場合のみsendを実行（ガード節）\n  ga4Object ______ ga4Object.send('view_item');\n</script>",
+        "hints": [
+          "`||` は左辺がfalsyのときに右辺を返します。`window.dataLayer || []` でdataLayerが未定義なら空配列を使います",
+          "`productName || '商品名不明'` で productName が空文字・undefined の場合にデフォルト値が使われます",
+          "`ga4Object && ga4Object.send('view_item')` でga4Objectが存在する（truthy）場合のみ `.send()` が実行されます"
+        ],
+        "answer": "<script>\n  // 1. dataLayerの安全な初期化\n  window.dataLayer = window.dataLayer || [];\n\n  var productName = {{Product Name}};\n  var productPrice = {{Product Price}};\n  var ga4Object = {{GA4 Custom Object}};\n\n  // 2. デフォルト値の設定\n  var safeName = productName || '商品名不明';\n  var safePrice = productPrice || 0;\n\n  window.dataLayer.push({\n    'event': 'view_item',\n    'item_name': safeName,\n    'price': safePrice\n  });\n\n  // 3. ga4Objectが存在する場合のみsendを実行（ガード節）\n  ga4Object && ga4Object.send('view_item');\n</script>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "question": "`var label = {{Click Text}} || 'no_text';` において、`{{Click Text}}` が `undefined` の場合、`label` の値はどうなりますか？",
+            "options": [
+              "undefined",
+              "'no_text'",
+              "null",
+              "エラーが発生する"
+            ],
+            "correct": 1,
+            "explanation": "`||` の短絡評価では、左辺（`undefined`）がfalsyのため右辺（`'no_text'`）が返されます。GTM変数が未設定の場合 `undefined` になることが多く、このデフォルト値パターンはGTMタグでの必須イディオムです。"
+          },
+          {
+            "question": "`window.ga && window.ga('send', 'pageview')` の動作として正しいのはどれですか？",
+            "options": [
+              "window.gaが存在しない場合、エラーが発生してスクリプトが停止する",
+              "window.gaが存在しない場合、右辺は評価されず ga() の呼び出しはスキップされる",
+              "window.gaの値に関わらず常に ga() が呼び出される",
+              "window.gaがundefinedの場合、自動的に定義される"
+            ],
+            "correct": 1,
+            "explanation": "`&&` の短絡評価では、左辺（`window.ga`）がfalsyの場合、右辺（`window.ga('send', 'pageview')`）は評価されません。つまり `window.ga` が未定義でも `window.ga is not a function` エラーが発生しません。これがガード節パターンの利点です。"
+          },
+          {
+            "question": "`window.dataLayer = window.dataLayer || []` はなぜGTMタグの先頭に書くべきですか？",
+            "options": [
+              "dataLayerをリセットして最新状態にするため",
+              "dataLayerが既に定義されていればそのまま使い、未定義なら空配列で初期化することで、既存のdataLayerデータを破壊せず安全に使えるようにするため",
+              "GTMの規約で必須とされているため",
+              "パフォーマンスを向上させるため"
+            ],
+            "correct": 1,
+            "explanation": "GTMタグは複数のタグが並行して動作します。`window.dataLayer = []` と書くと既存のdataLayerデータが消えてしまいます。`|| []` を使った短絡評価により「既にdataLayerが存在すればそれを使い、なければ空配列で初期化する」という安全な初期化が実現できます。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "## まとめ：短絡評価でデフォルト値とガード節を書く\n\n✅ `||` の短絡評価：左辺がfalsyなら右辺を返す。GTM変数のデフォルト値設定に必須\n\n✅ `&&` の短絡評価：左辺がfalsyなら右辺を評価しない。オブジェクト存在確認のガード節に使う\n\n✅ `window.dataLayer = window.dataLayer || []` はGTMタグの基本イディオム\n\n✅ ネストしたオブジェクトへの安全なアクセスを `&&` チェーンで実現できる\n\n✅ デフォルト値パターンとガード節パターンを使いこなすとバグの少ないGTMタグが書ける\n\n**このモジュールでJavaScriptの制御構文（条件分岐・ループ・演算子）の基礎を完走しました。** 次のカテゴリでは、これらのスキルを活かしてより高度なGA4実装テクニックを学びます。",
+        "diagram": false
+      }
+    }
+  ]
+}

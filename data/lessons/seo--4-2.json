@@ -1,0 +1,78 @@
+{
+  "id": "seo--4-2",
+  "moduleId": "4-2",
+  "categoryId": "seo",
+  "title": "クローリング：Googlebotがサイトを巡回する流れ",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# Googlebotを「理解する」とSEOの精度が上がる\n\nGooglebotはGoogleが運営するWebクローラー（自動巡回プログラム）です。人間のブラウザとは異なる動作をするため、「ブラウザでは見えているのにGoogleには伝わっていない」という状況が起こります。\n\n## マーケターが知るべき理由\n\n**「JavaScriptで動的に生成したコンテンツがGoogleに認識されていない」**\n\nこれはSPA（シングルページアプリ）やJavaScript重存のサイトで頻繁に起こる問題です。Googlebotの動作を理解することで、こうした問題を事前に防げます。\n\n## クローリングを制御する重要性\n\n- 重要なページに優先的にクロールリソースを集中させられる\n- 不要なページのクロールを防いでリソースを節約できる\n- クロールエラーを早期に発見・修正できる\n- ページの更新がGoogleに反映されるスピードをコントロールできる",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# Googlebotのクロール動作を理解する\n\n## クロールのプロセス\n\n```\n発見（URLキュー登録）\n    ↓\nrobots.txtを確認（クロール許可？）\n    ↓\nページをリクエスト・取得\n    ↓\nリンクを抽出→URLキューに追加\n    ↓\nコンテンツを解析・インデックスへ\n```\n\n## Googlebotの特徴\n\n| 特徴 | 詳細 |\n|------|------|\n| **User-Agent** | Googlebot/2.1 (+http://www.google.com/bot.html) |\n| **レンダリング** | JavaScriptを実行するが、タイミングが遅れる場合あり |\n| **クロール間隔** | サイトのサーバー負荷を考慮して間隔を調整 |\n| **IPアドレス** | Googleが公開するIP範囲から来訪 |\n\n## robots.txtによるクロール制御\n\n`robots.txt` はサイトのルートに置き、Googlebotのアクセスを許可・拒否する設定ファイルです。\n\n```\n# 全クローラーへの設定\nUser-agent: *\nDisallow: /admin/\nDisallow: /cart/\nDisallow: /user/\n\n# サイトマップの場所を伝える\nSitemap: https://example.com/sitemap.xml\n```\n\n**注意**: `Disallow` はクロールを禁止するだけで、インデックスを完全に防ぐわけではありません。インデックスを防ぐには `noindex` メタタグが必要です。\n\n## クロールされない主な原因\n\n1. **robots.txtでブロック** : Disallowの誤設定\n2. **サーバーエラー（5xx）** : ページが取得できない\n3. **リダイレクトチェーン** : 3回以上のリダイレクトは危険\n4. **nofollow連鎖** : リンクに`rel=\"nofollow\"`が多用されている\n5. **JavaScriptのみのナビゲーション** : リンクがJSイベントのみで生成されている",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: robots.txtとクロール制御の設定\n\nあなたはECサイトのSEO担当者です。以下のページ構成でrobots.txtを設定し、HTMLにもクロール制御の指示を追加してください。\n\n## クロールさせたいページ\n- 商品ページ（`/products/`）\n- ブログ（`/blog/`）\n- 会社情報（`/about/`）\n\n## クロールさせたくないページ\n- 管理画面（`/admin/`）\n- カートページ（`/cart/`）\n- 検索結果ページ（`/search/`）\n\n## 課題\n\nHTMLファイルに以下を設定してください：\n1. `<meta name=\"robots\">` でインデックスとフォローを許可\n2. コメントでrobots.txtの設定例を記載",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>商品詳細 | ECサイト</title>\n\n  <!-- ① metaロボットタグを設定してください（インデックス許可・フォロー許可） -->\n\n\n  <!-- robots.txtの設定例（コメントで記載）\n  ② 以下のrobots.txtを完成させてください：\n\n  User-agent: *\n  // 管理画面を拒否\n\n  // カートを拒否\n\n  // 検索結果を拒否\n\n  Sitemap: https://example.com/sitemap.xml\n  -->\n\n</head>\n<body>\n  <h1>おすすめ商品</h1>\n  <p>この商品はGooglebotにクロール・インデックスされます。</p>\n</body>\n</html>",
+        "hints": [
+          "`<meta name=\"robots\" content=\"index, follow\">` でインデックス許可・リンクフォロー許可を指定します",
+          "robots.txtのDisallow構文：`Disallow: /admin/` のようにパスを指定します",
+          "インデックスを拒否したい場合は `content=\"noindex\"` を使います",
+          "検索結果ページのような重複コンテンツはクロールさせないのがベストプラクティスです"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>商品詳細 | ECサイト</title>\n\n  <!-- metaロボットタグ：インデックス許可・リンクフォロー許可 -->\n  <meta name=\"robots\" content=\"index, follow\">\n\n  <!-- robots.txtの設定例\n  User-agent: *\n  Disallow: /admin/\n  Disallow: /cart/\n  Disallow: /search/\n\n  Sitemap: https://example.com/sitemap.xml\n  -->\n\n</head>\n<body>\n  <h1>おすすめ商品</h1>\n  <p>この商品はGooglebotにクロール・インデックスされます。</p>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "robots.txtの `Disallow: /admin/` という設定の正しい説明はどれですか？",
+            "options": [
+              "/admin/ 以下のページをインデックスから削除する",
+              "/admin/ 以下のページへのクロールをGooglebotに禁止する",
+              "/admin/ 以下のページをGoogleの広告から除外する",
+              "/admin/ 以下のページへのユーザーアクセスを禁止する"
+            ],
+            "correct": 1,
+            "explanation": "robots.txtのDisallowはGooglebotなどのクローラーに対して、そのパスをクロールしないよう「要求」するものです。ユーザーのアクセスには影響せず、インデックスの完全な防止も保証しません。"
+          },
+          {
+            "q": "Googlebotがページを取得する際に最初に確認するファイルはどれですか？",
+            "options": ["sitemap.xml", "robots.txt", ".htaccess", "index.html"],
+            "correct": 1,
+            "explanation": "Googlebotはサイトを訪問する前にまずサイトルートの robots.txt を確認し、クロールが許可されているかを確認します。このファイルはサーバーの負荷軽減とクロール制御に重要な役割を持ちます。"
+          },
+          {
+            "q": "JavaScriptで動的に生成されたコンテンツについて、Googlebotに関して正しい説明はどれですか？",
+            "options": [
+              "JavaScriptコンテンツはGooglebotに一切認識されない",
+              "Googlebotは即座にすべてのJavaScriptを実行してコンテンツを認識する",
+              "GooglebotはJavaScriptを実行できるが、静的HTMLより認識が遅れる場合がある",
+              "JavaScriptコンテンツは必ずインデックスに登録される"
+            ],
+            "correct": 2,
+            "explanation": "Googlebotは現代のWebでJavaScriptを実行できますが、レンダリングキューが別にあるため、静的HTMLより認識・インデックスが遅れることがあります。重要なコンテンツは静的HTMLで提供するか、サーバーサイドレンダリングが推奨されます。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール4-2 完了！\n\n## 習得したスキル\n\n✅ **Googlebotのクロールプロセス**（発見→robots.txt確認→取得→解析）を理解した\n✅ **robots.txtの書き方**と`Disallow`ディレクティブを習得した\n✅ **metaロボットタグ**（`index/noindex`, `follow/nofollow`）の設定方法を習得した\n✅ **クロールされない5つの原因**と対応策を理解した\n✅ **JavaScript重存サイトのリスク**とサーバーサイドレンダリングの重要性を把握した\n\n## 次のステップ\n\n次のモジュール **「4-3: インデックス：ページがGoogle検索に登録される仕組み」** では、クロールされたページがどのようにして検索データベースに登録されるかを学びます。\n\n> 実務チャレンジ: 自分のサイトのrobots.txtを `https://yourdomain.com/robots.txt` で確認し、意図しないブロックがないかチェックしましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

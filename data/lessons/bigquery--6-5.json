@@ -1,0 +1,82 @@
+{
+  "id": "bigquery--6-5",
+  "moduleId": "6-5",
+  "categoryId": "bigquery",
+  "title": "ORDER BY：データを並べ替える",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# データの「順番」が分析の見やすさを決める\n\nSELECT文で取得したデータは、デフォルトでは順番が保証されていません。BigQueryでは内部的な処理順序で返ってくるため、同じクエリでも毎回順番が変わる可能性があります。\n\n**ORDER BYを使うシーン**：\n- 「売上の高い順にユーザーを並べたい」\n- 「日付の古い順にイベントを追いたい」\n- 「アクセス数の多いページTOP10を確認したい」\n\n## ExcelのSORT機能との対応\n\nExcelで「列を選んで昇順・降順で並べ替え」するのと同じことをSQLで行います。SQLでは実行のたびに自動的に整列された結果が返ってきます。\n\n> 注意：BigQueryはコストがかかるため、ORDER BYだけを目的に大量データをソートするのは避けましょう。LIMITと組み合わせて必要な件数だけ取得するのが実務のベストプラクティスです。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# ORDER BYの構文\n\n## 基本構文\n\n```sql\nSELECT 列名\nFROM テーブル名\nWHERE 条件\nORDER BY 列名 [ASC | DESC]\n```\n\n- `ASC`：昇順（小さい→大きい、古い→新しい）※省略時のデフォルト\n- `DESC`：降順（大きい→小さい、新しい→古い）\n\n## 単一列での並べ替え\n\n```sql\n-- イベント発生日時の新しい順に並べる\nSELECT\n  event_date,\n  event_name,\n  user_pseudo_id\nFROM\n  `myproject.analytics_123456789.events_20240115`\nORDER BY\n  event_date DESC\n```\n\n## 複数列での並べ替え\n\n```sql\n-- まず日付で昇順、同じ日付内ではイベント名でアルファベット順\nSELECT\n  event_date,\n  event_name,\n  user_pseudo_id\nFROM\n  `myproject.analytics_123456789.events_*`\nWHERE\n  _TABLE_SUFFIX BETWEEN '20240101' AND '20240107'\nORDER BY\n  event_date ASC,\n  event_name ASC\n```\n\n## 集計結果をORDER BYで並べる（実務でよく使う）\n\n```sql\n-- イベントごとの発生回数を多い順に並べる\nSELECT\n  event_name,\n  COUNT(*) AS event_count\nFROM\n  `myproject.analytics_123456789.events_20240115`\nGROUP BY\n  event_name\nORDER BY\n  event_count DESC\n```\n\n## SQLの実行順序（重要）\n\n```\nFROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT\n```\n\nSQLは書いた順ではなく、この順序で実行されます。ORDER BYは最後から2番目に実行されます。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習：購入金額の高い順にユーザーを並べる\n\n## 課題\n\nGA4のBigQueryデータから、2024年1月の購入ユーザーを購入回数の多い順に並べるSQLを書いてください。\n\n**条件**：\n- テーブル：`myproject.analytics_123456789.events_*`\n- 期間：2024年1月（`_TABLE_SUFFIX BETWEEN '20240101' AND '20240131'`）\n- イベント：`purchase` のみ\n- 取得列：`user_pseudo_id`、購入回数（COUNT(*)をAS purchase_countで別名）\n- 並び順：購入回数の多い順（降順）\n\n> 💡 `GROUP BY` と `COUNT(*)` を組み合わせます（GROUP BYは6-11で詳しく学びますが、ここでは先取りして使ってみましょう）。",
+        "starterCode": "-- 2024年1月の購入ユーザーを購入回数順に並べる\n\nSELECT\n  user_pseudo_id,\n  COUNT(*) AS purchase_count\nFROM\n  `myproject.analytics_123456789.events_*`\nWHERE\n  _TABLE_SUFFIX BETWEEN '20240101' AND '20240131'\n  AND event_name = 'purchase'\nGROUP BY\n  user_pseudo_id\nORDER BY\n  -- 購入回数の多い順に並べてください\n  ________",
+        "hints": [
+          "ORDER BY の後に並べ替えの基準となる列名（またはAS句で付けた別名）を書きます。",
+          "「多い順」は降順（DESC）です。ORDER BY purchase_count DESC と書きます。",
+          "ASCは昇順（少ない→多い）、DESCは降順（多い→少ない）です。デフォルトはASCです。"
+        ],
+        "answer": "-- 2024年1月の購入ユーザーを購入回数順に並べる\n\nSELECT\n  user_pseudo_id,\n  COUNT(*) AS purchase_count\nFROM\n  `myproject.analytics_123456789.events_*`\nWHERE\n  _TABLE_SUFFIX BETWEEN '20240101' AND '20240131'\n  AND event_name = 'purchase'\nGROUP BY\n  user_pseudo_id\nORDER BY\n  purchase_count DESC"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "ORDER BY で昇順・降順を指定しなかった場合（ASC/DESCを省略した場合）、デフォルトはどちらになりますか？",
+            "options": [
+              "降順（DESC）",
+              "昇順（ASC）",
+              "テーブルの物理的な格納順",
+              "ランダム順"
+            ],
+            "correct": 1,
+            "explanation": "ORDER BY はデフォルトで昇順（ASC）になります。数値なら小さい順、文字列ならアルファベット順、日付なら古い順です。降順にしたい場合は明示的に DESC を指定します。"
+          },
+          {
+            "q": "SQLの実行順序として正しいものはどれですか？",
+            "options": [
+              "SELECT → FROM → WHERE → ORDER BY",
+              "FROM → WHERE → SELECT → ORDER BY",
+              "ORDER BY → WHERE → FROM → SELECT",
+              "WHERE → FROM → ORDER BY → SELECT"
+            ],
+            "correct": 1,
+            "explanation": "SQLは書いた順序ではなく「FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT」の順で実行されます。これを理解すると、エラーの原因や列の参照ルールが分かりやすくなります。"
+          },
+          {
+            "q": "複数列でのORDER BYについて正しい説明はどれですか？",
+            "options": [
+              "ORDER BY には列を1つしか指定できない",
+              "ORDER BY に複数列を指定すると、後に書いた列が優先される",
+              "ORDER BY に複数列を指定すると、最初の列で並べた後、同じ値がある行を次の列で並べる",
+              "ORDER BY に複数列を指定すると、すべての列で同時に並べ替えが行われる"
+            ],
+            "correct": 2,
+            "explanation": "ORDER BY に複数列を指定すると、最初の列で並べ替えを行い、同じ値を持つ行については次の列で並べ替えます。例えば `ORDER BY event_date ASC, event_name ASC` は日付順で並べ、同じ日付内ではイベント名のアルファベット順になります。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール6-5 完了！\n\nORDER BYによるデータの並べ替えをマスターしました。\n\n## 習得したスキル\n\n✅ **ORDER BY の基本構文**でデータを並べ替えられる\n✅ **ASC（昇順）とDESC（降順）**を使い分けられる\n✅ **複数列の並べ替え**ができる\n✅ **SQLの実行順序**（FROM → WHERE → SELECT → ORDER BY）を理解した\n\n## 実務でよく使うパターン\n\n- `ORDER BY event_date DESC` → 最新データから確認\n- `ORDER BY event_count DESC` → 多いものから確認\n- `ORDER BY user_pseudo_id ASC, event_timestamp ASC` → ユーザーごとの行動を時系列で追う\n\n## 次のステップ\n\n次のモジュール **「6-6: LIMIT」** では、取得件数を制限してBigQueryのコストを節約する方法を学びます。ORDER BYとの組み合わせが特に重要です。",
+        "diagram": false
+      }
+    }
+  ]
+}

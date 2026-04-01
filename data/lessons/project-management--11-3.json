@@ -1,0 +1,82 @@
+{
+  "id": "project-management--11-3",
+  "moduleId": "11-3",
+  "categoryId": "project-management",
+  "title": "QCD三角形とトレードオフの管理",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 「早く・安く・良いもの」は同時に実現できない\n\nクライアントから「予算を半分にして、期間も短縮して、でも品質は落とさないで」と言われたことはありませんか？\n\nこの要求に何の根拠もなく「はい」と答えると、プロジェクトは確実に破綻します。\n\n## よくあるデジタルマーケ案件の典型的な会話\n\n**クライアント**: 「LPを2週間で作れますか？予算は30万円です。競合より絶対良いものにしてください。」\n\n**適切なPMの回答**: 「2週間・30万円で実現できる品質の上限を明確にした上で、ご判断いただけますか？品質を競合水準にするなら、期間か予算のどちらかを調整する必要があります。」\n\nこの「3つの制約のバランス」を管理するのがQCD思考であり、PMの核心スキルの一つです。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# QCD三角形（鉄の三角形）\n\nプロジェクトマネジメントの根幹となる概念が**QCD三角形**（トリプル・コンストレイント）です。\n\n```\n           品質（Quality）\n              △\n             / \\\n            /   \\\n           /     \\\n          /  QCD  \\\n         /    ↕    \\\n        / スコープ  \\\n       ━━━━━━━━━━━━━━━\n  コスト（Cost）    期間（Delivery）\n```\n\n**どれか一つを動かすと他の要素に影響が出る**のが鉄則です。\n\n## 3要素の定義\n\n| 要素 | 内容 | デジタルマーケでの例 |\n|------|------|---------------------|\n| **Q（Quality）** | 成果物の品質・スコープの範囲 | LP完成度・機能数・分析精度 |\n| **C（Cost）** | 予算・リソース・工数 | 制作費・人件費・ツール費用 |\n| **D（Delivery）** | 納期・スケジュール | リリース日・キャンペーン開始日 |\n\n## トレードオフの4パターン\n\n**パターン1: 品質を上げたい**\n→ コストを増やす（追加人員・外注）か、期間を延ばす\n\n**パターン2: コストを下げたい**\n→ 品質（スコープ）を絞るか、期間を延ばして工数分散\n\n**パターン3: 納期を早めたい**\n→ コストを増やす（並行作業・外注）か、スコープを絞る\n\n**パターン4: 全部固定したい場合**\n→ スコープ（品質水準）を最初から厳密に合意しておく必要がある\n\n## 制約の優先順位を合意する\n\nプロジェクト開始時に必ず確認すべき質問：\n\n1. 「納期・予算・品質のうち、絶対に動かせないものはどれですか？」\n2. 「問題が発生した場合、どの要素を優先的に守りますか？」\n\nこの合意がないと、問題発生時に判断基準がなくなります。",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: QCDトレードオフシート\n\n以下のシナリオを読んで、QCDのトレードオフを整理してください。\n\n## シナリオ\n\nあなたはECサイトの夏季セールキャンペーンLPのPMです。\n- 現在の計画: 納期6週間・予算80万円・フルデザインカスタムLP\n- クライアントの新要件: 「来週末（10日後）にはリリースしたい」\n\n## 課題\n\nHTMLシートに、3つのトレードオフ案をまとめてください。\n- 案A: 品質を下げて納期を守る\n- 案B: 予算を増やして納期を守る\n- 案C: 納期を変更せずに交渉する（スコープ再定義）\n\n各案のメリット・デメリットも記入してください。",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>QCDトレードオフシート</title>\n  <style>\n    body { font-family: sans-serif; max-width: 800px; margin: 40px auto; background: #f8fafc; color: #1e293b; }\n    h1 { border-left: 4px solid #f59e0b; padding-left: 12px; }\n    .scenario { background: #fffbeb; border: 1px solid #fcd34d; border-radius: 8px; padding: 16px; margin: 16px 0; }\n    .card { background: white; border-radius: 8px; padding: 16px; margin: 12px 0; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }\n    .card h3 { margin-top: 0; }\n    .card-a { border-left: 4px solid #ef4444; }\n    .card-b { border-left: 4px solid #3b82f6; }\n    .card-c { border-left: 4px solid #10b981; }\n    table { width: 100%; border-collapse: collapse; }\n    td { padding: 8px; border-bottom: 1px solid #e2e8f0; vertical-align: top; }\n    .label { font-weight: bold; color: #64748b; width: 30%; }\n  </style>\n</head>\n<body>\n  <h1>QCDトレードオフシート</h1>\n  <div class=\"scenario\">\n    <strong>シナリオ:</strong> 夏季セールLP。元計画6週間・80万円→クライアントが10日後リリースを希望\n  </div>\n\n  <div class=\"card card-a\">\n    <h3>案A: 品質（スコープ）を絞って納期を守る</h3>\n    <table>\n      <tr><td class=\"label\">品質の変更</td><td>（記入してください）</td></tr>\n      <tr><td class=\"label\">コストの変更</td><td>（記入してください）</td></tr>\n      <tr><td class=\"label\">納期</td><td>10日後（維持）</td></tr>\n      <tr><td class=\"label\">メリット</td><td>（記入してください）</td></tr>\n      <tr><td class=\"label\">デメリット</td><td>（記入してください）</td></tr>\n    </table>\n  </div>\n\n  <div class=\"card card-b\">\n    <h3>案B: 予算を増やして納期を守る</h3>\n    <table>\n      <tr><td class=\"label\">品質の変更</td><td>（記入してください）</td></tr>\n      <tr><td class=\"label\">コストの変更</td><td>（記入してください）</td></tr>\n      <tr><td class=\"label\">納期</td><td>10日後（維持）</td></tr>\n      <tr><td class=\"label\">メリット</td><td>（記入してください）</td></tr>\n      <tr><td class=\"label\">デメリット</td><td>（記入してください）</td></tr>\n    </table>\n  </div>\n\n  <div class=\"card card-c\">\n    <h3>案C: 納期を変更して品質・コストを守る</h3>\n    <table>\n      <tr><td class=\"label\">品質の変更</td><td>（記入してください）</td></tr>\n      <tr><td class=\"label\">コストの変更</td><td>（記入してください）</td></tr>\n      <tr><td class=\"label\">納期</td><td>（変更後の納期を記入）</td></tr>\n      <tr><td class=\"label\">メリット</td><td>（記入してください）</td></tr>\n      <tr><td class=\"label\">デメリット</td><td>（記入してください）</td></tr>\n    </table>\n  </div>\n</body>\n</html>",
+        "hints": [
+          "案Aは「テンプレートLPを使う」「機能を削る」など、品質水準を下げることで時間を短縮する方向で考えます",
+          "案Bは外注やクラウドソーシングで人手を増やし、並行作業で時間を圧縮する方向です。追加コストの目安も書いてみましょう",
+          "案Cは「なぜ10日後でないといけないのか」を再確認し、本当に動かせない制約かを交渉する視点です"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>QCDトレードオフシート</title>\n  <style>\n    body { font-family: sans-serif; max-width: 800px; margin: 40px auto; background: #f8fafc; color: #1e293b; }\n    h1 { border-left: 4px solid #f59e0b; padding-left: 12px; }\n    .scenario { background: #fffbeb; border: 1px solid #fcd34d; border-radius: 8px; padding: 16px; margin: 16px 0; }\n    .card { background: white; border-radius: 8px; padding: 16px; margin: 12px 0; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }\n    .card h3 { margin-top: 0; }\n    .card-a { border-left: 4px solid #ef4444; }\n    .card-b { border-left: 4px solid #3b82f6; }\n    .card-c { border-left: 4px solid #10b981; }\n    table { width: 100%; border-collapse: collapse; }\n    td { padding: 8px; border-bottom: 1px solid #e2e8f0; vertical-align: top; }\n    .label { font-weight: bold; color: #64748b; width: 30%; }\n  </style>\n</head>\n<body>\n  <h1>QCDトレードオフシート</h1>\n  <div class=\"scenario\">\n    <strong>シナリオ:</strong> 夏季セールLP。元計画6週間・80万円→クライアントが10日後リリースを希望\n  </div>\n  <div class=\"card card-a\">\n    <h3>案A: 品質（スコープ）を絞って納期を守る</h3>\n    <table>\n      <tr><td class=\"label\">品質の変更</td><td>カスタムデザイン→既存テンプレートに変更。アニメーション・SP対応の一部を省略</td></tr>\n      <tr><td class=\"label\">コストの変更</td><td>削減（80万→40万円程度）</td></tr>\n      <tr><td class=\"label\">納期</td><td>10日後（維持）</td></tr>\n      <tr><td class=\"label\">メリット</td><td>スケジュール通りに動ける。コストも下がる</td></tr>\n      <tr><td class=\"label\">デメリット</td><td>競合比較で見劣りする可能性。CVRへの影響リスクあり</td></tr>\n    </table>\n  </div>\n  <div class=\"card card-b\">\n    <h3>案B: 予算を増やして納期を守る</h3>\n    <table>\n      <tr><td class=\"label\">品質の変更</td><td>維持（フルカスタムLP）</td></tr>\n      <tr><td class=\"label\">コストの変更</td><td>増加（80万→120〜150万円。外注・緊急対応費含む）</td></tr>\n      <tr><td class=\"label\">納期</td><td>10日後（維持）</td></tr>\n      <tr><td class=\"label\">メリット</td><td>品質と納期を両立できる</td></tr>\n      <tr><td class=\"label\">デメリット</td><td>追加予算の承認が必要。短期間で品質担保できるリソース確保が困難な場合あり</td></tr>\n    </table>\n  </div>\n  <div class=\"card card-c\">\n    <h3>案C: 納期を変更して品質・コストを守る</h3>\n    <table>\n      <tr><td class=\"label\">品質の変更</td><td>維持（フルカスタムLP）</td></tr>\n      <tr><td class=\"label\">コストの変更</td><td>維持（80万円）</td></tr>\n      <tr><td class=\"label\">納期</td><td>3週間後（最短現実的ラインで交渉）</td></tr>\n      <tr><td class=\"label\">メリット</td><td>品質・コスト双方を守れる。無理な作業による品質低下リスクなし</td></tr>\n      <tr><td class=\"label\">デメリット</td><td>セール開始に間に合わない可能性。クライアント説得が必要</td></tr>\n    </table>\n  </div>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "QCD三角形の3要素として正しい組み合わせはどれですか？",
+            "options": [
+              "品質（Quality）・コミュニケーション（Communication）・方向性（Direction）",
+              "品質（Quality）・コスト（Cost）・納期（Delivery）",
+              "クオリティ（Quality）・コラボレーション（Collaboration）・データ（Data）",
+              "要件（Quest）・コスト（Cost）・デプロイ（Deploy）"
+            ],
+            "correct": 1,
+            "explanation": "QCDはQuality（品質）・Cost（コスト）・Delivery（納期）の頭文字です。この3要素はトレードオフの関係にあり、一つを変えると他の要素に影響が出ます。"
+          },
+          {
+            "q": "クライアントから「予算を変えずに、かつ納期を2週間前倒ししてほしい」と言われた場合、PMとして最適な対応はどれですか？",
+            "options": [
+              "「わかりました」と即答して、後で何とかする",
+              "すべての要素は固定できないと伝え、スコープ（品質・機能）を削減する案を提示する",
+              "「それは不可能です」と断る",
+              "チームに残業・休日出勤を強制して対応する"
+            ],
+            "correct": 1,
+            "explanation": "QCDのトレードオフ原則に従い、予算と納期を固定するならスコープ（品質・機能）を削減する案を提示するのが正しいPM対応です。トレードオフを可視化してクライアントに判断を委ねます。"
+          },
+          {
+            "q": "プロジェクト開始時に必ずステークホルダーと合意しておくべき最も重要な事項はどれですか？",
+            "options": [
+              "使用するプロジェクト管理ツールの種類",
+              "チームメンバーの氏名と連絡先",
+              "QCDのうち絶対に変更できない制約（最優先要素）",
+              "週次定例会議の曜日と時間"
+            ],
+            "correct": 2,
+            "explanation": "問題発生時にどの制約を最優先するかを事前合意しておくことが最重要です。「納期が絶対」「予算が絶対」「品質が絶対」という優先順位が決まっていれば、トラブル時の判断軸が明確になります。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール11-3 完了！\n\nQCDトレードオフの管理手法を習得しました。\n\n## 習得したスキル\n\n✅ **QCD三角形の3要素**：品質・コスト・納期のトレードオフ構造を理解した\n✅ **4つのトレードオフパターン**：品質向上・コスト削減・納期前倒し・全固定の対処法を把握した\n✅ **制約優先順位の合意**：プロジェクト開始時に「何が絶対か」を確認する重要性を理解した\n✅ **交渉への応用**：クライアントの無理な要求に対してトレードオフを提示する手法を学んだ\n\n## 次のステップ\n\n次のモジュール **「11-4: PMBOKとアジャイルの使い分け」** では、現代のPMに必須の2大フレームワークの特徴と、デジタルマーケ案件での使い分け判断基準を学びます。\n\n> 実務チャレンジ: 現在進行中のプロジェクトのQCDを書き出し、「最も動かしてはいけない制約」を一つ特定してみましょう。それがプロジェクトの「錨」になります。",
+        "diagram": false
+      }
+    }
+  ]
+}

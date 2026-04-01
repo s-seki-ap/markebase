@@ -1,0 +1,67 @@
+{
+  "id": "advertising--9-9",
+  "moduleId": "9-9",
+  "categoryId": "advertising",
+  "title": "広告フォーマット別クリエイティブ制作の勘所",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# クリエイティブが広告成果の50%を決める\n\nどれだけ精緻な入札設定や正確なターゲティングをしても、**クリエイティブが悪ければユーザーはクリックしません**。業界調査では広告の成果の最大50%はクリエイティブの品質によって決まるとされています。\n\n## フォーマットごとの最適解が異なる\n\n- 検索テキスト広告: 140文字以内で意図に応える\n- ディスプレイ広告: 0.5秒の視覚インパクト\n- 動画広告: 最初の5秒でスキップを止める\n- レスポンシブ広告: 複数のアセットの組み合わせを最適化する\n\n## この学習で得られること\n\n各フォーマットの制約と成功パターンを理解し、媒体の特性に合わせたクリエイティブを設計できるようになります。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# フォーマット別クリエイティブ設計\n\n## 検索テキスト広告（RSA）\n\n```\n【文字数制限】\n見出し: 最大15個（各30文字）\n説明文: 最大4個（各90文字）\n\n【配信時の表示】\n見出し: 最大3個が自動選択・組み合わせ\n説明文: 最大2個が自動選択\n```\n\n**高CTR广告文の構造**:\n```\n見出し1: [キーワードを含む] → ユーザーの検索意図に直撃\n見出し2: [独自の強み・数字] → 競合との差別化\n見出し3: [行動喚起（CTA）] → クリックを促す\n\n例:\n見出し1: 「フィットネスジム 渋谷で入会無料」\n見出し2: 「月額¥7,800 器具200種類以上」\n見出し3: 「今すぐ無料見学を予約する」\n```\n\n## ディスプレイ広告（バナー）\n\n| サイズ | 用途 | 重要度 |\n|--------|------|--------|\n| 300×250 | レクタングル（最多表示） | 最高 |\n| 728×90 | リーダーボード | 高 |\n| 160×600 | ワイドスカイスクレイパー | 中 |\n| 320×50 | モバイルバナー | 高 |\n\n**バナー制作の原則（0.5秒ルール）**:\n```\n0.5秒でメッセージが伝わるか？\n\n✓ 背景と文字のコントラストを高く\n✓ キャッチコピーは8文字以内（視認性）\n✓ CTAボタンは右下に配置（視線の流れ）\n✓ ブランドロゴは左上に統一\n✗ 文字を詰め込みすぎない\n```\n\n## YouTube動画広告（スキップ可能）\n\n```\n【スキップ可能インストリーム広告の構造】\n\n0〜5秒: スキップ不可（最重要）\n  → 「誰のための動画か」を明示\n  → 衝撃・疑問・共感で止める\n\n5〜15秒: 問題提起・共感\n  → ターゲットの課題を言語化\n\n15〜30秒: 解決策の提示\n  → 製品・サービスの価値を提示\n\n30秒以降: 詳細説明・CTA\n  → 行動を促す\n\n課金: 30秒視聴または全視聴時に発生\n```\n\n## レスポンシブディスプレイ広告（RDA）のアセット\n\n```\n必須アセット:\n  見出し（短）: 25文字以内 × 最大5個\n  見出し（長）: 90文字以内 × 1個\n  説明文: 90文字以内 × 最大5個\n  画像（横長）: 1200×628px 以上\n  画像（正方形）: 1200×1200px 以上\n  ロゴ: 1200×1200px 以上\n\nGoogleが自動で最適な組み合わせを学習・選択する\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: 広告クリエイティブプレビューを作成する\n\n検索広告・バナー広告のプレビューを表示するHTMLを完成させます。\n\n## 課題\n\n以下のHTMLを完成させ、フィットネスジムの広告クリエイティブプレビューを作成してください。\n\n1. 検索広告プレビューに見出し3本・説明文1本を追加する\n2. バナー広告（300×250）に画像・キャッチコピー・CTAを追加する",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>広告クリエイティブプレビュー</title>\n  <style>\n    body { font-family: 'Noto Sans JP', sans-serif; background: #f1f5f9; padding: 20px; }\n    h2 { font-size: 14px; color: #475569; margin: 24px 0 8px; }\n    /* 検索広告スタイル */\n    .search-ad { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; max-width: 600px; }\n    .ad-label { font-size: 11px; color: #188038; border: 1px solid #188038; padding: 1px 4px; border-radius: 2px; display: inline-block; margin-bottom: 4px; }\n    .ad-url { font-size: 13px; color: #202124; margin-bottom: 4px; }\n    .ad-headline { font-size: 18px; color: #1a0dab; margin-bottom: 6px; }\n    .ad-headline span { color: #70757a; } /* 区切り文字 */\n    .ad-description { font-size: 13px; color: #4d5156; line-height: 1.5; }\n    /* バナースタイル */\n    .banner { width: 300px; height: 250px; background: #1e293b; border-radius: 4px; overflow: hidden; position: relative; display: flex; flex-direction: column; justify-content: flex-end; padding: 16px; box-sizing: border-box; }\n    .banner-logo { position: absolute; top: 12px; left: 12px; background: #3b82f6; color: white; font-size: 12px; font-weight: bold; padding: 4px 8px; border-radius: 4px; }\n    .banner-copy { color: white; font-size: 20px; font-weight: bold; margin-bottom: 12px; line-height: 1.3; }\n    .banner-cta { background: #10b981; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: bold; cursor: pointer; align-self: flex-start; }\n  </style>\n</head>\n<body>\n  <h2>検索広告プレビュー</h2>\n  <div class=\"search-ad\">\n    <div class=\"ad-label\">広告</div>\n    <div class=\"ad-url\">https://fitness-gym-shibuya.example.com</div>\n    <!-- 見出しをここに追加してください -->\n    <!-- 説明文をここに追加してください -->\n  </div>\n\n  <h2>バナー広告プレビュー（300×250）</h2>\n  <div class=\"banner\">\n    <div class=\"banner-logo\">FIT GYM</div>\n    <!-- キャッチコピーとCTAボタンをここに追加してください -->\n  </div>\n</body>\n</html>",
+        "hints": [
+          "検索広告の見出しは <div class=\"ad-headline\">見出し1 <span>|</span> 見出し2 <span>|</span> 見出し3</div> の形式です。",
+          "説明文は <div class=\"ad-description\">テキスト</div> で追加します。",
+          "バナーのキャッチコピーは <div class=\"banner-copy\">テキスト</div>、CTAは <button class=\"banner-cta\">テキスト</button> を使ってください。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>広告クリエイティブプレビュー</title>\n  <style>\n    body { font-family: 'Noto Sans JP', sans-serif; background: #f1f5f9; padding: 20px; }\n    h2 { font-size: 14px; color: #475569; margin: 24px 0 8px; }\n    .search-ad { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; max-width: 600px; }\n    .ad-label { font-size: 11px; color: #188038; border: 1px solid #188038; padding: 1px 4px; border-radius: 2px; display: inline-block; margin-bottom: 4px; }\n    .ad-url { font-size: 13px; color: #202124; margin-bottom: 4px; }\n    .ad-headline { font-size: 18px; color: #1a0dab; margin-bottom: 6px; }\n    .ad-headline span { color: #70757a; }\n    .ad-description { font-size: 13px; color: #4d5156; line-height: 1.5; }\n    .banner { width: 300px; height: 250px; background: #1e293b; border-radius: 4px; overflow: hidden; position: relative; display: flex; flex-direction: column; justify-content: flex-end; padding: 16px; box-sizing: border-box; }\n    .banner-logo { position: absolute; top: 12px; left: 12px; background: #3b82f6; color: white; font-size: 12px; font-weight: bold; padding: 4px 8px; border-radius: 4px; }\n    .banner-copy { color: white; font-size: 20px; font-weight: bold; margin-bottom: 12px; line-height: 1.3; }\n    .banner-cta { background: #10b981; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: bold; cursor: pointer; align-self: flex-start; }\n  </style>\n</head>\n<body>\n  <h2>検索広告プレビュー</h2>\n  <div class=\"search-ad\">\n    <div class=\"ad-label\">広告</div>\n    <div class=\"ad-url\">https://fitness-gym-shibuya.example.com</div>\n    <div class=\"ad-headline\">渋谷フィットネスジム入会無料 <span>|</span> 月額¥7,800〜器具200種 <span>|</span> 今すぐ無料見学を予約</div>\n    <div class=\"ad-description\">渋谷駅徒歩3分。24時間利用可能なフィットネスジム。入会金0円キャンペーン実施中。専属トレーナーによる初回フィットネス診断が無料。まずは無料見学からどうぞ。</div>\n  </div>\n  <h2>バナー広告プレビュー（300×250）</h2>\n  <div class=\"banner\">\n    <div class=\"banner-logo\">FIT GYM</div>\n    <div class=\"banner-copy\">入会金0円<br>月額¥7,800〜</div>\n    <button class=\"banner-cta\">無料見学を予約する</button>\n  </div>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "レスポンシブ検索広告（RSA）で設定できる見出しの最大数と、1つの見出しの文字数上限はどれですか？",
+            "options": ["最大10個・各20文字", "最大15個・各30文字", "最大5個・各50文字", "最大20個・各15文字"],
+            "correct": 1,
+            "explanation": "RSAの見出しは最大15個（各30文字）、説明文は最大4個（各90文字）が設定できます。Googleが機械学習でユーザーの意図に合った最適な組み合わせを自動選択します。"
+          },
+          {
+            "q": "YouTubeのスキップ可能なインストリーム広告で最も重要な時間帯はどこですか？",
+            "options": ["15〜30秒（問題提起）", "0〜5秒（スキップ不可）", "30秒以降（CTA）", "5〜15秒（解決策提示）"],
+            "correct": 1,
+            "explanation": "0〜5秒はユーザーがスキップできない唯一の時間であり、最も重要です。この間に「誰のための動画か」を明示し、衝撃・疑問・共感でユーザーの関心を引き付けないと、5秒後にスキップされてしまいます。"
+          },
+          {
+            "q": "ディスプレイ広告（バナー）で最も表示機会が多く最重要とされるサイズはどれですか？",
+            "options": ["728×90（リーダーボード）", "160×600（スカイスクレイパー）", "300×250（レクタングル）", "320×50（モバイルバナー）"],
+            "correct": 2,
+            "explanation": "300×250（レクタングル/ミディアムレクタングル）はWebサイト上で最も多く使われる広告サイズです。記事コンテンツの横やサイドバーに設置されることが多く、表示機会が最も多いため最優先で制作します。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール9-9 完了！\n\n広告フォーマット別のクリエイティブ制作の勘所を習得しました。\n\n## 習得したスキル\n\n✅ **RSAの文字数制限**（見出し30文字×15個、説明文90文字×4個）を覚えた\n✅ **ディスプレイ広告の優先サイズ**（300×250最優先）と0.5秒ルールを理解した\n✅ **YouTube広告の5秒ルール**（スキップ不可区間の重要性）を把握した\n✅ HTMLで検索広告・バナー広告のプレビューを作成できた\n\n## 次のステップ\n\n次のモジュール **「9-10: 広告運用PDCAサイクルの基本フレームワーク」** では、継続的な改善を実現するための運用管理の仕組みを学びます。\n\n> **実務チャレンジ**: 担当している広告の見出し・説明文を確認し、「0.5秒ルール」と「5秒ルール」の観点から改善できる点を1つ見つけてみましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

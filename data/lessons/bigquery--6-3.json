@@ -1,0 +1,82 @@
+{
+  "id": "bigquery--6-3",
+  "moduleId": "6-3",
+  "categoryId": "bigquery",
+  "title": "WHERE句：条件でデータを絞り込む",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 「必要なデータだけ」取り出すことがSQL分析の本質\n\nGA4のBigQueryテーブルには、1日だけで数百万行のデータが格納されることがあります。この全データをそのまま取得しても意味がありません。\n\n**「購入イベントだけ見たい」「日本からのアクセスだけ見たい」「特定の日付だけ見たい」**\n\nこうした絞り込みを実現するのが **WHERE句** です。\n\n## WHERE句がないSQLの問題点\n\n```\nevents_* テーブル：1,000万行\n　↓ SELECT * のみ\n全1,000万行を取得 → 課金が膨大・分析が困難\n```\n\n```\nevents_* テーブル：1,000万行\n　↓ WHERE event_name = 'purchase'\n購入イベントのみ5,000行 → 低コスト・分析しやすい\n```\n\nWHERE句は「コスト削減」と「分析精度の向上」を同時に実現します。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# WHERE句の構文と比較演算子\n\n## 基本構文\n\n```sql\nSELECT 列名\nFROM テーブル名\nWHERE 条件式\n```\n\n## 比較演算子一覧\n\n| 演算子 | 意味 | 例 |\n|--------|------|----|\n| `=` | 等しい | `event_name = 'purchase'` |\n| `!=` または `<>` | 等しくない | `platform != 'WEB'` |\n| `>` | より大きい | `event_value > 1000` |\n| `>=` | 以上 | `event_value >= 1000` |\n| `<` | より小さい | `event_value < 500` |\n| `<=` | 以下 | `event_value <= 500` |\n| `LIKE` | パターン一致 | `event_name LIKE 'page%'` |\n| `IN` | リスト内に含まれる | `event_name IN ('page_view', 'purchase')` |\n| `BETWEEN` | 範囲内 | `_TABLE_SUFFIX BETWEEN '20240101' AND '20240131'` |\n\n## 実践例：GA4データの絞り込み\n\n```sql\n-- 購入イベントのみ取得\nSELECT\n  event_date,\n  user_pseudo_id\nFROM\n  `myproject.analytics_123456789.events_*`\nWHERE\n  event_name = 'purchase'\n  AND _TABLE_SUFFIX BETWEEN '20240101' AND '20240131'\n```\n\n```sql\n-- 日本からのアクセスのみ取得\nSELECT\n  event_date,\n  event_name,\n  geo.city\nFROM\n  `myproject.analytics_123456789.events_20240115`\nWHERE\n  geo.country = 'Japan'\n```\n\n```sql\n-- LIKEで部分一致（page_で始まるイベント名）\nSELECT\n  event_name,\n  COUNT(*) AS event_count\nFROM\n  `myproject.analytics_123456789.events_20240115`\nWHERE\n  event_name LIKE 'page%'\nGROUP BY event_name\n```",
+        "diagram": false
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習：WHERE句でGA4データを絞り込む\n\n## 課題\n\n以下の条件でGA4データを取得するSQLを書いてください。\n\n**条件**：\n- テーブル：`myproject.analytics_123456789.events_*`\n- 取得列：`event_date`、`event_name`、`user_pseudo_id`、`geo.country`\n- 絞り込み条件：\n  1. 2024年2月のデータ（`_TABLE_SUFFIX BETWEEN '20240201' AND '20240229'`）\n  2. イベント名が `purchase` のみ\n\n> 💡 複数の条件を組み合わせるときは `AND` を使います（次のモジュールで詳しく学びます）。",
+        "starterCode": "-- GA4の2024年2月の購入イベントデータを取得する\n\nSELECT\n  event_date,\n  event_name,\n  user_pseudo_id,\n  geo.country\nFROM\n  `myproject.analytics_123456789.events_*`\nWHERE\n  -- 2024年2月のデータに限定\n  _TABLE_SUFFIX BETWEEN '________' AND '________'\n  -- 購入イベントのみに限定\n  AND event_name = '________'",
+        "hints": [
+          "2024年2月は '20240201' から '20240229' です（2024年はうるう年）。",
+          "購入イベントのイベント名は `purchase` です。文字列はシングルクォート(')で囲みます。",
+          "AND を使って複数条件を組み合わせます。`WHERE 条件1 AND 条件2` の形です。"
+        ],
+        "answer": "-- GA4の2024年2月の購入イベントデータを取得する\n\nSELECT\n  event_date,\n  event_name,\n  user_pseudo_id,\n  geo.country\nFROM\n  `myproject.analytics_123456789.events_*`\nWHERE\n  _TABLE_SUFFIX BETWEEN '20240201' AND '20240229'\n  AND event_name = 'purchase'"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "WHERE句で「event_nameがpage_viewまたはpurchaseのどちらか」を取得する最も適切な書き方はどれですか？",
+            "options": [
+              "`WHERE event_name = 'page_view' OR 'purchase'`",
+              "`WHERE event_name IN ('page_view', 'purchase')`",
+              "`WHERE event_name LIKE 'page_view, purchase'`",
+              "`WHERE event_name BETWEEN 'page_view' AND 'purchase'`"
+            ],
+            "correct": 1,
+            "explanation": "`IN (値1, 値2, ...)` を使うと、リスト内のいずれかに一致する行を取得できます。`OR` を複数並べることもできますが、`IN` の方が読みやすく推奨されます。"
+          },
+          {
+            "q": "BigQueryでGA4の `events_*` ワイルドカードテーブルを使う際、日付範囲を絞り込むために使う特殊な列名はどれですか？",
+            "options": [
+              "`event_date`",
+              "`_TABLE_DATE`",
+              "`_TABLE_SUFFIX`",
+              "`_PARTITIONDATE`"
+            ],
+            "correct": 2,
+            "explanation": "`_TABLE_SUFFIX` はワイルドカードテーブルでテーブル名のサフィックス（`events_` の後の部分、つまり日付文字列）を参照するための特殊な疑似列です。`BETWEEN '20240101' AND '20240131'` のように日付範囲を指定できます。"
+          },
+          {
+            "q": "WHERE句で `event_name LIKE 'scroll%'` とした場合、取得されるイベント名はどれですか？",
+            "options": [
+              "scroll のみ",
+              "scroll で始まるすべてのイベント名（例：scroll、scroll_depth）",
+              "scroll を含むすべてのイベント名（例：auto_scroll、page_scroll）",
+              "scroll で終わるすべてのイベント名"
+            ],
+            "correct": 1,
+            "explanation": "`LIKE 'scroll%'` の `%` は「0文字以上の任意の文字列」を意味します。先頭に `scroll` がついているすべての値が一致します。前後に `%` をつけた `'%scroll%'` にすると「scrollを含む」になります。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール6-3 完了！\n\nWHERE句によるデータ絞り込みをマスターしました。\n\n## 習得したスキル\n\n✅ **WHERE句の基本構文**でデータを絞り込める\n✅ **比較演算子**（=、!=、>、<、BETWEEN、LIKE、IN）を使い分けられる\n✅ **GA4特有の `_TABLE_SUFFIX`** で日付範囲を指定できる\n✅ **コスト削減の観点**からWHERE句を活用できる\n\n## 実務での活用例\n\n- `WHERE event_name = 'purchase'` → 購入分析\n- `WHERE geo.country = 'Japan'` → 国別分析\n- `WHERE device.category = 'mobile'` → デバイス別分析\n- `WHERE traffic_source.medium = 'organic'` → 流入経路別分析\n\n## 次のステップ\n\n次のモジュール **「6-4: AND/OR/NOT」** では、複数の条件を組み合わせてより細かい絞り込みをする方法を学びます。",
+        "diagram": false
+      }
+    }
+  ]
+}

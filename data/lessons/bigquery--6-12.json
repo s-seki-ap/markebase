@@ -1,0 +1,82 @@
+{
+  "id": "bigquery--6-12",
+  "moduleId": "6-12",
+  "categoryId": "bigquery",
+  "title": "HAVING：集計後に条件で絞り込む",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# WHEREとHAVINGの違いを理解する\n\n前のモジュールでGROUP BYの使い方を学びました。では、「集計後の結果」に条件をかけたい場合はどうすればよいでしょうか。\n\n**WHEREでは集計後の条件が書けない**：\n```sql\n-- これはエラー！WHEREでは集計関数を使えない\nSELECT user_pseudo_id, COUNT(*) AS purchase_count\nFROM events\nWHERE purchase_count >= 3  -- NG：集計前なのでpurchase_countはまだ存在しない\nGROUP BY user_pseudo_id\n```\n\n**HAVINGを使えば集計後に条件をかけられる**：\n```sql\n-- 3回以上購入したユーザーのみ取得\nSELECT user_pseudo_id, COUNT(*) AS purchase_count\nFROM events\nWHERE event_name = 'purchase'\nGROUP BY user_pseudo_id\nHAVING purchase_count >= 3  -- OK：集計後の値で絞り込める\n```\n\n## WHEREとHAVINGの役割分担\n\n| 句 | タイミング | 対象 |\n|----|-----------|------|\n| WHERE | 集計の**前** | 生データの各行 |\n| HAVING | 集計の**後** | 集計結果（グループ） |",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# HAVINGの構文と使い方\n\n## 基本構文\n\n```sql\nSELECT\n  グループ化する列,\n  集計関数(列名) AS 集計結果名\nFROM テーブル名\nWHERE 集計前の条件\nGROUP BY グループ化する列\nHAVING 集計後の条件\n```\n\n## 月に2回以上購入したユーザーを抽出\n\n```sql\n-- 2024年1月に2回以上購入したユーザーのリスト\nSELECT\n  user_pseudo_id,\n  COUNT(*) AS purchase_count\nFROM\n  `myproject.analytics_123456789.events_*`\nWHERE\n  event_name = 'purchase'\n  AND _TABLE_SUFFIX BETWEEN '20240101' AND '20240131'\nGROUP BY\n  user_pseudo_id\nHAVING\n  purchase_count >= 2  -- 集計後に2回以上のものだけ残す\nORDER BY\n  purchase_count DESC\n```\n\n## 一定数以上のイベントがあるカテゴリのみ表示\n\n```sql\n-- 100件以上発生しているイベントのみ表示\nSELECT\n  event_name,\n  COUNT(*) AS event_count\nFROM\n  `myproject.analytics_123456789.events_20240115`\nGROUP BY\n  event_name\nHAVING\n  event_count >= 100\nORDER BY\n  event_count DESC\n```\n\n## WHEREとHAVINGの組み合わせ\n\n```sql\n-- [WHERE] 購入イベントだけを対象に\n-- [GROUP BY] ユーザーごとに集計\n-- [HAVING] 集計結果が3以上のユーザーだけ残す\nSELECT\n  user_pseudo_id,\n  COUNT(*) AS purchase_count\nFROM\n  `myproject.analytics_123456789.events_*`\nWHERE\n  event_name = 'purchase'          -- 集計前フィルタ（WHERE）\n  AND _TABLE_SUFFIX = '20240115'\nGROUP BY\n  user_pseudo_id\nHAVING\n  COUNT(*) >= 3                    -- 集計後フィルタ（HAVING）\n```",
+        "diagram": false
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習：アクセスが多い流入メディアだけを表示する\n\n## 課題\n\n2024年1月のGA4データから、**ユニークユーザー数が100人以上**の流入メディアのみを表示するSQLを完成させてください。\n\n**取得内容**：\n- `traffic_source.medium`（流入メディア）\n- ユニークユーザー数（`COUNT(DISTINCT user_pseudo_id) AS users`）\n\n**条件**：\n- テーブル：`myproject.analytics_123456789.events_*`\n- 期間：2024年1月\n- 集計：`traffic_source.medium` でGROUP BY\n- 絞り込み：集計後にユーザー数が100以上のものだけ\n- 並び順：ユーザー数の多い順\n\n> 💡 集計後の絞り込みにはHAVINGを使います。WHEREでは集計結果（usersエイリアス）は参照できません。",
+        "starterCode": "-- 2024年1月 ユーザー数100人以上の流入メディア\n\nSELECT\n  COALESCE(traffic_source.medium, '(direct)') AS medium,\n  COUNT(DISTINCT user_pseudo_id) AS users\nFROM\n  `myproject.analytics_123456789.events_*`\nWHERE\n  _TABLE_SUFFIX BETWEEN '20240101' AND '20240131'\nGROUP BY\n  medium\n-- 集計後の絞り込み条件を追加してください\n________\n  users >= 100\nORDER BY\n  users DESC",
+        "hints": [
+          "集計後の絞り込みにはHAVING句を使います。GROUP BYの後、ORDER BYの前に書きます。",
+          "`HAVING users >= 100` のように、エイリアス名で条件を書けます（BigQueryはHAVINGでのエイリアス使用に対応しています）。",
+          "WHEREはGROUP BYより前に実行されるため、集計結果（COUNT等）に対してWHEREは使えません。"
+        ],
+        "answer": "-- 2024年1月 ユーザー数100人以上の流入メディア\n\nSELECT\n  COALESCE(traffic_source.medium, '(direct)') AS medium,\n  COUNT(DISTINCT user_pseudo_id) AS users\nFROM\n  `myproject.analytics_123456789.events_*`\nWHERE\n  _TABLE_SUFFIX BETWEEN '20240101' AND '20240131'\nGROUP BY\n  medium\nHAVING\n  users >= 100\nORDER BY\n  users DESC"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "HAVING句とWHERE句の最大の違いはどれですか？",
+            "options": [
+              "HAVINGは文字列にしか使えず、WHEREは数値にしか使えない",
+              "HAVINGはGROUP BYによる集計後の結果に条件をかけ、WHEREは集計前の各行に条件をかける",
+              "HAVINGはSELECT句の前に書き、WHEREはFROMの後に書く",
+              "HAVINGはBigQuery専用の構文で、標準SQLにはない"
+            ],
+            "correct": 1,
+            "explanation": "WHEREはGROUP BY処理の前に各行に適用されます。HAVINGはGROUP BY処理の後に集計結果（グループ）に適用されます。集計関数（COUNT, SUM等）の結果に条件をかけたい場合はHAVINGを使います。"
+          },
+          {
+            "q": "次のSQLのエラーの原因はどれですか？\n`SELECT user_id, COUNT(*) AS cnt FROM events GROUP BY user_id WHERE cnt > 5`",
+            "options": [
+              "COUNT(*)はエイリアスをつけられない",
+              "WHEREで集計結果（cnt）を参照できない",
+              "user_idはGROUP BYに含められない",
+              "SELECT句にCOUNT(*)は使えない"
+            ],
+            "correct": 1,
+            "explanation": "WHEREはGROUP BYより前に実行されるため、集計結果（cnt = COUNT(*)の結果）はWHEREの時点でまだ存在しません。集計後の条件には `HAVING cnt > 5` を使う必要があります。また書き順も `WHERE → GROUP BY → HAVING` が正しいです。"
+          },
+          {
+            "q": "SQLの実行順序として正しいものはどれですか？",
+            "options": [
+              "FROM → SELECT → WHERE → GROUP BY → HAVING → ORDER BY",
+              "SELECT → FROM → WHERE → GROUP BY → HAVING → ORDER BY",
+              "FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY",
+              "WHERE → FROM → GROUP BY → SELECT → HAVING → ORDER BY"
+            ],
+            "correct": 2,
+            "explanation": "SQLの論理的な実行順序は「FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT」です。この順序を理解することで、どの句でどの値が参照できるかが分かります（例：SELECT後のエイリアスはWHEREでは使えないがHAVINGとORDER BYでは使える）。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール6-12 完了！\n\nHAVINGを使った集計後フィルタリングをマスターしました。\n\n## 習得したスキル\n\n✅ **HAVING句の基本構文**で集計後に絞り込みができる\n✅ **WHERE（集計前）とHAVING（集計後）**の使い分けができる\n✅ **SQLの実行順序**を理解し、エラーの原因を特定できる\n\n## WHEREとHAVINGの使い分けまとめ\n\n```sql\nSELECT ...\nFROM ...\nWHERE event_name = 'purchase'   -- 集計前：生データの絞り込み\nGROUP BY user_pseudo_id\nHAVING COUNT(*) >= 3             -- 集計後：集計結果の絞り込み\n```\n\n## 次のステップ\n\n次のモジュール **「6-13: 集計関数」** では、COUNT・SUM・AVG・MIN・MAXの使い分けと実務での活用パターンを学びます。",
+        "diagram": false
+      }
+    }
+  ]
+}

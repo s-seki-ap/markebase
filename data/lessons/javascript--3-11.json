@@ -1,0 +1,82 @@
+{
+  "id": "javascript--3-11",
+  "moduleId": "3-11",
+  "categoryId": "javascript",
+  "title": "if・else ifで条件分岐を制御する",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "## if・else ifで条件分岐を制御する\n\n「このページがトップページなら○○、カートページなら△△、それ以外なら××を送信する」—— デジタルマーケティングのタグ実装では、ページや状態によって処理を変える条件分岐が頻繁に登場します。\n\n`if`・`else if`・`else` はそのための基本構文です。GTMのカスタムHTMLタグやカスタムJavaScript変数で必須のスキルです。\n\n**このモジュールで学ぶこと**\n- `if`・`else if`・`else` の基本構文\n- 比較演算子（`===`、`!==`、`>`、`<` など）\n- GTMタグでよく使う条件分岐パターン\n- 真偽値（truthy/falsy）の考え方",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "## if・else ifの基本構文\n\n```javascript\nif (条件1) {\n  // 条件1がtrueのとき実行\n} else if (条件2) {\n  // 条件1がfalseで条件2がtrueのとき実行\n} else {\n  // どの条件にも当てはまらないとき実行\n}\n```\n\n### 比較演算子\n\n```javascript\n// 厳密等値（型も一致）\n'top' === 'top'   // true\n1 === '1'         // false\n\n// 厳密不等値\n'cart' !== 'top'  // true\n\n// 大小比較\n100 > 50          // true\n3 < 10            // true\n50 >= 50          // true\n```\n\n### GTMでよく使うパターン①：ページ種別によるイベント分岐\n\n```javascript\n<script>\n  var pageType = {{Page Type}};  // GTM変数\n  var eventName;\n\n  if (pageType === 'top') {\n    eventName = 'view_top_page';\n  } else if (pageType === 'product') {\n    eventName = 'view_item';\n  } else if (pageType === 'cart') {\n    eventName = 'view_cart';\n  } else if (pageType === 'thankyou') {\n    eventName = 'purchase_complete';\n  } else {\n    eventName = 'view_other_page';\n  }\n\n  window.dataLayer = window.dataLayer || [];\n  window.dataLayer.push({ 'event': eventName });\n</script>\n```\n\n### GTMでよく使うパターン②：ユーザー状態による分岐\n\n```javascript\n<script>\n  var userId = {{User ID}};  // ログイン時のみ値あり\n  var memberRank = {{Member Rank}};\n\n  // truthyチェック：値が存在する（空でない）かを確認\n  if (userId) {\n    // ログインユーザー\n    if (memberRank === 'gold') {\n      window.dataLayer.push({ 'event': 'gold_member_visit' });\n    } else if (memberRank === 'silver') {\n      window.dataLayer.push({ 'event': 'silver_member_visit' });\n    } else {\n      window.dataLayer.push({ 'event': 'member_visit' });\n    }\n  } else {\n    // 非ログインユーザー\n    window.dataLayer.push({ 'event': 'guest_visit' });\n  }\n</script>\n```\n\n### truthy / falsy\n\nJavaScriptでは以下の値は条件式で `false` として扱われます（falsy値）：\n- `false`\n- `0`\n- `''`（空文字）\n- `null`\n- `undefined`\n- `NaN`\n\n```javascript\nvar userId = '';  // 空文字はfalsy\nif (userId) {\n  // ここは実行されない\n} else {\n  console.log('ユーザーIDなし');\n}\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "## 練習：URLパスによるイベント名の分岐\n\nGTM変数 `{{Page Path}}` の値に応じて、dataLayerに送信するイベント名を切り替えるコードを完成させてください。\n\n**条件**\n- パスが `/` のとき：`'view_top'`\n- パスが `/products/` から始まるとき：`'view_product_list'`\n- パスが `/product/` から始まるとき：`'view_item'`\n- それ以外：`'view_page'`\n\n**ヒント：** `'文字列'.indexOf('検索語')` は見つかれば0以上の数値、見つからなければ `-1` を返します。",
+        "starterCode": "<script>\n  window.dataLayer = window.dataLayer || [];\n  var path = {{Page Path}};\n  var eventName;\n\n  if (path ______ '/') {\n    eventName = 'view_top';\n  } ______ (path.indexOf('/products/') ______ 0) {\n    eventName = 'view_product_list';\n  } else if (______) {\n    eventName = 'view_item';\n  } else {\n    eventName = ______;\n  }\n\n  window.dataLayer.push({ 'event': eventName });\n</script>",
+        "hints": [
+          "完全一致の比較には `===` を使います。`path === '/'` でトップページを判定します",
+          "`else if` でさらに条件を追加します。`indexOf` が `0` 以上（`>= 0`）なら文字列が含まれると判定できます",
+          "`path.indexOf('/product/') >= 0` で `/product/` を含むパスを判定します。最後の `else` のイベント名は `'view_page'` です"
+        ],
+        "answer": "<script>\n  window.dataLayer = window.dataLayer || [];\n  var path = {{Page Path}};\n  var eventName;\n\n  if (path === '/') {\n    eventName = 'view_top';\n  } else if (path.indexOf('/products/') >= 0) {\n    eventName = 'view_product_list';\n  } else if (path.indexOf('/product/') >= 0) {\n    eventName = 'view_item';\n  } else {\n    eventName = 'view_page';\n  }\n\n  window.dataLayer.push({ 'event': eventName });\n</script>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "question": "JavaScriptで「型も含めて厳密に等しいか」を比較する演算子はどれですか？",
+            "options": [
+              "==",
+              "===",
+              "=",
+              "!="
+            ],
+            "correct": 1,
+            "explanation": "`===` は厳密等値演算子で、値と型の両方が一致するときのみ `true` を返します。`==` は型変換を行う緩い比較で、`1 == '1'` が `true` になるなど予期しない結果を生む可能性があります。GTMタグでは `===` の使用を推奨します。"
+          },
+          {
+            "question": "GTMカスタムJS変数で `var val = {{GA4 User ID}};` とした場合、ユーザーが未ログインで変数が空文字 `''` のとき、`if (val)` の評価結果はどうなりますか？",
+            "options": [
+              "trueになり、if内のコードが実行される",
+              "falseになり、if内のコードはスキップされる",
+              "エラーが発生する",
+              "undefinedになる"
+            ],
+            "correct": 1,
+            "explanation": "空文字 `''` はJavaScriptのfalsy値です。`if (val)` の `val` が空文字の場合、条件は `false` と評価されるため、`if` ブロック内のコードは実行されません。これを利用して「ログイン済みかどうか」を簡潔にチェックできます。"
+          },
+          {
+            "question": "以下のコードで `pageType = 'cart'` のとき、dataLayerに送信される `event` の値はどれですか？\n```\nif (pageType === 'top') { dL.push({event:'a'}); }\nelse if (pageType === 'product') { dL.push({event:'b'}); }\nelse { dL.push({event:'c'}); }\n```",
+            "options": [
+              "'a'",
+              "'b'",
+              "'c'",
+              "何も送信されない"
+            ],
+            "correct": 2,
+            "explanation": "`pageType` が `'cart'` の場合、`'top'` でも `'product'` でもないため、最後の `else` ブロックが実行されます。結果として `event: 'c'` がdataLayerに送信されます。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "## まとめ：if・else ifで条件分岐を制御する\n\n✅ `if`・`else if`・`else` で複数条件を順番にチェックできる\n\n✅ 型も含めた比較には `===` と `!==` を使う（`==` は避ける）\n\n✅ 空文字・null・undefinedは falsy として扱われ `if(val)` で値の存在チェックができる\n\n✅ GTMタグでのページ種別判定・ユーザー状態判定に条件分岐は必須スキル\n\n✅ 条件が多い場合は次のモジュールで学ぶ `switch` 文が読みやすいケースもある\n\n**次のモジュールでは** `switch` 文を使って多分岐処理をより読みやすく書く方法を学びます。",
+        "diagram": false
+      }
+    }
+  ]
+}

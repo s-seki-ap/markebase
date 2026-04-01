@@ -1,0 +1,67 @@
+{
+  "id": "html--1-16",
+  "moduleId": "1-16",
+  "categoryId": "html",
+  "title": "preタグとcodeタグでのコード表示",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# コードを正しく表示するHTMLタグ\n\nGTMの実装手順書やテクニカルブログで、HTMLやJavaScriptのコードスニペットを表示する場面は多くあります。通常のpタグでは空白や改行が無視されてしまうため、専用のタグが必要です。\n\n## マーケターが活用する場面\n\n**1. GTM実装手順ドキュメント**\nクライアントにGTMスニペットの設置位置を説明するドキュメントで、コードを正確に表示する必要があります。\n\n**2. テクニカルブログ記事**\nGA4のカスタムイベント実装方法などの技術記事で、コードブロックを読みやすく表示します。\n\n**3. 社内Wiki・マニュアル**\nエンジニアとの連携ドキュメントで、コード例を正確に共有する場面があります。\n\nこのモジュールでは、preタグとcodeタグの使い方を学びます。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# preタグとcodeタグ\n\n## code（コード）\n\n文中にコードの一部を表示するインライン要素です。\n\n```html\n<p>GTMのコンテナIDは <code>GTM-XXXXXXX</code> の形式です。</p>\n<p><code>dataLayer.push()</code> でイベントを送信します。</p>\n```\n\n- 等幅フォント（monospace）で表示される\n- インライン要素（文中に流れる）\n- 短いコード片に使用\n\n## pre（整形済みテキスト）\n\n空白・改行・インデントがそのまま保持されるブロック要素です。\n\n```html\n<pre>\nfunction greet(name) {\n    console.log('Hello, ' + name);\n    return true;\n}\n</pre>\n```\n\n- 空白とインデントがそのまま表示される\n- 等幅フォントで表示される\n- ブロック要素（前後で改行）\n\n## pre + code の組み合わせ（推奨）\n\nコードブロックを表示する場合、preとcodeを組み合わせるのがベストプラクティスです。\n\n```html\n<pre><code>\n&lt;!-- GTMスニペット --&gt;\n&lt;script&gt;\n  (function(w,d,s,l,i){\n    w[l]=w[l]||[];\n    w[l].push({'gtm.start': new Date().getTime(), event:'gtm.js'});\n  })(window,document,'script','dataLayer','GTM-XXXXXXX');\n&lt;/script&gt;\n</code></pre>\n```\n\n- `<pre>` — 空白と改行を保持\n- `<code>` — 「これはコードである」という意味を付与\n- HTMLタグをコードとして表示する場合は `&lt;` `&gt;` のエンティティを使用\n\n## preタグの注意点\n\n### インデントに注意\n\n```html\n<!-- NG: 余計なインデントが表示される -->\n<div>\n  <pre>\n    function hello() {\n      console.log('hello');\n    }\n  </pre>\n</div>\n\n<!-- OK: preの開始位置からインデント -->\n<div>\n<pre><code>function hello() {\n  console.log('hello');\n}</code></pre>\n</div>\n```\n\npre内のテキストは**そのまま表示される**ため、HTMLのインデントがそのまま余白として出ます。\n\n## CSSでのスタイリング\n\n```css\n/* インラインコード */\ncode {\n  background: #f1f5f9;\n  padding: 2px 6px;\n  border-radius: 4px;\n  font-family: 'JetBrains Mono', 'Courier New', monospace;\n  font-size: 0.9em;\n}\n\n/* コードブロック */\npre {\n  background: #1e293b;\n  color: #e2e8f0;\n  padding: 16px;\n  border-radius: 8px;\n  overflow-x: auto;  /* 横スクロール可能 */\n  line-height: 1.6;\n}\n\npre code {\n  background: transparent;\n  padding: 0;\n}\n```\n\n## マーケティング実例: GTM実装手順書\n\n```html\n<article>\n  <h2>GTMの設置手順</h2>\n  \n  <h3>ステップ1: headタグ内にスクリプトを追加</h3>\n  <p>以下のコードを <code>&lt;head&gt;</code> タグ内のできるだけ上部に貼り付けてください。</p>\n  \n<pre><code>&lt;!-- Google Tag Manager --&gt;\n&lt;script&gt;(function(w,d,s,l,i){w[l]=w[l]||[];\nw[l].push({'gtm.start':\nnew Date().getTime(),event:'gtm.js'});\n})(window,document,'script','dataLayer','GTM-XXXXXXX');\n&lt;/script&gt;\n&lt;!-- End Google Tag Manager --&gt;</code></pre>\n\n  <h3>ステップ2: bodyタグ直後にnoscriptを追加</h3>\n  <p><code>&lt;body&gt;</code> タグの直後に以下を貼り付けてください。</p>\n</article>\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: GTM実装手順ページを作る\n\nクライアント向けのGTM設置手順ドキュメントをHTMLで作成してください。preタグとcodeタグを使ってコードスニペットを正しく表示します。\n\n## 課題\n\n1. 文中のタグ名には `<code>` を使う\n2. コードブロックには `<pre><code>` を組み合わせて使う\n3. HTML内のタグ記号はHTMLエンティティ（`&lt;` `&gt;`）に変換する",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>GTM設置手順書</title>\n  <style>\n    body { font-family: sans-serif; max-width: 700px; margin: 0 auto; padding: 20px; }\n    code { background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-family: monospace; }\n    pre { background: #1e293b; color: #e2e8f0; padding: 16px; border-radius: 8px; overflow-x: auto; }\n    pre code { background: transparent; padding: 0; }\n  </style>\n</head>\n<body>\n\n  <h1>GTM設置手順書</h1>\n\n  <h2>ステップ1: headタグにスクリプトを追加</h2>\n  <!-- ① codeタグで「head」タグ名を囲んでください -->\n  <p>以下のコードを head タグ内に貼り付けてください。</p>\n  \n  <!-- ② pre+codeでGTMスニペットを表示してください -->\n  <!-- 注意: <script> などのタグは &lt;script&gt; に変換 -->\n  \n\n  <h2>ステップ2: bodyタグ直後にnoscriptを追加</h2>\n  <!-- ③ codeタグで「body」タグ名を囲んでください -->\n  <p>以下のコードを body タグの直後に貼り付けてください。</p>\n  \n  <!-- ④ pre+codeでnoscriptタグを表示してください -->\n  \n\n</body>\n</html>",
+        "hints": [
+          "文中のタグ名は <code>&lt;head&gt;</code> のように書きます。",
+          "コードブロックは <pre><code>コード内容</code></pre> で囲みます。",
+          "HTMLタグをテキストとして表示するには &lt; と &gt; を使います。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>GTM設置手順書</title>\n  <style>\n    body { font-family: sans-serif; max-width: 700px; margin: 0 auto; padding: 20px; }\n    code { background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-family: monospace; }\n    pre { background: #1e293b; color: #e2e8f0; padding: 16px; border-radius: 8px; overflow-x: auto; }\n    pre code { background: transparent; padding: 0; }\n  </style>\n</head>\n<body>\n\n  <h1>GTM設置手順書</h1>\n\n  <h2>ステップ1: headタグにスクリプトを追加</h2>\n  <p>以下のコードを <code>&lt;head&gt;</code> タグ内に貼り付けてください。</p>\n  \n<pre><code>&lt;!-- Google Tag Manager --&gt;\n&lt;script&gt;(function(w,d,s,l,i){w[l]=w[l]||[];\nw[l].push({'gtm.start':\nnew Date().getTime(),event:'gtm.js'});\n})(window,document,'script','dataLayer','GTM-XXXXXXX');\n&lt;/script&gt;\n&lt;!-- End Google Tag Manager --&gt;</code></pre>\n\n  <h2>ステップ2: bodyタグ直後にnoscriptを追加</h2>\n  <p>以下のコードを <code>&lt;body&gt;</code> タグの直後に貼り付けてください。</p>\n  \n<pre><code>&lt;!-- Google Tag Manager (noscript) --&gt;\n&lt;noscript&gt;&lt;iframe src=\"https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX\"\nheight=\"0\" width=\"0\" style=\"display:none;visibility:hidden\"&gt;&lt;/iframe&gt;&lt;/noscript&gt;\n&lt;!-- End Google Tag Manager (noscript) --&gt;</code></pre>\n\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "文中に短いコード片を表示するのに適切なタグはどれですか？",
+            "options": ["<pre>", "<code>", "<script>", "<span>"],
+            "correct": 1,
+            "explanation": "<code>はインライン要素で、文中にコードの一部を表示するのに適しています。等幅フォントで表示され、「これはコードである」という意味を持ちます。"
+          },
+          {
+            "q": "<pre>タグの最大の特徴は何ですか？",
+            "options": ["テキストが自動的に翻訳される", "空白・改行・インデントがそのまま保持される", "テキストが自動的に太字になる", "テキストが自動的に中央揃えになる"],
+            "correct": 1,
+            "explanation": "<pre>（preformatted text）は空白、改行、インデントがそのまま保持されて表示されます。通常のHTMLでは連続する空白は1つに圧縮されますが、pre内ではそのまま表示されます。"
+          },
+          {
+            "q": "コードブロックを表示するベストプラクティスはどれですか？",
+            "options": ["<pre>だけを使う", "<code>だけを使う", "<pre><code>を組み合わせて使う", "<div>の中にテキストを書く"],
+            "correct": 2,
+            "explanation": "<pre>で空白を保持し、<code>で「これはコードである」という意味を付与する組み合わせがベストプラクティスです。検索エンジンやスクリーンリーダーがコードブロックを正しく認識できます。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール1-16 完了！\n\npreタグとcodeタグによるコード表示を習得しました。\n\n## 習得したスキル\n\n✅ **code** タグで文中にコード片を表示できる\n✅ **pre** タグで空白と改行を保持した表示ができる\n✅ **pre + code** の組み合わせでコードブロックを正しくマークアップできる\n✅ HTMLエンティティを使ってコード内の**タグ記号を表示**できる\n\n## 次のステップ\n\n次のモジュール **「1-17: 水平線（hr）とセクション分割」** では、LPのセクション区切りにhrを使うべきかdivを使うべきかを判断する方法を学びます。\n\n> 💡 **実務チャレンジ**: 社内のGTM実装手順書を確認し、コードスニペットが正しく表示されているかチェックしてみましょう。preタグが使われていなければ改善の余地があります。",
+        "diagram": false
+      }
+    }
+  ]
+}

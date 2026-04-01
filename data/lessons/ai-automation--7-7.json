@@ -1,0 +1,82 @@
+{
+  "id": "ai-automation--7-7",
+  "moduleId": "7-7",
+  "categoryId": "ai-automation",
+  "title": "コンピュータビジョンの概要",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# AIが「見る」とはどういうことか\n\nコンピュータビジョン（CV）は、AIが画像・動画を認識・理解・生成する技術です。\n\nマーケターにとってビジュアルコンテンツは最重要資産の一つ。Instagram・Pinterest・YouTube・TikTokは視覚情報が主役です。\n\n## マーケターに直結するCV活用\n\n- **広告クリエイティブの自動審査**: 不適切画像のフィルタリング\n- **商品画像の自動タグ付け**: ECサイトの検索精度向上\n- **競合広告の分析**: スクリーンショットからクリエイティブ傾向を把握\n- **顔認識**: 広告に登場する人物の感情・デモグラフィック分析\n- **画像生成AI**: 広告素材・ブランド画像の自動生成\n\n**あなたへの問い**: PinterestやInstagramで「似たような画像」を検索できる機能を使ったことはありますか？その仕組みはどうなっていると思いますか？",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# コンピュータビジョンの仕組みとマーケ活用\n\n## AIは画像をどう「見るか」\n\n```\n画像 = ピクセルの数値の集まり\n\n例: 100x100ピクセルのRGBカラー画像\n= 100 × 100 × 3（RGB）= 30,000個の数値\n\nCNNはこの数値パターンから特徴を抽出:\n  層1: 輪郭・エッジを検出\n  層2: 形状（円・四角）を認識\n  層3: テクスチャ・色のパターン\n  層4: 物体の部位（手・顔・ロゴ）\n  出力: 「これはランニングシューズ（信頼度94%）」\n```\n\n## マーケティングで使われる主要CVタスク\n\n### 画像分類\n- ECサイトの商品カテゴリ自動分類\n- 広告素材のブランドガイドライン適合チェック\n\n### 物体検出\n- 画像内の複数商品を同時認識\n- 競合他社ロゴの広告内検出\n\n### 顔・感情認識\n- 広告の人物が適切な感情を表現しているか自動評価\n- OOH（屋外広告）での視聴者反応分析\n\n### 類似画像検索\n- Pinterest・Google画像検索の「類似検索」\n- ビジュアルSEO: ALTテキストだけでなく画像内容でランキング\n\n### 画像生成（Generative CV）\n\n```\nStable Diffusion / DALL-E / Midjourney の仕組み:\n\n1. テキストプロンプト入力\n   「夏の海辺でスポーツドリンクを飲む30代女性、明るい雰囲気」\n\n2. テキストをベクトルに変換（NLP）\n\n3. ノイズから徐々に画像を生成（Diffusionモデル）\n\n4. 出力: 広告素材として使える高品質画像\n```\n\n## CVの限界とマーケターへの注意点\n\n- **バイアス問題**: 学習データに偏りがあると人種・性別等のバイアスが生じる\n- **著作権問題**: 生成画像の権利は国・プラットフォームによって異なる\n- **精度の過信**: 90%の精度 = 10件に1件は誤認識",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 演習: 広告画像の自動品質チェックシステムを設計しよう\n\n画像認識AIを使った広告クリエイティブの自動審査システムを設計します。\n\nチェック項目のリストを完成させ、どの違反が最も深刻かスコアリングしてください。",
+        "starterCode": "# 広告クリエイティブ自動審査システム（設計演習）\n\n# 審査ルール定義\n# severity: 1=警告, 2=要確認, 3=即却下\naudit_rules = [\n    {\n        \"rule_id\": \"R001\",\n        \"category\": \"コンプライアンス\",\n        \"check\": \"過度な露出・不適切なコンテンツ\",\n        \"cv_method\": \"画像分類（NSFW検出モデル）\",\n        \"severity\": 3,\n        \"action\": \"即時却下\"\n    },\n    {\n        \"rule_id\": \"R002\",\n        \"category\": \"ブランドガイドライン\",\n        \"check\": \"ロゴの視認性（最小サイズ・配置）\",\n        \"cv_method\": \"物体検出（ロゴ位置・サイズ測定）\",\n        \"severity\": 2,\n        \"action\": \"修正依頼\"\n    },\n    {\n        \"rule_id\": \"R003\",\n        \"category\": \"テキスト量\",\n        \"check\": \"\",  # ← Facebook広告の「テキスト20%ルール」に関するチェック\n        \"cv_method\": \"OCR + テキスト領域の面積計算\",\n        \"severity\": 2,\n        \"action\": \"修正推奨\"\n    },\n    {\n        \"rule_id\": \"R004\",\n        \"category\": \"著作権\",\n        \"check\": \"\",  # ← 競合他社・有名ブランドのロゴが含まれていないかのチェック\n        \"cv_method\": \"物体検出（既知ロゴDBとのマッチング）\",\n        \"severity\": 3,\n        \"action\": \"法務確認後に判断\"\n    },\n    {\n        \"rule_id\": \"R005\",\n        \"category\": \"品質\",\n        \"check\": \"画像解像度・ぼやけ\",\n        \"cv_method\": \"Laplacianフィルタによるシャープネス測定\",\n        \"severity\": 1,\n        \"action\": \"差し替え推奨\"\n    },\n]\n\n# 審査結果シミュレーション\nsample_ad_issues = [\"R003\", \"R005\"]  # この広告で検出された違反\n\nprint(\"=== 広告クリエイティブ審査システム ===\")\nprint(\"審査ルール一覧:\")\nfor rule in audit_rules:\n    severity_label = [\"⚠️低\", \"⚠️中\", \"🚫高\"][rule[\"severity\"]-1]\n    check_display = rule[\"check\"] if rule[\"check\"] else \"（未設定）\"\n    print(f\"  [{rule['rule_id']}] {rule['category']}: {check_display} | 重要度:{severity_label}\")\n\nprint(\"\\n--- 審査結果 ---\")\nfor rule in audit_rules:\n    if rule[\"rule_id\"] in sample_ad_issues:\n        print(f\"違反検出 [{rule['rule_id']}]: {rule['check']} → {rule['action']}\")\n\nmax_severity = max(\n    rule[\"severity\"] for rule in audit_rules \n    if rule[\"rule_id\"] in sample_ad_issues\n)\nfinal_decision = [\"配信承認（修正推奨）\", \"配信保留（修正要）\", \"配信却下\"][max_severity-1]\nprint(f\"\\n最終判定: {final_decision}\")",
+        "hints": [
+          "R003の「テキスト量」チェックはFacebook/Meta広告のポリシーに関連します。画像内のテキストが画像面積の20%を超えると配信が制限される（現在は廃止されましたが概念は重要）。",
+          "R004の「著作権」チェックは、競合他社のロゴ・有名ブランドのロゴが意図せず広告に含まれていないか確認するものです。",
+          "sample_ad_issuesを変えて、異なる違反の組み合わせで最終判定がどう変わるか確認しましょう。['R001']を追加すると即却下になります。"
+        ],
+        "answer": "# 広告クリエイティブ自動審査システム\n\naudit_rules = [\n    {\n        \"rule_id\": \"R001\",\n        \"category\": \"コンプライアンス\",\n        \"check\": \"過度な露出・不適切なコンテンツ\",\n        \"cv_method\": \"画像分類（NSFW検出モデル）\",\n        \"severity\": 3,\n        \"action\": \"即時却下\"\n    },\n    {\n        \"rule_id\": \"R002\",\n        \"category\": \"ブランドガイドライン\",\n        \"check\": \"ロゴの視認性（最小サイズ・配置）\",\n        \"cv_method\": \"物体検出（ロゴ位置・サイズ測定）\",\n        \"severity\": 2,\n        \"action\": \"修正依頼\"\n    },\n    {\n        \"rule_id\": \"R003\",\n        \"category\": \"テキスト量\",\n        \"check\": \"画像内テキスト面積が全体の20%超\",\n        \"cv_method\": \"OCR + テキスト領域の面積計算\",\n        \"severity\": 2,\n        \"action\": \"修正推奨\"\n    },\n    {\n        \"rule_id\": \"R004\",\n        \"category\": \"著作権\",\n        \"check\": \"競合・第三者ブランドのロゴ無断使用\",\n        \"cv_method\": \"物体検出（既知ロゴDBとのマッチング）\",\n        \"severity\": 3,\n        \"action\": \"法務確認後に判断\"\n    },\n    {\n        \"rule_id\": \"R005\",\n        \"category\": \"品質\",\n        \"check\": \"画像解像度・ぼやけ\",\n        \"cv_method\": \"Laplacianフィルタによるシャープネス測定\",\n        \"severity\": 1,\n        \"action\": \"差し替え推奨\"\n    },\n]\n\nsample_ad_issues = [\"R003\", \"R005\"]\n\nprint(\"=== 広告クリエイティブ審査システム ===\")\nfor rule in audit_rules:\n    severity_label = [\"低\", \"中\", \"高\"][rule[\"severity\"]-1]\n    print(f\"  [{rule['rule_id']}] {rule['category']}: {rule['check']} | 重要度:{severity_label}\")\n\nprint(\"\\n--- 審査結果 ---\")\nfor rule in audit_rules:\n    if rule[\"rule_id\"] in sample_ad_issues:\n        print(f\"違反検出 [{rule['rule_id']}]: {rule['check']} → {rule['action']}\")\n\nmax_severity = max(rule[\"severity\"] for rule in audit_rules if rule[\"rule_id\"] in sample_ad_issues)\nfinal_decision = [\"配信承認（修正推奨）\", \"配信保留（修正要）\", \"配信却下\"][max_severity-1]\nprint(f\"\\n最終判定: {final_decision}\")"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "PinterestやGoogleの「この画像に似た商品を探す」機能に使われているCVタスクはどれですか？",
+            "options": [
+              "顔認識",
+              "画像生成",
+              "類似画像検索（画像をベクトル化して類似度比較）",
+              "感情認識"
+            ],
+            "correct": 2,
+            "explanation": "類似画像検索は画像をベクトル（数値列）に変換し、そのベクトル空間内での距離が近い画像を返す仕組みです。テキスト検索と違い、「言葉では説明しにくい色・形・スタイル」での検索が可能です。"
+          },
+          {
+            "q": "AI画像生成ツール（DALL-E・Stable Diffusion等）を広告素材に使う際に最も重要なリスクはどれですか？",
+            "options": [
+              "生成に時間がかかりすぎること",
+              "著作権・ライセンス問題、バイアス、ブランドガイドライン適合性",
+              "解像度が低すぎて印刷できないこと",
+              "色再現性がRGB限定でCMYKに変換できないこと"
+            ],
+            "correct": 1,
+            "explanation": "AI生成画像の著作権は国・プラットフォームによって未整備な部分が多いです。また、学習データに含まれる人種・性別バイアスが生成画像に反映されるリスクや、ブランドカラー・ガイドラインとの不整合も重要な問題です。"
+          },
+          {
+            "q": "Meta（Facebook）広告でAIを使った自動クリエイティブ最適化を行う際、CVが果たす役割はどれですか？",
+            "options": [
+              "ユーザーの購買意欲をリアルタイムで顔認識で判定する",
+              "広告画像の内容を理解して、どのオーディエンスに最適かを判断する",
+              "広告のテキストコピーを自動翻訳する",
+              "広告の入札単価をリアルタイムで調整する"
+            ],
+            "correct": 1,
+            "explanation": "MetaのAIは広告画像の内容（商品カテゴリ・シーン・感情トーン等）をCVで解析し、どのターゲット属性に響くかを過去データと照合します。これにより「この画像は30代女性に効果的」という判断が自動化されています。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール7-7 完了！\n\nコンピュータビジョンのマーケティング活用と注意点を理解しました。\n\n## 習得したポイント\n\n✅ AIが画像をピクセルの数値パターンとして処理することを理解した\n✅ 画像分類・物体検出・類似検索・画像生成の4タスクをマーケ活用で説明できる\n✅ 広告クリエイティブ自動審査システムの設計考え方を体験した\n✅ AI生成画像の著作権・バイアスリスクを認識した\n\n## 次のステップ\n\n次のモジュール **「7-8: 生成AI（Generative AI）の登場と衝撃」** では、ChatGPT・Midjourney登場がマーケティング業界にもたらした変化と、具体的な活用領域を整理します。\n\n> 実務チャレンジ: DALL-Eや Stable DiffusionなどのAI画像生成ツールで、自社ブランドの商品・サービスをイメージした画像を3枚生成してみましょう。ブランドガイドラインと比較してどんな差異があるか確認してください。",
+        "diagram": false
+      }
+    }
+  ]
+}

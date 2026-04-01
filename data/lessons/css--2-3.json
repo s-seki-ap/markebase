@@ -1,0 +1,67 @@
+{
+  "id": "css--2-3",
+  "moduleId": "2-3",
+  "categoryId": "css",
+  "title": "プロパティと値の構文ルールと単位（px・em・rem・%）",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# CSSの単位を理解するとレスポンシブ対応が分かる\n\nCSSでは色々な「単位」を使ってサイズを指定します。`px`、`em`、`rem`、`%` ——それぞれに意味と適した使い方があります。\n\n## マーケターが単位を知るべき理由\n\n**1. レスポンシブデザインの理解**\nモバイルとPCで見た目が変わるのは、`%`やレスポンシブ単位を使っているからです。GA4のデバイスカテゴリ別分析と直結します。\n\n**2. ABテストでのサイズ変更**\nCTAボタンのサイズを大きくするテストで、`px`で指定するか`%`で指定するかで、モバイルでの表示が全く変わります。\n\n**3. LP改善の品質向上**\nデザイナーやエンジニアに「もう少し大きく」ではなく「`font-size: 18px`にして」と具体的に伝えられます。\n\n## このモジュールで得られること\n\nCSSの構文ルールと4つの主要単位をマスターし、正しくスタイルを書ける基礎力を身につけます。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# CSSの構文ルールと単位\n\n## 基本構文ルール\n\n```css\nセレクタ {\n  プロパティ: 値;    /* セミコロンで終端 */\n  プロパティ: 値;    /* 複数のプロパティを記述可能 */\n}\n```\n\n**重要なルール：**\n- プロパティと値の間は**コロン（`:`）**で区切る\n- 各宣言の末尾は**セミコロン（`;`）**で終える\n- 波括弧 `{}` でルールを囲む\n- 大文字・小文字は区別しない（慣例で小文字）\n\n## 4つの主要単位\n\n### px（ピクセル）\n画面上の1ドットに対応する絶対単位です。\n\n```css\nh1 {\n  font-size: 32px;     /* 常に32ピクセル */\n  margin-bottom: 16px;\n}\n```\n\n**特徴**: サイズが固定。デバイスに関係なく同じ。\n\n### em（エム）\n**親要素**のフォントサイズを基準にした相対単位です。\n\n```css\n.parent {\n  font-size: 16px;\n}\n.parent .child {\n  font-size: 1.5em;   /* 16px × 1.5 = 24px */\n  padding: 1em;        /* 24px × 1 = 24px（自身のfont-sizeが基準） */\n}\n```\n\n**特徴**: 入れ子になると計算が複雑になる。\n\n### rem（ルートエム）\n**ルート要素（html）**のフォントサイズを基準にした相対単位です。\n\n```css\nhtml {\n  font-size: 16px;    /* ブラウザのデフォルト */\n}\nh1 {\n  font-size: 2rem;    /* 16px × 2 = 32px */\n}\np {\n  font-size: 1rem;    /* 16px × 1 = 16px */\n}\n```\n\n**特徴**: 常にルートが基準なので計算しやすい。モダンCSSの主流。\n\n### %（パーセント）\n**親要素**のサイズを基準にした割合指定です。\n\n```css\n.container {\n  width: 80%;          /* 親要素の幅の80% */\n}\n.half-column {\n  width: 50%;          /* 親要素の幅の50% */\n}\n```\n\n**特徴**: レスポンシブデザインで多用。\n\n## 単位の使い分けガイド\n\n| 単位 | 基準 | 主な用途 | マーケ活用例 |\n|------|------|---------|-------------|\n| `px` | 絶対値 | ボーダー、影 | 固定幅バナー |\n| `em` | 親要素 | padding、margin | コンポーネント内余白 |\n| `rem` | ルート | font-size | サイト全体のフォント統一 |\n| `%` | 親要素 | width、height | レスポンシブレイアウト |",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: 単位を使い分けてカードを作る\n\nLP用のサービス紹介カードをCSSでスタイリングしましょう。適切な単位を使い分けます。\n\n## 課題\n\n以下のCSSを完成させてください：\n\n1. `.card` の幅を親要素の `80%` にする\n2. `.card-title` のフォントサイズを `1.5rem` にする\n3. `.card-text` のフォントサイズを `14px` にする\n4. `.card` のパディングを `2em` にする",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>カードUI</title>\n  <style>\n    body {\n      font-family: sans-serif;\n      background: #f5f5f5;\n      padding: 20px;\n    }\n\n    /* ① .card の幅を 80% にしてください */\n    /* ④ .card のパディングを 2em にしてください */\n    .card {\n      background: white;\n      border-radius: 8px;\n      box-shadow: 0 2px 4px rgba(0,0,0,0.1);\n    }\n\n    /* ② .card-title のフォントサイズを 1.5rem に */\n    .card-title {\n      color: #1a73e8;\n    }\n\n    /* ③ .card-text のフォントサイズを 14px に */\n    .card-text {\n      color: #666;\n      line-height: 1.6;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"card\">\n    <h2 class=\"card-title\">GA4コンサルティング</h2>\n    <p class=\"card-text\">Google Analytics 4の導入から活用まで、データドリブンな意思決定を支援します。カスタムイベント設計、レポート構築、チーム教育まで一貫してサポート。</p>\n  </div>\n</body>\n</html>",
+        "hints": [
+          "幅はwidthプロパティで指定します。パーセントの場合は `width: 80%;` のように書きます。",
+          "remはルート要素基準の単位です。`font-size: 1.5rem;` のように書きます。",
+          "paddingプロパティで内側の余白を指定します。`padding: 2em;` で上下左右全てに2em。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>カードUI</title>\n  <style>\n    body {\n      font-family: sans-serif;\n      background: #f5f5f5;\n      padding: 20px;\n    }\n\n    .card {\n      width: 80%;\n      padding: 2em;\n      background: white;\n      border-radius: 8px;\n      box-shadow: 0 2px 4px rgba(0,0,0,0.1);\n    }\n\n    .card-title {\n      color: #1a73e8;\n      font-size: 1.5rem;\n    }\n\n    .card-text {\n      color: #666;\n      font-size: 14px;\n      line-height: 1.6;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"card\">\n    <h2 class=\"card-title\">GA4コンサルティング</h2>\n    <p class=\"card-text\">Google Analytics 4の導入から活用まで、データドリブンな意思決定を支援します。カスタムイベント設計、レポート構築、チーム教育まで一貫してサポート。</p>\n  </div>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "CSSで `font-size: 2rem;` と指定した場合、基準になるのはどの要素のフォントサイズですか？",
+            "options": ["html要素（ルート）のフォントサイズ", "親要素のフォントサイズ", "body要素のフォントサイズ", "自分自身のデフォルトフォントサイズ"],
+            "correct": 0,
+            "explanation": "`rem` は「Root em」の略で、常にhtml要素（ルート）のフォントサイズを基準にします。ブラウザのデフォルトは16pxなので、2remは32pxになります。"
+          },
+          {
+            "q": "レスポンシブ対応のレイアウトで、要素の幅を画面幅に応じて変えたい場合に最適な単位はどれですか？",
+            "options": ["px", "em", "rem", "%"],
+            "correct": 3,
+            "explanation": "`%` は親要素の幅に対する割合で計算されるため、画面幅が変わると自動的にサイズが変わります。レスポンシブデザインの基本単位です。"
+          },
+          {
+            "q": "CSSの構文で、プロパティと値の間に使う記号はどれですか？",
+            "options": ["セミコロン（;）", "イコール（=）", "コロン（:）", "ダッシュ（-）"],
+            "correct": 2,
+            "explanation": "CSSでは `プロパティ: 値;` の形式で書きます。コロン（`:`）でプロパティと値を区切り、セミコロン（`;`）で宣言を終了します。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール2-3 完了！\n\nお疲れ様でした。このモジュールで学んだことを振り返りましょう。\n\n## 習得したスキル\n\n✅ **CSSの基本構文ルール**（コロン、セミコロン、波括弧）を理解した\n✅ **px**（絶対単位）の使い方を習得した\n✅ **em・rem**（相対単位）の違いと使い分けを理解した\n✅ **%**（割合単位）のレスポンシブでの活用を理解した\n\n## 次のステップ\n\n次のモジュール **「2-4: CSSの適用方法3種の使い分け」** では、インラインCSS・内部スタイルシート・外部CSSファイルの違いと使い分けを学びます。\n\n> 💡 **実務チャレンジ**: DevToolsでお気に入りのサイトを開き、フォントサイズの単位が`px`か`rem`か確認してみましょう。最近のサイトは`rem`が主流です。",
+        "diagram": false
+      }
+    }
+  ]
+}

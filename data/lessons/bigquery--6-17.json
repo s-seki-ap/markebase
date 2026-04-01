@@ -1,0 +1,82 @@
+{
+  "id": "bigquery--6-17",
+  "moduleId": "6-17",
+  "categoryId": "bigquery",
+  "title": "UNION ALL：複数テーブルを縦に結合する",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 「横」のJOINと「縦」のUNION\n\nここまで学んだJOIN（INNER・LEFT・CROSS）は、テーブルを**横方向**に結合する操作でした。**UNION ALL** は複数のSELECT結果を**縦方向**に積み重ねる操作です。\n\n**UNIONを使うシーン**：\n- 異なる期間のデータをまとめる（「昨年Q1」+「今年Q1」の比較）\n- 複数のGA4プロパティのデータを統合する（モバイルアプリ+Web）\n- 異なるイベントをひとつのリストにまとめる\n- 複数のBigQueryテーブルをまとめてクエリする\n\n## UNION ALLとUNIONの違い\n\n| 種類 | 重複行 | 速度 |\n|------|--------|------|\n| `UNION ALL` | **重複を含む**（全行を結合） | 速い |\n| `UNION` | 重複を除去する | 遅い（重複チェックが必要） |\n\n**マーケティング分析では UNION ALL をほぼ常に使います。** 重複除去が必要なケースはまれで、UNION ALLの方がコストが低くなります。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# UNION ALLの構文と使い方\n\n## 基本構文\n\n```sql\nSELECT 列1, 列2, 列3\nFROM テーブルA\n\nUNION ALL\n\nSELECT 列1, 列2, 列3\nFROM テーブルB\n```\n\n**重要**：UNION ALLで結合するSELECT文は、列の数・順番・データ型が一致している必要があります。\n\n## 2つの期間のデータを縦に積む\n\n```sql\n-- 2023年1月と2024年1月のデータを縦に積んで比較\nSELECT\n  '2023年1月' AS period,\n  event_name,\n  COUNT(*) AS event_count\nFROM\n  `myproject.analytics_123456789.events_*`\nWHERE\n  event_name = 'purchase'\n  AND _TABLE_SUFFIX BETWEEN '20230101' AND '20230131'\nGROUP BY event_name\n\nUNION ALL\n\nSELECT\n  '2024年1月' AS period,\n  event_name,\n  COUNT(*) AS event_count\nFROM\n  `myproject.analytics_123456789.events_*`\nWHERE\n  event_name = 'purchase'\n  AND _TABLE_SUFFIX BETWEEN '20240101' AND '20240131'\nGROUP BY event_name\n\nORDER BY period, event_name\n```\n\n## 複数のGA4プロパティを統合する\n\n```sql\n-- WebとアプリのGA4データを統合\nSELECT\n  'web'        AS source,\n  event_date,\n  event_name,\n  user_pseudo_id\nFROM `myproject.analytics_web.events_*`\nWHERE _TABLE_SUFFIX BETWEEN '20240101' AND '20240131'\n\nUNION ALL\n\nSELECT\n  'app'        AS source,\n  event_date,\n  event_name,\n  user_pseudo_id\nFROM `myproject.analytics_app.events_*`\nWHERE _TABLE_SUFFIX BETWEEN '20240101' AND '20240131'\n```\n\n## UNION ALLの結果をさらに集計する（WITH句を使う）\n\n```sql\nWITH combined AS (\n  SELECT '前年' AS year, event_date, event_name\n  FROM `myproject.analytics_123456789.events_*`\n  WHERE _TABLE_SUFFIX BETWEEN '20230101' AND '20231231'\n\n  UNION ALL\n\n  SELECT '今年' AS year, event_date, event_name\n  FROM `myproject.analytics_123456789.events_*`\n  WHERE _TABLE_SUFFIX BETWEEN '20240101' AND '20241231'\n)\nSELECT year, COUNT(*) AS events\nFROM combined\nWHERE event_name = 'purchase'\nGROUP BY year\n```",
+        "diagram": false
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習：前年同月と当月のデータを縦に結合して比較する\n\n## 課題\n\n2023年1月と2024年1月の購入イベント数を縦に結合して、前年比較ができるデータを作成するSQLを完成させてください。\n\n**取得内容**：\n- `period`：'2023年1月' または '2024年1月'（文字列リテラル）\n- `event_date`：イベント日付\n- `purchase_count`：購入イベント数\n\n**条件**：\n- テーブル：`myproject.analytics_123456789.events_*`\n- イベント：`purchase` のみ\n- 集計単位：日別（event_dateでGROUP BY）\n- 並び順：期間昇順、日付昇順\n\n> 💡 UNION ALLで2つのSELECT文を縦に連結し、最後にひとつのORDER BYを付けます。",
+        "starterCode": "-- 2023年1月 vs 2024年1月 日別購入数比較\n\nSELECT\n  '2023年1月' AS period,\n  event_date,\n  COUNT(*) AS purchase_count\nFROM\n  `myproject.analytics_123456789.events_*`\nWHERE\n  event_name = 'purchase'\n  AND _TABLE_SUFFIX BETWEEN '20230101' AND '20230131'\nGROUP BY\n  event_date\n\n-- ここにUNION ALLを書いて2024年1月のデータを追加してください\n________\n\nSELECT\n  '2024年1月' AS period,\n  event_date,\n  COUNT(*) AS purchase_count\nFROM\n  `myproject.analytics_123456789.events_*`\nWHERE\n  event_name = 'purchase'\n  AND _TABLE_SUFFIX BETWEEN '20240101' AND '20240131'\nGROUP BY\n  event_date\n\nORDER BY\n  period ASC, event_date ASC",
+        "hints": [
+          "UNION ALL は2つのSELECT文の間に書きます。",
+          "UNION ALL で結合するSELECT文は同じ列数・列の型でなければなりません。",
+          "ORDER BY は最後のSELECTの後に1回だけ書きます。"
+        ],
+        "answer": "-- 2023年1月 vs 2024年1月 日別購入数比較\n\nSELECT\n  '2023年1月' AS period,\n  event_date,\n  COUNT(*) AS purchase_count\nFROM\n  `myproject.analytics_123456789.events_*`\nWHERE\n  event_name = 'purchase'\n  AND _TABLE_SUFFIX BETWEEN '20230101' AND '20230131'\nGROUP BY\n  event_date\n\nUNION ALL\n\nSELECT\n  '2024年1月' AS period,\n  event_date,\n  COUNT(*) AS purchase_count\nFROM\n  `myproject.analytics_123456789.events_*`\nWHERE\n  event_name = 'purchase'\n  AND _TABLE_SUFFIX BETWEEN '20240101' AND '20240131'\nGROUP BY\n  event_date\n\nORDER BY\n  period ASC, event_date ASC"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "UNION ALLとUNIONの最大の違いはどれですか？",
+            "options": [
+              "UNION ALLは縦方向の結合、UNIONは横方向の結合",
+              "UNION ALLは重複行を含むすべての行を返し、UNIONは重複行を除去して返す",
+              "UNION ALLはBigQueryのみで使える機能で、UNIONは標準SQL",
+              "UNION ALLは2テーブルのみ対応、UNIONは3テーブル以上対応"
+            ],
+            "correct": 1,
+            "explanation": "UNION ALLは重複を含むすべての行を縦に積みます。UNIONは重複行を除去します。マーケティング分析では異なる期間・プロパティのデータを積み上げる際に重複除去が不要なことが多く、コストの安いUNION ALLが推奨されます。"
+          },
+          {
+            "q": "UNION ALLで2つのSELECT文を結合する際の必須条件はどれですか？",
+            "options": [
+              "両方のSELECT文が同じテーブルを参照している必要がある",
+              "両方のSELECT文で取得する列の数・順番・データ型が一致している必要がある",
+              "両方のSELECT文にWHERE句が含まれている必要がある",
+              "両方のSELECT文に同じORDER BY句が含まれている必要がある"
+            ],
+            "correct": 1,
+            "explanation": "UNION ALLで結合するSELECT文は「列の数・順番・データ型」が一致している必要があります。列名が違っても問題なく（最初のSELECTの列名が使われます）、参照するテーブルも異なっていて構いません。"
+          },
+          {
+            "q": "UNION ALLの結果に対してORDER BYを適用したい場合、どこに書きますか？",
+            "options": [
+              "最初のSELECT文の末尾",
+              "各SELECT文の末尾（すべてに書く）",
+              "最後のSELECT文の末尾",
+              "UNION ALLの直前"
+            ],
+            "correct": 2,
+            "explanation": "UNION ALLを使う場合、ORDER BYは最後のSELECT文の後に1回だけ書きます。ORDER BY は全体の結果に対して適用されます。各SELECT文の末尾に書くとエラーになります。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール6-17 完了！\n\nUNION ALLによる縦方向のデータ統合をマスターしました。\n\n## 習得したスキル\n\n✅ **UNION ALLの基本構文**で複数のSELECT結果を縦に積める\n✅ **UNION ALLとUNIONの違い**（重複の扱い）を理解した\n✅ **複数期間の前年比較**データをUNION ALLで作れる\n✅ **複数GA4プロパティの統合**パターンを把握した\n\n## JOINとUNIONの使い分け\n\n| 操作 | 方向 | 使うとき |\n|------|------|----------|\n| JOIN | 横（列を増やす） | 異なるテーブルの情報を組み合わせるとき |\n| UNION ALL | 縦（行を増やす） | 同じ構造のデータを積み上げるとき |\n\n## 次のステップ\n\n次のモジュール **「6-18: サブクエリ」** では、クエリの中にクエリを書くサブクエリを学びます。WITH句（CTE）も含め、複雑な分析を読みやすく書く技術を習得します。",
+        "diagram": false
+      }
+    }
+  ]
+}

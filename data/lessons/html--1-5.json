@@ -1,0 +1,67 @@
+{
+  "id": "html--1-5",
+  "moduleId": "1-5",
+  "categoryId": "html",
+  "title": "DOCTYPE宣言の役割と標準モード・後方互換モードの違い",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# DOCTYPE宣言がレイアウトを左右する\n\n`<!DOCTYPE html>` はHTMLファイルの最初に書く1行です。たった1行ですが、これを省略するとLPのレイアウトが崩れることがあります。\n\n## マーケターが知るべき理由\n\n**1. LPのレイアウト崩れの原因特定**\n「CSSは正しいはずなのにIEでだけレイアウトが崩れる」という問題の原因がDOCTYPE省略だったケースは多数あります。\n\n**2. テンプレートの品質チェック**\n外注先から納品されたHTMLテンプレートの最初の行を確認するだけで、品質の基準がわかります。\n\n**3. HTMLメールの表示崩れ**\nHTMLメールでもDOCTYPE宣言は重要です。メーラーによってレンダリングモードが変わります。\n\nこのモジュールでは、DOCTYPE省略がどのような問題を引き起こすかを理解します。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# 標準モードと後方互換モード\n\nブラウザには2つのレンダリングモードがあります。\n\n## 標準モード（Standards Mode）\n\n```html\n<!DOCTYPE html>  <!-- この宣言があると標準モード -->\n<html lang=\"ja\">\n...\n```\n\n最新のHTML/CSS仕様に従ってページを描画します。CSSのBox Modelが正しく適用され、予測通りのレイアウトになります。\n\n## 後方互換モード（Quirks Mode）\n\n```html\n<!-- DOCTYPE宣言がない場合 → 後方互換モード -->\n<html lang=\"ja\">\n...\n```\n\nDOCTYPE宣言がないと、ブラウザは1990年代のWebサイトとの互換性のために古いルールで描画します。\n\n## 具体的な違い\n\n| 項目 | 標準モード | 後方互換モード |\n|------|-----------|---------------|\n| Box Model | `width` = コンテンツ幅のみ | `width` = コンテンツ + padding + border |\n| テーブルのフォントサイズ | 親要素から継承 | テーブル独自のデフォルト |\n| インライン要素の高さ | line-height基準 | コンテンツ基準 |\n| 画像の下の隙間 | あり（inline要素の仕様） | なし |\n\n## Box Modelの違いが実務に与える影響\n\n```css\n/* CSSで幅300px、パディング20pxを指定した場合 */\n.banner {\n  width: 300px;\n  padding: 20px;\n}\n```\n\n**標準モード**: 実際の表示幅 = 300 + 20×2 = **340px**\n**後方互換モード**: 実際の表示幅 = **300px**（paddingがwidth内に含まれる）\n\nこの差でLP内のバナーサイズがずれ、デザインが崩れます。\n\n## HTML5のDOCTYPE宣言\n\n```html\n<!DOCTYPE html>\n```\n\nHTML5では非常にシンプルになりました。以前のHTMLでは以下のような長い宣言が必要でした：\n\n```html\n<!-- HTML 4.01 の場合（旧式） -->\n<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"\n  \"http://www.w3.org/TR/html4/loose.dtd\">\n```\n\n覚えるべきは `<!DOCTYPE html>` の1行だけです。",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: DOCTYPE宣言を正しく追加する\n\n外注先から納品されたLPのHTMLにDOCTYPE宣言がありません。正しく追加して標準モードでレンダリングされるようにしましょう。\n\n## 課題\n\n1. ファイルの最初の行にHTML5のDOCTYPE宣言を追加する\n2. `<html>` タグに `lang=\"ja\"` 属性を追加する\n3. `<head>` 内に必要なメタタグを確認する",
+        "starterCode": "<html>\n<head>\n  <meta charset=\"UTF-8\">\n  <title>商品紹介ページ</title>\n  <style>\n    .product-card {\n      width: 300px;\n      padding: 20px;\n      border: 1px solid #ccc;\n      margin: 10px;\n    }\n  </style>\n</head>\n<body>\n\n  <h1>おすすめ商品</h1>\n  \n  <div class=\"product-card\">\n    <h2>商品A</h2>\n    <p>高品質な商品Aの紹介文です。</p>\n    <p>価格：¥3,980（税込）</p>\n  </div>\n\n  <div class=\"product-card\">\n    <h2>商品B</h2>\n    <p>人気No.1の商品Bの紹介文です。</p>\n    <p>価格：¥5,980（税込）</p>\n  </div>\n\n</body>\n</html>",
+        "hints": [
+          "<!DOCTYPE html> はファイルの1行目（最初の行）に書きます。<html>タグよりも前です。",
+          "<html> タグに lang=\"ja\" を追加して <html lang=\"ja\"> にしましょう。",
+          "DOCTYPE宣言があることで、.product-card の width: 300px は「コンテンツ幅のみ」として正しく計算されます。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>商品紹介ページ</title>\n  <style>\n    .product-card {\n      width: 300px;\n      padding: 20px;\n      border: 1px solid #ccc;\n      margin: 10px;\n    }\n  </style>\n</head>\n<body>\n\n  <h1>おすすめ商品</h1>\n  \n  <div class=\"product-card\">\n    <h2>商品A</h2>\n    <p>高品質な商品Aの紹介文です。</p>\n    <p>価格：¥3,980（税込）</p>\n  </div>\n\n  <div class=\"product-card\">\n    <h2>商品B</h2>\n    <p>人気No.1の商品Bの紹介文です。</p>\n    <p>価格：¥5,980（税込）</p>\n  </div>\n\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "DOCTYPE宣言を省略した場合、ブラウザはどのモードでページを描画しますか？",
+            "options": ["標準モード", "後方互換モード（Quirks Mode）", "厳密モード", "セーフモード"],
+            "correct": 1,
+            "explanation": "DOCTYPE宣言がないと、ブラウザは後方互換モード（Quirks Mode）で描画します。これは1990年代のWebサイトとの互換性のためのモードで、現代のCSS仕様とは異なるレンダリングルールが適用されます。"
+          },
+          {
+            "q": "標準モードと後方互換モードで最も大きな違いが出るCSS仕様はどれですか？",
+            "options": ["色の指定方法", "Box Model（widthの計算方法）", "フォントの種類", "アニメーションの速度"],
+            "correct": 1,
+            "explanation": "Box Modelの解釈が最大の違いです。標準モードではwidthはコンテンツ幅のみ、後方互換モードではpaddingとborderを含んだ幅になります。これによりレイアウトのサイズ計算が異なります。"
+          },
+          {
+            "q": "HTML5のDOCTYPE宣言の正しい書き方はどれですか？",
+            "options": ["<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 5.0//EN\">", "<!DOCTYPE html>", "<DOCTYPE html>", "<!doctype html5>"],
+            "correct": 1,
+            "explanation": "HTML5のDOCTYPE宣言は <!DOCTYPE html> です。大文字小文字は区別されませんが（<!doctype html>も有効）、<!DOCTYPE html> が最も一般的な表記です。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール1-5 完了！\n\nDOCTYPE宣言の重要性とブラウザのレンダリングモードの違いを理解しました。\n\n## 習得したスキル\n\n✅ **標準モード**と**後方互換モード**の違いを説明できる\n✅ **Box Modelの差異**がレイアウトに与える影響を理解した\n✅ **HTML5のDOCTYPE宣言** `<!DOCTYPE html>` を正しく書ける\n✅ 納品物の品質チェックで**DOCTYPE宣言の有無**を確認できる\n\n## 次のステップ\n\n次のモジュール **「1-6: なぜマーケターがHTMLを読めると強いか」** では、LP修正・GTMデバッグ・SEO診断の実務場面でHTMLが必要な理由を具体的に整理します。\n\n> 💡 **実務チャレンジ**: ブラウザのDevTools（F12）で `document.compatMode` をConsoleに入力してみてください。`CSS1Compat` なら標準モード、`BackCompat` なら後方互換モードです。",
+        "diagram": false
+      }
+    }
+  ]
+}

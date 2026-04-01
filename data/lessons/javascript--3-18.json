@@ -1,0 +1,82 @@
+{
+  "id": "javascript--3-18",
+  "moduleId": "3-18",
+  "categoryId": "javascript",
+  "title": "三項演算子でコンパクトな条件分岐を書く",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "## 三項演算子でコンパクトな条件分岐を書く\n\n「ログイン済みなら 'member'、未ログインなら 'guest'」のような、条件によって2択の値を返す単純な分岐は、`if-else` を書くと4〜6行になります。三項演算子を使えば1行で表現できます。\n\nGTMのカスタムJavaScript変数や、dataLayerに送るパラメータの値設定でよく見かける記法です。\n\n**このモジュールで学ぶこと**\n- 三項演算子の構文と読み方\n- if-elseとの書き換えパターン\n- GTMカスタムJS変数での活用\n- 三項演算子の使いすぎに関する注意点",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "## 三項演算子の構文\n\n```javascript\n条件 ? 条件がtrueの場合の値 : 条件がfalseの場合の値\n```\n\n`?` の前が条件、`?` と `:` の間が真の値、`:` の後が偽の値です。\n\n### if-elseとの比較\n\n```javascript\n// if-else（4行）\nvar userType;\nif (userId) {\n  userType = 'member';\n} else {\n  userType = 'guest';\n}\n\n// 三項演算子（1行）\nvar userType = userId ? 'member' : 'guest';\n```\n\n### GTM実例①：カスタムJavaScript変数でのページ種別取得\n\nGTMのカスタムJavaScript変数は `function() { return 値; }` 形式で書きます。\n\n```javascript\n// GTMカスタムJS変数：ログインステータス\nfunction() {\n  var userId = {{User ID}};\n  return userId ? 'logged_in' : 'not_logged_in';\n}\n\n// GTMカスタムJS変数：デバイスカテゴリ\nfunction() {\n  var ua = navigator.userAgent;\n  var isMobile = /Mobi|Android/i.test(ua);\n  return isMobile ? 'mobile' : 'desktop';\n}\n```\n\n### GTM実例②：イベントパラメータの値を条件で切り替える\n\n```javascript\n<script>\n  window.dataLayer = window.dataLayer || [];\n\n  var itemCount = {{Cart Item Count}};\n  var orderValue = {{Order Value}};\n  var memberRank = {{Member Rank}};\n\n  window.dataLayer.push({\n    'event': 'checkout_start',\n    // 商品が複数なら'multiple'、1つなら'single'\n    'cart_type': itemCount > 1 ? 'multiple' : 'single',\n    // 1万円以上なら'high_value'、未満なら'standard'\n    'order_segment': orderValue >= 10000 ? 'high_value' : 'standard',\n    // ゴールド会員ならtrue、それ以外はfalse\n    'is_gold_member': memberRank === 'gold' ? true : false\n  });\n</script>\n```\n\n### 三項演算子のネスト（多用は避ける）\n\n三項演算子を入れ子にすることも技術的には可能ですが、可読性が下がるため推奨しません。\n\n```javascript\n// 非推奨：読みにくい\nvar label = pageType === 'top' ? 'トップ' : pageType === 'cart' ? 'カート' : 'その他';\n\n// 推奨：if-else ifで書く\nvar label;\nif (pageType === 'top') {\n  label = 'トップ';\n} else if (pageType === 'cart') {\n  label = 'カート';\n} else {\n  label = 'その他';\n}\n```\n\n**三項演算子を使うべき場面**\n- 条件が1つで2択の値を返す場合\n- GTMカスタムJS変数で値を1行で返す場合\n- 長いif-elseを簡潔にしたい場合\n\n**三項演算子を避けるべき場面**\n- ネストが必要な場合（switch or if-else ifを使う）\n- 条件・値の内容が複雑で読みにくくなる場合",
+        "diagram": false
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "## 練習：GTMカスタムJS変数を三項演算子で書く\n\n以下のif-elseで書かれたGTMカスタムJavaScript変数を、三項演算子を使って1行に書き直してください。\n\n**変換前（if-else）**\n```javascript\nfunction() {\n  var scrollY = window.scrollY;\n  var threshold = 300;\n  if (scrollY > threshold) {\n    return 'scrolled';\n  } else {\n    return 'top';\n  }\n}\n```\n\n**変換後（三項演算子）を完成させてください**",
+        "starterCode": "// 変換後（三項演算子を使って1行で書く）\nfunction() {\n  var scrollY = window.scrollY;\n  var threshold = 300;\n  return scrollY ______ threshold ______ 'scrolled' ______ 'top';\n}",
+        "hints": [
+          "三項演算子の構文は `条件 ? 真の値 : 偽の値` です",
+          "`scrollY > threshold` が条件になります",
+          "`return` の後に三項演算子全体を書きます：`return scrollY > threshold ? 'scrolled' : 'top';`"
+        ],
+        "answer": "// 変換後（三項演算子を使って1行で書く）\nfunction() {\n  var scrollY = window.scrollY;\n  var threshold = 300;\n  return scrollY > threshold ? 'scrolled' : 'top';\n}"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "question": "三項演算子 `var result = score >= 80 ? 'pass' : 'fail';` で `score = 75` の場合、`result` の値はどれですか？",
+            "options": [
+              "'pass'",
+              "'fail'",
+              "undefined",
+              "null"
+            ],
+            "correct": 1,
+            "explanation": "`score >= 80` は `75 >= 80` となり `false` です。三項演算子は条件が `false` の場合 `:` の後の値（`'fail'`）を返します。したがって `result` は `'fail'` になります。"
+          },
+          {
+            "question": "GTMのカスタムJavaScript変数で三項演算子が特に有効なのはどのような場合ですか？",
+            "options": [
+              "3つ以上の条件を処理する場合",
+              "2択の値を条件によって返す場合（例：ログイン状態、デバイス種別）",
+              "ループ処理が必要な場合",
+              "エラーハンドリングが必要な場合"
+            ],
+            "correct": 1,
+            "explanation": "GTMのカスタムJavaScript変数は `return` で値を返す関数形式です。「条件によって2つの値のどちらかを返す」処理は三項演算子で1行に書けます。ログイン状態（'member'/'guest'）、デバイス（'mobile'/'desktop'）、会員種別の判定などが典型的な使用例です。"
+          },
+          {
+            "question": "三項演算子のネスト（入れ子）について、最も適切な説明はどれですか？",
+            "options": [
+              "三項演算子はネストできないため、3つ以上の条件はif-elseを使わなければならない",
+              "技術的にはネスト可能だが、可読性が大きく下がるため通常は避けるべき",
+              "ネストした三項演算子はパフォーマンスが低下するため使えない",
+              "ネストは2段階まで推奨されており、3段階以上は禁止されている"
+            ],
+            "correct": 1,
+            "explanation": "三項演算子は技術的にネスト可能ですが、`A ? B : C ? D : E` のような書き方は読解が困難になります。3つ以上の条件分岐が必要な場合は `if-else if` または `switch` 文を使うことで、コードの可読性と保守性を保てます。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "## まとめ：三項演算子でコンパクトな条件分岐を書く\n\n✅ `条件 ? 真の値 : 偽の値` の構文で2択の条件分岐を1行で書ける\n\n✅ GTMカスタムJS変数での値の返し方として非常によく使われる\n\n✅ if-elseの4〜6行をコンパクトに表現できる\n\n✅ ネストは可読性を下げるため避け、複数条件はif-else ifかswitchを使う\n\n✅ ログイン状態・デバイス種別・会員ランクの2択判定で特に有効\n\n**次のモジュールでは** `&&`・`||`・`!` の論理演算子を使いこなす方法を学びます。",
+        "diagram": false
+      }
+    }
+  ]
+}

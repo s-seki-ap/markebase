@@ -1,0 +1,77 @@
+{
+  "id": "advertising--9-8",
+  "moduleId": "9-8",
+  "categoryId": "advertising",
+  "title": "広告ポリシーと審査・配信停止リスクを理解する",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 審査なしで広告は配信されない\n\nGoogle広告に掲載するすべての広告は、**配信前に自動・手動の審査を通過する必要があります**。審査に落ちると広告は配信されず、悪質なポリシー違反が繰り返されるとアカウント自体が停止されます。\n\n## 審査に関わるリスクの大きさ\n\n- **広告審査落ち**: 修正するまで配信されず、機会損失が発生\n- **アカウント一時停止**: 修正・異議申し立て中は全広告が停止\n- **アカウント永久停止**: 悪質な違反では回復不可能\n\n## なぜポリシーが存在するか\n\nGoogleは「ユーザーにとって有益で安全な広告体験」を維持するためにポリシーを設定しています。Googleの広告収益は信頼性に依存しており、不正広告・誤解を招く広告を排除することがプラットフォームの価値を守ることにつながります。\n\n> **実務への影響**: ポリシー違反による配信停止は、特に重要なキャンペーン期間中に発生すると深刻な損害になります。事前の知識が最大の防衛策です。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# Google広告ポリシーの主要カテゴリ\n\n## 禁止コンテンツ（絶対に掲載不可）\n\n| カテゴリ | 具体例 |\n|---------|--------|\n| 偽造品 | ブランドロゴを無断使用した模倣品 |\n| 危険な製品・サービス | 違法薬物・爆発物・人身売買 |\n| 誠実性を欠くビジネス | フィッシング・マルウェア配布 |\n| 有害または不適切なコンテンツ | ヘイトスピーチ・暴力的コンテンツ |\n\n## 制限コンテンツ（条件付きで掲載可）\n\n```\n【医療・健康】\n  医療サービス・医薬品 → 資格証明・認定が必要\n  サプリメント → 効能の誇張表現は不可\n\n【金融サービス】\n  ローン・クレジット → 金利・条件の開示が必要\n  仮想通貨 → 国別に規制が異なる\n\n【アルコール】\n  年齢制限ターゲティングの設定が必須\n\n【ギャンブル】\n  ライセンス取得が必要・国によって制限あり\n```\n\n## 広告のテキストポリシー（よくある落ち理由）\n\n```\n【NG例と理由】\n\n「最安値！」「No.1！」→ 根拠のない最上級表現は不可\n「今すぐ！急いで！」（過度な使用）→ 誇張・強制的な表現\n「絶対に稼げる！」→ 虚偽の約束・誇大表現\n大文字の多用「今だけ大SALE！！！」→ 不適切な大文字使用\nURL不一致（広告URL ≠ 遷移先URL のドメイン）→ 欺瞞的なURL\n```\n\n## 審査プロセスの仕組み\n\n```\n広告作成・更新\n    ↓\n自動審査（AIによる機械審査）約1時間\n    ↓\n「審査済み」→ 配信開始\n「要審査」  → 手動審査へ（1〜3営業日）\n「審査不承認」→ 不承認の理由が通知される\n    ↓\n修正して再申請（または異議申し立て）\n```\n\n## アカウント停止を避けるための実務ルール\n\n```\n1. 広告文は事実のみを記載する（根拠のない最上級禁止）\n2. ランディングページと広告の訴求内容を一致させる\n3. 特定業種（医療・金融）は事前にポリシーを精読する\n4. 業界固有の認定を取得してから出稿する\n5. 月1回ポリシー違反通知メールを確認する\n```",
+        "diagram": false
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: 広告文ポリシー違反チェッカー\n\n広告文のポリシー違反を判定するチェッカーを実装します。\n\n## 課題\n\n以下のJavaScriptを完成させてください。\n\n1. `checkAdText()` 関数で広告文のポリシー違反を検出する\n2. 以下のルールをチェックする\n   - 「最安値」「No.1」「業界最高」の根拠なし最上級表現を検出\n   - 「絶対に」「保証」「必ず」の虚偽約束表現を検出\n   - 「！！」（感嘆符2つ以上連続）の過度な記号使用を検出\n3. 違反が見つかった場合は警告、なければ「問題なし」を表示する",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>広告文ポリシーチェッカー</title>\n  <style>\n    body { font-family: 'Noto Sans JP', sans-serif; background: #0f172a; color: #e2e8f0; padding: 20px; }\n    h1 { color: #60a5fa; font-size: 18px; }\n    textarea { width: 100%; background: #1e293b; border: 1px solid #334155; color: #e2e8f0; padding: 12px; border-radius: 6px; font-size: 14px; resize: vertical; box-sizing: border-box; }\n    button { background: #3b82f6; color: white; border: none; padding: 10px 24px; border-radius: 6px; cursor: pointer; margin-top: 8px; }\n    .result { margin-top: 16px; padding: 12px 16px; border-radius: 6px; font-size: 13px; }\n    .ok { background: #14532d; border: 1px solid #16a34a; }\n    .ng { background: #450a0a; border: 1px solid #dc2626; }\n    .violation { color: #fca5a5; margin: 4px 0; }\n  </style>\n</head>\n<body>\n  <h1>広告文 ポリシー違反チェッカー</h1>\n  <p style=\"font-size:13px; color:#94a3b8;\">チェックしたい広告文を入力してください</p>\n  <textarea id=\"adText\" rows=\"4\" placeholder=\"例: 業界最安値！絶対に満足保証！今すぐお問い合わせください！！\"></textarea>\n  <button onclick=\"checkAdText()\">チェックする</button>\n  <div id=\"result\"></div>\n\n  <script>\n    function checkAdText() {\n      const text = document.getElementById('adText').value;\n      const violations = [];\n\n      // ここにチェックロジックを実装してください\n      // 1. 根拠なし最上級表現: 最安値・No.1・業界最高\n      // 2. 虚偽約束表現: 絶対に・保証・必ず\n      // 3. 過度な記号: ！！（感嘆符2つ以上連続）\n\n      // 結果表示（変更不要）\n      const resultEl = document.getElementById('result');\n      if (violations.length === 0) {\n        resultEl.className = 'result ok';\n        resultEl.innerHTML = '問題なし: ポリシー違反の可能性はありません';\n      } else {\n        resultEl.className = 'result ng';\n        resultEl.innerHTML = '<strong>警告: 以下の違反の可能性があります</strong>' +\n          violations.map(v => `<div class=\"violation\">・${v}</div>`).join('');\n      }\n    }\n  </script>\n</body>\n</html>",
+        "hints": [
+          "violations.push('メッセージ') で違反メッセージを追加します。",
+          "text.includes('最安値') で特定の文字列が含まれるか確認できます。",
+          "/！{2,}/.test(text) で感嘆符2つ以上の連続を正規表現で検出できます。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>広告文ポリシーチェッカー</title>\n  <style>\n    body { font-family: 'Noto Sans JP', sans-serif; background: #0f172a; color: #e2e8f0; padding: 20px; }\n    h1 { color: #60a5fa; font-size: 18px; }\n    textarea { width: 100%; background: #1e293b; border: 1px solid #334155; color: #e2e8f0; padding: 12px; border-radius: 6px; font-size: 14px; resize: vertical; box-sizing: border-box; }\n    button { background: #3b82f6; color: white; border: none; padding: 10px 24px; border-radius: 6px; cursor: pointer; margin-top: 8px; }\n    .result { margin-top: 16px; padding: 12px 16px; border-radius: 6px; font-size: 13px; }\n    .ok { background: #14532d; border: 1px solid #16a34a; }\n    .ng { background: #450a0a; border: 1px solid #dc2626; }\n    .violation { color: #fca5a5; margin: 4px 0; }\n  </style>\n</head>\n<body>\n  <h1>広告文 ポリシー違反チェッカー</h1>\n  <p style=\"font-size:13px; color:#94a3b8;\">チェックしたい広告文を入力してください</p>\n  <textarea id=\"adText\" rows=\"4\" placeholder=\"例: 業界最安値！絶対に満足保証！今すぐお問い合わせください！！\"></textarea>\n  <button onclick=\"checkAdText()\">チェックする</button>\n  <div id=\"result\"></div>\n  <script>\n    function checkAdText() {\n      const text = document.getElementById('adText').value;\n      const violations = [];\n      if (text.includes('最安値')) violations.push('「最安値」: 根拠のない最上級表現（要根拠・注釈）');\n      if (text.includes('No.1') || text.includes('№1')) violations.push('「No.1」: 根拠のない最上級表現（調査出典が必要）');\n      if (text.includes('業界最高')) violations.push('「業界最高」: 根拠のない最上級表現（要根拠・注釈）');\n      if (text.includes('絶対に')) violations.push('「絶対に」: 虚偽の約束・保証表現の可能性');\n      if (text.includes('保証')) violations.push('「保証」: 保証内容の根拠と条件の明記が必要');\n      if (text.includes('必ず')) violations.push('「必ず」: 虚偽の約束表現の可能性');\n      if (/！{2,}/.test(text) || /!{2,}/.test(text)) violations.push('感嘆符の連続使用: 過度な記号は不承認の原因');\n      const resultEl = document.getElementById('result');\n      if (violations.length === 0) {\n        resultEl.className = 'result ok';\n        resultEl.innerHTML = '問題なし: ポリシー違反の可能性はありません';\n      } else {\n        resultEl.className = 'result ng';\n        resultEl.innerHTML = '<strong>警告: 以下の違反の可能性があります</strong>' +\n          violations.map(v => `<div class=\"violation\">・${v}</div>`).join('');\n      }\n    }\n  </script>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "Google広告の自動審査が完了するまでの標準的な時間はどれくらいですか？",
+            "options": ["数秒", "約1時間", "約24時間", "3〜5営業日"],
+            "correct": 1,
+            "explanation": "Google広告の自動審査（AI審査）は通常約1時間で完了します。自動審査で問題がなければ「審査済み」となり配信が開始されます。複雑な内容や特定業種は手動審査に回り、1〜3営業日かかることがあります。"
+          },
+          {
+            "q": "広告文に「業界No.1！」と記載した場合、ポリシー上どのような扱いになりますか？",
+            "options": [
+              "問題なく審査を通過する",
+              "調査出典・根拠の明記なしでは不承認の可能性がある",
+              "競合他社名を含まなければ問題ない",
+              "日本語広告には最上級表現の規制がない"
+            ],
+            "correct": 1,
+            "explanation": "「No.1」「最安値」などの最上級表現は、調査機関・調査日・調査方法などの根拠が明記されていない場合、不承認になる可能性があります。使用する場合は「〇〇調べ（2024年）」などの注釈が必要です。"
+          },
+          {
+            "q": "医療サービスの広告を掲載する際に必要なことはどれですか？",
+            "options": [
+              "医療広告は一切掲載できない",
+              "Googleへの事前申請と資格証明の提出が必要",
+              "ランディングページに電話番号があれば掲載できる",
+              "医師監修の記載があれば特別な手続きは不要"
+            ],
+            "correct": 1,
+            "explanation": "医療サービスは「制限コンテンツ」に分類され、Googleへの事前申請と資格・認定証明の提出が必要です。許可なく掲載すると不承認・停止になります。業種によって必要な認定が異なるため、事前にGoogleのポリシーを精読することが重要です。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール9-8 完了！\n\n広告ポリシーと審査プロセスの知識を習得しました。\n\n## 習得したスキル\n\n✅ **禁止コンテンツと制限コンテンツ**の違いを説明できる\n✅ **よくある不承認理由**（最上級表現・虚偽約束・過度な記号）を把握した\n✅ **審査プロセス**（自動→手動→再申請）のフローを理解した\n✅ JavaScriptで広告文ポリシーチェッカーを実装できた\n\n## 次のステップ\n\n次のモジュール **「9-9: 広告フォーマット別クリエイティブ制作の勘所」** では、各広告フォーマットに合わせたクリエイティブ制作のポイントを学びます。\n\n> **実務チャレンジ**: 現在運用中の広告文を今日学んだチェックポイントで再確認してください。「最安値」「No.1」などの表現を使っていた場合、根拠の追記または表現変更を検討しましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

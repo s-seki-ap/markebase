@@ -1,0 +1,72 @@
+{
+  "id": "advertising--9-5",
+  "moduleId": "9-5",
+  "categoryId": "advertising",
+  "title": "広告媒体の特徴比較と目的別の最適媒体選定",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# なぜ媒体選定が成果を左右するか\n\n同じ予算でも、**間違った媒体に投資すると効果は半分以下になります**。逆に、目的とターゲットに合った媒体を選ぶだけで、改善施策より大きなインパクトが出ることもあります。\n\n## デジタル広告媒体の現在地\n\n日本のデジタル広告費（2024年）は約4兆円を超え、以下の媒体が主要シェアを持ちます。\n\n- **Google広告**: 検索・YouTube・GDN（ディスプレイ）\n- **Meta広告**: Facebook・Instagram\n- **LINE広告**: LINEアプリ内\n- **Twitter/X広告**: X（旧Twitter）\n- **TikTok広告**: 短尺動画\n- **Yahoo!広告**: Yahoo! JAPAN検索・YDN\n\n## この学習で得られること\n\n各媒体の特徴と強み・弱みを理解し、クライアントの目的・ターゲット・予算に応じた媒体選定の根拠を説明できるようになります。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# 主要広告媒体の特徴比較\n\n## 媒体比較マトリクス\n\n| 媒体 | 強みのターゲティング | 主な目的 | 最小予算目安 | 特徴 |\n|------|---------------------|---------|------------|------|\n| Google検索 | キーワード（検索意図） | 獲得・購入 | ¥3万/月 | 購買意欲が高い層にリーチ |\n| Google P-MAX | 機械学習・全チャネル | 獲得・認知 | ¥10万/月 | 自動最適化が強力 |\n| YouTube広告 | 属性・興味関心・リマーケ | 認知・検討 | ¥5万/月 | 動画で深いエンゲージメント |\n| Meta（FB/IG） | 詳細な属性・行動データ | 認知・獲得 | ¥5万/月 | 精度の高い類似オーディエンス |\n| LINE広告 | 国内8,900万人のIDデータ | 認知・集客 | ¥3万/月 | 日本人カバレッジが最大 |\n| TikTok広告 | 10〜30代・エンタメ好き | 認知・ブランド | ¥10万/月 | 動画エンゲージメントが最高 |\n\n## 購買ファネルと媒体の対応\n\n```\n【認知フェーズ】　→ YouTube・TikTok・GDN\n     ↓\n【興味・検討フェーズ】→ Meta・LINE・リターゲティング\n     ↓\n【比較・評価フェーズ】→ Google検索・Yahoo!検索\n     ↓\n【購入・コンバージョン】→ Google検索・P-MAX・リターゲティング\n```\n\n## ターゲット別の媒体推奨\n\n**BtoC向け（一般消費者）**\n```\n若年層（18-34歳）: Instagram・TikTok・YouTube\n中年層（35-54歳）: Facebook・LINE・Google検索\n シニア（55歳以上）: Yahoo!検索・LINE\n```\n\n**BtoB向け**\n```\n第一選択: Google検索（職業・課題で検索する層に直撃）\n第二選択: LinkedIn広告（役職・会社規模でのターゲティング）\nリターゲティング: GDN・YouTube\n```\n\n## 予算配分の考え方（例: 月間¥100万）\n\n```\n【新規獲得重視】\n  Google検索: 50%（¥50万）\n  Meta広告:   30%（¥30万）\n  YouTube:    20%（¥20万）\n\n【ブランド認知重視】\n  YouTube:    40%（¥40万）\n  TikTok:     30%（¥30万）\n  GDN:        30%（¥30万）\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: 媒体選定プランニングシートを作成する\n\n以下のクライアント条件に対して、最適な媒体選定とその根拠をHTMLドキュメントにまとめてください。\n\n**クライアント条件**:\n- 業種: フィットネスジム（月会費¥8,000）\n- ターゲット: 30〜45歳、都市部在住、健康意識が高い\n- 目的: 入会申込の獲得（CPA目標: ¥5,000以下）\n- 月間予算: ¥50万\n\n## 課題\n\n各媒体の推奨度（◎/○/△）と根拠をHTMLテーブルに入力してください。",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>媒体選定プランニングシート</title>\n  <style>\n    body { font-family: 'Noto Sans JP', sans-serif; background: #f8fafc; padding: 20px; color: #1e293b; }\n    h1 { font-size: 18px; color: #0f172a; }\n    .condition { background: #eff6ff; border: 1px solid #bfdbfe; padding: 12px 16px; border-radius: 6px; margin: 12px 0; font-size: 13px; }\n    table { border-collapse: collapse; width: 100%; margin-top: 16px; font-size: 13px; }\n    th { background: #1e293b; color: white; padding: 8px 12px; text-align: left; }\n    td { border: 1px solid #e2e8f0; padding: 8px 12px; }\n    .rank-s { color: #16a34a; font-weight: bold; font-size: 16px; }\n    .rank-a { color: #2563eb; font-weight: bold; font-size: 16px; }\n    .rank-b { color: #d97706; font-size: 16px; }\n    .budget { font-weight: bold; color: #7c3aed; }\n  </style>\n</head>\n<body>\n  <h1>媒体選定プランニングシート</h1>\n  <div class=\"condition\">\n    <strong>クライアント:</strong> フィットネスジム |\n    <strong>ターゲット:</strong> 30〜45歳・都市部・健康意識高 |\n    <strong>目的:</strong> 入会申込獲得（CPA ¥5,000以下）|\n    <strong>月予算:</strong> ¥500,000\n  </div>\n  <table>\n    <thead>\n      <tr><th>媒体</th><th>推奨度</th><th>推奨根拠</th><th>想定予算</th></tr>\n    </thead>\n    <tbody>\n      <!-- 各媒体の行を追加してください（最低4媒体） -->\n    </tbody>\n  </table>\n</body>\n</html>",
+        "hints": [
+          "Google検索は「フィットネスジム 入会」「ジム 料金」などの高意図キーワードで獲得に直結するため◎です。",
+          "Instagram広告はフィットネス・健康カテゴリの親和性が高く、30〜45歳女性への訴求に有効です。",
+          "TikTokは20代中心のため、30〜45歳ターゲットへのリーチ効率は△となります。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>媒体選定プランニングシート</title>\n  <style>\n    body { font-family: 'Noto Sans JP', sans-serif; background: #f8fafc; padding: 20px; color: #1e293b; }\n    h1 { font-size: 18px; color: #0f172a; }\n    .condition { background: #eff6ff; border: 1px solid #bfdbfe; padding: 12px 16px; border-radius: 6px; margin: 12px 0; font-size: 13px; }\n    table { border-collapse: collapse; width: 100%; margin-top: 16px; font-size: 13px; }\n    th { background: #1e293b; color: white; padding: 8px 12px; text-align: left; }\n    td { border: 1px solid #e2e8f0; padding: 8px 12px; }\n    .rank-s { color: #16a34a; font-weight: bold; font-size: 16px; }\n    .rank-a { color: #2563eb; font-weight: bold; font-size: 16px; }\n    .rank-b { color: #d97706; font-size: 16px; }\n    .budget { font-weight: bold; color: #7c3aed; }\n  </style>\n</head>\n<body>\n  <h1>媒体選定プランニングシート</h1>\n  <div class=\"condition\">\n    <strong>クライアント:</strong> フィットネスジム |\n    <strong>ターゲット:</strong> 30〜45歳・都市部・健康意識高 |\n    <strong>目的:</strong> 入会申込獲得（CPA ¥5,000以下）|\n    <strong>月予算:</strong> ¥500,000\n  </div>\n  <table>\n    <thead>\n      <tr><th>媒体</th><th>推奨度</th><th>推奨根拠</th><th>想定予算</th></tr>\n    </thead>\n    <tbody>\n      <tr>\n        <td>Google検索広告</td>\n        <td class=\"rank-s\">◎ 最優先</td>\n        <td>「ジム 入会」「フィットネス 近く」などの高意図キーワードで購買意欲の高い層に直接リーチ。CPA目標達成に最も直結する</td>\n        <td class=\"budget\">¥250,000（50%）</td>\n      </tr>\n      <tr>\n        <td>Instagram広告</td>\n        <td class=\"rank-s\">◎ 推奨</td>\n        <td>フィットネス・ライフスタイルカテゴリとの親和性が高く、30〜45歳女性への訴求が強い。ビジュアルでモチベーション訴求が可能</td>\n        <td class=\"budget\">¥150,000（30%）</td>\n      </tr>\n      <tr>\n        <td>YouTube広告</td>\n        <td class=\"rank-a\">○ 補助</td>\n        <td>入会検討中のユーザーへ施設・トレーナーの魅力を動画で訴求。リターゲティングとの組み合わせで検討ユーザーのプッシュに有効</td>\n        <td class=\"budget\">¥75,000（15%）</td>\n      </tr>\n      <tr>\n        <td>LINE広告</td>\n        <td class=\"rank-a\">○ 補助</td>\n        <td>30〜45歳の国内普及率が高く、地域ターゲティングで近隣ユーザーへのリーチが可能。クーポン訴求との相性が良い</td>\n        <td class=\"budget\">¥25,000（5%）</td>\n      </tr>\n      <tr>\n        <td>TikTok広告</td>\n        <td class=\"rank-b\">△ 不推奨</td>\n        <td>主要ユーザー層が20代中心のため、30〜45歳へのリーチ効率が低い。今回のターゲット・目的には合致しない</td>\n        <td>-</td>\n      </tr>\n    </tbody>\n  </table>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "BtoBサービスの新規リード獲得において、最も優先度が高い媒体はどれですか？",
+            "options": ["TikTok広告", "Instagram広告", "Google検索広告", "LINE広告"],
+            "correct": 2,
+            "explanation": "BtoBでは「業務課題を検索で解決しようとしている層」へのリーチが最も効率的です。Google検索広告は「〇〇システム 導入」「〇〇 比較」などの検索意図を持つユーザーに直接リーチできるため最優先です。"
+          },
+          {
+            "q": "購買ファネルの「認知フェーズ」に最も適した媒体・フォーマットはどれですか？",
+            "options": [
+              "Google検索広告（テキスト）",
+              "YouTube・TikTok（動画広告）",
+              "リターゲティング広告",
+              "Google P-MAX"
+            ],
+            "correct": 1,
+            "explanation": "認知フェーズでは、まだ商品・サービスを知らないユーザーに広くリーチし、強い印象を与えることが目的です。動画広告（YouTube・TikTok）はビジュアルと音声で最も印象を残しやすく、認知フェーズに最適です。"
+          },
+          {
+            "q": "日本市場において、30〜50代のカバレッジが最も高い広告媒体はどれですか？",
+            "options": ["TikTok広告", "Instagram広告", "LINE広告", "Twitter/X広告"],
+            "correct": 2,
+            "explanation": "LINEは日本国内で約9,600万人のMAUを持ち（2024年）、30〜50代の普及率が非常に高い媒体です。特に地域・年齢・性別ターゲティングと合わせることで、特定の地域の中高年層への効率的なリーチが可能です。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール9-5 完了！\n\n広告媒体の特徴比較と目的別選定の考え方を習得しました。\n\n## 習得したスキル\n\n✅ **主要6媒体**（Google・YouTube・Meta・LINE・TikTok・Yahoo!）の特徴を比較できる\n✅ **購買ファネル**と媒体の対応関係を理解した\n✅ **BtoC/BtoB別**の媒体推奨ロジックを説明できる\n✅ 予算配分の考え方をHTMLシートで整理できた\n\n## 次のステップ\n\n次のモジュール **「9-6: デジタル広告の予算設計：目標から逆算する方法」** では、KPIと媒体特性を踏まえた予算設計の具体的な手法を学びます。\n\n> **実務チャレンジ**: 担当クライアントの現在の媒体配分を確認し、「この配分はファネル上の目的と合っているか？」を今日学んだ視点で評価してみましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

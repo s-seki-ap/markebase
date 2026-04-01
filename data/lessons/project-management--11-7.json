@@ -1,0 +1,82 @@
+{
+  "id": "project-management--11-7",
+  "moduleId": "11-7",
+  "categoryId": "project-management",
+  "title": "プロジェクト憲章の作成方法",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 「口頭で合意した」は合意していない\n\nプロジェクト開始時に「大体こんな感じでやりましょう」と口頭で話し合って進めると、後から必ず齟齬が生まれます。\n\n## よくある「合意なき開始」の末路\n\n**3ヶ月後の状況**:\n- クライアント：「スマホ対応は当然含まれてると思ってました」\n- PM：「レスポンシブ対応は別見積もりのはずです」\n\n**原因**: プロジェクト開始時に、スコープ・前提条件・除外事項を文書化していなかった。\n\nこの問題を防ぐのが**プロジェクト憲章（Project Charter）**です。\n\n## プロジェクト憲章とは\n\nプロジェクトの存在を正式に認可し、**目標・スコープ・体制・制約・前提・除外事項**を一枚のドキュメントとして定義した「プロジェクトの契約書」です。\n\nプロジェクト憲章が承認された時点で、プロジェクトは正式にスタートします。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# プロジェクト憲章の構成要素\n\n## 必須8要素\n\n| 要素 | 内容 | 記入例 |\n|------|------|--------|\n| **プロジェクト名** | 正式なプロジェクト呼称 | 「コーポレートサイトリニューアルPJ 2025」 |\n| **目的・背景** | なぜこのプロジェクトが必要か | 「旧サイトのCVR低下（前年比-30%）を改善するため」 |\n| **目標・成功基準** | 何を達成すれば成功か（数値目標） | 「リニューアル後3ヶ月でCVR 2%以上を達成」 |\n| **スコープ（含まれるもの）** | 何をやるか | 「TOP・サービス5ページ・お問い合わせフォーム」 |\n| **スコープ外（含まれないもの）** | 何をやらないか | 「採用ページ・EC機能・多言語対応」 |\n| **体制・役割** | 誰が関与するか | PM、デザイナー、エンジニア、クライアント担当者 |\n| **スケジュール** | マイルストーンと完了日 | 「2025/4/1開始→9/30リリース」 |\n| **前提条件・制約** | プロジェクトが依存する前提 | 「コンテンツはクライアント提供」「予算は200万円まで」 |\n\n## スコープ外（除外事項）が最重要\n\nプロジェクト憲章で最も重要かつ見落とされがちなのが**「やらないことの明記」**です。\n\n```\n悪い例: スコープに「Webサイト制作」とだけ記載\n  → 「SPAにしてほしい」「アニメーション追加してほしい」\n  → 「GA4設定もやってほしい」が追加されていく\n\n良い例: 「スコープ外」に明記\n  ✗ CMSの構築・設定（別案件として対応）\n  ✗ GA4・GTMの実装（別途料金が発生）\n  ✗ 多言語対応（将来フェーズに含む）\n  ✗ SEOライティング（クライアント様でご対応）\n```\n\n## 承認フロー\n\n```\nPM作成 → チーム内レビュー → クライアント確認\n  → 修正・合意 → 双方の署名（または承認メール）\n  → プロジェクト正式スタート\n```\n\n**承認なき開始はプロジェクト憲章の意味をなしません。**",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: プロジェクト憲章の作成\n\n以下のシナリオに基づいてプロジェクト憲章を作成してください。\n\n## シナリオ\n\nあなたは中小企業（製造業B2B）のコーポレートサイトリニューアルPMです。\n- 背景: 現サイトはスマホ非対応・デザインが10年前のまま・お問い合わせが月2件以下\n- 予算: 150万円以内\n- 期間: 2025/5/1〜2025/8/31\n- 目標: お問い合わせを月10件以上に増加\n\n## 課題\n\nHTMLテンプレートの各セクションを埋めてプロジェクト憲章を完成させてください。特に「スコープ外」を3項目以上記入してください。",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>プロジェクト憲章</title>\n  <style>\n    body { font-family: sans-serif; max-width: 800px; margin: 40px auto; background: #fff; color: #1e293b; }\n    h1 { text-align: center; border-bottom: 3px solid #1e293b; padding-bottom: 8px; }\n    .section { margin: 24px 0; }\n    .section h2 { background: #1e293b; color: white; padding: 8px 12px; border-radius: 4px; font-size: 1em; margin-bottom: 12px; }\n    .field { border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; margin: 8px 0; min-height: 60px; background: #f8fafc; }\n    .scope-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }\n    .scope-in { border-left: 4px solid #10b981; }\n    .scope-out { border-left: 4px solid #ef4444; }\n    .scope-out h3 { color: #ef4444; }\n    .scope-in h3 { color: #059669; }\n    .approval { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 16px; }\n    .approval-box { border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; text-align: center; }\n    ul { padding-left: 20px; }\n  </style>\n</head>\n<body>\n  <h1>プロジェクト憲章</h1>\n\n  <div class=\"section\">\n    <h2>基本情報</h2>\n    <div class=\"field\">プロジェクト名: （記入してください）</div>\n    <div class=\"field\">作成日: 　　　　PM: 　　　　クライアント: </div>\n  </div>\n\n  <div class=\"section\">\n    <h2>目的・背景</h2>\n    <div class=\"field\">（なぜこのプロジェクトが必要か記入してください）</div>\n  </div>\n\n  <div class=\"section\">\n    <h2>目標・成功基準</h2>\n    <div class=\"field\">（数値目標を含めて記入してください）</div>\n  </div>\n\n  <div class=\"section\">\n    <h2>スコープ</h2>\n    <div class=\"scope-grid\">\n      <div class=\"field scope-in\">\n        <h3>含まれるもの（スコープ内）</h3>\n        <ul>\n          <li>（記入してください）</li>\n          <li>（記入してください）</li>\n          <li>（記入してください）</li>\n        </ul>\n      </div>\n      <div class=\"field scope-out\">\n        <h3>含まれないもの（スコープ外）</h3>\n        <ul>\n          <li>（3項目以上記入してください）</li>\n          <li>（記入してください）</li>\n          <li>（記入してください）</li>\n        </ul>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"section\">\n    <h2>スケジュール（マイルストーン）</h2>\n    <div class=\"field\">（主要な節目と日付を記入してください）</div>\n  </div>\n\n  <div class=\"section\">\n    <h2>制約・前提条件</h2>\n    <div class=\"field\">予算上限: 　　　　　前提条件: （記入してください）</div>\n  </div>\n\n  <div class=\"section\">\n    <h2>承認</h2>\n    <div class=\"approval\">\n      <div class=\"approval-box\">PM署名: ___________<br>日付: ___________</div>\n      <div class=\"approval-box\">クライアント承認: ___________<br>日付: ___________</div>\n    </div>\n  </div>\n\n</body>\n</html>",
+        "hints": [
+          "プロジェクト名は「何の・誰の・何年の」を含めると後から見ても分かりやすいです（例：○○株式会社 コーポレートサイトリニューアル 2025）",
+          "スコープ外には「採用ページ」「ECカート機能」「GA4・GTM設定」「コンテンツ執筆」「SEOライティング」などが典型的です",
+          "マイルストーンは「要件定義完了・デザイン完了・実装完了・テスト完了・リリース」の5点を押さえると整理しやすいです"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>プロジェクト憲章</title>\n  <style>\n    body { font-family: sans-serif; max-width: 800px; margin: 40px auto; background: #fff; color: #1e293b; }\n    h1 { text-align: center; border-bottom: 3px solid #1e293b; padding-bottom: 8px; }\n    .section { margin: 24px 0; }\n    .section h2 { background: #1e293b; color: white; padding: 8px 12px; border-radius: 4px; font-size: 1em; margin-bottom: 12px; }\n    .field { border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; margin: 8px 0; background: #f8fafc; }\n    .scope-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }\n    .scope-in { border-left: 4px solid #10b981; }\n    .scope-out { border-left: 4px solid #ef4444; }\n    .scope-out h3 { color: #ef4444; margin: 0 0 8px; }\n    .scope-in h3 { color: #059669; margin: 0 0 8px; }\n    .approval { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 16px; }\n    .approval-box { border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; text-align: center; }\n    ul { padding-left: 20px; margin: 0; }\n    li { margin: 4px 0; }\n  </style>\n</head>\n<body>\n  <h1>プロジェクト憲章</h1>\n  <div class=\"section\">\n    <h2>基本情報</h2>\n    <div class=\"field\">プロジェクト名: 株式会社○○ コーポレートサイトリニューアル 2025</div>\n    <div class=\"field\">作成日: 2025/04/15　　PM: 山田太郎　　クライアント: 株式会社○○ 営業部長 鈴木様</div>\n  </div>\n  <div class=\"section\">\n    <h2>目的・背景</h2>\n    <div class=\"field\">現行サイトはスマートフォン非対応・デザインが10年前のままであり、月間お問い合わせが2件以下に低迷している。競合他社との差別化とリード獲得の改善を目的に、コーポレートサイトをフルリニューアルする。</div>\n  </div>\n  <div class=\"section\">\n    <h2>目標・成功基準</h2>\n    <div class=\"field\">リニューアル後3ヶ月以内に月間お問い合わせ10件以上を達成する。スマートフォン対応によりモバイルからのセッション数を前年比+50%以上とする。</div>\n  </div>\n  <div class=\"section\">\n    <h2>スコープ</h2>\n    <div class=\"scope-grid\">\n      <div class=\"field scope-in\">\n        <h3>含まれるもの</h3>\n        <ul>\n          <li>TOPページ・会社概要・サービス3ページ</li>\n          <li>お問い合わせフォーム（確認・完了画面含む）</li>\n          <li>スマートフォン対応（レスポンシブデザイン）</li>\n          <li>基本SEO対策（メタタグ・構造化データ）</li>\n        </ul>\n      </div>\n      <div class=\"field scope-out\">\n        <h3>含まれないもの</h3>\n        <ul>\n          <li>採用ページ（別フェーズで対応）</li>\n          <li>GA4・GTMの実装設定（別途見積もり）</li>\n          <li>コンテンツ執筆・画像撮影（クライアント様提供）</li>\n          <li>CMS構築・管理画面開発</li>\n          <li>多言語（英語）対応</li>\n        </ul>\n      </div>\n    </div>\n  </div>\n  <div class=\"section\">\n    <h2>スケジュール（マイルストーン）</h2>\n    <div class=\"field\">\n      2025/05/01 プロジェクト開始・キックオフ<br>\n      2025/05/31 要件定義完了・クライアント承認<br>\n      2025/06/30 デザインカンプ完了・クライアント承認<br>\n      2025/07/31 実装完了・テスト開始<br>\n      2025/08/20 クライアント最終確認<br>\n      2025/08/31 本番リリース\n    </div>\n  </div>\n  <div class=\"section\">\n    <h2>制約・前提条件</h2>\n    <div class=\"field\">予算上限: 150万円（税別）　前提条件: コンテンツ（テキスト・画像）はクライアント様より2025/6/15までに提供いただく。ドメイン・サーバー費用は別途クライアント様負担。</div>\n  </div>\n  <div class=\"section\">\n    <h2>承認</h2>\n    <div class=\"approval\">\n      <div class=\"approval-box\">PM署名: 山田太郎<br>日付: 2025/04/15</div>\n      <div class=\"approval-box\">クライアント承認: 鈴木一郎<br>日付: 2025/04/18</div>\n    </div>\n  </div>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "プロジェクト憲章において「スコープ外（除外事項）」を明記する主な目的はどれですか？",
+            "options": [
+              "プロジェクトの作業量を少なく見せるため",
+              "「やると思っていた・やらないと思っていた」という認識のズレを事前に防ぐため",
+              "クライアントへの追加請求を正当化するため",
+              "チームメンバーの作業負荷を減らすため"
+            ],
+            "correct": 1,
+            "explanation": "スコープ外の明記は「何をやらないか」を合意するためです。例えば「スマホ対応は含まれると思っていた」「GA4設定は別料金とは聞いていない」などのトラブルは、除外事項を明文化することで防げます。"
+          },
+          {
+            "q": "プロジェクト憲章の「成功基準」として最も適切な記述はどれですか？",
+            "options": [
+              "「Webサイトをよりよくする」",
+              "「リニューアル後3ヶ月以内に月間お問い合わせ数を現状の2件から10件以上に増加させる」",
+              "「チームメンバー全員が満足できるサイトを作る」",
+              "「競合他社より優れたサイトを作る」"
+            ],
+            "correct": 1,
+            "explanation": "成功基準は「数値・期限・測定方法」が明確でなければなりません。「よりよくする」「満足できる」「優れた」は主観的で測定不能です。「3ヶ月以内に10件以上」のように客観的に判断できる形式が正しいです。"
+          },
+          {
+            "q": "プロジェクト憲章が正式に「承認」された状態として正しいものはどれですか？",
+            "options": [
+              "PMが単独で作成・保存した状態",
+              "チームメンバー全員が口頭で「良いと思います」と言った状態",
+              "クライアントを含む関係者全員が内容を確認し、署名または承認の意思を示した状態",
+              "上長がドキュメントを一度見た状態"
+            ],
+            "correct": 2,
+            "explanation": "プロジェクト憲章は、クライアントを含む関係者全員が内容を確認・合意し、署名または明示的な承認（メール等での確認）を行って初めて効力を持ちます。PMが一人で作成しただけでは単なる草案です。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール11-7 完了！\n\nプロジェクト憲章の作成・活用手法を習得しました。\n\n## 習得したスキル\n\n✅ **プロジェクト憲章の8要素**：目的・目標・スコープ・体制・スケジュール・前提・除外事項・承認を理解した\n✅ **スコープ外の重要性**：「やらないことを明記する」ことがトラブル防止の核心であることを理解した\n✅ **成功基準の設計**：数値・期限を含む測定可能な目標の書き方を習得した\n✅ **承認フロー**：口頭合意ではなく書面承認の重要性を理解した\n\n## 次のステップ\n\n次のモジュール **「11-8: キックオフミーティングの設計と進行」** では、プロジェクト憲章を承認した後に実施するキックオフMTGの設計・アジェンダ作成・ファシリテーション手法を学びます。\n\n> 実務チャレンジ: 現在進行中のプロジェクトで「スコープ外」が文書化されているか確認しましょう。されていない場合は今日中に「スコープ外リスト」を3項目作成してクライアントに確認を取ってください。",
+        "diagram": false
+      }
+    }
+  ]
+}

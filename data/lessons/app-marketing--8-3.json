@@ -1,0 +1,82 @@
+{
+  "id": "app-marketing--8-3",
+  "moduleId": "8-3",
+  "categoryId": "app-marketing",
+  "title": "アプリの計測単位と指標の体系",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# アプリ計測は「誰が・何をしたか」の積み重ね\n\nWebのページビューがすべての起点だったように、アプリにはアプリなりの計測単位があります。この単位を正しく理解しないと、レポートを見ても意味が取れず、改善施策の判断を誤ります。\n\n## アプリ計測の3大単位\n\n1. **デバイス / ユーザー**: 誰がアプリを使っているか\n2. **セッション**: いつ・どれだけ使ったか\n3. **イベント**: 何をしたか\n\nFirebaseでは、この3つの単位をそれぞれ独立して計測し、組み合わせて分析します。\n\n## なぜ単位の理解が重要か\n\n「MAUが10万人いる」という数字も、「そのうち何人が課金した？」「何日に1回起動している？」という分析をするには、各指標がどの単位で計算されているかを理解する必要があります。単位を誤ると、分析結果が現実とずれてしまいます。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# アプリ指標の体系マップ\n\n## レイヤー1: ユーザー識別\n\n```\nユーザー識別の種類\n├── user_id          → ログイン済みユーザーのID（最も信頼性が高い）\n├── device_id        → デバイス固有のID（iOS: IDFV、Android: Android ID）\n└── user_pseudo_id   → FirebaseがCookieなしで付与する匿名ID\n```\n\n## レイヤー2: セッション\n\nFirebaseにおけるセッションの定義:\n- アプリをフォアグラウンドに出した瞬間にセッション開始\n- バックグラウンドに移行してから**30分以上**経過するとセッション終了\n- Webのセッション（30分無操作で終了）と同じ考え方\n\n## レイヤー3: イベント\n\n| イベント種別 | 説明 | 例 |\n|---|---|---|\n| 自動収集イベント | Firebaseが自動で取得 | `first_open`, `session_start`, `app_remove` |\n| 推奨イベント | Googleが命名規則を定めたもの | `purchase`, `login`, `search` |\n| カスタムイベント | 自分で定義するもの | `tutorial_complete`, `video_play` |\n\n## 指標の体系（ファネル順）\n\n```\n[獲得] インストール数 → CPI\n  ↓\n[起動] first_open → Day1 Retention\n  ↓\n[エンゲージメント] DAU・MAU・Stickiness\n  ↓\n[収益] ARPU・ARPPU・LTV\n  ↓\n[継続] チャーンレート → LTV計算に影響\n```\n\n## Firebaseにおける主要指標の定義\n\n| 指標 | Firebase上での定義 |\n|---|---|\n| アクティブユーザー | 任意の期間に少なくとも1回アプリを起動したユーザー |\n| エンゲージメント率 | エンゲージドセッション / 全セッション × 100 |\n| エンゲージドセッション | 10秒以上継続 or 2画面以上遷移 or コンバージョン発生 |",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: 指標体系を関数で実装する\n\nアプリ計測の基本指標をJavaScriptで計算する関数群を実装してください。\n\n## 課題\n\n3つの計算関数を実装して、サンプルデータで動作確認してください。",
+        "starterCode": "// アプリ計測指標の計算関数\n\n// エンゲージメント率を計算する関数\n// 計算式: エンゲージドセッション / 全セッション * 100\nfunction calcEngagementRate(engagedSessions, totalSessions) {\n  // ここに実装してください\n  return 0;\n}\n\n// Day1 Retentionを計算する関数\n// 計算式: Day1に起動したユーザー / インストール日のユーザー * 100\nfunction calcDay1Retention(day1Users, installDayUsers) {\n  // ここに実装してください\n  return 0;\n}\n\n// Stickiness（粘着率）を計算する関数\n// 計算式: DAU / MAU * 100\nfunction calcStickiness(dau, mau) {\n  // ここに実装してください\n  return 0;\n}\n\n// サンプルデータ（変更不要）\nconst data = {\n  totalSessions: 120000,\n  engagedSessions: 84000,\n  installDayUsers: 5000,\n  day1Users: 1750,\n  dau: 45000,\n  mau: 200000\n};\n\n// 結果出力（変更不要）\nconsole.log('エンゲージメント率:', calcEngagementRate(data.engagedSessions, data.totalSessions).toFixed(1) + '%');\nconsole.log('Day1 Retention:', calcDay1Retention(data.day1Users, data.installDayUsers).toFixed(1) + '%');\nconsole.log('Stickiness:', calcStickiness(data.dau, data.mau).toFixed(1) + '%');",
+        "hints": [
+          "エンゲージメント率は engagedSessions / totalSessions * 100 です。",
+          "Day1 Retention は day1Users / installDayUsers * 100 です。",
+          "Stickiness は dau / mau * 100 です。"
+        ],
+        "answer": "function calcEngagementRate(engagedSessions, totalSessions) {\n  return (engagedSessions / totalSessions) * 100;\n}\n\nfunction calcDay1Retention(day1Users, installDayUsers) {\n  return (day1Users / installDayUsers) * 100;\n}\n\nfunction calcStickiness(dau, mau) {\n  return (dau / mau) * 100;\n}\n\nconst data = {\n  totalSessions: 120000,\n  engagedSessions: 84000,\n  installDayUsers: 5000,\n  day1Users: 1750,\n  dau: 45000,\n  mau: 200000\n};\n\nconsole.log('エンゲージメント率:', calcEngagementRate(data.engagedSessions, data.totalSessions).toFixed(1) + '%');\nconsole.log('Day1 Retention:', calcDay1Retention(data.day1Users, data.installDayUsers).toFixed(1) + '%');\nconsole.log('Stickiness:', calcStickiness(data.dau, data.mau).toFixed(1) + '%');"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "Firebaseにおける「エンゲージドセッション」の条件として正しいものはどれですか？",
+            "options": [
+              "1分以上アプリを使ったセッション",
+              "購入が発生したセッションのみ",
+              "10秒以上継続、または2画面以上遷移、またはコンバージョン発生",
+              "プッシュ通知から起動したセッション"
+            ],
+            "correct": 2,
+            "explanation": "Firebaseのエンゲージドセッションは「10秒以上継続、2画面以上遷移、コンバージョン発生」のいずれかを満たしたセッションです。GA4のWebでも同じ定義が使われています。"
+          },
+          {
+            "q": "Firebaseが匿名ユーザーに自動で付与するIDの名称はどれですか？",
+            "options": [
+              "device_id",
+              "IDFA",
+              "user_pseudo_id",
+              "client_id"
+            ],
+            "correct": 2,
+            "explanation": "user_pseudo_idはFirebaseがCookieなしで付与する匿名IDです。ログインしていないユーザーでもユーザー単位の分析ができます。ログイン後はuser_idと紐付けて追跡精度を上げることが推奨されます。"
+          },
+          {
+            "q": "Firebaseのセッションが終了する条件として正しいものはどれですか？",
+            "options": [
+              "アプリをホーム画面に戻してから即時終了",
+              "バックグラウンドに移行してから30分以上経過",
+              "バックグラウンドに移行してから5分以上経過",
+              "ユーザーが明示的にアプリを閉じた場合のみ"
+            ],
+            "correct": 1,
+            "explanation": "Firebaseのセッションはアプリがバックグラウンドに移行してから30分以上経過すると終了します。これはWebのGA4セッションと同じ定義です。短時間の中断（通知確認など）はセッション継続として扱われます。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール8-3 完了！\n\nアプリ計測の単位と指標体系を理解しました。\n\n## 習得したスキル\n\n✅ **ユーザー識別の3種類**（user_id / device_id / user_pseudo_id）を説明できる\n✅ **Firebaseのセッション定義**（バックグラウンド30分で終了）を理解した\n✅ **イベント3分類**（自動収集・推奨・カスタム）の違いを把握した\n✅ **ファネル順の指標体系**（獲得→起動→エンゲージメント→収益→継続）を整理できた\n\n## 次のステップ\n\n次のモジュール **「8-4: DAU / MAU / ARPUの計算と活用」** では、最頻出の3指標を実際に計算しながら深掘りします。",
+        "diagram": false
+      }
+    }
+  ]
+}

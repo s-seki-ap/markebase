@@ -1,0 +1,82 @@
+{
+  "id": "app-marketing--8-14",
+  "moduleId": "8-14",
+  "categoryId": "app-marketing",
+  "title": "Firebase Consoleの基本操作",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# Firebase ConsoleはFirebaseの「コックピット」\n\nFirebase Console（console.firebase.google.com）はFirebaseプロジェクトを管理するWebUIです。エンジニアだけでなく、マーケターもここでアプリの状態を確認し、プッシュ通知の配信やA/Bテストの設定を行います。\n\n## このモジュールで学ぶこと\n\n- Firebase Consoleの画面構成とナビゲーション\n- マーケターが日常的に使うメニューの場所\n- プロジェクト設定で確認すべき重要な情報\n\n## Consoleにアクセスするには\n\n```\nURL: https://console.firebase.google.com\n\n必要な権限:\n- Googleアカウントがプロジェクトのメンバーとして追加されていること\n- 「閲覧者」以上の権限（編集にはオーナーまたは編集者権限が必要）\n```",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# Firebase Consoleの画面構成\n\n## 左サイドバーのメニュー構成\n\n```\nFirebase Console（左サイドバー）\n│\n├── プロジェクトの概要\n│\n├── [リリースとモニタリング]\n│   ├── Crashlytics      → クラッシュレポート\n│   ├── Performance      → アプリ速度計測\n│   └── App Distribution → テスター配布\n│\n├── [アナリティクス]\n│   ├── Dashboard        → 主要KPIの概要\n│   ├── Realtime         → リアルタイム計測\n│   ├── Events           → イベント一覧\n│   ├── Conversions      → コンバージョン\n│   ├── Audiences        → ユーザーセグメント\n│   ├── Funnels          → ファネル分析\n│   └── Retention        → コホート継続率\n│\n├── [エンゲージメント]\n│   ├── A/B Testing      → ABテスト設定\n│   ├── Cloud Messaging  → プッシュ通知\n│   ├── In-App Messaging → アプリ内通知\n│   └── Remote Config    → リモート設定\n│\n└── [構築]\n    ├── Authentication   → ユーザー認証\n    ├── Firestore        → データベース\n    └── Storage          → ファイルストレージ\n```\n\n## マーケターが最も使うメニューTop5\n\n| 順位 | メニュー | 主な用途 |\n|---|---|---|\n| 1 | Analytics → Events | どのイベントが何回発火しているか確認 |\n| 2 | Analytics → Retention | コホート別継続率の確認 |\n| 3 | Cloud Messaging | プッシュ通知キャンペーンの作成・配信 |\n| 4 | A/B Testing | UI変更・通知文言のABテスト |\n| 5 | Crashlytics | クラッシュ状況とその影響ユーザー数確認 |\n\n## プロジェクト設定で確認すること\n\n```\nプロジェクトの概要 → 歯車アイコン → プロジェクトの設定\n\n確認すべき項目:\n├── プロジェクトID（例: my-app-12345）\n├── アプリのバンドルID / パッケージ名\n├── google-services.json のダウンロード\n└── 統合タブ → BigQueryリンク状態\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: Firebase Consoleのナビゲーション設計をコードで表現する\n\nFirebase Consoleの画面構成をJavaScriptのオブジェクトとして表現し、「マーケター向けメニュー」をフィルタリングする関数を実装してください。\n\n## 課題\n\n`getMarketerMenus()` 関数を実装して、`forMarketer: true` のメニューのみを返してください。",
+        "starterCode": "// Firebase Consoleのメニュー構成\nconst firebaseConsoleMenus = [\n  { section: 'アナリティクス', name: 'Dashboard', forMarketer: true },\n  { section: 'アナリティクス', name: 'Events', forMarketer: true },\n  { section: 'アナリティクス', name: 'Retention', forMarketer: true },\n  { section: 'アナリティクス', name: 'Funnels', forMarketer: true },\n  { section: 'エンゲージメント', name: 'Cloud Messaging', forMarketer: true },\n  { section: 'エンゲージメント', name: 'A/B Testing', forMarketer: true },\n  { section: 'エンゲージメント', name: 'Remote Config', forMarketer: false },\n  { section: 'リリースとモニタリング', name: 'Crashlytics', forMarketer: true },\n  { section: '構築', name: 'Authentication', forMarketer: false },\n  { section: '構築', name: 'Firestore', forMarketer: false }\n];\n\n// マーケター向けメニューだけを返す関数\nfunction getMarketerMenus(menus) {\n  // forMarketer が true のメニューだけを返してください\n  return [];\n}\n\n// セクション別にグループ化する関数\nfunction groupBySection(menus) {\n  return menus.reduce((groups, menu) => {\n    // ここに実装してください\n    // groups[menu.section] が未定義なら空配列で初期化\n    // その後 menu.name を追加する\n    return groups;\n  }, {});\n}\n\n// 結果出力（変更不要）\nconst marketerMenus = getMarketerMenus(firebaseConsoleMenus);\nconsole.log('マーケター向けメニュー数:', marketerMenus.length);\n\nconst grouped = groupBySection(marketerMenus);\nObject.entries(grouped).forEach(([section, names]) => {\n  console.log(`\\n[${section}]`);\n  names.forEach(name => console.log(`  - ${name}`));\n});",
+        "hints": [
+          "getMarketerMenus は menus.filter(menu => menu.forMarketer) で実装できます。",
+          "groupBySection の reduce: if (!groups[menu.section]) groups[menu.section] = []; の後に groups[menu.section].push(menu.name); を実行します。",
+          "最後に return groups; を忘れずに。"
+        ],
+        "answer": "const firebaseConsoleMenus = [\n  { section: 'アナリティクス', name: 'Dashboard', forMarketer: true },\n  { section: 'アナリティクス', name: 'Events', forMarketer: true },\n  { section: 'アナリティクス', name: 'Retention', forMarketer: true },\n  { section: 'アナリティクス', name: 'Funnels', forMarketer: true },\n  { section: 'エンゲージメント', name: 'Cloud Messaging', forMarketer: true },\n  { section: 'エンゲージメント', name: 'A/B Testing', forMarketer: true },\n  { section: 'エンゲージメント', name: 'Remote Config', forMarketer: false },\n  { section: 'リリースとモニタリング', name: 'Crashlytics', forMarketer: true },\n  { section: '構築', name: 'Authentication', forMarketer: false },\n  { section: '構築', name: 'Firestore', forMarketer: false }\n];\n\nfunction getMarketerMenus(menus) {\n  return menus.filter(menu => menu.forMarketer);\n}\n\nfunction groupBySection(menus) {\n  return menus.reduce((groups, menu) => {\n    if (!groups[menu.section]) groups[menu.section] = [];\n    groups[menu.section].push(menu.name);\n    return groups;\n  }, {});\n}\n\nconst marketerMenus = getMarketerMenus(firebaseConsoleMenus);\nconsole.log('マーケター向けメニュー数:', marketerMenus.length);\n\nconst grouped = groupBySection(marketerMenus);\nObject.entries(grouped).forEach(([section, names]) => {\n  console.log(`\\n[${section}]`);\n  names.forEach(name => console.log(`  - ${name}`));\n});"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "Firebase ConsoleでコホートごとのDay7・Day30継続率を確認するメニューはどれですか？",
+            "options": [
+              "Analytics → Events",
+              "Analytics → Retention",
+              "エンゲージメント → A/B Testing",
+              "リリースとモニタリング → Crashlytics"
+            ],
+            "correct": 1,
+            "explanation": "Firebase Consoleの「Analytics → Retention」でコホート分析を確認できます。インストール日ごとのユーザーが1日後・7日後・30日後に何%残っているかを視覚的に確認できます。"
+          },
+          {
+            "q": "Firebase ConsoleでプッシュキャンペーンやIn-App Messagingを管理するセクションはどれですか？",
+            "options": [
+              "アナリティクス",
+              "リリースとモニタリング",
+              "エンゲージメント",
+              "構築"
+            ],
+            "correct": 2,
+            "explanation": "「エンゲージメント」セクションにCloud Messaging（プッシュ通知）、In-App Messaging（アプリ内通知）、A/B Testing、Remote Configが含まれています。ユーザーとのコミュニケーション施策はすべてここから管理します。"
+          },
+          {
+            "q": "`google-services.json` をダウンロードできる場所はどこですか？",
+            "options": [
+              "Firebase Console → Analytics → Dashboard",
+              "Firebase Console → プロジェクトの設定（歯車アイコン）→ アプリ欄",
+              "Firebase Console → Cloud Messaging",
+              "Google Cloud Console → IAM"
+            ],
+            "correct": 1,
+            "explanation": "`google-services.json` はFirebase Consoleの「プロジェクトの概要 → 歯車アイコン → プロジェクトの設定」の「マイアプリ」欄からダウンロードできます。SDKを更新したりFirebase機能を追加した後は再ダウンロードが必要な場合があります。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール8-14 完了！\n\nFirebase Consoleの基本操作と画面構成を習得しました。\n\n## 習得したスキル\n\n✅ **Firebase Consoleの4セクション**（アナリティクス・エンゲージメント・モニタリング・構築）を説明できる\n✅ **マーケター向けTop5メニュー**の場所と用途を把握した\n✅ **プロジェクト設定の確認項目**（プロジェクトID・設定ファイル・BQリンク）を整理できた\n✅ **メニューのフィルタリング**をコードで実装できた\n\n## 次のステップ\n\n次のモジュール **「8-15: データストリームの設定と確認」** では、GA4とFirebaseを繋ぐデータストリームの設定を詳しく学びます。",
+        "diagram": false
+      }
+    }
+  ]
+}

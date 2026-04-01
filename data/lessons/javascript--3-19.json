@@ -1,0 +1,82 @@
+{
+  "id": "javascript--3-19",
+  "moduleId": "3-19",
+  "categoryId": "javascript",
+  "title": "&&・||・!の論理演算子を使いこなす",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "## &&・||・!の論理演算子を使いこなす\n\n「ユーザーIDがあり、かつページタイプが商品ページのとき送信する」「GA4が読み込まれていない、またはdataLayerが未初期化のときは処理をスキップする」——複数の条件を組み合わせる処理は、GTMタグの実装で非常によく登場します。\n\n`&&`（AND）、`||`（OR）、`!`（NOT）の3つの論理演算子を理解すると、複合条件を正確に表現できるようになります。\n\n**このモジュールで学ぶこと**\n- `&&`（AND）、`||`（OR）、`!`（NOT）の動作\n- 論理演算子の優先順位\n- GTMカスタムHTML/JS変数での活用パターン\n- 複合条件を使った安全なタグ実装",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "## 3つの論理演算子\n\n### &&（AND：かつ）\n\n両方の条件が `true` のときのみ `true` を返します。\n\n```javascript\ntrue && true    // true\ntrue && false   // false\nfalse && true   // false\nfalse && false  // false\n```\n\n### ||（OR：または）\n\nどちらか一方でも `true` なら `true` を返します。\n\n```javascript\ntrue || true    // true\ntrue || false   // true\nfalse || true   // true\nfalse || false  // false\n```\n\n### !（NOT：否定）\n\n`true` を `false` に、`false` を `true` に反転します。\n\n```javascript\n!true           // false\n!false          // true\n!undefined      // true\n!''             // true（空文字はfalsyなので反転するとtrue）\n!'hello'        // false\n```\n\n### GTM実例①：複合条件でのイベント送信制御\n\n```javascript\n<script>\n  window.dataLayer = window.dataLayer || [];\n\n  var userId = {{User ID}};\n  var pageType = {{Page Type}};\n  var isConversionPage = {{Is Conversion Page}};  // true/false\n\n  // ログイン済み かつ 商品ページ のとき送信\n  if (userId && pageType === 'product') {\n    window.dataLayer.push({\n      'event': 'member_product_view',\n      'user_id': userId\n    });\n  }\n\n  // コンバージョンページ または 商品詳細ページ のとき送信\n  if (isConversionPage || pageType === 'product_detail') {\n    window.dataLayer.push({\n      'event': 'high_value_page_view'\n    });\n  }\n\n  // ログインしていない ときのみ送信\n  if (!userId) {\n    window.dataLayer.push({\n      'event': 'guest_page_view'\n    });\n  }\n</script>\n```\n\n### GTM実例②：GA4オブジェクトの安全チェック\n\n```javascript\n<script>\n  // gtag関数が存在し かつ 引数が有効なときのみ呼び出す\n  var eventName = {{GA4 Event Name}};\n\n  if (typeof window.gtag === 'function' && eventName && eventName !== '') {\n    window.gtag('event', eventName, {\n      'page_type': {{Page Type}}\n    });\n  }\n</script>\n```\n\n### 論理演算子の優先順位\n\n`!` > `&&` > `||` の順に優先されます。括弧で明示的にグループ化するのが安全です。\n\n```javascript\n// &&は||より先に評価される\nvar result = isLoggedIn || isPremium && hasCoupon;\n// 上記は isLoggedIn || (isPremium && hasCoupon) と同じ\n\n// 意図を明示するために括弧を使う\nvar result = (isLoggedIn || isPremium) && hasCoupon;\n```\n\n### よく使う複合条件パターン\n\n```javascript\n// 値の存在確認（nullでもundefinedでも空文字でもない）\nif (value !== null && value !== undefined && value !== '') { ... }\n\n// 簡略版（truthyチェック）\nif (value) { ... }\n\n// 特定のドメイン外ページを除外\nif (pageType === 'product' && !isExcludedDomain) { ... }\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "## 練習：複合条件でGA4イベント送信を制御する\n\n以下の条件を満たすときのみ `purchase` イベントをdataLayerに送信するコードを論理演算子を使って完成させてください。\n\n**送信条件（すべて満たす必要がある）**\n1. `orderId` が存在する（truthy）\n2. `orderValue` が 0 より大きい\n3. 重複送信防止のため `hasFired` が `false`（未発火）\n\n**また、以下のいずれかでもスキップする**\n- `pageType` が `'thankyou'` でない\n- `userId` が存在しない（ゲスト購入でもイベント送信したいため、この条件は不要）\n\n※ 今回は「3つの条件すべてを満たす」場合のみ送信するシンプルな実装です。",
+        "starterCode": "<script>\n  window.dataLayer = window.dataLayer || [];\n\n  var orderId = {{Order ID}};\n  var orderValue = {{Order Value}};\n  var hasFired = {{Purchase Fired Flag}};  // true/false\n  var pageType = {{Page Type}};\n\n  // 3つの条件をすべて満たす場合のみ送信\n  if (______ ______ orderValue > 0 ______ ______hasFired) {\n    window.dataLayer.push({\n      'event': 'purchase',\n      'transaction_id': orderId,\n      'value': orderValue\n    });\n  }\n</script>",
+        "hints": [
+          "`orderId` が存在するか（truthy）は `orderId` だけで判定できます",
+          "すべての条件を満たす必要があるので、条件を `&&`（AND）でつなぎます",
+          "`hasFired` が `false`（まだ発火していない）という条件は `!hasFired` と書けます"
+        ],
+        "answer": "<script>\n  window.dataLayer = window.dataLayer || [];\n\n  var orderId = {{Order ID}};\n  var orderValue = {{Order Value}};\n  var hasFired = {{Purchase Fired Flag}};  // true/false\n  var pageType = {{Page Type}};\n\n  // 3つの条件をすべて満たす場合のみ送信\n  if (orderId && orderValue > 0 && !hasFired) {\n    window.dataLayer.push({\n      'event': 'purchase',\n      'transaction_id': orderId,\n      'value': orderValue\n    });\n  }\n</script>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "question": "`!userId` の評価として正しいのはどれですか？（`userId = ''` の場合）",
+            "options": [
+              "false（userId は存在するため）",
+              "true（userId が空文字でfalsyのため、!で反転するとtrue）",
+              "undefined",
+              "エラーが発生する"
+            ],
+            "correct": 1,
+            "explanation": "空文字 `''` はJavaScriptのfalsy値です。`!''` は `!false` と同等で `true` を返します。つまり `userId = ''` のとき `!userId` は `true` になります。これを使って「ユーザーIDがない（未ログイン）」を判定できます。"
+          },
+          {
+            "question": "論理演算子の優先順位として正しいのはどれですか？",
+            "options": [
+              "||  >  &&  >  !",
+              "&&  >  ||  >  !",
+              "!  >  &&  >  ||",
+              "すべて左から右に同じ優先順位で評価される"
+            ],
+            "correct": 2,
+            "explanation": "論理演算子の優先順位は `!`（NOT）が最も高く、次に `&&`（AND）、最後に `||`（OR）です。そのため `a || b && c` は `a || (b && c)` と評価されます。意図を明確にするためには括弧でグループ化することを推奨します。"
+          },
+          {
+            "question": "GTMカスタムHTMLタグで `if (typeof window.gtag === 'function' && eventName)` という条件を書く理由はどれですか？",
+            "options": [
+              "gtagとeventNameを同時に初期化するため",
+              "gtagが関数として存在し かつ eventNameが空でないことを確認してから安全に呼び出すため",
+              "eventNameをgtag関数に自動的に渡すため",
+              "&&を使うとコードが高速化されるため"
+            ],
+            "correct": 1,
+            "explanation": "`typeof window.gtag === 'function'` でgtag関数が正しく読み込まれていることを確認し、`&& eventName` でイベント名が空でないことを確認します。`&&` の短絡評価（左辺がfalseなら右辺を評価しない）により、gtagが存在しない場合にエラーが発生するのを防ぎます。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "## まとめ：&&・||・!の論理演算子を使いこなす\n\n✅ `&&`（AND）は両方がtrueのときのみtrue。複数条件を同時に満たすかの判定に使う\n\n✅ `||`（OR）はどちらかがtrueならtrue。複数条件のいずれかを満たすかの判定に使う\n\n✅ `!`（NOT）は真偽値を反転する。「存在しない」「発火済みでない」の判定に使う\n\n✅ 優先順位は `!` > `&&` > `||`。複合条件は括弧で意図を明示する\n\n✅ GTMタグでのオブジェクト存在確認・重複送信防止・複合条件判定で必須スキル\n\n**次のモジュールでは** 短絡評価でデフォルト値とガード節を書く方法を学びます。",
+        "diagram": false
+      }
+    }
+  ]
+}

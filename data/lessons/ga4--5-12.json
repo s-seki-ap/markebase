@@ -1,0 +1,82 @@
+{
+  "id": "ga4--5-12",
+  "moduleId": "5-12",
+  "categoryId": "ga4",
+  "title": "拡張計測機能の全項目設定",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# コードなしで計測できる行動データ\n\nGA4の「拡張計測機能」は、GA4管理画面のトグルをONにするだけで追加のユーザー行動を自動計測する機能です。\n\n## UAとの圧倒的な差\n\nUAでスクロール計測や外部リンクのクリック計測をするには、GTMで複数のトリガー・タグ・変数を設定する必要がありました。GA4では**トグルひとつ**で完了します。\n\n## 拡張計測機能の全6項目\n\n```\n拡張計測機能トグル一覧（GA4管理 → データストリーム → 拡張計測）\n\n1. ページビュー          → page_view\n2. スクロール数          → scroll（90%到達）\n3. 離脱クリック         → click（外部リンク）\n4. サイト内検索         → view_search_results\n5. 動画エンゲージメント  → video_start / video_progress / video_complete\n6. ファイルのダウンロード → file_download\n```\n\n## ただし「設定すれば完璧」ではない\n\n拡張計測はあくまで汎用的な自動計測です。現場ではカスタム設定が必要なケースが多くあります。この違いを理解することが重要です。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# 各項目の詳細と実務上の注意点\n\n## 1. スクロール計測（scroll）\n\n```\nデフォルト動作: ページの90%スクロールで1回発火\n\nイベントパラメータ:\n- percent_scrolled: 90（常に90のみ）\n- page_title, page_location\n\n注意点:\n- 50%や75%などの中間点は計測できない\n- 中間点が必要ならGTMでカスタム実装が必要\n```\n\n## 2. 離脱クリック計測（click）\n\n```\nデフォルト動作: 自サイト外のURLリンクをクリックしたとき\n\nイベントパラメータ:\n- link_url: クリックされたURL\n- link_text: アンカーテキスト\n- outbound: true\n\n注意点:\n- クロスドメイン設定したドメインは「離脱」とみなされない\n- 電話番号リンク（tel:）は計測されない\n```\n\n## 3. サイト内検索（view_search_results）\n\n```\nデフォルト動作: URLに検索クエリパラメータが含まれるページ表示時\n対応パラメータ: q, s, search, query, keyword など\n\nイベントパラメータ:\n- search_term: 検索キーワード\n\n注意点:\n- 自サイトの検索パラメータ名が上記に含まれない場合は検出不可\n- GTMでカスタムURLパラメータを設定して対応することが多い\n```\n\n## 4. 動画エンゲージメント\n\n```\n対応: YouTubeの埋め込み動画のみ（HTML5 videoタグは対象外）\n\n計測されるイベント:\n- video_start: 再生開始\n- video_progress: 10%, 25%, 50%, 75%通過時\n- video_complete: 視聴完了\n\nイベントパラメータ:\n- video_title, video_url, video_duration, video_percent\n```\n\n## 5. ファイルダウンロード（file_download）\n\n```\n対象拡張子: pdf, doc(x), xls(x), ppt(x), zip, csv など\n\nイベントパラメータ:\n- file_name: ファイル名\n- file_extension: 拡張子\n- link_url: ダウンロードURL\n```\n\n## 設定の全体像（GTMとの関係）\n\n```\nGA4拡張計測  vs  GTMカスタム計測\n\n拡張計測が適切な場合:\n✅ 外部リンクのクリック一括計測\n✅ YouTubeの動画計測\n✅ PDFダウンロードの計測\n\nGTMカスタム計測が必要な場合:\n✅ 特定ボタンのクリックだけを計測したい\n✅ 90%以外のスクロール深度を計測したい\n✅ HTMLビデオタグの計測\n✅ 特定フォームの完了イベント\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: 拡張計測イベントをGTMでカスタマイズする\n\n拡張計測の `scroll` イベントは90%固定ですが、25%・50%・75%のスクロール到達も計測したい場合、GTMで実装します。\n\n## 課題\n\n以下のGTMカスタムHTMLタグのJavaScriptを完成させてください。\n\n1. スクロール深度が25%、50%、75%に到達したタイミングで `scroll_depth` イベントを送信する\n2. イベントパラメータ `percent_scrolled` に到達した深度を入れる\n3. 各深度は一度だけ送信する（二重送信を防ぐ）\n\n> `dataLayer.push()` でGA4にイベントを送信します。",
+        "starterCode": "<script>\n(function() {\n  var milestones = [25, 50, 75];\n  var triggered = {};\n\n  function getScrollPercent() {\n    var body = document.body;\n    var html = document.documentElement;\n    var scrollTop = window.pageYOffset || html.scrollTop;\n    var scrollHeight = Math.max(\n      body.scrollHeight, html.scrollHeight,\n      body.offsetHeight, html.offsetHeight\n    );\n    var clientHeight = html.clientHeight;\n    return Math.round((scrollTop / (scrollHeight - clientHeight)) * 100);\n  }\n\n  window.addEventListener('scroll', function() {\n    var percent = getScrollPercent();\n    milestones.forEach(function(milestone) {\n      // TODO: 条件を完成させる\n      // - percentがmilestone以上\n      // - かつまだtriggeredでない\n      if (/* ここを完成させる */) {\n        // TODO: triggered[milestone]をtrueにしてdataLayer.pushを実行\n      }\n    });\n  });\n})();\n</script>",
+        "hints": [
+          "条件式は `percent >= milestone && !triggered[milestone]` です。",
+          "`triggered[milestone] = true` で二重送信を防ぎます。",
+          "`dataLayer.push({ event: 'scroll_depth', percent_scrolled: milestone })` でGA4にイベントを送信します。"
+        ],
+        "answer": "<script>\n(function() {\n  var milestones = [25, 50, 75];\n  var triggered = {};\n\n  function getScrollPercent() {\n    var body = document.body;\n    var html = document.documentElement;\n    var scrollTop = window.pageYOffset || html.scrollTop;\n    var scrollHeight = Math.max(\n      body.scrollHeight, html.scrollHeight,\n      body.offsetHeight, html.offsetHeight\n    );\n    var clientHeight = html.clientHeight;\n    return Math.round((scrollTop / (scrollHeight - clientHeight)) * 100);\n  }\n\n  window.addEventListener('scroll', function() {\n    var percent = getScrollPercent();\n    milestones.forEach(function(milestone) {\n      if (percent >= milestone && !triggered[milestone]) {\n        triggered[milestone] = true;\n        dataLayer.push({\n          event: 'scroll_depth',\n          percent_scrolled: milestone\n        });\n      }\n    });\n  });\n})();\n</script>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "GA4の拡張計測機能でスクロール計測をONにしたとき、デフォルトで計測されるスクロール深度はどれですか？",
+            "options": [
+              "25%、50%、75%、100%の4段階",
+              "50%と100%の2段階",
+              "90%到達時のみ",
+              "スクロールのたびにリアルタイムで計測"
+            ],
+            "correct": 2,
+            "explanation": "GA4拡張計測のスクロール計測はページの90%に到達したときのみ `scroll` イベントが発火します。他の深度を計測したい場合はGTMでカスタム実装が必要です。"
+          },
+          {
+            "q": "GA4の拡張計測機能の動画エンゲージメント計測が対象としている動画プレーヤーはどれですか？",
+            "options": [
+              "HTML5の<video>タグで再生される動画すべて",
+              "Vimeoの埋め込み動画",
+              "Webページに埋め込まれたYouTube動画",
+              "mp4ファイルへの直接リンク"
+            ],
+            "correct": 2,
+            "explanation": "拡張計測の動画エンゲージメントは、Webページにiframeで埋め込まれたYouTube動画のみを対象としています。HTML5の<video>タグやVimeoなどは対象外で、計測するにはカスタム実装が必要です。"
+          },
+          {
+            "q": "拡張計測機能の「離脱クリック」計測で `click` イベントが発火しないリンクはどれですか？",
+            "options": [
+              "別ウィンドウで開く外部サイトへのリンク",
+              "クロスドメイン設定を行った対象ドメインへのリンク",
+              "target=\"_blank\" 属性のついた外部リンク",
+              "https:// で始まる外部リンク"
+            ],
+            "correct": 1,
+            "explanation": "クロスドメイン設定（リンカー設定）を行ったドメインへのリンクは、自サイトの一部として扱われるため「離脱クリック」とはみなされず `click` イベントは発火しません。`target=\"_blank\"` の外部リンクは通常通り計測されます。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール5-12 完了！\n\n拡張計測機能の全6項目を理解し、限界と対応策まで把握しました。\n\n## 習得したスキル\n\n✅ **拡張計測機能の全6項目**（スクロール・離脱クリック・検索・動画・ダウンロード）を説明できる\n✅ **各イベントのパラメータ**（percent_scrolled、link_url、search_term等）を把握した\n✅ **拡張計測の限界**と GTMカスタム実装が必要なケースを判断できる\n✅ **スクロール深度のカスタム実装**をJavaScriptで書ける\n\n## 実務での判断基準\n\n- クライアントから「コンテンツの読了率を計測したい」→ GTMでカスタムスクロール実装\n- 「外部リンクのクリックをまとめて計測したい」→ 拡張計測の離脱クリックで十分\n- 「YouTube動画の視聴完了率が知りたい」→ 拡張計測の動画エンゲージメントで対応可\n\n## 次のステップ\n\n次のモジュール **「5-13: Eコマース計測イベント」** では、購入・カート追加などの推奨イベントの実装を学びます。",
+        "diagram": false
+      }
+    }
+  ]
+}

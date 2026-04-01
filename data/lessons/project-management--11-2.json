@@ -1,0 +1,82 @@
+{
+  "id": "project-management--11-2",
+  "moduleId": "11-2",
+  "categoryId": "project-management",
+  "title": "プロジェクトの定義と特徴",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 「プロジェクト」と「日常業務」は何が違うのか\n\nデジタルマーケターの仕事には、毎週繰り返す「日常業務」と、期限と目標を持つ「プロジェクト」の2種類があります。この違いを曖昧にしていると、リソース配分も優先順位も崩れていきます。\n\n## 混同しやすい例\n\n**日常業務だと思っていたらプロジェクトだった**\n- 「Google Analytics 4への移行」→ 期限・予算・複数の関係者が関与するプロジェクト\n- 「SNSアカウントのリブランディング」→ 一度きりの成果物を生み出す固有のプロジェクト\n\n**プロジェクトだと思っていたら日常業務だった**\n- 「毎月のレポート作成」→ 繰り返し行うオペレーション\n- 「広告の定期最適化」→ 継続的なルーティンワーク\n\nこの区別ができると、プロジェクトに正しくPMプロセスを適用できるようになります。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# プロジェクトの4つの定義要素\n\nPMBOK（プロジェクトマネジメント知識体系）では、プロジェクトを以下のように定義しています。\n\n> **「独自の成果物またはサービスを創出するために行われる、有期性の業務」**\n\n## 4つの特徴\n\n| 特徴 | 説明 | 例 |\n|------|------|----|\n| **有期性** | 明確な開始日と終了日がある | サイトリニューアル：2025/4〜2025/9 |\n| **独自性** | 同じプロジェクトは二度と存在しない | 全く同じ条件の案件はない |\n| **漸進的詳細化** | 最初は曖昧でも進むにつれ明確になる | 要件は走りながら確定する |\n| **目的のある成果** | 具体的な成果物またはサービスを生み出す | 新LP、データ基盤、分析レポート |\n\n## プロジェクト vs オペレーション\n\n```\n【プロジェクト】\n  ・有期（始まりと終わりがある）\n  ・独自の成果物を生み出す\n  ・新しいチーム編成が多い\n  ・不確実性が高い\n  → 例：ECサイト構築、GA4移行\n\n【オペレーション（日常業務）】\n  ・継続的・反復的\n  ・既定のプロセスを繰り返す\n  ・固定チームで運用\n  ・標準化・効率化が目標\n  → 例：月次レポート作成、広告運用\n```\n\n## デジタルマーケで頻出のプロジェクト分類\n\n**グリーンフィールドプロジェクト**（新規構築）\n→ 新しいWebサイト、初回キャンペーン設計、ゼロからのデータ基盤構築\n\n**ブラウンフィールドプロジェクト**（既存改善）\n→ サイトリニューアル、UA→GA4移行、既存MAツールの改善",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: プロジェクト vs オペレーション分類シート\n\n以下のHTMLテンプレートを使って、自分の業務をプロジェクトとオペレーションに分類してみましょう。\n\n## 課題\n\n1. リストにある業務例を「プロジェクト」か「オペレーション」に分類する\n2. 各プロジェクトに有期性（開始〜終了）を設定する\n3. 自分の現在の業務を1つ追加する\n\n完成したら **[▶ 実行]** でプレビューを確認してください。",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>業務分類シート</title>\n  <style>\n    body { font-family: sans-serif; max-width: 750px; margin: 40px auto; background: #f8fafc; color: #1e293b; }\n    h1 { border-left: 4px solid #10b981; padding-left: 12px; }\n    .card { background: white; border-radius: 8px; padding: 16px; margin: 12px 0; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }\n    .badge-project { background: #dbeafe; color: #1d4ed8; padding: 2px 10px; border-radius: 12px; font-size: 0.85em; }\n    .badge-ops { background: #dcfce7; color: #15803d; padding: 2px 10px; border-radius: 12px; font-size: 0.85em; }\n    .period { color: #64748b; font-size: 0.9em; margin-top: 6px; }\n  </style>\n</head>\n<body>\n  <h1>業務分類シート</h1>\n\n  <!-- 各cardの badge を「プロジェクト」か「オペレーション」に変更し、期間を記入してください -->\n\n  <div class=\"card\">\n    <strong>GA4移行プロジェクト</strong>\n    <span class=\"badge-project\">プロジェクト</span>\n    <p class=\"period\">期間: 2025/4/1 〜 2025/6/30</p>\n  </div>\n\n  <div class=\"card\">\n    <strong>月次広告レポート作成</strong>\n    <span class=\"badge-ops\">（分類してください）</span>\n    <p class=\"period\">期間: （有期ならば記入）</p>\n  </div>\n\n  <div class=\"card\">\n    <strong>新LPデザイン・制作</strong>\n    <span class=\"badge-project\">（分類してください）</span>\n    <p class=\"period\">期間: （有期ならば記入）</p>\n  </div>\n\n  <div class=\"card\">\n    <strong>SNS毎日投稿運用</strong>\n    <span class=\"badge-ops\">（分類してください）</span>\n    <p class=\"period\">期間: （有期ならば記入）</p>\n  </div>\n\n  <!-- あなたの業務を1つ追加してください -->\n  <div class=\"card\">\n    <strong>（あなたの業務を入力）</strong>\n    <span class=\"badge-project\">（分類してください）</span>\n    <p class=\"period\">期間: </p>\n  </div>\n\n</body>\n</html>",
+        "hints": [
+          "「有期性（始まりと終わりがある）」かどうかが最も重要な判断基準です",
+          "「繰り返し行う」業務はオペレーション、「一度きりの成果物を生む」業務はプロジェクトです",
+          "SNS毎日投稿は継続業務なのでオペレーション、新LP制作は一度きりの成果物なのでプロジェクトです"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>業務分類シート</title>\n  <style>\n    body { font-family: sans-serif; max-width: 750px; margin: 40px auto; background: #f8fafc; color: #1e293b; }\n    h1 { border-left: 4px solid #10b981; padding-left: 12px; }\n    .card { background: white; border-radius: 8px; padding: 16px; margin: 12px 0; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }\n    .badge-project { background: #dbeafe; color: #1d4ed8; padding: 2px 10px; border-radius: 12px; font-size: 0.85em; }\n    .badge-ops { background: #dcfce7; color: #15803d; padding: 2px 10px; border-radius: 12px; font-size: 0.85em; }\n    .period { color: #64748b; font-size: 0.9em; margin-top: 6px; }\n  </style>\n</head>\n<body>\n  <h1>業務分類シート</h1>\n  <div class=\"card\">\n    <strong>GA4移行プロジェクト</strong>\n    <span class=\"badge-project\">プロジェクト</span>\n    <p class=\"period\">期間: 2025/4/1 〜 2025/6/30</p>\n  </div>\n  <div class=\"card\">\n    <strong>月次広告レポート作成</strong>\n    <span class=\"badge-ops\">オペレーション</span>\n    <p class=\"period\">期間: 継続（有期なし）</p>\n  </div>\n  <div class=\"card\">\n    <strong>新LPデザイン・制作</strong>\n    <span class=\"badge-project\">プロジェクト</span>\n    <p class=\"period\">期間: 2025/5/1 〜 2025/5/31</p>\n  </div>\n  <div class=\"card\">\n    <strong>SNS毎日投稿運用</strong>\n    <span class=\"badge-ops\">オペレーション</span>\n    <p class=\"period\">期間: 継続（有期なし）</p>\n  </div>\n  <div class=\"card\">\n    <strong>CRMツール導入プロジェクト</strong>\n    <span class=\"badge-project\">プロジェクト</span>\n    <p class=\"period\">期間: 2025/7/1 〜 2025/9/30</p>\n  </div>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "PMBOKにおけるプロジェクトの定義として最も正確なものはどれですか？",
+            "options": [
+              "継続的に繰り返される日常業務の総称",
+              "独自の成果物またはサービスを創出するために行われる有期性の業務",
+              "予算が100万円以上の大規模な業務",
+              "複数の部署が関与するすべての業務"
+            ],
+            "correct": 1,
+            "explanation": "PMBOKはプロジェクトを「独自の成果物またはサービスを創出するために行われる有期性の業務」と定義しています。有期性（始まりと終わり）と独自性が重要なキーワードです。"
+          },
+          {
+            "q": "次の業務のうち、「プロジェクト」ではなく「オペレーション（日常業務）」に該当するものはどれですか？",
+            "options": [
+              "ECサイトのリニューアル設計・制作",
+              "Google Analytics 4への移行作業",
+              "毎月の広告効果レポート作成",
+              "新しいMAツールの導入プロジェクト"
+            ],
+            "correct": 2,
+            "explanation": "「毎月の広告効果レポート作成」は繰り返し行われる継続的なオペレーションです。ECサイトリニューアル、GA4移行、MAツール導入は一度きりの成果物を生む有期性のプロジェクトです。"
+          },
+          {
+            "q": "プロジェクトの特徴「漸進的詳細化」の説明として正しいものはどれですか？",
+            "options": [
+              "プロジェクトの予算は開始時点で100%確定しなければならない",
+              "プロジェクト開始時は全体像が曖昧でも、進行とともに詳細が明確になっていく",
+              "プロジェクトは細かい作業から始めて全体像を後から決める",
+              "プロジェクトの詳細は最終段階にならないと決定できない"
+            ],
+            "correct": 1,
+            "explanation": "漸進的詳細化とは、プロジェクトが進行するにつれて情報が増え、計画の詳細度が高まっていくことです。初期段階で全てを完璧に計画しようとせず、反復しながら精度を上げるアプローチです。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール11-2 完了！\n\nプロジェクトの本質的な定義を理解しました。\n\n## 習得したスキル\n\n✅ **プロジェクトの4要素**：有期性・独自性・漸進的詳細化・目的ある成果を把握した\n✅ **プロジェクト vs オペレーション**：繰り返し業務と一度きりの業務を分類できるようになった\n✅ **グリーン/ブラウンフィールド**：新規構築と既存改善の違いを理解した\n✅ **自分の業務への適用**：実際の業務をプロジェクトとして認識できた\n\n## 次のステップ\n\n次のモジュール **「11-3: QCD三角形とトレードオフの管理」** では、プロジェクトの3大制約「品質・コスト・スケジュール」のバランス管理について学びます。\n\n> 実務チャレンジ: 今週の業務リストを「プロジェクト」と「オペレーション」に分けて書き出してみましょう。プロジェクトには必ず完了日を設定してください。",
+        "diagram": false
+      }
+    }
+  ]
+}

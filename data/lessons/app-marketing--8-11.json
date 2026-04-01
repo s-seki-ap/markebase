@@ -1,0 +1,82 @@
+{
+  "id": "app-marketing--8-11",
+  "moduleId": "8-11",
+  "categoryId": "app-marketing",
+  "title": "Firebaseエコシステムの全体像",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# Firebaseとは何か\n\nFirebase（ファイアベース）はGoogleが提供するモバイルアプリ開発・運用プラットフォームです。2014年にGoogleが買収し、現在はGCPの一部として提供されています。\n\n## Firebaseが解決すること\n\nアプリ開発・運用では以下のような課題があります:\n- ユーザーの行動を計測したい → **Firebase Analytics**\n- バグを素早く検知したい → **Firebase Crashlytics**\n- ABテストをしたい → **Firebase Remote Config**\n- プッシュ通知を送りたい → **Firebase Cloud Messaging（FCM）**\n\nこれらを個別のツールではなく**統合プラットフォーム**として提供しているのがFirebaseの強みです。\n\n## マーケターにとってのFirebase\n\nFirebaseはエンジニアだけのツールではありません。マーケターが知るべき理由は:\n- 計測設定（イベント設計）に直接関わる\n- Firebase Consoleでデータを自分で確認できる\n- GA4との連携でWebとアプリを統合分析できる",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# Firebaseの主要サービス一覧\n\n## アナリティクス・計測系\n\n| サービス | 役割 | マーケターの使いどころ |\n|---|---|---|\n| **Firebase Analytics** | アプリ内行動の計測 | DAU・Retention・イベント分析 |\n| **Google Analytics（GA4）** | WebとApp統合分析 | クロスプラットフォーム計測 |\n| **Firebase Crashlytics** | クラッシュ（強制終了）検知 | UX改善の優先度判断 |\n| **Firebase Performance** | アプリ速度・応答時間計測 | 遅延がCVに与える影響分析 |\n\n## エンゲージメント・グロース系\n\n| サービス | 役割 | マーケターの使いどころ |\n|---|---|---|\n| **Firebase Cloud Messaging** | プッシュ通知配信 | リテンション施策 |\n| **Firebase Remote Config** | アプリ動作のリモート変更 | ABテスト・機能フラグ |\n| **Firebase A/B Testing** | 施策の効果測定 | オンボーディング・UI比較 |\n| **Firebase In-App Messaging** | アプリ内ポップアップ | オファー・誘導メッセージ |\n\n## インフラ・バックエンド系\n\n| サービス | 役割 |\n|---|---|\n| Cloud Firestore / Realtime Database | リアルタイムDB |\n| Firebase Authentication | ユーザー認証 |\n| Cloud Storage | 画像・動画ファイル保存 |\n| Cloud Functions | サーバーレス処理 |\n\n## FirebaseとGCPの関係\n\n```\nGCP（Google Cloud Platform）\n└── Firebase（モバイルに特化した抽象化レイヤー）\n    ├── Firebase Console（管理UI）\n    ├── Firebase SDK（iOS / Android / Web）\n    └── Google Analytics for Firebase（= GA4）\n```\n\nFirebaseプロジェクトを作成すると自動的にGCPプロジェクトが作られ、BigQueryへのデータエクスポートも可能になります。",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: Firebaseサービスとユースケースのマッピング\n\nマーケティング施策とFirebaseサービスを正しく対応させてください。\n\n## 課題\n\n`useCaseMapping` オブジェクトに、各マーケティング施策に対応するFirebaseサービス名を入力してください。",
+        "starterCode": "// マーケティング施策 → Firebaseサービスのマッピング\nconst useCaseMapping = {\n  // プッシュ通知でチャーンユーザーを呼び戻す施策\n  reengagementPush: '',\n  \n  // アプリのクラッシュを検知してUX改善の優先度を決める\n  crashDetection: '',\n  \n  // オンボーディングのAパターンとBパターンの効果を比較する\n  onboardingAbTest: '',\n  \n  // ユーザーの行動データ（DAU・イベント）を分析する\n  behaviorAnalytics: '',\n  \n  // キャンペーン中だけ特定バナーを表示する（コード変更なし）\n  remoteFeatureToggle: ''\n};\n\n// 確認出力（変更不要）\nconst services = [\n  'Firebase Cloud Messaging',\n  'Firebase Crashlytics',\n  'Firebase A/B Testing',\n  'Firebase Analytics',\n  'Firebase Remote Config'\n];\n\nObject.entries(useCaseMapping).forEach(([useCase, service]) => {\n  const isValid = services.includes(service);\n  console.log(`${useCase}: ${service} ${isValid ? '✓' : '× (未設定または誤り)'}`);\n});",
+        "hints": [
+          "プッシュ通知は Firebase Cloud Messaging（FCM）です。",
+          "ABテストは Firebase A/B Testing です。",
+          "コード変更なしでアプリ動作を変えるのは Firebase Remote Config です。"
+        ],
+        "answer": "const useCaseMapping = {\n  reengagementPush: 'Firebase Cloud Messaging',\n  crashDetection: 'Firebase Crashlytics',\n  onboardingAbTest: 'Firebase A/B Testing',\n  behaviorAnalytics: 'Firebase Analytics',\n  remoteFeatureToggle: 'Firebase Remote Config'\n};\n\nconst services = [\n  'Firebase Cloud Messaging',\n  'Firebase Crashlytics',\n  'Firebase A/B Testing',\n  'Firebase Analytics',\n  'Firebase Remote Config'\n];\n\nObject.entries(useCaseMapping).forEach(([useCase, service]) => {\n  const isValid = services.includes(service);\n  console.log(`${useCase}: ${service} ${isValid ? '✓' : '× (未設定または誤り)'}`);\n});"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "Firebase A/B Testingを使う主な目的はどれですか？",
+            "options": [
+              "アプリのクラッシュを検知する",
+              "プッシュ通知を配信する",
+              "施策（UI・メッセージ等）のAパターンとBパターンの効果を比較する",
+              "BigQueryにデータをエクスポートする"
+            ],
+            "correct": 2,
+            "explanation": "Firebase A/B Testingは施策の効果測定に使います。オンボーディングのUI変更・プッシュ通知の文言・Remote Configの設定値の違いが、Retention・CVRなどのKPIに与える影響を統計的に比較できます。"
+          },
+          {
+            "q": "Firebase Remote Configの説明として正しいものはどれですか？",
+            "options": [
+              "リアルタイムデータベースの設定を変更するツール",
+              "アプリのコードを変えずにサーバーから動作・表示を変更できる仕組み",
+              "プッシュ通知のテンプレートを管理するツール",
+              "iOSのみで使えるFirebase機能"
+            ],
+            "correct": 1,
+            "explanation": "Firebase Remote Configはアプリのコードを再リリースせずに、サーバー側からアプリの動作・表示・設定を変更できる仕組みです。「キャンペーン中だけバナーを出す」「段階的に新機能を公開する」などに使います。"
+          },
+          {
+            "q": "FirebaseプロジェクトとGCPの関係として正しいものはどれですか？",
+            "options": [
+              "FirebaseとGCPは完全に別のサービスで連携できない",
+              "FirebaseはAWSの一部である",
+              "Firebaseプロジェクトを作成すると自動的にGCPプロジェクトが作られ、BigQueryエクスポートも可能",
+              "GCPの利用にはFirebaseの契約が必須"
+            ],
+            "correct": 2,
+            "explanation": "FirebaseはGCPの一部であり、Firebaseプロジェクト作成時に自動でGCPプロジェクトが作られます。これによりBigQueryへのデータエクスポートや、Cloud FunctionsなどのGCPサービスとのシームレスな連携が可能です。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール8-11 完了！\n\nFirebaseエコシステムの全体像を把握しました。\n\n## 習得したスキル\n\n✅ **Firebaseの主要サービス**（Analytics・Crashlytics・FCM・Remote Config・A/B Testing）を説明できる\n✅ **マーケティング施策とFirebaseサービス**の対応関係を整理できた\n✅ **FirebaseとGCPの関係**（自動でGCPプロジェクトが作られる）を理解した\n✅ **GA4とFirebaseの位置づけ**をエコシステムの中で説明できる\n\n## 次のステップ\n\n次のモジュール **「8-12: Firebase Analytics（GA4）の基礎」** では、Firebaseの中核となる計測機能を詳しく学びます。",
+        "diagram": false
+      }
+    }
+  ]
+}

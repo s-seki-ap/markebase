@@ -1,0 +1,83 @@
+{
+  "id": "seo--4-8",
+  "moduleId": "4-8",
+  "categoryId": "seo",
+  "title": "Googlebotのクロールバジェットと優先度制御",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 大規模サイトで「クロールバジェット」が重要な理由\n\nGooglebotがあなたのサイトに割り当てるクロールリソース（時間・リクエスト数）には限りがあります。これを**クロールバジェット**と言います。\n\n## こんな状況に心当たりはありませんか？\n\n- 数千・数万ページを持つECサイトで、新商品ページがなかなかインデックスされない\n- サイトリニューアル後、古いURLへのクロールが止まらない\n- フィルタリングURLが大量にGooglebotにクロールされている\n\nこれらはすべてクロールバジェットの無駄遣いが原因の可能性があります。\n\n## 小規模サイトは気にしなくていい\n\nGoogleは「数百ページ程度のサイトはクロールバジェットを心配する必要はない」と公式に述べています。このモジュールは主に**数千ページ以上の大規模サイト**向けの内容です。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# クロールバジェットの仕組みと最適化\n\n## クロールバジェットとは\n\nGooglebotがサイトをクロールする際に使えるリソースの「予算」です。2つの要素で決まります。\n\n```\nクロールバジェット = クロールレート上限 × クロール需要\n\nクロールレート上限：サーバーに負荷をかけすぎない範囲\nクロール需要：ページの人気度・被リンク数・更新頻度\n```\n\n## クロールバジェットを無駄遣いするURL\n\n以下のURLは積極的にクロールさせないようにすることで、重要ページのクロール頻度を上げられます。\n\n| 無駄なURL | 対策 |\n|----------|------|\n| UTMパラメータ付きURL | canonicalで正規URLを指定 |\n| セッションIDが含まれるURL | URLパラメータを統一 |\n| ファセットナビのURLの組み合わせ | robots.txtやnoindexで制御 |\n| 404ページへのリンク | リンク切れを修正 |\n| リダイレクトチェーン | 直接最終URLにリダイレクト |\n\n## クロール優先度を高めるには\n\n1. **サイトマップを最新に保つ**: 更新頻度・重要度（priority）を正確に設定\n2. **内部リンクを整備する**: 重要ページへの内部リンクを増やす\n3. **ページ速度を改善する**: 応答が速いサーバーはクロールを促進\n4. **被リンクを獲得する**: 被リンクが多いページはクロール需要が高まる\n\n## Search Consoleで確認できる指標\n\n```\nSearch Console → 設定 → クロールの統計情報\n→ ホスト別ステータス\n→ 応答コード別クロール数\n→ ファイルタイプ別クロール数\n```\n\n## XMLサイトマップの優先度設定例\n\n```xml\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n\n  <!-- 最重要ページ：高優先度・高更新頻度 -->\n  <url>\n    <loc>https://example.com/</loc>\n    <lastmod>2024-04-01</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>1.0</priority>\n  </url>\n\n  <!-- 商品カテゴリページ：中優先度 -->\n  <url>\n    <loc>https://example.com/products/</loc>\n    <lastmod>2024-03-28</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>\n\n  <!-- 個別ブログ記事：低優先度 -->\n  <url>\n    <loc>https://example.com/blog/article-001/</loc>\n    <lastmod>2024-02-15</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.5</priority>\n  </url>\n\n</urlset>\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: クロールバジェット最適化のためのHTML設定\n\nECサイトのカテゴリページにフィルター機能があります。フィルターの組み合わせで大量のURLが生成されており、クロールバジェットを無駄遣いしています。\n\n以下の問題を解決するHTMLメタタグを実装してください。\n\n## 状況\n\n- 商品カテゴリページ：`/products/shoes/`（インデックスしたい）\n- フィルターURL：`/products/shoes/?color=red&size=25`（インデックス不要）\n- ソートURL：`/products/shoes/?sort=price_asc`（インデックス不要）\n\n## 課題\n\n1. フィルターページにnoindexとcanonicalを設定する\n2. フィルターページからのリンクにnofollowを付与する",
+        "starterCode": "<!-- ===== フィルターページ /products/shoes/?color=red&size=25 ===== -->\n<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>赤・25cm シューズ一覧</title>\n\n  <!-- ① このフィルターページをインデックスさせないようにしてください -->\n\n\n  <!-- ② 正規URLとしてフィルターなしのカテゴリページを指定してください -->\n\n\n</head>\n<body>\n  <h1>シューズ一覧（赤・25cm）</h1>\n\n  <!-- フィルターのナビゲーション -->\n  <nav>\n    <ul>\n      <!-- ③ フィルターリンクにはrel=\"nofollow\"を付けてクロールバジェットを節約 -->\n      <li><a href=\"/products/shoes/?color=blue\" rel=\"\">青でフィルター</a></li>\n      <li><a href=\"/products/shoes/?color=black\" rel=\"\">黒でフィルター</a></li>\n      <!-- ④ カテゴリトップへのリンクはfollowを許可する -->\n      <li><a href=\"/products/shoes/\">フィルターをクリア</a></li>\n    </ul>\n  </nav>\n</body>\n</html>",
+        "hints": [
+          "noindexを設定するには `<meta name=\"robots\" content=\"noindex\">` を使います",
+          "canonicalで正規URLを指定：`<link rel=\"canonical\" href=\"https://example.com/products/shoes/\">`",
+          "フィルターリンクのnofollow：`<a href=\"...\" rel=\"nofollow\">` とします",
+          "カテゴリトップへのリンクはrel属性を省略するか `rel=\"follow\"` とします（デフォルトはフォロー許可）"
+        ],
+        "answer": "<!-- ===== フィルターページ /products/shoes/?color=red&size=25 ===== -->\n<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>赤・25cm シューズ一覧</title>\n\n  <meta name=\"robots\" content=\"noindex, follow\">\n\n  <link rel=\"canonical\" href=\"https://example.com/products/shoes/\">\n\n</head>\n<body>\n  <h1>シューズ一覧（赤・25cm）</h1>\n\n  <nav>\n    <ul>\n      <li><a href=\"/products/shoes/?color=blue\" rel=\"nofollow\">青でフィルター</a></li>\n      <li><a href=\"/products/shoes/?color=black\" rel=\"nofollow\">黒でフィルター</a></li>\n      <li><a href=\"/products/shoes/\">フィルターをクリア</a></li>\n    </ul>\n  </nav>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "クロールバジェットが特に重要になるのはどのようなサイトですか？",
+            "options": [
+              "数十ページ程度の小規模コーポレートサイト",
+              "数万〜数百万ページを持つ大規模ECサイトやニュースサイト",
+              "1ページのみのランディングページ",
+              "どんなサイトでも同様に重要"
+            ],
+            "correct": 1,
+            "explanation": "Googleは数百ページ程度のサイトはクロールバジェットを心配する必要はないと公式に述べています。数万〜数百万ページを持つ大規模サイトでこそ、クロールバジェットの最適化が重要になります。"
+          },
+          {
+            "q": "クロールバジェットを無駄遣いしやすいURLの例として最も適切なものはどれですか？",
+            "options": [
+              "各商品の詳細ページ",
+              "UTMパラメータやセッションIDが含まれる大量のURLバリエーション",
+              "トップページへのリンク",
+              "sitemap.xmlファイル"
+            ],
+            "correct": 1,
+            "explanation": "UTMパラメータ（?utm_source=emailなど）やセッションID（?session=abc123など）が含まれるURLはコンテンツ的には同じページでも別URLとして大量にクロールされます。canonicalタグやURLパラメータの統一で対策します。"
+          },
+          {
+            "q": "XMLサイトマップの `<priority>` 要素について正しい説明はどれですか？",
+            "options": [
+              "Googleのランキングに直接影響し、高いほど上位表示される",
+              "同一サイト内のURLの相対的な重要度をGooglebotに伝えるヒントである",
+              "設定した順番にGooglebotがクロールすることを保証する",
+              "ページの広告掲載順位を制御する"
+            ],
+            "correct": 1,
+            "explanation": "priorityはサイトマップ内のURLの相対的な重要度をGooglebotに伝えるヒントです。ランキングには直接影響せず、クロール順序を保証するものでもありません。全ページを1.0にしても意味がなく、0.1〜1.0で適切に差をつけることが重要です。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール4-8 完了！\n\n## 習得したスキル\n\n✅ **クロールバジェットの概念**：Googlebotが持つクロールリソースの「予算」を理解した\n✅ **バジェットを無駄遣いするURL**（UTMパラメータ・フィルターURL・リダイレクトチェーン等）を把握した\n✅ **XMLサイトマップの優先度設定**（changefreq・priority・lastmod）を実装できた\n✅ **フィルターページへのnoindex+canonical設定**でクロールバジェットを最適化する方法を実践した\n✅ **Search Consoleのクロール統計情報**で確認できる指標を把握した\n\n## 次のステップ\n\n次のモジュール **「4-9: 品質評価ガイドラインとE-E-A-Tの位置づけ」** では、Googleの検索品質評価者が使うガイドラインと、E-E-A-Tがどのようにコンテンツ戦略に影響するかを学びます。\n\n> 実務チャレンジ: Search ConsoleでクロールされているURLを確認し、インデックス不要なURLが大量にクロールされていないかチェックしましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

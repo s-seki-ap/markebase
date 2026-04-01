@@ -1,0 +1,82 @@
+{
+  "id": "marketing-strategy--10-6",
+  "moduleId": "10-6",
+  "categoryId": "marketing-strategy",
+  "title": "PEST分析：マクロ環境のスキャニング",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# PEST分析：ビジネスを取り巻く大きな環境変化を読む\n\nSWOT分析の「機会・脅威」をどこから拾うか、悩んだことはありませんか？そのための強力なツールが **PEST分析** です。\n\n## PESTとは\n\n- **P（Political）政治的要因**: 政策・規制・法律\n- **E（Economic）経済的要因**: 景気・為替・金利・物価\n- **S（Social）社会的要因**: 人口動態・ライフスタイル・価値観\n- **T（Technological）技術的要因**: 技術革新・デジタル化・AI\n\n## なぜマクロ環境を分析するのか\n\nビジネスは真空の中で行われていません。政治・経済・社会・技術の変化が、市場の形を大きく変えます。\n\n**例**: コロナ禍（社会的要因）→ リモートワーク普及 → オンラインツール需要急増 → Zoom・Slackが急成長\n\nPEST分析でこうした外部変化を早期にスキャンし、機会と脅威を先読みすることが目的です。\n\n**あなたへの問い**: 直近1年で、業界に最も影響を与えた「外部環境の変化」は何でしたか？",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# PEST分析の各要素と分析ポイント\n\n## P: Political（政治的要因）\n\n政府・規制機関の動向が事業に与える影響を分析します。\n\n**分析ポイント**:\n- 規制の強化・緩和（個人情報保護法、薬機法など）\n- 補助金・助成金制度\n- 政権交代・政策転換\n- 国際貿易・関税\n\n**デジタルマーケへの影響例**: Cookie規制強化（プライバシー保護）→ファーストパーティデータ戦略が必須に\n\n## E: Economic（経済的要因）\n\n**分析ポイント**:\n- GDP成長率・景気サイクル\n- 物価上昇率（インフレ・デフレ）\n- 為替レート\n- 可処分所得・消費動向\n\n**デジタルマーケへの影響例**: 広告費は景気に敏感。景気後退期はパフォーマンス広告（ROI重視）にシフトしやすい。\n\n## S: Social（社会的要因）\n\n**分析ポイント**:\n- 人口動態（少子高齢化、人口減少）\n- ライフスタイルの変化（単身世帯増加など）\n- 価値観の変化（サステナビリティ志向）\n- 消費者行動の変化\n\n**デジタルマーケへの影響例**: Z世代の台頭→短尺動画・インフルエンサーマーケが主流に\n\n## T: Technological（技術的要因）\n\n**分析ポイント**:\n- AI・機械学習の進化\n- 通信インフラ（5G、光回線）\n- プラットフォームの変化（iOS/Android）\n- 新デバイスの普及（スマートスピーカー、XR）\n\n**デジタルマーケへの影響例**: 生成AI普及→コンテンツ制作コスト激減、差別化要素が変わる\n\n## PEST分析からSWOTへの接続\n\n```\nPEST分析（マクロ環境のスキャン）\n    ↓\n自社への影響を評価\n    ↓\n機会（O）または脅威（T）としてSWOTに組み込む\n    ↓\nクロスSWOT戦略へ\n```\n\n| PEST要因 | 機会として解釈 | 脅威として解釈 |\n|----------|----------------|----------------|\n| Cookie規制強化 | ファーストパーティデータに強い企業が優位に | 既存の広告運用方法が使えなくなる |\n| 生成AI普及 | コンテンツ制作コスト削減、高速PDCAが可能 | 競合も同じ恩恵を受け差別化が難しくなる |",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: PEST分析シートを作成する\n\n任意の業界・サービスについて、PEST分析を実施してください。各要因がビジネスに与える影響を「機会」または「脅威」として整理してください。\n\n## 課題\n\n以下のHTMLテンプレートを完成させ、PESTの4要因を分析し、SWOTへの接続コメントも追加してください。",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>PEST分析シート</title>\n  <style>\n    body { font-family: sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; }\n    .pest-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0; }\n    .card { border-radius: 8px; padding: 20px; background: white; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }\n    textarea { width: 100%; height: 90px; padding: 8px; border: 1px solid #e2e8f0; border-radius: 4px; resize: vertical; }\n    label { display: block; font-weight: bold; margin: 8px 0 4px; font-size: 0.85rem; }\n  </style>\n</head>\n<body>\n  <h1>PEST分析シート</h1>\n  <p>分析業界/サービス: <input type=\"text\" placeholder=\"例：デジタルマーケ支援業界\" style=\"padding:4px 8px; border:1px solid #ccc; border-radius:4px; width:280px;\"/></p>\n\n  <div class=\"pest-grid\">\n    <!-- 4つのカード（P/E/S/T）をここに作成 -->\n  </div>\n\n  <!-- SWOTへの接続サマリー -->\n\n</body>\n</html>",
+        "hints": [
+          "P（政治）はオレンジ、E（経済）は青、S（社会）は緑、T（技術）は紫などで色分けすると読みやすくなります。",
+          "各カードに「環境変化の事実」「ビジネスへの影響」「機会/脅威の分類」の3つのテキストエリアを追加しましょう。",
+          "最後にSWOTへの接続サマリーとして「機会リスト」と「脅威リスト」をまとめるセクションを追加します。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>PEST分析シート</title>\n  <style>\n    body { font-family: sans-serif; max-width: 820px; margin: 40px auto; padding: 20px; background: #f8fafc; }\n    h1, h2 { color: #1e293b; }\n    .pest-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0; }\n    .card { border-radius: 8px; padding: 20px; background: white; box-shadow: 0 1px 4px rgba(0,0,0,0.08); border-top: 4px solid; }\n    .p-card { border-color: #f59e0b; }\n    .e-card { border-color: #3b82f6; }\n    .s-card { border-color: #10b981; }\n    .t-card { border-color: #8b5cf6; }\n    .card h2 { margin-top: 0; font-size: 1rem; }\n    .p-card h2 { color: #f59e0b; }\n    .e-card h2 { color: #3b82f6; }\n    .s-card h2 { color: #10b981; }\n    .t-card h2 { color: #8b5cf6; }\n    label { display: block; font-weight: bold; margin: 10px 0 4px; font-size: 0.82rem; color: #475569; }\n    textarea { width: 100%; height: 65px; padding: 8px; border: 1px solid #e2e8f0; border-radius: 4px; resize: vertical; font-size: 0.85rem; }\n    .impact { display: flex; gap: 8px; margin-top: 8px; }\n    .badge { padding: 2px 10px; border-radius: 12px; font-size: 0.8rem; font-weight: bold; cursor: pointer; border: 2px solid; }\n    .opp { background: #dcfce7; color: #16a34a; border-color: #16a34a; }\n    .thr { background: #fee2e2; color: #dc2626; border-color: #dc2626; }\n    .swot-summary { background: #1e293b; color: #e2e8f0; border-radius: 8px; padding: 20px; margin-top: 16px; }\n    .swot-summary h2 { color: #fbbf24; margin-top: 0; }\n    .swot-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }\n    .swot-cols h3 { margin-top: 0; }\n    .swot-cols ul { margin: 0; padding-left: 20px; }\n    .swot-cols li { margin-bottom: 6px; font-size: 0.9rem; }\n    .opp-title { color: #4ade80; }\n    .thr-title { color: #f87171; }\n  </style>\n</head>\n<body>\n  <h1>PEST分析シート</h1>\n  <p>分析業界/サービス: <input type=\"text\" value=\"デジタルマーケ支援業界（日本・中小企業向け）\" style=\"padding:4px 8px; border:1px solid #ccc; border-radius:4px; width:340px;\"/></p>\n\n  <div class=\"pest-grid\">\n    <div class=\"card p-card\">\n      <h2>P: Political（政治的要因）</h2>\n      <label>主な環境変化</label>\n      <textarea>・改正個人情報保護法・Cookie規制強化\n・中小企業DX補助金制度の継続・拡充\n・景品表示法・ステルスマーケ規制強化</textarea>\n      <label>ビジネスへの影響</label>\n      <textarea>ファーストパーティデータ戦略が必須に。補助金活用で受注しやすくなる反面、広告・コンテンツ規制対応コストが増加。</textarea>\n      <div class=\"impact\">\n        <span class=\"badge opp\">機会: 補助金活用で提案しやすくなる</span>\n        <span class=\"badge thr\">脅威: 規制対応コスト増加</span>\n      </div>\n    </div>\n\n    <div class=\"card e-card\">\n      <h2>E: Economic（経済的要因）</h2>\n      <label>主な環境変化</label>\n      <textarea>・物価上昇による広告予算の圧縮傾向\n・円安によるSaaS/広告ツールのコスト増\n・コスト削減志向でインハウス化ニーズ増加</textarea>\n      <label>ビジネスへの影響</label>\n      <textarea>高額サービスの受注が難しくなる一方、「安くて成果が出る」低価格プランへの需要が高まる。ROI訴求が必須。</textarea>\n      <div class=\"impact\">\n        <span class=\"badge opp\">機会: ROI訴求で差別化できる</span>\n        <span class=\"badge thr\">脅威: 予算削減・解約リスク増</span>\n      </div>\n    </div>\n\n    <div class=\"card s-card\">\n      <h2>S: Social（社会的要因）</h2>\n      <label>主な環境変化</label>\n      <textarea>・Z世代が購買意思決定者になり始める\n・SNS経由の情報収集が主流に（特にTikTok・Instagram）\n・企業のパーパス・サステナビリティへの注目</textarea>\n      <label>ビジネスへの影響</label>\n      <textarea>SNS運用・短尺動画の需要急増。Z世代向けブランディングの重要性が増す。サステナビリティ訴求が選ばれる要素に。</textarea>\n      <div class=\"impact\">\n        <span class=\"badge opp\">機会: SNS運用需要の増加</span>\n        <span class=\"badge thr\">脅威: Z世代対応できないと時代遅れに</span>\n      </div>\n    </div>\n\n    <div class=\"card t-card\">\n      <h2>T: Technological（技術的要因）</h2>\n      <label>主な環境変化</label>\n      <textarea>・生成AI（ChatGPT等）のコンテンツ制作活用が急拡大\n・GA4への移行・Cookie廃止対応\n・MAツール・CRMの中小企業への普及</textarea>\n      <label>ビジネスへの影響</label>\n      <textarea>コンテンツ制作コストが下がり競合増。一方でGA4活用・AIを使いこなす専門性が差別化になる。MAツール導入支援ニーズ増。</textarea>\n      <div class=\"impact\">\n        <span class=\"badge opp\">機会: AI活用で高速PDCAが可能に</span>\n        <span class=\"badge thr\">脅威: AI普及で参入障壁が下がる</span>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"swot-summary\">\n    <h2>SWOTへの接続: 機会・脅威サマリー</h2>\n    <div class=\"swot-cols\">\n      <div>\n        <h3 class=\"opp-title\">機会（Opportunity）</h3>\n        <ul>\n          <li>中小企業DX補助金活用で受注しやすい環境</li>\n          <li>Cookie規制→ファーストパーティデータ専門家の需要増</li>\n          <li>SNS運用・短尺動画ニーズの急増</li>\n          <li>AI活用による業務効率化・高速PDCAが可能</li>\n          <li>MAツール導入支援ニーズの拡大</li>\n        </ul>\n      </div>\n      <div>\n        <h3 class=\"thr-title\">脅威（Threat）</h3>\n        <ul>\n          <li>景気悪化・物価上昇による広告予算削減</li>\n          <li>生成AI普及で参入障壁が低下し競合増加</li>\n          <li>規制強化（ステマ・景表法）による対応コスト増</li>\n          <li>円安によるSaaSツールコスト増</li>\n          <li>Z世代対応力がない場合のブランド陳腐化</li>\n        </ul>\n      </div>\n    </div>\n  </div>\n\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "Cookie規制強化（サードパーティCookie廃止）はPEST分析のどの要因に分類されますか？",
+            "options": [
+              "Economic（経済的要因）",
+              "Social（社会的要因）",
+              "Political（政治的要因）",
+              "Technological（技術的要因）"
+            ],
+            "correct": 2,
+            "explanation": "Cookie規制強化はGDPRや改正個人情報保護法などの法規制・政策の変化です。Political（政治的要因）に分類されます。技術的な実装の問題と混同しやすいですが、規制の根拠は政治・政策です。"
+          },
+          {
+            "q": "PEST分析とSWOT分析の関係として正しいのはどれですか？",
+            "options": [
+              "PEST分析はSWOTの「強み・弱み」を導くために使う",
+              "PEST分析はSWOTの「機会・脅威」を導くために使う",
+              "PEST分析はSWOTの代替として使う（両方は不要）",
+              "PEST分析はSWOT分析の後に行う"
+            ],
+            "correct": 1,
+            "explanation": "PEST分析はマクロ環境の外部要因を分析するフレームワークです。その結果をSWOTの「機会（Opportunity）」または「脅威（Threat）」として組み込みます。強み・弱みは内部環境の分析なのでPESTとは別です。"
+          },
+          {
+            "q": "生成AI（ChatGPT等）の普及はPEST分析のどの要因に分類されますか？",
+            "options": [
+              "Political（政治的要因）",
+              "Economic（経済的要因）",
+              "Social（社会的要因）",
+              "Technological（技術的要因）"
+            ],
+            "correct": 3,
+            "explanation": "生成AIの普及は技術革新であり、Technological（技術的要因）に分類されます。ただし、AIが経済や雇用に影響を与えれば経済的要因にも波及します。PESTの要因は相互に連鎖することを意識しましょう。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール10-6 完了！\n\nPEST分析によるマクロ環境スキャニングを習得しました。\n\n## 習得したスキル\n\n✅ **PEST4要因**（政治・経済・社会・技術）で外部環境を体系的にスキャンできる\n✅ **各要因がビジネスに与える影響**を「機会」または「脅威」に変換できる\n✅ **PEST→SWOT接続**（外部分析からO/Tを導く）の流れを実践できる\n✅ **デジタルマーケへの具体的な影響**（Cookie規制・AI・Z世代）を説明できる\n\n## なぜこれが重要か\n\nPEST分析がないまま戦略を立てると、ある日突然「法律が変わった」「競合が新技術で参入してきた」と慌てることになります。先を読む習慣が長期的な競争優位につながります。\n\n## 次のステップ\n\n次のモジュール **「10-7: ポーターの5Forces分析」** では、業界構造を5つの競争要因で分析し、収益性を評価する方法を学びます。",
+        "diagram": false
+      }
+    }
+  ]
+}

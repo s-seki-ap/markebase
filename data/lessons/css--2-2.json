@@ -1,0 +1,67 @@
+{
+  "id": "css--2-2",
+  "moduleId": "2-2",
+  "categoryId": "css",
+  "title": "CSSセレクタの基本（要素・クラス・ID・複合セレクタ）",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# CSSセレクタはGTMの必須スキル\n\nCSSセレクタは「どのHTML要素にスタイルを適用するか」を指定する仕組みです。これはCSS以外にも、GTMのトリガー設定やABテストツールでのターゲット指定で頻繁に使います。\n\n## マーケターがCSSセレクタを使う場面\n\n**1. GTMのクリックトリガー設定**\nGTMで「特定のボタンがクリックされたとき」を計測するには、CSSセレクタでボタンを指定します。`Click Element matches CSS selector` の条件で `.cta-button` のようなセレクタを書きます。\n\n**2. GA4のカスタムイベント**\nGTMでカスタムイベントを発火させる際、どの要素のクリックを計測するかをCSSセレクタで定義します。\n\n**3. ABテストのターゲット要素指定**\nVWOやOptimizeで特定の要素だけ変更するとき、CSSセレクタで対象を正確に指定します。\n\n## このモジュールで得られること\n\nCSSセレクタの4つの基本パターンをマスターすれば、GTMの設定が格段にスムーズになります。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# CSSセレクタの4つの基本パターン\n\n## 1. 要素セレクタ（タグセレクタ）\n\nHTMLタグ名をそのまま書きます。そのタグ全てに適用されます。\n\n```css\np {\n  color: #333;\n}\n```\n→ ページ内の全ての `<p>` タグに適用\n\n## 2. クラスセレクタ\n\nドット（`.`）に続けてクラス名を書きます。最もよく使うセレクタです。\n\n```css\n.cta-button {\n  background-color: #ea4335;\n}\n```\n→ `class=\"cta-button\"` を持つ全ての要素に適用\n\n## 3. IDセレクタ\n\nシャープ（`#`）に続けてID名を書きます。ページ内で1つだけの要素を指定します。\n\n```css\n#main-header {\n  background-color: #1a73e8;\n}\n```\n→ `id=\"main-header\"` を持つ要素（1つだけ）に適用\n\n## 4. 複合セレクタ\n\n複数のセレクタを組み合わせて、より具体的に指定します。\n\n```css\n/* 子孫セレクタ：スペースで区切る */\n.header a {\n  color: white;\n}\n\n/* 子セレクタ：>で区切る */\n.nav > li {\n  display: inline-block;\n}\n\n/* 複数クラス：ドットを連結 */\n.btn.primary {\n  background-color: blue;\n}\n```\n\n## GTMでのセレクタ活用例\n\n| GTM設定 | CSSセレクタ例 | 説明 |\n|---------|-------------|------|\n| CTAクリック計測 | `.cta-button` | CTAボタン全てを計測 |\n| ヘッダーナビ計測 | `#global-nav a` | ヘッダー内リンクを計測 |\n| フォーム送信 | `form.contact-form` | 特定フォームを計測 |\n| 特定リンクのみ | `a[href*=\"campaign\"]` | URLに\"campaign\"を含むリンク |\n\n## セレクタの優先順位（詳細度）\n\n| セレクタ | 詳細度 | 強さ |\n|---------|--------|------|\n| 要素セレクタ（`p`） | 低い | ★☆☆ |\n| クラスセレクタ（`.btn`） | 中程度 | ★★☆ |\n| IDセレクタ（`#header`） | 高い | ★★★ |",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: セレクタでターゲットを指定する\n\nGTMでクリック計測を設定する前に、CSSセレクタで正しく要素を指定する練習をしましょう。\n\n## 課題\n\n以下のCSSを完成させてください：\n\n1. クラス `.hero-title` の文字色を `#1a73e8` にする\n2. ID `#cta-primary` の背景色を `#ea4335`、文字色を `white` にする\n3. `.nav` の中にある `a` タグの文字色を `#333` にする（子孫セレクタ使用）",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>セレクタ練習</title>\n  <style>\n    /* ① .hero-title の文字色を #1a73e8 に */\n    \n\n    /* ② #cta-primary の背景色を #ea4335、文字色を white に */\n    \n\n    /* ③ .nav の中の a タグの文字色を #333 に */\n    \n  </style>\n</head>\n<body>\n  <nav class=\"nav\">\n    <a href=\"/\">ホーム</a>\n    <a href=\"/features\">機能</a>\n    <a href=\"/pricing\">料金</a>\n  </nav>\n  <h1 class=\"hero-title\">データドリブンマーケティング</h1>\n  <p>GA4とBigQueryで売上を可視化</p>\n  <button id=\"cta-primary\">無料トライアル</button>\n</body>\n</html>",
+        "hints": [
+          "クラスセレクタはドット（`.`）で始めます。例：`.hero-title { ... }`",
+          "IDセレクタはシャープ（`#`）で始めます。例：`#cta-primary { ... }`",
+          "子孫セレクタはスペースで区切ります。例：`.nav a { ... }`"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>セレクタ練習</title>\n  <style>\n    .hero-title {\n      color: #1a73e8;\n    }\n\n    #cta-primary {\n      background-color: #ea4335;\n      color: white;\n    }\n\n    .nav a {\n      color: #333;\n    }\n  </style>\n</head>\n<body>\n  <nav class=\"nav\">\n    <a href=\"/\">ホーム</a>\n    <a href=\"/features\">機能</a>\n    <a href=\"/pricing\">料金</a>\n  </nav>\n  <h1 class=\"hero-title\">データドリブンマーケティング</h1>\n  <p>GA4とBigQueryで売上を可視化</p>\n  <button id=\"cta-primary\">無料トライアル</button>\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "GTMでCTAボタン（class=\"cta-button\"）のクリックを計測するCSSセレクタはどれですか？",
+            "options": [".cta-button", "#cta-button", "cta-button", "*cta-button"],
+            "correct": 0,
+            "explanation": "クラスセレクタはドット（`.`）を先頭に付けます。`.cta-button` で `class=\"cta-button\"` を持つ要素を指定できます。GTMのトリガー条件で頻繁に使うパターンです。"
+          },
+          {
+            "q": "CSSセレクタの詳細度（優先順位）が最も高いのはどれですか？",
+            "options": ["要素セレクタ（p）", "クラスセレクタ（.btn）", "IDセレクタ（#header）", "ユニバーサルセレクタ（*）"],
+            "correct": 2,
+            "explanation": "IDセレクタ（`#`）は最も詳細度が高く、クラスセレクタ（`.`）、要素セレクタの順に低くなります。IDはページ内で一意なので、最も具体的な指定になります。"
+          },
+          {
+            "q": "`.header a` というセレクタが意味するものはどれですか？",
+            "options": ["headerクラスを持つaタグ", "headerクラスの中にある全てのaタグ", "headerクラスの直下のaタグのみ", "headerタグとaタグの両方"],
+            "correct": 1,
+            "explanation": "スペースで区切る「子孫セレクタ」は、前の要素の中にある（ネストの深さに関係なく）全ての該当要素を選択します。`.header a` は `.header` クラスの中の全ての `a` タグに適用されます。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール2-2 完了！\n\nお疲れ様でした。このモジュールで学んだことを振り返りましょう。\n\n## 習得したスキル\n\n✅ **要素セレクタ**（`p`, `h1`）でタグ全体をスタイリングできる\n✅ **クラスセレクタ**（`.btn`）で複数要素をまとめてスタイリングできる\n✅ **IDセレクタ**（`#header`）で特定の1要素をスタイリングできる\n✅ **複合セレクタ**（`.nav a`）で範囲を絞った指定ができる\n✅ **GTMでのCSSセレクタ活用**を理解した\n\n## 次のステップ\n\n次のモジュール **「2-3: プロパティと値の構文ルールと単位」** では、CSSの値で使うpx・em・rem・%などの単位の違いを学びます。\n\n> 💡 **実務チャレンジ**: GTMのプレビューモードで、クリックイベントの「Click Element」にどんなCSSセレクタが表示されるか確認してみましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

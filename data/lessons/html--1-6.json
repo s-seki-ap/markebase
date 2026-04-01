@@ -1,0 +1,67 @@
+{
+  "id": "html--1-6",
+  "moduleId": "1-6",
+  "categoryId": "html",
+  "title": "なぜマーケターがHTMLを読めると強いか",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# HTMLを読めるマーケターの優位性\n\n「HTMLはエンジニアの仕事」と思っていませんか？実は、HTMLを読めるマーケターは圧倒的に仕事が速いです。\n\n## 3つの決定的な差\n\n**1. コミュニケーションコストの削減**\n「ここのテキストを変えてください」ではなく「`.hero-section h1` のテキストを変更してください」と伝えられると、エンジニアの作業時間が半分になります。\n\n**2. 自分で問題を特定できる**\nGA4のイベントが発火しない原因が、HTMLの構造なのかGTMの設定なのかを自分で切り分けられます。\n\n**3. 施策のスピードが上がる**\nABテストのバリアント作成、LP微修正、タグ設置確認を自分でできると、施策実行のリードタイムが劇的に短縮されます。\n\nこのモジュールでは、マーケティング実務でHTMLが必要になる具体的な場面を整理します。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# マーケターのHTML活用5大場面\n\n## 場面1: LP修正の依頼・確認\n\n```html\n<!-- エンジニアに正確に伝えられる -->\n<section class=\"hero\">\n  <h1>春のキャンペーン</h1>      <!-- ← このテキストを変更 -->\n  <p class=\"subtitle\">期間限定</p>\n  <a href=\"/apply\" class=\"cta-btn\">今すぐ申し込む</a>\n</section>\n```\n\n「heroセクションのh1を『夏のキャンペーン』に変更してください」と具体的に指示できます。\n\n## 場面2: GTMのデバッグ\n\n```html\n<!-- GTMが正しく設置されているか確認 -->\n<head>\n  <!-- Google Tag Manager -->\n  <script>(function(w,d,s,l,i){...})(window,document,'script','dataLayer','GTM-XXXXX');</script>\n  <!-- End Google Tag Manager -->\n</head>\n<body>\n  <!-- Google Tag Manager (noscript) -->\n  <noscript><iframe src=\"https://www.googletagmanager.com/ns.html?id=GTM-XXXXX\"...></iframe></noscript>\n  <!-- End Google Tag Manager (noscript) -->\n```\n\nDevToolsでHTMLを確認し、GTMスニペットが正しい位置にあるか自分で判断できます。\n\n## 場面3: SEO診断\n\n```html\n<head>\n  <title>キーワードを含むタイトル | ブランド名</title>\n  <meta name=\"description\" content=\"ディスクリプション160文字以内\">\n  <link rel=\"canonical\" href=\"https://example.com/page\">\n</head>\n```\n\nSEOの基本3要素（title、description、canonical）をソースコードで直接確認できます。\n\n## 場面4: ABテスト実装\n\n```html\n<!-- ABテストでターゲットする要素を特定 -->\n<button id=\"cta-main\" class=\"btn btn-primary\">\n  今すぐ購入\n</button>\n```\n\nVWOやOptimizeでABテストを設定するとき、ターゲット要素のID・クラスを特定する必要があります。HTMLを読めれば自分で設定できます。\n\n## 場面5: 構造化データの確認\n\n```html\n<script type=\"application/ld+json\">\n{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"Product\",\n  \"name\": \"商品名\",\n  \"price\": \"3980\"\n}\n</script>\n```\n\nリッチリザルト（検索結果の星評価や価格表示）に必要な構造化データがHTMLに正しく埋め込まれているか確認できます。\n\n## スキルレベル別の活用範囲\n\n| レベル | できること | 業務への効果 |\n|--------|-----------|-------------|\n| 読める | ソースコード確認、問題箇所の特定 | エンジニアとの意思疎通が円滑に |\n| 少し書ける | GTMカスタムHTML、軽微な修正 | 施策スピード2倍 |\n| しっかり書ける | LP作成、ABテストバリアント | 施策スピード5倍 |",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: HTMLを読んで問題を特定する\n\nあなたはマーケティング担当者です。以下のLPのHTMLを確認して、SEOとGTMに関する問題を修正してください。\n\n## 課題\n\n1. `<title>` タグにキーワードを含む適切なタイトルを設定する（現在は空）\n2. `<meta name=\"description\">` を追加する\n3. GTMのnoscriptタグを `<body>` の直後に移動する（現在は末尾にある）",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <!-- Google Tag Manager -->\n  <script>(function(w,d,s,l,i){w[l]=w[l]||[];})(window,document,'script','dataLayer','GTM-XXXXX');</script>\n  <title></title>\n  <!-- meta descriptionがない -->\n</head>\n<body>\n\n  <header>\n    <nav>\n      <a href=\"/\">ホーム</a>\n      <a href=\"/products\">商品一覧</a>\n    </nav>\n  </header>\n\n  <main>\n    <h1>オーガニック化粧品 - 春の新作コレクション</h1>\n    <p>自然由来成分100%のオーガニック化粧品をお届けします。</p>\n    <a href=\"/products/spring\" class=\"cta-btn\">新作を見る</a>\n  </main>\n\n  <!-- GTM noscript が間違った位置にある -->\n  <noscript><iframe src=\"https://www.googletagmanager.com/ns.html?id=GTM-XXXXX\" height=\"0\" width=\"0\" style=\"display:none;visibility:hidden\"></iframe></noscript>\n</body>\n</html>",
+        "hints": [
+          "<title> にはページの主要キーワードを含めましょう。例：「オーガニック化粧品 春の新作 | ブランド名」",
+          "<meta name=\"description\" content=\"...\"> を <head> 内に追加します。160文字以内で魅力的な説明を書きましょう。",
+          "GTMのnoscriptタグは <body> タグの直後（開始タグのすぐ下）に配置するのがGoogleの推奨です。"
+        ],
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <!-- Google Tag Manager -->\n  <script>(function(w,d,s,l,i){w[l]=w[l]||[];})(window,document,'script','dataLayer','GTM-XXXXX');</script>\n  <title>オーガニック化粧品 春の新作コレクション | ナチュラルビューティー</title>\n  <meta name=\"description\" content=\"自然由来成分100%のオーガニック化粧品。春の新作コレクションを特別価格でお届け。敏感肌にもやさしい処方で、毎日のスキンケアを上質に。\">\n</head>\n<body>\n  <!-- Google Tag Manager (noscript) -->\n  <noscript><iframe src=\"https://www.googletagmanager.com/ns.html?id=GTM-XXXXX\" height=\"0\" width=\"0\" style=\"display:none;visibility:hidden\"></iframe></noscript>\n\n  <header>\n    <nav>\n      <a href=\"/\">ホーム</a>\n      <a href=\"/products\">商品一覧</a>\n    </nav>\n  </header>\n\n  <main>\n    <h1>オーガニック化粧品 - 春の新作コレクション</h1>\n    <p>自然由来成分100%のオーガニック化粧品をお届けします。</p>\n    <a href=\"/products/spring\" class=\"cta-btn\">新作を見る</a>\n  </main>\n\n</body>\n</html>"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "ABテストツールでバリアントを作成するとき、HTML要素を特定するために最も使われるのはどれですか？",
+            "options": ["テキストの内容", "IDやclass属性（CSSセレクタ）", "タグの色", "ページのURL"],
+            "correct": 1,
+            "explanation": "ABテストツールでは、CSSセレクタ（#id や .class）を使って変更対象の要素を特定します。HTMLのid属性やclass属性を読めることが、ABテスト設定の基本スキルです。"
+          },
+          {
+            "q": "GTMのnoscriptタグをGoogleが推奨する設置位置はどこですか？",
+            "options": ["<head>の中", "<body>タグの直後", "<footer>の直前", "HTMLファイルの最後"],
+            "correct": 1,
+            "explanation": "GTMのnoscriptタグは<body>タグの開始直後に配置するのがGoogleの公式推奨です。これにより、JavaScriptが無効な環境でもGTMが基本的な計測を行えます。"
+          },
+          {
+            "q": "SEO診断でHTMLソースから確認すべき3つの基本要素の組み合わせはどれですか？",
+            "options": ["div, span, class", "title, meta description, canonical", "h1, h2, h3", "script, link, style"],
+            "correct": 1,
+            "explanation": "SEOの基本3要素は、title（ページタイトル）、meta description（検索結果の説明文）、canonical（正規URL）です。これらをHTMLのソースコードで確認することがSEO診断の第一歩です。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール1-6 完了！\n\nマーケターがHTMLを読める強みを具体的に理解しました。\n\n## 習得したスキル\n\n✅ **LP修正依頼**をHTML用語で正確に伝えられる\n✅ **GTMの設置確認**をソースコードで行える\n✅ **SEOの基本3要素**をHTMLから確認できる\n✅ **ABテスト**のターゲット要素をHTMLから特定できる\n✅ **構造化データ**の存在をソースコードで確認できる\n\n## 次のステップ\n\n次のモジュール **「1-7: ページソース表示とHTMLファイルの保存・開き方」** では、Chromeの開発者ツールを使って実際にページソースを確認する手順を学びます。\n\n> 💡 **実務チャレンジ**: 自社のLPを1つ選び、ソースコードでtitle、description、GTMスニペットの3つを確認してみましょう。5分でSEOとタグ設置の健全性をチェックできます。",
+        "diagram": false
+      }
+    }
+  ]
+}

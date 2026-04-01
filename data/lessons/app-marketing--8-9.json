@@ -1,0 +1,82 @@
+{
+  "id": "app-marketing--8-9",
+  "moduleId": "8-9",
+  "categoryId": "app-marketing",
+  "title": "チャーンレートの定義と改善アプローチ",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 「バケツに穴が開いている」状態を把握する\n\nどれだけユーザーを獲得しても、チャーン（離脱・解約）が多ければMAUは増えません。チャーンレートは「バケツの穴の大きさ」です。穴を塞がずに水（広告費）を注ぎ続けるのは最も非効率な戦略です。\n\n## チャーンレートの2つの定義\n\n1. **ユーザーチャーン**: アプリを使わなくなったユーザーの割合（DAU/MAUの低下に現れる）\n2. **レベニューチャーン**: 課金をやめたユーザーによる収益減少の割合\n\n同じチャーンでも、高課金ユーザーが解約するレベニューチャーンの方がビジネスへの打撃は大きいです。\n\n## なぜチャーン改善が広告費削減より効果的か\n\n```\n例: MAU 10万人、月次チャーン 5%、月次獲得 3,000人\n\nチャーン分の離脱: 10万 × 5% = 5,000人/月\n純増: 3,000 - 5,000 = -2,000人（減少）\n\nチャーンを4%に改善:\n離脱: 10万 × 4% = 4,000人/月\n純増: 3,000 - 4,000 = -1,000人（改善）\n\n→ 1%のチャーン改善が月1,000人分の獲得と同等の効果\n```",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# チャーンの種類と改善アプローチ\n\n## チャーンの計算式\n\n```\n月次チャーンレート = 月初ユーザー数 - 月末ユーザー数（新規除く）/ 月初ユーザー数 × 100\n\n例:\n  月初MAU: 100,000人\n  月末MAU: 97,000人（新規2,000人を除く）\n  月次チャーン = (100,000 - 97,000) / 100,000 × 100 = 3%\n```\n\n## チャーンが発生するタイミングと原因\n\n| タイミング | 原因 | 対策 |\n|---|---|---|\n| インストール直後（Day1-3） | オンボーディングが複雑・価値が伝わらない | チュートリアル最適化・初期体験改善 |\n| 1〜2週間後 | 習慣化されなかった | プッシュ通知・ゲーミフィケーション |\n| 課金後 | 期待値とのギャップ | 機能改善・カスタマーサポート強化 |\n| 競合登場時 | 差別化不足 | 独自機能・ロイヤルティ施策 |\n\n## チャーン予防の4つのアプローチ\n\n**1. オンボーディング最適化**\n```\n目標: first_open後の最初の5分で「価値」を体験させる\n施策: プログレスバー表示、スキップ可能チュートリアル\n```\n\n**2. エンゲージメント施策**\n```\n目標: 週3回以上の起動習慣を形成する\n施策: ストリーク（連続記録）、パーソナライズドプッシュ通知\n```\n\n**3. チャーン予測と先手対応**\n```\n目標: 「離脱しそうなユーザー」を早期検知してアクション\n施策: 最終起動から7日経過ユーザーに限定オファー送付\n```\n\n**4. オフボーディング設計**\n```\n目標: 解約直前に引き止める\n施策: 「一時停止」オプション提供、解約理由のヒアリング\n```\n\n## 業界別チャーンレートの目安\n\n| カテゴリ | 月次チャーン目安 |\n|---|---|\n| ゲーム | 8〜15%（高い） |\n| ヘルスケア | 3〜7% |\n| フィンテック | 2〜5% |\n| 業務ツール | 1〜3%（低い） |",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 練習: チャーン分析とシミュレーション\n\nチャーンレートの計算と、チャーン改善によるMAUシミュレーションを実装してください。\n\n## 課題\n\n1. `calcChurnRate()` 関数を実装する\n2. `simulateMAU()` 関数で3ヶ月間のMAU推移をシミュレートする",
+        "starterCode": "// チャーン率計算\nfunction calcChurnRate(startMAU, endMAU, newUsers) {\n  // 月初MAUから月末MAU（新規除く）の離脱率を計算してください\n  // 計算式: (startMAU - (endMAU - newUsers)) / startMAU * 100\n  return 0;\n}\n\n// MAUシミュレーション（3ヶ月間）\n// 毎月 monthlyNewUsers 人を獲得し、churnRate% が離脱する\nfunction simulateMAU(initialMAU, monthlyNewUsers, churnRate, months) {\n  const results = [];\n  let currentMAU = initialMAU;\n  \n  for (let month = 1; month <= months; month++) {\n    // 離脱ユーザー数を計算\n    const churned = 0; // currentMAU * (churnRate / 100) で計算してください\n    // 新しいMAUを計算\n    const newMAU = 0; // currentMAU - churned + monthlyNewUsers で計算してください\n    \n    results.push({\n      month: month,\n      mau: Math.round(newMAU),\n      churned: Math.round(churned)\n    });\n    \n    currentMAU = newMAU;\n  }\n  \n  return results;\n}\n\n// テストデータ（変更不要）\nconst churnRate = calcChurnRate(100000, 98500, 2000);\nconsole.log('月次チャーンレート:', churnRate.toFixed(2) + '%');\n\nconsole.log('\\n-- MAUシミュレーション（チャーン5%）--');\nconst simulation = simulateMAU(100000, 3000, 5, 3);\nsimulation.forEach(r => {\n  console.log(`${r.month}ヶ月後: MAU ${r.mau.toLocaleString()}人（離脱 ${r.churned.toLocaleString()}人）`);\n});",
+        "hints": [
+          "calcChurnRate: (startMAU - (endMAU - newUsers)) / startMAU * 100 で計算します。",
+          "churned = currentMAU * (churnRate / 100) で離脱数を計算します。",
+          "newMAU = currentMAU - churned + monthlyNewUsers で翌月MAUを計算します。"
+        ],
+        "answer": "function calcChurnRate(startMAU, endMAU, newUsers) {\n  return (startMAU - (endMAU - newUsers)) / startMAU * 100;\n}\n\nfunction simulateMAU(initialMAU, monthlyNewUsers, churnRate, months) {\n  const results = [];\n  let currentMAU = initialMAU;\n  \n  for (let month = 1; month <= months; month++) {\n    const churned = currentMAU * (churnRate / 100);\n    const newMAU = currentMAU - churned + monthlyNewUsers;\n    \n    results.push({\n      month: month,\n      mau: Math.round(newMAU),\n      churned: Math.round(churned)\n    });\n    \n    currentMAU = newMAU;\n  }\n  \n  return results;\n}\n\nconst churnRate = calcChurnRate(100000, 98500, 2000);\nconsole.log('月次チャーンレート:', churnRate.toFixed(2) + '%');\n\nconsole.log('\\n-- MAUシミュレーション（チャーン5%）--');\nconst simulation = simulateMAU(100000, 3000, 5, 3);\nsimulation.forEach(r => {\n  console.log(`${r.month}ヶ月後: MAU ${r.mau.toLocaleString()}人（離脱 ${r.churned.toLocaleString()}人）`);\n});"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "月初MAUが80,000人、当月新規獲得が5,000人、月末MAUが81,000人の場合、月次チャーンレートはいくらですか？",
+            "options": [
+              "1%",
+              "2.5%",
+              "5%",
+              "6.25%"
+            ],
+            "correct": 1,
+            "explanation": "月末MAUから新規を引いた継続ユーザー数は 81,000 - 5,000 = 76,000人。離脱数は 80,000 - 76,000 = 4,000人。チャーンレート = 4,000 / 80,000 × 100 = 5%です。"
+          },
+          {
+            "q": "チャーンが最も多く発生するタイミングとして一般的に正しいものはどれですか？",
+            "options": [
+              "インストール後6ヶ月〜1年",
+              "インストール直後（Day1〜Day3）",
+              "最初の課金後30日",
+              "競合アプリリリース直後"
+            ],
+            "correct": 1,
+            "explanation": "チャーンはインストール直後（Day1〜Day3）が最も多く発生します。アプリの価値が伝わらない・操作が複雑・初期体験が悪いと即座にアンインストールされます。オンボーディングの改善がチャーン対策で最も効果的な理由がここにあります。"
+          },
+          {
+            "q": "「レベニューチャーン」の説明として正しいものはどれですか？",
+            "options": [
+              "全ユーザーの離脱率",
+              "DAUの前月比減少率",
+              "課金停止によって失われた収益の割合",
+              "アプリアンインストール数の割合"
+            ],
+            "correct": 2,
+            "explanation": "レベニューチャーンは解約・プラン変更によって失われた収益の割合です。ユーザーチャーン（人数ベース）と異なり、高課金ユーザー1人の解約が多数の低課金ユーザー解約より大きな打撃になる場合があります。両方の指標を並行して見ることが重要です。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール8-9 完了！\n\nチャーンレートの定義から改善アプローチまでを習得しました。\n\n## 習得したスキル\n\n✅ **月次チャーンレートの計算式**を正確に説明できる\n✅ **ユーザーチャーンとレベニューチャーン**の違いを理解した\n✅ **チャーン発生タイミング別の対策**（オンボーディング・エンゲージメント・予測）を把握した\n✅ **MAUシミュレーション**でチャーン改善の定量的効果を計算できた\n\n## 次のステップ\n\n次のモジュール **「8-10: アプリグロースの全体フレームワーク」** では、獲得から継続・収益化まで全体を俯瞰するグロースの思考法を学びます。",
+        "diagram": false
+      }
+    }
+  ]
+}

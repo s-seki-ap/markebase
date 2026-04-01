@@ -1,0 +1,82 @@
+{
+  "id": "ai-automation--7-2",
+  "moduleId": "7-2",
+  "categoryId": "ai-automation",
+  "title": "機械学習とは何か",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 「ルールを書かずに学習する」とはどういうことか\n\n従来のプログラムは人間がルールを書きます。「IF 購入金額が1万円以上 THEN ゴールド会員」というように。\n\n**機械学習**は違います。大量のデータを見せると、機械が自分でルールを発見します。\n\n## なぜマーケターが機械学習を理解する必要があるか\n\n- Google広告の「スマート入札」は機械学習\n- Meta広告の「類似オーディエンス」は機械学習\n- メールの最適な送信時間予測は機械学習\n- ECサイトの離脱予測は機械学習\n\n**あなたが毎日使っているツールの大半がすでに機械学習で動いています。** 仕組みを知ることで、ツールを正しく設定し、結果を正しく解釈できるようになります。\n\n**あなたへの問い**: 最近使った広告プラットフォームで「自動最適化」という機能を見かけましたか？それはどんな目標に向けて最適化しているでしょうか？",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# 機械学習の仕組みを直感的に理解する\n\n## 機械学習の3ステップ\n\n```\n1. データ収集\n   └── 過去の広告クリックデータ（ユーザー属性、時間帯、デバイス等）\n\n2. モデル学習\n   └── データのパターンを統計的に発見\n       「30代女性×スマホ×夜20時 → CTR高い」\n\n3. 予測・判断\n   └── 新しいデータに対してパターンを適用\n       「この条件なら入札単価を上げよう」\n```\n\n## 従来プログラム vs 機械学習\n\n| 項目 | 従来プログラム | 機械学習 |\n|------|----------------|----------|\n| ルールの作成 | 人間が書く | データから自動発見 |\n| 未知のパターン | 対応できない | 汎化して対応 |\n| メンテナンス | ルール追加が必要 | データ追加で自動改善 |\n| 説明可能性 | 高い | モデルによる |\n\n## マーケティングでの具体的な活用\n\n### 分類問題\n- 「このユーザーは購入する / しない」\n- 「このメールはスパム / 正常」\n- 「この顧客はチャーンリスク 高 / 低」\n\n### 回帰問題\n- 「この広告のコンバージョン率は何%か」\n- 「この商品の来月の需要はいくつか」\n- 「この顧客のLTVはいくらか」\n\n### クラスタリング問題\n- 「類似する顧客グループに分類する」\n- 「似たコンテンツをまとめる」\n\n## 機械学習が苦手なこと\n\n- 学習データにないパターンへの対応\n- 学習データが偏っているとバイアスが生じる\n- 「なぜその判断をしたか」の説明（ブラックボックス問題）",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 演習: 機械学習の「学習」プロセスをシミュレートしよう\n\n以下は単純な機械学習の考え方を疑似体験するコードです。\n\n広告クリックデータから「クリックしやすい時間帯」を学習するシミュレーションです。\n\n`threshold` の値を変えて、予測精度がどう変わるか確認してください。",
+        "starterCode": "# 広告クリック予測: 単純な機械学習シミュレーション\n\n# 学習データ（時間帯 → クリック有無）\ntraining_data = [\n    {\"hour\": 8,  \"clicked\": False},\n    {\"hour\": 12, \"clicked\": True},\n    {\"hour\": 13, \"clicked\": True},\n    {\"hour\": 18, \"clicked\": True},\n    {\"hour\": 19, \"clicked\": True},\n    {\"hour\": 20, \"clicked\": True},\n    {\"hour\": 23, \"clicked\": False},\n    {\"hour\": 2,  \"clicked\": False},\n]\n\n# Step1: データから「クリックされた時間帯」を学習\nclicked_hours = [d[\"hour\"] for d in training_data if d[\"clicked\"]]\navg_clicked_hour = sum(clicked_hours) / len(clicked_hours)\nprint(f\"クリックが多い平均時間帯: {avg_clicked_hour:.1f}時\")\n\n# Step2: 予測ルール（しきい値を変えて試してください）\nthreshold = 3  # ← この値を変えてみよう（1〜6）\n\ndef predict_click(hour):\n    # 平均クリック時間帯からの距離でクリック確率を判定\n    distance = abs(hour - avg_clicked_hour)\n    return distance <= threshold\n\n# Step3: テストデータで予測精度を確認\ntest_data = [\n    {\"hour\": 11, \"clicked\": True},\n    {\"hour\": 17, \"clicked\": True},\n    {\"hour\": 3,  \"clicked\": False},\n    {\"hour\": 21, \"clicked\": True},\n]\n\ncorrect = 0\nfor d in test_data:\n    predicted = predict_click(d[\"hour\"])\n    result = \"正解\" if predicted == d[\"clicked\"] else \"不正解\"\n    print(f\"  {d['hour']}時 → 予測:{predicted} 実際:{d['clicked']} [{result}]\")\n    if predicted == d[\"clicked\"]:\n        correct += 1\n\nprint(f\"\\n精度: {correct}/{len(test_data)} = {correct/len(test_data)*100:.0f}%\")",
+        "hints": [
+          "thresholdを小さくすると、より「厳しい」予測になります（クリックしないと予測するケースが増える）。",
+          "thresholdを大きくすると、より多くの時間帯で「クリックする」と予測します。精度は上がることも下がることもあります。",
+          "threshold=5 にすると全時間帯で「クリックする」と予測します。テストデータに「clicked: True」が多ければ精度は上がりますが、それは本当の学習ではありません。（過学習・偏り）"
+        ],
+        "answer": "# 広告クリック予測: 単純な機械学習シミュレーション\n\ntraining_data = [\n    {\"hour\": 8,  \"clicked\": False},\n    {\"hour\": 12, \"clicked\": True},\n    {\"hour\": 13, \"clicked\": True},\n    {\"hour\": 18, \"clicked\": True},\n    {\"hour\": 19, \"clicked\": True},\n    {\"hour\": 20, \"clicked\": True},\n    {\"hour\": 23, \"clicked\": False},\n    {\"hour\": 2,  \"clicked\": False},\n]\n\nclicked_hours = [d[\"hour\"] for d in training_data if d[\"clicked\"]]\navg_clicked_hour = sum(clicked_hours) / len(clicked_hours)\nprint(f\"クリックが多い平均時間帯: {avg_clicked_hour:.1f}時\")\n\n# threshold=4 が最もバランスが取れた設定\nthreshold = 4\n\ndef predict_click(hour):\n    distance = abs(hour - avg_clicked_hour)\n    return distance <= threshold\n\ntest_data = [\n    {\"hour\": 11, \"clicked\": True},\n    {\"hour\": 17, \"clicked\": True},\n    {\"hour\": 3,  \"clicked\": False},\n    {\"hour\": 21, \"clicked\": True},\n]\n\ncorrect = 0\nfor d in test_data:\n    predicted = predict_click(d[\"hour\"])\n    result = \"正解\" if predicted == d[\"clicked\"] else \"不正解\"\n    print(f\"  {d['hour']}時 → 予測:{predicted} 実際:{d['clicked']} [{result}]\")\n    if predicted == d[\"clicked\"]:\n        correct += 1\n\nprint(f\"\\n精度: {correct}/{len(test_data)} = {correct/len(test_data)*100:.0f}%\")"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "機械学習と従来のプログラミングの最大の違いはどれですか？",
+            "options": [
+              "機械学習はより高速なコンピュータが必要",
+              "機械学習はルールをデータから自動的に学習する",
+              "機械学習はインターネット接続が必須",
+              "機械学習はPython以外の言語では動かない"
+            ],
+            "correct": 1,
+            "explanation": "機械学習の本質は「人間がルールを書かず、データからパターンを自動発見する」点にあります。従来プログラムはIF-THENルールを人間が記述しますが、機械学習はデータから統計的にルールを導き出します。"
+          },
+          {
+            "q": "Google広告のスマート入札が解いているのはどのタイプの機械学習問題ですか？",
+            "options": [
+              "クラスタリング問題",
+              "分類問題",
+              "回帰問題",
+              "強化学習問題"
+            ],
+            "correct": 2,
+            "explanation": "スマート入札は「このオークションでのコンバージョン率（またはコンバージョン値）はいくつか」という数値を予測する回帰問題です。予測値に基づいて入札単価を自動調整します。"
+          },
+          {
+            "q": "機械学習モデルの精度が低い場合、最初に確認すべきことはどれですか？",
+            "options": [
+              "コンピュータのスペックを上げる",
+              "より高価なAIサービスに乗り換える",
+              "学習データの量と質（偏りがないか等）を確認する",
+              "アルゴリズムを最新のものに変更する"
+            ],
+            "correct": 2,
+            "explanation": "機械学習の精度はアルゴリズムよりもデータの質・量に依存する割合が大きいです。「ゴミを入れればゴミが出る（GIGO: Garbage In, Garbage Out）」という原則があります。まずデータを見直しましょう。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール7-2 完了！\n\n機械学習の本質とマーケティングへの適用を理解しました。\n\n## 習得したポイント\n\n✅ 機械学習が「データからルールを自動発見する」技術であることを説明できる\n✅ 分類・回帰・クラスタリングの3種類の問題タイプをマーケ事例で区別できた\n✅ Google広告・Meta広告等が機械学習で動いていることを具体的に理解した\n✅ 機械学習の精度はデータ品質に大きく依存することを認識した\n\n## 次のステップ\n\n次のモジュール **「7-3: 教師あり・なし・強化学習の違い」** では、機械学習の3大分類を掘り下げ、それぞれがどんなマーケティング課題に適しているかを学びます。\n\n> 実務チャレンジ: 自社のマーケティングツールに「自動最適化」「スマート〇〇」「AI予測」という機能があれば、それが分類・回帰・クラスタリングのどれを解いているか推測してみましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}
