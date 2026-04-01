@@ -233,6 +233,26 @@ export async function getLeaderboard(): Promise<LeaderboardEntry[]> {
   return entries;
 }
 
+// ---------- Feedback ----------
+
+export async function saveModuleFeedback(
+  userId: string,
+  categoryId: string,
+  moduleId: string,
+  rating: number,
+  comment: string
+): Promise<void> {
+  const feedbackId = `${categoryId}--${moduleId}`;
+  await db.collection("feedback").doc(`${userId}__${feedbackId}`).set({
+    userId,
+    categoryId,
+    moduleId,
+    rating,
+    comment,
+    createdAt: FieldValue.serverTimestamp(),
+  });
+}
+
 // ---------- Weekly Stats ----------
 
 export async function getWeeklyCompletedCount(userId: string): Promise<number> {

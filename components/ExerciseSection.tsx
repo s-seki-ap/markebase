@@ -27,6 +27,39 @@ interface ExerciseSectionProps {
   onAIClick: () => void;
 }
 
+function normalizeHtml(html: string): string {
+  return html
+    .replace(/<!--[\s\S]*?-->/g, "")
+    .replace(/\s+/g, " ")
+    .replace(/>\s+</g, "><")
+    .trim()
+    .toLowerCase();
+}
+
+type JudgeResult = "correct" | "partial" | "incorrect" | null;
+
+function judgeCode(userCode: string, answer: string): JudgeResult {
+  if (!answer) return null;
+  const normUser = normalizeHtml(userCode);
+  const normAnswer = normalizeHtml(answer);
+  if (normUser === normAnswer) return "correct";
+
+  // 部分一致: answerのキー要素がuserCodeに含まれているか
+  const answerTags = normAnswer.match(/<[^>]+>/g) ?? [];
+  if (answerTags.length === 0) return null;
+  const matchCount = answerTags.filter((tag) => normUser.includes(tag)).length;
+  const ratio = matchCount / answerTags.length;
+  if (ratio >= 0.8) return "correct";
+  if (ratio >= 0.4) return "partial";
+  return "incorrect";
+}
+
+const JUDGE_MESSAGES: Record<string, { icon: string; text: string; color: string }> = {
+  correct: { icon: "\u2705", text: "正解！よくできました。", color: "#10b981" },
+  partial: { icon: "\uD83D\uDCA1", text: "惜しい！もう少しです。ヒントを確認してみましょう。", color: "#f59e0b" },
+  incorrect: { icon: "\u274C", text: "もう一度試してみましょう。ヒントを見ると手がかりが得られます。", color: "#ef4444" },
+};
+
 export default function ExerciseSection({
   data,
   onNext,
@@ -35,9 +68,12 @@ export default function ExerciseSection({
   const [code, setCode] = useState(data.starterCode);
   const [previewHtml, setPreviewHtml] = useState("");
   const [shownHints, setShownHints] = useState(0);
+  const [judgeResult, setJudgeResult] = useState<JudgeResult>(null);
 
   const handleRun = () => {
     setPreviewHtml(code);
+    const result = judgeCode(code, data.answer);
+    setJudgeResult(result);
   };
 
   const showNextHint = () => {
@@ -163,6 +199,22 @@ export default function ExerciseSection({
           </div>
         </div>
       </div>
+
+      {/* Judge result */}
+      {judgeResult && JUDGE_MESSAGES[judgeResult] && (
+        <div
+          className="flex items-center gap-3 px-5 py-2.5 border-t"
+          style={{
+            borderColor: "#1e293b",
+            backgroundColor: `${JUDGE_MESSAGES[judgeResult].color}15`,
+          }}
+        >
+          <span className="text-lg">{JUDGE_MESSAGES[judgeResult].icon}</span>
+          <p className="text-sm font-medium" style={{ color: JUDGE_MESSAGES[judgeResult].color }}>
+            {JUDGE_MESSAGES[judgeResult].text}
+          </p>
+        </div>
+      )}
 
       {/* Action bar */}
       <div

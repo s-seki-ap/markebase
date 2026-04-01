@@ -1,9 +1,25 @@
 import { getCategories, isModuleAvailable } from "@/lib/curriculum";
 import Link from "next/link";
+import CurriculumSearch from "@/components/CurriculumSearch";
 
 export default function CurriculumPage() {
   const categories = getCategories();
   const totalModules = categories.reduce((s, c) => s + c.modules.length, 0);
+
+  // 検索用のフラットなモジュールリスト
+  const searchableModules = categories.flatMap((cat) =>
+    cat.modules.map((mod) => ({
+      categoryId: cat.id,
+      categoryName: cat.name,
+      categoryIcon: cat.icon,
+      categoryColor: cat.color,
+      moduleId: mod.id,
+      moduleName: mod.name,
+      difficulty: mod.difficulty,
+      estimatedMinutes: mod.estimatedMinutes,
+      available: isModuleAvailable(cat.id, mod.id),
+    }))
+  );
 
   return (
     <main className="min-h-screen p-8" style={{ backgroundColor: "#0f172a" }}>
@@ -14,7 +30,7 @@ export default function CurriculumPage() {
             href="/"
             className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors text-sm"
           >
-            ← ダッシュボード
+            &larr; ダッシュボード
           </Link>
         </div>
 
@@ -24,11 +40,14 @@ export default function CurriculumPage() {
         </p>
         <Link
           href="/why-learn"
-          className="inline-flex items-center gap-1 text-sm mb-10 transition-colors hover:opacity-80"
+          className="inline-flex items-center gap-1 text-sm mb-6 transition-colors hover:opacity-80"
           style={{ color: "#3b82f6" }}
         >
-          なぜ体系的に学ぶ必要があるのか？ →
+          なぜ体系的に学ぶ必要があるのか？ &rarr;
         </Link>
+
+        {/* Search */}
+        <CurriculumSearch modules={searchableModules} />
 
         {/* Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">

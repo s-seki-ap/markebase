@@ -8,7 +8,9 @@
 - コードエディタ: @monaco-editor/react
 - DB: Firestore（firebase-admin SDK。ユーザー進捗・XP・学習ログを永続化）
 - 認証: NextAuth.js + Google OAuth
-- ホスティング: Cloud Run（手動デプロイ）
+- チャート: Recharts（レーダーチャート等）
+- CI/CD: GitHub Actions → Cloud Run
+- ホスティング: Cloud Run (asia-northeast1)
 - GCPプロジェクト: ap-hp-bq-test
 
 ## ディレクトリ構成
@@ -58,12 +60,17 @@ markebase/
 - 日本語テキスト直書きOK
 - コミット: feat:/fix:/docs: プレフィクス
 
-## 現在のスコープ（Phase 1 MVP）
+## 現在のスコープ（Phase 2 完了）
 - 教材: 47モジュール（Web基礎30, HTML1, JS8, GA4 8）
-- DB: Firestore（ユーザー進捗・XP・レベル永続化）
+- DB: Firestore（ユーザー進捗・XP・レベル・フィードバック永続化）
 - 認証: NextAuth.js + Google OAuth（デモモード対応）
 - Markdown: react-markdown + remark-gfm
 - オンボーディング: 役割→経験→学習パス推薦
 - 管理者ページ: チーム学習状況一覧
+- ストリーク表示・ウィークリーゴール・チームランキング
+- スキルマップ（Rechartsレーダーチャート）
+- 検索機能（カリキュラムマップ）
+- モジュール末5段階フィードバック
+- 演習の自動判定
+- CI/CD: GitHub Actions → Cloud Run 自動デプロイ
 - AI質問チャット: OpenAI API接続済み
-- デプロイは手動（gcloud run deploy）

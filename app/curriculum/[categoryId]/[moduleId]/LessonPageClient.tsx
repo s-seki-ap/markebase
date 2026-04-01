@@ -10,6 +10,7 @@ import ExerciseSection from "@/components/ExerciseSection";
 import InteractiveSection from "@/components/InteractiveSection";
 import DiagramSection from "@/components/DiagramSection";
 import AIChatPanel from "@/components/AIChatPanel";
+import ModuleFeedback from "@/components/ModuleFeedback";
 
 interface LessonPageClientProps {
   category: Category;
@@ -253,6 +254,7 @@ export default function LessonPageClient({
               isFirst={currentSectionIndex === 0}
               isLast={currentSectionIndex === sections.length - 1}
               categoryId={category.id}
+              moduleId={moduleId}
             />
           )}
         </div>
@@ -288,6 +290,7 @@ function ContentSection({
   isFirst,
   isLast,
   categoryId,
+  moduleId,
 }: {
   section: { type: string; data: Record<string, unknown> };
   onNext: () => void;
@@ -295,7 +298,9 @@ function ContentSection({
   isFirst: boolean;
   isLast: boolean;
   categoryId: string;
+  moduleId: string;
 }) {
+  const isSummary = section.type === "summary";
   const annotations = section.data.annotations as AnnotationItem[] | undefined;
   const hasAnnotations = Array.isArray(annotations) && annotations.length > 0;
 
@@ -313,6 +318,7 @@ function ContentSection({
                   <DiagramSection type={section.type} categoryId={categoryId} />
                 </div>
               )}
+              {isSummary && <ModuleFeedback categoryId={categoryId} moduleId={moduleId} />}
             </div>
             {/* Annotation sidebar */}
             <aside
@@ -353,6 +359,7 @@ function ContentSection({
                 <DiagramSection type={section.type} categoryId={categoryId} />
               </div>
             )}
+            {isSummary && <ModuleFeedback categoryId={categoryId} moduleId={moduleId} />}
           </div>
         )}
       </div>
