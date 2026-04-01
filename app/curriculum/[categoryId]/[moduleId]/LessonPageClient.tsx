@@ -311,7 +311,7 @@ function ContentSection({
           /* 2-column layout: main content (65%) + annotation sidebar (35%) */
           <div className="flex flex-col lg:flex-row min-h-full">
             {/* Main content */}
-            <div className="flex-1 min-w-0 px-8 py-10 lg:max-w-none">
+            <div className="flex-1 min-w-0 px-6 lg:px-10 py-10 lg:py-12 lg:max-w-none">
               <MarkdownContent content={section.data.content as string} />
               {Boolean(section.data.diagram) && (
                 <div className="mt-8">
@@ -352,7 +352,7 @@ function ContentSection({
           </div>
         ) : (
           /* 1-column fallback (original layout) */
-          <div className="max-w-[680px] mx-auto px-8 py-10">
+          <div className="max-w-[740px] mx-auto px-6 lg:px-10 py-10 lg:py-12">
             <MarkdownContent content={section.data.content as string} />
             {Boolean(section.data.diagram) && (
               <div className="mt-8">
@@ -393,30 +393,30 @@ function ContentSection({
 // react-markdown + remark-gfm based renderer
 const markdownComponents = {
   h1: ({ children, ...props }: ComponentPropsWithoutRef<"h1">) => (
-    <h1 className="text-2xl font-bold text-white mt-2 mb-4" {...props}>{children}</h1>
+    <h1 className="text-2xl lg:text-3xl font-bold text-white mt-2 mb-6 leading-tight" {...props}>{children}</h1>
   ),
   h2: ({ children, ...props }: ComponentPropsWithoutRef<"h2">) => (
-    <h2 className="text-lg font-semibold text-white mt-6 mb-2" {...props}>{children}</h2>
+    <h2 className="text-xl font-semibold text-white mt-10 mb-4 leading-snug" {...props}>{children}</h2>
   ),
   h3: ({ children, ...props }: ComponentPropsWithoutRef<"h3">) => (
-    <h3 className="text-base font-semibold text-slate-200 mt-4 mb-1" {...props}>{children}</h3>
+    <h3 className="text-lg font-semibold text-slate-100 mt-8 mb-3 leading-snug" {...props}>{children}</h3>
   ),
   p: ({ children, ...props }: ComponentPropsWithoutRef<"p">) => (
-    <p className="text-slate-300 text-sm leading-relaxed mb-2" {...props}>{children}</p>
+    <p className="text-slate-300 text-[15px] leading-[1.9] mb-4" {...props}>{children}</p>
   ),
   ul: ({ children, ...props }: ComponentPropsWithoutRef<"ul">) => (
-    <ul className="list-disc ml-4 space-y-1" {...props}>{children}</ul>
+    <ul className="list-disc ml-5 space-y-2 mb-4" {...props}>{children}</ul>
   ),
   ol: ({ children, ...props }: ComponentPropsWithoutRef<"ol">) => (
-    <ol className="list-decimal ml-4 space-y-1" {...props}>{children}</ol>
+    <ol className="list-decimal ml-5 space-y-2 mb-4" {...props}>{children}</ol>
   ),
   li: ({ children, ...props }: ComponentPropsWithoutRef<"li">) => (
-    <li className="text-slate-300 text-sm" {...props}>{children}</li>
+    <li className="text-slate-300 text-[15px] leading-[1.8] pl-1" {...props}>{children}</li>
   ),
   blockquote: ({ children, ...props }: ComponentPropsWithoutRef<"blockquote">) => (
     <blockquote
-      className="border-l-4 pl-4 py-1 text-slate-400 text-sm italic"
-      style={{ borderColor: "#3b82f6" }}
+      className="border-l-4 pl-5 py-3 my-5 rounded-r-lg text-[15px] leading-[1.8]"
+      style={{ borderColor: "#3b82f6", backgroundColor: "#1e293b80", color: "#cbd5e1" }}
       {...props}
     >
       {children}
@@ -426,12 +426,12 @@ const markdownComponents = {
     const isBlock = className?.includes("language-");
     if (isBlock) {
       return (
-        <code className={`${className ?? ""} text-xs`} {...props}>{children}</code>
+        <code className={`${className ?? ""} text-sm leading-relaxed`} {...props}>{children}</code>
       );
     }
     return (
       <code
-        className="px-1 rounded text-xs font-mono"
+        className="px-1.5 py-0.5 rounded text-[13px] font-mono"
         style={{ backgroundColor: "#1e293b", color: "#93c5fd" }}
         {...props}
       >
@@ -441,7 +441,7 @@ const markdownComponents = {
   },
   pre: ({ children, ...props }: ComponentPropsWithoutRef<"pre">) => (
     <pre
-      className="rounded-xl p-4 text-xs font-mono overflow-x-auto my-4"
+      className="rounded-xl p-5 text-sm font-mono overflow-x-auto my-6 leading-relaxed"
       style={{ backgroundColor: "#0f172a", color: "#e2e8f0", border: "1px solid #334155" }}
       {...props}
     >
@@ -449,27 +449,27 @@ const markdownComponents = {
     </pre>
   ),
   table: ({ children, ...props }: ComponentPropsWithoutRef<"table">) => (
-    <div className="overflow-x-auto my-4">
-      <table className="w-full text-sm border-collapse" {...props}>{children}</table>
+    <div className="overflow-x-auto my-6 rounded-lg" style={{ border: "1px solid #334155" }}>
+      <table className="w-full text-[14px] border-collapse" {...props}>{children}</table>
     </div>
   ),
   thead: ({ children, ...props }: ComponentPropsWithoutRef<"thead">) => (
     <thead style={{ backgroundColor: "#1e293b" }} {...props}>{children}</thead>
   ),
   th: ({ children, ...props }: ComponentPropsWithoutRef<"th">) => (
-    <th className="text-left text-white font-medium px-4 py-2 border-b" style={{ borderColor: "#334155" }} {...props}>
+    <th className="text-left text-white font-semibold px-4 py-3 border-b" style={{ borderColor: "#334155" }} {...props}>
       {children}
     </th>
   ),
   td: ({ children, ...props }: ComponentPropsWithoutRef<"td">) => (
-    <td className="text-slate-300 px-4 py-2 border-b" style={{ borderColor: "#334155" }} {...props}>
+    <td className="text-slate-300 px-4 py-3 border-b" style={{ borderColor: "#334155" }} {...props}>
       {children}
     </td>
   ),
   a: ({ children, href, ...props }: ComponentPropsWithoutRef<"a">) => (
     <a
       href={href}
-      className="underline"
+      className="underline underline-offset-2"
       style={{ color: "#93c5fd" }}
       target="_blank"
       rel="noopener noreferrer"
@@ -481,11 +481,14 @@ const markdownComponents = {
   strong: ({ children, ...props }: ComponentPropsWithoutRef<"strong">) => (
     <strong className="text-white font-semibold" {...props}>{children}</strong>
   ),
+  hr: ({ ...props }: ComponentPropsWithoutRef<"hr">) => (
+    <hr className="my-8 border-t" style={{ borderColor: "#334155" }} {...props} />
+  ),
 };
 
 function MarkdownContent({ content }: { content: string }) {
   return (
-    <div className="space-y-1">
+    <div className="space-y-1 text-[15px]">
       <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
         {content}
       </ReactMarkdown>

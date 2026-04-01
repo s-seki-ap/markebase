@@ -93,40 +93,40 @@ export default function ExerciseSection({
           className="shrink-0 overflow-y-auto border-b lg:border-b-0 lg:border-r p-5 w-full lg:w-[28%] max-h-[35vh] lg:max-h-none"
           style={{ backgroundColor: "#0f172a", borderColor: "#1e293b" }}
         >
-          <div className="space-y-3 text-sm">
+          <div className="space-y-3">
             {contentLines.map((line, i) => {
               if (line.startsWith("# ")) {
-                return <h2 key={i} className="text-lg font-bold text-white">{line.slice(2)}</h2>;
+                return <h2 key={i} className="text-lg font-bold text-white mb-1">{line.slice(2)}</h2>;
               }
               if (line.startsWith("## ")) {
-                return <h3 key={i} className="text-base font-semibold text-white mt-4">{line.slice(3)}</h3>;
+                return <h3 key={i} className="text-base font-semibold text-white mt-5 mb-1">{line.slice(3)}</h3>;
               }
               if (line.startsWith("> ")) {
                 return (
-                  <p key={i} className="text-slate-400 text-xs italic border-l-2 pl-3" style={{ borderColor: "#8b5cf6" }}>
+                  <p key={i} className="text-slate-400 text-sm italic border-l-2 pl-3 py-1 rounded-r" style={{ borderColor: "#8b5cf6", backgroundColor: "#8b5cf608" }}>
                     {line.slice(2)}
                   </p>
                 );
               }
               if (line.match(/^\d+\./)) {
-                return <p key={i} className="text-slate-300">{line}</p>;
+                return <p key={i} className="text-slate-300 text-sm leading-relaxed">{line}</p>;
               }
-              if (line.trim() === "") return <div key={i} className="h-1" />;
-              return <p key={i} className="text-slate-300 leading-relaxed">{line}</p>;
+              if (line.trim() === "") return <div key={i} className="h-2" />;
+              return <p key={i} className="text-slate-300 text-sm leading-[1.8]">{line}</p>;
             })}
           </div>
 
           {/* Hints */}
           <div className="mt-6">
-            <div className="flex items-center justify-between mb-2">
-              <p className="text-slate-400 text-xs font-medium">ヒント</p>
-              <span className="text-slate-600 text-xs">{shownHints}/{data.hints.length}</span>
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-slate-400 text-sm font-medium">ヒント</p>
+              <span className="text-slate-500 text-xs">{shownHints}/{data.hints.length}</span>
             </div>
 
             {data.hints.slice(0, shownHints).map((hint, i) => (
               <div
                 key={i}
-                className="mb-2 p-3 rounded-lg text-xs text-slate-300 leading-relaxed"
+                className="mb-2.5 p-3.5 rounded-lg text-sm text-slate-300 leading-[1.7]"
                 style={{ backgroundColor: "#1e293b" }}
               >
                 💡 {hint}
@@ -136,7 +136,7 @@ export default function ExerciseSection({
             {shownHints < data.hints.length && (
               <button
                 onClick={showNextHint}
-                className="w-full py-2 rounded-lg text-xs transition-colors"
+                className="w-full py-2.5 rounded-lg text-sm transition-colors"
                 style={{ backgroundColor: "#1e293b", color: "#94a3b8" }}
               >
                 ヒントを表示 →

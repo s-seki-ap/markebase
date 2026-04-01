@@ -72,7 +72,7 @@ export default function QuizSection({ data, onNext, categoryId, moduleId, onQuiz
           <h2 className="text-2xl font-bold text-white mb-2">
             {score}/{total} 正解
           </h2>
-          <p className="text-slate-400 mb-6">
+          <p className="text-slate-400 text-base mb-6 leading-relaxed">
             {score === total
               ? "パーフェクト！素晴らしい理解度です。"
               : score >= total / 2
@@ -124,12 +124,12 @@ export default function QuizSection({ data, onNext, categoryId, moduleId, onQuiz
         </div>
 
         {/* Question */}
-        <h2 className="text-xl font-bold text-white mb-8 leading-relaxed">
+        <h2 className="text-xl lg:text-2xl font-bold text-white mb-8 leading-relaxed">
           {question.q}
         </h2>
 
         {/* Options */}
-        <div className="space-y-3 mb-6">
+        <div className="space-y-3.5 mb-8">
           {question.options.map((option, i) => {
             let borderColor = "#334155";
             let bgColor = "#1e293b";
@@ -154,7 +154,7 @@ export default function QuizSection({ data, onNext, categoryId, moduleId, onQuiz
               <button
                 key={i}
                 onClick={() => handleSelect(i)}
-                className="w-full text-left p-4 rounded-xl border transition-all text-sm font-medium"
+                className="w-full text-left px-5 py-4 rounded-xl border transition-all text-[15px] leading-relaxed font-medium"
                 style={{
                   backgroundColor: bgColor,
                   borderColor,
@@ -163,7 +163,7 @@ export default function QuizSection({ data, onNext, categoryId, moduleId, onQuiz
                 }}
               >
                 <span
-                  className="inline-flex w-6 h-6 rounded-full items-center justify-center text-xs mr-3 shrink-0"
+                  className="inline-flex w-7 h-7 rounded-full items-center justify-center text-xs mr-3 shrink-0 font-bold"
                   style={{ backgroundColor: "#334155" }}
                 >
                   {String.fromCharCode(65 + i)}
@@ -177,16 +177,16 @@ export default function QuizSection({ data, onNext, categoryId, moduleId, onQuiz
         {/* Explanation */}
         {isAnswered && (
           <div
-            className="p-4 rounded-xl mb-6 text-sm"
+            className="p-5 rounded-xl mb-6"
             style={{
-              backgroundColor: isCorrect ? "#10b98122" : "#ef444422",
-              borderLeft: `3px solid ${isCorrect ? "#10b981" : "#ef4444"}`,
+              backgroundColor: isCorrect ? "#10b98115" : "#ef444415",
+              borderLeft: `4px solid ${isCorrect ? "#10b981" : "#ef4444"}`,
             }}
           >
-            <p className="font-medium mb-1" style={{ color: isCorrect ? "#10b981" : "#ef4444" }}>
+            <p className="font-semibold mb-2 text-base" style={{ color: isCorrect ? "#10b981" : "#ef4444" }}>
               {isCorrect ? "✅ 正解！" : "❌ 不正解"}
             </p>
-            <p className="text-slate-300 leading-relaxed">{question.explanation}</p>
+            <p className="text-slate-300 text-[15px] leading-[1.8]">{question.explanation}</p>
           </div>
         )}
 
