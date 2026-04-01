@@ -7,10 +7,19 @@ import remarkGfm from "remark-gfm";
 import type { Category } from "@/types/curriculum";
 import QuizSection from "@/components/QuizSection";
 import ExerciseSection from "@/components/ExerciseSection";
+import WorksheetSection from "@/components/WorksheetSection";
 import InteractiveSection from "@/components/InteractiveSection";
 import DiagramSection from "@/components/DiagramSection";
+
+// コードエディタ不要のカテゴリ（ワークシート形式で表示）
+const WORKSHEET_CATEGORIES = new Set([
+  "advertising",
+  "marketing-strategy",
+  "project-management",
+]);
 import AIChatPanel from "@/components/AIChatPanel";
 import ModuleFeedback from "@/components/ModuleFeedback";
+import SlideContent from "@/components/SlideContent";
 
 interface LessonPageClientProps {
   category: Category;
@@ -225,7 +234,13 @@ export default function LessonPageClient({
 
         {/* Section content */}
         <div className="flex-1 overflow-hidden">
-          {currentSection.type === "exercise" ? (
+          {currentSection.type === "exercise" && WORKSHEET_CATEGORIES.has(category.id) ? (
+            <WorksheetSection
+              data={currentSection.data as { content: string; starterCode: string; hints: string[]; answer: string }}
+              onNext={goNext}
+              onAIClick={() => setShowAIPanel(true)}
+            />
+          ) : currentSection.type === "exercise" ? (
             <ExerciseSection
               data={currentSection.data as { content: string; starterCode: string; hints: string[]; answer: string }}
               categoryId={category.id}
@@ -301,8 +316,43 @@ function ContentSection({
   moduleId: string;
 }) {
   const isSummary = section.type === "summary";
+  const isSlideSection = section.type === "intro" || section.type === "concept";
   const annotations = section.data.annotations as AnnotationItem[] | undefined;
   const hasAnnotations = Array.isArray(annotations) && annotations.length > 0;
+
+  // intro / concept はスライド形式で表示
+  if (isSlideSection && !hasAnnotations) {
+    return (
+      <div className="h-full flex flex-col">
+        <div className="flex-1 overflow-hidden">
+          <SlideContent content={section.data.content as string} />
+        </div>
+
+        {/* Section navigation (前へ / 次へ) */}
+        <div
+          className="flex justify-between items-center px-8 py-4 border-t shrink-0"
+          style={{ borderColor: "#1e293b" }}
+        >
+          <button
+            onClick={onPrev}
+            disabled={isFirst}
+            className="px-4 py-2 rounded-lg text-sm transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+            style={{ color: "#94a3b8" }}
+          >
+            ← 前のセクション
+          </button>
+          <button
+            onClick={onNext}
+            disabled={isLast}
+            className="flex items-center gap-2 px-6 py-2 rounded-lg text-sm font-medium transition-opacity hover:opacity-90 disabled:opacity-30 disabled:cursor-not-allowed"
+            style={{ backgroundColor: "#3b82f6", color: "white" }}
+          >
+            次のセクション →
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="h-full flex flex-col">
@@ -351,7 +401,7 @@ function ContentSection({
             </aside>
           </div>
         ) : (
-          /* 1-column fallback (original layout) */
+          /* 1-column: summary and fallback */
           <div className="max-w-[740px] mx-auto px-6 lg:px-10 py-10 lg:py-12">
             <MarkdownContent content={section.data.content as string} />
             {Boolean(section.data.diagram) && (
