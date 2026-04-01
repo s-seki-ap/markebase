@@ -17,8 +17,8 @@ function getFirebaseApp() {
     });
   }
 
-  // 個別の環境変数から構築
-  if (process.env.FIREBASE_PROJECT_ID) {
+  // 個別の環境変数から構築（ローカル開発用）
+  if (process.env.FIREBASE_PROJECT_ID && process.env.FIREBASE_CLIENT_EMAIL) {
     return initializeApp({
       credential: cert({
         projectId: process.env.FIREBASE_PROJECT_ID,
@@ -29,7 +29,12 @@ function getFirebaseApp() {
     });
   }
 
-  // 開発用: エミュレーターまたはデフォルト認証
+  // Cloud Run等：ADC + FIREBASE_PROJECT_IDで初期化
+  if (process.env.FIREBASE_PROJECT_ID) {
+    return initializeApp({ projectId: process.env.FIREBASE_PROJECT_ID });
+  }
+
+  // ローカル開発フォールバック
   return initializeApp({ projectId: "markebase-dev" });
 }
 
