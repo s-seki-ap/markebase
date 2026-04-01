@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback, type ComponentPropsWithoutRef } from "react";
 import Link from "next/link";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import type { Category } from "@/types/curriculum";
 import QuizSection from "@/components/QuizSection";
 import ExerciseSection from "@/components/ExerciseSection";
@@ -19,6 +21,7 @@ interface LessonPageClientProps {
       data: Record<string, unknown>;
     }>;
   };
+  completedSections?: Set<string>;
 }
 
 const SECTION_LABELS: Record<string, string> = {
@@ -47,13 +50,34 @@ export default function LessonPageClient({
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
   const [showAIPanel, setShowAIPanel] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [visitedSections, setVisitedSections] = useState<Set<number>>(new Set([0]));
+  const [earnedXP, setEarnedXP] = useState(0);
   const sections = lessonData.sections;
   const currentSection = sections[currentSectionIndex];
   const currentModule = category.modules.find((m) => m.id === moduleId);
 
+  const markSectionVisited = useCallback((index: number) => {
+    setVisitedSections((prev) => {
+      const next = new Set(prev);
+      next.add(index);
+      return next;
+    });
+  }, []);
+
   const goNext = () => {
     if (currentSectionIndex < sections.length - 1) {
-      setCurrentSectionIndex(currentSectionIndex + 1);
+      const nextIndex = currentSectionIndex + 1;
+      setCurrentSectionIndex(nextIndex);
+      markSectionVisited(nextIndex);
+
+      // summaryセクションに到達 → モジュール完了を記録
+      if (sections[nextIndex].type === "summary") {
+        fetch("/api/progress/complete", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ categoryId: category.id, moduleId }),
+        }).catch(() => {});
+      }
     }
   };
 
@@ -62,6 +86,10 @@ export default function LessonPageClient({
       setCurrentSectionIndex(currentSectionIndex - 1);
     }
   };
+
+  const handleQuizComplete = useCallback((xp: number) => {
+    setEarnedXP((prev) => prev + xp);
+  }, []);
 
   return (
     <div className="flex h-screen overflow-hidden" style={{ backgroundColor: "#0f172a" }}>
@@ -120,7 +148,7 @@ export default function LessonPageClient({
           {sections.map((section, index) => (
             <button
               key={index}
-              onClick={() => setCurrentSectionIndex(index)}
+              onClick={() => { setCurrentSectionIndex(index); markSectionVisited(index); }}
               className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-colors mb-1"
               style={{
                 backgroundColor:
@@ -130,7 +158,11 @@ export default function LessonPageClient({
               }}
             >
               <span className="text-base w-5 text-center">
-                {SECTION_ICONS[section.type]}
+                {visitedSections.has(index) && currentSectionIndex !== index ? (
+                  <span style={{ color: "#10b981" }}>&#10003;</span>
+                ) : (
+                  SECTION_ICONS[section.type]
+                )}
               </span>
               <span className="text-sm">{SECTION_LABELS[section.type]}</span>
               {currentSectionIndex === index && (
@@ -179,7 +211,7 @@ export default function LessonPageClient({
           </div>
           <div className="flex items-center gap-4">
             <span className="text-sm font-medium" style={{ color: "#fbbf24" }}>
-              ⭐ 0 XP
+              {earnedXP > 0 ? `+${earnedXP} XP` : ""}
             </span>
             <div
               className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold"
@@ -209,6 +241,9 @@ export default function LessonPageClient({
             <QuizSection
               data={currentSection.data as { questions: Array<{ q: string; options: string[]; correct: number; explanation: string }> }}
               onNext={goNext}
+              categoryId={category.id}
+              moduleId={moduleId}
+              onQuizComplete={handleQuizComplete}
             />
           ) : (
             <ContentSection
@@ -348,119 +383,105 @@ function ContentSection({
   );
 }
 
-// Simple markdown-like renderer
-function MarkdownContent({ content }: { content: string }) {
-  const lines = content.split("\n");
-
-  // Extract code blocks first to avoid double rendering
-  const codeBlockNodes = renderCodeBlocks(content);
-
-  return (
-    <div className="space-y-2">
-      {lines.map((line, i) => {
-        if (line.startsWith("# ")) {
-          return (
-            <h1 key={i} className="text-2xl font-bold text-white mt-2 mb-4">
-              {line.slice(2)}
-            </h1>
-          );
-        }
-        if (line.startsWith("## ")) {
-          return (
-            <h2 key={i} className="text-lg font-semibold text-white mt-6 mb-2">
-              {line.slice(3)}
-            </h2>
-          );
-        }
-        if (line.startsWith("### ")) {
-          return (
-            <h3 key={i} className="text-base font-semibold text-slate-200 mt-4 mb-1">
-              {line.slice(4)}
-            </h3>
-          );
-        }
-        if (line.startsWith("```")) {
-          return null;
-        }
-        if (line.startsWith("> ")) {
-          return (
-            <blockquote
-              key={i}
-              className="border-l-4 pl-4 py-1 text-slate-400 text-sm italic"
-              style={{ borderColor: "#3b82f6" }}
-            >
-              {line.slice(2)}
-            </blockquote>
-          );
-        }
-        if (line.startsWith("| ")) {
-          return null;
-        }
-        if (line.startsWith("- ") || line.startsWith("* ")) {
-          return (
-            <li key={i} className="text-slate-300 text-sm ml-4 list-disc">
-              <InlineMarkdown text={line.slice(2)} />
-            </li>
-          );
-        }
-        if (line.startsWith("✅") || line.startsWith("💡") || line.startsWith("**")) {
-          return (
-            <p key={i} className="text-slate-300 text-sm leading-relaxed">
-              <InlineMarkdown text={line} />
-            </p>
-          );
-        }
-        if (line.trim() === "") {
-          return <div key={i} className="h-2" />;
-        }
-        return (
-          <p key={i} className="text-slate-300 text-sm leading-relaxed">
-            <InlineMarkdown text={line} />
-          </p>
-        );
-      })}
-      {/* Code blocks */}
-      {codeBlockNodes}
-    </div>
-  );
-}
-
-function renderCodeBlocks(content: string): React.ReactNode[] {
-  const blocks: React.ReactNode[] = [];
-  const parts = content.split(/```(\w*)\n([\s\S]*?)```/g);
-
-  for (let i = 1; i < parts.length; i += 3) {
-    const code = parts[i + 1];
-    blocks.push(
-      <pre
-        key={i}
-        className="rounded-xl p-4 text-xs font-mono overflow-x-auto"
-        style={{ backgroundColor: "#0f172a", color: "#e2e8f0", border: "1px solid #334155" }}
+// react-markdown + remark-gfm based renderer
+const markdownComponents = {
+  h1: ({ children, ...props }: ComponentPropsWithoutRef<"h1">) => (
+    <h1 className="text-2xl font-bold text-white mt-2 mb-4" {...props}>{children}</h1>
+  ),
+  h2: ({ children, ...props }: ComponentPropsWithoutRef<"h2">) => (
+    <h2 className="text-lg font-semibold text-white mt-6 mb-2" {...props}>{children}</h2>
+  ),
+  h3: ({ children, ...props }: ComponentPropsWithoutRef<"h3">) => (
+    <h3 className="text-base font-semibold text-slate-200 mt-4 mb-1" {...props}>{children}</h3>
+  ),
+  p: ({ children, ...props }: ComponentPropsWithoutRef<"p">) => (
+    <p className="text-slate-300 text-sm leading-relaxed mb-2" {...props}>{children}</p>
+  ),
+  ul: ({ children, ...props }: ComponentPropsWithoutRef<"ul">) => (
+    <ul className="list-disc ml-4 space-y-1" {...props}>{children}</ul>
+  ),
+  ol: ({ children, ...props }: ComponentPropsWithoutRef<"ol">) => (
+    <ol className="list-decimal ml-4 space-y-1" {...props}>{children}</ol>
+  ),
+  li: ({ children, ...props }: ComponentPropsWithoutRef<"li">) => (
+    <li className="text-slate-300 text-sm" {...props}>{children}</li>
+  ),
+  blockquote: ({ children, ...props }: ComponentPropsWithoutRef<"blockquote">) => (
+    <blockquote
+      className="border-l-4 pl-4 py-1 text-slate-400 text-sm italic"
+      style={{ borderColor: "#3b82f6" }}
+      {...props}
+    >
+      {children}
+    </blockquote>
+  ),
+  code: ({ className, children, ...props }: ComponentPropsWithoutRef<"code">) => {
+    const isBlock = className?.includes("language-");
+    if (isBlock) {
+      return (
+        <code className={`${className ?? ""} text-xs`} {...props}>{children}</code>
+      );
+    }
+    return (
+      <code
+        className="px-1 rounded text-xs font-mono"
+        style={{ backgroundColor: "#1e293b", color: "#93c5fd" }}
+        {...props}
       >
-        <code>{code}</code>
-      </pre>
+        {children}
+      </code>
     );
-  }
-  return blocks;
-}
+  },
+  pre: ({ children, ...props }: ComponentPropsWithoutRef<"pre">) => (
+    <pre
+      className="rounded-xl p-4 text-xs font-mono overflow-x-auto my-4"
+      style={{ backgroundColor: "#0f172a", color: "#e2e8f0", border: "1px solid #334155" }}
+      {...props}
+    >
+      {children}
+    </pre>
+  ),
+  table: ({ children, ...props }: ComponentPropsWithoutRef<"table">) => (
+    <div className="overflow-x-auto my-4">
+      <table className="w-full text-sm border-collapse" {...props}>{children}</table>
+    </div>
+  ),
+  thead: ({ children, ...props }: ComponentPropsWithoutRef<"thead">) => (
+    <thead style={{ backgroundColor: "#1e293b" }} {...props}>{children}</thead>
+  ),
+  th: ({ children, ...props }: ComponentPropsWithoutRef<"th">) => (
+    <th className="text-left text-white font-medium px-4 py-2 border-b" style={{ borderColor: "#334155" }} {...props}>
+      {children}
+    </th>
+  ),
+  td: ({ children, ...props }: ComponentPropsWithoutRef<"td">) => (
+    <td className="text-slate-300 px-4 py-2 border-b" style={{ borderColor: "#334155" }} {...props}>
+      {children}
+    </td>
+  ),
+  a: ({ children, href, ...props }: ComponentPropsWithoutRef<"a">) => (
+    <a
+      href={href}
+      className="underline"
+      style={{ color: "#93c5fd" }}
+      target="_blank"
+      rel="noopener noreferrer"
+      {...props}
+    >
+      {children}
+    </a>
+  ),
+  strong: ({ children, ...props }: ComponentPropsWithoutRef<"strong">) => (
+    <strong className="text-white font-semibold" {...props}>{children}</strong>
+  ),
+};
 
-function InlineMarkdown({ text }: { text: string }) {
-  const parts = text.split(/(\*\*[^*]+\*\*|`[^`]+`)/g);
+function MarkdownContent({ content }: { content: string }) {
   return (
-    <>
-      {parts.map((part, i) => {
-        if (part.startsWith("**") && part.endsWith("**")) {
-          return <strong key={i} className="text-white font-semibold">{part.slice(2, -2)}</strong>;
-        }
-        if (part.startsWith("`") && part.endsWith("`")) {
-          return (
-            <code key={i} className="px-1 rounded text-xs font-mono" style={{ backgroundColor: "#1e293b", color: "#93c5fd" }}>
-              {part.slice(1, -1)}
-            </code>
-          );
-        }
-        return <span key={i}>{part}</span>;
-      })}
-    </>
+    <div className="space-y-1">
+      <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
+        {content}
+      </ReactMarkdown>
+    </div>
   );
 }

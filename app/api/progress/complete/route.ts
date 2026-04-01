@@ -1,0 +1,29 @@
+import { NextRequest, NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { markModuleComplete } from "@/lib/progress";
+
+const isDevBypass = !process.env.GOOGLE_CLIENT_ID;
+
+function getUserId(session: { user?: { email?: string | null } } | null): string | null {
+  if (isDevBypass) return "dev-user";
+  return session?.user?.email ?? null;
+}
+
+export async function POST(request: NextRequest) {
+  const session = await getServerSession(authOptions);
+  const userId = getUserId(session);
+  if (!userId) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const body = await request.json();
+  const { categoryId, moduleId } = body as { categoryId: string; moduleId: string };
+
+  if (!categoryId || !moduleId) {
+    return NextResponse.json({ error: "Missing categoryId or moduleId" }, { status: 400 });
+  }
+
+  const result = await markModuleComplete(userId, categoryId, moduleId);
+  return NextResponse.json(result);
+}

@@ -14,13 +14,17 @@ interface QuizSectionProps {
     questions: QuizQuestion[];
   };
   onNext: () => void;
+  categoryId?: string;
+  moduleId?: string;
+  onQuizComplete?: (xp: number) => void;
 }
 
-export default function QuizSection({ data, onNext }: QuizSectionProps) {
+export default function QuizSection({ data, onNext, categoryId, moduleId, onQuizComplete }: QuizSectionProps) {
   const [currentQ, setCurrentQ] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [answers, setAnswers] = useState<boolean[]>([]);
   const [finished, setFinished] = useState(false);
+  const [xpSaved, setXpSaved] = useState(false);
 
   const question = data.questions[currentQ];
   const isAnswered = selected !== null;
@@ -48,6 +52,18 @@ export default function QuizSection({ data, onNext }: QuizSectionProps) {
     const score = answers.filter(Boolean).length;
     const total = data.questions.length;
     const xp = score * 10;
+
+    // Firestore にクイズXPを保存
+    if (!xpSaved && categoryId && moduleId) {
+      setXpSaved(true);
+      fetch("/api/progress/quiz", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ categoryId, moduleId, score, total }),
+      })
+        .then(() => onQuizComplete?.(xp))
+        .catch(() => {});
+    }
 
     return (
       <div className="h-full flex items-center justify-center">

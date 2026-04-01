@@ -6,7 +6,7 @@
 ## 技術スタック
 - Next.js 14 (App Router) + TypeScript + Tailwind CSS
 - コードエディタ: @monaco-editor/react
-- DB: なし（JSONファイルから直接読み込み。Firestore接続はPhase 1）
+- DB: Firestore（firebase-admin SDK。ユーザー進捗・XP・学習ログを永続化）
 - 認証: NextAuth.js + Google OAuth
 - ホスティング: Cloud Run（手動デプロイ）
 - GCPプロジェクト: ap-hp-bq-test
@@ -58,9 +58,12 @@ markebase/
 - 日本語テキスト直書きOK
 - コミット: feat:/fix:/docs: プレフィクス
 
-## 現在のスコープ（ミニマムデモ）
-- 教材は2モジュールのみ: 1-1（HTML基礎）と 5-1（GA4データモデル）
-- DBなし。JSONから読み込み
-- AI質問チャットはUIのみ（バックエンド接続なし）
-- XP/レベルはハードコード表示
+## 現在のスコープ（Phase 1 MVP）
+- 教材: 47モジュール（Web基礎30, HTML1, JS8, GA4 8）
+- DB: Firestore（ユーザー進捗・XP・レベル永続化）
+- 認証: NextAuth.js + Google OAuth（デモモード対応）
+- Markdown: react-markdown + remark-gfm
+- オンボーディング: 役割→経験→学習パス推薦
+- 管理者ページ: チーム学習状況一覧
+- AI質問チャット: OpenAI API接続済み
 - デプロイは手動（gcloud run deploy）
