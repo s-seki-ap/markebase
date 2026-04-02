@@ -21,14 +21,14 @@
     {
       "type": "exercise",
       "data": {
-        "content": "# 練習: GTM経由でGA4タグを設定する\n\n新しいWebデータストリームを作成し、GTMでGA4設定タグを実装します。\n\n## 課題\n\n以下のGTMタグ設定をJSONで完成させてください。\n\n1. タグタイプ: GA4設定\n2. 計測ID: `G-DEMO12345`\n3. トリガー: All Pages（全ページ）\n4. ユーザープロパティ: `login_status` を `{{Login Status}}` データレイヤー変数から取得\n\n> GTMのエクスポートJSON形式で記述します。",
-        "starterCode": "{\n  \"containerVersion\": {\n    \"tag\": [\n      {\n        \"name\": \"GA4設定タグ\",\n        \"type\": \"googtag\",\n        \"parameter\": [\n          {\n            \"key\": \"tagId\",\n            \"type\": \"template\",\n            \"value\": \"\" // 計測IDを入力\n          }\n          // ユーザープロパティの設定をここに追加\n        ],\n        \"firingTriggerId\": [\n          // トリガーIDを入れる想定（ここではAll Pagesを示すコメントのみ）\n          // \"All Pages trigger\"\n        ]\n      }\n    ]\n  }\n}",
+        "content": "# 練習: GTM経由でGA4タグを設定する\n\n新しいWebデータストリームを作成し、GTMでGoogleタグ（GA4設定）を実装します。\n\n## 課題\n\n以下のGTMタグ設定をJSONで完成させてください。\n\n1. タグタイプ: Googleタグ（GA4設定）\n2. 計測ID: `G-DEMO12345`\n3. トリガー: All Pages（全ページ）\n4. ユーザープロパティ: `login_status` を `{{Login Status}}` データレイヤー変数から取得\n\n> GTMのエクスポートJSON形式で記述します。",
+        "starterCode": "{\n  \"containerVersion\": {\n    \"tag\": [\n      {\n        \"name\": \"Googleタグ（GA4設定）\",\n        \"type\": \"googtag\",\n        \"parameter\": [\n          {\n            \"key\": \"tagId\",\n            \"type\": \"template\",\n            \"value\": \"\" // 計測IDを入力\n          }\n          // ユーザープロパティの設定をここに追加\n        ],\n        \"firingTriggerId\": [\n          // トリガーIDを入れる想定（ここではAll Pagesを示すコメントのみ）\n          // \"All Pages trigger\"\n        ]\n      }\n    ]\n  }\n}",
         "hints": [
           "計測IDは `G-DEMO12345` を `value` フィールドに入れます。",
           "ユーザープロパティはGTMでは `userProperties` キーのリストとして指定します。各プロパティは `{ key: 'プロパティ名', value: { key: 'value', type: 'template', value: '{{変数名}}' } }` の形式です。",
           "完成形: `parameter` に `{ \"key\": \"userProperties\", \"type\": \"list\", \"list\": [ { \"type\": \"map\", \"map\": [ { \"key\": \"name\", \"type\": \"template\", \"value\": \"login_status\" }, { \"key\": \"value\", \"type\": \"template\", \"value\": \"{{Login Status}}\" } ] } ] }` を追加します。"
         ],
-        "answer": "{\n  \"containerVersion\": {\n    \"tag\": [\n      {\n        \"name\": \"GA4設定タグ\",\n        \"type\": \"googtag\",\n        \"parameter\": [\n          {\n            \"key\": \"tagId\",\n            \"type\": \"template\",\n            \"value\": \"G-DEMO12345\"\n          },\n          {\n            \"key\": \"userProperties\",\n            \"type\": \"list\",\n            \"list\": [\n              {\n                \"type\": \"map\",\n                \"map\": [\n                  {\n                    \"key\": \"name\",\n                    \"type\": \"template\",\n                    \"value\": \"login_status\"\n                  },\n                  {\n                    \"key\": \"value\",\n                    \"type\": \"template\",\n                    \"value\": \"{{Login Status}}\"\n                  }\n                ]\n              }\n            ]\n          }\n        ],\n        \"firingTriggerId\": [\n          \"All Pages trigger\"\n        ]\n      }\n    ]\n  }\n}"
+        "answer": "{\n  \"containerVersion\": {\n    \"tag\": [\n      {\n        \"name\": \"Googleタグ（GA4設定）\",\n        \"type\": \"googtag\",\n        \"parameter\": [\n          {\n            \"key\": \"tagId\",\n            \"type\": \"template\",\n            \"value\": \"G-DEMO12345\"\n          },\n          {\n            \"key\": \"userProperties\",\n            \"type\": \"list\",\n            \"list\": [\n              {\n                \"type\": \"map\",\n                \"map\": [\n                  {\n                    \"key\": \"name\",\n                    \"type\": \"template\",\n                    \"value\": \"login_status\"\n                  },\n                  {\n                    \"key\": \"value\",\n                    \"type\": \"template\",\n                    \"value\": \"{{Login Status}}\"\n                  }\n                ]\n              }\n            ]\n          }\n        ],\n        \"firingTriggerId\": [\n          \"All Pages trigger\"\n        ]\n      }\n    ]\n  }\n}"
       }
     },
     {
@@ -74,7 +74,7 @@
     {
       "type": "summary",
       "data": {
-        "content": "# モジュール5-9 完了！\n\nデータストリームの設計と管理について理解しました。\n\n## 習得したスキル\n\n✅ **GA4プロパティとデータストリームの関係**を説明できる\n✅ **本番・テスト環境の正しい分離方法**（別プロパティ）を理解した\n✅ **計測IDの形式**（G-XXXXXXXXXX）と実装方法を把握した\n✅ **GTM経由でのGA4設定タグ**を構成できる\n\n## 実務での注意点\n\n- 新規クライアント対応時は必ず本番・テストプロパティを別々に作成する\n- GTMコンテナも本番・テストで分ける運用が理想的\n- データストリームの拡張計測機能の設定は次のモジュールで詳しく学ぶ\n\n## 次のステップ\n\n次のモジュール **「5-10: 参照元トラフィック除外とクロスドメイン計測」** では、複数ドメインをまたいだ計測の実装方法を学びます。",
+        "content": "# モジュール5-9 完了！\n\nデータストリームの設計と管理について理解しました。\n\n## 習得したスキル\n\n✅ **GA4プロパティとデータストリームの関係**を説明できる\n✅ **本番・テスト環境の正しい分離方法**（別プロパティ）を理解した\n✅ **計測IDの形式**（G-XXXXXXXXXX）と実装方法を把握した\n✅ **GTM経由でのGoogleタグ**を構成できる\n\n## 実務での注意点\n\n- 新規クライアント対応時は必ず本番・テストプロパティを別々に作成する\n- GTMコンテナも本番・テストで分ける運用が理想的\n- データストリームの拡張計測機能の設定は次のモジュールで詳しく学ぶ\n\n## 次のステップ\n\n次のモジュール **「5-10: 参照元トラフィック除外とクロスドメイン計測」** では、複数ドメインをまたいだ計測の実装方法を学びます。",
         "diagram": false
       }
     }

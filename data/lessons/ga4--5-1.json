@@ -7,14 +7,14 @@
     {
       "type": "intro",
       "data": {
-        "content": "# なぜGA4はUAから変わったのか\n\n2023年7月、Googleはユニバーサルアナリティクス（UA）を終了し、GA4に完全移行しました。これはただのUIリニューアルではありません。**計測の思想が根本から変わった**のです。\n\n## UAの限界\n\nUAは「セッション」単位でデータを取得していました。\n\n- ユーザーがサイトに来る → セッション開始\n- ページを見る → ページビュー\n- 離脱 → セッション終了\n\nこのモデルは「Webサイト」のために作られていました。しかしビジネスは変わりました。\n\n**課題1**: スマホアプリとWebを横断する計測ができない\n**課題2**: 動画視聴・スクロール深度などの行動が取れない\n**課題3**: Cookieへの依存でプライバシー規制に対応できない\n\n## GA4が解決したこと\n\nGA4は「**イベント**」を唯一の計測単位にしました。\n\nページビューも、ボタンクリックも、購入も、すべて「イベント」として同じ形式で記録されます。これによりWeb・アプリを統一的に計測できるようになりました。\n\n**あなたへの問い**: 自社サイトでは今、どんなユーザー行動を計測できていますか？",
+        "content": "# なぜGA4はUAから変わったのか\n\n2023年7月、Googleはユニバーサルアナリティクス（UA）を終了し、GA4に完全移行しました。これはただのUIリニューアルではありません。**計測の思想が根本から変わった**のです。\n\n## UAの限界\n\nUAは「セッション」単位でデータを取得していました。\n\n- ユーザーがサイトに来る → セッション開始\n- ページを見る → ページビュー\n- 離脱 → セッション終了\n\nこのモデルは「Webサイト」のために作られていました。しかしビジネスは変わりました。\n\n**課題1**: スマホアプリとWebを横断する計測ができない\n**課題2**: 動画視聴・スクロール深度などの行動が取れない\n**課題3**: Cookieへの依存でプライバシー規制に対応できない\n\n## GA4が解決したこと\n\nGA4は「**イベント**」を唯一の計測単位にしました。\n\nページビューも、ボタンクリックも、購入も、すべて「イベント」として同じ形式で記録されます。これによりWeb・アプリを統一的に計測できるようになりました。\n\n**あなたへの問い**: 自社サイトでは今、どんなユーザー行動を計測できていますか？「ページビューだけ」なら、GA4のポテンシャルの10%も使えていません。",
         "diagram": false
       }
     },
     {
       "type": "concept",
       "data": {
-        "content": "# イベントベースデータモデル\n\nGA4のすべてのデータは以下の3要素で構成されます。\n\n## データ構造\n\n```\nイベント（event）\n├── event_name: \"purchase\"           # 何が起きたか\n├── event_timestamp: 1234567890      # いつ起きたか\n└── event_params: [                  # どんな内容か\n      { key: \"transaction_id\", value: \"T-001\" },\n      { key: \"value\", value: 29800 },\n      { key: \"currency\", value: \"JPY\" }\n    ]\n```\n\n## BigQueryエクスポートの構造\n\nGA4のデータはBigQueryに以下の形で保存されます：\n\n```sql\n-- テーブル名: events_YYYYMMDD\nSELECT\n  event_name,\n  event_date,\n  (SELECT value.string_value \n   FROM UNNEST(event_params) \n   WHERE key = 'page_title') AS page_title,\n  user_pseudo_id\nFROM `project.dataset.events_*`\nWHERE event_name = 'page_view'\nLIMIT 10\n```\n\n## UAとGA4の比較\n\n| 概念 | UA | GA4 |\n|------|-----|-----|\n| 計測単位 | セッション | **イベント** |\n| ページビュー | 独立した概念 | page_viewイベント |\n| 購入 | トランザクション | purchaseイベント |\n| BQ連携 | 有料（360のみ） | **無料** |\n| Cookieレス対応 | 困難 | **設計済み** |",
+        "content": "# イベントベースデータモデル\n\nGA4のすべてのデータは以下の3要素で構成されます。\n\n## データ構造\n\n```\nイベント（event）\n├── event_name: \"purchase\"           # 何が起きたか\n├── event_timestamp: 1234567890      # いつ起きたか\n└── event_params: [                  # どんな内容か\n      { key: \"transaction_id\", value: \"T-001\" },\n      { key: \"value\", value: 29800 },\n      { key: \"currency\", value: \"JPY\" }\n    ]\n```\n\n## BigQueryエクスポートの構造\n\nGA4のデータはBigQueryに以下の形で保存されます：\n\n```sql\n-- テーブル名: events_YYYYMMDD\nSELECT\n  event_name,\n  event_date,\n  (SELECT value.string_value \n   FROM UNNEST(event_params) \n   WHERE key = 'page_title') AS page_title,\n  user_pseudo_id\nFROM `project.dataset.events_*`\nWHERE event_name = 'page_view'\nLIMIT 10\n```\n\n## UAとGA4の比較\n\n| 概念 | UA | GA4 |\n|------|-----|-----|\n| 計測単位 | セッション | **イベント** |\n| ページビュー | 独立した概念 | page_viewイベント |\n| 購入 | トランザクション | purchaseイベント |\n| BQ連携 | 有料（360のみ） | **無料（BQ側のコストは別途）** |\n| Cookieレス対応 | 困難 | **設計済み（Consent Mode等）** |",
         "diagram": true
       }
     },

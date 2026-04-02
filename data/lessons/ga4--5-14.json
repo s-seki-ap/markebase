@@ -14,7 +14,7 @@
     {
       "type": "concept",
       "data": {
-        "content": "# generate_leadの仕様と設計\n\n## 基本構造\n\n```javascript\n// generate_leadイベントの基本形\ndataLayer.push({\n  event: 'generate_lead',\n  // Googleが定義する標準パラメータ\n  value: 50000,        // リードの推定価値（任意）\n  currency: 'JPY',     // 通貨コード\n  // カスタムパラメータ（独自定義）\n  lead_type: 'contact_form',\n  lead_source_detail: 'services_page',\n  form_name: '一般お問い合わせ'\n});\n```\n\n## リードタイプの設計例\n\n```\nリードの種類を lead_type で分類する\n\n'document_download'  → 資料ダウンロード\n'contact_form'       → 問い合わせフォーム\n'free_consultation'  → 無料相談申し込み\n'seminar_register'   → セミナー参加登録\n'newsletter'         → メルマガ登録\n'demo_request'       → デモ依頼\n```\n\n## リード価値（value）の設定方針\n\n```\n推奨: リードタイプごとに推定価値を設定する\n\n例: 受注率と平均受注額から逆算\n- デモ依頼: 受注率20% × 平均50万円 = 10万円\n- 資料DL: 受注率2% × 平均50万円 = 1万円\n- メルマガ: 受注率0.5% × 平均50万円 = 2,500円\n\nGA4レポートの「コンバージョン価値」で\nチャネルごとの貢献度を金額換算できる\n```\n\n## マルチステップフォームの計測\n\n```javascript\n// フォームが複数ページに分かれている場合\n\n// Step 1: フォーム入力開始\ndataLayer.push({\n  event: 'form_start',\n  form_name: '無料相談フォーム',\n  form_step: 1\n});\n\n// Step 2: フォーム送信完了（リード獲得）\ndataLayer.push({\n  event: 'generate_lead',\n  lead_type: 'free_consultation',\n  value: 100000,\n  currency: 'JPY',\n  form_name: '無料相談フォーム'\n});\n```\n\n## よくある実装ミス\n\n```\nNG例1: サンクスページが複数タブで開かれて二重計測\n→ 対策: sessionStorage で送信済みフラグを管理\n\nNG例2: フォームが外部ドメイン（Hubspot、Salesforce）で\n        完了通知がGA4に届かない\n→ 対策: iframeのpostMessage受信またはWebhook連携\n\nNG例3: value を設定しないためチャネル価値が比較できない\n→ 対策: 必ず推定リード価値を設定するルールを徹底\n```",
+        "content": "# generate_leadの仕様と設計\n\n## 基本構造\n\n```javascript\n// generate_leadイベントの基本形\ndataLayer.push({\n  event: 'generate_lead',\n  // Googleが定義する標準パラメータ\n  value: 50000,        // リードの推定価値（任意）\n  currency: 'JPY',     // 通貨コード\n  // カスタムパラメータ（独自定義）\n  lead_type: 'contact_form',\n  lead_source_detail: 'services_page',\n  form_name: '一般お問い合わせ'\n});\n```\n\n## リードタイプの設計例\n\n```\nリードの種類を lead_type で分類する\n\n'document_download'  → 資料ダウンロード\n'contact_form'       → 問い合わせフォーム\n'free_consultation'  → 無料相談申し込み\n'seminar_register'   → セミナー参加登録\n'newsletter'         → メルマガ登録\n'demo_request'       → デモ依頼\n```\n\n## リード価値（value）の設定方針\n\n```\n推奨: リードタイプごとに推定価値を設定する\n\n例: 受注率と平均受注額から逆算\n- デモ依頼: 受注率20% × 平均50万円 = 10万円\n- 資料DL: 受注率2% × 平均50万円 = 1万円\n- メルマガ: 受注率0.5% × 平均50万円 = 2,500円\n\nGA4レポートの「キーイベント値」で\nチャネルごとの貢献度を金額換算できる\n```\n\n## マルチステップフォームの計測\n\n```javascript\n// フォームが複数ページに分かれている場合\n\n// Step 1: フォーム入力開始\ndataLayer.push({\n  event: 'form_start',\n  form_name: '無料相談フォーム',\n  form_step: 1\n});\n\n// Step 2: フォーム送信完了（リード獲得）\ndataLayer.push({\n  event: 'generate_lead',\n  lead_type: 'free_consultation',\n  value: 100000,\n  currency: 'JPY',\n  form_name: '無料相談フォーム'\n});\n```\n\n## よくある実装ミス\n\n```\nNG例1: サンクスページが複数タブで開かれて二重計測\n→ 対策: sessionStorage で送信済みフラグを管理\n\nNG例2: フォームが外部ドメイン（Hubspot、Salesforce）で\n        完了通知がGA4に届かない\n→ 対策: iframeのpostMessage受信またはWebhook連携\n\nNG例3: value を設定しないためチャネル価値が比較できない\n→ 対策: 必ず推定リード価値を設定するルールを徹底\n```",
         "diagram": false
       }
     },
@@ -44,7 +44,7 @@
               "Google広告の目標コンバージョン単価の自動入札に使われるため"
             ],
             "correct": 2,
-            "explanation": "`value` パラメータを設定すると、GA4レポートの「コンバージョン価値」でチャネルごとのリード価値を金額換算して比較できます。これにより「有機検索は件数は少ないが価値の高いリードを獲得している」などの分析が可能になります。"
+            "explanation": "`value` パラメータを設定すると、GA4レポートの「キーイベント値」（旧コンバージョン価値）でチャネルごとのリード価値を金額換算して比較できます。これにより「有機検索は件数は少ないが価値の高いリードを獲得している」などの分析が可能になります。"
           },
           {
             "q": "外部のフォームツール（HubSpotなど）を使っている場合、フォーム完了を計測するための推奨アプローチはどれですか？",

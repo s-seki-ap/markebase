@@ -14,7 +14,7 @@
     {
       "type": "concept",
       "data": {
-        "content": "# 自動収集イベント全一覧\n\n## コアイベント（常に自動収集）\n\n| イベント名 | 発火タイミング | 主なパラメータ |\n|-----------|--------------|---------------|\n| `first_visit` | ユーザーが初めてサイトを訪問 | なし |\n| `session_start` | セッション開始時 | `ga_session_id`, `ga_session_number` |\n| `page_view` | ページ表示時（拡張計測ON） | `page_title`, `page_location` |\n| `user_engagement` | ページが10秒以上アクティブ | `engagement_time_msec` |\n\n## 重要なパラメータ\n\n```javascript\n// session_startイベントで自動的に付与されるパラメータ\n{\n  event_name: 'session_start',\n  event_params: {\n    ga_session_id: '1234567890',      // セッションID\n    ga_session_number: 3,             // 通算何回目のセッションか\n    engagement_time_msec: 0\n  }\n}\n\n// page_viewイベントで自動的に付与されるパラメータ\n{\n  event_name: 'page_view',\n  event_params: {\n    page_title: 'トップページ | 株式会社XX',\n    page_location: 'https://example.com/',\n    page_referrer: 'https://google.com/',\n    engagement_time_msec: 12000\n  }\n}\n```\n\n## BigQueryでの確認方法\n\n```sql\n-- 自動収集イベントの一覧と件数を確認する\nSELECT\n  event_name,\n  COUNT(*) AS event_count\nFROM `your-project.analytics_XXXXXXXX.events_*`\nWHERE\n  _TABLE_SUFFIX BETWEEN '20240101' AND '20240131'\n  AND event_name IN (\n    'first_visit',\n    'session_start',\n    'page_view',\n    'user_engagement'\n  )\nGROUP BY 1\nORDER BY 2 DESC\n```\n\n## 新規ユーザー判定の仕組み\n\n```\nfirst_visitイベント = そのデバイス・ブラウザでの初回訪問\n\n注意: Cookieがクリアされると再びfirst_visitが発生する\n→ GA4の「新規ユーザー」はデバイス単位の新規であり、人単位ではない\n→ Googleアカウントでログインしている場合のみ、より正確なユーザー識別が可能\n```\n\n## アプリの自動収集イベント（参考）\n\nFirebase SDKを使ったアプリでは追加でこれらが自動収集されます：\n\n| イベント名 | 発火タイミング |\n|-----------|---------------|\n| `app_update` | アプリがアップデートされた |\n| `os_update` | OSがアップデートされた |\n| `app_exception` | アプリがクラッシュした |\n| `screen_view` | 画面遷移 |",
+        "content": "# 自動収集イベント全一覧\n\n## コアイベント（自動収集 + デフォルトONの拡張計測）\n\n| イベント名 | 分類 | 発火タイミング | 主なパラメータ |\n|-----------|------|--------------|---------------|\n| `first_visit` | 自動収集 | ユーザーが初めてサイトを訪問 | なし |\n| `session_start` | 自動収集 | セッション開始時 | `ga_session_id`, `ga_session_number` |\n| `page_view` | 拡張計測（デフォルトON） | ページ表示時 | `page_title`, `page_location`, `page_referrer` |\n| `user_engagement` | 自動収集 | ページが10秒以上アクティブ | `engagement_time_msec` |\n\n## 重要なパラメータ\n\n```javascript\n// session_startイベントで自動的に付与されるパラメータ\n{\n  event_name: 'session_start',\n  event_params: {\n    ga_session_id: '1234567890',      // セッションID\n    ga_session_number: 3,             // 通算何回目のセッションか\n    engagement_time_msec: 0\n  }\n}\n\n// page_viewイベントで自動的に付与されるパラメータ\n{\n  event_name: 'page_view',\n  event_params: {\n    page_title: 'トップページ | 株式会社XX',\n    page_location: 'https://example.com/',\n    page_referrer: 'https://google.com/',\n    engagement_time_msec: 12000\n  }\n}\n```\n\n## BigQueryでの確認方法\n\n```sql\n-- 自動収集イベントの一覧と件数を確認する\nSELECT\n  event_name,\n  COUNT(*) AS event_count\nFROM `your-project.analytics_XXXXXXXX.events_*`\nWHERE\n  _TABLE_SUFFIX BETWEEN '20240101' AND '20240131'\n  AND event_name IN (\n    'first_visit',\n    'session_start',\n    'page_view',\n    'user_engagement'\n  )\nGROUP BY 1\nORDER BY 2 DESC\n```\n\n## 新規ユーザー判定の仕組み\n\n```\nfirst_visitイベント = そのデバイス・ブラウザでの初回訪問\n\n注意: Cookieがクリアされると再びfirst_visitが発生する\n→ GA4の「新規ユーザー」はデバイス単位の新規であり、人単位ではない\n→ Googleアカウントでログインしている場合のみ、より正確なユーザー識別が可能\n```\n\n## アプリの自動収集イベント（参考）\n\nFirebase SDKを使ったアプリでは追加でこれらが自動収集されます：\n\n| イベント名 | 発火タイミング |\n|-----------|---------------|\n| `app_update` | アプリがアップデートされた |\n| `os_update` | OSがアップデートされた |\n| `app_exception` | アプリがクラッシュした |\n| `screen_view` | 画面遷移 |",
         "diagram": false
       }
     },
@@ -58,15 +58,15 @@
             "explanation": "`ga_session_number` はそのユーザー（同一デバイス）の通算セッション回数です。初回訪問時は1、2回目の訪問時は2というように増加します。リピーター分析に活用できます。"
           },
           {
-            "q": "`page_view` イベントは自動収集イベントに分類されますが、実際に発火するには何が必要ですか？",
+            "q": "`page_view` イベントは拡張計測機能の一部ですが、発火させるために通常行うべきことはどれですか？",
             "options": [
-              "GTMでpage_viewトリガーを設定する必要がある",
-              "GA4管理画面の「拡張計測機能」でページビューをONにする必要がある",
-              "GA4タグを設置するだけで自動的に発火する",
-              "カスタムイベントとして手動実装が必要"
+              "GTMでpage_viewトリガーを手動設定する必要がある",
+              "拡張計測機能のページビューがデフォルトONのため、GA4タグを設置するだけで発火する",
+              "gtag('event', 'page_view') を全ページに手動で記述する",
+              "カスタムイベントとして別途実装が必要"
             ],
-            "correct": 2,
-            "explanation": "`page_view` はGA4の計測タグ（gtag.jsまたはGTMのGA4設定タグ）を設置するだけで自動的に収集されます。拡張計測機能の設定は不要です。ただし、SPAの場合は追加設定が必要な場合があります。"
+            "correct": 1,
+            "explanation": "`page_view` は拡張計測機能の「ページビュー」に含まれ、デフォルトでONになっています。GA4の計測タグ（gtag.jsまたはGTMのGoogleタグ）を設置するだけで自動的に発火します。ただし、SPA（シングルページアプリケーション）の場合はブラウザの履歴変更を検知する追加設定が必要な場合があります。"
           }
         ]
       }

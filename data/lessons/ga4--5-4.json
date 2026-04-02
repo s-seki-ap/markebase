@@ -14,7 +14,7 @@
     {
       "type": "concept",
       "data": {
-        "content": "# GTMの3要素とdataLayerの仕組み\n\n## GTMの3要素\n\n### タグ（Tag）: 「何を実行するか」\nGA4にイベントを送る、広告のコンバージョンタグを発火させる、などの「実行する処理」です。\n\n```\n【GA4設定タグ】: GA4の計測IDを設定。全ページで発火。\n  → 測定ID: G-XXXXXXXX\n  → すべてのページトリガー\n\n【GA4イベントタグ】: 特定のイベントをGA4に送信。\n  → イベント名: add_to_cart\n  → トリガー: カスタムイベント「add_to_cart」\n  → パラメータ: {{DLV - ecommerce.currency}} など\n```\n\n### トリガー（Trigger）: 「いつ実行するか」\nタグを発火させる条件です。\n\n```\n【すべてのページビュー】: 全ページで発火\n【クリックトリガー】: 特定の要素がクリックされたとき\n【カスタムイベント】: dataLayer.push({ event: 'xxx' }) を受け取ったとき\n【フォーム送信】: フォームが送信されたとき\n```\n\n### 変数（Variable）: 「どんな値を使うか」\nタグやトリガーの中で動的に使うデータです。\n\n```\n【組み込み変数】: Click URL, Page URL, Form ID など\n【データレイヤー変数】: dataLayer から値を取り出す\n  → データレイヤーの変数名: ecommerce.value → {{DLV - ecommerce.value}}\n【カスタムJS変数】: function() { return 値; } の形式\n```\n\n## dataLayerの仕組み\n\ndataLayerは**サイトのJSとGTMの間の「共有メモ帳」**です。\n\n```js\n// ① サイト側: dataLayerにデータを書き込む\ndataLayer.push({\n  event: 'add_to_cart',        // GTMトリガーが監視するイベント名\n  ecommerce: {                  // GTM変数で取り出せるデータ\n    currency: 'JPY',\n    value: 9800,\n    items: [{\n      item_id:   'SKU-001',\n      item_name: 'プレミアムTシャツ',\n      price:     9800,\n      quantity:  1\n    }]\n  }\n});\n\n// ② GTM側: トリガー「カスタムイベント = add_to_cart」が発火\n// ③ GTM側: GA4イベントタグが実行\n//    イベント名: add_to_cart\n//    currency: {{DLV - ecommerce.currency}}\n//    value: {{DLV - ecommerce.value}}\n//    items: {{DLV - ecommerce.items}}\n\n// ④ GA4にイベントが送信される\n```\n\n## プレビューモードの使い方\n\nGTMのプレビューモード（虫眼鏡アイコン）は、公開前にタグの動作を確認できる最重要機能です。\n\n```\n確認できること:\n- どのタグが発火したか / しなかったか\n- トリガーの条件が満たされているか\n- dataLayerに正しいデータが入っているか\n- 各イベントパラメータの値\n```",
+        "content": "# GTMの3要素とdataLayerの仕組み\n\n## GTMの3要素\n\n### タグ（Tag）: 「何を実行するか」\nGA4にイベントを送る、広告のコンバージョンタグを発火させる、などの「実行する処理」です。\n\n```\n【Googleタグ（旧GA4設定タグ）】: GA4の測定IDを設定。全ページで発火。\n  → 測定ID: G-XXXXXXXX\n  → すべてのページトリガー\n\n【GA4イベントタグ】: 特定のイベントをGA4に送信。\n  → イベント名: add_to_cart\n  → トリガー: カスタムイベント「add_to_cart」\n  → パラメータ: {{DLV - ecommerce.currency}} など\n```\n\n### トリガー（Trigger）: 「いつ実行するか」\nタグを発火させる条件です。\n\n```\n【すべてのページビュー】: 全ページで発火\n【クリックトリガー】: 特定の要素がクリックされたとき\n【カスタムイベント】: dataLayer.push({ event: 'xxx' }) を受け取ったとき\n【フォーム送信】: フォームが送信されたとき\n```\n\n### 変数（Variable）: 「どんな値を使うか」\nタグやトリガーの中で動的に使うデータです。\n\n```\n【組み込み変数】: Click URL, Page URL, Form ID など\n【データレイヤー変数】: dataLayer から値を取り出す\n  → データレイヤーの変数名: ecommerce.value → {{DLV - ecommerce.value}}\n【カスタムJS変数】: function() { return 値; } の形式\n```\n\n## dataLayerの仕組み\n\ndataLayerは**サイトのJSとGTMの間の「共有メモ帳」**です。\n\n```js\n// ① サイト側: dataLayerにデータを書き込む\ndataLayer.push({\n  event: 'add_to_cart',        // GTMトリガーが監視するイベント名\n  ecommerce: {                  // GTM変数で取り出せるデータ\n    currency: 'JPY',\n    value: 9800,\n    items: [{\n      item_id:   'SKU-001',\n      item_name: 'プレミアムTシャツ',\n      price:     9800,\n      quantity:  1\n    }]\n  }\n});\n\n// ② GTM側: トリガー「カスタムイベント = add_to_cart」が発火\n// ③ GTM側: GA4イベントタグが実行\n//    イベント名: add_to_cart\n//    currency: {{DLV - ecommerce.currency}}\n//    value: {{DLV - ecommerce.value}}\n//    items: {{DLV - ecommerce.items}}\n\n// ④ GA4にイベントが送信される\n```\n\n## プレビューモードの使い方\n\nGTMのプレビューモード（虫眼鏡アイコン）は、公開前にタグの動作を確認できる最重要機能です。\n\n```\n確認できること:\n- どのタグが発火したか / しなかったか\n- トリガーの条件が満たされているか\n- dataLayerに正しいデータが入っているか\n- 各イベントパラメータの値\n```",
         "diagram": true
       }
     },
@@ -49,13 +49,13 @@
           {
             "q": "GTMにおける「GA4設定タグ」と「GA4イベントタグ」の違いとして正しいのはどれですか？",
             "options": [
-              "GA4設定タグはGA4の測定IDを設定する基盤タグ、GA4イベントタグは個別のイベントを送信するタグ",
+              "Googleタグ（旧GA4設定タグ）はGA4の測定IDを設定する基盤タグ、GA4イベントタグは個別のイベントを送信するタグ",
               "GA4設定タグはGA4管理画面で設定し、GA4イベントタグはGTMで設定する",
               "GA4設定タグは有料版専用、GA4イベントタグは無料版でも使える",
               "GA4設定タグとGA4イベントタグは同じもので、名前が違うだけ"
             ],
             "correct": 0,
-            "explanation": "「GA4設定タグ」（正式名称: Googleタグ）は測定IDを設定する基盤となるタグで全ページに設置します。「GA4イベントタグ」は特定のイベント（add_to_cart, purchaseなど）をGA4に送信するタグで、特定のトリガー条件で発火します。通常、GA4設定タグを1つ作成し、イベントタグはそれを参照する構成にします。"
+            "explanation": "「Googleタグ」（旧GA4設定タグ）は測定IDを設定する基盤となるタグで全ページに設置します。「GA4イベントタグ」は特定のイベント（add_to_cart, purchaseなど）をGA4に送信するタグで、特定のトリガー条件で発火します。通常、Googleタグを1つ作成し、イベントタグはそれを参照する構成にします。2024年以降のGTMでは「GA4設定タグ」は「Googleタグ」に名称変更されました。"
           },
           {
             "q": "GTMのプレビューモードで確認できないのはどれですか？",
@@ -74,7 +74,7 @@
     {
       "type": "summary",
       "data": {
-        "content": "# モジュール5-4 完了！\n\nGTM × GA4の実装フローを完全に理解しました。\n\n## 習得したスキル\n\n✅ **GTMの3要素**（タグ/トリガー/変数）の役割を正確に理解した\n✅ **GA4設定タグとイベントタグの違い**を把握した\n✅ **dataLayerのデータ設計**と変数での取り出し方を習得した\n✅ **プレビューモードの活用方法**を理解した\n\n## 実務でのGTM × GA4 設定フロー\n\n```\n① GTMにGA4設定タグを作成\n   → 測定ID設定、「すべてのページ」トリガー\n\n② dataLayerの設計（サイトエンジニアと合意）\n   → どのイベントで何のパラメータを渡すか\n\n③ GTMにデータレイヤー変数を作成\n   → ecommerce.value, ecommerce.currency など\n\n④ GTMにGA4イベントタグを作成\n   → イベント名、パラメータに変数を設定\n\n⑤ GTMにカスタムイベントトリガーを作成\n   → dataLayer.pushの event キーと一致させる\n\n⑥ GTMプレビューモードでデバッグ\n   → 全パラメータの値を確認\n\n⑦ GTMバージョン公開\n```\n\n## 次のモジュールへ\n\n次は **「5-5: ファネル分析と経路探索」** です。GA4の「探索」レポートを使ったファネル分析・ユーザー経路の可視化・離脱ポイントの特定を学びます。\n\n> 💡 **実務チャレンジ**: GTMのプレビューモードを起動して、担当サイトの「Summary」タブでどのタグが発火しているか確認してみましょう。予期せぬタグが発火していることがよくあります。",
+        "content": "# モジュール5-4 完了！\n\nGTM × GA4の実装フローを完全に理解しました。\n\n## 習得したスキル\n\n✅ **GTMの3要素**（タグ/トリガー/変数）の役割を正確に理解した\n✅ **Googleタグ（旧GA4設定タグ）とイベントタグの違い**を把握した\n✅ **dataLayerのデータ設計**と変数での取り出し方を習得した\n✅ **プレビューモードの活用方法**を理解した\n\n## 実務でのGTM × GA4 設定フロー\n\n```\n① GTMにGoogleタグ（旧GA4設定タグ）を作成\n   → 測定ID設定、「すべてのページ」トリガー\n\n② dataLayerの設計（サイトエンジニアと合意）\n   → どのイベントで何のパラメータを渡すか\n\n③ GTMにデータレイヤー変数を作成\n   → ecommerce.value, ecommerce.currency など\n\n④ GTMにGA4イベントタグを作成\n   → イベント名、パラメータに変数を設定\n\n⑤ GTMにカスタムイベントトリガーを作成\n   → dataLayer.pushの event キーと一致させる\n\n⑥ GTMプレビューモードでデバッグ\n   → 全パラメータの値を確認\n\n⑦ GTMバージョン公開\n```\n\n## 次のモジュールへ\n\n次は **「5-5: GA4レポートと探索（Explore）」** です。GA4の標準レポートと「探索」レポートの7つの手法を使いこなし、ファネル分析・ユーザー経路の可視化・離脱ポイントの特定を学びます。\n\n> 💡 **実務チャレンジ**: GTMのプレビューモードを起動して、担当サイトの「Summary」タブでどのタグが発火しているか確認してみましょう。予期せぬタグが発火していることがよくあります。",
         "diagram": false
       }
     }
