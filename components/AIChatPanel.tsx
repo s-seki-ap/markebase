@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useRef, useEffect, KeyboardEvent } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 interface Message {
   role: "user" | "assistant";
@@ -149,7 +151,9 @@ export default function AIChatPanel({
               className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
             >
               <div
-                className="max-w-[80%] px-4 py-2.5 rounded-xl text-sm leading-relaxed"
+                className={`max-w-[85%] px-4 py-2.5 rounded-xl text-sm leading-relaxed ${
+                  msg.role === "assistant" ? "chat-markdown" : ""
+                }`}
                 style={
                   msg.role === "user"
                     ? {
@@ -163,7 +167,85 @@ export default function AIChatPanel({
                       }
                 }
               >
-                {msg.content}
+                {msg.role === "assistant" ? (
+                  <ReactMarkdown
+                    remarkPlugins={[remarkGfm]}
+                    components={{
+                      p: ({ children }) => (
+                        <p className="mb-2 last:mb-0 leading-relaxed">{children}</p>
+                      ),
+                      strong: ({ children }) => (
+                        <strong className="font-semibold" style={{ color: "#f1f5f9" }}>{children}</strong>
+                      ),
+                      ul: ({ children }) => (
+                        <ul className="mb-2 last:mb-0 ml-3 space-y-0.5" style={{ listStyleType: "disc" }}>{children}</ul>
+                      ),
+                      ol: ({ children }) => (
+                        <ol className="mb-2 last:mb-0 ml-3 space-y-0.5" style={{ listStyleType: "decimal" }}>{children}</ol>
+                      ),
+                      li: ({ children }) => (
+                        <li className="text-slate-300 pl-1">{children}</li>
+                      ),
+                      code: ({ className, children }) => {
+                        const isBlock = className?.includes("language-");
+                        if (isBlock) {
+                          return (
+                            <code
+                              className="block my-2 p-2.5 rounded-lg text-xs overflow-x-auto"
+                              style={{
+                                backgroundColor: "#1e293b",
+                                color: "#a5f3fc",
+                                fontFamily: "'JetBrains Mono', monospace",
+                              }}
+                            >
+                              {children}
+                            </code>
+                          );
+                        }
+                        return (
+                          <code
+                            className="px-1 py-0.5 rounded text-xs"
+                            style={{
+                              backgroundColor: "#334155",
+                              color: "#a5f3fc",
+                              fontFamily: "'JetBrains Mono', monospace",
+                            }}
+                          >
+                            {children}
+                          </code>
+                        );
+                      },
+                      pre: ({ children }) => <>{children}</>,
+                      h1: ({ children }) => (
+                        <p className="font-semibold mb-1.5 mt-2 first:mt-0" style={{ color: "#f1f5f9" }}>{children}</p>
+                      ),
+                      h2: ({ children }) => (
+                        <p className="font-semibold mb-1.5 mt-2 first:mt-0" style={{ color: "#f1f5f9" }}>{children}</p>
+                      ),
+                      h3: ({ children }) => (
+                        <p className="font-semibold mb-1 mt-1.5 first:mt-0" style={{ color: "#f1f5f9" }}>{children}</p>
+                      ),
+                      a: ({ href, children }) => (
+                        <a
+                          href={href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="underline"
+                          style={{ color: "#93c5fd" }}
+                        >
+                          {children}
+                        </a>
+                      ),
+                      hr: () => (
+                        <hr className="my-2 border-slate-600" />
+                      ),
+                    }}
+                  >
+                    {msg.content}
+                  </ReactMarkdown>
+                ) : (
+                  msg.content
+                )}
               </div>
             </div>
           ))}
