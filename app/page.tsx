@@ -35,28 +35,38 @@ export default async function Home() {
   const userEmail = session?.user?.email ?? null;
   const userImage = session?.user?.image ?? null;
 
-  // Firestore からデータ取得
-  const user = userId ? await getUser(userId) : null;
+  // Firestore からデータ取得（接続不可時はフォールバック）
+  let user: Awaited<ReturnType<typeof getUser>> = null;
   let completedCount = 0;
   let weeklyCount = 0;
   let recentModules: Array<{ id: string; completedAt: FirebaseFirestore.Timestamp }> = [];
+  let progress: Record<string, { completedAt: FirebaseFirestore.Timestamp; quizScore: number | null; xpEarned: number }> = {};
 
-  // オンボーディング未完了 → リダイレクト
-  if (userId && !user) {
+  try {
+    user = userId ? await getUser(userId) : null;
+  } catch {
+    // Firestore未接続時はnull
+  }
+
+  // オンボーディング未完了 → リダイレクト（Firestore接続時のみ）
+  if (userId && !user && !isDevBypass) {
     redirect("/onboarding");
   }
 
-  let progress: Record<string, { completedAt: FirebaseFirestore.Timestamp; quizScore: number | null; xpEarned: number }> = {};
   if (userId && user) {
-    const [prog, weekly, recent] = await Promise.all([
-      getUserProgress(userId),
-      getWeeklyCompletedCount(userId),
-      getRecentModules(userId, 5),
-    ]);
-    progress = prog;
-    completedCount = Object.keys(progress).length;
-    weeklyCount = weekly;
-    recentModules = recent;
+    try {
+      const [prog, weekly, recent] = await Promise.all([
+        getUserProgress(userId),
+        getWeeklyCompletedCount(userId),
+        getRecentModules(userId, 5),
+      ]);
+      progress = prog;
+      completedCount = Object.keys(progress).length;
+      weeklyCount = weekly;
+      recentModules = recent;
+    } catch {
+      // Firestore未接続時はデフォルト値
+    }
   }
 
   const xp = user?.xp ?? 0;

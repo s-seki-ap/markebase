@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
+import Anthropic from "@anthropic-ai/sdk";
 
 export async function POST(req: NextRequest) {
-  const apiKey = process.env.OPENAI_API_KEY;
+  const apiKey = process.env.ANTHROPIC_API_KEY;
 
   if (!apiKey) {
     return NextResponse.json(
@@ -23,29 +24,25 @@ export async function POST(req: NextRequest) {
 
 ${lessonContext ? `\n現在学習中のレッスン:\n${lessonContext}` : ""}`;
 
-  const response = await fetch("https://api.openai.com/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${apiKey}`,
-    },
-    body: JSON.stringify({
-      model: "gpt-4o",
-      messages: [
-        { role: "system", content: systemPrompt },
-        ...messages,
-      ],
-      max_tokens: 1000,
-      temperature: 0.7,
-    }),
-  });
+  try {
+    const client = new Anthropic({ apiKey });
 
-  if (!response.ok) {
+    const response = await client.messages.create({
+      model: "claude-sonnet-4-20250514",
+      max_tokens: 1000,
+      system: systemPrompt,
+      messages: messages.map((m: { role: string; content: string }) => ({
+        role: m.role as "user" | "assistant",
+        content: m.content,
+      })),
+    });
+
+    const textBlock = response.content.find((b) => b.type === "text");
+    return NextResponse.json({
+      message: textBlock?.text ?? "回答を生成できませんでした。",
+    });
+  } catch (error) {
+    console.error("Anthropic API error:", error);
     return NextResponse.json({ error: "AI応答エラー" }, { status: 500 });
   }
-
-  const data = await response.json();
-  return NextResponse.json({
-    message: data.choices[0].message.content,
-  });
 }
