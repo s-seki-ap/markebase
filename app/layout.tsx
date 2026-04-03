@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import { Suspense } from "react";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 import "./globals.css";
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID ?? "G-BVF7R4WG1F";
@@ -35,6 +37,9 @@ export default function RootLayout({
         )}
       </head>
       <body style={{ backgroundColor: "#0f172a", color: "#f1f5f9", minHeight: "100vh" }}>
+        <Suspense fallback={null}>
+          <GoogleAnalytics />
+        </Suspense>
         {children}
       </body>
     </html>
