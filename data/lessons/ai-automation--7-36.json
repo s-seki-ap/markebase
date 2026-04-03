@@ -1,0 +1,82 @@
+{
+  "id": "ai-automation--7-36",
+  "moduleId": "7-36",
+  "categoryId": "ai-automation",
+  "title": "Python基本文法（変数・型・制御構文）",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# マーケデータ処理に必要な基本文法\n\nPythonの基本文法をマーケティングデータ処理の例を使いながら学びます。変数、データ型、if文、for文を使いこなせるようになりましょう。\n\n**あなたへの問い**: プログラミング未経験でも大丈夫。この演習でPythonの基礎を体験してみましょう。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# Python基本文法\n\n## 変数とデータ型\n\n```python\n# 文字列\ncampaign_name = \"春のキャンペーン\"\n\n# 数値\nctr = 3.5  # float\nclicks = 1500  # int\n\n# リスト\nkeywords = [\"GA4\", \"SEO\", \"広告運用\"]\n\n# 辞書\ncampaign = {\n    \"name\": \"春キャンペーン\",\n    \"budget\": 500000,\n    \"ctr\": 3.5\n}\n```\n\n## 制御構文\n\n```python\n# if文: CVR判定\ncvr = 2.5\nif cvr >= 3.0:\n    print(\"目標達成\")\nelif cvr >= 2.0:\n    print(\"改善の余地あり\")\nelse:\n    print(\"要改善\")\n\n# for文: キーワード処理\nfor kw in keywords:\n    print(f\"キーワード: {kw}\")\n```\n\n## マーケ実務でよく使うパターン\n\n```python\n# 広告データの集計\ncampaigns = [\n    {\"name\": \"A\", \"cost\": 100000, \"cv\": 10},\n    {\"name\": \"B\", \"cost\": 200000, \"cv\": 30},\n]\n\nfor c in campaigns:\n    cpa = c[\"cost\"] / c[\"cv\"]\n    print(f\"{c['name']}: CPA = ¥{cpa:,.0f}\")\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 演習: Python基本文法（変数・型・制御構文）を実践してみよう\n\n以下のコードの空欄を埋めて、実際に動くスクリプトを完成させましょう。",
+        "starterCode": "# Python基本文法（変数・型・制御構文）の演習\n# TODO: 以下のコードを完成させてください\n\nprint('演習を完成させましょう')",
+        "hints": [
+          "Python基本文法（変数・型・制御構文）の基本構文を確認しましょう",
+          "公式ドキュメントを参照してください",
+          "エラーメッセージをよく読んで対処しましょう"
+        ],
+        "answer": "# Python基本文法（変数・型・制御構文）の模範回答\nprint('Python基本文法（変数・型・制御構文）の演習完了！')"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "Python基本文法（変数・型・制御構文）に関する問題1",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          },
+          {
+            "q": "Python基本文法（変数・型・制御構文）に関する問題2",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          },
+          {
+            "q": "Python基本文法（変数・型・制御構文）に関する問題3",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール7-36 完了！\n\n## 習得したポイント\n\n✅ Python基本文法（変数・型・制御構文）の基本概念を理解した\n✅ マーケティング実務での活用方法を把握した\n✅ 関連する技術との違いを説明できる\n✅ 次のステップに進む準備ができた\n\n## 次のステップ\n\n次のモジュール **「7-37: Python関数・辞書・モジュール分割」** に進みましょう。\n\n> 実務チャレンジ: 今回学んだ内容を自社の業務に1つ適用してみましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

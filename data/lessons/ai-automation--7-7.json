@@ -2,33 +2,35 @@
   "id": "ai-automation--7-7",
   "moduleId": "7-7",
   "categoryId": "ai-automation",
-  "title": "コンピュータビジョンの概要",
+  "title": "トークンとコンテキストウィンドウ",
   "sections": [
     {
       "type": "intro",
       "data": {
-        "content": "# AIが「見る」とはどういうことか\n\nコンピュータビジョン（CV）は、AIが画像・動画を認識・理解・生成する技術です。\n\nマーケターにとってビジュアルコンテンツは最重要資産の一つ。Instagram・Pinterest・YouTube・TikTokは視覚情報が主役です。\n\n## マーケターに直結するCV活用\n\n- **広告クリエイティブの自動審査**: 不適切画像のフィルタリング\n- **商品画像の自動タグ付け**: ECサイトの検索精度向上\n- **競合広告の分析**: スクリーンショットからクリエイティブ傾向を把握\n- **顔認識**: 広告に登場する人物の感情・デモグラフィック分析\n- **画像生成AI**: 広告素材・ブランド画像の自動生成\n\n**あなたへの問い**: PinterestやInstagramで「似たような画像」を検索できる機能を使ったことはありますか？その仕組みはどうなっていると思いますか？",
+        "content": "# コスト計算とプロンプト設計の基礎\n\nLLMを使う上で「トークン」と「コンテキストウィンドウ」は避けて通れない概念です。API利用料はトークン数で決まり、1回の会話で処理できる情報量もトークンで制限されます。\n\n## なぜマーケターに必要か\n\n- API費用の見積もり・最適化に直結\n- プロンプトの長さ制限を理解して設計\n- 「AIが途中で忘れる」問題の原因がわかる\n\n**あなたへの問い**: ChatGPTに長い文書を貼り付けたら途中で「話の流れがおかしくなった」経験はありませんか？",
         "diagram": false
       }
     },
     {
       "type": "concept",
       "data": {
-        "content": "# コンピュータビジョンの仕組みとマーケ活用\n\n## AIは画像をどう「見るか」\n\n```\n画像 = ピクセルの数値の集まり\n\n例: 100x100ピクセルのRGBカラー画像\n= 100 × 100 × 3（RGB）= 30,000個の数値\n\nCNNはこの数値パターンから特徴を抽出:\n  層1: 輪郭・エッジを検出\n  層2: 形状（円・四角）を認識\n  層3: テクスチャ・色のパターン\n  層4: 物体の部位（手・顔・ロゴ）\n  出力: 「これはランニングシューズ（信頼度94%）」\n```\n\n## マーケティングで使われる主要CVタスク\n\n### 画像分類\n- ECサイトの商品カテゴリ自動分類\n- 広告素材のブランドガイドライン適合チェック\n\n### 物体検出\n- 画像内の複数商品を同時認識\n- 競合他社ロゴの広告内検出\n\n### 顔・感情認識\n- 広告の人物が適切な感情を表現しているか自動評価\n- OOH（屋外広告）での視聴者反応分析\n\n### 類似画像検索\n- Pinterest・Google画像検索の「類似検索」\n- ビジュアルSEO: ALTテキストだけでなく画像内容でランキング\n\n### 画像生成（Generative CV）\n\n```\nStable Diffusion / DALL-E / Midjourney の仕組み:\n\n1. テキストプロンプト入力\n   「夏の海辺でスポーツドリンクを飲む30代女性、明るい雰囲気」\n\n2. テキストをベクトルに変換（NLP）\n\n3. ノイズから徐々に画像を生成（Diffusionモデル）\n\n4. 出力: 広告素材として使える高品質画像\n```\n\n## CVの限界とマーケターへの注意点\n\n- **バイアス問題**: 学習データに偏りがあると人種・性別等のバイアスが生じる\n- **著作権問題**: 生成画像の権利は国・プラットフォームによって異なる\n- **精度の過信**: 90%の精度 = 10件に1件は誤認識",
+        "content": "# トークンとコンテキストウィンドウ\n\n## トークンとは\n\n```\nトークン化の例（日本語）\n「マーケティング戦略」→ [マーケ][ティング][戦略] = 3トークン\n「AI」→ [AI] = 1トークン\n\nトークン化の例（英語）\n\"marketing\" → [market][ing] = 2トークン\n\"AI\" → [AI] = 1トークン\n\n目安: 日本語1文字 ≒ 1〜2トークン\n      英語1単語 ≒ 1〜1.5トークン\n```\n\n## コンテキストウィンドウ\n\n| モデル | コンテキスト | 目安 |\n|-------|-------------|------|\n| GPT-4o | 128K tokens | 日本語約6万字 |\n| Claude 3.5 | 200K tokens | 日本語約10万字 |\n| Gemini 1.5 Pro | 1M tokens | 日本語約50万字 |\n\n## API料金の計算\n\n```\n料金 = (入力トークン数 × 入力単価) + (出力トークン数 × 出力単価)\n\n例: GPT-4o\n  入力: $2.50/1Mトークン\n  出力: $10.00/1Mトークン\n  \n  1000字の入力 + 500字の出力 ≒\n  2000トークン × $2.50/1M + 1000トークン × $10/1M\n  = $0.005 + $0.01 = $0.015（約2.3円）\n```\n\n## マーケ実務でのコスト最適化\n\n- **入力を簡潔に**: 不要な情報を削ってトークン節約\n- **出力長を制限**: max_tokensパラメータで制御\n- **軽量モデル活用**: 単純タスクはGPT-4o miniやHaikuで十分",
         "diagram": true
       }
     },
     {
       "type": "exercise",
       "data": {
-        "content": "# 演習: 広告画像の自動品質チェックシステムを設計しよう\n\n画像認識AIを使った広告クリエイティブの自動審査システムを設計します。\n\nチェック項目のリストを完成させ、どの違反が最も深刻かスコアリングしてください。",
-        "starterCode": "# 広告クリエイティブ自動審査システム（設計演習）\n\n# 審査ルール定義\n# severity: 1=警告, 2=要確認, 3=即却下\naudit_rules = [\n    {\n        \"rule_id\": \"R001\",\n        \"category\": \"コンプライアンス\",\n        \"check\": \"過度な露出・不適切なコンテンツ\",\n        \"cv_method\": \"画像分類（NSFW検出モデル）\",\n        \"severity\": 3,\n        \"action\": \"即時却下\"\n    },\n    {\n        \"rule_id\": \"R002\",\n        \"category\": \"ブランドガイドライン\",\n        \"check\": \"ロゴの視認性（最小サイズ・配置）\",\n        \"cv_method\": \"物体検出（ロゴ位置・サイズ測定）\",\n        \"severity\": 2,\n        \"action\": \"修正依頼\"\n    },\n    {\n        \"rule_id\": \"R003\",\n        \"category\": \"テキスト量\",\n        \"check\": \"\",  # ← Facebook広告の「テキスト20%ルール」に関するチェック\n        \"cv_method\": \"OCR + テキスト領域の面積計算\",\n        \"severity\": 2,\n        \"action\": \"修正推奨\"\n    },\n    {\n        \"rule_id\": \"R004\",\n        \"category\": \"著作権\",\n        \"check\": \"\",  # ← 競合他社・有名ブランドのロゴが含まれていないかのチェック\n        \"cv_method\": \"物体検出（既知ロゴDBとのマッチング）\",\n        \"severity\": 3,\n        \"action\": \"法務確認後に判断\"\n    },\n    {\n        \"rule_id\": \"R005\",\n        \"category\": \"品質\",\n        \"check\": \"画像解像度・ぼやけ\",\n        \"cv_method\": \"Laplacianフィルタによるシャープネス測定\",\n        \"severity\": 1,\n        \"action\": \"差し替え推奨\"\n    },\n]\n\n# 審査結果シミュレーション\nsample_ad_issues = [\"R003\", \"R005\"]  # この広告で検出された違反\n\nprint(\"=== 広告クリエイティブ審査システム ===\")\nprint(\"審査ルール一覧:\")\nfor rule in audit_rules:\n    severity_label = [\"⚠️低\", \"⚠️中\", \"🚫高\"][rule[\"severity\"]-1]\n    check_display = rule[\"check\"] if rule[\"check\"] else \"（未設定）\"\n    print(f\"  [{rule['rule_id']}] {rule['category']}: {check_display} | 重要度:{severity_label}\")\n\nprint(\"\\n--- 審査結果 ---\")\nfor rule in audit_rules:\n    if rule[\"rule_id\"] in sample_ad_issues:\n        print(f\"違反検出 [{rule['rule_id']}]: {rule['check']} → {rule['action']}\")\n\nmax_severity = max(\n    rule[\"severity\"] for rule in audit_rules \n    if rule[\"rule_id\"] in sample_ad_issues\n)\nfinal_decision = [\"配信承認（修正推奨）\", \"配信保留（修正要）\", \"配信却下\"][max_severity-1]\nprint(f\"\\n最終判定: {final_decision}\")",
-        "hints": [
-          "R003の「テキスト量」チェックはFacebook/Meta広告のポリシーに関連します。画像内のテキストが画像面積の20%を超えると配信が制限される（現在は廃止されましたが概念は重要）。",
-          "R004の「著作権」チェックは、競合他社のロゴ・有名ブランドのロゴが意図せず広告に含まれていないか確認するものです。",
-          "sample_ad_issuesを変えて、異なる違反の組み合わせで最終判定がどう変わるか確認しましょう。['R001']を追加すると即却下になります。"
-        ],
-        "answer": "# 広告クリエイティブ自動審査システム\n\naudit_rules = [\n    {\n        \"rule_id\": \"R001\",\n        \"category\": \"コンプライアンス\",\n        \"check\": \"過度な露出・不適切なコンテンツ\",\n        \"cv_method\": \"画像分類（NSFW検出モデル）\",\n        \"severity\": 3,\n        \"action\": \"即時却下\"\n    },\n    {\n        \"rule_id\": \"R002\",\n        \"category\": \"ブランドガイドライン\",\n        \"check\": \"ロゴの視認性（最小サイズ・配置）\",\n        \"cv_method\": \"物体検出（ロゴ位置・サイズ測定）\",\n        \"severity\": 2,\n        \"action\": \"修正依頼\"\n    },\n    {\n        \"rule_id\": \"R003\",\n        \"category\": \"テキスト量\",\n        \"check\": \"画像内テキスト面積が全体の20%超\",\n        \"cv_method\": \"OCR + テキスト領域の面積計算\",\n        \"severity\": 2,\n        \"action\": \"修正推奨\"\n    },\n    {\n        \"rule_id\": \"R004\",\n        \"category\": \"著作権\",\n        \"check\": \"競合・第三者ブランドのロゴ無断使用\",\n        \"cv_method\": \"物体検出（既知ロゴDBとのマッチング）\",\n        \"severity\": 3,\n        \"action\": \"法務確認後に判断\"\n    },\n    {\n        \"rule_id\": \"R005\",\n        \"category\": \"品質\",\n        \"check\": \"画像解像度・ぼやけ\",\n        \"cv_method\": \"Laplacianフィルタによるシャープネス測定\",\n        \"severity\": 1,\n        \"action\": \"差し替え推奨\"\n    },\n]\n\nsample_ad_issues = [\"R003\", \"R005\"]\n\nprint(\"=== 広告クリエイティブ審査システム ===\")\nfor rule in audit_rules:\n    severity_label = [\"低\", \"中\", \"高\"][rule[\"severity\"]-1]\n    print(f\"  [{rule['rule_id']}] {rule['category']}: {rule['check']} | 重要度:{severity_label}\")\n\nprint(\"\\n--- 審査結果 ---\")\nfor rule in audit_rules:\n    if rule[\"rule_id\"] in sample_ad_issues:\n        print(f\"違反検出 [{rule['rule_id']}]: {rule['check']} → {rule['action']}\")\n\nmax_severity = max(rule[\"severity\"] for rule in audit_rules if rule[\"rule_id\"] in sample_ad_issues)\nfinal_decision = [\"配信承認（修正推奨）\", \"配信保留（修正要）\", \"配信却下\"][max_severity-1]\nprint(f\"\\n最終判定: {final_decision}\")"
+        "type": "interactive",
+        "data": {
+          "content": "# 演習: トークン数とAPI料金を計算しよう",
+          "htmlContent": "<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#0f172a;color:#e2e8f0;font-family:system-ui,sans-serif;padding:24px;min-height:100vh}.title{font-size:1.3rem;font-weight:700;margin-bottom:16px}.quiz-item{background:#1e293b;border:2px solid #334155;border-radius:10px;padding:16px;margin-bottom:12px}.quiz-item .q{font-weight:600;margin-bottom:12px;font-size:.95rem}.options{display:flex;gap:8px;flex-wrap:wrap}.opt{background:#334155;border:2px solid #475569;border-radius:8px;padding:10px 16px;cursor:pointer;transition:all .2s;font-size:.85rem}.opt:hover{border-color:#3b82f6}.opt.selected{border-color:#3b82f6;background:#1e3a5f}.opt.correct{border-color:#10b981;background:#052e16}.opt.wrong{border-color:#ef4444;background:#2a0f0f}.btn{background:#3b82f6;color:#fff;border:none;border-radius:8px;padding:12px 28px;font-size:1rem;font-weight:600;cursor:pointer;margin-top:8px}.btn:hover{background:#2563eb}.result{margin-top:16px;padding:14px;border-radius:10px;font-weight:600;display:none}.feedback{margin-top:8px;font-size:.8rem;color:#94a3b8;display:none}</style></head><body><div class=\"title\">演習: トークン数とAPI料金を計算しよう</div><div id=\"questions\"></div><button class=\"btn\" onclick=\"check()\">回答を確認</button><div class=\"result\" id=\"result\"></div><script>const qs=[{q:\"日本語「マーケティングオートメーション」は約何トークン？\",opts:[\"3トークン\",\"8トークン\",\"15トークン\",\"20トークン\"],ans:1,exp:\"日本語は1文字1〜2トークン。12文字で約8トークン\"},{q:\"GPT-4oのコンテキストウィンドウ128Kトークンは日本語約何万字？\",opts:[\"約2万字\",\"約6万字\",\"約20万字\",\"約50万字\"],ans:1,exp:\"日本語1文字≒2トークンなので128K÷2≒6万字\"},{q:\"API料金を最も効果的に削減する方法は？\",opts:[\"高性能PCを使う\",\"入力テキストを簡潔にしトークン数を減らす\",\"夜間に実行する\",\"複数APIキーを使う\"],ans:1,exp:\"料金はトークン数に比例。不要情報を削りトークンを節約するのが最も効果的\"},{q:\"Claudeの200Kコンテキストの利点は？\",opts:[\"料金が安い\",\"長い文書全体を1回で読み込み分析できる\",\"画像処理が速い\",\"音声認識精度が高い\"],ans:1,exp:\"200Kトークンで日本語約10万字。長い報告書や複数文書を一括分析可能\"}];const container=document.getElementById(\"questions\");const selections=new Array(qs.length).fill(-1);qs.forEach((q,i)=>{const div=document.createElement(\"div\");div.className=\"quiz-item\";div.innerHTML=`<div class=\"q\">${i+1}. ${q.q}</div><div class=\"options\">${q.opts.map((o,j)=>`<div class=\"opt\" data-q=\"${i}\" data-o=\"${j}\" onclick=\"sel(${i},${j})\">${o}</div>`).join(\"\")}</div><div class=\"feedback\" id=\"fb-${i}\"></div>`;container.appendChild(div)});function sel(qi,oi){selections[qi]=oi;document.querySelectorAll(`[data-q=\"${qi}\"]`).forEach(el=>{el.className=el.dataset.o==oi?\"opt selected\":\"opt\"})}function check(){let score=0;qs.forEach((q,i)=>{const fb=document.getElementById(\"fb-\"+i);document.querySelectorAll(`[data-q=\"${i}\"]`).forEach(el=>{const oi=parseInt(el.dataset.o);if(oi===q.ans)el.className=\"opt correct\";else if(oi===selections[i])el.className=\"opt wrong\";else el.className=\"opt\"});fb.textContent=q.exp;fb.style.display=\"block\";if(selections[i]===q.ans)score++});const r=document.getElementById(\"result\");r.style.display=\"block\";const ok=score>=qs.length-1;r.style.background=ok?\"#052e16\":\"#2a0f0f\";r.style.border=ok?\"2px solid #10b981\":\"2px solid #ef4444\";r.style.color=ok?\"#10b981\":\"#ef4444\";r.textContent=`${score}/${qs.length}問正解！`}</script></body></html>",
+          "checkpoints": [
+            "トークンの概念とカウント方法を理解した",
+            "API料金の計算方法を把握した",
+            "コスト最適化の方法を実務に適用できる"
+          ]
+        }
       }
     },
     {
@@ -36,37 +38,37 @@
       "data": {
         "questions": [
           {
-            "q": "PinterestやGoogleの「この画像に似た商品を探す」機能に使われているCVタスクはどれですか？",
+            "q": "トークンの説明として正しいのは？",
             "options": [
-              "顔認識",
-              "画像生成",
-              "類似画像検索（画像をベクトル化して類似度比較）",
-              "感情認識"
-            ],
-            "correct": 2,
-            "explanation": "類似画像検索は画像をベクトル（数値列）に変換し、そのベクトル空間内での距離が近い画像を返す仕組みです。テキスト検索と違い、「言葉では説明しにくい色・形・スタイル」での検索が可能です。"
-          },
-          {
-            "q": "AI画像生成ツール（DALL-E・Stable Diffusion等）を広告素材に使う際に最も重要なリスクはどれですか？",
-            "options": [
-              "生成に時間がかかりすぎること",
-              "著作権・ライセンス問題、バイアス、ブランドガイドライン適合性",
-              "解像度が低すぎて印刷できないこと",
-              "色再現性がRGB限定でCMYKに変換できないこと"
+              "1文字=1トークン固定",
+              "LLMがテキストを処理する最小単位",
+              "APIキーの別名",
+              "1単語=1トークン固定"
             ],
             "correct": 1,
-            "explanation": "AI生成画像の著作権は国・プラットフォームによって未整備な部分が多いです。また、学習データに含まれる人種・性別バイアスが生成画像に反映されるリスクや、ブランドカラー・ガイドラインとの不整合も重要な問題です。"
+            "explanation": "トークンはLLMのテキスト処理単位。言語やモデルにより分割方法が異なる。"
           },
           {
-            "q": "Meta（Facebook）広告でAIを使った自動クリエイティブ最適化を行う際、CVが果たす役割はどれですか？",
+            "q": "コンテキストウィンドウを超えるとどうなる？",
             "options": [
-              "ユーザーの購買意欲をリアルタイムで顔認識で判定する",
-              "広告画像の内容を理解して、どのオーディエンスに最適かを判断する",
-              "広告のテキストコピーを自動翻訳する",
-              "広告の入札単価をリアルタイムで調整する"
+              "自動要約される",
+              "古い情報が切り捨てられエラーや精度低下が起きる",
+              "料金が2倍になる",
+              "別モデルに自動切替"
             ],
             "correct": 1,
-            "explanation": "MetaのAIは広告画像の内容（商品カテゴリ・シーン・感情トーン等）をCVで解析し、どのターゲット属性に響くかを過去データと照合します。これにより「この画像は30代女性に効果的」という判断が自動化されています。"
+            "explanation": "ウィンドウ超過で古い情報が失われ、会話の一貫性や精度が低下する。"
+          },
+          {
+            "q": "1000字の入力+500字出力のGPT-4o API料金は約いくら？",
+            "options": [
+              "約0.1円",
+              "約2.3円",
+              "約50円",
+              "約500円"
+            ],
+            "correct": 1,
+            "explanation": "入力2000トークン×$2.50/1M+出力1000トークン×$10/1M≒$0.015≒約2.3円"
           }
         ]
       }
@@ -74,7 +76,7 @@
     {
       "type": "summary",
       "data": {
-        "content": "# モジュール7-7 完了！\n\nコンピュータビジョンのマーケティング活用と注意点を理解しました。\n\n## 習得したポイント\n\n✅ AIが画像をピクセルの数値パターンとして処理することを理解した\n✅ 画像分類・物体検出・類似検索・画像生成の4タスクをマーケ活用で説明できる\n✅ 広告クリエイティブ自動審査システムの設計考え方を体験した\n✅ AI生成画像の著作権・バイアスリスクを認識した\n\n## 次のステップ\n\n次のモジュール **「7-8: 生成AI（Generative AI）の登場と衝撃」** では、ChatGPT・Midjourney登場がマーケティング業界にもたらした変化と、具体的な活用領域を整理します。\n\n> 実務チャレンジ: DALL-Eや Stable DiffusionなどのAI画像生成ツールで、自社ブランドの商品・サービスをイメージした画像を3枚生成してみましょう。ブランドガイドラインと比較してどんな差異があるか確認してください。",
+        "content": "# モジュール7-7 完了！\n\n## 習得したポイント\n\n✅ トークンの概念と日本語/英語でのカウント目安を把握した\n✅ 主要モデルのコンテキストウィンドウサイズを比較できる\n✅ API料金の計算方法を理解した\n✅ コスト最適化の実践的な方法を知った\n\n## 次のステップ\n\n次のモジュール **「7-8: 主要LLMモデル比較」** で各モデルの特徴を用途別に比較します。\n\n> 実務チャレンジ: OpenAIのTokenizerツール（platform.openai.com/tokenizer）で、自社のプロンプトが何トークンか確認してみましょう。",
         "diagram": false
       }
     }

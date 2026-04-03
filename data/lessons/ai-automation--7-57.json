@@ -1,0 +1,82 @@
+{
+  "id": "ai-automation--7-57",
+  "moduleId": "7-57",
+  "categoryId": "ai-automation",
+  "title": "ツール詳解: Bash・Grep・Glob",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# コマンドラインを味方にする\n\nマーケターが「コマンドライン」と聞くと身構えるかもしれません。しかしClaude Codeを通じてなら、自然言語で指示するだけでコマンドが実行されます。\n\nBash・Grep・Globの3ツールを理解すると、「フォルダ内の全CSVから特定キーワードを含む行を探す」「昨日更新されたファイルだけ一覧にする」といった操作が一瞬で完了します。\n\nExcelでフィルタをかけたりフォルダを目視で探したりする時間が、劇的に短縮されます。\n\n**あなたへの問い**: 「あのファイルどこだっけ？」とフォルダを探し回った経験は今週ありましたか？",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# Bash・Grep・Globの3ツール\n\n## Bash: コマンドを実行する\n\nターミナルコマンドを何でも実行できる万能ツール。git操作、Python実行、ファイル操作など。\n\n```\nBash・Grep・Globの使い分け\n├── Bash: 汎用コマンド実行\n│   ├── git status / git commit\n│   ├── python script.py\n│   └── npm run build\n├── Grep: ファイル内容を検索\n│   ├── 特定キーワードを含むファイルを発見\n│   ├── 正規表現で複雑なパターン検索\n│   └── include/excludeでファイル種別を絞り込み\n└── Glob: ファイル名で検索\n    ├── *.csv でCSVファイル一覧\n    ├── **/report*.md で全階層のレポート検索\n    └── ディレクトリ構造の把握\n```\n\n## Grep: 中身で探す\n\n「この単語が書かれているファイルはどれ？」を高速に見つけます。\n\n- `pattern: \"CVR\"` → CVRという文字列を含むファイル\n- `include: \"*.md\"` → Markdownファイルだけに絞り込み\n- 正規表現OK: `\"CVR.*[0-9]+%\"` で「CVR + 数値%」のパターンを検索\n\n## Glob: 名前で探す\n\n「このパターンに一致するファイル名は？」を見つけます。\n\n- `*.csv` → カレントフォルダのCSV\n- `**/*.json` → 全階層のJSONファイル\n- `reports/2024-*` → 2024年のレポート一覧\n\n## マーケ実務での活用例\n\n| やりたいこと | ツール | 指示例 |\n|-------------|--------|--------|\n| 先月のレポートファイルを探す | Glob | 「reports/以下の2024-03を含むファイルを探して」 |\n| CVRに言及しているドキュメントを探す | Grep | 「ドキュメント内でCVRに言及している箇所を全部見つけて」 |\n| Pythonスクリプトを実行する | Bash | 「analysis.pyを実行して結果を見せて」 |\n| Gitの変更履歴を確認する | Bash | 「最近のコミット5件を見せて」 |",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "type": "interactive",
+        "content": "# 演習: Bash・Grep・Globの使い分けマッチング\n\n左の作業と右のツールを正しくマッチングしてください。",
+        "htmlContent": "<!DOCTYPE html><html><head><meta charset=\"utf-8\"><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#0f172a;color:#e2e8f0;font-family:system-ui,sans-serif;padding:24px;min-height:100vh}.title{font-size:1.3rem;font-weight:700;margin-bottom:8px}.desc{color:#94a3b8;margin-bottom:20px;font-size:.9rem}.match-container{display:flex;gap:24px;margin-bottom:16px}.column{flex:1}.col-title{font-weight:700;font-size:.85rem;color:#8b5cf6;margin-bottom:10px}.task-card{background:#1e293b;border:1px solid #334155;border-radius:8px;padding:10px 14px;margin-bottom:8px;font-size:.85rem;line-height:1.4;cursor:pointer;transition:all .2s}.task-card:hover{border-color:#3b82f6}.task-card.selected{border-color:#f59e0b;box-shadow:0 0 8px rgba(245,158,11,.3)}.task-card.correct{border-color:#10b981;background:rgba(16,185,129,.08)}.task-card.wrong{border-color:#ef4444;background:rgba(239,68,68,.08)}.task-card.matched{opacity:.6}.tool-card{background:#1e293b;border:2px solid #475569;border-radius:8px;padding:12px 16px;margin-bottom:8px;font-size:.95rem;font-weight:700;cursor:pointer;transition:all .2s;text-align:center}.tool-card:hover{border-color:#3b82f6}.tool-card.selected{border-color:#f59e0b;box-shadow:0 0 8px rgba(245,158,11,.3)}.pairs{margin-top:12px;font-size:.85rem;color:#94a3b8}.pair{padding:4px 0}.pair .tool-tag{display:inline-block;padding:2px 8px;border-radius:4px;font-weight:600;font-size:.8rem;margin-left:8px}.pair .tool-tag.Bash{background:rgba(59,130,246,.15);color:#60a5fa}.pair .tool-tag.Grep{background:rgba(16,185,129,.15);color:#34d399}.pair .tool-tag.Glob{background:rgba(245,158,11,.15);color:#fbbf24}.btn{background:#3b82f6;color:#fff;border:none;padding:10px 24px;border-radius:8px;cursor:pointer;font-size:.95rem;margin-top:12px}.btn:hover{background:#2563eb}.btn.reset{background:#475569;margin-left:8px}.score{margin-top:12px;padding:12px;border-radius:8px;font-weight:600;display:none}.score.show{display:block;background:rgba(16,185,129,.15);color:#10b981;border:1px solid #10b981}</style></head><body><div class=\"title\">ツールマッチング</div><div class=\"desc\">左の作業をクリック後、右のツールをクリックしてマッチング</div><div class=\"match-container\"><div class=\"column\"><div class=\"col-title\">作業</div><div id=\"tasks\"></div></div><div class=\"column\"><div class=\"col-title\">ツール</div><div id=\"tools\"></div></div></div><div class=\"pairs\" id=\"pairs\"></div><button class=\"btn\" onclick=\"check()\">回答を確認</button><button class=\"btn reset\" onclick=\"resetAll()\">リセット</button><div class=\"score\" id=\"score\"></div><script>const tasks=[{id:0,text:\"フォルダ内の全CSVファイルを一覧表示\",answer:\"Glob\"},{id:1,text:\"レポート内で『直帰率』に言及している箇所を検索\",answer:\"Grep\"},{id:2,text:\"Pythonの分析スクリプトを実行\",answer:\"Bash\"},{id:3,text:\"全Markdownファイルから『TODO』を検索\",answer:\"Grep\"},{id:4,text:\"gitの最新コミットログを確認\",answer:\"Bash\"},{id:5,text:\"reports/以下のファイル構成を把握\",answer:\"Glob\"}];const toolNames=[\"Bash\",\"Grep\",\"Glob\"];let selectedTask=null;let matches={};const tasksEl=document.getElementById(\"tasks\");const toolsEl=document.getElementById(\"tools\");tasks.forEach(t=>{const div=document.createElement(\"div\");div.className=\"task-card\";div.textContent=t.text;div.dataset.id=t.id;div.onclick=()=>{document.querySelectorAll(\".task-card\").forEach(c=>c.classList.remove(\"selected\"));if(!div.classList.contains(\"matched\")){div.classList.add(\"selected\");selectedTask=t.id}};tasksEl.appendChild(div)});toolNames.forEach(name=>{const div=document.createElement(\"div\");div.className=\"tool-card\";div.textContent=name;div.onclick=()=>{if(selectedTask!==null){matches[selectedTask]=name;const taskEl=document.querySelector('.task-card[data-id=\"'+selectedTask+'\"]');taskEl.classList.remove(\"selected\");taskEl.classList.add(\"matched\");selectedTask=null;renderPairs()}};toolsEl.appendChild(div)});function renderPairs(){const pairsEl=document.getElementById(\"pairs\");pairsEl.innerHTML=\"<strong>マッチング結果:</strong>\";Object.keys(matches).forEach(id=>{const task=tasks.find(t=>t.id==id);const p=document.createElement(\"div\");p.className=\"pair\";p.innerHTML=task.text+'<span class=\"tool-tag '+matches[id]+'\">'+matches[id]+\"</span>\";pairsEl.appendChild(p)})}function resetAll(){matches={};selectedTask=null;document.querySelectorAll(\".task-card\").forEach(c=>{c.classList.remove(\"selected\",\"matched\",\"correct\",\"wrong\")});document.getElementById(\"pairs\").innerHTML=\"\";document.getElementById(\"score\").classList.remove(\"show\")}function check(){let c=0;tasks.forEach(t=>{const el=document.querySelector('.task-card[data-id=\"'+t.id+'\"]');el.classList.remove(\"correct\",\"wrong\",\"matched\");if(matches[t.id]===t.answer){el.classList.add(\"correct\");c++}else if(matches[t.id]){el.classList.add(\"wrong\")}});const s=document.getElementById(\"score\");s.classList.add(\"show\");s.textContent=\"スコア: \"+c+\"/\"+tasks.length+(c===tasks.length?\" パーフェクト！\":\" Bash=実行、Grep=内容検索、Glob=名前検索です\")}</script></body></html>",
+        "checkpoints": [
+          "Bash・Grep・Globの役割の違いを理解した",
+          "ファイル名検索（Glob）と内容検索（Grep）を使い分けられる",
+          "マーケ実務でのコマンドライン活用をイメージできた"
+        ]
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "「レポートフォルダ内でCVRに言及しているMarkdownファイルを探す」場合に使うべきツールはどれですか？",
+            "options": [
+              "Bash",
+              "Glob",
+              "Grep",
+              "Read"
+            ],
+            "correct": 2,
+            "explanation": "ファイルの内容からキーワードを検索するにはGrepが最適です。Globはファイル名のパターン検索、Bashは汎用コマンド実行に使います。"
+          },
+          {
+            "q": "Globツールのパターン **/*.csv が意味するのはどれですか？",
+            "options": [
+              "カレントフォルダのCSVファイルのみ",
+              "全階層のサブフォルダを含むすべてのCSVファイル",
+              "csvという名前のフォルダ",
+              "最新のCSVファイル1つ"
+            ],
+            "correct": 1,
+            "explanation": "**はすべてのサブフォルダを再帰的に検索することを意味します。**/*.csvは全階層のCSVファイルを見つけます。"
+          },
+          {
+            "q": "Bashツールの使用が推奨されるのはどのような場合ですか？",
+            "options": [
+              "ファイルの中身を検索するとき",
+              "ファイル名のパターンで探すとき",
+              "gitコマンドやPythonスクリプトの実行",
+              "ファイルの内容を読むとき"
+            ],
+            "correct": 2,
+            "explanation": "Bashはgit操作、Pythonスクリプト実行、npm buildなど、汎用的なコマンド実行に使います。ファイル検索にはGrep/Glob、ファイル読み取りにはReadがそれぞれ専用ツールとしてあります。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール7-57 完了！\n\n## 習得したポイント\n\n✅ Bash（実行）・Grep（内容検索）・Glob（名前検索）の3ツールを把握した\n✅ ファイル名で探すか内容で探すかでGlob/Grepを使い分けられる\n✅ Bashの汎用性と注意点（パーミッション確認が重要）を理解した\n✅ マーケ実務での具体的な活用シーンをイメージできた\n\n## 次のステップ\n\n次のモジュール **「7-58: エージェントとサブエージェントの仕組み」** では、Claude Codeの内部構造であるAgent/Subagentの役割分担を学びます。\n\n> 実務チャレンジ: Claude Codeに「このプロジェクトのファイル構成を教えて」と聞いて、GlobとReadがどう使われるか観察してみましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

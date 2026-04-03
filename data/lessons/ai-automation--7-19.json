@@ -1,0 +1,84 @@
+{
+  "id": "ai-automation--7-19",
+  "moduleId": "7-19",
+  "categoryId": "ai-automation",
+  "title": "プロンプトチェーンとパイプライン設計",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 複数プロンプトを連鎖させて複雑なタスクを実行\n\n1回のプロンプトでは対応できない複雑なタスクも、複数のプロンプトを「チェーン（連鎖）」させることで実現できます。\n\n## なぜチェーンが必要か\n\n- 1プロンプトの出力が次のプロンプトの入力になる\n- 各ステップで品質チェックを挟める\n- 大きなタスクを小さく分解できる\n\n**あなたへの問い**: SEO記事を書くとき「構成→本文→校正」と段階的に依頼したことはありますか？",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# プロンプトチェーンの設計\n\n## 基本パターン\n\n```\nプロンプトチェーンの構造\n├── Step 1: 情報抽出・整理\n│   └── 入力: 生データ → 出力: 構造化データ\n├── Step 2: 分析・判断\n│   └── 入力: 構造化データ → 出力: インサイト\n├── Step 3: コンテンツ生成\n│   └── 入力: インサイト → 出力: ドラフト\n└── Step 4: 品質チェック\n    └── 入力: ドラフト → 出力: 修正版\n```\n\n## SEO記事生成パイプラインの例\n\n1. **キーワード分析**: 「○○」の検索意図を分析→JSON\n2. **記事構成**: 検索意図に基づくH2/H3構成→Markdown\n3. **本文生成**: 構成に従い各セクション執筆→Markdown\n4. **品質チェック**: ファクトチェック・トーン確認→修正指示\n5. **最終仕上げ**: 修正反映→完成原稿\n\n## 設計のポイント\n\n| ポイント | 説明 |\n|----------|------|\n| 各ステップの出力形式を統一 | JSON等で受け渡しを明確に |\n| エラーハンドリング | 各ステップで品質チェック |\n| 並列化可能なステップを特定 | 処理速度向上 |",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "type": "interactive",
+        "data": {
+          "content": "# 演習: プロンプトチェーンとパイプライン設計の理解度チェック\n\n学んだ内容をインタラクティブな演習で確認しましょう。",
+          "htmlContent": "<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#0f172a;color:#e2e8f0;font-family:system-ui,sans-serif;padding:24px;min-height:100vh}.title{font-size:1.3rem;font-weight:700;margin-bottom:16px}.quiz-item{background:#1e293b;border:2px solid #334155;border-radius:10px;padding:16px;margin-bottom:12px}.quiz-item .q{font-weight:600;margin-bottom:12px;font-size:.95rem}.options{display:flex;gap:8px;flex-wrap:wrap}.opt{background:#334155;border:2px solid #475569;border-radius:8px;padding:10px 16px;cursor:pointer;transition:all .2s;font-size:.85rem}.opt:hover{border-color:#3b82f6}.opt.selected{border-color:#3b82f6;background:#1e3a5f}.opt.correct{border-color:#10b981;background:#052e16}.opt.wrong{border-color:#ef4444;background:#2a0f0f}.btn{background:#3b82f6;color:#fff;border:none;border-radius:8px;padding:12px 28px;font-size:1rem;font-weight:600;cursor:pointer;margin-top:8px}.btn:hover{background:#2563eb}.result{margin-top:16px;padding:14px;border-radius:10px;font-weight:600;display:none}.feedback{margin-top:8px;font-size:.8rem;color:#94a3b8;display:none}</style></head><body><div class=\"title\">プロンプトチェーンとパイプライン設計 理解度チェック</div><div id=\"questions\"></div><button class=\"btn\" onclick=\"check()\">回答を確認</button><div class=\"result\" id=\"result\"></div><script>const qs=[{q:\"このモジュールの重要概念を選択してください\",opts:[\"選択肢A\",\"選択肢B\",\"選択肢C\"],ans:0,exp:\"正解の解説\"}];const container=document.getElementById(\"questions\");const selections=new Array(qs.length).fill(-1);qs.forEach((q,i)=>{const div=document.createElement(\"div\");div.className=\"quiz-item\";div.innerHTML=`<div class=\"q\">${i+1}. ${q.q}</div><div class=\"options\">${q.opts.map((o,j)=>`<div class=\"opt\" data-q=\"${i}\" data-o=\"${j}\" onclick=\"sel(${i},${j})\">${o}</div>`).join(\"\")}</div><div class=\"feedback\" id=\"fb-${i}\"></div>`;container.appendChild(div)});function sel(qi,oi){selections[qi]=oi;document.querySelectorAll(`[data-q=\"${qi}\"]`).forEach(el=>{el.className=el.dataset.o==oi?\"opt selected\":\"opt\"})}function check(){let score=0;qs.forEach((q,i)=>{const fb=document.getElementById(\"fb-\"+i);document.querySelectorAll(`[data-q=\"${i}\"]`).forEach(el=>{const oi=parseInt(el.dataset.o);if(oi===q.ans)el.className=\"opt correct\";else if(oi===selections[i])el.className=\"opt wrong\";else el.className=\"opt\"});fb.textContent=q.exp;fb.style.display=\"block\";if(selections[i]===q.ans)score++});const r=document.getElementById(\"result\");r.style.display=\"block\";const ok=score>=qs.length-1;r.style.background=ok?\"#052e16\":\"#2a0f0f\";r.style.border=ok?\"2px solid #10b981\":\"2px solid #ef4444\";r.style.color=ok?\"#10b981\":\"#ef4444\";r.textContent=`${score}/${qs.length}問正解！`}</script></body></html>",
+          "checkpoints": [
+            "主要概念を理解した",
+            "マーケティング実務への適用を考えられた",
+            "次のステップを把握した"
+          ]
+        }
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "プロンプトチェーンとパイプライン設計に関する問題1",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          },
+          {
+            "q": "プロンプトチェーンとパイプライン設計に関する問題2",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          },
+          {
+            "q": "プロンプトチェーンとパイプライン設計に関する問題3",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール7-19 完了！\n\n## 習得したポイント\n\n✅ プロンプトチェーンとパイプライン設計の基本概念を理解した\n✅ マーケティング実務での活用方法を把握した\n✅ 関連する技術との違いを説明できる\n✅ 次のステップに進む準備ができた\n\n## 次のステップ\n\n次のモジュール **「7-20: プロンプトの評価メトリクスとイテレーション」** に進みましょう。\n\n> 実務チャレンジ: 今回学んだ内容を自社の業務に1つ適用してみましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

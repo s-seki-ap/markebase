@@ -1,0 +1,82 @@
+{
+  "id": "ai-automation--7-60",
+  "moduleId": "7-60",
+  "categoryId": "ai-automation",
+  "title": "フック（Hooks）の設計と活用",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 「うっかりミス」をシステムで防ぐ\n\nマーケターなら「本番環境に誤って下書きを公開してしまった」「クライアント名を間違えたまま送ってしまった」という冷や汗を経験したことがあるかもしれません。\n\nClaude Codeのフック（Hooks）は、ツール実行の前後に自動チェックや後処理を挿入する仕組みです。「ファイル保存前に必ずクライアント名をチェック」「コマンド実行後にログを記録」といったガードレールを自動化できます。\n\n人間の注意力に頼らず、仕組みでミスを防ぐ――これがフックの価値です。\n\n**あなたへの問い**: 過去に「チェックリストを確認し忘れた」ことで起きたトラブルはありますか？それが自動化されていたら防げましたか？",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# Hooksの3つのタイプ\n\n## フックの全体像\n\n```\nHooksの種類と実行タイミング\n├── PreTool Hook（ツール実行前）\n│   ├── ファイル書き込み前のバリデーション\n│   ├── 危険なコマンドのブロック\n│   └── 必須チェック項目の確認\n├── PostTool Hook（ツール実行後）\n│   ├── 実行結果のログ記録\n│   ├── 後処理（フォーマット整形など）\n│   └── 通知の送信\n└── Notification Hook（通知）\n    ├── 長時間タスク完了時の通知\n    └── エラー発生時のアラート\n```\n\n## 設定場所\n\nsettings.jsonの`hooks`セクションに定義します。\n\n## マーケ実務での活用例\n\n**PreTool: 書き込み前チェック**\n- レポートファイルにクライアント実名が含まれていないか確認\n- .envファイルへの書き込みをブロック\n- 本番BQへのDELETE文を検出してブロック\n\n**PostTool: 実行後の自動処理**\n- ファイル保存後にGitステージングを自動実行\n- レポート生成後にPDF変換を実行\n- コマンド実行ログを記録\n\n**Notification: 完了通知**\n- 長時間のデータ分析が完了したらデスクトップ通知\n- エラー発生時にSlack通知\n\n## フックの実行制御\n\n- `matcher`: どのツール・イベントにフックを適用するか\n- `command`: 実行するシェルコマンド\n- フックが非ゼロで終了するとツール実行がブロックされる（PreToolの場合）\n\n## 注意点\n\n- フックが重すぎると全体の処理速度が低下する\n- PreToolフックのブロックは明確な理由がある場合のみ設定\n- テスト環境で十分に検証してから本番運用する",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "type": "interactive",
+        "content": "# 演習: フックの種類とユースケースをマッチングしよう\n\n各ユースケースに対して、PreTool・PostTool・Notificationのどのフックが適切か選んでください。",
+        "htmlContent": "<!DOCTYPE html><html><head><meta charset=\"utf-8\"><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#0f172a;color:#e2e8f0;font-family:system-ui,sans-serif;padding:24px;min-height:100vh}.title{font-size:1.3rem;font-weight:700;margin-bottom:8px}.desc{color:#94a3b8;margin-bottom:20px;font-size:.9rem}.case{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:14px;margin-bottom:10px}.case-text{font-size:.93rem;margin-bottom:10px;line-height:1.5}.hook-btns{display:flex;gap:8px}.h-btn{padding:8px 16px;border-radius:8px;border:1px solid #475569;background:#0f172a;color:#94a3b8;cursor:pointer;font-size:.85rem;transition:all .2s}.h-btn:hover{border-color:#3b82f6;color:#e2e8f0}.h-btn.selected{border-color:#8b5cf6;background:rgba(139,92,246,.15);color:#c4b5fd}.h-btn.correct{border-color:#10b981;background:rgba(16,185,129,.15);color:#10b981}.h-btn.wrong{border-color:#ef4444;background:rgba(239,68,68,.15);color:#ef4444}.btn{background:#3b82f6;color:#fff;border:none;padding:10px 24px;border-radius:8px;cursor:pointer;font-size:.95rem;margin-top:16px}.btn:hover{background:#2563eb}.score{margin-top:12px;padding:12px;border-radius:8px;font-weight:600;display:none}.score.show{display:block;background:rgba(16,185,129,.15);color:#10b981;border:1px solid #10b981}</style></head><body><div class=\"title\">フック種類マッチング</div><div class=\"desc\">各ユースケースに適切なフックタイプを選択してください</div><div id=\"cases\"></div><button class=\"btn\" onclick=\"check()\">回答を確認</button><div class=\"score\" id=\"score\"></div><script>const cases=[{text:\"ファイル保存前にクライアント実名が含まれていないかチェックする\",answer:\"PreTool\"},{text:\"レポート生成後にGitステージングを自動実行する\",answer:\"PostTool\"},{text:\"長時間のBQクエリが完了したらデスクトップ通知を出す\",answer:\"Notification\"},{text:\".envファイルへの書き込みをブロックする\",answer:\"PreTool\"},{text:\"コマンド実行後にログファイルに記録する\",answer:\"PostTool\"},{text:\"エラーが発生したらSlackに通知する\",answer:\"Notification\"}];const hooks=[\"PreTool\",\"PostTool\",\"Notification\"];const container=document.getElementById(\"cases\");cases.forEach((c,i)=>{const div=document.createElement(\"div\");div.className=\"case\";const btns=hooks.map(h=>'<button class=\"h-btn\" data-q=\"'+i+'\" data-val=\"'+h+'\" onclick=\"sel(this)\">'+h+\"</button>\").join(\"\");div.innerHTML='<div class=\"case-text\">'+c.text+'</div><div class=\"hook-btns\">'+btns+\"</div>\";container.appendChild(div)});function sel(btn){btn.parentElement.querySelectorAll(\".h-btn\").forEach(b=>b.classList.remove(\"selected\"));btn.classList.add(\"selected\")}function check(){let correct=0;cases.forEach((c,i)=>{document.querySelectorAll('.h-btn[data-q=\"'+i+'\"]').forEach(b=>{b.classList.remove(\"correct\",\"wrong\");if(b.classList.contains(\"selected\")){if(b.dataset.val===c.answer){b.classList.add(\"correct\");correct++}else b.classList.add(\"wrong\")}if(b.dataset.val===c.answer&&!b.classList.contains(\"selected\"))b.classList.add(\"correct\")})});const s=document.getElementById(\"score\");s.classList.add(\"show\");s.textContent=\"スコア: \"+correct+\"/\"+cases.length+(correct===cases.length?\" パーフェクト！\":\" PreTool=事前チェック、PostTool=事後処理、Notification=通知です\")}</script></body></html>",
+        "checkpoints": [
+          "PreTool・PostTool・Notificationの3種類の違いを理解した",
+          "各フックの実行タイミングを正確に把握した",
+          "マーケ実務でのフック活用をイメージできた"
+        ]
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "PreToolフックが非ゼロで終了した場合、何が起きますか？",
+            "options": [
+              "エラーログが記録されるだけ",
+              "ツールの実行がブロックされる",
+              "フックが再実行される",
+              "ユーザーに確認ダイアログが表示される"
+            ],
+            "correct": 1,
+            "explanation": "PreToolフックが非ゼロの終了コードを返すと、対象のツール実行がブロックされます。これにより危険な操作を事前に防ぐことができます。"
+          },
+          {
+            "q": "「レポート生成後にPDF変換を自動実行」するにはどのフックを使いますか？",
+            "options": [
+              "PreTool Hook",
+              "PostTool Hook",
+              "Notification Hook",
+              "Startup Hook"
+            ],
+            "correct": 1,
+            "explanation": "「実行後」の自動処理にはPostToolフックを使います。Writeツール実行後にPDF変換コマンドを実行するように設定します。"
+          },
+          {
+            "q": "フック設計で最も注意すべき点はどれですか？",
+            "options": [
+              "できるだけ多くのフックを設定する",
+              "フックは一度設定したら変更しない",
+              "フックが重すぎると処理速度が低下する",
+              "フックにはPythonしか使えない"
+            ],
+            "correct": 2,
+            "explanation": "フックはツール実行のたびに走るため、重い処理を設定すると全体の速度が低下します。必要最小限のチェックに留め、テスト環境で十分検証してから導入しましょう。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール7-60 完了！\n\n## 習得したポイント\n\n✅ PreTool（事前チェック）・PostTool（事後処理）・Notification（通知）の3種を理解した\n✅ フックによるガードレール（ミス防止）の仕組みを把握した\n✅ settings.jsonでの設定方法と実行制御を学んだ\n✅ マーケ実務でのフック活用（クライアント名チェック等）をイメージできた\n\n## 次のステップ\n\n次のモジュール **「7-61: MCPサーバーの接続と活用」** では、外部ツールやデータソースをClaude Codeに統合するMCPプロトコルを学びます。\n\n> 実務チャレンジ: 「ファイル保存前にクライアント名の漏洩をチェックする」PreToolフックの仕様を、日本語で設計書として書いてみましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

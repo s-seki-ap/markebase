@@ -1,0 +1,82 @@
+{
+  "id": "ai-automation--7-37",
+  "moduleId": "7-37",
+  "categoryId": "ai-automation",
+  "title": "Python関数・辞書・モジュール分割",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 再利用可能なコードの書き方\n\n同じ処理を何度も書くのは非効率です。関数にまとめ、辞書でデータを構造化し、モジュールに分割することで、保守しやすいコードを書けるようになります。\n\n**あなたへの問い**: 同じ計算式をコピペして何度も使っていませんか？",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# 関数・辞書・モジュール\n\n## 関数の定義と呼び出し\n\n```python\ndef calculate_roas(revenue: float, ad_cost: float) -> float:\n    \"\"\"ROAS（広告費用対効果）を計算する\"\"\"\n    if ad_cost == 0:\n        return 0.0\n    return (revenue / ad_cost) * 100\n\n# 使用例\nroas = calculate_roas(1500000, 500000)\nprint(f\"ROAS: {roas:.1f}%\")  # ROAS: 300.0%\n```\n\n## 辞書（dict）の活用\n\n```python\n# ネストした辞書でデータ構造化\ncampaign_report = {\n    \"campaign_a\": {\n        \"impressions\": 50000,\n        \"clicks\": 2500,\n        \"conversions\": 75,\n        \"cost\": 300000\n    }\n}\n\n# アクセス\nctr = campaign_report[\"campaign_a\"][\"clicks\"] / \\\n      campaign_report[\"campaign_a\"][\"impressions\"] * 100\n```\n\n## モジュール分割\n\n```\nプロジェクト構成例\n├── main.py          # メイン処理\n├── metrics.py       # KPI計算関数\n├── api_client.py    # API連携\n└── utils.py         # ユーティリティ\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 演習: Python関数・辞書・モジュール分割を実践してみよう\n\n以下のコードの空欄を埋めて、実際に動くスクリプトを完成させましょう。",
+        "starterCode": "# Python関数・辞書・モジュール分割の演習\n# TODO: 以下のコードを完成させてください\n\nprint('演習を完成させましょう')",
+        "hints": [
+          "Python関数・辞書・モジュール分割の基本構文を確認しましょう",
+          "公式ドキュメントを参照してください",
+          "エラーメッセージをよく読んで対処しましょう"
+        ],
+        "answer": "# Python関数・辞書・モジュール分割の模範回答\nprint('Python関数・辞書・モジュール分割の演習完了！')"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "Python関数・辞書・モジュール分割に関する問題1",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          },
+          {
+            "q": "Python関数・辞書・モジュール分割に関する問題2",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          },
+          {
+            "q": "Python関数・辞書・モジュール分割に関する問題3",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール7-37 完了！\n\n## 習得したポイント\n\n✅ Python関数・辞書・モジュール分割の基本概念を理解した\n✅ マーケティング実務での活用方法を把握した\n✅ 関連する技術との違いを説明できる\n✅ 次のステップに進む準備ができた\n\n## 次のステップ\n\n次のモジュール **「7-38: Pythonでファイル操作と正規表現」** に進みましょう。\n\n> 実務チャレンジ: 今回学んだ内容を自社の業務に1つ適用してみましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

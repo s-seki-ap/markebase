@@ -1,0 +1,82 @@
+{
+  "id": "ai-automation--7-34",
+  "moduleId": "7-34",
+  "categoryId": "ai-automation",
+  "title": "GASとBigQuery連携・Webアプリ公開",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# BQクエリ結果をスプレッドシートに反映し、Webアプリ化\n\nGASからBigQueryに接続してクエリを実行し、結果をスプレッドシートに書き込む方法を学びます。さらにWebアプリとして公開する手順も解説します。\n\n**あなたへの問い**: BigQueryのデータをスプレッドシートに手動でエクスポートしていませんか？",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# GAS × BigQuery × Webアプリ\n\n## BigQuery連携\n\n```javascript\nfunction queryBigQuery() {\n  const projectId = 'your-project-id';\n  const sql = `\n    SELECT event_date, COUNT(*) as events\n    FROM \\`project.dataset.events\\`\n    WHERE event_date >= '20240101'\n    GROUP BY event_date\n    ORDER BY event_date\n  `;\n  \n  const request = BigQuery.Jobs.query({\n    query: sql, useLegacySql: false\n  }, projectId);\n  \n  // 結果をスプレッドシートに書き込み\n  const sheet = SpreadsheetApp.getActiveSheet();\n  request.rows.forEach((row, i) => {\n    sheet.getRange(i+2, 1, 1, 2)\n      .setValues([[row.f[0].v, row.f[1].v]]);\n  });\n}\n```\n\n## Webアプリ公開\n\n```javascript\n// doGet関数でWebアプリとして公開\nfunction doGet() {\n  return HtmlService.createHtmlOutputFromFile('index');\n}\n```\n\n## 公開手順\n1. デプロイ → 新しいデプロイ → Webアプリ\n2. アクセス権限を設定\n3. URLが発行される",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 演習: GASとBigQuery連携・Webアプリ公開を実践してみよう\n\n以下のコードの空欄を埋めて、実際に動くスクリプトを完成させましょう。",
+        "starterCode": "# GASとBigQuery連携・Webアプリ公開の演習\n# TODO: 以下のコードを完成させてください\n\nprint('演習を完成させましょう')",
+        "hints": [
+          "GASとBigQuery連携・Webアプリ公開の基本構文を確認しましょう",
+          "公式ドキュメントを参照してください",
+          "エラーメッセージをよく読んで対処しましょう"
+        ],
+        "answer": "# GASとBigQuery連携・Webアプリ公開の模範回答\nprint('GASとBigQuery連携・Webアプリ公開の演習完了！')"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "GASとBigQuery連携・Webアプリ公開に関する問題1",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          },
+          {
+            "q": "GASとBigQuery連携・Webアプリ公開に関する問題2",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          },
+          {
+            "q": "GASとBigQuery連携・Webアプリ公開に関する問題3",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール7-34 完了！\n\n## 習得したポイント\n\n✅ GASとBigQuery連携・Webアプリ公開の基本概念を理解した\n✅ マーケティング実務での活用方法を把握した\n✅ 関連する技術との違いを説明できる\n✅ 次のステップに進む準備ができた\n\n## 次のステップ\n\n次のモジュール **「7-35: Python環境構築（venv・pip）」** に進みましょう。\n\n> 実務チャレンジ: 今回学んだ内容を自社の業務に1つ適用してみましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "id": "ai-automation--7-54",
+  "moduleId": "7-54",
+  "categoryId": "ai-automation",
+  "title": "パーミッションモデルとセキュリティ設計",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# AIに「どこまで任せるか」を決める\n\nマーケティング施策の外注で、制作会社に本番環境の管理者権限を渡しますか？普通は必要最小限のアクセスだけ与えますよね。\n\nClaude Codeも同じです。ファイルの読み書き、コマンド実行、Web検索など多彩な機能がありますが、すべてを無条件に許可するのはリスクがあります。\n\n特にクライアントデータを扱うマーケターにとって、「AIが何をできて何をできないか」を設計するのは必須スキルです。\n\n**あなたへの問い**: もしAIが誤って顧客リストを外部に送信したら、どんな問題が起きるでしょうか？",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# Claude Codeのパーミッションモデル\n\n## 3つの許可レベル\n\nClaude Codeのツール実行には3段階の許可レベルがあります。\n\n```\nパーミッションモデル\n├── Allow（常に許可）\n│   └── ファイル読み取り・検索など安全な操作\n├── Ask（毎回確認）\n│   └── ファイル書き込み・コマンド実行など\n└── Deny（常に拒否）\n    └── 危険な操作を明示的にブロック\n```\n\n## 設定方法\n\nsettings.jsonまたはCLAUDE.mdの`Allowed Tools`セクションで設定できます。\n\n- `Read`（ファイル読み取り）: 通常はAllow\n- `Write`（ファイル書き込み）: 用途に応じてAsk or Allow\n- `Bash`（コマンド実行）: 慎重にAsk推奨\n\n## マーケターが押さえるべきセキュリティ原則\n\n**最小権限の原則**: 必要な操作だけを許可し、それ以外はブロックする。\n\n具体例:\n- レポート作成タスク → Read: Allow, Write: Allow（出力フォルダのみ）, Bash: Ask\n- データ分析タスク → Read: Allow, Write: Deny, Bash: Ask（SELECTクエリのみ）\n- クライアントデータ含む作業 → .envやcredentials/フォルダへのアクセスをDeny\n\n## セッションごとの許可\n\n対話中にツール実行の許可を求められたら:\n- 「Yes」: 今回だけ許可\n- 「Yes, always」: このセッション中ずっと許可\n- 「No」: 拒否\n\n意図しない操作が提案された場合は必ず「No」を選びましょう。\n\n## よくあるリスクシナリオ\n\n- `rm -rf` のような破壊的コマンドの実行\n- 機密ファイル（.env、SAキー）の内容表示\n- 本番DBへのDELETE/UPDATE文の実行",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "type": "interactive",
+        "content": "# 演習: セキュリティシナリオ判定\n\nClaude Codeから以下の操作が提案されました。各操作に対して「許可」「確認が必要」「拒否」のいずれかを選んでください。",
+        "htmlContent": "<!DOCTYPE html><html><head><meta charset=\"utf-8\"><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#0f172a;color:#e2e8f0;font-family:system-ui,sans-serif;padding:24px;min-height:100vh}.title{font-size:1.3rem;font-weight:700;margin-bottom:8px}.desc{color:#94a3b8;margin-bottom:20px;font-size:.9rem}.scenario{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:16px;margin-bottom:12px}.scenario-text{font-size:.95rem;margin-bottom:12px;line-height:1.5}.scenario-text code{background:#334155;padding:2px 6px;border-radius:4px;font-size:.85rem}.options{display:flex;gap:8px}.opt-btn{padding:8px 16px;border-radius:8px;border:1px solid #475569;background:#0f172a;color:#e2e8f0;cursor:pointer;font-size:.85rem;transition:all .2s}.opt-btn:hover{border-color:#3b82f6}.opt-btn.selected{border-color:#3b82f6;background:rgba(59,130,246,.15)}.opt-btn.correct{border-color:#10b981;background:rgba(16,185,129,.15);color:#10b981}.opt-btn.wrong{border-color:#ef4444;background:rgba(239,68,68,.15);color:#ef4444}.feedback{font-size:.8rem;margin-top:8px;padding:8px;border-radius:6px;display:none}.feedback.show{display:block}.feedback.pass{background:rgba(16,185,129,.1);color:#10b981}.feedback.fail{background:rgba(239,68,68,.1);color:#ef4444}.btn{background:#3b82f6;color:#fff;border:none;padding:10px 24px;border-radius:8px;cursor:pointer;font-size:.95rem;margin-top:16px}.btn:hover{background:#2563eb}.score{margin-top:16px;padding:12px;border-radius:8px;font-weight:600;display:none}.score.show{display:block;background:rgba(139,92,246,.15);color:#a78bfa;border:1px solid #8b5cf6}</style></head><body><div class=\"title\">セキュリティ判定シミュレーション</div><div class=\"desc\">各操作に対して適切な対応を選んでください</div><div id=\"scenarios\"></div><button class=\"btn\" onclick=\"checkAll()\">回答を確認</button><div class=\"score\" id=\"score\"></div><script>const scenarios=[{text:\"<code>Read</code> でレポート用CSVファイルを読み取る\",answer:\"allow\",explain:\"読み取り専用の操作なのでAllowで問題ありません。\"},{text:\"<code>Bash</code> で <code>rm -rf /tmp/reports</code> を実行する\",answer:\"deny\",explain:\"rm -rfは再帰的な強制削除です。意図しないファイル消失のリスクがあるため拒否が適切です。\"},{text:\"<code>Write</code> で分析結果をoutput/フォルダに保存する\",answer:\"ask\",explain:\"書き込み先が想定内か確認してから許可するのが安全です。\"},{text:\"<code>Bash</code> で <code>cat .env</code> を実行して環境変数を表示する\",answer:\"deny\",explain:\".envにはAPIキーなどの機密情報が含まれます。AIに表示させるべきではありません。\"},{text:\"<code>Bash</code> で <code>git status</code> を実行する\",answer:\"allow\",explain:\"git statusは現在の変更状態を確認する安全な読み取り操作です。\"}];const container=document.getElementById(\"scenarios\");scenarios.forEach((s,i)=>{const div=document.createElement(\"div\");div.className=\"scenario\";div.innerHTML='<div class=\"scenario-text\">'+s.text+'</div><div class=\"options\" data-idx=\"'+i+'\"><button class=\"opt-btn\" data-val=\"allow\" onclick=\"select(this)\">許可（Allow）</button><button class=\"opt-btn\" data-val=\"ask\" onclick=\"select(this)\">確認（Ask）</button><button class=\"opt-btn\" data-val=\"deny\" onclick=\"select(this)\">拒否（Deny）</button></div><div class=\"feedback\" id=\"fb-'+i+'\"></div>';container.appendChild(div)});function select(btn){btn.parentElement.querySelectorAll(\".opt-btn\").forEach(b=>b.classList.remove(\"selected\"));btn.classList.add(\"selected\")}function checkAll(){let correct=0;scenarios.forEach((s,i)=>{const opts=document.querySelector('.options[data-idx=\"'+i+'\"]');const selected=opts.querySelector(\".opt-btn.selected\");const fb=document.getElementById(\"fb-\"+i);opts.querySelectorAll(\".opt-btn\").forEach(b=>{b.classList.remove(\"correct\",\"wrong\")});if(selected){if(selected.dataset.val===s.answer){selected.classList.add(\"correct\");correct++;fb.className=\"feedback show pass\";fb.textContent=\"正解！ \"+s.explain}else{selected.classList.add(\"wrong\");opts.querySelector('.opt-btn[data-val=\"'+s.answer+'\"]').classList.add(\"correct\");fb.className=\"feedback show fail\";fb.textContent=\"不正解。\"+s.explain}}});const sc=document.getElementById(\"score\");sc.classList.add(\"show\");sc.textContent=\"スコア: \"+correct+\"/\"+scenarios.length+\"（\"+(correct===scenarios.length?\"パーフェクト！セキュリティ意識が高いです\":\"間違えたポイントを復習しましょう\")+\"）\"}</script></body></html>",
+        "checkpoints": [
+          "読み取り操作と書き込み操作のリスクの違いを理解した",
+          "破壊的コマンド（rm -rf等）を拒否すべきことを理解した",
+          "機密ファイル（.env等）へのアクセスを制限すべきことを理解した"
+        ]
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "Claude Codeのパーミッションモデルで「最小権限の原則」とは何ですか？",
+            "options": [
+              "できるだけ少ないファイルしか作らないこと",
+              "必要な操作だけを許可しそれ以外をブロックすること",
+              "AIに与えるトークン数を最小にすること",
+              "最も安いAPIプランを選ぶこと"
+            ],
+            "correct": 1,
+            "explanation": "最小権限の原則は、タスクに必要な操作だけを許可し、不要な権限は与えないセキュリティの基本原則です。これにより意図しない操作のリスクを最小化できます。"
+          },
+          {
+            "q": "Claude Codeがbashコマンドの実行を提案してきたとき、最も適切な対応は？",
+            "options": [
+              "常にYesを選んで効率を優先する",
+              "コマンドの内容を確認し、安全な操作のみ許可する",
+              "常にNoを選んで安全を優先する",
+              "Bashツール自体を無効にする"
+            ],
+            "correct": 1,
+            "explanation": "Bashコマンドは便利ですが、内容を確認してから許可するのが適切です。git statusのような安全な操作は許可し、rm -rfのような破壊的操作は拒否するなど、判断力が必要です。"
+          },
+          {
+            "q": "クライアントデータを扱う作業で最も注意すべきパーミッション設定はどれですか？",
+            "options": [
+              "Read権限をDenyにする",
+              ".envやcredentialsフォルダへのアクセスをブロックする",
+              "すべてのBash操作をDenyにする",
+              "Write権限をすべてAllowにする"
+            ],
+            "correct": 1,
+            "explanation": "APIキーやサービスアカウントキーなどの機密情報が含まれるファイルへのアクセスを明示的にブロックすることが最も重要です。Read自体を全面禁止すると作業ができません。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール7-54 完了！\n\n## 習得したポイント\n\n✅ Allow/Ask/Denyの3段階パーミッションモデルを理解した\n✅ 最小権限の原則をClaude Code運用に適用できる\n✅ 破壊的コマンドや機密ファイルへのアクセスを判断できる\n✅ タスク別の推奨パーミッション設定を把握した\n\n## 次のステップ\n\n次のモジュール **「7-55: Claude Codeの設定ファイル体系」** では、settings.jsonや.claude/フォルダの構造と設定の優先順位を学びます。\n\n> 実務チャレンジ: 自分のプロジェクトで「AIにアクセスさせたくないファイル」をリストアップし、CLAUDE.mdの禁止事項に追記してみましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

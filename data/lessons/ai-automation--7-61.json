@@ -1,0 +1,82 @@
+{
+  "id": "ai-automation--7-61",
+  "moduleId": "7-61",
+  "categoryId": "ai-automation",
+  "title": "MCPサーバーの接続と活用",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# AIをあらゆるデータソースに接続する\n\nマーケターの情報源は多岐にわたります。GA4、BigQuery、Slack、スプレッドシート、CRM――これらが分断されていると、データを行き来するだけで時間が消えます。\n\nMCP（Model Context Protocol）は、Claude Codeと外部ツール・データソースを標準化されたプロトコルで接続する仕組みです。いわば「AIの万能アダプター」。\n\nMCPサーバーを接続すれば、「BigQueryから先月のデータを取得して」「Slackに分析結果を投稿して」がClaude Codeの中で完結します。\n\n**あなたへの問い**: 日々の業務で何個のツールを切り替えていますか？それらが1つのインターフェースに統合されたら？",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# MCPの仕組みと接続方法\n\n## MCPとは\n\nModel Context Protocol（MCP）は、LLMと外部ツールを接続する標準プロトコルです。Anthropicが提唱し、オープン仕様として公開されています。\n\n```\nMCPアーキテクチャ\n├── Claude Code（MCPクライアント）\n│   └── ユーザーの指示に応じてMCPサーバーを呼び出す\n├── MCPサーバー（ブリッジ）\n│   ├── BigQuery MCPサーバー\n│   ├── Slack MCPサーバー\n│   ├── GitHub MCPサーバー\n│   └── カスタムMCPサーバー\n└── 外部サービス（データソース）\n    ├── BigQuery / GA4\n    ├── Slack / Teams\n    └── GitHub / Jira\n```\n\n## 設定方法\n\n`.claude/settings.json` の `mcpServers` セクションに接続情報を記述します。\n\n基本構造:\n- `command`: MCPサーバーの起動コマンド\n- `args`: 起動引数\n- `env`: 環境変数（APIキー等）\n\n## マーケ実務で使えるMCPサーバー例\n\n| MCPサーバー | できること |\n|------------|--------|\n| BigQuery MCP | SQLクエリ実行、テーブル一覧、スキーマ確認 |\n| Slack MCP | チャンネル投稿、メッセージ検索 |\n| GitHub MCP | Issue作成、PR管理 |\n| Google Sheets MCP | スプレッドシート読み書き |\n\n## MCPサーバーが提供する3つの機能\n\n1. **Tools（ツール）**: AIが実行できるアクション（クエリ実行等）\n2. **Resources（リソース）**: AIが参照できるデータ（テーブル一覧等）\n3. **Prompts（プロンプト）**: テンプレート化された対話パターン\n\n## セキュリティの注意点\n\n- MCPサーバーの認証情報は.envで管理（Gitにコミットしない）\n- 読み取り専用MCPサーバーの活用で誤操作を防止\n- 本番環境への書き込み権限は必要最小限に",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "type": "interactive",
+        "content": "# 演習: MCPサーバー接続シナリオを設計しよう\n\nマーケティング業務の各タスクに対して、必要なMCPサーバーを選んでワークフローを完成させてください。",
+        "htmlContent": "<!DOCTYPE html><html><head><meta charset=\"utf-8\"><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#0f172a;color:#e2e8f0;font-family:system-ui,sans-serif;padding:24px;min-height:100vh}.title{font-size:1.3rem;font-weight:700;margin-bottom:8px}.desc{color:#94a3b8;margin-bottom:20px;font-size:.9rem}.workflow{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:16px;margin-bottom:12px}.wf-title{font-weight:700;font-size:.95rem;margin-bottom:12px;color:#8b5cf6}.step{display:flex;align-items:center;gap:10px;margin-bottom:8px;padding:8px;border-radius:8px;background:#0f172a}.step-label{font-size:.85rem;flex:1}.step select{padding:8px;background:#1e293b;border:1px solid #475569;border-radius:6px;color:#e2e8f0;font-size:.85rem;min-width:180px}.step select:focus{border-color:#8b5cf6;outline:none}.arrow{color:#475569;font-size:1.2rem;text-align:center;padding:4px}.btn{background:#3b82f6;color:#fff;border:none;padding:10px 24px;border-radius:8px;cursor:pointer;font-size:.95rem;margin-top:16px}.btn:hover{background:#2563eb}.result{margin-top:12px;padding:12px;border-radius:8px;font-weight:600;display:none}.result.show{display:block}.result.pass{background:rgba(16,185,129,.15);color:#10b981;border:1px solid #10b981}.result.fail{background:rgba(239,68,68,.15);color:#ef4444;border:1px solid #ef4444}</style></head><body><div class=\"title\">MCPワークフロー設計</div><div class=\"desc\">各ステップに必要なMCPサーバーを選択してください</div><div class=\"workflow\"><div class=\"wf-title\">月次レポート自動配信フロー</div><div id=\"steps\"></div></div><button class=\"btn\" onclick=\"check()\">回答を確認</button><div class=\"result\" id=\"result\"></div><script>const steps=[{label:\"GA4データをSQLで集計する\",answer:\"bigquery\"},{label:\"集計結果をスプレッドシートに書き出す\",answer:\"sheets\"},{label:\"レポートをSlackチャンネルに投稿する\",answer:\"slack\"},{label:\"改善タスクをGitHub Issueとして起票する\",answer:\"github\"}];const mcpOptions=[{val:\"\",text:\"-- MCPサーバーを選択 --\"},{val:\"bigquery\",text:\"BigQuery MCP\"},{val:\"slack\",text:\"Slack MCP\"},{val:\"github\",text:\"GitHub MCP\"},{val:\"sheets\",text:\"Google Sheets MCP\"}];const container=document.getElementById(\"steps\");steps.forEach((s,i)=>{const div=document.createElement(\"div\");const optHtml=mcpOptions.map(o=>'<option value=\"'+o.val+'\">'+o.text+\"</option>\").join(\"\");div.innerHTML='<div class=\"step\"><div class=\"step-label\">'+(i+1)+\". \"+s.label+'</div><select data-idx=\"'+i+'\">'+optHtml+\"</select></div>\";if(i<steps.length-1)div.innerHTML+='<div class=\"arrow\">&#8595;</div>';container.appendChild(div)});function check(){let c=0;steps.forEach((s,i)=>{const sel=document.querySelector('select[data-idx=\"'+i+'\"]');if(sel.value===s.answer){sel.style.borderColor=\"#10b981\";c++}else{sel.style.borderColor=\"#ef4444\"}});const r=document.getElementById(\"result\");r.classList.add(\"show\");if(c===steps.length){r.className=\"result show pass\";r.textContent=\"全問正解！MCPサーバーの適切な選択ができました。\"}else{r.className=\"result show fail\";r.textContent=c+\"/\"+steps.length+\" 正解。各ツールに対応するMCPサーバーを確認しましょう。\"}}</script></body></html>",
+        "checkpoints": [
+          "MCPの概念と標準プロトコルとしての役割を理解した",
+          "マーケ業務で使えるMCPサーバーの種類を把握した",
+          "複数MCPサーバーを組み合わせたワークフローをイメージできた"
+        ]
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "MCPの正式名称として正しいのはどれですか？",
+            "options": [
+              "Machine Control Protocol",
+              "Model Context Protocol",
+              "Multi-Channel Platform",
+              "Marketing Communication Protocol"
+            ],
+            "correct": 1,
+            "explanation": "MCPはModel Context Protocolの略で、LLMと外部ツールを標準化されたプロトコルで接続する仕組みです。Anthropicが提唱しました。"
+          },
+          {
+            "q": "MCPサーバーが提供する3つの機能はどれですか？",
+            "options": [
+              "Read・Write・Edit",
+              "Tools・Resources・Prompts",
+              "Auth・Query・Response",
+              "Input・Process・Output"
+            ],
+            "correct": 1,
+            "explanation": "MCPサーバーはTools（実行可能なアクション）、Resources（参照可能なデータ）、Prompts（テンプレート化された対話）の3つの機能を提供します。"
+          },
+          {
+            "q": "MCPサーバーの認証情報の管理で正しいのはどれですか？",
+            "options": [
+              "CLAUDE.mdに直接記述する",
+              "settings.jsonに平文で記述する",
+              ".envファイルで管理しGitにはコミットしない",
+              "MCPサーバー内にハードコードする"
+            ],
+            "correct": 2,
+            "explanation": "APIキーなどの認証情報は.envファイルで管理し、絶対にGitリポジトリにコミットしてはいけません。.gitignoreに.envを追加しておくのが基本です。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール7-61 完了！\n\n## 習得したポイント\n\n✅ MCPがLLMと外部ツールを繋ぐ標準プロトコルであることを理解した\n✅ MCPサーバーの接続設定方法を把握した\n✅ Tools・Resources・Promptsの3つの機能を理解した\n✅ マーケ業務でのMCPワークフロー（BQ→Sheets→Slack）をイメージできた\n\n## 次のステップ\n\n次のモジュール **「7-62: メモリシステム（Auto Memory）の仕組み」** では、会話を跨いで記憶を永続化するMEMORY.mdの運用を学びます。\n\n> 実務チャレンジ: 自分のチームで使っているツール（GA4、Slack、スプレッドシート等）をリストアップし、それぞれにMCPサーバーがあるか調べてみましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

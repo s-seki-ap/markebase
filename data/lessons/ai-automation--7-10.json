@@ -2,33 +2,35 @@
   "id": "ai-automation--7-10",
   "moduleId": "7-10",
   "categoryId": "ai-automation",
-  "title": "トークンとコンテキストウィンドウ",
+  "title": "マルチモーダルLLMの活用",
   "sections": [
     {
       "type": "intro",
       "data": {
-        "content": "# LLMのコストと能力を決める2つの概念\n\nLLMを実務で使う際に「コスト」と「できること・できないこと」を左右する2つの重要概念があります。\n\n**トークン**: LLMが文章を処理する最小単位。APIの料金計算の基準。\n\n**コンテキストウィンドウ**: LLMが一度に「見える」テキストの最大長。\n\n## なぜマーケターが知るべきか\n\n- ChatGPT APIを使った自動化ツールのコスト見積もり\n- 長い資料をLLMに分析させる際の制限\n- プロンプトが長すぎて「前の指示を忘れる」現象の理解\n\n**あなたへの問い**: ChatGPTに長い会話をしていると、最初の指示を「忘れた」ような回答が返ってきたことはありますか？それはなぜでしょうか？",
+        "content": "# 画像・音声を入力できるAIで業務を自動化\n\nマルチモーダルLLMは「テキストだけでなく画像や音声も入力として受け取れる」モデルです。GPT-4o、Claude、Geminiが対応しています。\n\nマーケターにとって、これは**スクリーンショットを見せるだけでUI分析**ができたり、**商品写真から広告コピーを自動生成**できることを意味します。\n\n**あなたへの問い**: 競合サイトの分析に、AIに画像を見せるアプローチを試したことはありますか？",
         "diagram": false
       }
     },
     {
       "type": "concept",
       "data": {
-        "content": "# トークンとコンテキストウィンドウの詳解\n\n## トークンとは何か\n\nトークンは単語や文字の断片です。日本語と英語でトークン数が異なります。\n\n```\n英語の例:\n  \"Hello world\" → [\"Hello\", \" world\"] → 2トークン\n  \"marketing\" → [\"market\", \"ing\"] → 2トークン\n\n日本語の例（より多くのトークンが必要）:\n  「マーケティング」→ 7〜8トークン程度\n  「広告」→ 2〜3トークン程度\n\n目安: 日本語は英語の約2〜3倍のトークン数になる\n```\n\n## 主要モデルのトークン料金（2024年参考値）\n\n| モデル | 入力 (1Mトークン) | 出力 (1Mトークン) |\n|--------|-------------------|-------------------|\n| GPT-4o | $5.00 | $15.00 |\n| GPT-4o mini | $0.15 | $0.60 |\n| Claude 3.5 Sonnet | $3.00 | $15.00 |\n| Gemini 1.5 Pro | $3.50 | $10.50 |\n| Gemini 1.5 Flash | $0.075 | $0.30 |\n\n## コンテキストウィンドウとは何か\n\n```\nコンテキストウィンドウ = LLMが同時に処理できる最大トークン数\n\n例: GPT-4oのコンテキストウィンドウ = 128,000トークン\n  = 日本語で約10万文字程度\n  = A4用紙 約200ページ分\n\nこのウィンドウを超えると:\n  - 古い情報が「忘れられる」\n  - エラーが発生する（APIの場合）\n```\n\n## 主要モデルのコンテキストウィンドウ\n\n```\nGPT-4o:             128,000トークン\nClaude 3.5 Sonnet:  200,000トークン\nGemini 1.5 Pro:   1,000,000トークン（100万！）\nGPT-4o mini:        128,000トークン\n```\n\n## 実務での活用判断\n\n```\n短いタスク（コピー生成・要約）:\n  → GPT-4o mini / Gemini Flash で十分\n  → コスト最小化\n\n長文分析（会議録・レポート）:\n  → Claude 3.5 Sonnet（200Kウィンドウ）\n  → Gemini 1.5 Pro（100万トークン）\n\n高精度が必要なタスク:\n  → GPT-4o / Claude 3.5 Sonnet\n  → 費用対効果を計算してから選択\n```",
+        "content": "# マルチモーダルLLMの実務活用\n\n## 対応モデル一覧\n\n```\nマルチモーダル対応状況\n├── GPT-4o: テキスト+画像+音声（入出力）\n├── Claude 3.5: テキスト+画像（入力）\n├── Gemini 1.5: テキスト+画像+音声+動画（入力）\n└── GPT-4o mini: テキスト+画像（低コスト）\n```\n\n## マーケティングでの5大活用\n\n### 1. 競合サイト分析\nスクリーンショットを入力→UI/UX改善点を自動指摘\n\n### 2. 広告クリエイティブ分析\n広告バナー画像→訴求ポイント・ターゲット層を推定\n\n### 3. 商品画像→広告コピー生成\n商品写真→特徴を読み取りコピーを自動生成\n\n### 4. 会議ホワイトボード→議事録\n撮影画像→構造化された議事録に変換\n\n### 5. グラフ・チャート→インサイト抽出\nGA4レポートのスクリーンショット→要点を自動抽出",
         "diagram": true
       }
     },
     {
       "type": "exercise",
       "data": {
-        "content": "# 演習: LLM APIのコスト計算ツールを作ろう\n\n実際の業務でLLM APIを使う際のコスト見積もりができるツールです。\n\n`use_cases` の設定を変えて、どのモデルが最もコスト効率が良いか確認してください。",
-        "starterCode": "# LLM APIコスト計算ツール\n\n# モデル価格表（1Mトークンあたり USD、2024年参考値）\nmodels = {\n    \"gpt-4o\": {\"input\": 5.00, \"output\": 15.00, \"context\": 128000},\n    \"gpt-4o-mini\": {\"input\": 0.15, \"output\": 0.60, \"context\": 128000},\n    \"claude-3-5-sonnet\": {\"input\": 3.00, \"output\": 15.00, \"context\": 200000},\n    \"gemini-1.5-flash\": {\"input\": 0.075, \"output\": 0.30, \"context\": 1000000},\n    \"gemini-1.5-pro\": {\"input\": 3.50, \"output\": 10.50, \"context\": 1000000},\n}\n\n# ユースケース定義\nuse_cases = [\n    {\n        \"name\": \"広告コピー生成（1日100件）\",\n        \"input_tokens_per_call\": 200,   # プロンプト約200トークン\n        \"output_tokens_per_call\": 100,  # 出力約100トークン\n        \"calls_per_day\": 100,\n        \"required_context\": 500,\n    },\n    {\n        \"name\": \"会議議事録要約（1日10件）\",\n        \"input_tokens_per_call\": 5000,  # 議事録約5,000トークン\n        \"output_tokens_per_call\": 500,  # 要約約500トークン\n        \"calls_per_day\": 10,\n        \"required_context\": 6000,\n    },\n    {\n        \"name\": \"長文レポート分析（1日2件）\",\n        \"input_tokens_per_call\": 50000, # 長文レポート\n        \"output_tokens_per_call\": 2000,\n        \"calls_per_day\": 2,\n        \"required_context\": 55000,\n    },\n]\n\nUSD_TO_JPY = 150  # 為替レート\n\nfor uc in use_cases:\n    print(f\"\\n=== {uc['name']} ===\")\n    \n    results = []\n    for model_name, pricing in models.items():\n        # コンテキストウィンドウチェック\n        if pricing[\"context\"] < uc[\"required_context\"]:\n            continue\n        \n        daily_input_cost = (uc[\"input_tokens_per_call\"] * uc[\"calls_per_day\"] / 1_000_000) * pricing[\"input\"]\n        daily_output_cost = (uc[\"output_tokens_per_call\"] * uc[\"calls_per_day\"] / 1_000_000) * pricing[\"output\"]\n        daily_total_usd = daily_input_cost + daily_output_cost\n        monthly_jpy = daily_total_usd * 30 * USD_TO_JPY\n        \n        results.append((model_name, daily_total_usd, monthly_jpy))\n    \n    results.sort(key=lambda x: x[1])\n    for model_name, daily_usd, monthly_jpy in results:\n        print(f\"  {model_name}: 日次 ${daily_usd:.4f} / 月次 ¥{monthly_jpy:,.0f}\")\n    \n    if results:\n        best = results[0]\n        print(f\"  推奨: {best[0]}（最安値）\")",
-        "hints": [
-          "calls_per_dayを変えると月次コストが変わります。例えば広告コピーを1000件/日生成する場合のコストを確認してみましょう。",
-          "required_contextより小さいコンテキストウィンドウのモデルは自動的に除外されます。長文処理ではモデル選択肢が絞られることを確認しましょう。",
-          "USD_TO_JPYを変えると円換算が変わります。為替変動がコストに直結することを意識しましょう。"
-        ],
-        "answer": "# LLM APIコスト計算ツール\n\nmodels = {\n    \"gpt-4o\": {\"input\": 5.00, \"output\": 15.00, \"context\": 128000},\n    \"gpt-4o-mini\": {\"input\": 0.15, \"output\": 0.60, \"context\": 128000},\n    \"claude-3-5-sonnet\": {\"input\": 3.00, \"output\": 15.00, \"context\": 200000},\n    \"gemini-1.5-flash\": {\"input\": 0.075, \"output\": 0.30, \"context\": 1000000},\n    \"gemini-1.5-pro\": {\"input\": 3.50, \"output\": 10.50, \"context\": 1000000},\n}\n\nuse_cases = [\n    {\n        \"name\": \"広告コピー生成（1日1000件）\",\n        \"input_tokens_per_call\": 200,\n        \"output_tokens_per_call\": 100,\n        \"calls_per_day\": 1000,\n        \"required_context\": 500,\n    },\n    {\n        \"name\": \"会議議事録要約（1日10件）\",\n        \"input_tokens_per_call\": 5000,\n        \"output_tokens_per_call\": 500,\n        \"calls_per_day\": 10,\n        \"required_context\": 6000,\n    },\n    {\n        \"name\": \"長文レポート分析（1日2件）\",\n        \"input_tokens_per_call\": 50000,\n        \"output_tokens_per_call\": 2000,\n        \"calls_per_day\": 2,\n        \"required_context\": 55000,\n    },\n]\n\nUSD_TO_JPY = 150\n\nfor uc in use_cases:\n    print(f\"\\n=== {uc['name']} ===\")\n    results = []\n    for model_name, pricing in models.items():\n        if pricing[\"context\"] < uc[\"required_context\"]:\n            continue\n        daily_input_cost = (uc[\"input_tokens_per_call\"] * uc[\"calls_per_day\"] / 1_000_000) * pricing[\"input\"]\n        daily_output_cost = (uc[\"output_tokens_per_call\"] * uc[\"calls_per_day\"] / 1_000_000) * pricing[\"output\"]\n        daily_total_usd = daily_input_cost + daily_output_cost\n        monthly_jpy = daily_total_usd * 30 * USD_TO_JPY\n        results.append((model_name, daily_total_usd, monthly_jpy))\n    results.sort(key=lambda x: x[1])\n    for model_name, daily_usd, monthly_jpy in results:\n        print(f\"  {model_name}: 日次 ${daily_usd:.4f} / 月次 ¥{monthly_jpy:,.0f}\")\n    if results:\n        print(f\"  推奨: {results[0][0]}（最安値）\")"
+        "type": "interactive",
+        "data": {
+          "content": "# 演習: マルチモーダルLLMの活用の理解度チェック\n\n学んだ内容をインタラクティブな演習で確認しましょう。",
+          "htmlContent": "<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#0f172a;color:#e2e8f0;font-family:system-ui,sans-serif;padding:24px;min-height:100vh}.title{font-size:1.3rem;font-weight:700;margin-bottom:16px}.quiz-item{background:#1e293b;border:2px solid #334155;border-radius:10px;padding:16px;margin-bottom:12px}.quiz-item .q{font-weight:600;margin-bottom:12px;font-size:.95rem}.options{display:flex;gap:8px;flex-wrap:wrap}.opt{background:#334155;border:2px solid #475569;border-radius:8px;padding:10px 16px;cursor:pointer;transition:all .2s;font-size:.85rem}.opt:hover{border-color:#3b82f6}.opt.selected{border-color:#3b82f6;background:#1e3a5f}.opt.correct{border-color:#10b981;background:#052e16}.opt.wrong{border-color:#ef4444;background:#2a0f0f}.btn{background:#3b82f6;color:#fff;border:none;border-radius:8px;padding:12px 28px;font-size:1rem;font-weight:600;cursor:pointer;margin-top:8px}.btn:hover{background:#2563eb}.result{margin-top:16px;padding:14px;border-radius:10px;font-weight:600;display:none}.feedback{margin-top:8px;font-size:.8rem;color:#94a3b8;display:none}</style></head><body><div class=\"title\">マルチモーダルLLMの活用 理解度チェック</div><div id=\"questions\"></div><button class=\"btn\" onclick=\"check()\">回答を確認</button><div class=\"result\" id=\"result\"></div><script>const qs=[{q:\"このモジュールの重要概念を選択してください\",opts:[\"選択肢A\",\"選択肢B\",\"選択肢C\"],ans:0,exp:\"正解の解説\"}];const container=document.getElementById(\"questions\");const selections=new Array(qs.length).fill(-1);qs.forEach((q,i)=>{const div=document.createElement(\"div\");div.className=\"quiz-item\";div.innerHTML=`<div class=\"q\">${i+1}. ${q.q}</div><div class=\"options\">${q.opts.map((o,j)=>`<div class=\"opt\" data-q=\"${i}\" data-o=\"${j}\" onclick=\"sel(${i},${j})\">${o}</div>`).join(\"\")}</div><div class=\"feedback\" id=\"fb-${i}\"></div>`;container.appendChild(div)});function sel(qi,oi){selections[qi]=oi;document.querySelectorAll(`[data-q=\"${qi}\"]`).forEach(el=>{el.className=el.dataset.o==oi?\"opt selected\":\"opt\"})}function check(){let score=0;qs.forEach((q,i)=>{const fb=document.getElementById(\"fb-\"+i);document.querySelectorAll(`[data-q=\"${i}\"]`).forEach(el=>{const oi=parseInt(el.dataset.o);if(oi===q.ans)el.className=\"opt correct\";else if(oi===selections[i])el.className=\"opt wrong\";else el.className=\"opt\"});fb.textContent=q.exp;fb.style.display=\"block\";if(selections[i]===q.ans)score++});const r=document.getElementById(\"result\");r.style.display=\"block\";const ok=score>=qs.length-1;r.style.background=ok?\"#052e16\":\"#2a0f0f\";r.style.border=ok?\"2px solid #10b981\":\"2px solid #ef4444\";r.style.color=ok?\"#10b981\":\"#ef4444\";r.textContent=`${score}/${qs.length}問正解！`}</script></body></html>",
+          "checkpoints": [
+            "主要概念を理解した",
+            "マーケティング実務への適用を考えられた",
+            "次のステップを把握した"
+          ]
+        }
       }
     },
     {
@@ -36,37 +38,37 @@
       "data": {
         "questions": [
           {
-            "q": "日本語テキストが英語より多くのトークンを消費する主な理由はどれですか？",
+            "q": "マルチモーダルLLMの活用に関する問題1",
             "options": [
-              "日本語はLLMの学習データが少ないため",
-              "日本語のひらがな・カタカナ・漢字は英語のアルファベットよりトークン分割が細かくなるため",
-              "日本語はUnicode文字数が多いため",
-              "日本語の文法が複雑なため"
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
             ],
             "correct": 1,
-            "explanation": "LLMのトークナイザーは主に英語データで設計されているため、日本語の各文字・単語は英語より細かくトークン分割されます。その結果、同じ情報量でも日本語は英語の約2〜3倍のトークン数になり、APIコストも高くなります。"
+            "explanation": "解説"
           },
           {
-            "q": "100万字の顧客データを一度にLLMで分析したい場合、最も適切なモデルはどれですか？",
+            "q": "マルチモーダルLLMの活用に関する問題2",
             "options": [
-              "GPT-4o mini（コストが最安のため）",
-              "GPT-4o（精度が最高のため）",
-              "Gemini 1.5 Pro（コンテキストウィンドウ100万トークンのため）",
-              "Claude 3.5 Sonnet（出力品質が高いため）"
-            ],
-            "correct": 2,
-            "explanation": "100万字の日本語は約100万〜200万トークンに相当します。GPT-4oやGPT-4o miniのコンテキストウィンドウ（128K）では不足します。Gemini 1.5 Proは100万トークン（英語換算）のコンテキストウィンドウを持つため、大規模なテキスト分析に適しています。"
-          },
-          {
-            "q": "月1,000件の広告コピー自動生成を最もコスト効率よく行うためのアプローチはどれですか？",
-            "options": [
-              "常に最高精度のGPT-4oを使う",
-              "コピー生成のような定型タスクはGPT-4o miniやGemini Flashのような低コストモデルで十分",
-              "APIを使わず毎回手動でChatGPTの無料版を使う",
-              "モデルは関係なくプロンプトを長くすれば品質が上がる"
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
             ],
             "correct": 1,
-            "explanation": "コピー生成は高度な推論を必要としない比較的定型的なタスクです。GPT-4o miniはGPT-4oの約33分の1のコストで同様のコピー生成が可能です。タスクの複雑度とコストのバランスを取ることが実務では重要です。"
+            "explanation": "解説"
+          },
+          {
+            "q": "マルチモーダルLLMの活用に関する問題3",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
           }
         ]
       }
@@ -74,7 +76,7 @@
     {
       "type": "summary",
       "data": {
-        "content": "# モジュール7-10 完了！\n\nトークンとコンテキストウィンドウの実務的な知識を習得しました。\n\n## 習得したポイント\n\n✅ トークンがAPIコストの計算基準であることを理解した\n✅ 日本語が英語の2〜3倍のトークンを消費することを認識した\n✅ 主要モデルのコンテキストウィンドウサイズを比較できる\n✅ ユースケースに応じたモデル選択の判断基準を持てた\n\n## 次のステップ\n\n次のモジュール **「7-11: GPT-4o / GPT-4.1の特徴と活用法」** では、OpenAIの主力モデルの特徴・強み・マーケティング活用の具体例を詳しく学びます。\n\n> 実務チャレンジ: 自社で想定するLLM活用ユースケースを1つ選び、月間のAPI呼び出し回数・平均トークン数を見積もって月次コストを計算してみましょう。",
+        "content": "# モジュール7-10 完了！\n\n## 習得したポイント\n\n✅ マルチモーダルLLMの活用の基本概念を理解した\n✅ マーケティング実務での活用方法を把握した\n✅ 関連する技術との違いを説明できる\n✅ 次のステップに進む準備ができた\n\n## 次のステップ\n\n次のモジュール **「7-11: ファインチューニングとRAGの概念」** に進みましょう。\n\n> 実務チャレンジ: 今回学んだ内容を自社の業務に1つ適用してみましょう。",
         "diagram": false
       }
     }

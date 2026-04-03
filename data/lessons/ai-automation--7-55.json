@@ -1,0 +1,82 @@
+{
+  "id": "ai-automation--7-55",
+  "moduleId": "7-55",
+  "categoryId": "ai-automation",
+  "title": "Claude Codeの設定ファイル体系",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 設定を制する者がAIを制する\n\nマーケティングツール（GA4、GTM、広告プラットフォーム等）の設定を理解せずに使うと、計測漏れや無駄な広告費が発生します。\n\nClaude Codeも同様に、設定ファイルの仕組みを理解することで「思った通りに動かない」というトラブルを防げます。どこに何を書くべきかを把握することが、効率的な運用の第一歩です。\n\n**あなたへの問い**: GA4の設定をプロパティレベルとデータストリームレベルで使い分けていますか？Claude Codeにも同じ「階層構造」があります。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# Claude Codeの設定ファイル体系\n\n## 設定ファイルの種類と配置場所\n\n```\n設定ファイルの階層\n├── ~/.claude/settings.json（グローバル設定）\n│   └── 全プロジェクト共通の許可ツール・テーマ等\n├── .claude/settings.json（プロジェクト設定）\n│   └── Git管理される。チームで共有可能\n├── .claude/settings.local.json（ローカル設定）\n│   └── Git管理されない。個人の好み\n├── CLAUDE.md（プロジェクト指示書）\n│   └── AIへのルール・技術情報\n└── .claude/CLAUDE.md（追加指示）\n    └── CLAUDE.mdを補完する指示\n```\n\n## 優先順位\n\nより「近い」設定が優先されます。\n\n1. コマンドライン引数（最優先）\n2. .claude/settings.local.json\n3. .claude/settings.json\n4. ~/.claude/settings.json（最低優先）\n\n## settings.jsonで設定できる主な項目\n\n- **permissions**: Allowedツール一覧（例: `Read`, `Bash(git status)`）\n- **theme**: ターミナルテーマ\n- **model**: 使用するモデル\n\n## マーケ実務での使い分け\n\n| 設定場所 | 用途 | 例 |\n|---------|------|----|\n| グローバル | 全PJ共通ルール | 日本語で回答、git系コマンド許可 |\n| プロジェクト | PJ固有ルール | BQクエリはSELECTのみ許可 |\n| ローカル | 個人設定 | エディタテーマ、ショートカット |\n\n## CLAUDE.mdとsettings.jsonの違い\n\n- **CLAUDE.md**: 「何をすべきか」の指示（ルール・コンテキスト）\n- **settings.json**: 「何ができるか」の権限設定（ツール許可・環境設定）\n\n両方を適切に使い分けることで、安全かつ効率的にClaude Codeを運用できます。",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "type": "interactive",
+        "content": "# 演習: 設定項目を正しいファイルに配置しよう\n\n各設定項目を「CLAUDE.md」「settings.json」「settings.local.json」のどこに書くべきか、選択してください。",
+        "htmlContent": "<!DOCTYPE html><html><head><meta charset=\"utf-8\"><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#0f172a;color:#e2e8f0;font-family:system-ui,sans-serif;padding:24px;min-height:100vh}.title{font-size:1.3rem;font-weight:700;margin-bottom:8px}.desc{color:#94a3b8;margin-bottom:20px;font-size:.9rem}.item{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:16px;margin-bottom:10px}.item-text{font-size:.95rem;margin-bottom:10px;line-height:1.5}.select-group{display:flex;gap:8px;flex-wrap:wrap}.sel-btn{padding:6px 14px;border-radius:8px;border:1px solid #475569;background:#0f172a;color:#94a3b8;cursor:pointer;font-size:.8rem;transition:all .2s}.sel-btn:hover{border-color:#3b82f6;color:#e2e8f0}.sel-btn.selected{border-color:#8b5cf6;background:rgba(139,92,246,.15);color:#c4b5fd}.sel-btn.correct{border-color:#10b981;background:rgba(16,185,129,.15);color:#10b981}.sel-btn.wrong{border-color:#ef4444;background:rgba(239,68,68,.15);color:#ef4444}.btn{background:#3b82f6;color:#fff;border:none;padding:10px 24px;border-radius:8px;cursor:pointer;font-size:.95rem;margin-top:16px}.btn:hover{background:#2563eb}.score{margin-top:16px;padding:12px;border-radius:8px;font-weight:600;display:none}.score.show{display:block;background:rgba(16,185,129,.15);color:#10b981;border:1px solid #10b981}</style></head><body><div class=\"title\">設定ファイルの使い分け</div><div class=\"desc\">各項目をどのファイルに書くべきか選択してください</div><div id=\"items\"></div><button class=\"btn\" onclick=\"check()\">回答を確認</button><div class=\"score\" id=\"score\"></div><script>const questions=[{text:\"レポートは日本語敬語で書くこと\",answer:\"CLAUDE.md\"},{text:\"Readツールを常に許可する\",answer:\"settings.json\"},{text:\"ターミナルテーマをダークにする（個人の好み）\",answer:\"settings.local.json\"},{text:\"プロジェクトの技術スタック（Python + BigQuery）\",answer:\"CLAUDE.md\"},{text:\"Bash(git status)を許可ツールに追加する\",answer:\"settings.json\"},{text:\"クライアント実データをGitにコミットしない\",answer:\"CLAUDE.md\"}];const opts=[\"CLAUDE.md\",\"settings.json\",\"settings.local.json\"];const container=document.getElementById(\"items\");questions.forEach((q,i)=>{const div=document.createElement(\"div\");div.className=\"item\";let btns=opts.map(o=>'<button class=\"sel-btn\" data-q=\"'+i+'\" data-val=\"'+o+'\" onclick=\"sel(this)\">'+o+\"</button>\").join(\"\");div.innerHTML='<div class=\"item-text\">'+q.text+'</div><div class=\"select-group\">'+btns+\"</div>\";container.appendChild(div)});function sel(btn){btn.parentElement.querySelectorAll(\".sel-btn\").forEach(b=>b.classList.remove(\"selected\"));btn.classList.add(\"selected\")}function check(){let correct=0;questions.forEach((q,i)=>{const btns=document.querySelectorAll('.sel-btn[data-q=\"'+i+'\"]');btns.forEach(b=>{b.classList.remove(\"correct\",\"wrong\");if(b.classList.contains(\"selected\")){if(b.dataset.val===q.answer){b.classList.add(\"correct\");correct++}else{b.classList.add(\"wrong\")}}if(b.dataset.val===q.answer&&!b.classList.contains(\"selected\")){b.classList.add(\"correct\")}})});const sc=document.getElementById(\"score\");sc.classList.add(\"show\");sc.textContent=\"スコア: \"+correct+\"/\"+questions.length+(correct===questions.length?\" パーフェクト！\":\" 緑が正解です。CLAUDE.mdは指示、settings.jsonは権限設定です。\")}</script></body></html>",
+        "checkpoints": [
+          "CLAUDE.mdとsettings.jsonの役割の違いを理解した",
+          "設定ファイルの優先順位を把握した",
+          "チーム共有設定と個人設定の使い分けを理解した"
+        ]
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "settings.local.jsonとsettings.jsonの違いとして正しいのはどれですか？",
+            "options": [
+              "settings.local.jsonのほうが優先順位が低い",
+              "settings.local.jsonはGit管理されず個人設定用",
+              "settings.jsonは読み取り専用",
+              "settings.local.jsonはグローバル設定用"
+            ],
+            "correct": 1,
+            "explanation": "settings.local.jsonはGit管理されない個人設定用ファイルで、テーマなどの好みを書きます。settings.jsonはGit管理されチームで共有できるプロジェクト設定です。"
+          },
+          {
+            "q": "CLAUDE.mdに書くべき内容はどれですか？",
+            "options": [
+              "許可するツールの一覧",
+              "ターミナルのテーマ設定",
+              "プロジェクトのルール・技術スタック・禁止事項",
+              "APIキーとシークレット"
+            ],
+            "correct": 2,
+            "explanation": "CLAUDE.mdには「何をすべきか」の指示を書きます。ツール許可はsettings.json、テーマはsettings.local.json、APIキーは設定ファイルに書くべきではありません。"
+          },
+          {
+            "q": "設定の優先順位として正しいのはどれですか？",
+            "options": [
+              "グローバル > プロジェクト > ローカル",
+              "ローカル > プロジェクト > グローバル",
+              "すべて同じ優先順位",
+              "CLAUDE.md > settings.json > settings.local.json"
+            ],
+            "correct": 1,
+            "explanation": "より「近い」設定が優先されます。ローカル（個人）> プロジェクト（チーム）> グローバル（全体）の順です。これにより個人の設定がチーム設定を上書きできます。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール7-55 完了！\n\n## 習得したポイント\n\n✅ Claude Codeの設定ファイル体系（グローバル・PJ・ローカル）を理解した\n✅ CLAUDE.md（指示）とsettings.json（権限）の使い分けを把握した\n✅ 設定ファイルの優先順位（ローカル > PJ > グローバル）を理解した\n✅ チーム共有と個人設定の分離方法を学んだ\n\n## 次のステップ\n\n次のモジュール **「7-56: ツール詳解: Read・Write・Edit」** では、ファイル操作の3つのツールの仕様と使い分けを詳しく学びます。\n\n> 実務チャレンジ: 自分のプロジェクトの設定ファイルを確認し、グローバル・PJ・ローカルの3層に整理してみましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

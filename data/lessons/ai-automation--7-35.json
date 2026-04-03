@@ -1,0 +1,82 @@
+{
+  "id": "ai-automation--7-35",
+  "moduleId": "7-35",
+  "categoryId": "ai-automation",
+  "title": "Python環境構築（venv・pip）",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# マーケターのためのPython環境構築ガイド\n\nPythonはデータ分析・API連携・自動化に最適な言語です。まずは環境構築から始めましょう。仮想環境（venv）とパッケージ管理（pip）を使って、クリーンな開発環境を作ります。\n\n**あなたへの問い**: Pythonをインストールしたことはありますか？「環境構築で挫折した」という声をよく聞きます。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# Python環境構築\n\n## インストール手順\n\n```\nPython環境構築の流れ\n├── 1. Python 3.11+をインストール\n│   └── python.org からダウンロード\n├── 2. 仮想環境を作成\n│   └── python -m venv .venv\n├── 3. 仮想環境を有効化\n│   ├── Windows: .venv\\Scripts\\activate\n│   └── Mac/Linux: source .venv/bin/activate\n├── 4. パッケージをインストール\n│   └── pip install pandas openai\n└── 5. requirements.txt で管理\n    └── pip freeze > requirements.txt\n```\n\n## なぜ仮想環境が必要か\n\n- プロジェクトごとにパッケージのバージョンを分離\n- 「Aのプロジェクトでは動くのにBでは動かない」を防止\n- チームメンバーと同じ環境を再現\n\n## マーケターがよく使うパッケージ\n\n| パッケージ | 用途 |\n|-----------|------|\n| pandas | データ分析 |\n| openai | LLM API |\n| requests | API呼び出し |\n| matplotlib | グラフ描画 |\n| google-cloud-bigquery | BQ連携 |",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 演習: Python環境構築（venv・pip）を実践してみよう\n\n以下のコードの空欄を埋めて、実際に動くスクリプトを完成させましょう。",
+        "starterCode": "# Python環境構築（venv・pip）の演習\n# TODO: 以下のコードを完成させてください\n\nprint('演習を完成させましょう')",
+        "hints": [
+          "Python環境構築（venv・pip）の基本構文を確認しましょう",
+          "公式ドキュメントを参照してください",
+          "エラーメッセージをよく読んで対処しましょう"
+        ],
+        "answer": "# Python環境構築（venv・pip）の模範回答\nprint('Python環境構築（venv・pip）の演習完了！')"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "Python環境構築（venv・pip）に関する問題1",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          },
+          {
+            "q": "Python環境構築（venv・pip）に関する問題2",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          },
+          {
+            "q": "Python環境構築（venv・pip）に関する問題3",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール7-35 完了！\n\n## 習得したポイント\n\n✅ Python環境構築（venv・pip）の基本概念を理解した\n✅ マーケティング実務での活用方法を把握した\n✅ 関連する技術との違いを説明できる\n✅ 次のステップに進む準備ができた\n\n## 次のステップ\n\n次のモジュール **「7-36: Python基本文法（変数・型・制御構文）」** に進みましょう。\n\n> 実務チャレンジ: 今回学んだ内容を自社の業務に1つ適用してみましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

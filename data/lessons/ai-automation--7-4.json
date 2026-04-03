@@ -2,33 +2,35 @@
   "id": "ai-automation--7-4",
   "moduleId": "7-4",
   "categoryId": "ai-automation",
-  "title": "ニューラルネットワーク入門",
+  "title": "NLP・画像認識・マルチモーダルAI",
   "sections": [
     {
       "type": "intro",
       "data": {
-        "content": "# 人間の脳を模した情報処理の仕組み\n\nニューラルネットワークは人間の脳の神経細胞（ニューロン）のつながり方をコンピュータ上で模倣したものです。\n\n「脳を模倣する」と聞くと難しく感じますが、マーケターに必要な理解はシンプルです。\n\n## なぜニューラルネットワークを知るべきか\n\n現在主流のAIツール（ChatGPT、Gemini、画像生成AI等）はすべてニューラルネットワークを基盤にしています。\n\n「どうやってAIがコンテンツを生成するのか」「なぜ時々間違えるのか」——これらを理解するための土台がニューラルネットワークの概念です。\n\n**あなたへの問い**: LLMが「もっともらしい嘘をつく」ことがあります。これはなぜだと思いますか？このモジュールの後半でその理由がわかります。",
+        "content": "# テキスト・画像・音声を横断するAI技術\n\nAIが扱える「入力」は年々広がっています。テキストだけでなく画像、音声、動画、さらにこれらを組み合わせた**マルチモーダルAI**が実用化されています。\n\n## マーケターの日常にあるAI技術\n\n- **NLP**: チャットボット、感情分析、SEOツール\n- **画像認識**: 広告クリエイティブの自動審査、商品画像検索\n- **音声認識**: 音声検索最適化、コールセンター分析\n\n技術の中身を知ることで、ツール選定と活用の精度が上がります。\n\n**あなたへの問い**: Google検索で画像をアップロードして検索したことはありますか？あれはどんなAI技術でしょうか？",
         "diagram": false
       }
     },
     {
       "type": "concept",
       "data": {
-        "content": "# ニューラルネットワークの構造\n\n## 基本単位: ニューロン（ノード）\n\n```\n入力1 ─┐\n入力2 ─┼→ [重み付き合計 + 活性化関数] → 出力\n入力3 ─┘\n```\n\n各ニューロンは:\n1. 複数の入力を受け取る\n2. それぞれに「重み（weight）」をかけて合計する\n3. 活性化関数を通して出力する\n\n## ネットワークの層構造\n\n```\n入力層 → 隠れ層1 → 隠れ層2 → 出力層\n（データ）  （特徴抽出）  （特徴統合）  （予測）\n```\n\n### マーケティング文脈での例: 広告CTR予測\n\n```\n入力層:\n  - ユーザー年齢: 35\n  - デバイス: スマホ（1） / PC（0）\n  - 時間帯: 19\n  - 過去クリック率: 0.05\n\n隠れ層（自動的に学習する特徴）:\n  - 「夜×スマホ」の組み合わせ\n  - 「若年層×特定ジャンル」の関連性\n\n出力層:\n  - CTR予測値: 0.12（12%）\n```\n\n## 「学習」とは何か\n\nニューラルネットワークの学習 = **重みの調整**\n\n```\n予測 → 正解との誤差を計算 → 誤差を小さくするよう重みを微調整\n→ 繰り返す（バックプロパゲーション）\n```\n\n## なぜ「もっともらしい嘘」をつくのか\n\nニューラルネットワーク（特にLLM）は「次に来るべき単語の確率」を計算します。\n\n```\n「東京の人口は___」\n→ 「約」: 45%\n→ 「1」: 30%  \n→ 「多く」: 15%\n→ ...\n```\n\nこれは「事実の確認」ではなく「確率的なパターン補完」です。そのため、パターンが整合していれば事実と異なる内容でも自信満々に出力します（ハルシネーション）。",
+        "content": "# NLP・画像認識・マルチモーダルAI\n\n## NLP（自然言語処理）\n\n```\nNLPの主要タスク\n├── テキスト分類: スパム判定、感情分析\n├── 固有表現抽出: 人名・企業名・日付の検出\n├── 要約: 長文の自動要約\n├── 翻訳: 多言語対応\n├── 質問応答: FAQ自動回答\n└── テキスト生成: コンテンツ作成\n```\n\n**マーケ活用**: SNS感情分析でブランド評判をリアルタイム監視。\n\n## 画像認識\n\n- **画像分類**: 「食品/衣料品/家電」判定\n- **物体検出**: 画像内アイテムの位置特定\n- **画像生成**: DALL-E, Midjourney\n\n**マーケ活用**: ECのビジュアル類似レコメンド、広告クリエイティブA/Bテスト。\n\n## マルチモーダルAI\n\n複数入力形式を同時処理。代表: GPT-4o、Claude、Gemini。\n\n**マーケ活用**:\n- 競合サイトスクリーンショットのUI分析\n- 商品画像+説明文から広告コピー自動生成\n- 会議録音+ホワイトボード写真から議事録作成\n\n## 使い分けポイント\n\n| 入力データ | 技術 | マーケ活用 |\n|-----------|------|----------|\n| テキストのみ | NLP | 感情分析、SEO |\n| 画像のみ | 画像認識 | 広告審査、商品検索 |\n| テキスト+画像 | マルチモーダル | クリエイティブ分析 |",
         "diagram": true
       }
     },
     {
       "type": "exercise",
       "data": {
-        "content": "# 演習: 簡単なニューラルネットワークの計算を追体験しよう\n\n単一ニューロンの計算を手動でシミュレートします。\n広告クリック確率を予測するニューロンです。\n\n`weights` の値を変えて、出力がどう変わるか確認してください。",
-        "starterCode": "import math\n\n# 単純なニューロンのシミュレーション\n# 広告クリック確率予測\n\n# 入力データ（特徴量）\ninputs = {\n    \"is_smartphone\": 1,    # スマホ=1, PC=0\n    \"hour_normalized\": 0.8, # 時間帯を0-1に正規化（0.8 ≈ 夜間）\n    \"past_ctr\": 0.05,       # 過去のCTR\n}\n\n# 重み（学習で調整される値。ここでは手動で設定）\n# ← この値を変えて影響を観察してください\nweights = {\n    \"is_smartphone\": 0.5,   # スマホのほうがクリックされやすい\n    \"hour_normalized\": 0.8, # 夜間のほうがクリックされやすい\n    \"past_ctr\": 2.0,        # 過去CTRは強い予測因子\n}\nbias = -0.3  # バイアス項\n\n# ステップ1: 重み付き合計\nweighted_sum = sum(inputs[k] * weights[k] for k in inputs) + bias\nprint(f\"重み付き合計: {weighted_sum:.4f}\")\n\n# ステップ2: 活性化関数（シグモイド）で0-1に変換\ndef sigmoid(x):\n    return 1 / (1 + math.exp(-x))\n\nclick_probability = sigmoid(weighted_sum)\nprint(f\"クリック確率予測: {click_probability:.1%}\")\n\n# 判定\nif click_probability > 0.5:\n    print(\"→ このユーザーには広告を配信する（入札UP）\")\nelse:\n    print(\"→ このユーザーへの配信は見送る（入札DOWN）\")",
-        "hints": [
-          "weightsの値を大きくすると、その入力特徴量の影響が強くなります。例えばis_smartphoneの重みを2.0にすると、スマホユーザーへの予測確率が大きく上がります。",
-          "biasを正の値（例: 0.5）にすると全体的に確率が上がります。負の値（例: -1.0）にすると下がります。",
-          "シグモイド関数は任意の数値を0〜1の範囲に変換します。これにより「確率」として解釈できるようになります。"
-        ],
-        "answer": "import math\n\ninputs = {\n    \"is_smartphone\": 1,\n    \"hour_normalized\": 0.8,\n    \"past_ctr\": 0.05,\n}\n\n# 最適化された重み設定の例\nweights = {\n    \"is_smartphone\": 0.7,\n    \"hour_normalized\": 1.2,\n    \"past_ctr\": 3.0,\n}\nbias = -0.5\n\nweighted_sum = sum(inputs[k] * weights[k] for k in inputs) + bias\nprint(f\"重み付き合計: {weighted_sum:.4f}\")\n\ndef sigmoid(x):\n    return 1 / (1 + math.exp(-x))\n\nclick_probability = sigmoid(weighted_sum)\nprint(f\"クリック確率予測: {click_probability:.1%}\")\n\nif click_probability > 0.5:\n    print(\"→ このユーザーには広告を配信する（入札UP）\")\nelse:\n    print(\"→ このユーザーへの配信は見送る（入札DOWN）\")"
+        "type": "interactive",
+        "data": {
+          "content": "# 演習: マーケティング課題に最適なAI技術を選ぼう",
+          "htmlContent": "<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#0f172a;color:#e2e8f0;font-family:system-ui,sans-serif;padding:24px;min-height:100vh}.title{font-size:1.3rem;font-weight:700;margin-bottom:16px}.quiz-item{background:#1e293b;border:2px solid #334155;border-radius:10px;padding:16px;margin-bottom:12px}.quiz-item .q{font-weight:600;margin-bottom:12px;font-size:.95rem}.options{display:flex;gap:8px;flex-wrap:wrap}.opt{background:#334155;border:2px solid #475569;border-radius:8px;padding:10px 16px;cursor:pointer;transition:all .2s;font-size:.85rem}.opt:hover{border-color:#3b82f6}.opt.selected{border-color:#3b82f6;background:#1e3a5f}.opt.correct{border-color:#10b981;background:#052e16}.opt.wrong{border-color:#ef4444;background:#2a0f0f}.btn{background:#3b82f6;color:#fff;border:none;border-radius:8px;padding:12px 28px;font-size:1rem;font-weight:600;cursor:pointer;margin-top:8px}.btn:hover{background:#2563eb}.result{margin-top:16px;padding:14px;border-radius:10px;font-weight:600;display:none}.feedback{margin-top:8px;font-size:.8rem;color:#94a3b8;display:none}</style></head><body><div class=\"title\">マーケティング課題 × AI技術マッチング</div><div id=\"questions\"></div><button class=\"btn\" onclick=\"check()\">回答を確認</button><div class=\"result\" id=\"result\"></div><script>const qs=[{q:\"SNS上のブランド言及を肯定/否定/中立に分類\",opts:[\"NLP\",\"画像認識\",\"マルチモーダルAI\"],ans:0,exp:\"テキスト感情分析はNLPの代表タスク\"},{q:\"ECで商品写真から類似商品をレコメンド\",opts:[\"NLP\",\"画像認識\",\"マルチモーダルAI\"],ans:1,exp:\"画像類似度計算は画像認識の得意分野\"},{q:\"競合サイトのスクショ+URLでUI分析\",opts:[\"NLP\",\"画像認識\",\"マルチモーダルAI\"],ans:2,exp:\"画像とテキスト同時分析にはマルチモーダルが必要\"},{q:\"カスタマーレビューから頻出キーワード抽出\",opts:[\"NLP\",\"画像認識\",\"マルチモーダルAI\"],ans:0,exp:\"テキストからのキーワード抽出はNLPの基本\"},{q:\"Instagram投稿の画像+キャプションでトレンド発見\",opts:[\"NLP\",\"画像認識\",\"マルチモーダルAI\"],ans:2,exp:\"画像+テキスト両方の分析にマルチモーダルが最適\"}];const container=document.getElementById(\"questions\");const selections=new Array(qs.length).fill(-1);qs.forEach((q,i)=>{const div=document.createElement(\"div\");div.className=\"quiz-item\";div.innerHTML=`<div class=\"q\">${i+1}. ${q.q}</div><div class=\"options\">${q.opts.map((o,j)=>`<div class=\"opt\" data-q=\"${i}\" data-o=\"${j}\" onclick=\"sel(${i},${j})\">${o}</div>`).join(\"\")}</div><div class=\"feedback\" id=\"fb-${i}\"></div>`;container.appendChild(div)});function sel(qi,oi){selections[qi]=oi;document.querySelectorAll(`[data-q=\"${qi}\"]`).forEach(el=>{el.className=el.dataset.o==oi?\"opt selected\":\"opt\"})}function check(){let score=0;qs.forEach((q,i)=>{const fb=document.getElementById(\"fb-\"+i);document.querySelectorAll(`[data-q=\"${i}\"]`).forEach(el=>{const oi=parseInt(el.dataset.o);if(oi===q.ans)el.className=\"opt correct\";else if(oi===selections[i])el.className=\"opt wrong\";else el.className=\"opt\"});fb.textContent=q.exp;fb.style.display=\"block\";if(selections[i]===q.ans)score++});const r=document.getElementById(\"result\");r.style.display=\"block\";const ok=score>=qs.length-1;r.style.background=ok?\"#052e16\":\"#2a0f0f\";r.style.border=ok?\"2px solid #10b981\":\"2px solid #ef4444\";r.style.color=ok?\"#10b981\":\"#ef4444\";r.textContent=`${score}/${qs.length}問正解！`}</script></body></html>",
+          "checkpoints": [
+            "NLP・画像認識・マルチモーダルの適用場面を区別できた",
+            "課題に対して最適なAI技術を選択できた",
+            "マルチモーダルが必要なケースを判断できる"
+          ]
+        }
       }
     },
     {
@@ -36,37 +38,37 @@
       "data": {
         "questions": [
           {
-            "q": "ニューラルネットワークの「学習」とは具体的に何を調整するプロセスですか？",
+            "q": "SNS感情分析に最適な技術は？",
             "options": [
-              "ニューロンの数を増やすこと",
-              "各接続の重み（weight）を誤差が小さくなるよう調整すること",
-              "学習データの量を増やすこと",
-              "ネットワークの層の数を変えること"
+              "画像認識",
+              "NLP",
+              "音声合成",
+              "マルチモーダルAI"
             ],
             "correct": 1,
-            "explanation": "ニューラルネットワークの学習の本質は「重み（weight）の調整」です。予測と正解の誤差を計算し、誤差を小さくする方向に重みを少しずつ更新するバックプロパゲーションという手法が使われます。"
+            "explanation": "テキスト感情分析はNLPの代表的タスク。"
           },
           {
-            "q": "LLMが「ハルシネーション（事実と異なる内容を自信を持って出力する現象）」を起こす根本的な理由はどれですか？",
+            "q": "マルチモーダルAIの特徴は？",
             "options": [
-              "LLMは意図的に嘘をつくよう設計されているため",
-              "学習データが少なすぎるため",
-              "LLMは「次に来るべき単語の確率」を計算するものであり、事実確認をしないため",
-              "LLMは一度しか学習できないため"
-            ],
-            "correct": 2,
-            "explanation": "LLMは本質的に「次のトークンの確率分布」を予測するシステムです。事実データベースを検索しているのではなく、学習パターンに基づいて「もっともらしい続き」を生成します。そのため、パターンとして整合していれば事実と異なる内容も出力します。"
-          },
-          {
-            "q": "シグモイド関数がニューラルネットワークで使われる主な理由はどれですか？",
-            "options": [
-              "計算速度を上げるため",
-              "任意の数値を0〜1の範囲（確率として解釈可能な値）に変換するため",
-              "入力データを正規化するため",
-              "重みの初期値を設定するため"
+              "テキストのみを超高速処理",
+              "複数入力形式を同時に理解・処理できる",
+              "画像のみを3D変換",
+              "音声のみを多言語翻訳"
             ],
             "correct": 1,
-            "explanation": "シグモイド関数は任意の実数を0〜1の範囲に変換します。これにより「クリックする確率は73%」のような確率値として解釈できるようになります。現代の深層学習ではReLUが主流ですが、出力層では依然としてシグモイドが使われます。"
+            "explanation": "複数モダリティを同時に入力・理解できることが特徴。"
+          },
+          {
+            "q": "ECの画像ベースレコメンドに使う技術は？",
+            "options": [
+              "NLPテキスト類似度",
+              "CNN画像特徴量の類似度計算",
+              "RNN時系列予測",
+              "強化学習"
+            ],
+            "correct": 1,
+            "explanation": "CNNで画像特徴量ベクトルを抽出し、コサイン類似度で比較。"
           }
         ]
       }
@@ -74,7 +76,7 @@
     {
       "type": "summary",
       "data": {
-        "content": "# モジュール7-4 完了！\n\nニューラルネットワークの仕組みと、AIの限界（ハルシネーション）の根拠を理解しました。\n\n## 習得したポイント\n\n✅ ニューロンが重み付き合計と活性化関数で動作することを理解した\n✅ 「学習=重みの調整」という本質を説明できる\n✅ LLMがハルシネーションを起こす根本理由を理解した\n✅ 広告CTR予測でのニューラルネットワーク活用イメージを掴んだ\n\n## 次のステップ\n\n次のモジュール **「7-5: 深層学習（ディープラーニング）の基礎」** では、多層化したニューラルネットワーク（ディープラーニング）がなぜ革命的だったかを学びます。\n\n> 実務チャレンジ: ChatGPTやGeminiに「東京都の人口は？」と聞いた後、回答の出典を確認してみましょう。LLMは事実確認をしているか、パターン補完をしているかを観察してください。",
+        "content": "# モジュール7-4 完了！\n\n## 習得したポイント\n\n✅ NLPの主要タスクをマーケ実務に結びつけられる\n✅ 画像認識のEC・広告審査での活用を把握した\n✅ マルチモーダルAIの「複数入力同時処理」を理解した\n✅ 課題に応じた技術選択ができる\n\n## 次のステップ\n\n次のモジュール **「7-5: 生成AI（Generative AI）の登場と衝撃」** で生成AI技術のインパクトを学びます。\n\n> 実務チャレンジ: GPT-4oに競合サイトのスクリーンショットをアップロードしてUI分析させてみましょう。",
         "diagram": false
       }
     }

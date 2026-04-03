@@ -1,0 +1,82 @@
+{
+  "id": "ai-automation--7-44",
+  "moduleId": "7-44",
+  "categoryId": "ai-automation",
+  "title": "OpenAI / Anthropic APIの実装入門",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# LLMをシステムに組み込む実装方法\n\nOpenAI（GPT）とAnthropic（Claude）のAPIを使って、LLMをPythonプログラムに組み込む方法を学びます。これにより、マーケティング自動化システムの構築が可能になります。\n\n**あなたへの問い**: ChatGPTをブラウザで使うのと、APIで使うのとではどう違うと思いますか？",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# LLM API実装\n\n## OpenAI API\n\n```python\nfrom openai import OpenAI\n\nclient = OpenAI(api_key='sk-...')\n\nresponse = client.chat.completions.create(\n    model='gpt-4o',\n    messages=[\n        {'role': 'system', 'content': 'マーケティングの専門家'},\n        {'role': 'user', 'content': 'GA4の初期設定手順を教えて'}\n    ],\n    temperature=0.3,\n    max_tokens=2000\n)\n\nprint(response.choices[0].message.content)\n```\n\n## Anthropic API\n\n```python\nimport anthropic\n\nclient = anthropic.Anthropic(api_key='sk-ant-...')\n\nresponse = client.messages.create(\n    model='claude-3-5-sonnet-20241022',\n    max_tokens=2000,\n    system='マーケティングの専門家',\n    messages=[\n        {'role': 'user', 'content': 'GA4の初期設定手順を教えて'}\n    ]\n)\n\nprint(response.content[0].text)\n```\n\n## API vs ブラウザ利用の違い\n\n| 項目 | ブラウザ | API |\n|------|---------|-----|\n| 自動化 | 不可 | 可能 |\n| バッチ処理 | 不可 | 可能 |\n| コスト | 月額固定 | 従量課金 |\n| カスタマイズ | 限定的 | 柔軟 |",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 演習: OpenAI / Anthropic APIの実装入門を実践してみよう\n\n以下のコードの空欄を埋めて、実際に動くスクリプトを完成させましょう。",
+        "starterCode": "# OpenAI / Anthropic APIの実装入門の演習\n# TODO: 以下のコードを完成させてください\n\nprint('演習を完成させましょう')",
+        "hints": [
+          "OpenAI / Anthropic APIの実装入門の基本構文を確認しましょう",
+          "公式ドキュメントを参照してください",
+          "エラーメッセージをよく読んで対処しましょう"
+        ],
+        "answer": "# OpenAI / Anthropic APIの実装入門の模範回答\nprint('OpenAI / Anthropic APIの実装入門の演習完了！')"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "OpenAI / Anthropic APIの実装入門に関する問題1",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          },
+          {
+            "q": "OpenAI / Anthropic APIの実装入門に関する問題2",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          },
+          {
+            "q": "OpenAI / Anthropic APIの実装入門に関する問題3",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール7-44 完了！\n\n## 習得したポイント\n\n✅ OpenAI / Anthropic APIの実装入門の基本概念を理解した\n✅ マーケティング実務での活用方法を把握した\n✅ 関連する技術との違いを説明できる\n✅ 次のステップに進む準備ができた\n\n## 次のステップ\n\n次のモジュール **「7-45: Google API認証とOAuth2実装」** に進みましょう。\n\n> 実務チャレンジ: 今回学んだ内容を自社の業務に1つ適用してみましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

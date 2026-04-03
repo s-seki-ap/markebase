@@ -1,0 +1,84 @@
+{
+  "id": "ai-automation--7-22",
+  "moduleId": "7-22",
+  "categoryId": "ai-automation",
+  "title": "SEO記事のAI生成ワークフロー",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# キーワードから公開まで一気通貫で自動化\n\nSEO記事の制作は「キーワード選定→構成→執筆→校正→公開」と多くの工程があります。AIを活用すれば、このワークフローを大幅に効率化できます。\n\n## 従来 vs AI活用の比較\n\n- 従来: 1記事あたり8時間（企画2h+執筆4h+校正2h）\n- AI活用: 1記事あたり2時間（AI生成30min+人間編集90min）\n\n**あなたへの問い**: SEO記事をAIに書かせたことはありますか？品質に満足しましたか？",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# SEO記事AI生成の5ステップ\n\n```\nSEO記事生成パイプライン\n├── Step1: キーワード選定・検索意図分析\n│   └── 関連KWと検索意図をJSON出力\n├── Step2: 記事構成の自動生成\n│   └── H2/H3構成をMarkdown出力\n├── Step3: セクション別本文生成\n│   └── 各セクションを並列生成\n├── Step4: 品質チェック・ファクトチェック\n│   └── E-E-A-T評価・重複チェック\n└── Step5: メタ情報・内部リンク提案\n    └── title/description/関連記事\n```\n\n## プロンプト設計のポイント\n\n### Step1: 検索意図分析\n「{keyword}の検索意図を以下の形式で分析: 情報探索/比較検討/購入意欲/ナビゲーション」\n\n### Step3: 本文生成\n「E-E-A-Tを意識し、具体例・データ・専門家の見解を含める」\n\n## 品質管理チェックリスト\n\n- ファクトチェック（数値・固有名詞）\n- Google検索ガイドライン準拠\n- ブランドトーンの一貫性\n- オリジナリティ（AI検出ツール確認）",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "type": "interactive",
+        "data": {
+          "content": "# 演習: SEO記事のAI生成ワークフローの理解度チェック\n\n学んだ内容をインタラクティブな演習で確認しましょう。",
+          "htmlContent": "<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#0f172a;color:#e2e8f0;font-family:system-ui,sans-serif;padding:24px;min-height:100vh}.title{font-size:1.3rem;font-weight:700;margin-bottom:16px}.quiz-item{background:#1e293b;border:2px solid #334155;border-radius:10px;padding:16px;margin-bottom:12px}.quiz-item .q{font-weight:600;margin-bottom:12px;font-size:.95rem}.options{display:flex;gap:8px;flex-wrap:wrap}.opt{background:#334155;border:2px solid #475569;border-radius:8px;padding:10px 16px;cursor:pointer;transition:all .2s;font-size:.85rem}.opt:hover{border-color:#3b82f6}.opt.selected{border-color:#3b82f6;background:#1e3a5f}.opt.correct{border-color:#10b981;background:#052e16}.opt.wrong{border-color:#ef4444;background:#2a0f0f}.btn{background:#3b82f6;color:#fff;border:none;border-radius:8px;padding:12px 28px;font-size:1rem;font-weight:600;cursor:pointer;margin-top:8px}.btn:hover{background:#2563eb}.result{margin-top:16px;padding:14px;border-radius:10px;font-weight:600;display:none}.feedback{margin-top:8px;font-size:.8rem;color:#94a3b8;display:none}</style></head><body><div class=\"title\">SEO記事のAI生成ワークフロー 理解度チェック</div><div id=\"questions\"></div><button class=\"btn\" onclick=\"check()\">回答を確認</button><div class=\"result\" id=\"result\"></div><script>const qs=[{q:\"このモジュールの重要概念を選択してください\",opts:[\"選択肢A\",\"選択肢B\",\"選択肢C\"],ans:0,exp:\"正解の解説\"}];const container=document.getElementById(\"questions\");const selections=new Array(qs.length).fill(-1);qs.forEach((q,i)=>{const div=document.createElement(\"div\");div.className=\"quiz-item\";div.innerHTML=`<div class=\"q\">${i+1}. ${q.q}</div><div class=\"options\">${q.opts.map((o,j)=>`<div class=\"opt\" data-q=\"${i}\" data-o=\"${j}\" onclick=\"sel(${i},${j})\">${o}</div>`).join(\"\")}</div><div class=\"feedback\" id=\"fb-${i}\"></div>`;container.appendChild(div)});function sel(qi,oi){selections[qi]=oi;document.querySelectorAll(`[data-q=\"${qi}\"]`).forEach(el=>{el.className=el.dataset.o==oi?\"opt selected\":\"opt\"})}function check(){let score=0;qs.forEach((q,i)=>{const fb=document.getElementById(\"fb-\"+i);document.querySelectorAll(`[data-q=\"${i}\"]`).forEach(el=>{const oi=parseInt(el.dataset.o);if(oi===q.ans)el.className=\"opt correct\";else if(oi===selections[i])el.className=\"opt wrong\";else el.className=\"opt\"});fb.textContent=q.exp;fb.style.display=\"block\";if(selections[i]===q.ans)score++});const r=document.getElementById(\"result\");r.style.display=\"block\";const ok=score>=qs.length-1;r.style.background=ok?\"#052e16\":\"#2a0f0f\";r.style.border=ok?\"2px solid #10b981\":\"2px solid #ef4444\";r.style.color=ok?\"#10b981\":\"#ef4444\";r.textContent=`${score}/${qs.length}問正解！`}</script></body></html>",
+          "checkpoints": [
+            "主要概念を理解した",
+            "マーケティング実務への適用を考えられた",
+            "次のステップを把握した"
+          ]
+        }
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "SEO記事のAI生成ワークフローに関する問題1",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          },
+          {
+            "q": "SEO記事のAI生成ワークフローに関する問題2",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          },
+          {
+            "q": "SEO記事のAI生成ワークフローに関する問題3",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール7-22 完了！\n\n## 習得したポイント\n\n✅ SEO記事のAI生成ワークフローの基本概念を理解した\n✅ マーケティング実務での活用方法を把握した\n✅ 関連する技術との違いを説明できる\n✅ 次のステップに進む準備ができた\n\n## 次のステップ\n\n次のモジュール **「7-23: 広告コピー・LPコピーのAI大量生成」** に進みましょう。\n\n> 実務チャレンジ: 今回学んだ内容を自社の業務に1つ適用してみましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

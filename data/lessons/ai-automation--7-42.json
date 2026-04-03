@@ -1,0 +1,82 @@
+{
+  "id": "ai-automation--7-42",
+  "moduleId": "7-42",
+  "categoryId": "ai-automation",
+  "title": "Jupyter Notebookの活用術",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 分析と文書を一体化したインタラクティブ環境\n\nJupyter Notebookは「コード実行」「分析結果」「説明文」を1つのドキュメントにまとめられるツールです。データ分析の試行錯誤と結果の文書化を同時に行えます。\n\n**あなたへの問い**: データ分析の過程を後から振り返れるように記録していますか？",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# Jupyter Notebook活用\n\n## Notebookの構成\n\n```\nJupyter Notebookの構成要素\n├── Markdownセル: 説明・見出し・分析メモ\n├── コードセル: Python実行\n├── 出力セル: グラフ・表・テキスト\n└── マジックコマンド: %timeit, %%sql等\n```\n\n## インストールと起動\n\n```bash\npip install jupyter\njupyter notebook\n# ブラウザが自動的に開く\n```\n\n## 効率的な使い方\n\n### セル分割のコツ\n- 1セル = 1つの処理ステップ\n- データ読み込み → 前処理 → 分析 → 可視化\n- 各セルにMarkdownで目的を記載\n\n### 便利なショートカット\n| キー | 機能 |\n|------|------|\n| Shift+Enter | セル実行&次へ |\n| Ctrl+Enter | セル実行（移動なし） |\n| A | 上にセル追加 |\n| B | 下にセル追加 |\n| M | Markdownセルに変更 |",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 演習: Jupyter Notebookの活用術を実践してみよう\n\n以下のコードの空欄を埋めて、実際に動くスクリプトを完成させましょう。",
+        "starterCode": "# Jupyter Notebookの活用術の演習\n# TODO: 以下のコードを完成させてください\n\nprint('演習を完成させましょう')",
+        "hints": [
+          "Jupyter Notebookの活用術の基本構文を確認しましょう",
+          "公式ドキュメントを参照してください",
+          "エラーメッセージをよく読んで対処しましょう"
+        ],
+        "answer": "# Jupyter Notebookの活用術の模範回答\nprint('Jupyter Notebookの活用術の演習完了！')"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "Jupyter Notebookの活用術に関する問題1",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          },
+          {
+            "q": "Jupyter Notebookの活用術に関する問題2",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          },
+          {
+            "q": "Jupyter Notebookの活用術に関する問題3",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール7-42 完了！\n\n## 習得したポイント\n\n✅ Jupyter Notebookの活用術の基本概念を理解した\n✅ マーケティング実務での活用方法を把握した\n✅ 関連する技術との違いを説明できる\n✅ 次のステップに進む準備ができた\n\n## 次のステップ\n\n次のモジュール **「7-43: REST APIの呼び出しと認証基礎」** に進みましょう。\n\n> 実務チャレンジ: 今回学んだ内容を自社の業務に1つ適用してみましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

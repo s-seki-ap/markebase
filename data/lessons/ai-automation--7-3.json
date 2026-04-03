@@ -2,33 +2,35 @@
   "id": "ai-automation--7-3",
   "moduleId": "7-3",
   "categoryId": "ai-automation",
-  "title": "教師あり・なし・強化学習の違い",
+  "title": "ニューラルネットワークと深層学習",
   "sections": [
     {
       "type": "intro",
       "data": {
-        "content": "# 3種類の「学習スタイル」を使い分ける\n\n機械学習には大きく3つのアプローチがあります。どれを使うかは**手元にあるデータの形**と**解きたい問題**によって決まります。\n\n## マーケターにとっての重要性\n\nAIツールの担当者や開発ベンダーと話すとき、「このツールは教師ありですか？クラスタリングベースですか？」と聞けるだけで、技術選定の議論に参加できます。\n\nまた、「なぜ精度が出ないのか」の原因特定にも直結します。\n\n**あなたへの問い**: 顧客セグメンテーションを行う場合、あなたは「事前に何グループに分けるか」を決めていますか？それとも「データを見てから決めたい」ですか？",
+        "content": "# 人間の脳を模倣した「学習する仕組み」\n\nニューラルネットワークは、人間の脳の神経細胞の接続を模倣した数学的モデルです。これを多層に積み重ねたものが**深層学習（ディープラーニング）**。\n\n## マーケターにとっての意味\n\n- Google広告の「自動入札」はニューラルネットワーク\n- Instagram・TikTokの「おすすめフィード」も深層学習\n- 画像生成AI（DALL-E、Midjourney）の基盤技術\n\n仕組みを知ることで、AIツールの設定を正しく行い、結果を的確に解釈できます。\n\n**あなたへの問い**: 「ディープラーニング」と「機械学習」の違いを聞かれたら、どう答えますか？",
         "diagram": false
       }
     },
     {
       "type": "concept",
       "data": {
-        "content": "# 3種類の機械学習アプローチ\n\n## 1. 教師あり学習（Supervised Learning）\n\n**「正解ラベル付きのデータ」で学習する**\n\n```\nデータ例:\n  購入あり: [30代, 女性, 夜間, スマホ] → 正解: 購入\n  購入なし: [20代, 男性, 昼間, PC]    → 正解: 非購入\n\n学習: このパターンから「購入する人の特徴」を学ぶ\n予測: 新しいユーザーが購入するか確率を出す\n```\n\n**マーケ活用**:\n- 離脱予測（チャーンスコアリング）\n- リード評価（スコアリング）\n- 広告CTR予測\n- スパムメール分類\n\n## 2. 教師なし学習（Unsupervised Learning）\n\n**「正解なし」でデータの構造を発見する**\n\n```\nデータ例:\n  顧客1: [購入頻度: 高, 客単価: 高, 直近: 近い]\n  顧客2: [購入頻度: 低, 客単価: 高, 直近: 遠い]\n  顧客3: [購入頻度: 高, 客単価: 低, 直近: 近い]\n  ...\n\n学習: 「似ているグループ」を自動で見つける\n結果: 「ロイヤル顧客」「休眠顧客」「価格重視顧客」等\n```\n\n**マーケ活用**:\n- 顧客セグメンテーション（RFM分析の自動化）\n- 類似コンテンツのグルーピング\n- 異常検知（不正トランザクション検出）\n\n## 3. 強化学習（Reinforcement Learning）\n\n**「試行錯誤と報酬」で学習する**\n\n```\nエージェント（AI）が行動 → 環境から報酬を受け取る\n→ 報酬が最大になるよう行動を改善する\n```\n\n**マーケ活用**:\n- 広告入札の自動最適化（Google Smart Bidding)\n- メール送信タイミングの最適化\n- レコメンドエンジンの長期的な改善\n\n## まとめ比較表\n\n| 種類 | 必要なデータ | 代表的なマーケ活用 |\n|------|-------------|-------------------|\n| 教師あり | ラベル付きデータ | 購入予測・スコアリング |\n| 教師なし | ラベルなしデータ | 顧客セグメント発見 |\n| 強化学習 | 環境との相互作用 | 入札・配信最適化 |",
+        "content": "# ニューラルネットワークの基本構造\n\n```\nニューラルネットワークの構造\n├── 入力層（Input Layer）\n│   └── データを受け取る（画像ピクセル、テキストトークン等）\n├── 隠れ層（Hidden Layers）× N層\n│   ├── 浅い学習: 1〜2層 → 単純なパターン認識\n│   └── 深層学習: 数十〜数百層 → 複雑な特徴抽出\n└── 出力層（Output Layer）\n    └── 予測結果（分類確率、数値予測等）\n```\n\n## 深層学習の「深い」理由\n\n隠れ層を増やすほど複雑な特徴を段階的に学習。\n\n画像認識の例:\n- 第1層: エッジ（線の方向）\n- 第2層: テクスチャ（模様）\n- 第3層: パーツ（目・鼻）\n- 第4層以降: 顔全体→人物識別\n\n## マーケティング活用\n\n### 広告最適化\nGoogle広告スマート入札は数百万パラメータのNNでCV確率をリアルタイム予測。\n\n### 画像・動画広告の自動審査\nMeta広告のポリシー違反検出はCNNベースの画像分類。\n\n### 需要予測\nECの在庫最適化にRNNやTransformerベースの時系列予測が活用。\n\n## 深層学習の限界\n\n- **ブラックボックス**: 判断理由の説明が難しい\n- **大量データが必要**: 少量データでは学習困難\n- **計算コストが高い**: 学習に高価なGPUが必要",
         "diagram": true
       }
     },
     {
       "type": "exercise",
       "data": {
-        "content": "# 演習: マーケティング課題を3種類に分類しよう\n\n以下の5つのマーケティング課題が「教師あり」「教師なし」「強化学習」のどれに該当するか分類してください。\n\n`solutions` リストの空欄を埋めて実行し、解説を確認してください。",
-        "starterCode": "# マーケティング課題の機械学習タイプ分類\n\nmarketing_tasks = [\n    {\n        \"task\": \"過去の購入履歴から、来月解約しそうな顧客を特定する\",\n        \"data_available\": \"解約した顧客・継続した顧客のデータあり\",\n        \"ml_type\": \"\"  # 「教師あり」「教師なし」「強化学習」のいずれかを入力\n    },\n    {\n        \"task\": \"全顧客を行動パターンで自動的にグループ分けする\",\n        \"data_available\": \"行動ログのみ（グループの答えなし）\",\n        \"ml_type\": \"\"\n    },\n    {\n        \"task\": \"Google広告の入札単価を自動でリアルタイム最適化する\",\n        \"data_available\": \"過去の入札結果と成果データ\",\n        \"ml_type\": \"\"\n    },\n    {\n        \"task\": \"メールの件名が良いか悪いかを自動判定する\",\n        \"data_available\": \"過去の件名と開封率データあり\",\n        \"ml_type\": \"\"\n    },\n    {\n        \"task\": \"購買履歴から顧客の潜在的な興味関心クラスタを発見する\",\n        \"data_available\": \"購買ログのみ（興味関心のラベルなし）\",\n        \"ml_type\": \"\"\n    }\n]\n\n# 答え合わせ用\ncorrect_answers = [\"教師あり\", \"教師なし\", \"強化学習\", \"教師あり\", \"教師なし\"]\n\nscore = 0\nfor i, task in enumerate(marketing_tasks):\n    user_answer = task[\"ml_type\"]\n    correct = correct_answers[i]\n    is_correct = user_answer == correct\n    if is_correct:\n        score += 1\n    status = \"正解\" if is_correct else f\"不正解（正解: {correct}）\"\n    print(f\"問{i+1}: {task['task'][:25]}... → {user_answer or '未回答'} [{status}]\")\n\nprint(f\"\\n得点: {score}/{len(marketing_tasks)}\")",
-        "hints": [
-          "「正解データがある（解約した・しない, 開封した・しない）」→ 教師あり学習です。",
-          "「ラベルがなく、データの構造を自分で発見したい」→ 教師なし学習です。グルーピング・クラスタリングが典型例。",
-          "「リアルタイムで試行錯誤しながら最適化したい（入札・配信）」→ 強化学習です。"
-        ],
-        "answer": "# マーケティング課題の機械学習タイプ分類\n\nmarketing_tasks = [\n    {\n        \"task\": \"過去の購入履歴から、来月解約しそうな顧客を特定する\",\n        \"data_available\": \"解約した顧客・継続した顧客のデータあり\",\n        \"ml_type\": \"教師あり\"\n    },\n    {\n        \"task\": \"全顧客を行動パターンで自動的にグループ分けする\",\n        \"data_available\": \"行動ログのみ（グループの答えなし）\",\n        \"ml_type\": \"教師なし\"\n    },\n    {\n        \"task\": \"Google広告の入札単価を自動でリアルタイム最適化する\",\n        \"data_available\": \"過去の入札結果と成果データ\",\n        \"ml_type\": \"強化学習\"\n    },\n    {\n        \"task\": \"メールの件名が良いか悪いかを自動判定する\",\n        \"data_available\": \"過去の件名と開封率データあり\",\n        \"ml_type\": \"教師あり\"\n    },\n    {\n        \"task\": \"購買履歴から顧客の潜在的な興味関心クラスタを発見する\",\n        \"data_available\": \"購買ログのみ（興味関心のラベルなし）\",\n        \"ml_type\": \"教師なし\"\n    }\n]\n\ncorrect_answers = [\"教師あり\", \"教師なし\", \"強化学習\", \"教師あり\", \"教師なし\"]\n\nscore = 0\nfor i, task in enumerate(marketing_tasks):\n    user_answer = task[\"ml_type\"]\n    correct = correct_answers[i]\n    is_correct = user_answer == correct\n    if is_correct:\n        score += 1\n    status = \"正解\" if is_correct else f\"不正解（正解: {correct}）\"\n    print(f\"問{i+1}: {task['task'][:25]}... → {user_answer or '未回答'} [{status}]\")\n\nprint(f\"\\n得点: {score}/{len(marketing_tasks)}\")"
+        "type": "interactive",
+        "data": {
+          "content": "# 演習: ニューラルネットワークの構造と活用をマッチング\n\n各層の役割とマーケティング活用を正しくマッチングさせましょう。",
+          "htmlContent": "<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#0f172a;color:#e2e8f0;font-family:system-ui,sans-serif;padding:24px;min-height:100vh}.title{font-size:1.3rem;font-weight:700;margin-bottom:16px}.quiz-item{background:#1e293b;border:2px solid #334155;border-radius:10px;padding:16px;margin-bottom:12px}.quiz-item .q{font-weight:600;margin-bottom:12px;font-size:.95rem}.options{display:flex;gap:8px;flex-wrap:wrap}.opt{background:#334155;border:2px solid #475569;border-radius:8px;padding:10px 16px;cursor:pointer;transition:all .2s;font-size:.85rem}.opt:hover{border-color:#3b82f6}.opt.selected{border-color:#3b82f6;background:#1e3a5f}.opt.correct{border-color:#10b981;background:#052e16}.opt.wrong{border-color:#ef4444;background:#2a0f0f}.btn{background:#3b82f6;color:#fff;border:none;border-radius:8px;padding:12px 28px;font-size:1rem;font-weight:600;cursor:pointer;margin-top:8px}.btn:hover{background:#2563eb}.result{margin-top:16px;padding:14px;border-radius:10px;font-weight:600;display:none}.feedback{margin-top:8px;font-size:.8rem;color:#94a3b8;display:none}</style></head><body><div class=\"title\">ニューラルネットワークの層と活用マッチング</div><div id=\"questions\"></div><button class=\"btn\" onclick=\"check()\">回答を確認</button><div class=\"result\" id=\"result\"></div><script>const qs=[{q:\"データ（画像・テキスト等）を受け取る最初の層は？\",opts:[\"入力層\",\"隠れ層\",\"出力層\"],ans:0,exp:\"入力層はデータを受け取る最初の層です\"},{q:\"データの特徴を段階的に抽出する中間層は？\",opts:[\"入力層\",\"隠れ層\",\"出力層\"],ans:1,exp:\"隠れ層がパターン認識の中核を担います\"},{q:\"予測結果を出す最後の層は？\",opts:[\"入力層\",\"隠れ層\",\"出力層\"],ans:2,exp:\"出力層が最終的な予測結果を出力します\"},{q:\"広告画像のポリシー違反自動判定に使うNNは？\",opts:[\"CNN（画像認識）\",\"RNN（時系列）\",\"Transformer（言語）\"],ans:0,exp:\"CNNは画像の特徴抽出に特化しています\"},{q:\"来月のEC売上を時系列データから予測するNNは？\",opts:[\"CNN（画像認識）\",\"RNN（時系列）\",\"Transformer（言語）\"],ans:1,exp:\"RNNは時系列データの予測に適しています\"},{q:\"自然言語からSQL文を生成するLLMの基盤技術は？\",opts:[\"CNN（画像認識）\",\"RNN（時系列）\",\"Transformer（言語）\"],ans:2,exp:\"Transformerは現在のLLMの基盤アーキテクチャです\"}];const container=document.getElementById(\"questions\");const selections=new Array(qs.length).fill(-1);qs.forEach((q,i)=>{const div=document.createElement(\"div\");div.className=\"quiz-item\";div.innerHTML=`<div class=\"q\">${i+1}. ${q.q}</div><div class=\"options\">${q.opts.map((o,j)=>`<div class=\"opt\" data-q=\"${i}\" data-o=\"${j}\" onclick=\"sel(${i},${j})\">${o}</div>`).join(\"\")}</div><div class=\"feedback\" id=\"fb-${i}\"></div>`;container.appendChild(div)});function sel(qi,oi){selections[qi]=oi;document.querySelectorAll(`[data-q=\"${qi}\"]`).forEach(el=>{el.className=el.dataset.o==oi?\"opt selected\":\"opt\"})}function check(){let score=0;qs.forEach((q,i)=>{const fb=document.getElementById(\"fb-\"+i);document.querySelectorAll(`[data-q=\"${i}\"]`).forEach(el=>{const oi=parseInt(el.dataset.o);if(oi===q.ans)el.className=\"opt correct\";else if(oi===selections[i])el.className=\"opt wrong\";else el.className=\"opt\"});fb.textContent=q.exp;fb.style.display=\"block\";if(selections[i]===q.ans)score++});const r=document.getElementById(\"result\");r.style.display=\"block\";const ok=score>=qs.length-1;r.style.background=ok?\"#052e16\":\"#2a0f0f\";r.style.border=ok?\"2px solid #10b981\":\"2px solid #ef4444\";r.style.color=ok?\"#10b981\":\"#ef4444\";r.textContent=`${score}/${qs.length}問正解！`}</script></body></html>",
+          "checkpoints": [
+            "入力層・隠れ層・出力層の役割を正しくマッチングできた",
+            "CNN・RNN・Transformerの用途を区別できた",
+            "マーケティング課題に適したNN構造を選択できる"
+          ]
+        }
       }
     },
     {
@@ -36,37 +38,37 @@
       "data": {
         "questions": [
           {
-            "q": "顧客のRFMデータ（購入頻度・金額・最終購入日）を使って「似たような顧客グループ」を自動で発見したい。最も適切な機械学習の種類はどれですか？",
+            "q": "深層学習が「深い」理由は？",
             "options": [
-              "教師あり学習（ラベルがあるため）",
-              "強化学習（試行錯誤が必要なため）",
-              "教師なし学習（正解ラベルなしでパターン発見）",
-              "転移学習（別ドメインの知識を使うため）"
-            ],
-            "correct": 2,
-            "explanation": "「どんなグループが存在するか事前にわからない」状況でのグルーピングは教師なし学習（クラスタリング）の典型例です。k-meansやDBSCANなどのアルゴリズムが使われます。"
-          },
-          {
-            "q": "教師あり学習を使うために必ず必要なものはどれですか？",
-            "options": [
-              "大量の非構造化データ",
-              "正解ラベル付きのトレーニングデータ",
-              "リアルタイムのフィードバック環境",
-              "GPUクラスター"
+              "データ量が多い",
+              "隠れ層が多層に積み重なっている",
+              "計算速度が速い",
+              "コードが長い"
             ],
             "correct": 1,
-            "explanation": "教師あり学習では「このデータの正解はこれ」というラベル付きデータが必須です。例えば「解約した（1）・しない（0）」のラベルがついた過去データが必要です。ラベル付け作業はコストがかかる点に注意。"
+            "explanation": "「ディープ」は隠れ層の多さを指す。層が深いほど複雑な特徴を学習可能。"
           },
           {
-            "q": "Google広告のスマート入札が採用している機械学習アプローチとして最も適切なのはどれですか？",
+            "q": "広告画像のポリシー違反検出に最適なNNは？",
             "options": [
-              "教師なし学習でユーザーをクラスタリングする",
-              "教師あり学習でCTRを予測する",
-              "強化学習でリアルタイムに入札を最適化する",
-              "教師あり学習でコンバージョンを分類する"
+              "RNN",
+              "CNN",
+              "全結合NN",
+              "GAN"
+            ],
+            "correct": 1,
+            "explanation": "CNNは画像特徴の階層的抽出に特化。画像分類で圧倒的性能。"
+          },
+          {
+            "q": "深層学習の課題として不適切なものは？",
+            "options": [
+              "大量データが必要",
+              "計算コストが高い",
+              "日本語に対応できない",
+              "判断理由の説明が難しい"
             ],
             "correct": 2,
-            "explanation": "スマート入札はオークションのたびに入札単価を決定し、その結果（コンバージョン）を報酬として学習し続けます。これは強化学習の「行動→報酬→改善」サイクルに相当します。"
+            "explanation": "深層学習は言語非依存。課題はデータ量・コスト・ブラックボックス性。"
           }
         ]
       }
@@ -74,7 +76,7 @@
     {
       "type": "summary",
       "data": {
-        "content": "# モジュール7-3 完了！\n\n3種類の機械学習アプローチとマーケ活用を整理しました。\n\n## 習得したポイント\n\n✅ 教師あり・なし・強化学習の違いをデータの種類で判断できる\n✅ 顧客スコアリングは教師あり、セグメンテーションは教師なしと説明できる\n✅ Google広告のスマート入札が強化学習であることを理解した\n✅ マーケティング課題から適切な学習タイプを選べるようになった\n\n## 次のステップ\n\n次のモジュール **「7-4: ニューラルネットワーク入門」** では、現代AIの根幹技術であるニューラルネットワークの仕組みを直感的に学びます。\n\n> 実務チャレンジ: 自社のCRMやMAツールに搭載されているAI機能を1つ選び、「教師あり・なし・強化学習」のどれに該当するか担当者に聞いてみましょう。",
+        "content": "# モジュール7-3 完了！\n\n## 習得したポイント\n\n✅ NNの3層構造（入力・隠れ・出力）を説明できる\n✅ CNN・RNN・Transformerの用途の違いを理解した\n✅ 深層学習がマーケツールの内部でどう使われているか把握した\n✅ 深層学習の限界を認識した\n\n## 次のステップ\n\n次のモジュール **「7-4: NLP・画像認識・マルチモーダルAI」** でテキスト・画像・音声を横断するAI技術を学びます。\n\n> 実務チャレンジ: Canva AIやAdobe Fireflyを使う際、CNNベースの技術が動いていることを意識してみましょう。",
         "diagram": false
       }
     }

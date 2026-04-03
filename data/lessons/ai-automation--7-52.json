@@ -1,0 +1,82 @@
+{
+  "id": "ai-automation--7-52",
+  "moduleId": "7-52",
+  "categoryId": "ai-automation",
+  "title": "CLAUDE.mdの書き方とプロジェクト指示設計",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# CLAUDE.mdはAIへの「ブリーフィング資料」\n\nマーケターなら、外部パートナーに仕事を依頼するとき「ブリーフィングシート」を渡しますよね。ブランドガイドライン、ターゲット、禁止事項――これがないと成果物の質がブレます。\n\nClaude CodeにおけるCLAUDE.mdは、まさにそのブリーフィングシートです。プロジェクトのルール、技術スタック、やってはいけないことを書いておくと、AIがそれに従って動きます。\n\n逆に言えば、CLAUDE.mdが雑だとAIの出力も雑になります。\n\n**あなたへの問い**: 外部ライターにブログ記事を依頼するとき、何を伝えますか？その情報はAIにも同じように伝えるべきではないですか？",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# CLAUDE.mdの設計原則\n\n## CLAUDE.mdとは\n\nプロジェクトのルートに配置するMarkdownファイルで、Claude Codeが毎回の会話開始時に自動で読み込みます。プロジェクト固有の指示書です。\n\n## 書くべき5つの要素\n\n```\nCLAUDE.mdの構成\n├── 1. プロジェクト概要（何のプロジェクトか）\n├── 2. 技術スタック（使用言語・フレームワーク）\n├── 3. ディレクトリ構成（ファイルの置き場所）\n├── 4. コーディング/ライティングルール\n└── 5. 禁止事項（絶対やってはいけないこと）\n```\n\n## マーケティングプロジェクトでの記述例\n\n- **概要**: 「GA4データを分析してクライアント向け月次レポートを作成するプロジェクト」\n- **技術**: 「Python 3.11、pandas、BigQuery」\n- **ルール**: 「レポートは日本語敬語。数値は前月比を必ず併記」\n- **禁止**: 「クライアントの実データをGitにコミットしない」\n\n## 配置場所と優先順位\n\n1. `~/.claude/CLAUDE.md` — 全プロジェクト共通\n2. `プロジェクトルート/CLAUDE.md` — プロジェクト固有\n3. `サブフォルダ/CLAUDE.md` — フォルダ固有\n\n下位のファイルが上位を上書きします。マーケ部門共通ルールは全体設定、案件固有ルールはプロジェクト設定に書くのが効率的です。\n\n## よくある失敗\n\n- 抽象的すぎる（「良い感じにして」→ NG）\n- 情報が多すぎる（AIも人間と同じで情報過多だと重要点を見失う）\n- 更新しない（プロジェクトが進んでもルールが初期のまま）",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "type": "interactive",
+        "content": "# 演習: CLAUDE.mdの構成要素を正しく分類しよう\n\n以下の記述が「概要」「技術スタック」「ルール」「禁止事項」のどこに入るか、ドラッグ&ドロップで分類してください。",
+        "htmlContent": "<!DOCTYPE html><html><head><meta charset=\"utf-8\"><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#0f172a;color:#e2e8f0;font-family:system-ui,sans-serif;padding:24px;min-height:100vh}.title{font-size:1.3rem;font-weight:700;margin-bottom:8px;color:#f8fafc}.desc{color:#94a3b8;margin-bottom:20px;font-size:.9rem}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}.category{background:#1e293b;border:2px dashed #334155;border-radius:12px;padding:12px;min-height:150px}.category.over{border-color:#3b82f6;background:rgba(59,130,246,.05)}.cat-title{font-size:.85rem;font-weight:700;color:#8b5cf6;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid #334155}.source{background:#1e293b;border:2px dashed #334155;border-radius:12px;padding:12px;margin-bottom:16px;min-height:60px;display:flex;flex-wrap:wrap;gap:6px}.card{background:#0f172a;border:1px solid #475569;border-radius:8px;padding:8px 12px;cursor:grab;user-select:none;font-size:.85rem;transition:all .2s;display:inline-block;margin:2px}.card:hover{border-color:#3b82f6;box-shadow:0 0 8px rgba(59,130,246,.2)}.card.correct{border-color:#10b981;background:rgba(16,185,129,.1)}.card.wrong{border-color:#ef4444;background:rgba(239,68,68,.1)}.btn{background:#3b82f6;color:#fff;border:none;padding:10px 24px;border-radius:8px;cursor:pointer;font-size:.95rem;transition:all .2s}.btn:hover{background:#2563eb}.result{margin-top:12px;padding:12px;border-radius:8px;font-weight:600;display:none}.result.show{display:block}.result.pass{background:rgba(16,185,129,.15);color:#10b981;border:1px solid #10b981}.result.fail{background:rgba(239,68,68,.15);color:#ef4444;border:1px solid #ef4444}</style></head><body><div class=\"title\">CLAUDE.md構成要素の分類</div><div class=\"desc\">カードを正しいカテゴリにドラッグしてください</div><div class=\"source\" id=\"source\"></div><div class=\"grid\" id=\"grid\"></div><button class=\"btn\" onclick=\"check()\">回答を確認</button><div class=\"result\" id=\"result\"></div><script>const items=[{text:\"GA4データ分析レポート作成PJ\",cat:\"概要\"},{text:\"Python 3.11 + pandas\",cat:\"技術スタック\"},{text:\"BigQuery + Altair\",cat:\"技術スタック\"},{text:\"レポートは日本語敬語で書く\",cat:\"ルール\"},{text:\"数値は前月比を必ず併記\",cat:\"ルール\"},{text:\"クライアント実データをGitにコミットしない\",cat:\"禁止事項\"},{text:\"本番BQテーブルをDELETEしない\",cat:\"禁止事項\"},{text:\"クライアント向け月次分析を自動化\",cat:\"概要\"}];const cats=[\"概要\",\"技術スタック\",\"ルール\",\"禁止事項\"];const shuffled=[...items].sort(()=>Math.random()-.5);const source=document.getElementById(\"source\");const grid=document.getElementById(\"grid\");shuffled.forEach((item,i)=>{const card=document.createElement(\"div\");card.className=\"card\";card.draggable=true;card.textContent=item.text;card.dataset.cat=item.cat;card.dataset.idx=i;card.addEventListener(\"dragstart\",e=>{e.dataTransfer.setData(\"text/plain\",i);card.style.opacity=\"0.4\"});card.addEventListener(\"dragend\",()=>{card.style.opacity=\"1\"});source.appendChild(card)});cats.forEach(cat=>{const zone=document.createElement(\"div\");zone.className=\"category\";zone.dataset.cat=cat;zone.innerHTML='<div class=\"cat-title\">'+cat+\"</div>\";zone.addEventListener(\"dragover\",e=>{e.preventDefault();zone.classList.add(\"over\")});zone.addEventListener(\"dragleave\",()=>zone.classList.remove(\"over\"));zone.addEventListener(\"drop\",e=>{e.preventDefault();zone.classList.remove(\"over\");const idx=e.dataTransfer.getData(\"text/plain\");const card=document.querySelector('.card[data-idx=\"'+idx+'\"]');if(card)zone.appendChild(card)});grid.appendChild(zone)});source.addEventListener(\"dragover\",e=>e.preventDefault());source.addEventListener(\"drop\",e=>{e.preventDefault();const idx=e.dataTransfer.getData(\"text/plain\");const card=document.querySelector('.card[data-idx=\"'+idx+'\"]');if(card)source.appendChild(card)});function check(){const allCards=document.querySelectorAll(\".card\");let correct=0;allCards.forEach(card=>{card.classList.remove(\"correct\",\"wrong\");const parent=card.parentElement;if(parent&&parent.dataset.cat===card.dataset.cat){card.classList.add(\"correct\");correct++}else if(parent&&parent.dataset.cat){card.classList.add(\"wrong\")}});const r=document.getElementById(\"result\");r.classList.add(\"show\");if(correct===items.length){r.className=\"result show pass\";r.textContent=\"全問正解！ CLAUDE.mdの構成要素を正しく理解しています。\"}else{r.className=\"result show fail\";r.textContent=correct+\"/\"+items.length+\" 正解。緑が正解、赤が不正解です。\"}}</script></body></html>",
+        "checkpoints": [
+          "CLAUDE.mdに書くべき5つの要素を理解した",
+          "概要・技術・ルール・禁止事項の区別ができる",
+          "マーケティングプロジェクト向けの記述例をイメージできた"
+        ]
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "CLAUDE.mdファイルの役割として最も適切なのはどれですか？",
+            "options": [
+              "Claude Codeのインストール設定ファイル",
+              "プロジェクト固有のルールや技術情報をAIに伝える指示書",
+              "コードのテスト結果を記録するログファイル",
+              "APIキーを保存する認証ファイル"
+            ],
+            "correct": 1,
+            "explanation": "CLAUDE.mdはプロジェクトのルール・技術スタック・禁止事項などをClaude Codeに伝えるための指示書です。会話開始時に自動で読み込まれます。"
+          },
+          {
+            "q": "CLAUDE.mdの配置場所と優先順位について正しいのはどれですか？",
+            "options": [
+              "ホームディレクトリのものだけが有効",
+              "プロジェクトルートのものだけが有効",
+              "サブフォルダ > プロジェクトルート > ホームの順で上書きされる",
+              "すべて同じ優先順位で処理される"
+            ],
+            "correct": 2,
+            "explanation": "CLAUDE.mdはホーム、プロジェクトルート、サブフォルダの3階層に配置でき、より深い階層のものが優先されます。共通ルールはホームに、プロジェクト固有はルートに書くのが効率的です。"
+          },
+          {
+            "q": "CLAUDE.mdの記述でやりがちな失敗はどれですか？",
+            "options": [
+              "技術スタックを具体的に書きすぎる",
+              "禁止事項を明記する",
+              "「良い感じにして」のような抽象的な指示を書く",
+              "ディレクトリ構成を図で示す"
+            ],
+            "correct": 2,
+            "explanation": "CLAUDE.mdに抽象的な指示を書くとAIの出力がブレます。「日本語敬語で書く」「前月比を必ず併記する」のように具体的に書くことが重要です。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール7-52 完了！\n\n## 習得したポイント\n\n✅ CLAUDE.mdがAIへのブリーフィング資料として機能することを理解した\n✅ 書くべき5要素（概要・技術・構成・ルール・禁止）を把握した\n✅ 3階層の配置場所と優先順位を理解した\n✅ マーケPJでの具体的な記述例をイメージできた\n\n## 次のステップ\n\n次のモジュール **「7-53: Claude Codeとの対話ベストプラクティス」** では、効果的な指示の出し方と会話の組み立て方を学びます。\n\n> 実務チャレンジ: 自分が担当するプロジェクトのCLAUDE.mdを下書きしてみましょう。5つの要素を意識して書いてみてください。",
+        "diagram": false
+      }
+    }
+  ]
+}

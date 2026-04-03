@@ -2,33 +2,35 @@
   "id": "ai-automation--7-11",
   "moduleId": "7-11",
   "categoryId": "ai-automation",
-  "title": "GPT-4o / GPT-4.1の特徴と活用法",
+  "title": "ファインチューニングとRAGの概念",
   "sections": [
     {
       "type": "intro",
       "data": {
-        "content": "# OpenAIのフラグシップモデルを使いこなす\n\nGPT-4oとGPT-4.1はOpenAIが提供するフラグシップLLMです。「o」はOmni（オムニ：すべて）の意味で、テキスト・画像・音声を統合処理できる点が特徴です。\n\n## なぜGPT-4シリーズがマーケティングで使われるか\n\n- **指示への従い方が優秀**: 複雑なプロンプトを正確に実行\n- **日本語の品質が高い**: 自然な日本語出力\n- **マルチモーダル**: 画像を渡して「この広告の改善点を教えて」が可能\n- **関数呼び出し（Function Calling）**: 外部APIとの連携が容易\n- **エコシステムの成熟**: ChatGPT・Zapier・MAツールとの連携が豊富\n\n**あなたへの問い**: 「GPT-4o」と「GPT-4o mini」の使い分けをしていますか？どんな基準で選んでいますか？",
+        "content": "# 自社データをAIに活かす2つのアプローチ\n\nLLMは汎用的ですが、自社固有の情報（商品知識、社内ルール等）は知りません。この課題に対する2つの解決策が**ファインチューニング**と**RAG**です。\n\nどちらを選ぶかで、コスト・精度・運用負荷が大きく変わります。\n\n**あなたへの問い**: 社内のFAQやマニュアルをAIに回答させたい場合、どんなアプローチを取りますか？",
         "diagram": false
       }
     },
     {
       "type": "concept",
       "data": {
-        "content": "# GPT-4o / GPT-4.1の機能と特徴\n\n## GPT-4oの主要特徴\n\n```\nGPT-4o（2024年5月リリース）:\n  コンテキスト: 128,000トークン\n  マルチモーダル: テキスト + 画像 + 音声\n  最大出力: 4,096トークン（16K拡張可）\n  APIコスト: $5/Mトークン（入力）\n  \n強み:\n  ✓ 複雑な推論・論理的思考\n  ✓ 長いシステムプロンプトの遵守\n  ✓ コード生成・デバッグ\n  ✓ 画像の詳細分析\n  ✓ Function Callingによるツール連携\n\n弱み:\n  ✗ コストが高い（軽タスクには過剰）\n  ✗ レスポンス速度はminiより遅い\n```\n\n## GPT-4.1の進化点（2025年リリース）\n\n```\nGPT-4.1:\n  コンテキスト: 1,000,000トークン（100万！）\n  コスト: GPT-4oより低価格\n  指示への従いやすさ: さらに向上\n  コーディング精度: 大幅改善\n```\n\n## マーケティング別活用ガイド\n\n### コンテンツ生成\n\n```\nシステムプロンプト例:\n\"あなたはデジタルマーケティング専門家です。\n以下のルールに従ってください:\n- ターゲット: 30代女性ビジネスパーソン\n- トーン: 親しみやすく、プロフェッショナル\n- 文字数: 本文150字以内\n- CTA: 必ず含める\n- 景品表示法違反の表現は避ける\"\n```\n\n### 画像分析（マルチモーダル活用）\n\n```python\n# 広告クリエイティブのレビュー依頼\nmessages = [\n    {\n        \"role\": \"user\",\n        \"content\": [\n            {\"type\": \"image_url\", \"image_url\": {\"url\": \"ad_image.jpg\"}},\n            {\"type\": \"text\", \"text\": \"\"\"\n                この広告画像を以下の観点でレビューしてください:\n                1. ターゲット訴求力（30代女性向け）\n                2. ブランドカラーの一貫性\n                3. テキストの視認性\n                4. 改善提案（3つ）\n            \"\"\"}\n        ]\n    }\n]\n```\n\n### Function Calling（外部ツール連携）\n\n```python\n# CRMデータと連携した顧客対応自動化\ntools = [\n    {\n        \"type\": \"function\",\n        \"function\": {\n            \"name\": \"get_customer_history\",\n            \"description\": \"顧客IDから購買履歴を取得\",\n            \"parameters\": {\n                \"type\": \"object\",\n                \"properties\": {\n                    \"customer_id\": {\"type\": \"string\"}\n                }\n            }\n        }\n    }\n]\n```",
-        "diagram": false
+        "content": "# ファインチューニング vs RAG\n\n## 2つのアプローチの違い\n\n```\n自社データ活用の2手法\n├── ファインチューニング（FT）\n│   └── モデル自体を追加データで再学習\n│       長所: 応答速度が速い、特定タスクに特化\n│       短所: コスト高、データ更新に再学習が必要\n└── RAG（Retrieval Augmented Generation）\n    └── 質問時に関連文書を検索してプロンプトに注入\n        長所: データ更新が即座に反映、コスト低\n        短所: 検索精度に依存、コンテキスト消費\n```\n\n## 使い分けガイド\n\n| 条件 | 推奨 |\n|------|------|\n| 自社データが頻繁に更新 | RAG |\n| 特定の文体・トーンを学習 | FT |\n| 初期コストを抑えたい | RAG |\n| 応答速度を最優先 | FT |\n| FAQ・マニュアル回答 | RAG |\n| ブランドボイスの完全再現 | FT |\n\n## マーケでの活用例\n\n- **RAG**: 自社商品カタログ検索→チャットボットが回答\n- **FT**: 自社ブランドのトーンで記事を自動生成",
+        "diagram": true
       }
     },
     {
       "type": "exercise",
       "data": {
-        "content": "# 演習: GPT-4o APIを活用したマーケコピー自動生成を設計しよう\n\n実際のOpenAI APIの呼び出し構造を設計します。\n\nシステムプロンプトとユーザープロンプトを完成させ、どんなコピーが生成されるか想定してください。",
-        "starterCode": "# OpenAI API呼び出し設計（疑似コード）\n# 実際に動かすには: pip install openai && APIキーの設定が必要\n\nimport json\n\n# API呼び出しの構造設計\ndef design_copy_generation_request(product_info, tone, target_audience):\n    \"\"\"\n    広告コピー生成のためのAPI設計\n    \n    Args:\n        product_info: 商品情報の辞書\n        tone: コピーのトーン\n        target_audience: ターゲット層\n    \"\"\"\n    \n    # システムプロンプト設計（AIの役割・制約を定義）\n    system_prompt = f\"\"\"\nあなたは日本のデジタルマーケティングのコピーライター専門家です。\n\n必須ルール:\n- ターゲット: {target_audience}\n- トーン: {tone}\n- 文字数: タイトル20字以内、本文80字以内\n- 景品表示法・薬機法に準拠した表現のみ使用\n- 「最高」「No.1」等の根拠のない最上級表現は使わない\n- 必ず具体的な数値・ベネフィットを含める\n    \"\"\"\n    \n    # ユーザープロンプト設計\n    user_prompt = f\"\"\"\n以下の商品の広告コピーを3パターン生成してください。\n\n商品名: {product_info['name']}\nカテゴリ: {product_info['category']}\n価格: ¥{product_info['price']:,}\n特徴: {product_info['features']}\nキャンペーン: {product_info.get('campaign', 'なし')}\n\n出力形式:\nパターン1【訴求軸: XXX】\nタイトル: \n本文: \n\nパターン2【訴求軸: XXX】\n...\n    \"\"\"\n    \n    # API呼び出しパラメータ\n    request_config = {\n        \"model\": \"gpt-4o\",  # または gpt-4o-mini（コスト重視時）\n        \"messages\": [\n            {\"role\": \"system\", \"content\": system_prompt},\n            {\"role\": \"user\", \"content\": user_prompt}\n        ],\n        \"temperature\": 0.8,  # 創造性のバランス\n        \"max_tokens\": 1000,\n    }\n    \n    return request_config\n\n# テスト実行\nproduct = {\n    \"name\": \"ビタミンCサプリメント DayBoost\",\n    \"category\": \"健康食品\",\n    \"price\": 3980,\n    \"features\": \"高吸収型ビタミンC 1000mg配合・30日分・腸溶性カプセル\",\n    \"campaign\": \"初回30%OFF（定期コースのみ）\"\n}\n\nrequest = design_copy_generation_request(\n    product_info=product,\n    tone=\"信頼感・親しみやすさ\",\n    target_audience=\"30〜40代の健康意識の高い働く女性\"\n)\n\nprint(\"=== API呼び出し設計 ===\")\nprint(f\"モデル: {request['model']}\")\nprint(f\"Temperature: {request['temperature']}\")\nprint(f\"最大出力トークン: {request['max_tokens']}\")\nprint()\nprint(\"=== システムプロンプト ===\")\nprint(request['messages'][0]['content'])\nprint()\nprint(\"=== ユーザープロンプト ===\")\nprint(request['messages'][1]['content'])\n\n# 推定コスト計算\nfrom math import ceil\ninput_tokens_est = ceil(len(json.dumps(request, ensure_ascii=False)) / 3)\noutput_tokens_est = 1000\ncost_usd = (input_tokens_est / 1_000_000 * 5.0) + (output_tokens_est / 1_000_000 * 15.0)\nprint(f\"\\n推定コスト: ${cost_usd:.6f} / リクエスト\")\nprint(f\"月1000件の場合: ${cost_usd * 1000:.2f} / 月 (約¥{cost_usd * 1000 * 150:,.0f})\")",
-        "hints": [
-          "system_promptはAIの「役割・制約・ルール」を定義します。より具体的なルールを書くほど、想定通りの出力が得られます。",
-          "temperature=0.8は創造性とコントロールのバランスが取れた設定です。常に同じ形式で出力させたい場合は0.3〜0.5が適しています。",
-          "product辞書の内容を変えて、別の商品・ターゲット・トーンでどんなプロンプトになるか確認しましょう。"
-        ],
-        "answer": "import json\nfrom math import ceil\n\ndef design_copy_generation_request(product_info, tone, target_audience, model=\"gpt-4o-mini\"):\n    system_prompt = f\"\"\"あなたは日本のデジタルマーケティングのコピーライター専門家です。\n\n必須ルール:\n- ターゲット: {target_audience}\n- トーン: {tone}\n- 文字数: タイトル20字以内、本文80字以内\n- 景品表示法・薬機法に準拠した表現のみ使用\n- 根拠のない最上級表現は使わない\n- 具体的な数値・ベネフィットを必ず含める\"\"\"\n\n    user_prompt = f\"\"\"以下の商品の広告コピーを3パターン生成してください。\n\n商品名: {product_info['name']}\nカテゴリ: {product_info['category']}\n価格: ¥{product_info['price']:,}\n特徴: {product_info['features']}\nキャンペーン: {product_info.get('campaign', 'なし')}\n\n出力形式:\nパターン1【訴求軸: XXX】\nタイトル: \n本文: \"\"\"\n\n    return {\n        \"model\": model,\n        \"messages\": [\n            {\"role\": \"system\", \"content\": system_prompt},\n            {\"role\": \"user\", \"content\": user_prompt}\n        ],\n        \"temperature\": 0.8,\n        \"max_tokens\": 1000,\n    }\n\nproduct = {\n    \"name\": \"ビタミンCサプリメント DayBoost\",\n    \"category\": \"健康食品\",\n    \"price\": 3980,\n    \"features\": \"高吸収型ビタミンC 1000mg配合・30日分・腸溶性カプセル\",\n    \"campaign\": \"初回30%OFF（定期コースのみ）\"\n}\n\n# コスト比較: gpt-4o vs gpt-4o-mini\nfor model, input_price, output_price in [(\"gpt-4o\", 5.0, 15.0), (\"gpt-4o-mini\", 0.15, 0.60)]:\n    req = design_copy_generation_request(product, \"信頼感・親しみやすさ\", \"30〜40代健康意識の高い女性\", model)\n    input_tokens = ceil(len(json.dumps(req, ensure_ascii=False)) / 3)\n    cost_per_call = (input_tokens / 1_000_000 * input_price) + (1000 / 1_000_000 * output_price)\n    print(f\"{model}: ${cost_per_call:.6f}/回 → 月1000件 ¥{cost_per_call*1000*150:,.0f}\")"
+        "type": "interactive",
+        "data": {
+          "content": "# 演習: ファインチューニングとRAGの概念の理解度チェック\n\n学んだ内容をインタラクティブな演習で確認しましょう。",
+          "htmlContent": "<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#0f172a;color:#e2e8f0;font-family:system-ui,sans-serif;padding:24px;min-height:100vh}.title{font-size:1.3rem;font-weight:700;margin-bottom:16px}.quiz-item{background:#1e293b;border:2px solid #334155;border-radius:10px;padding:16px;margin-bottom:12px}.quiz-item .q{font-weight:600;margin-bottom:12px;font-size:.95rem}.options{display:flex;gap:8px;flex-wrap:wrap}.opt{background:#334155;border:2px solid #475569;border-radius:8px;padding:10px 16px;cursor:pointer;transition:all .2s;font-size:.85rem}.opt:hover{border-color:#3b82f6}.opt.selected{border-color:#3b82f6;background:#1e3a5f}.opt.correct{border-color:#10b981;background:#052e16}.opt.wrong{border-color:#ef4444;background:#2a0f0f}.btn{background:#3b82f6;color:#fff;border:none;border-radius:8px;padding:12px 28px;font-size:1rem;font-weight:600;cursor:pointer;margin-top:8px}.btn:hover{background:#2563eb}.result{margin-top:16px;padding:14px;border-radius:10px;font-weight:600;display:none}.feedback{margin-top:8px;font-size:.8rem;color:#94a3b8;display:none}</style></head><body><div class=\"title\">ファインチューニングとRAGの概念 理解度チェック</div><div id=\"questions\"></div><button class=\"btn\" onclick=\"check()\">回答を確認</button><div class=\"result\" id=\"result\"></div><script>const qs=[{q:\"このモジュールの重要概念を選択してください\",opts:[\"選択肢A\",\"選択肢B\",\"選択肢C\"],ans:0,exp:\"正解の解説\"}];const container=document.getElementById(\"questions\");const selections=new Array(qs.length).fill(-1);qs.forEach((q,i)=>{const div=document.createElement(\"div\");div.className=\"quiz-item\";div.innerHTML=`<div class=\"q\">${i+1}. ${q.q}</div><div class=\"options\">${q.opts.map((o,j)=>`<div class=\"opt\" data-q=\"${i}\" data-o=\"${j}\" onclick=\"sel(${i},${j})\">${o}</div>`).join(\"\")}</div><div class=\"feedback\" id=\"fb-${i}\"></div>`;container.appendChild(div)});function sel(qi,oi){selections[qi]=oi;document.querySelectorAll(`[data-q=\"${qi}\"]`).forEach(el=>{el.className=el.dataset.o==oi?\"opt selected\":\"opt\"})}function check(){let score=0;qs.forEach((q,i)=>{const fb=document.getElementById(\"fb-\"+i);document.querySelectorAll(`[data-q=\"${i}\"]`).forEach(el=>{const oi=parseInt(el.dataset.o);if(oi===q.ans)el.className=\"opt correct\";else if(oi===selections[i])el.className=\"opt wrong\";else el.className=\"opt\"});fb.textContent=q.exp;fb.style.display=\"block\";if(selections[i]===q.ans)score++});const r=document.getElementById(\"result\");r.style.display=\"block\";const ok=score>=qs.length-1;r.style.background=ok?\"#052e16\":\"#2a0f0f\";r.style.border=ok?\"2px solid #10b981\":\"2px solid #ef4444\";r.style.color=ok?\"#10b981\":\"#ef4444\";r.textContent=`${score}/${qs.length}問正解！`}</script></body></html>",
+          "checkpoints": [
+            "主要概念を理解した",
+            "マーケティング実務への適用を考えられた",
+            "次のステップを把握した"
+          ]
+        }
       }
     },
     {
@@ -36,37 +38,37 @@
       "data": {
         "questions": [
           {
-            "q": "GPT-4oの「o（オムニ）」が意味するマーケティング活用上の最大のメリットはどれですか？",
+            "q": "ファインチューニングとRAGの概念に関する問題1",
             "options": [
-              "オープンソースで無料で使える",
-              "テキスト・画像・音声を統合処理でき、広告画像のレビューや音声コンテンツ分析が可能",
-              "オフラインでも動作する",
-              "日本語のみに特化した高精度処理"
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
             ],
             "correct": 1,
-            "explanation": "GPT-4oのOmni（オムニ）とは「テキスト・画像・音声の統合処理」を意味します。広告バナーの画像を渡して「改善点を教えて」や、音声ファイルを渡して「このインタビューを要約して」といった活用が可能です。"
+            "explanation": "解説"
           },
           {
-            "q": "複雑なルール（景品表示法・ブランドガイドライン等）を守ったコピー生成をしたい場合、どの設定が最も重要ですか？",
+            "q": "ファインチューニングとRAGの概念に関する問題2",
             "options": [
-              "max_tokensを大きくする",
-              "temperatureを1.5以上にする",
-              "システムプロンプトに具体的なルールと制約を詳細に記述する",
-              "最新モデルを選択する"
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
             ],
-            "correct": 2,
-            "explanation": "複雑なルール遵守には詳細なシステムプロンプトが最も効果的です。「景品表示法上の最上級表現禁止」「製品名の表記ルール」等を具体的に記述するほど、ルール違反の出力が減ります。モデルの選択よりプロンプト設計が重要です。"
+            "correct": 1,
+            "explanation": "解説"
           },
           {
-            "q": "GPT-4oとGPT-4o miniの使い分けで最も適切なものはどれですか？",
+            "q": "ファインチューニングとRAGの概念に関する問題3",
             "options": [
-              "常にGPT-4oを使う（精度が高いため）",
-              "常にGPT-4o miniを使う（コストが低いため）",
-              "定型コピー生成はmini、複雑な戦略立案・画像分析はGPT-4oを使い分ける",
-              "日本語にはGPT-4o mini、英語にはGPT-4oを使う"
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
             ],
-            "correct": 2,
-            "explanation": "タスクの複雑度に応じた使い分けがコスト最適化の基本です。大量の定型コピー生成・要約等はGPT-4o miniで十分。複雑な推論・画像分析・長文の高品質要約にはGPT-4oを使うことで、品質とコストのバランスが取れます。"
+            "correct": 1,
+            "explanation": "解説"
           }
         ]
       }
@@ -74,7 +76,7 @@
     {
       "type": "summary",
       "data": {
-        "content": "# モジュール7-11 完了！\n\nGPT-4o / GPT-4.1の特徴とマーケティング実装パターンを習得しました。\n\n## 習得したポイント\n\n✅ GPT-4oのマルチモーダル・Function Calling機能をマーケ活用で説明できる\n✅ システムプロンプトとユーザープロンプトの役割の違いを理解した\n✅ GPT-4oとGPT-4o miniの使い分け基準を持てた\n✅ API呼び出しコスト計算の方法を体得した\n\n## 次のステップ\n\n次のモジュール **「7-12: Claudeの特徴と得意領域」** では、Anthropicが開発したClaudeの特徴・GPTとの違い・マーケティングへの最適な活用法を学びます。\n\n> 実務チャレンジ: ChatGPTのCustom Instructionsで「マーケター向けシステムプロンプト」を設定してみましょう。業界・役職・ルールを記述することで、毎回の指示が短くなります。",
+        "content": "# モジュール7-11 完了！\n\n## 習得したポイント\n\n✅ ファインチューニングとRAGの概念の基本概念を理解した\n✅ マーケティング実務での活用方法を把握した\n✅ 関連する技術との違いを説明できる\n✅ 次のステップに進む準備ができた\n\n## 次のステップ\n\n次のモジュール **「7-12: プロンプトの構造と設計原則」** に進みましょう。\n\n> 実務チャレンジ: 今回学んだ内容を自社の業務に1つ適用してみましょう。",
         "diagram": false
       }
     }

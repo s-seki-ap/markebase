@@ -1,0 +1,82 @@
+{
+  "id": "ai-automation--7-28",
+  "moduleId": "7-28",
+  "categoryId": "ai-automation",
+  "title": "Google Apps Script（GAS）入門",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# Google Workspaceを自動化する第一歩\n\nGAS（Google Apps Script）は、Googleスプレッドシート、Gmail、Googleフォーム等を自動化できるスクリプト言語です。JavaScriptベースなので、プログラミング初心者にも比較的取り組みやすいのが特徴です。\n\nマーケターがGASを覚えると、日常の定型作業を大幅に自動化できます。\n\n**あなたへの問い**: 毎週スプレッドシートにデータを手動でコピペしている作業はありませんか？",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# GASの基礎\n\n```\nGASでできること\n├── スプレッドシート操作\n│   ├── データの読み書き・集計\n│   └── グラフの自動更新\n├── Gmail自動化\n│   ├── テンプレートメール送信\n│   └── メール分類・ラベル付け\n├── Googleフォーム連携\n│   └── 回答→スプレッドシート→通知\n├── Googleドライブ操作\n│   └── ファイル整理・共有設定\n└── 外部API連携\n    └── Slack通知・データ取得\n```\n\n## GASの始め方\n\n1. Googleスプレッドシートを開く\n2. 拡張機能 → Apps Script\n3. エディタでコードを記述\n4. 実行ボタンで動作確認\n\n## 基本構文\n\n```javascript\nfunction myFunction() {\n  // スプレッドシートを取得\n  const ss = SpreadsheetApp.getActiveSpreadsheet();\n  const sheet = ss.getSheetByName('Sheet1');\n  \n  // データを読み取り\n  const data = sheet.getRange('A1').getValue();\n  Logger.log(data);\n}\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 演習: Google Apps Script（GAS）入門を実践してみよう\n\n以下のコードの空欄を埋めて、実際に動くスクリプトを完成させましょう。",
+        "starterCode": "# Google Apps Script（GAS）入門の演習\n# TODO: 以下のコードを完成させてください\n\nprint('演習を完成させましょう')",
+        "hints": [
+          "Google Apps Script（GAS）入門の基本構文を確認しましょう",
+          "公式ドキュメントを参照してください",
+          "エラーメッセージをよく読んで対処しましょう"
+        ],
+        "answer": "# Google Apps Script（GAS）入門の模範回答\nprint('Google Apps Script（GAS）入門の演習完了！')"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "Google Apps Script（GAS）入門に関する問題1",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          },
+          {
+            "q": "Google Apps Script（GAS）入門に関する問題2",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          },
+          {
+            "q": "Google Apps Script（GAS）入門に関する問題3",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール7-28 完了！\n\n## 習得したポイント\n\n✅ Google Apps Script（GAS）入門の基本概念を理解した\n✅ マーケティング実務での活用方法を把握した\n✅ 関連する技術との違いを説明できる\n✅ 次のステップに進む準備ができた\n\n## 次のステップ\n\n次のモジュール **「7-29: GASでスプレッドシート・Gmail自動化」** に進みましょう。\n\n> 実務チャレンジ: 今回学んだ内容を自社の業務に1つ適用してみましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

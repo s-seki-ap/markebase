@@ -1,0 +1,84 @@
+{
+  "id": "ai-automation--7-16",
+  "moduleId": "7-16",
+  "categoryId": "ai-automation",
+  "title": "ロールプレイング・ペルソナプロンプト設計",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 専門家ペルソナで出力品質を向上させる\n\nAIに「あなたは○○の専門家です」と指示するだけで、出力の質が劇的に向上します。\n\nこれはロールプレイング（役割演技）プロンプティングと呼ばれ、AIの中で関連する知識パターンが活性化されるためと考えられています。\n\n**あなたへの問い**: AIに指示するとき、「あなたは○○です」という前置きを使っていますか？",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# ロールプレイング・ペルソナ設計\n\n## なぜペルソナ設定が効果的か\n\n```\nペルソナなし:\n「SEO記事を書いて」→ 一般的で浅い内容\n\nペルソナあり:\n「あなたは10年の経験を持つSEOコンサルタントです。\n E-E-A-Tを重視し、Googleの最新ガイドラインに基づいて\n SEO記事を書いてください」→ 専門的で深い内容\n```\n\n## 効果的なペルソナ設計テンプレート\n\n### 基本情報\n- 専門分野: デジタルマーケティング\n- 経験年数: 10年\n- 得意領域: GA4・広告運用・SEO\n\n### 行動規範\n- データに基づいた提案を行う\n- 具体的な数値目標を含める\n- 不確かな情報には明示する\n\n### トーン\n- 専門的だが平易な表現\n- 結論ファースト\n\n## マーケでの活用パターン\n\n| ペルソナ | 活用場面 |\n|----------|----------|\n| SEOコンサルタント | 記事構成・キーワード提案 |\n| 広告運用者 | キャンペーン設計・入札戦略 |\n| データアナリスト | GA4データ分析・レポート |\n| コピーライター | 広告コピー・LP文面 |",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "type": "interactive",
+        "data": {
+          "content": "# 演習: ロールプレイング・ペルソナプロンプト設計の理解度チェック\n\n学んだ内容をインタラクティブな演習で確認しましょう。",
+          "htmlContent": "<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#0f172a;color:#e2e8f0;font-family:system-ui,sans-serif;padding:24px;min-height:100vh}.title{font-size:1.3rem;font-weight:700;margin-bottom:16px}.quiz-item{background:#1e293b;border:2px solid #334155;border-radius:10px;padding:16px;margin-bottom:12px}.quiz-item .q{font-weight:600;margin-bottom:12px;font-size:.95rem}.options{display:flex;gap:8px;flex-wrap:wrap}.opt{background:#334155;border:2px solid #475569;border-radius:8px;padding:10px 16px;cursor:pointer;transition:all .2s;font-size:.85rem}.opt:hover{border-color:#3b82f6}.opt.selected{border-color:#3b82f6;background:#1e3a5f}.opt.correct{border-color:#10b981;background:#052e16}.opt.wrong{border-color:#ef4444;background:#2a0f0f}.btn{background:#3b82f6;color:#fff;border:none;border-radius:8px;padding:12px 28px;font-size:1rem;font-weight:600;cursor:pointer;margin-top:8px}.btn:hover{background:#2563eb}.result{margin-top:16px;padding:14px;border-radius:10px;font-weight:600;display:none}.feedback{margin-top:8px;font-size:.8rem;color:#94a3b8;display:none}</style></head><body><div class=\"title\">ロールプレイング・ペルソナプロンプト設計 理解度チェック</div><div id=\"questions\"></div><button class=\"btn\" onclick=\"check()\">回答を確認</button><div class=\"result\" id=\"result\"></div><script>const qs=[{q:\"このモジュールの重要概念を選択してください\",opts:[\"選択肢A\",\"選択肢B\",\"選択肢C\"],ans:0,exp:\"正解の解説\"}];const container=document.getElementById(\"questions\");const selections=new Array(qs.length).fill(-1);qs.forEach((q,i)=>{const div=document.createElement(\"div\");div.className=\"quiz-item\";div.innerHTML=`<div class=\"q\">${i+1}. ${q.q}</div><div class=\"options\">${q.opts.map((o,j)=>`<div class=\"opt\" data-q=\"${i}\" data-o=\"${j}\" onclick=\"sel(${i},${j})\">${o}</div>`).join(\"\")}</div><div class=\"feedback\" id=\"fb-${i}\"></div>`;container.appendChild(div)});function sel(qi,oi){selections[qi]=oi;document.querySelectorAll(`[data-q=\"${qi}\"]`).forEach(el=>{el.className=el.dataset.o==oi?\"opt selected\":\"opt\"})}function check(){let score=0;qs.forEach((q,i)=>{const fb=document.getElementById(\"fb-\"+i);document.querySelectorAll(`[data-q=\"${i}\"]`).forEach(el=>{const oi=parseInt(el.dataset.o);if(oi===q.ans)el.className=\"opt correct\";else if(oi===selections[i])el.className=\"opt wrong\";else el.className=\"opt\"});fb.textContent=q.exp;fb.style.display=\"block\";if(selections[i]===q.ans)score++});const r=document.getElementById(\"result\");r.style.display=\"block\";const ok=score>=qs.length-1;r.style.background=ok?\"#052e16\":\"#2a0f0f\";r.style.border=ok?\"2px solid #10b981\":\"2px solid #ef4444\";r.style.color=ok?\"#10b981\":\"#ef4444\";r.textContent=`${score}/${qs.length}問正解！`}</script></body></html>",
+          "checkpoints": [
+            "主要概念を理解した",
+            "マーケティング実務への適用を考えられた",
+            "次のステップを把握した"
+          ]
+        }
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "ロールプレイング・ペルソナプロンプト設計に関する問題1",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          },
+          {
+            "q": "ロールプレイング・ペルソナプロンプト設計に関する問題2",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          },
+          {
+            "q": "ロールプレイング・ペルソナプロンプト設計に関する問題3",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール7-16 完了！\n\n## 習得したポイント\n\n✅ ロールプレイング・ペルソナプロンプト設計の基本概念を理解した\n✅ マーケティング実務での活用方法を把握した\n✅ 関連する技術との違いを説明できる\n✅ 次のステップに進む準備ができた\n\n## 次のステップ\n\n次のモジュール **「7-17: Output Format指定とJSON出力」** に進みましょう。\n\n> 実務チャレンジ: 今回学んだ内容を自社の業務に1つ適用してみましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

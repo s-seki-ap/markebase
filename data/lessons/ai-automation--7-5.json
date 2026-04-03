@@ -2,33 +2,35 @@
   "id": "ai-automation--7-5",
   "moduleId": "7-5",
   "categoryId": "ai-automation",
-  "title": "深層学習（ディープラーニング）の基礎",
+  "title": "生成AI（Generative AI）の登場と衝撃",
   "sections": [
     {
       "type": "intro",
       "data": {
-        "content": "# なぜ「深い」ネットワークが重要なのか\n\nディープラーニング（深層学習）は、ニューラルネットワークを多層化（「深く」）したものです。\n\n2012年、ディープラーニングが画像認識コンテストで従来手法を圧倒し、AI研究の方向性を完全に変えました。\n\n## マーケターへの直接的な影響\n\n- **画像認識**: 広告クリエイティブの自動タグ付け、商品画像の類似検索\n- **音声認識**: 音声検索、ポッドキャスト・動画のテキスト化\n- **自然言語処理**: 感情分析、チャットボット、コンテンツ生成\n- **レコメンド**: YouTube・TikTokのアルゴリズム\n\n**あなたへの問い**: Instagramのフィード最適化やYouTubeの次の動画提案はどのように機能していると思いますか？",
+        "content": "# テキスト・画像・動画を「作る」AIの登場\n\n2022年は「生成AI元年」です。ChatGPTが5日で100万ユーザーを突破し、Midjourneyが絵を描き、AIが動画を生成する時代が始まりました。\n\n## マーケターへの直接的なインパクト\n\n- **コンテンツ制作コストが1/10に**: ブログ記事、広告コピー、SNS投稿\n- **クリエイティブの民主化**: デザイナーでなくても高品質な画像生成が可能\n- **パーソナライゼーション加速**: 個別最適化メッセージの大量生成\n\n生成AIはマーケティングの仕事の仕方そのものを変える技術です。\n\n**あなたへの問い**: 生成AIにコンテンツを作らせるとき、最も気をつけるべきリスクは何ですか？",
         "diagram": false
       }
     },
     {
       "type": "concept",
       "data": {
-        "content": "# ディープラーニングの「深さ」が生み出す力\n\n## 浅いネットワーク vs 深いネットワーク\n\n```\n浅いネットワーク（1-2層）:\n  入力 → [単純な特徴] → 出力\n  例: 「赤い」「丸い」→ りんご？\n\n深いネットワーク（10-100層+）:\n  入力 → [エッジ] → [形状] → [テクスチャ] → [物体部位] → [物体] → 出力\n  例: ピクセル → 輪郭 → 形状 → 色・質感 → りんごの特徴 → 「りんご（信頼度99%）」\n```\n\n## なぜ層を深くすると性能が上がるのか\n\n各層が「抽象度の異なる特徴」を自動で学習するからです。\n\n**マーケコンテンツの感情分析を例に:**\n\n```\n入力: 「この商品、思ったより全然ダメでした」\n\n層1: 単語の意味（ダメ=負、全然=強調）\n層2: 文法構造（否定文パターン）\n層3: 文脈の意図（購入後のレビュー文脈）\n層4: 感情強度（「全然」「思ったより」の複合効果）\n出力: 強いネガティブ（信頼度92%）\n```\n\n## 主要なディープラーニング手法\n\n| 手法 | 略称 | 得意分野 | マーケ活用例 |\n|------|------|---------|-------------|\n| 畳み込みNN | CNN | 画像 | 広告画像審査、商品検索 |\n| 再帰型NN | RNN | 時系列 | 売上予測、チャーン予測 |\n| トランスフォーマー | - | 言語全般 | ChatGPT、Gemini、Claude |\n| 敵対的生成NN | GAN | 画像生成 | 広告素材生成（一部） |\n\n## なぜ2012年以降に急速に発展したか\n\n```\n3つの革新が同時に起きた:\n1. GPU: 並列計算で学習速度が100倍以上に\n2. ビッグデータ: SNS・ECの普及でデータが爆増\n3. ReLU関数: 深層化時の勾配消失問題を解決\n```",
+        "content": "# 生成AIの全体像\n\n```\n生成AIの分類\n├── テキスト生成: ChatGPT, Claude, Gemini\n├── 画像生成: DALL-E 3, Midjourney, Stable Diffusion\n├── 動画生成: Sora, Runway\n├── 音声生成: ElevenLabs, VALL-E\n└── コード生成: GitHub Copilot, Claude Code\n```\n\n## マーケティングへの衝撃\n\n### コンテンツ制作の変革\n従来: 企画→取材→執筆→校正 = 2週間\n生成AI: 企画→AI下書き→人間が編集 = 2日\n\n### 広告クリエイティブ革命\n- 1コンセプトから数十パターンのコピーを瞬時生成\n- ターゲット別にトーン・表現を自動最適化\n- A/Bテストバリエーションを大量作成\n\n### パーソナライゼーション\n- セグメント別カスタマイズメール文面\n- 閲覧履歴に基づくレコメンド文言生成\n\n## 生成AIの限界とリスク\n\n| リスク | 内容 | 対策 |\n|-------|------|------|\n| ハルシネーション | 事実と異なる情報を生成 | ファクトチェック必須 |\n| 著作権問題 | 学習データの権利関係 | 商用利用確認 |\n| ブランドリスク | トーンの不一致 | ガイドライン指定 |\n| 均質化 | 似たコンテンツの氾濫 | 人間の視点を付加 |",
         "diagram": true
       }
     },
     {
       "type": "exercise",
       "data": {
-        "content": "# 演習: レビュー感情分析モデルの動作を理解しよう\n\nディープラーニングを使った感情分析の疑似実装です。\n実際のモデルでは何百層ものネットワークが動きますが、ここでは概念を掴みます。\n\nレビューテキストを変えて、感情スコアの変化を観察してください。",
-        "starterCode": "# 感情分析の疑似シミュレーション\n# （実際のDLモデルを簡略化したもの）\n\n# 感情辞書（実際のDLは自動でこれを学習する）\npositive_words = {\n    \"良い\": 1.0, \"最高\": 1.5, \"素晴らしい\": 1.5, \"好き\": 0.8,\n    \"おすすめ\": 1.0, \"満足\": 1.0, \"便利\": 0.9, \"嬉しい\": 1.0\n}\nnegative_words = {\n    \"悪い\": -1.0, \"最悪\": -1.5, \"ダメ\": -1.2, \"嫌い\": -1.0,\n    \"失望\": -1.3, \"不満\": -1.0, \"使えない\": -1.2, \"返品\": -0.8\n}\nnegation_words = [\"ない\", \"なかった\", \"全然\", \"まったく\"]  # 否定語\n\n# テストするレビューを変えてください ↓\nreviews = [\n    \"この商品は素晴らしい。満足しています。\",\n    \"最悪でした。全然使えない。返品します。\",\n    \"悪くはないですが、もう少し改善してほしい。\",\n    \"思ったより良くなかった。\",  # 否定+ポジティブ語の組み合わせ\n]\n\ndef analyze_sentiment(text):\n    score = 0\n    words = list(text)\n    \n    for word, val in positive_words.items():\n        if word in text:\n            # 否定語が直前にあるか確認\n            pos = text.find(word)\n            context = text[max(0, pos-5):pos]\n            if any(neg in context for neg in negation_words):\n                score -= val  # 否定で反転\n            else:\n                score += val\n    \n    for word, val in negative_words.items():\n        if word in text:\n            score += val\n    \n    if score > 0.5:\n        return \"ポジティブ\", score\n    elif score < -0.5:\n        return \"ネガティブ\", score\n    else:\n        return \"ニュートラル\", score\n\nfor review in reviews:\n    sentiment, score = analyze_sentiment(review)\n    print(f\"レビュー: {review}\")\n    print(f\"  → 感情: {sentiment}（スコア: {score:.2f}）\")\n    print()",
-        "hints": [
-          "「思ったより良くなかった」は否定語+ポジティブ語の組み合わせです。本物のDLモデルはこういった複雑な文脈をより正確に処理します。",
-          "positive_wordsに新しい単語を追加してみましょう。例: \"最高\": 2.0 にすると最高の重みが強くなります。",
-          "実際のBERTやGPTなどのDLモデルは、単語の前後関係（コンテキスト）全体を同時に考慮するため、このような単純なルールより遥かに正確です。"
-        ],
-        "answer": "# 感情分析の疑似シミュレーション\n\npositive_words = {\n    \"良い\": 1.0, \"最高\": 1.5, \"素晴らしい\": 1.5, \"好き\": 0.8,\n    \"おすすめ\": 1.0, \"満足\": 1.0, \"便利\": 0.9, \"嬉しい\": 1.0,\n    \"期待通り\": 0.8, \"リピート\": 1.0\n}\nnegative_words = {\n    \"悪い\": -1.0, \"最悪\": -1.5, \"ダメ\": -1.2, \"嫌い\": -1.0,\n    \"失望\": -1.3, \"不満\": -1.0, \"使えない\": -1.2, \"返品\": -0.8\n}\nnegation_words = [\"ない\", \"なかった\", \"全然\", \"まったく\"]\n\nreviews = [\n    \"この商品は素晴らしい。満足しています。\",\n    \"最悪でした。全然使えない。返品します。\",\n    \"悪くはないですが、もう少し改善してほしい。\",\n    \"思ったより良くなかった。\",\n    \"期待通りでリピートしたい！\",\n]\n\ndef analyze_sentiment(text):\n    score = 0\n    for word, val in positive_words.items():\n        if word in text:\n            pos = text.find(word)\n            context = text[max(0, pos-5):pos]\n            if any(neg in context for neg in negation_words):\n                score -= val\n            else:\n                score += val\n    for word, val in negative_words.items():\n        if word in text:\n            score += val\n    if score > 0.5:\n        return \"ポジティブ\", score\n    elif score < -0.5:\n        return \"ネガティブ\", score\n    else:\n        return \"ニュートラル\", score\n\nfor review in reviews:\n    sentiment, score = analyze_sentiment(review)\n    print(f\"レビュー: {review}\")\n    print(f\"  → 感情: {sentiment}（スコア: {score:.2f}）\")\n    print()"
+        "type": "interactive",
+        "data": {
+          "content": "# 演習: 生成AI活用シーンとリスクをマッチング",
+          "htmlContent": "<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#0f172a;color:#e2e8f0;font-family:system-ui,sans-serif;padding:24px;min-height:100vh}.title{font-size:1.3rem;font-weight:700;margin-bottom:16px}.cards{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;min-height:60px;padding:8px;background:#1e293b;border-radius:10px}.card{background:#334155;border:2px solid #475569;border-radius:8px;padding:10px 14px;cursor:grab;transition:all .2s;font-size:.85rem;user-select:none}.card:hover{border-color:#3b82f6;transform:translateY(-2px)}.card.dragging{opacity:.4}.categories{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:20px}.cat{background:#1e293b;border:2px solid #334155;border-radius:12px;padding:16px;min-height:180px}.cat-title{font-weight:700;font-size:.95rem;margin-bottom:4px}.cat-desc{font-size:.75rem;color:#94a3b8;margin-bottom:12px}.cat-drop{min-height:100px;border:2px dashed #334155;border-radius:8px;padding:8px;display:flex;flex-direction:column;gap:6px;transition:all .2s}.cat-drop.over{border-color:#10b981;background:rgba(16,185,129,.08)}.cat-drop .card{font-size:.8rem;padding:8px 10px}.btn{background:#3b82f6;color:#fff;border:none;border-radius:8px;padding:12px 28px;font-size:1rem;font-weight:600;cursor:pointer}.btn:hover{background:#2563eb}.result{margin-top:16px;padding:14px;border-radius:10px;font-weight:600;display:none}</style></head><body><div class=\"title\">生成AI活用シーン × リスク分類</div><div class=\"cards\" id=\"source\"></div><div class=\"categories\"><div class=\"cat\"><div class=\"cat-title\" style=\"color:#ef4444\">ハルシネーション</div><div class=\"cat-desc\">事実誤認リスク</div><div class=\"cat-drop\" data-cat=\"hallucination\"></div></div><div class=\"cat\"><div class=\"cat-title\" style=\"color:#f59e0b\">著作権リスク</div><div class=\"cat-desc\">権利関係の問題</div><div class=\"cat-drop\" data-cat=\"copyright\"></div></div><div class=\"cat\"><div class=\"cat-title\" style=\"color:#8b5cf6\">ブランドリスク</div><div class=\"cat-desc\">トーン不一致</div><div class=\"cat-drop\" data-cat=\"brand\"></div></div><div class=\"cat\"><div class=\"cat-title\" style=\"color:#3b82f6\">均質化リスク</div><div class=\"cat-desc\">差別化の欠如</div><div class=\"cat-drop\" data-cat=\"quality\"></div></div></div><button class=\"btn\" onclick=\"check()\">回答を確認</button><div class=\"result\" id=\"result\"></div><script>const tasks=[{id:\"s1\",text:\"AIでSEO記事を大量生成\",cat:\"quality\"},{id:\"s2\",text:\"AIで医療・金融の専門記事を生成\",cat:\"hallucination\"},{id:\"s3\",text:\"AI生成画像を商用広告に使用\",cat:\"copyright\"},{id:\"s4\",text:\"AIでブランドSNS投稿を自動生成\",cat:\"brand\"}];const shuffled=[...tasks].sort(()=>Math.random()-.5);const src=document.getElementById(\"source\");let dragId=null;shuffled.forEach(t=>{const c=document.createElement(\"div\");c.className=\"card\";c.draggable=true;c.dataset.id=t.id;c.textContent=t.text;c.addEventListener(\"dragstart\",()=>{dragId=t.id;c.classList.add(\"dragging\")});c.addEventListener(\"dragend\",()=>c.classList.remove(\"dragging\"));src.appendChild(c)});document.querySelectorAll(\".cat-drop\").forEach(drop=>{drop.addEventListener(\"dragover\",e=>{e.preventDefault();drop.classList.add(\"over\")});drop.addEventListener(\"dragleave\",()=>drop.classList.remove(\"over\"));drop.addEventListener(\"drop\",e=>{e.preventDefault();drop.classList.remove(\"over\");const card=document.querySelector(`.card[data-id=\"${dragId}\"]`);if(card)drop.appendChild(card)})});src.addEventListener(\"dragover\",e=>e.preventDefault());src.addEventListener(\"drop\",e=>{e.preventDefault();const card=document.querySelector(`.card[data-id=\"${dragId}\"]`);if(card)src.appendChild(card)});function check(){let score=0;tasks.forEach(t=>{const card=document.querySelector(`.card[data-id=\"${t.id}\"]`);if(card&&card.parentElement){const parent=card.parentElement.dataset.cat;if(parent===t.cat){score++;card.style.borderColor=\"#10b981\"}else{card.style.borderColor=\"#ef4444\"}}});const r=document.getElementById(\"result\");r.style.display=\"block\";const ok=score===tasks.length;r.style.background=ok?\"#052e16\":\"#2a0f0f\";r.style.border=ok?\"2px solid #10b981\":\"2px solid #ef4444\";r.style.color=ok?\"#10b981\":\"#ef4444\";r.textContent=ok?`全問正解！（${score}/${tasks.length}）`:`${score}/${tasks.length}問正解です。もう一度挑戦しましょう。`}</script></body></html>",
+          "checkpoints": [
+            "4つの主要リスクを特定できた",
+            "活用シーンごとの注意点を理解した",
+            "リスク軽減策を説明できる"
+          ]
+        }
       }
     },
     {
@@ -36,37 +38,37 @@
       "data": {
         "questions": [
           {
-            "q": "ディープラーニングが2012年以降に急速に発展した主な要因として最も重要なものはどれですか？",
+            "q": "ハルシネーションとは？",
             "options": [
-              "インターネットの普及によりデータが入手しやすくなったこと",
-              "GPU・ビッグデータ・アルゴリズム改善（ReLU等）が同時に揃ったこと",
-              "政府のAI投資が急増したこと",
-              "AIの研究者が世界中で増加したこと"
+              "画像がぼやけること",
+              "事実と異なる情報をもっともらしく生成すること",
+              "処理速度低下",
+              "著作権画像の生成"
             ],
             "correct": 1,
-            "explanation": "2012年以降のDL革命は単一の要因ではなく、GPU並列計算の進化、SNS・ECによるビッグデータの蓄積、ReLU等のアルゴリズム改善が同時に揃ったことで起きました。この3要素が揃わなければ、理論だけでは実現しませんでした。"
+            "explanation": "AIが実在しない事実を「もっともらしく」生成する現象。"
           },
           {
-            "q": "YouTube・TikTokのコンテンツレコメンドに主に使われているディープラーニング技術はどれですか？",
+            "q": "生成AIがコンテンツ制作を変えた最大のポイントは？",
             "options": [
-              "CNN（画像のみを処理するため）",
-              "GAN（コンテンツを生成するため）",
-              "多層ニューラルネットワーク（視聴履歴・行動パターンの学習）",
-              "決定木（シンプルなルールのため）"
-            ],
-            "correct": 2,
-            "explanation": "YouTubeやTikTokのレコメンドは、ユーザーの視聴履歴・スキップ・いいね・滞在時間などの多次元データを多層ニューラルネットワークで処理します。単純なCNNやGANではなく、行動データ全体を学習する複合的なDLモデルが使われます。"
-          },
-          {
-            "q": "マーケティングにおける感情分析でディープラーニングを使う主なメリットはどれですか？",
-            "options": [
-              "100%の精度で感情を分類できる",
-              "ルールベースでは対応できない文脈・皮肉・否定表現を学習で処理できる",
-              "リアルタイムで感情を読み取れる（ルールベースは不可能）",
-              "日本語にしか対応していない"
+              "質が人間を完全に超えた",
+              "制作スピードとコストが劇的に改善",
+              "人間ライターが不要に",
+              "SEOランキングが自動上昇"
             ],
             "correct": 1,
-            "explanation": "「全然良くない」「悪くはない」「期待していなかった分、良かった」のような文脈依存・否定・皮肉は、単純な辞書ベースでは処理が難しいです。DLは大量のデータから文脈パターンを学習するため、これらを高精度で処理できます。"
+            "explanation": "最大の価値はスピードとコスト改善。人間の編集・校正は引き続き必要。"
+          },
+          {
+            "q": "均質化リスクが指摘される理由は？",
+            "options": [
+              "AI計算速度が遅い",
+              "多くの企業が同じAIで同様のコンテンツを生成",
+              "古い情報のみ",
+              "モデルが1つしかない"
+            ],
+            "correct": 1,
+            "explanation": "同じLLMで似た指示→似たコンテンツが大量発生。差別化に人間の視点が必要。"
           }
         ]
       }
@@ -74,7 +76,7 @@
     {
       "type": "summary",
       "data": {
-        "content": "# モジュール7-5 完了！\n\nディープラーニングの本質と主要手法のマーケ活用を理解しました。\n\n## 習得したポイント\n\n✅ 「深さ」が抽象度の異なる特徴を階層的に学習することを理解した\n✅ CNN・RNN・Transformerの使い分けをマーケ文脈で説明できる\n✅ 感情分析の仕組みと限界（文脈・否定語の処理）を把握した\n✅ DLが急発展した3要因（GPU・データ・アルゴリズム）を説明できる\n\n## 次のステップ\n\n次のモジュール **「7-6: 自然言語処理（NLP）の概要」** では、テキストデータをAIが処理する仕組みと、マーケティングコンテンツへの活用方法を学びます。\n\n> 実務チャレンジ: ECサイトのレビューや自社のSNSコメントを10件収集し、感情（ポジティブ・ネガティブ・ニュートラル）を手動で分類してみましょう。その後、ChatGPTに同じ分類をさせ、精度を比較してみてください。",
+        "content": "# モジュール7-5 完了！\n\n## 習得したポイント\n\n✅ テキスト・画像・動画・音声の生成AI技術と代表モデルを把握した\n✅ コンテンツ制作がどう変わったかを具体的に説明できる\n✅ 4大リスク（ハルシネーション・著作権・ブランド・均質化）を理解した\n✅ リスクを軽減しながら活用する方針を立てられる\n\n## 次のステップ\n\n次のモジュール **「7-6: LLM（大規模言語モデル）の仕組み」** でTransformerアーキテクチャを学びます。\n\n> 実務チャレンジ: ブログ記事1本をAIで下書き生成し、かかった時間を通常の制作時間と比較してみましょう。",
         "diagram": false
       }
     }

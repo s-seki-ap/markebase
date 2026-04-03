@@ -1,0 +1,82 @@
+{
+  "id": "ai-automation--7-38",
+  "moduleId": "7-38",
+  "categoryId": "ai-automation",
+  "title": "Pythonでファイル操作と正規表現",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# CSV/JSON/テキストの一括処理\n\nマーケティングデータはCSV、JSON、テキスト等の様々な形式で扱います。Pythonでこれらを効率的に読み書きし、正規表現でパターンマッチングする方法を学びます。\n\n**あなたへの問い**: 大量のCSVファイルを手動で開いて処理していませんか？",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# ファイル操作と正規表現\n\n## CSV操作\n\n```python\nimport csv\n\n# CSV読み込み\nwith open('campaign_data.csv', 'r', encoding='utf-8') as f:\n    reader = csv.DictReader(f)\n    for row in reader:\n        print(f\"{row['campaign']}: CPA=¥{row['cpa']}\")\n\n# CSV書き込み\nwith open('report.csv', 'w', encoding='utf-8', newline='') as f:\n    writer = csv.writer(f)\n    writer.writerow(['campaign', 'cpa', 'roas'])\n    writer.writerow(['Campaign_A', 3000, 300])\n```\n\n## JSON操作\n\n```python\nimport json\n\n# JSON読み込み\nwith open('config.json', 'r') as f:\n    config = json.load(f)\n\n# JSON書き込み\nwith open('output.json', 'w', encoding='utf-8') as f:\n    json.dump(data, f, ensure_ascii=False, indent=2)\n```\n\n## 正規表現\n\n```python\nimport re\n\n# UTMパラメータの抽出\nurl = 'https://example.com?utm_source=google&utm_medium=cpc'\nparams = re.findall(r'utm_(\\w+)=(\\w+)', url)\n# [('source', 'google'), ('medium', 'cpc')]\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 演習: Pythonでファイル操作と正規表現を実践してみよう\n\n以下のコードの空欄を埋めて、実際に動くスクリプトを完成させましょう。",
+        "starterCode": "# Pythonでファイル操作と正規表現の演習\n# TODO: 以下のコードを完成させてください\n\nprint('演習を完成させましょう')",
+        "hints": [
+          "Pythonでファイル操作と正規表現の基本構文を確認しましょう",
+          "公式ドキュメントを参照してください",
+          "エラーメッセージをよく読んで対処しましょう"
+        ],
+        "answer": "# Pythonでファイル操作と正規表現の模範回答\nprint('Pythonでファイル操作と正規表現の演習完了！')"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "Pythonでファイル操作と正規表現に関する問題1",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          },
+          {
+            "q": "Pythonでファイル操作と正規表現に関する問題2",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          },
+          {
+            "q": "Pythonでファイル操作と正規表現に関する問題3",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール7-38 完了！\n\n## 習得したポイント\n\n✅ Pythonでファイル操作と正規表現の基本概念を理解した\n✅ マーケティング実務での活用方法を把握した\n✅ 関連する技術との違いを説明できる\n✅ 次のステップに進む準備ができた\n\n## 次のステップ\n\n次のモジュール **「7-39: pandasでデータ分析・前処理」** に進みましょう。\n\n> 実務チャレンジ: 今回学んだ内容を自社の業務に1つ適用してみましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

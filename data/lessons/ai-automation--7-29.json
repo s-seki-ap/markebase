@@ -1,0 +1,82 @@
+{
+  "id": "ai-automation--7-29",
+  "moduleId": "7-29",
+  "categoryId": "ai-automation",
+  "title": "GASでスプレッドシート・Gmail自動化",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 定型作業をスクリプトで一括処理\n\nマーケターの日常業務には「スプレッドシートにデータをまとめる」「決まったメールを送る」等の定型作業が多くあります。GASでこれらを自動化しましょう。\n\n**あなたへの問い**: 毎月のレポート集計で、同じ操作を繰り返していませんか？",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# スプレッドシート・Gmail自動化\n\n## スプレッドシート操作の基本\n\n```javascript\n// データの一括読み込み\nfunction readAllData() {\n  const sheet = SpreadsheetApp.getActiveSheet();\n  const data = sheet.getDataRange().getValues();\n  // data[0] = ヘッダー行\n  // data[1] = 1行目のデータ\n}\n\n// 条件付きデータ書き込み\nfunction writeResults() {\n  const sheet = SpreadsheetApp.getActiveSheet();\n  sheet.getRange('D2').setValue('=SUM(B2:C2)');\n}\n```\n\n## Gmail自動化\n\n```javascript\n// テンプレートメール送信\nfunction sendReport(email, name, data) {\n  const subject = `月次レポート: ${name}様`;\n  const body = `${name}様\\n\\n今月の成果:\\n${data}`;\n  GmailApp.sendEmail(email, subject, body);\n}\n```\n\n## マーケ実務での活用例\n\n| 自動化タスク | 削減時間/月 |\n|-------------|------------|\n| 週次レポート集計 | 4時間 |\n| クライアントへのメール送信 | 2時間 |\n| データ整形・クリーニング | 3時間 |",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 演習: GASでスプレッドシート・Gmail自動化を実践してみよう\n\n以下のコードの空欄を埋めて、実際に動くスクリプトを完成させましょう。",
+        "starterCode": "# GASでスプレッドシート・Gmail自動化の演習\n# TODO: 以下のコードを完成させてください\n\nprint('演習を完成させましょう')",
+        "hints": [
+          "GASでスプレッドシート・Gmail自動化の基本構文を確認しましょう",
+          "公式ドキュメントを参照してください",
+          "エラーメッセージをよく読んで対処しましょう"
+        ],
+        "answer": "# GASでスプレッドシート・Gmail自動化の模範回答\nprint('GASでスプレッドシート・Gmail自動化の演習完了！')"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "GASでスプレッドシート・Gmail自動化に関する問題1",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          },
+          {
+            "q": "GASでスプレッドシート・Gmail自動化に関する問題2",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          },
+          {
+            "q": "GASでスプレッドシート・Gmail自動化に関する問題3",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール7-29 完了！\n\n## 習得したポイント\n\n✅ GASでスプレッドシート・Gmail自動化の基本概念を理解した\n✅ マーケティング実務での活用方法を把握した\n✅ 関連する技術との違いを説明できる\n✅ 次のステップに進む準備ができた\n\n## 次のステップ\n\n次のモジュール **「7-30: GASフォーム連携とトリガー設定」** に進みましょう。\n\n> 実務チャレンジ: 今回学んだ内容を自社の業務に1つ適用してみましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

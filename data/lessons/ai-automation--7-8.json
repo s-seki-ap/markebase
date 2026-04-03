@@ -2,33 +2,35 @@
   "id": "ai-automation--7-8",
   "moduleId": "7-8",
   "categoryId": "ai-automation",
-  "title": "生成AI（Generative AI）の登場と衝撃",
+  "title": "主要LLMモデル比較（GPT/Claude/Gemini/Llama）",
   "sections": [
     {
       "type": "intro",
       "data": {
-        "content": "# 2022年11月、世界が変わった\n\n2022年11月30日、OpenAIがChatGPTを公開しました。\n\n「AIとは専門家が使うもの」という常識が覆り、一般ユーザーが自然な会話でAIを使いこなせる時代が到来しました。\n\nリリース後5日でユーザー数100万人突破。2ヶ月で1億人。それまでのあらゆるサービスで最速の成長速度でした。\n\n## なぜ生成AIはマーケティングを変えるのか\n\nマーケターの仕事の多くは「コンテンツ制作」です。\n\n- 広告コピーを書く\n- メールマガジンを作る\n- SNS投稿を量産する\n- LP・ランディングページを改善する\n- レポートをまとめる\n\nこれらすべてにAIが直接介入できるようになったのが生成AIの本質的な衝撃です。\n\n**あなたへの問い**: あなたの1週間の業務の中で、「テキストを書く・編集する」作業は何時間ありますか？",
+        "content": "# どのLLMを選ぶべきか\n\n2024年現在、主要なLLMは4つのファミリーに分かれています。マーケターとして重要なのは、**用途に応じて最適なモデルを選ぶ**こと。\n\n一つのモデルに固執する必要はありません。タスクの性質・コスト・品質のバランスで選びましょう。\n\n**あなたへの問い**: 今使っているAIツールのモデルを知っていますか？それは最適な選択ですか？",
         "diagram": false
       }
     },
     {
       "type": "concept",
       "data": {
-        "content": "# 生成AIの4つのカテゴリとマーケ活用\n\n## 1. テキスト生成AI\n\n**代表**: ChatGPT（OpenAI）、Claude（Anthropic）、Gemini（Google）\n\n```\nマーケ活用:\n├── 広告コピーのバリエーション生成（A/Bテスト素材）\n├── メールマガジンの文章作成\n├── SEOブログ記事の下書き\n├── 競合調査のサマリー作成\n└── 顧客対応スクリプト作成\n```\n\n## 2. 画像生成AI\n\n**代表**: DALL-E 3（OpenAI）、Stable Diffusion（Stability AI）、Midjourney\n\n```\nマーケ活用:\n├── 広告バナーの素材生成\n├── SNS投稿用ビジュアル\n├── 商品コンセプト画像\n└── A/Bテスト用クリエイティブバリエーション\n```\n\n## 3. 動画生成AI\n\n**代表**: Sora（OpenAI）、Gen-2（Runway）、Veo（Google）\n\n```\nマーケ活用（2024年〜急速普及）:\n├── 商品紹介動画の自動生成\n├── SNS広告動画の低コスト制作\n└── パーソナライズ動画広告\n```\n\n## 4. 音声・音楽生成AI\n\n**代表**: ElevenLabs、Udio、Suno\n\n```\nマーケ活用:\n├── ナレーション・音声広告の自動生成\n├── ポッドキャストの多言語展開\n└── CMのBGM生成\n```\n\n## マーケティング業務への影響（現実的な見方）\n\n| 業務 | AI化の進行度 | 人間に残る価値 |\n|------|------------|---------------|\n| 定型コピー生成 | 高（既に実用） | 戦略・ブランドトーン判断 |\n| クリエイティブ素材 | 中（品質向上中） | 独自ビジュアルアイデア |\n| 市場調査・まとめ | 高（既に実用） | 調査設計・仮説立案 |\n| データ分析レポート | 中（ツール整備中） | インサイト解釈・意思決定 |\n| 戦略立案 | 低（補助ツール） | ビジネス文脈・人間関係 |",
-        "diagram": false
+        "content": "# 主要LLMモデルの比較\n\n## 4大LLMファミリー\n\n```\nLLMファミリー\n├── OpenAI（GPT）\n│   ├── GPT-4o: バランス型主力モデル\n│   ├── GPT-4o mini: 高速・低コスト\n│   └── o1: 推論特化（数学・コード）\n├── Anthropic（Claude）\n│   ├── Claude 3.5 Sonnet: 長文・コード\n│   └── Claude 3.5 Haiku: 高速・低コスト\n├── Google（Gemini）\n│   ├── Gemini 1.5 Pro: 超長文（1Mトークン）\n│   └── Gemini 1.5 Flash: 高速・低コスト\n└── Meta（Llama）\n    └── Llama 3.1 405B: オープンソース最大\n```\n\n## 用途別の推奨モデル\n\n| タスク | 推奨 | 理由 |\n|--------|------|------|\n| 短いコピー大量生成 | GPT-4o mini | コスト効率最高 |\n| 長文レポート生成 | Claude 3.5 Sonnet | 200K文脈・高品質 |\n| 超長文書分析 | Gemini 1.5 Pro | 1Mトークン |\n| コード生成 | Claude / GPT-4o | 両者拮抗 |\n| 社内専用AI構築 | Llama 3.1 | OSS・データ外部流出なし |\n| 画像分析+テキスト | GPT-4o | マルチモーダル実績 |\n\n## コスト比較（API入力単価/1Mトークン）\n\n| モデル | 入力 | 出力 |\n|--------|------|------|\n| GPT-4o | $2.50 | $10.00 |\n| GPT-4o mini | $0.15 | $0.60 |\n| Claude 3.5 Sonnet | $3.00 | $15.00 |\n| Gemini 1.5 Pro | $1.25 | $5.00 |\n| Llama 3.1 | 無料（自前GPUコスト） | - |",
+        "diagram": true
       }
     },
     {
       "type": "exercise",
       "data": {
-        "content": "# 演習: 生成AIを使った広告コピー生成フローを設計しよう\n\n生成AIで広告コピーを量産するワークフローを設計します。\n\nプロンプトテンプレートを完成させ、複数バリエーションを自動生成するシミュレーションを実行してください。",
-        "starterCode": "# 広告コピー生成ワークフロー\n# （実際のAPI呼び出しをシミュレート）\n\n# 商品情報\nproduct = {\n    \"name\": \"スマートウォッチ ProX\",\n    \"category\": \"ウェアラブルデバイス\",\n    \"price\": 29800,\n    \"usp\": \"7日間バッテリー・24時間健康モニタリング\",\n    \"target\": \"30〜40代ビジネスパーソン\",\n}\n\n# コピーバリエーション生成テンプレート\ncopy_templates = [\n    {\n        \"tone\": \"問題提起型\",\n        \"template\": \"【課題】→【解決策】→【CTA】の構成\",\n        \"example_prompt\": f\"\"\"\n商品: {product['name']}\n対象: {product['target']}\nUSP: {product['usp']}\n価格: ¥{product['price']:,}\n\nトーン: 問題提起型\n文字数: 80文字以内\nCTA: 「今すぐチェック」\n        \"\"\",\n        # 実際はAPI応答。ここでは模擬出力\n        \"generated_copy\": \"充電切れで大事なデータを見逃していませんか？ProXなら7日間フル稼働。健康とビジネスをひとつの腕で管理。今すぐチェック\"\n    },\n    {\n        \"tone\": \"ベネフィット訴求型\",\n        \"template\": \"【ベネフィット強調】→【裏付け】→【CTA】\",\n        \"example_prompt\": \"\",  # ← ここに上と同様のプロンプトを書いてください\n        \"generated_copy\": \"24時間365日、あなたの健康を見守るスマートウォッチ。心拍・睡眠・ストレスをリアルタイム計測。7日間バッテリーで毎日充電不要。¥29,800〜\"\n    },\n    {\n        \"tone\": \"社会的証明型\",\n        \"template\": \"【実績・評価】→【特徴】→【CTA】\",\n        \"example_prompt\": \"\",  # ← ここにプロンプトを書いてください\n        \"generated_copy\": \"導入企業500社・満足度94%。ビジネスパーソンが選ぶスマートウォッチNo.1。7日バッテリー×24H健康管理でパフォーマンスを最大化。\"\n    },\n]\n\nprint(\"=== 広告コピー自動生成レポート ===\")\nprint(f\"商品: {product['name']} | ターゲット: {product['target']}\\n\")\n\nfor i, variant in enumerate(copy_templates, 1):\n    print(f\"バリエーション{i}【{variant['tone']}】\")\n    print(f\"  生成コピー: {variant['generated_copy']}\")\n    print(f\"  文字数: {len(variant['generated_copy'])}文字\")\n    print()\n\nprint(\"=== 次のアクション ===\")\nprint(\"1. 上記3パターンをA/Bテストとして配信\")\nprint(\"2. CTR・CVRを1週間計測\")\nprint(\"3. 勝者パターンのトーンで次のバッチを生成\")",
-        "hints": [
-          "ベネフィット訴求型のプロンプトは問題提起型と同じ情報を使い、「トーン: ベネフィット訴求型（商品の恩恵を前面に）」と指定するだけで変わります。",
-          "実際のOpenAI APIでは、このプロンプトをsystem/userメッセージとして送ると、generated_copyの部分が自動生成されます。",
-          "product辞書の内容を変えて、別の商品でどんなコピーが生成されるか想像してみましょう。"
-        ],
-        "answer": "# 広告コピー生成ワークフロー\n\nproduct = {\n    \"name\": \"スマートウォッチ ProX\",\n    \"category\": \"ウェアラブルデバイス\",\n    \"price\": 29800,\n    \"usp\": \"7日間バッテリー・24時間健康モニタリング\",\n    \"target\": \"30〜40代ビジネスパーソン\",\n}\n\ncopy_templates = [\n    {\n        \"tone\": \"問題提起型\",\n        \"example_prompt\": f\"商品:{product['name']} 対象:{product['target']} USP:{product['usp']} 価格:¥{product['price']:,} トーン:問題提起型 文字数:80文字以内 CTA:今すぐチェック\",\n        \"generated_copy\": \"充電切れで大事なデータを見逃していませんか？ProXなら7日間フル稼働。健康とビジネスをひとつの腕で管理。今すぐチェック\"\n    },\n    {\n        \"tone\": \"ベネフィット訴求型\",\n        \"example_prompt\": f\"商品:{product['name']} 対象:{product['target']} USP:{product['usp']} 価格:¥{product['price']:,} トーン:ベネフィット訴求型（商品の恩恵を前面に） 文字数:80文字以内\",\n        \"generated_copy\": \"24時間365日、あなたの健康を見守るスマートウォッチ。心拍・睡眠・ストレスをリアルタイム計測。7日間バッテリーで毎日充電不要。¥29,800〜\"\n    },\n    {\n        \"tone\": \"社会的証明型\",\n        \"example_prompt\": f\"商品:{product['name']} 対象:{product['target']} USP:{product['usp']} 価格:¥{product['price']:,} トーン:社会的証明型（実績・評価を強調） 文字数:80文字以内\",\n        \"generated_copy\": \"導入企業500社・満足度94%。ビジネスパーソンが選ぶスマートウォッチNo.1。7日バッテリー×24H健康管理でパフォーマンスを最大化。\"\n    },\n]\n\nprint(\"=== 広告コピー自動生成レポート ===\")\nprint(f\"商品: {product['name']} | ターゲット: {product['target']}\\n\")\n\nfor i, variant in enumerate(copy_templates, 1):\n    print(f\"バリエーション{i}【{variant['tone']}】\")\n    print(f\"  プロンプト: {variant['example_prompt'][:60]}...\")\n    print(f\"  生成コピー: {variant['generated_copy']}\")\n    print(f\"  文字数: {len(variant['generated_copy'])}文字\")\n    print()\n\nprint(\"=== 次のアクション ===\")\nprint(\"1. 上記3パターンをA/Bテストとして配信\")\nprint(\"2. CTR・CVRを1週間計測\")\nprint(\"3. 勝者パターンのトーンで次のバッチを生成\")"
+        "type": "interactive",
+        "data": {
+          "content": "# 演習: マーケティングタスクに最適なモデルを選ぼう",
+          "htmlContent": "<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#0f172a;color:#e2e8f0;font-family:system-ui,sans-serif;padding:24px;min-height:100vh}.title{font-size:1.3rem;font-weight:700;margin-bottom:16px}.quiz-item{background:#1e293b;border:2px solid #334155;border-radius:10px;padding:16px;margin-bottom:12px}.quiz-item .q{font-weight:600;margin-bottom:12px;font-size:.95rem}.options{display:flex;gap:8px;flex-wrap:wrap}.opt{background:#334155;border:2px solid #475569;border-radius:8px;padding:10px 16px;cursor:pointer;transition:all .2s;font-size:.85rem}.opt:hover{border-color:#3b82f6}.opt.selected{border-color:#3b82f6;background:#1e3a5f}.opt.correct{border-color:#10b981;background:#052e16}.opt.wrong{border-color:#ef4444;background:#2a0f0f}.btn{background:#3b82f6;color:#fff;border:none;border-radius:8px;padding:12px 28px;font-size:1rem;font-weight:600;cursor:pointer;margin-top:8px}.btn:hover{background:#2563eb}.result{margin-top:16px;padding:14px;border-radius:10px;font-weight:600;display:none}.feedback{margin-top:8px;font-size:.8rem;color:#94a3b8;display:none}</style></head><body><div class=\"title\">演習: マーケティングタスクに最適なモデルを選ぼう</div><div id=\"questions\"></div><button class=\"btn\" onclick=\"check()\">回答を確認</button><div class=\"result\" id=\"result\"></div><script>const qs=[{q:\"月次レポート（1万字）をAIで自動生成したい\",opts:[\"GPT-4o mini\",\"Claude 3.5 Sonnet\",\"Llama 3.1\"],ans:1,exp:\"長文レポート生成はClaudeの200Kコンテキストと高品質な文章力が最適\"},{q:\"広告コピーを100パターン生成してA/Bテストしたい\",opts:[\"GPT-4o mini\",\"Claude 3.5 Sonnet\",\"Gemini 1.5 Pro\"],ans:0,exp:\"大量の短文生成はGPT-4o miniのコスト効率が最適\"},{q:\"500ページのPDFマニュアルを一括分析したい\",opts:[\"GPT-4o\",\"Claude 3.5 Sonnet\",\"Gemini 1.5 Pro\"],ans:2,exp:\"超長文書にはGemini 1.5 Proの1Mトークンが最適\"},{q:\"機密データを外部に出さずに社内AIを構築したい\",opts:[\"GPT-4o\",\"Claude 3.5 Sonnet\",\"Llama 3.1（自社サーバー）\"],ans:2,exp:\"データ外部流出なしのオープンソースLlama 3.1が最適\"}];const container=document.getElementById(\"questions\");const selections=new Array(qs.length).fill(-1);qs.forEach((q,i)=>{const div=document.createElement(\"div\");div.className=\"quiz-item\";div.innerHTML=`<div class=\"q\">${i+1}. ${q.q}</div><div class=\"options\">${q.opts.map((o,j)=>`<div class=\"opt\" data-q=\"${i}\" data-o=\"${j}\" onclick=\"sel(${i},${j})\">${o}</div>`).join(\"\")}</div><div class=\"feedback\" id=\"fb-${i}\"></div>`;container.appendChild(div)});function sel(qi,oi){selections[qi]=oi;document.querySelectorAll(`[data-q=\"${qi}\"]`).forEach(el=>{el.className=el.dataset.o==oi?\"opt selected\":\"opt\"})}function check(){let score=0;qs.forEach((q,i)=>{const fb=document.getElementById(\"fb-\"+i);document.querySelectorAll(`[data-q=\"${i}\"]`).forEach(el=>{const oi=parseInt(el.dataset.o);if(oi===q.ans)el.className=\"opt correct\";else if(oi===selections[i])el.className=\"opt wrong\";else el.className=\"opt\"});fb.textContent=q.exp;fb.style.display=\"block\";if(selections[i]===q.ans)score++});const r=document.getElementById(\"result\");r.style.display=\"block\";const ok=score>=qs.length-1;r.style.background=ok?\"#052e16\":\"#2a0f0f\";r.style.border=ok?\"2px solid #10b981\":\"2px solid #ef4444\";r.style.color=ok?\"#10b981\":\"#ef4444\";r.textContent=`${score}/${qs.length}問正解！`}</script></body></html>",
+          "checkpoints": [
+            "タスクに応じたモデル選択ができるようになった",
+            "各モデルのコスト構造を比較できる",
+            "オープンソースLLMの活用場面を理解した"
+          ]
+        }
       }
     },
     {
@@ -36,37 +38,37 @@
       "data": {
         "questions": [
           {
-            "q": "生成AIがマーケターの業務に与える最も本質的な変化はどれですか？",
+            "q": "短い広告コピーを大量生成する場合の最適モデルは？",
             "options": [
-              "マーケターが不要になり、AIがすべての業務を代替する",
-              "コンテンツ制作の「量産コスト」が大幅に下がり、戦略・判断に時間を使えるようになる",
-              "広告費が自動的に最適化される",
-              "データ分析が不要になる"
+              "GPT-4o",
+              "GPT-4o mini",
+              "Claude 3.5 Sonnet",
+              "Gemini 1.5 Pro"
             ],
             "correct": 1,
-            "explanation": "生成AIの本質的な価値は「コンテンツ制作の限界コストをほぼゼロにする」ことです。マーケターは定型作業から解放され、戦略立案・ブランド判断・顧客理解など、より高度な業務に集中できるようになります。"
+            "explanation": "大量の短文タスクにはGPT-4o miniのコスト効率が圧倒的。"
           },
           {
-            "q": "広告コピーのA/Bテストに生成AIを活用する最大のメリットはどれですか？",
+            "q": "Llama 3.1を選ぶ最大のメリットは？",
             "options": [
-              "法的審査が不要になる",
-              "短時間で多数のバリエーションを生成し、テスト速度を大幅に上げられる",
-              "AIが生成したコピーは必ず高いCTRを出す",
-              "広告配信プラットフォームが自動承認してくれる"
+              "最も高精度",
+              "無料・OSS・データを外部に出さない",
+              "UIが使いやすい",
+              "日本語が最も得意"
             ],
             "correct": 1,
-            "explanation": "生成AIを使うと、従来は時間・コストがかかったコピーバリエーションを瞬時に大量生成できます。これによりA/Bテストの仮説検証サイクルが劇的に速くなります。ただしAI生成コピーの品質は必ず人間がレビューする必要があります。"
+            "explanation": "Llamaはオープンソースで自社サーバーに展開でき、データ流出リスクがない。"
           },
           {
-            "q": "生成AIを広告・マーケティングで活用する際のリスクとして最も重要なものはどれですか？",
+            "q": "1Mトークンのコンテキストウィンドウを持つモデルは？",
             "options": [
-              "AIが生成したコンテンツは著作権保護が適用されない",
-              "不正確な情報（ハルシネーション）、ブランドトーン逸脱、法的コンプライアンス違反",
-              "処理速度が遅く、リアルタイム対応できない",
-              "日本語の精度が低すぎて実用できない"
+              "GPT-4o",
+              "Claude 3.5 Sonnet",
+              "Gemini 1.5 Pro",
+              "Llama 3.1"
             ],
-            "correct": 1,
-            "explanation": "生成AIの主なリスクは、①事実と異なる情報の生成（ハルシネーション）、②ブランドのトーン・価値観との不整合、③薬機法・景品表示法等の法的コンプライアンス違反です。特に医療・金融・食品分野では厳重なレビューが必要です。"
+            "correct": 2,
+            "explanation": "Gemini 1.5 Proは1Mトークン（日本語約50万字）の超長文対応。"
           }
         ]
       }
@@ -74,7 +76,7 @@
     {
       "type": "summary",
       "data": {
-        "content": "# モジュール7-8 完了！\n\n生成AIの4カテゴリとマーケティング業務への影響を整理しました。\n\n## 習得したポイント\n\n✅ テキスト・画像・動画・音声の4カテゴリ生成AIと代表ツールを説明できる\n✅ 生成AIがマーケ業務に与える本質的な変化（量産コストの激減）を理解した\n✅ 広告コピー生成ワークフローを設計・体験した\n✅ 生成AI活用のリスク（ハルシネーション・コンプライアンス）を認識した\n\n## 次のステップ\n\n次のモジュール **「7-9: LLM（大規模言語モデル）の仕組み」** では、生成AIの中核技術であるLLMがどのように動作するか、トークン・学習・推論の仕組みを詳しく学びます。\n\n> 実務チャレンジ: 現在担当している施策の1つを選び、ChatGPTで広告コピーを3バリエーション生成してみましょう。そのコピーをそのまま使えるか、どこを修正すべきかをレビューしてください。",
+        "content": "# モジュール7-8 完了！\n\n## 習得したポイント\n\n✅ GPT/Claude/Gemini/Llamaの特徴と得意領域を比較できる\n✅ マーケティングタスクに応じた最適モデルを選択できる\n✅ APIコスト構造を理解し、予算計画に活かせる\n✅ オープンソースLLMの活用場面を理解した\n\n## 次のステップ\n\n次のモジュール **「7-9: LLM APIコスト比較と最適化」** でROI最大化の実践方法を学びます。\n\n> 実務チャレンジ: 現在のAI利用タスクを3つ挙げ、それぞれに最適なモデルを選び直してみましょう。",
         "diagram": false
       }
     }

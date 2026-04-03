@@ -1,0 +1,83 @@
+{
+  "id": "ai-automation--7-51",
+  "moduleId": "7-51",
+  "categoryId": "ai-automation",
+  "title": "Claude Codeのインストールと初期設定",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# なぜマーケターがClaude Codeを使えるべきなのか\n\nレポート作成、データ整形、定型作業の自動化――マーケターの業務には「手を動かすだけで頭を使わない時間」が驚くほど多く含まれています。\n\nClaude Codeは、ターミナル上で動くAIエージェントです。ファイル操作、コード生成、Git管理などを自然言語の指示だけで実行できます。エンジニアだけのツールではありません。\n\n環境構築さえ終われば、あとは「日本語で指示を出す」だけ。この最初の一歩を今日クリアしましょう。\n\n**あなたへの問い**: 毎週繰り返している定型作業を3つ挙げてみてください。そのうちいくつがAIで自動化できそうですか？",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# Claude Codeの導入ステップ\n\n## 前提条件\n\nClaude Codeを動かすにはNode.js（v18以上）が必要です。Node.jsはJavaScriptの実行環境で、npmというパッケージ管理ツールが付属します。\n\n## インストール手順\n\n```\nClaude Code導入フロー\n├── 1. Node.jsインストール（公式サイトからLTS版）\n├── 2. npmでClaude Codeをグローバルインストール\n│   └── npm install -g @anthropic-ai/claude-code\n├── 3. claude login でAnthropicアカウント認証\n├── 4. プロジェクトフォルダに移動して claude を実行\n└── 5. 対話開始！\n```\n\n## マーケ実務での活用イメージ\n\n- **レポート作成**: 「先月のGA4データをまとめてMarkdownレポートにして」\n- **データ整形**: 「このCSVからチャネル別のセッション数を集計して」\n- **ファイル管理**: 「クライアントフォルダの構成を整理して」\n\n## 認証の仕組み\n\n`claude login` を実行するとブラウザが開き、Anthropicアカウントで認証します。API利用にはAnthropicのサブスクリプション（Max Plan等）が必要です。\n\n## 初回起動時の確認ポイント\n\n- ターミナルに `claude` と打って起動するか\n- `/help` コマンドで使い方一覧が出るか\n- 簡単な質問（「今日の日付は？」等）に回答するか",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "type": "interactive",
+        "content": "# 演習: Claude Codeのインストール手順を正しい順序に並べ替えよう\n\nClaude Codeを使い始めるまでのステップを正しい順序にドラッグ&ドロップで並べ替えてください。",
+        "htmlContent": "<!DOCTYPE html><html><head><meta charset=\"utf-8\"><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#0f172a;color:#e2e8f0;font-family:system-ui,sans-serif;padding:24px;min-height:100vh}.title{font-size:1.3rem;font-weight:700;margin-bottom:8px;color:#f8fafc}.desc{color:#94a3b8;margin-bottom:20px;font-size:.95rem}.container{max-width:600px;margin:0 auto}.drop-zone{min-height:60px;border:2px dashed #334155;border-radius:12px;margin-bottom:8px;padding:8px;transition:all .2s}.drop-zone.over{border-color:#3b82f6;background:rgba(59,130,246,.1)}.drop-zone .label{color:#64748b;font-size:.8rem;padding:4px 8px}.card{background:#1e293b;border:1px solid #334155;border-radius:8px;padding:12px 16px;cursor:grab;user-select:none;transition:all .2s;margin-bottom:6px;font-size:.95rem}.card:hover{border-color:#3b82f6;box-shadow:0 0 12px rgba(59,130,246,.2)}.card:active{cursor:grabbing;transform:scale(1.02)}.card.correct{border-color:#10b981;background:rgba(16,185,129,.1)}.card.wrong{border-color:#ef4444;background:rgba(239,68,68,.1)}.source{background:#1e293b;border:2px dashed #334155;border-radius:12px;padding:12px;margin-bottom:20px;min-height:80px}.btn{background:#3b82f6;color:#fff;border:none;padding:10px 24px;border-radius:8px;font-size:1rem;cursor:pointer;margin-top:16px;transition:all .2s}.btn:hover{background:#2563eb}.result{margin-top:16px;padding:12px;border-radius:8px;font-weight:600;display:none}.result.show{display:block}.result.pass{background:rgba(16,185,129,.15);color:#10b981;border:1px solid #10b981}.result.fail{background:rgba(239,68,68,.15);color:#ef4444;border:1px solid #ef4444}.step-num{display:inline-block;width:28px;height:28px;line-height:28px;text-align:center;background:#3b82f6;border-radius:50%;font-size:.8rem;font-weight:700;margin-right:8px}</style></head><body><div class=\"container\"><div class=\"title\">Claude Code導入ステップ並べ替え</div><div class=\"desc\">下のカードを正しい順序でドロップゾーンに並べてください</div><div class=\"source\" id=\"source\"></div><div id=\"zones\"></div><button class=\"btn\" onclick=\"checkAnswer()\">回答を確認</button><div class=\"result\" id=\"result\"></div></div><script>const steps=[{id:1,text:\"Node.js（LTS版）を公式サイトからインストール\"},{id:2,text:\"npm install -g @anthropic-ai/claude-code を実行\"},{id:3,text:\"claude login でAnthropicアカウント認証\"},{id:4,text:\"プロジェクトフォルダに cd で移動\"},{id:5,text:\"claude コマンドで対話を開始\"}];const shuffled=[...steps].sort(()=>Math.random()-.5);const source=document.getElementById(\"source\");const zones=document.getElementById(\"zones\");shuffled.forEach(s=>{const card=document.createElement(\"div\");card.className=\"card\";card.draggable=true;card.dataset.id=s.id;card.textContent=s.text;card.addEventListener(\"dragstart\",e=>{e.dataTransfer.setData(\"text/plain\",s.id);card.style.opacity=\"0.4\"});card.addEventListener(\"dragend\",()=>{card.style.opacity=\"1\"});source.appendChild(card)});for(let i=0;i<5;i++){const zone=document.createElement(\"div\");zone.className=\"drop-zone\";zone.innerHTML='<span class=\"label\">ステップ '+(i+1)+\"</span>\";zone.addEventListener(\"dragover\",e=>{e.preventDefault();zone.classList.add(\"over\")});zone.addEventListener(\"dragleave\",()=>zone.classList.remove(\"over\"));zone.addEventListener(\"drop\",e=>{e.preventDefault();zone.classList.remove(\"over\");const id=e.dataTransfer.getData(\"text/plain\");const card=document.querySelector('.card[data-id=\"'+id+'\"]');if(card){const existingCards=zone.querySelectorAll(\".card\");existingCards.forEach(c=>source.appendChild(c));zone.appendChild(card)}});zones.appendChild(zone)}source.addEventListener(\"dragover\",e=>e.preventDefault());source.addEventListener(\"drop\",e=>{e.preventDefault();const id=e.dataTransfer.getData(\"text/plain\");const card=document.querySelector('.card[data-id=\"'+id+'\"]');if(card)source.appendChild(card)});function checkAnswer(){const allZones=document.querySelectorAll(\".drop-zone\");let correct=0;allZones.forEach((zone,i)=>{const card=zone.querySelector(\".card\");if(card){card.classList.remove(\"correct\",\"wrong\");if(parseInt(card.dataset.id)===i+1){card.classList.add(\"correct\");correct++}else{card.classList.add(\"wrong\")}}});const result=document.getElementById(\"result\");result.classList.add(\"show\");if(correct===5){result.className=\"result show pass\";result.textContent=\"全問正解！ Claude Codeの導入手順を正しく理解しています。\"}else{result.className=\"result show fail\";result.textContent=correct+\"/5 正解。緑がOK、赤が間違いです。もう一度並べ替えてみましょう。\"}}</script></body></html>",
+        "checkpoints": [
+          "Node.jsのインストールが最初のステップであることを理解した",
+          "npmによるグローバルインストールの意味を理解した",
+          "claude loginによる認証フローを理解した",
+          "プロジェクトフォルダでの起動が重要であることを理解した"
+        ]
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "Claude Codeを動かすために必要な前提環境はどれですか？",
+            "options": [
+              "Python 3.11以上",
+              "Node.js v18以上",
+              "Docker Desktop",
+              "Visual Studio Code"
+            ],
+            "correct": 1,
+            "explanation": "Claude CodeはNode.jsのnpmパッケージとして配布されるため、Node.js v18以上が必要です。VS CodeやPythonは前提条件ではありません。"
+          },
+          {
+            "q": "Claude Codeのインストールコマンドとして正しいのはどれですか？",
+            "options": [
+              "pip install claude-code",
+              "brew install claude",
+              "npm install -g @anthropic-ai/claude-code",
+              "apt-get install claude-code"
+            ],
+            "correct": 2,
+            "explanation": "Claude Codeはnpmのグローバルパッケージとしてインストールします。-gフラグはグローバルインストールを意味し、どのディレクトリからでもclaudeコマンドが使えるようになります。"
+          },
+          {
+            "q": "claude loginコマンドを実行すると何が起きますか？",
+            "options": [
+              "ローカルにAIモデルがダウンロードされる",
+              "ブラウザが開きAnthropicアカウントで認証する",
+              "SSHキーが自動生成される",
+              "GitHubアカウントに接続する"
+            ],
+            "correct": 1,
+            "explanation": "claude loginを実行するとブラウザが起動し、Anthropicアカウントで認証します。これによりAPIアクセスが可能になります。モデルはクラウド側で動作するため、ローカルにダウンロードされることはありません。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール7-51 完了！\n\n## 習得したポイント\n\n✅ Claude Codeの導入にはNode.js v18以上が必要であることを理解した\n✅ npm install → claude login → プロジェクトフォルダで起動の流れを把握した\n✅ Claude Codeがマーケ業務（レポート作成・データ整形）に活用できることを理解した\n✅ 認証の仕組みとAPI利用の前提条件を把握した\n\n## 次のステップ\n\n次のモジュール **「7-52: CLAUDE.mdの書き方とプロジェクト指示設計」** では、Claude Codeにプロジェクトのルールや技術情報を正しく伝える方法を学びます。\n\n> 実務チャレンジ: 自分のPCにClaude Codeをインストールし、簡単な質問（「マーケティングの4Pとは？」等）を投げてみましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

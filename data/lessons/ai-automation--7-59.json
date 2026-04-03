@@ -1,0 +1,82 @@
+{
+  "id": "ai-automation--7-59",
+  "moduleId": "7-59",
+  "categoryId": "ai-automation",
+  "title": "スキル（Slash Commands）の作成と活用",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 繰り返しタスクをワンコマンドに圧縮する\n\n月次レポート作成、競合チェック、データ集計――毎回同じ指示をAIに出していませんか？\n\nClaude Codeの「スキル」（Slash Commands）を使えば、複雑な指示をMarkdownファイルとして保存し、`/report` や `/analyze` のようなワンコマンドで呼び出せます。\n\nマーケターにとっては「テンプレート+自動実行」をAIに仕込めるようなものです。定型業務の効率化に直結します。\n\n**あなたへの問い**: 毎月同じ手順で作っているレポートや資料はありますか？それを「ワンコマンド」で済ませられたら、何時間の節約になりますか？",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# スキル（Slash Commands）の仕組み\n\n## スキルとは\n\n`.claude/commands/` フォルダにMarkdownファイルを置くと、Claude Codeが `/コマンド名` として認識します。\n\n```\nスキルの構造\n├── .claude/commands/（プロジェクト共有）\n│   ├── report.md       → /report で呼び出し\n│   ├── analyze.md      → /analyze で呼び出し\n│   └── review.md       → /review で呼び出し\n└── ~/.claude/commands/（個人用・全PJ共通）\n    ├── daily-check.md   → /daily-check\n    └── standup.md       → /standup\n```\n\n## スキルの書き方\n\nMarkdownファイルにAIへの指示を書くだけです。\n\n例: `/report` スキル（.claude/commands/report.md）\n```\n以下の手順で月次レポートを作成してください:\n1. data/raw/ フォルダの最新CSVを読み込む\n2. チャネル別（Organic/Paid/Social/Direct）にセッション数を集計\n3. 前月比を計算\n4. reports/ フォルダにMarkdownレポートを出力\n\nフォーマット:\n- エグゼクティブサマリー（3行以内）\n- KPI表（Markdown table）\n- チャネル別分析\n- 改善提案3つ（優先度つき）\n```\n\n## 引数の使い方\n\nスキル内で `$ARGUMENTS` を使うと、呼び出し時に追加情報を渡せます。\n\n`/report 2024年4月` → `$ARGUMENTS` が「2024年4月」に置換\n\n## マーケ実務で便利なスキル例\n\n| コマンド | 用途 |\n|---------|------|\n| `/report` | 月次レポート自動生成 |\n| `/competitor` | 競合サイト比較分析 |\n| `/kpi-check` | KPIダッシュボード更新 |\n| `/content-review` | コンテンツ品質チェック |\n| `/meeting-prep` | 定例会議の資料準備 |",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "type": "interactive",
+        "content": "# 演習: スキルファイルを組み立てよう\n\n月次レポート生成スキルの手順を正しい順序に並べ替えてください。",
+        "htmlContent": "<!DOCTYPE html><html><head><meta charset=\"utf-8\"><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#0f172a;color:#e2e8f0;font-family:system-ui,sans-serif;padding:24px;min-height:100vh}.title{font-size:1.3rem;font-weight:700;margin-bottom:8px}.desc{color:#94a3b8;margin-bottom:16px;font-size:.9rem}.file-header{background:#1e293b;border:1px solid #8b5cf6;border-bottom:none;border-radius:12px 12px 0 0;padding:10px 16px;font-family:monospace;font-size:.85rem;color:#8b5cf6}.file-body{background:#1e293b;border:1px solid #334155;border-radius:0 0 12px 12px;padding:16px;margin-bottom:16px;min-height:250px}.step-source{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;padding:12px;background:#1e293b;border:2px dashed #334155;border-radius:12px}.step-card{background:#0f172a;border:1px solid #475569;border-radius:8px;padding:8px 14px;cursor:grab;font-size:.85rem;transition:all .2s;user-select:none}.step-card:hover{border-color:#3b82f6}.step-card:active{cursor:grabbing}.step-card.correct{border-color:#10b981;background:rgba(16,185,129,.08)}.step-card.wrong{border-color:#ef4444;background:rgba(239,68,68,.08)}.drop-slot{border:2px dashed #334155;border-radius:8px;padding:8px;margin-bottom:6px;min-height:40px;transition:all .2s}.drop-slot.over{border-color:#8b5cf6;background:rgba(139,92,246,.05)}.drop-slot .num{color:#64748b;font-size:.8rem}.btn{background:#3b82f6;color:#fff;border:none;padding:10px 24px;border-radius:8px;cursor:pointer;font-size:.95rem}.btn:hover{background:#2563eb}.result{margin-top:12px;padding:12px;border-radius:8px;font-weight:600;display:none}.result.show{display:block}.result.pass{background:rgba(16,185,129,.15);color:#10b981;border:1px solid #10b981}.result.fail{background:rgba(239,68,68,.15);color:#ef4444;border:1px solid #ef4444}</style></head><body><div class=\"title\">スキルファイル組み立て</div><div class=\"desc\">.claude/commands/report.md の手順を正しい順に並べてください</div><div class=\"step-source\" id=\"source\"></div><div class=\"file-header\">.claude/commands/report.md</div><div class=\"file-body\" id=\"slots\"></div><button class=\"btn\" onclick=\"check()\">回答を確認</button><div class=\"result\" id=\"result\"></div><script>const steps=[{id:1,text:\"data/raw/ フォルダの最新CSVを読み込む\"},{id:2,text:\"チャネル別にセッション数・CVR・直帰率を集計する\"},{id:3,text:\"前月データと比較して増減率を計算する\"},{id:4,text:\"改善提案を3つ（優先度: 高・中・低）作成する\"},{id:5,text:\"reports/ フォルダにMarkdownレポートとして出力する\"}];const shuffled=[...steps].sort(()=>Math.random()-.5);const source=document.getElementById(\"source\");const slots=document.getElementById(\"slots\");shuffled.forEach(s=>{const card=document.createElement(\"div\");card.className=\"step-card\";card.draggable=true;card.textContent=s.text;card.dataset.id=s.id;card.addEventListener(\"dragstart\",e=>{e.dataTransfer.setData(\"text/plain\",s.id);card.style.opacity=\"0.4\"});card.addEventListener(\"dragend\",()=>card.style.opacity=\"1\");source.appendChild(card)});for(let i=0;i<5;i++){const slot=document.createElement(\"div\");slot.className=\"drop-slot\";slot.innerHTML='<span class=\"num\">Step '+(i+1)+\"</span>\";slot.addEventListener(\"dragover\",e=>{e.preventDefault();slot.classList.add(\"over\")});slot.addEventListener(\"dragleave\",()=>slot.classList.remove(\"over\"));slot.addEventListener(\"drop\",e=>{e.preventDefault();slot.classList.remove(\"over\");const id=e.dataTransfer.getData(\"text/plain\");const card=document.querySelector('.step-card[data-id=\"'+id+'\"]');if(card){const existing=slot.querySelector(\".step-card\");if(existing)source.appendChild(existing);slot.appendChild(card)}});slots.appendChild(slot)}source.addEventListener(\"dragover\",e=>e.preventDefault());source.addEventListener(\"drop\",e=>{e.preventDefault();const id=e.dataTransfer.getData(\"text/plain\");const card=document.querySelector('.step-card[data-id=\"'+id+'\"]');if(card)source.appendChild(card)});function check(){const allSlots=document.querySelectorAll(\".drop-slot\");let c=0;allSlots.forEach((slot,i)=>{const card=slot.querySelector(\".step-card\");if(card){card.classList.remove(\"correct\",\"wrong\");if(parseInt(card.dataset.id)===i+1){card.classList.add(\"correct\");c++}else card.classList.add(\"wrong\")}});const r=document.getElementById(\"result\");r.classList.add(\"show\");if(c===5){r.className=\"result show pass\";r.textContent=\"全問正解！レポート生成スキルの手順を正しく設計できました。\"}else{r.className=\"result show fail\";r.textContent=c+\"/5 正解。データ読込→集計→比較→提案→出力の流れです。\"}}</script></body></html>",
+        "checkpoints": [
+          "スキルファイルの配置場所（.claude/commands/）を理解した",
+          "レポート生成の論理的な手順を設計できた",
+          "$ARGUMENTSによるパラメータ渡しを理解した"
+        ]
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "Claude Codeのスキル（Slash Commands）はどこに配置しますか？",
+            "options": [
+              "CLAUDE.mdの中に記述する",
+              ".claude/commands/ フォルダにMarkdownファイルとして配置する",
+              "settings.jsonのcommands項目に設定する",
+              "package.jsonのscripts項目に追加する"
+            ],
+            "correct": 1,
+            "explanation": "スキルは.claude/commands/フォルダにMarkdownファイルとして配置します。ファイル名がそのままコマンド名になり、/ファイル名 で呼び出せます。"
+          },
+          {
+            "q": "スキル内で $ARGUMENTS はどう使われますか？",
+            "options": [
+              "環境変数として設定される",
+              "コマンド呼び出し時の追加テキストで置換される",
+              "ファイルパスとして解釈される",
+              "エラーメッセージとして表示される"
+            ],
+            "correct": 1,
+            "explanation": "$ARGUMENTSはスキル呼び出し時にユーザーが追加したテキストで置換されます。例えば /report 4月 と実行すると、$ARGUMENTSが「4月」に置き換わります。"
+          },
+          {
+            "q": "全プロジェクトで共通使用したいスキルはどこに配置しますか？",
+            "options": [
+              "プロジェクトルートの.claude/commands/",
+              "ホームディレクトリの~/.claude/commands/",
+              "CLAUDE.mdに記述する",
+              "settings.jsonに記述する"
+            ],
+            "correct": 1,
+            "explanation": "~/.claude/commands/（ホームディレクトリ）に配置すると、全プロジェクトで共通して使えます。プロジェクト固有のスキルはプロジェクト内の.claude/commands/に配置します。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール7-59 完了！\n\n## 習得したポイント\n\n✅ スキルがMarkdownファイルで定義されるSlash Commandsであることを理解した\n✅ .claude/commands/ への配置と呼び出し方法を把握した\n✅ $ARGUMENTSによるパラメータ渡しの仕組みを学んだ\n✅ マーケ業務向けの実用的なスキル例を把握した\n\n## 次のステップ\n\n次のモジュール **「7-60: フック（Hooks）の設計と活用」** では、ツール実行の前後に自動処理を挿入する仕組みを学びます。\n\n> 実務チャレンジ: 自分のプロジェクトで毎回使う指示を1つ選び、.claude/commands/にスキルファイルとして保存してみましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

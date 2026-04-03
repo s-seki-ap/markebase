@@ -1,0 +1,82 @@
+{
+  "id": "ai-automation--7-39",
+  "moduleId": "7-39",
+  "categoryId": "ai-automation",
+  "title": "pandasでデータ分析・前処理",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# GA4データを即戦力分析できるようになる\n\npandasはPythonの最強データ分析ライブラリです。CSV読み込み・欠損値処理・グループ集計・ピボットテーブル等、マーケティングデータ分析に必要な操作を一通り学びます。\n\n**あなたへの問い**: Excelのピボットテーブルを使っていますか？pandasならもっと高速・柔軟に集計できます。",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# pandasデータ分析\n\n## 基本操作\n\n```python\nimport pandas as pd\n\n# CSV読み込み\ndf = pd.read_csv('ga4_events.csv')\n\n# データ確認\nprint(df.head())      # 先頭5行\nprint(df.info())      # 列情報\nprint(df.describe())  # 統計量\n```\n\n## よく使う操作\n\n```python\n# フィルタリング\nhigh_cv = df[df['conversions'] > 10]\n\n# グループ集計\nchannel_summary = df.groupby('channel').agg({\n    'sessions': 'sum',\n    'conversions': 'sum',\n    'revenue': 'sum'\n}).reset_index()\n\n# 新しい列の追加\ndf['cvr'] = df['conversions'] / df['sessions'] * 100\ndf['cpa'] = df['cost'] / df['conversions']\n```\n\n## マーケ分析の定番パターン\n\n```\npandasでよく使う分析\n├── チャネル別KPI集計\n├── 日別トレンド分析\n├── コホート分析\n├── ファネル分析\n└── 前月比・前年比計算\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 演習: pandasでデータ分析・前処理を実践してみよう\n\n以下のコードの空欄を埋めて、実際に動くスクリプトを完成させましょう。",
+        "starterCode": "# pandasでデータ分析・前処理の演習\n# TODO: 以下のコードを完成させてください\n\nprint('演習を完成させましょう')",
+        "hints": [
+          "pandasでデータ分析・前処理の基本構文を確認しましょう",
+          "公式ドキュメントを参照してください",
+          "エラーメッセージをよく読んで対処しましょう"
+        ],
+        "answer": "# pandasでデータ分析・前処理の模範回答\nprint('pandasでデータ分析・前処理の演習完了！')"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "pandasでデータ分析・前処理に関する問題1",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          },
+          {
+            "q": "pandasでデータ分析・前処理に関する問題2",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          },
+          {
+            "q": "pandasでデータ分析・前処理に関する問題3",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール7-39 完了！\n\n## 習得したポイント\n\n✅ pandasでデータ分析・前処理の基本概念を理解した\n✅ マーケティング実務での活用方法を把握した\n✅ 関連する技術との違いを説明できる\n✅ 次のステップに進む準備ができた\n\n## 次のステップ\n\n次のモジュール **「7-40: データクレンジングの自動化」** に進みましょう。\n\n> 実務チャレンジ: 今回学んだ内容を自社の業務に1つ適用してみましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

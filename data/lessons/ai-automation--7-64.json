@@ -1,0 +1,82 @@
+{
+  "id": "ai-automation--7-64",
+  "moduleId": "7-64",
+  "categoryId": "ai-automation",
+  "title": "IDE統合（VS Code・JetBrains）",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# エディタの中にAIアシスタントを組み込む\n\nマーケターがデータ分析やレポート作成でコードを書く機会が増えています。Pythonでデータ集計、SQLでクエリ作成、Markdownでレポート執筆。\n\nこのとき、ターミナルとエディタを行き来するのは非効率です。VS CodeやJetBrainsのIDE内にClaude Codeを統合すれば、エディタを離れずにAIの支援を受けられます。\n\nコードを書きながら「この関数の意味を教えて」「このSQLのバグを見つけて」とすぐ聞けるのが強みです。\n\n**あなたへの問い**: 普段コードやSQLを書くとき、エラーが出たら何を見ますか？AIに聞くほうが早い場面はありませんか？",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# IDE統合の設定と活用\n\n## VS Code統合\n\nClaude Code拡張機能をVS Codeにインストールすると、エディタ内のターミナルやサイドパネルからClaude Codeを使えます。\n\n```\nIDE統合の構成\n├── VS Code統合\n│   ├── 拡張機能インストール\n│   ├── ターミナル内でclaude起動\n│   ├── サイドパネルでの対話\n│   └── 選択範囲をコンテキストとして渡す\n├── JetBrains統合\n│   ├── プラグインインストール\n│   ├── ツールウィンドウでの対話\n│   └── コードインスペクションとの連携\n└── 共通の活用法\n    ├── コード説明・解説\n    ├── バグ発見・修正提案\n    ├── リファクタリング支援\n    └── ドキュメント生成\n```\n\n## マーケターにとってのメリット\n\n| 場面 | IDE統合なし | IDE統合あり |\n|------|-----------|------------|\n| SQLエラー | エラーをコピーしてブラウザで検索 | エディタ内で即座に聞ける |\n| Python集計 | 別ターミナルで確認 | エディタ横のパネルで対話 |\n| Markdown執筆 | プレビューと行き来 | 書きながらAIにレビュー依頼 |\n\n## 選択範囲の活用\n\nコードを選択した状態でClaude Codeに質問すると、選択範囲がコンテキストとして自動的に渡されます。\n\n- SQLの一部を選択 →「このWHERE句を最適化して」\n- Pythonの関数を選択 →「この関数にdocstringを追加して」\n- Markdownの段落を選択 →「この文章をより簡潔にして」\n\n## 設定のコツ\n\n- VS Codeのターミナルで `claude` を起動するのが最もシンプル\n- CLAUDE.mdはプロジェクトルートに配置（エディタで開いているPJが自動認識）\n- キーバインドのカスタマイズで呼び出しを高速化",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "type": "interactive",
+        "content": "# 演習: IDE統合の活用シーンを判断しよう\n\n以下のマーケティング業務シーンで、IDE統合のClaude Codeをどう活用するか、最適なアクションを選んでください。",
+        "htmlContent": "<!DOCTYPE html><html><head><meta charset=\"utf-8\"><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#0f172a;color:#e2e8f0;font-family:system-ui,sans-serif;padding:24px;min-height:100vh}.title{font-size:1.3rem;font-weight:700;margin-bottom:8px}.desc{color:#94a3b8;margin-bottom:20px;font-size:.9rem}.scene{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:16px;margin-bottom:12px}.scene-label{font-size:.8rem;color:#8b5cf6;font-weight:600;margin-bottom:6px}.scene-text{font-size:.93rem;margin-bottom:12px;line-height:1.5}.options{display:flex;flex-direction:column;gap:6px}.opt{padding:10px 14px;background:#0f172a;border:1px solid #475569;border-radius:8px;cursor:pointer;font-size:.85rem;transition:all .2s}.opt:hover{border-color:#3b82f6}.opt.selected{border-color:#8b5cf6;background:rgba(139,92,246,.1)}.opt.correct{border-color:#10b981;background:rgba(16,185,129,.1)}.opt.wrong{border-color:#ef4444;background:rgba(239,68,68,.1)}.btn{background:#3b82f6;color:#fff;border:none;padding:10px 24px;border-radius:8px;cursor:pointer;font-size:.95rem;margin-top:16px}.btn:hover{background:#2563eb}.score{margin-top:12px;padding:12px;border-radius:8px;font-weight:600;display:none}.score.show{display:block;background:rgba(16,185,129,.15);color:#10b981;border:1px solid #10b981}</style></head><body><div class=\"title\">IDE統合活用シーン</div><div class=\"desc\">各シーンで最適な活用方法を選んでください</div><div id=\"scenes\"></div><button class=\"btn\" onclick=\"check()\">回答を確認</button><div class=\"score\" id=\"score\"></div><script>const scenes=[{label:\"シーン1\",text:\"BigQueryのSQLでエラーが出た。エラーメッセージの意味が分からない。\",options:[\"エラーメッセージをGoogle検索する\",\"エラー箇所を選択してClaude Codeに説明を求める\",\"SQLを全部消して書き直す\"],correct:1},{label:\"シーン2\",text:\"Pythonでpandas集計スクリプトを書いたが、結果が期待と違う。\",options:[\"print文を大量に追加してデバッグする\",\"関数を選択してClaude Codeにバグ発見を依頼する\",\"新しいファイルで一から書き直す\"],correct:1},{label:\"シーン3\",text:\"月次レポートのMarkdownを書き終えた。クライアントに出す前にチェックしたい。\",options:[\"自分で3回読み直す\",\"同僚に転送してレビューを待つ\",\"文書を選択してClaude Codeに品質レビューを依頼する\"],correct:2}];const container=document.getElementById(\"scenes\");scenes.forEach((s,si)=>{const div=document.createElement(\"div\");div.className=\"scene\";let optHtml=s.options.map((o,oi)=>'<div class=\"opt\" data-s=\"'+si+'\" data-o=\"'+oi+'\" onclick=\"sel(this)\">'+o+\"</div>\").join(\"\");div.innerHTML='<div class=\"scene-label\">'+s.label+'</div><div class=\"scene-text\">'+s.text+'</div><div class=\"options\">'+optHtml+\"</div>\";container.appendChild(div)});function sel(el){el.parentElement.querySelectorAll(\".opt\").forEach(o=>o.classList.remove(\"selected\"));el.classList.add(\"selected\")}function check(){let c=0;scenes.forEach((s,si)=>{document.querySelectorAll('.opt[data-s=\"'+si+'\"]').forEach(el=>{el.classList.remove(\"correct\",\"wrong\");if(el.classList.contains(\"selected\")){if(parseInt(el.dataset.o)===s.correct){el.classList.add(\"correct\");c++}else el.classList.add(\"wrong\")}if(parseInt(el.dataset.o)===s.correct&&!el.classList.contains(\"selected\"))el.classList.add(\"correct\")})});const r=document.getElementById(\"score\");r.classList.add(\"show\");r.textContent=\"スコア: \"+c+\"/\"+scenes.length+(c===scenes.length?\" パーフェクト！IDE統合を効果的に活用できます。\":\"\")}</script></body></html>",
+        "checkpoints": [
+          "IDE統合によりエディタを離れずにAI支援を受けられることを理解した",
+          "選択範囲をコンテキストとして渡すテクニックを習得した",
+          "マーケ業務（SQL・Python・Markdown）での具体的活用をイメージできた"
+        ]
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "VS CodeでClaude Codeを使う最もシンプルな方法はどれですか？",
+            "options": [
+              "別のターミナルアプリケーションから起動する",
+              "VS Codeの統合ターミナルでclaudeコマンドを実行する",
+              "ブラウザからWebインターフェースにアクセスする",
+              "VS Codeの設定JSONに直接記述する"
+            ],
+            "correct": 1,
+            "explanation": "最もシンプルな方法は、VS Codeの統合ターミナルでclaudeコマンドを実行することです。プロジェクトフォルダが自動認識され、CLAUDE.mdも読み込まれます。"
+          },
+          {
+            "q": "コードを選択してClaude Codeに質問するメリットは何ですか？",
+            "options": [
+              "コードが自動的にフォーマットされる",
+              "選択範囲がコンテキストとして渡されるので正確な回答が得られる",
+              "コードが自動でGitにコミットされる",
+              "選択範囲が自動で翻訳される"
+            ],
+            "correct": 1,
+            "explanation": "選択範囲がコンテキストとして渡されるため、AIが対象のコードを正確に把握でき、より的確な回答・修正提案が得られます。"
+          },
+          {
+            "q": "IDE統合がマーケターにとって特に有用な場面はどれですか？",
+            "options": [
+              "大規模なシステム開発",
+              "SQLエラー解決・Pythonデバッグ・Markdownレビュー",
+              "OS設定の変更",
+              "ハードウェアの管理"
+            ],
+            "correct": 1,
+            "explanation": "マーケターがよく扱うSQL（BQクエリ）、Python（データ集計）、Markdown（レポート）の作業で、エディタ内からAIに即座に質問・修正依頼できるのが最大のメリットです。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール7-64 完了！\n\n## 習得したポイント\n\n✅ VS Code/JetBrainsでのClaude Code統合方法を理解した\n✅ 選択範囲をコンテキストとして渡す活用法を習得した\n✅ SQL・Python・Markdownでの具体的な活用シーンを把握した\n✅ エディタを離れずにAI支援を受ける効率の良さを理解した\n\n## 次のステップ\n\n次のモジュール **「7-65: ヘッドレスモードとCI/CD統合」** では、スクリプトやGitHub ActionsからClaude Codeを自動実行する方法を学びます。\n\n> 実務チャレンジ: VS Codeの統合ターミナルでclaudeを起動し、開いているファイルについて質問してみましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

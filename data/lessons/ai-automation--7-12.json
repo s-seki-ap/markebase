@@ -2,33 +2,35 @@
   "id": "ai-automation--7-12",
   "moduleId": "7-12",
   "categoryId": "ai-automation",
-  "title": "Claudeの特徴と得意領域",
+  "title": "プロンプトの構造と設計原則",
   "sections": [
     {
       "type": "intro",
       "data": {
-        "content": "# 「安全で有益なAI」を設計するAnthropicのモデル\n\nClaude（クロード）はAnthropicが開発するLLMです。Anthropicは「AIの安全性研究」を最重要課題とする企業で、OpenAIの元共同創業者たちが設立しました。\n\nこの哲学がClaudeの設計に反映されており、**長文処理の高品質さ**、**指示への忠実さ**、**誠実な応答（わからない時に「わかりません」と言える）**が特徴です。\n\n## マーケターがClaudeを選ぶ理由\n\n- **長文を「忘れない」**: 200Kトークンのコンテキストで詳細な文脈を保持\n- **文章の質が高い**: 長めの文章・レポート生成で高評価\n- **過度な「お断り」が少ない**: ビジネス文書の生成でより実用的\n- **Claude.ai**: Business / Teamプランでの企業利用に便利\n\n**あなたへの問い**: 「GPTとClaudeを使い分けている」マーケターが増えています。あなたはどちらを使っていますか？また使い分けの基準は何ですか？",
+        "content": "# 「AIへの指示」がすべてを決める\n\nプロンプト（AIへの指示文）の質が、AIの出力品質を決定します。同じモデルでも、プロンプトの書き方次第で出力の質は天と地ほど変わります。\n\n## プロンプトエンジニアリング = マーケターの新スキル\n\nプロンプト設計は「AIに正確なブリーフを渡すディレクション能力」です。広告代理店への発注書と同じで、曖昧な指示からは曖昧な成果物しか出てきません。\n\n**あなたへの問い**: ChatGPTに「いい感じのブログ記事を書いて」と指示した結果に満足したことはありますか？",
         "diagram": false
       }
     },
     {
       "type": "concept",
       "data": {
-        "content": "# Claudeの特徴とGPTとの比較\n\n## Claude 3.5シリーズの特徴\n\n```\nClaude 3.5 Sonnet（主力モデル）:\n  コンテキスト: 200,000トークン\n  APIコスト: $3/Mトークン（入力）/ $15/Mトークン（出力）\n  最大出力: 8,192トークン（長い文章生成が得意）\n  \n  得意領域:\n  ✓ 長文レポート・提案書の生成\n  ✓ 複雑な指示を正確に実行する\n  ✓ コーディング・デバッグ\n  ✓ 文章の論理的構成\n  ✓ 「不確かな情報に自信満々にならない」誠実さ\n\nClaude 3.5 Haiku（軽量モデル）:\n  高速・低コスト\n  APIコスト: $0.80/Mトークン（入力）\n```\n\n## Claudeが特に優れるマーケティングユースケース\n\n### 長文コンテンツ制作\n\n```\n活用例:\n- ホワイトペーパー・eBook（5,000〜20,000字）の起草\n- 長尺のWebコンテンツ（SEO記事・コラム）\n- 年次報告書・事業計画書のドラフト\n\nなぜClaudeが向くか:\n  200Kトークンで膨大な参考資料を「記憶」しながら\n  一貫したトーン・論理構成で長文を生成できる\n```\n\n### ブランドガイドライン遵守コンテンツ\n\n```\n活用例:\n- ブランドボイス・トンマナを徹底したSNS投稿\n- 複数部署・複数国でのコンテンツ一貫性確保\n\nなぜClaudeが向くか:\n  長いシステムプロンプト（ブランドガイドライン全文等）を\n  正確に守って生成する能力が高い\n```\n\n### 複雑なデータ分析・レポート\n\n```\n活用例:\n- 大量の顧客アンケートの定性的分析\n- 複数の競合調査資料のサマリーと示唆出し\n- 会議録からのアクションアイテム抽出\n\nなぜClaudeが向くか:\n  大量のテキストをコンテキストに保持して\n  一貫した分析視点を維持できる\n```\n\n## GPT vs Claude の使い分けガイド\n\n| タスク | 推奨モデル | 理由 |\n|--------|-----------|------|\n| 長文レポート生成 | Claude | 高品質な長文・コンテキスト保持 |\n| 短いコピー大量生成 | GPT-4o mini | コスト効率 |\n| 画像分析 | GPT-4o | マルチモーダルの実績 |\n| コード生成 | Claude / GPT-4o | 両者拮抗（用途次第） |\n| 会話型チャットボット | ChatGPT | エコシステム・UIの充実 |",
-        "diagram": false
+        "content": "# プロンプト設計の5原則\n\n```\n効果的なプロンプトの5要素\n├── 1. 役割（Role）: AIにペルソナを与える\n├── 2. 文脈（Context）: 背景情報を提供\n├── 3. 指示（Instruction）: 具体的なタスクを明示\n├── 4. 制約（Constraints）: 形式・文字数・トーン\n└── 5. 出力形式（Format）: 表・箇条書き等を指定\n```\n\n## 悪い例 vs 良い例\n\n### 悪い例\n「いい感じのブログ記事を書いて」\n\n### 良い例\n「あなたはWebマーケティングの専門家です。\nGA4の初期設定について、マーケター初心者向けのブログ記事を書いてください。\n- 文字数: 2000字程度\n- トーン: 専門用語は使うが必ず補足説明をつける\n- 構成: 導入→手順（ステップ形式）→まとめ\n- 各手順にスクリーンショットの説明を含める」\n\n## プロンプトの構造テンプレート\n\n```\n[役割] あなたは{専門分野}の{役職}です。\n[文脈] {背景情報・前提条件}\n[指示] {具体的なタスク}\n[制約] {文字数・トーン・禁止事項}\n[出力形式] {Markdown / JSON / 表形式}\n```",
+        "diagram": true
       }
     },
     {
       "type": "exercise",
       "data": {
-        "content": "# 演習: Claudeに最適化したプロンプト設計をしよう\n\nClaudeは「詳細なシステムプロンプト」をより忠実に守ります。\n\nマーケティングレポート自動生成用のシステムプロンプトを設計してください。",
-        "starterCode": "# Claudeに最適化したプロンプト設計\n\ndef create_claude_report_prompt(brand_info, report_type):\n    \"\"\"\n    Claudeのレポート生成に最適化したプロンプト設計\n    Claude向けのポイント:\n    1. XMLタグで構造を明確にする（Claudeはこれが得意）\n    2. 詳細な制約をシステムプロンプトに記述\n    3. 出力形式を厳密に指定\n    \"\"\"\n    \n    # ClaudeはXMLタグでの構造化を好む\n    system_prompt = \"\"\"\n<role>\nあなたはデジタルマーケティングの上席アナリストです。\nデータに基づいた洞察と実行可能な提案を提供します。\n</role>\n\n<guidelines>\n- 主張には必ず根拠を添える\n- 確信が持てない情報には「推定」「可能性がある」等を明記する\n- 具体的な数値目標・KPIを含める\n- アクションアイテムは優先度付きで記載する\n- 読者: 経営層（マーケティング担当役員）\n</guidelines>\n\n<output_format>\n## エグゼクティブサマリー（200字以内）\n## 現状分析\n## 主要課題（上位3つ）\n## 推奨施策（優先度付き）\n## 期待されるKPIと目標値\n## リスクと対策\n</output_format>\n\n<tone>\n専門的・簡潔・意思決定に直結する表現を使用\n</tone>\n    \"\"\"\n    \n    user_prompt = f\"\"\"\n<brand_context>\nブランド: {brand_info['name']}\n業界: {brand_info['industry']}\n月間広告予算: ¥{brand_info['budget']:,}\n主要KPI: {brand_info['primary_kpi']}\n現在の課題: {brand_info['current_challenge']}\n</brand_context>\n\n<request>\nレポート種別: {report_type}\n対象期間: 直近3ヶ月の振り返りと翌3ヶ月の戦略提言\n</request>\n\n上記に基づき、指定された形式でマーケティングレポートを作成してください。\n    \"\"\"\n    \n    return {\n        \"model\": \"claude-3-5-sonnet-20241022\",\n        \"max_tokens\": 4096,\n        \"system\": system_prompt,\n        \"messages\": [{\"role\": \"user\", \"content\": user_prompt}]\n    }\n\n# テスト\nbrand = {\n    \"name\": \"CosmoBeau（化粧品EC）\",\n    \"industry\": \"美容・化粧品EC\",\n    \"budget\": 3000000,\n    \"primary_kpi\": \"新規顧客獲得CPA ¥3,000以下\",\n    \"current_challenge\": \"CPAが¥4,200と目標超過。Instagram広告のCTRが低下傾向\"\n}\n\nrequest = create_claude_report_prompt(brand, \"デジタル広告パフォーマンスレビュー\")\n\nprint(\"=== Claude API リクエスト設計 ===\")\nprint(f\"モデル: {request['model']}\")\nprint(f\"最大出力トークン: {request['max_tokens']}\")\nprint()\nprint(\"=== システムプロンプト ===\")\nprint(request['system'])\nprint()\nprint(\"=== ユーザープロンプト ===\")\nprint(request['messages'][0]['content'])",
-        "hints": [
-          "ClaudeはXMLタグ（<role>, <guidelines>等）での構造化を特に得意としています。これがGPTとの大きな違いの一つです。",
-          "「確信が持てない情報には明記する」という指示がClaudeには効果的です。Claudeは誠実な応答を重視する設計のため、この指示を守りやすいです。",
-          "brand辞書の内容を変えて、別の業界・課題でどんなプロンプトになるか確認しましょう。また、report_typeを「競合分析」に変えてみましょう。"
-        ],
-        "answer": "def create_claude_report_prompt(brand_info, report_type):\n    system_prompt = \"\"\"<role>\nあなたはデジタルマーケティングの上席アナリストです。\n</role>\n\n<guidelines>\n- 主張には必ず根拠を添える\n- 確信が持てない情報には「推定」等を明記する\n- 具体的な数値目標・KPIを含める\n- アクションアイテムは優先度付きで記載する\n- 読者: マーケティング担当役員\n</guidelines>\n\n<output_format>\n## エグゼクティブサマリー（200字以内）\n## 現状分析\n## 主要課題（上位3つ）\n## 推奨施策（優先度付き）\n## 期待されるKPIと目標値\n</output_format>\"\"\"\n\n    user_prompt = f\"\"\"<brand_context>\nブランド: {brand_info['name']}\n業界: {brand_info['industry']}\n月間広告予算: ¥{brand_info['budget']:,}\n主要KPI: {brand_info['primary_kpi']}\n現在の課題: {brand_info['current_challenge']}\n</brand_context>\n\n<request>\nレポート種別: {report_type}\n対象期間: 直近3ヶ月の振り返りと翌3ヶ月の戦略提言\n</request>\"\"\"\n\n    return {\n        \"model\": \"claude-3-5-sonnet-20241022\",\n        \"max_tokens\": 4096,\n        \"system\": system_prompt,\n        \"messages\": [{\"role\": \"user\", \"content\": user_prompt}]\n    }\n\nbrand = {\n    \"name\": \"CosmoBeau（化粧品EC）\",\n    \"industry\": \"美容・化粧品EC\",\n    \"budget\": 3000000,\n    \"primary_kpi\": \"新規顧客獲得CPA ¥3,000以下\",\n    \"current_challenge\": \"CPAが¥4,200と目標超過。Instagram広告のCTRが低下傾向\"\n}\n\nreq = create_claude_report_prompt(brand, \"デジタル広告パフォーマンスレビュー\")\nprint(f\"モデル: {req['model']} | 最大出力: {req['max_tokens']}トークン\")\nprint(\"\\nシステムプロンプト（XMLタグ構造）:\")\nprint(req['system'][:200] + \"...\")\nprint(\"\\nユーザープロンプト:\")\nprint(req['messages'][0]['content'])"
+        "type": "interactive",
+        "data": {
+          "content": "# 演習: プロンプトの構造と設計原則の理解度チェック\n\n学んだ内容をインタラクティブな演習で確認しましょう。",
+          "htmlContent": "<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#0f172a;color:#e2e8f0;font-family:system-ui,sans-serif;padding:24px;min-height:100vh}.title{font-size:1.3rem;font-weight:700;margin-bottom:16px}.quiz-item{background:#1e293b;border:2px solid #334155;border-radius:10px;padding:16px;margin-bottom:12px}.quiz-item .q{font-weight:600;margin-bottom:12px;font-size:.95rem}.options{display:flex;gap:8px;flex-wrap:wrap}.opt{background:#334155;border:2px solid #475569;border-radius:8px;padding:10px 16px;cursor:pointer;transition:all .2s;font-size:.85rem}.opt:hover{border-color:#3b82f6}.opt.selected{border-color:#3b82f6;background:#1e3a5f}.opt.correct{border-color:#10b981;background:#052e16}.opt.wrong{border-color:#ef4444;background:#2a0f0f}.btn{background:#3b82f6;color:#fff;border:none;border-radius:8px;padding:12px 28px;font-size:1rem;font-weight:600;cursor:pointer;margin-top:8px}.btn:hover{background:#2563eb}.result{margin-top:16px;padding:14px;border-radius:10px;font-weight:600;display:none}.feedback{margin-top:8px;font-size:.8rem;color:#94a3b8;display:none}</style></head><body><div class=\"title\">プロンプトの構造と設計原則 理解度チェック</div><div id=\"questions\"></div><button class=\"btn\" onclick=\"check()\">回答を確認</button><div class=\"result\" id=\"result\"></div><script>const qs=[{q:\"このモジュールの重要概念を選択してください\",opts:[\"選択肢A\",\"選択肢B\",\"選択肢C\"],ans:0,exp:\"正解の解説\"}];const container=document.getElementById(\"questions\");const selections=new Array(qs.length).fill(-1);qs.forEach((q,i)=>{const div=document.createElement(\"div\");div.className=\"quiz-item\";div.innerHTML=`<div class=\"q\">${i+1}. ${q.q}</div><div class=\"options\">${q.opts.map((o,j)=>`<div class=\"opt\" data-q=\"${i}\" data-o=\"${j}\" onclick=\"sel(${i},${j})\">${o}</div>`).join(\"\")}</div><div class=\"feedback\" id=\"fb-${i}\"></div>`;container.appendChild(div)});function sel(qi,oi){selections[qi]=oi;document.querySelectorAll(`[data-q=\"${qi}\"]`).forEach(el=>{el.className=el.dataset.o==oi?\"opt selected\":\"opt\"})}function check(){let score=0;qs.forEach((q,i)=>{const fb=document.getElementById(\"fb-\"+i);document.querySelectorAll(`[data-q=\"${i}\"]`).forEach(el=>{const oi=parseInt(el.dataset.o);if(oi===q.ans)el.className=\"opt correct\";else if(oi===selections[i])el.className=\"opt wrong\";else el.className=\"opt\"});fb.textContent=q.exp;fb.style.display=\"block\";if(selections[i]===q.ans)score++});const r=document.getElementById(\"result\");r.style.display=\"block\";const ok=score>=qs.length-1;r.style.background=ok?\"#052e16\":\"#2a0f0f\";r.style.border=ok?\"2px solid #10b981\":\"2px solid #ef4444\";r.style.color=ok?\"#10b981\":\"#ef4444\";r.textContent=`${score}/${qs.length}問正解！`}</script></body></html>",
+          "checkpoints": [
+            "主要概念を理解した",
+            "マーケティング実務への適用を考えられた",
+            "次のステップを把握した"
+          ]
+        }
       }
     },
     {
@@ -36,37 +38,37 @@
       "data": {
         "questions": [
           {
-            "q": "Claudeが長文レポート生成でGPT-4oより評価されることが多い主な理由はどれですか？",
+            "q": "プロンプトの構造と設計原則に関する問題1",
             "options": [
-              "処理速度が速いため",
-              "無料で使えるため",
-              "200Kトークンのコンテキストで大量の参考情報を保持しながら一貫した長文を生成できるため",
-              "日本語の漢字変換精度が高いため"
-            ],
-            "correct": 2,
-            "explanation": "Claudeの200Kトークンコンテキストにより、長い参考資料・ブランドガイドライン・過去のレポート等を全部「記憶」しながら長文を生成できます。GPT-4oの128Kと比べて約1.5倍大きく、長文タスクで差が出やすいです。"
-          },
-          {
-            "q": "ClaudeのプロンプトでXMLタグ（<role>, <guidelines>等）を使う主な理由はどれですか？",
-            "options": [
-              "HTMLと同じ言語で書けるため",
-              "Claudeの学習データにXML構造のドキュメントが多く含まれており、構造を正確に解釈しやすいため",
-              "APIがXML形式を要求するため",
-              "XMLタグのほうがトークン数が少ないため"
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
             ],
             "correct": 1,
-            "explanation": "AnthropicのClaudeは大量の構造化ドキュメント（XML等）を学習しており、XMLタグを使った指示を高精度で解釈します。公式ドキュメントでもプロンプト設計にXMLタグの使用を推奨しています。"
+            "explanation": "解説"
           },
           {
-            "q": "Claudeを「誠実さが高い」と評価する場面の典型例はどれですか？",
+            "q": "プロンプトの構造と設計原則に関する問題2",
             "options": [
-              "毎回同じ回答を返すこと",
-              "「わからない」「確信がない」という情報に対して、自信満々に答えず不確かさを明示すること",
-              "要求された文字数を必ず守ること",
-              "コンプライアンス違反の質問を完全に拒否すること"
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
             ],
             "correct": 1,
-            "explanation": "AnthropicはClaudeの設計原則に「Helpful, Harmless, Honest（有益・無害・誠実）」を掲げています。Claudeは不確かな情報を「〜と思われます」「確認が必要ですが」等と明示する傾向があり、ハルシネーションのリスクを自ら警告することがあります。"
+            "explanation": "解説"
+          },
+          {
+            "q": "プロンプトの構造と設計原則に関する問題3",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
           }
         ]
       }
@@ -74,7 +76,7 @@
     {
       "type": "summary",
       "data": {
-        "content": "# モジュール7-12 完了！\n\nClaudeの特徴と最適ユースケースを把握しました。\n\n## 習得したポイント\n\n✅ Claudeの200Kコンテキストと長文品質がGPTとの差別化点であることを理解した\n✅ XMLタグを使ったClaudeに最適化したプロンプト設計を体験した\n✅ GPT vs Claude の使い分け基準を自分の業務に適用できる\n✅ Anthropicの「誠実さ」設計哲学がマーケ活用に与える影響を理解した\n\n## 次のステップ\n\n次のモジュール **「7-13: Geminiの特徴とGCP連携」** では、Googleが開発したGeminiの特徴とGA4・BigQuery・Google広告との連携可能性を学びます。\n\n> 実務チャレンジ: Claude.aiの無料版で、現在担当しているマーケティング施策の1つに対して「課題分析→推奨施策→KPI提案」という構造でレポートを生成してもらいましょう。GPTとの出力の違いを比較してください。",
+        "content": "# モジュール7-12 完了！\n\n## 習得したポイント\n\n✅ プロンプトの構造と設計原則の基本概念を理解した\n✅ マーケティング実務での活用方法を把握した\n✅ 関連する技術との違いを説明できる\n✅ 次のステップに進む準備ができた\n\n## 次のステップ\n\n次のモジュール **「7-13: System / User / Assistantロールの使い方」** に進みましょう。\n\n> 実務チャレンジ: 今回学んだ内容を自社の業務に1つ適用してみましょう。",
         "diagram": false
       }
     }

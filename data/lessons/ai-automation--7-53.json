@@ -1,0 +1,82 @@
+{
+  "id": "ai-automation--7-53",
+  "moduleId": "7-53",
+  "categoryId": "ai-automation",
+  "title": "Claude Codeとの対話ベストプラクティス",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 「指示の出し方」がAIの出力品質を決める\n\nマーケターは日常的にコピーライターやデザイナーに指示を出します。そのとき「いい感じにお願い」と言って満足のいく成果物が上がってきたことはありますか？\n\nClaude Codeも同じです。指示が曖昧だと出力も曖昧になり、具体的だと期待通りの結果が返ってきます。\n\nこのモジュールでは、Claude Codeに「正確に意図を伝える」ための対話テクニックを学びます。\n\n**あなたへの問い**: 最後にAIに指示を出して「思ったのと違う」と感じたのはいつですか？何が足りなかったと思いますか？",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# 効果的な対話の4原則\n\n## 原則1: コンテキストを先に伝える\n\n悪い例: 「レポートを作って」\n良い例: 「GA4の先月データをもとに、クライアントA向けの月次レポートをMarkdown形式で作成して。KPIはPV・UU・CVR・直帰率の4つ」\n\n## 原則2: 出力フォーマットを指定する\n\n「Markdown表で」「JSON形式で」「CSV形式で」など、期待する形を先に伝えます。\n\n## 原則3: 段階的に依頼する\n\n一度に全部頼むのではなく、ステップに分けて依頼し、中間確認を挟みます。\n\n```\n対話の組み立て方\n├── Step 1: ゴールと背景を伝える\n├── Step 2: 出力フォーマットを指定する\n├── Step 3: 実行してもらい中間結果を確認\n├── Step 4: フィードバックで修正依頼\n└── Step 5: 最終確認して完了\n```\n\n## 原則4: 制約条件を明示する\n\nやってほしくないことを先に伝えるのも重要です。\n- 「推測でデータを作らないでください」\n- 「英語は使わず日本語のみで」\n- 「既存ファイルを上書きしないで」\n\n## マーケ実務での活用例\n\n- **データ分析**: 「このCSVのチャネル別セッション数を集計して、前月比を計算し、増減の大きいチャネルTOP3をピックアップして」\n- **競合調査**: 「以下の3社のWebサイト構成を比較表にして。比較軸はCTA配置・LP構成・フォーム項目数」\n- **コンテンツ**: 「この文章を、マーケ担当者向けにトーンを変えてリライトして。専門用語には括弧で補足を入れて」",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "type": "interactive",
+        "content": "# 演習: 良い指示と悪い指示を見分けよう\n\n以下の指示文を「効果的」「改善が必要」に分類してください。",
+        "htmlContent": "<!DOCTYPE html><html><head><meta charset=\"utf-8\"><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#0f172a;color:#e2e8f0;font-family:system-ui,sans-serif;padding:24px;min-height:100vh}.title{font-size:1.3rem;font-weight:700;margin-bottom:8px}.desc{color:#94a3b8;margin-bottom:16px;font-size:.9rem}.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}.col{background:#1e293b;border:2px dashed #334155;border-radius:12px;padding:12px;min-height:200px}.col.over{border-color:#3b82f6}.col-title{font-weight:700;font-size:.9rem;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid #334155}.col-title.good{color:#10b981}.col-title.bad{color:#f59e0b}.source{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}.card{background:#1e293b;border:1px solid #475569;border-radius:8px;padding:10px 14px;cursor:grab;font-size:.85rem;line-height:1.5;transition:all .2s}.card:hover{border-color:#3b82f6}.card.correct{border-color:#10b981;background:rgba(16,185,129,.08)}.card.wrong{border-color:#ef4444;background:rgba(239,68,68,.08)}.btn{background:#3b82f6;color:#fff;border:none;padding:10px 24px;border-radius:8px;cursor:pointer;font-size:.95rem}.btn:hover{background:#2563eb}.result{margin-top:12px;padding:12px;border-radius:8px;font-weight:600;display:none}.result.show{display:block}.result.pass{background:rgba(16,185,129,.15);color:#10b981;border:1px solid #10b981}.result.fail{background:rgba(239,68,68,.15);color:#ef4444;border:1px solid #ef4444}</style></head><body><div class=\"title\">指示文の品質判定</div><div class=\"desc\">各カードを「効果的な指示」「改善が必要な指示」に分類してください</div><div class=\"source\" id=\"source\"></div><div class=\"cols\"><div class=\"col\" id=\"good\" data-cat=\"good\"><div class=\"col-title good\">効果的な指示</div></div><div class=\"col\" id=\"bad\" data-cat=\"bad\"><div class=\"col-title bad\">改善が必要な指示</div></div></div><button class=\"btn\" onclick=\"check()\">回答を確認</button><div class=\"result\" id=\"result\"></div><script>const items=[{text:\"GA4の3月データからチャネル別セッション数をMarkdown表で出して。前月比も併記して。\",cat:\"good\"},{text:\"データを分析して。\",cat:\"bad\"},{text:\"以下のCSVを読んで、CVRが2%以上のランディングページTOP5を抽出して。\",cat:\"good\"},{text:\"いい感じのレポートを作って。\",cat:\"bad\"},{text:\"このブログ記事を、GA4初心者のマーケ担当者向けにリライトして。専門用語には補足を入れて。\",cat:\"good\"},{text:\"レポート頼む。\",cat:\"bad\"}];const shuffled=[...items].sort(()=>Math.random()-.5);const source=document.getElementById(\"source\");shuffled.forEach((item,i)=>{const card=document.createElement(\"div\");card.className=\"card\";card.draggable=true;card.textContent=item.text;card.dataset.cat=item.cat;card.dataset.idx=i;card.addEventListener(\"dragstart\",e=>{e.dataTransfer.setData(\"text/plain\",i);card.style.opacity=\"0.4\"});card.addEventListener(\"dragend\",()=>card.style.opacity=\"1\");source.appendChild(card)});document.querySelectorAll(\".col\").forEach(col=>{col.addEventListener(\"dragover\",e=>{e.preventDefault();col.classList.add(\"over\")});col.addEventListener(\"dragleave\",()=>col.classList.remove(\"over\"));col.addEventListener(\"drop\",e=>{e.preventDefault();col.classList.remove(\"over\");const idx=e.dataTransfer.getData(\"text/plain\");const card=document.querySelector('.card[data-idx=\"'+idx+'\"]');if(card)col.appendChild(card)})});source.addEventListener(\"dragover\",e=>e.preventDefault());source.addEventListener(\"drop\",e=>{e.preventDefault();const idx=e.dataTransfer.getData(\"text/plain\");const card=document.querySelector('.card[data-idx=\"'+idx+'\"]');if(card)source.appendChild(card)});function check(){let correct=0;document.querySelectorAll(\".card\").forEach(card=>{card.classList.remove(\"correct\",\"wrong\");const parent=card.parentElement;if(parent&&parent.dataset.cat===card.dataset.cat){card.classList.add(\"correct\");correct++}else if(parent&&parent.dataset.cat){card.classList.add(\"wrong\")}});const r=document.getElementById(\"result\");r.classList.add(\"show\");if(correct===items.length){r.className=\"result show pass\";r.textContent=\"全問正解！効果的な指示の特徴を正しく理解しています。\"}else{r.className=\"result show fail\";r.textContent=correct+\"/\"+items.length+\" 正解。具体性・フォーマット指定・制約条件の有無がポイントです。\"}}</script></body></html>",
+        "checkpoints": [
+          "効果的な指示にはコンテキスト・フォーマット・制約が含まれることを理解した",
+          "曖昧な指示がAIの出力品質を下げることを体感した",
+          "段階的な依頼の重要性を理解した"
+        ]
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "Claude Codeへの指示で最も重要な要素はどれですか？",
+            "options": [
+              "丁寧な敬語を使うこと",
+              "コンテキスト・出力フォーマット・制約条件を明示すること",
+              "できるだけ短く書くこと",
+              "英語で書くこと"
+            ],
+            "correct": 1,
+            "explanation": "AIへの指示では、背景情報（コンテキスト）、期待する出力形式、やってはいけないこと（制約）を明示することが最も重要です。敬語の有無や言語は品質に大きく影響しません。"
+          },
+          {
+            "q": "大きなタスクを依頼するときの正しいアプローチはどれですか？",
+            "options": [
+              "一度にすべての要件を詳細に伝えて一発で完成させる",
+              "段階的に依頼し、中間確認を挟みながら進める",
+              "最小限の指示で自律的に判断させる",
+              "完成形のサンプルだけ渡して再現させる"
+            ],
+            "correct": 1,
+            "explanation": "大きなタスクはステップに分けて中間確認しながら進めるのが効果的です。一度に全部頼むと方向性のズレに気づくのが遅れ、手戻りが大きくなります。"
+          },
+          {
+            "q": "「制約条件を明示する」とは具体的にどういうことですか？",
+            "options": [
+              "タスクの期限を設定すること",
+              "やってほしくないこと・使わないでほしい表現を先に伝えること",
+              "AIの回答の文字数上限を設定すること",
+              "特定のAPIエンドポイントを指定すること"
+            ],
+            "correct": 1,
+            "explanation": "制約条件とは「推測データを作らない」「英語を使わない」「既存ファイルを上書きしない」など、禁止事項を明示することです。これにより想定外の出力を防げます。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール7-53 完了！\n\n## 習得したポイント\n\n✅ 効果的な対話の4原則（コンテキスト・フォーマット・段階的依頼・制約条件）を理解した\n✅ 良い指示と悪い指示の違いを見分けられるようになった\n✅ マーケティング業務での具体的な指示例を把握した\n✅ 中間確認を挟む段階的なアプローチの重要性を理解した\n\n## 次のステップ\n\n次のモジュール **「7-54: パーミッションモデルとセキュリティ設計」** では、Claude Codeが実行できる操作の制御方法を学びます。\n\n> 実務チャレンジ: 普段AIに出している指示を1つ選び、4原則に基づいてリライトしてみましょう。出力の質の変化を確認してください。",
+        "diagram": false
+      }
+    }
+  ]
+}

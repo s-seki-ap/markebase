@@ -1,0 +1,82 @@
+{
+  "id": "ai-automation--7-32",
+  "moduleId": "7-32",
+  "categoryId": "ai-automation",
+  "title": "GASでWebスクレイピング基礎",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 競合サイトの情報を定期収集するスクリプト\n\nWebスクレイピングは、Webサイトから自動的に情報を収集する技術です。GASを使えば、競合の価格、ブログ更新、SNSフォロワー数等を定期的に収集できます。\n\n注意: スクレイピングはサイトの利用規約を確認した上で行いましょう。\n\n**あなたへの問い**: 競合サイトの価格チェックを手動でやっていませんか？",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# GASスクレイピング基礎\n\n## 基本的なスクレイピング\n\n```javascript\nfunction scrapeWebPage() {\n  const url = 'https://example.com/products';\n  const html = UrlFetchApp.fetch(url).getContentText();\n  \n  // 正規表現でデータ抽出\n  const priceMatch = html.match(/price[^>]*>([0-9,]+)円/);\n  if (priceMatch) {\n    const price = priceMatch[1];\n    Logger.log('価格: ' + price + '円');\n  }\n}\n```\n\n## 注意事項\n\n```\nスクレイピングの注意点\n├── 利用規約の確認（robots.txt）\n├── アクセス頻度の制限（1秒以上間隔）\n├── 個人情報の収集禁止\n└── 商用利用の可否確認\n```\n\n## マーケ活用例\n\n| 収集データ | 活用方法 |\n|-----------|----------|\n| 競合価格 | 価格戦略の参考 |\n| ブログ更新頻度 | コンテンツ戦略 |\n| 求人情報 | 競合の投資方向性 |",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 演習: GASでWebスクレイピング基礎を実践してみよう\n\n以下のコードの空欄を埋めて、実際に動くスクリプトを完成させましょう。",
+        "starterCode": "# GASでWebスクレイピング基礎の演習\n# TODO: 以下のコードを完成させてください\n\nprint('演習を完成させましょう')",
+        "hints": [
+          "GASでWebスクレイピング基礎の基本構文を確認しましょう",
+          "公式ドキュメントを参照してください",
+          "エラーメッセージをよく読んで対処しましょう"
+        ],
+        "answer": "# GASでWebスクレイピング基礎の模範回答\nprint('GASでWebスクレイピング基礎の演習完了！')"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "GASでWebスクレイピング基礎に関する問題1",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          },
+          {
+            "q": "GASでWebスクレイピング基礎に関する問題2",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          },
+          {
+            "q": "GASでWebスクレイピング基礎に関する問題3",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール7-32 完了！\n\n## 習得したポイント\n\n✅ GASでWebスクレイピング基礎の基本概念を理解した\n✅ マーケティング実務での活用方法を把握した\n✅ 関連する技術との違いを説明できる\n✅ 次のステップに進む準備ができた\n\n## 次のステップ\n\n次のモジュール **「7-33: GASのデバッグとエラーハンドリング」** に進みましょう。\n\n> 実務チャレンジ: 今回学んだ内容を自社の業務に1つ適用してみましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

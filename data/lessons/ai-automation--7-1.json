@@ -14,21 +14,23 @@
     {
       "type": "concept",
       "data": {
-        "content": "# AI発展の5つの時代\n\n## 第1期: 黎明期（1950年代〜1960年代）\n\nアラン・チューリングが「機械は考えられるか？」という問いを提起（1950年）。記号処理による推論プログラムが登場。\n\n**限界**: 現実の複雑さに対応できず。計算資源が圧倒的に不足。\n\n## 第2期: 第1次AIブーム〜冬の時代（1970年代〜1980年代前半）\n\nエキスパートシステム（専門家の知識をルール化したAI）が実用化。しかし知識の記述コストが膨大で破綻。\n\n## 第3期: 第2次AIブーム〜冬の時代（1980年代後半〜2000年代前半）\n\nニューラルネットワークの研究が進むも、計算能力の限界から商用化には至らず。\n\n## 第4期: 機械学習の実用化（2000年代〜2010年代前半）\n\nビッグデータの蓄積とクラウド計算の普及により、機械学習が実用化。スパムフィルタ、レコメンド、広告最適化に活用。\n\n**マーケティングへの影響**: Google広告のスマート入札、Amazonのレコメンドエンジン。\n\n## 第5期: 深層学習革命〜生成AI（2012年〜現在）\n\n2012年のImageNetコンテストでディープラーニングが圧勝。以降、画像認識・音声認識・自然言語処理が急速に発展。\n\n2022年のChatGPT登場で一般ユーザーへの普及が爆発的に加速。\n\n**マーケティングへの影響**: コンテンツ生成、広告クリエイティブ自動化、チャットボット、SEO対策の変革。\n\n## なぜ今AIが「使える」のか\n\n```\n3つの要因が揃った\n├── データ量: SNS・ECの普及でビッグデータが蓄積\n├── 計算能力: GPU・TPUの進化とクラウドの低コスト化\n└── アルゴリズム: Transformer（2017年）による革命的な精度向上\n```",
+        "content": "# AI発展の5つの時代\n\n## 第1期: 黎明期（1950年代〜1960年代）\n\nアラン・チューリングが「機械は考えられるか？」という問いを提起（1950年）。記号処理による推論プログラムが登場。\n\n**限界**: 現実の複雑さに対応できず。計算資源が圧倒的に不足。\n\n## 第2期: エキスパートシステム〜冬の時代（1970年代〜1980年代）\n\nエキスパートシステム（専門家の知識をルール化したAI）が実用化。しかし知識の記述コストが膨大で破綻。\n\n## 第3期: ニューラルネットワーク〜冬の時代（1980年代後半〜2000年代前半）\n\nニューラルネットワークの研究が進むも、計算能力の限界から商用化には至らず。\n\n## 第4期: 機械学習の実用化（2000年代〜2010年代前半）\n\nビッグデータの蓄積とクラウドの普及で機械学習が実用化。スパムフィルタ、レコメンド、広告最適化に活用。\n\n**マーケティングへの影響**: Google広告のスマート入札、Amazonのレコメンドエンジン。\n\n## 第5期: 深層学習革命〜生成AI（2012年〜現在）\n\n2012年のImageNetでディープラーニングが圧勝。2022年のChatGPT登場で一般への普及が爆発的に加速。\n\n**マーケティングへの影響**: コンテンツ生成、広告クリエイティブ自動化、チャットボット、SEO対策の変革。\n\n## なぜ今AIが「使える」のか\n\n```\n3つの要因が揃った\n├── データ量: SNS・ECの普及でビッグデータが蓄積\n├── 計算能力: GPU・TPUの進化とクラウドの低コスト化\n└── アルゴリズム: Transformer（2017年）による精度向上\n```",
         "diagram": true
       }
     },
     {
       "type": "exercise",
       "data": {
-        "content": "# 演習: AI技術の発展とマーケティング活用の対応表を完成させよう\n\n各AI技術がどのマーケティング施策に活用されているか、時代ごとに整理します。\n\n以下のコードを実行して、AIの歴史とマーケティング活用の対応を確認してください。\n\n`applications` 辞書の空欄を埋めてください。",
-        "starterCode": "# AI歴史とマーケティング活用マッピング\n\nai_history = [\n    {\n        \"era\": \"機械学習時代（2000年代〜）\",\n        \"technology\": \"協調フィルタリング・ロジスティック回帰\",\n        \"marketing_use\": \"\"  # ここを埋めてください: レコメンド・広告CTR予測のどちらか\n    },\n    {\n        \"era\": \"深層学習時代（2012年〜）\",\n        \"technology\": \"CNN・RNN\",\n        \"marketing_use\": \"\"  # ここを埋めてください: 画像認識広告審査・感情分析のどちらか\n    },\n    {\n        \"era\": \"生成AI時代（2022年〜）\",\n        \"technology\": \"LLM（GPT-4o、Claude等）\",\n        \"marketing_use\": \"\"  # ここを埋めてください: コンテンツ自動生成・SEO最適化のどちらか\n    }\n]\n\nfor item in ai_history:\n    print(f\"時代: {item['era']}\")\n    print(f\"  技術: {item['technology']}\")\n    print(f\"  マーケ活用: {item['marketing_use']}\")\n    print()",
-        "hints": [
-          "機械学習の協調フィルタリングは「Amazonのおすすめ商品」のような仕組みに使われています。",
-          "CNNは画像を高精度で識別します。広告審査で不適切画像を検出したり、ユーザーの感情を顔表情から読み取ることに使われます。",
-          "LLMはテキスト生成が得意です。ブログ記事、広告コピー、SEO用コンテンツの自動生成が代表的な活用例です。"
-        ],
-        "answer": "# AI歴史とマーケティング活用マッピング\n\nai_history = [\n    {\n        \"era\": \"機械学習時代（2000年代〜）\",\n        \"technology\": \"協調フィルタリング・ロジスティック回帰\",\n        \"marketing_use\": \"レコメンド・広告CTR予測\"\n    },\n    {\n        \"era\": \"深層学習時代（2012年〜）\",\n        \"technology\": \"CNN・RNN\",\n        \"marketing_use\": \"画像認識広告審査・感情分析\"\n    },\n    {\n        \"era\": \"生成AI時代（2022年〜）\",\n        \"technology\": \"LLM（GPT-4o、Claude等）\",\n        \"marketing_use\": \"コンテンツ自動生成・SEO最適化\"\n    }\n]\n\nfor item in ai_history:\n    print(f\"時代: {item['era']}\")\n    print(f\"  技術: {item['technology']}\")\n    print(f\"  マーケ活用: {item['marketing_use']}\")\n    print()"
+        "type": "interactive",
+        "data": {
+          "content": "# 演習: AI技術の発展を時系列に並べ替えよう\n\nAIの主要なマイルストーンを正しい時系列順に並べ替えてください。",
+          "htmlContent": "<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#0f172a;color:#e2e8f0;font-family:system-ui,sans-serif;padding:24px;min-height:100vh}.title{font-size:1.3rem;font-weight:700;margin-bottom:8px;color:#f1f5f9}.subtitle{color:#94a3b8;margin-bottom:20px;font-size:.9rem}.container{display:flex;gap:24px;flex-wrap:wrap}.source{flex:1;min-width:280px}.target{flex:1;min-width:280px}.label{font-size:.85rem;color:#8b5cf6;font-weight:600;margin-bottom:10px}.card{background:#1e293b;border:2px solid #334155;border-radius:10px;padding:14px 16px;margin-bottom:10px;cursor:grab;transition:all .2s;user-select:none}.card:hover{border-color:#3b82f6}.card.dragging{opacity:.4}.card .main{font-weight:600;font-size:.95rem;margin-bottom:4px}.card .sub{font-size:.8rem;color:#94a3b8}.drop-zone{background:#1e293b;border:2px dashed #334155;border-radius:10px;padding:14px 16px;margin-bottom:10px;min-height:56px;transition:all .2s;display:flex;align-items:center}.drop-zone.over{border-color:#10b981;background:#0f2a1e}.drop-zone .num{color:#475569;font-size:1.2rem;font-weight:700;margin-right:12px;min-width:24px}.drop-zone.filled{border-style:solid;border-color:#10b981;background:#0f2a1e}.btn{background:#3b82f6;color:#fff;border:none;border-radius:8px;padding:12px 28px;font-size:1rem;font-weight:600;cursor:pointer;margin-top:16px}.btn:hover{background:#2563eb}.result{margin-top:16px;padding:16px;border-radius:10px;font-weight:600;display:none}.result.correct{background:#052e16;border:2px solid #10b981;color:#10b981;display:block}.result.wrong{background:#2a0f0f;border:2px solid #ef4444;color:#ef4444;display:block}</style></head><body><div class=\"title\">AI技術の発展タイムライン</div><div class=\"subtitle\">カードをドラッグして古い順に並べましょう</div><div class=\"container\"><div class=\"source\" id=\"source\"><div class=\"label\">カード</div></div><div class=\"target\" id=\"target\"><div class=\"label\">正しい順序（上から下）</div></div></div><button class=\"btn\" onclick=\"checkAnswer()\">回答を確認</button><div class=\"result\" id=\"result\"></div><script>const items=[{id:0,main:\"チューリングテスト提唱\",sub:\"1950年代 - 機械は考えられるか？\"},{id:1,main:\"エキスパートシステム実用化\",sub:\"1980年代 - ルールベースAIの台頭と限界\"},{id:2,main:\"ディープラーニング再発見\",sub:\"2006年 - ヒントン教授の研究で復活\"},{id:3,main:\"ImageNetでCNN圧勝\",sub:\"2012年 - 画像認識が人間を超え始める\"},{id:4,main:\"ChatGPT一般公開\",sub:\"2022年 - 生成AIがマーケティングを変革\"}];const correctOrder=[0,1,2,3,4];const shuffled=[...items].sort(()=>Math.random()-.5);const sourceEl=document.getElementById(\"source\");const targetEl=document.getElementById(\"target\");const slots=new Array(items.length).fill(null);let draggedId=null;items.forEach((_,i)=>{const dz=document.createElement(\"div\");dz.className=\"drop-zone\";dz.dataset.slot=i;dz.innerHTML=`<span class=\"num\">${i+1}</span><span>ここにドロップ</span>`;targetEl.appendChild(dz)});shuffled.forEach(item=>{const card=document.createElement(\"div\");card.className=\"card\";card.draggable=true;card.dataset.id=item.id;card.innerHTML=`<div class=\"main\">${item.main}</div><div class=\"sub\">${item.sub}</div>`;card.addEventListener(\"dragstart\",()=>{draggedId=item.id;card.classList.add(\"dragging\")});card.addEventListener(\"dragend\",()=>card.classList.remove(\"dragging\"));sourceEl.appendChild(card)});document.querySelectorAll(\".drop-zone\").forEach(zone=>{zone.addEventListener(\"dragover\",e=>{e.preventDefault();zone.classList.add(\"over\")});zone.addEventListener(\"dragleave\",()=>zone.classList.remove(\"over\"));zone.addEventListener(\"drop\",e=>{e.preventDefault();zone.classList.remove(\"over\");const si=parseInt(zone.dataset.slot);if(slots[si]!==null){const old=zone.querySelector(\".card\");if(old)sourceEl.appendChild(old);slots[si]=null}const card=document.querySelector(`.card[data-id=\"${draggedId}\"]`);if(card){const prev=slots.indexOf(draggedId);if(prev!==-1){const pz=document.querySelector(`.drop-zone[data-slot=\"${prev}\"]`);pz.classList.remove(\"filled\");pz.innerHTML=`<span class=\"num\">${prev+1}</span><span>ここにドロップ</span>`;slots[prev]=null}zone.innerHTML=`<span class=\"num\">${si+1}</span>`;zone.appendChild(card);zone.classList.add(\"filled\");slots[si]=draggedId}})});function checkAnswer(){const ok=slots.every((s,i)=>s===correctOrder[i]);const r=document.getElementById(\"result\");r.className=ok?\"result correct\":\"result wrong\";r.textContent=ok?\"正解！理論提唱→ルールベース→深層学習再発見→画像認識突破→生成AI普及の流れです。\":\"不正解。チューリング(1950s)→エキスパートシステム(1980s)→深層学習(2006)→ImageNet(2012)→ChatGPT(2022)の順です。\";r.style.display=\"block\"}</script></body></html>",
+          "checkpoints": [
+            "5つのAIマイルストーンを正しい時系列で並べられた",
+            "各技術のマーケティングへの影響を理解した",
+            "AIブームと冬の時代のサイクルを把握した"
+          ]
+        }
       }
     },
     {
@@ -40,33 +42,33 @@
             "options": [
               "AI研究者が不足したため",
               "計算能力やデータ量が技術の要求水準に追いつかなかったため",
-              "政府の規制によって研究が禁止されたため",
-              "AIへの投資家の関心が最初からなかったため"
+              "政府の規制で研究が禁止されたため",
+              "投資家の関心がなかったため"
             ],
             "correct": 1,
-            "explanation": "AIの冬の時代は主に、理論・アルゴリズムの進歩に対して計算資源やデータ量が不足していたことが原因です。現在はGPUの進化とビッグデータ蓄積によりこの障壁が解消されました。"
+            "explanation": "AIの冬は計算資源・データ量の不足が主因。現在はGPU進化とビッグデータで解消。"
           },
           {
-            "q": "2022年以降の生成AIブームを引き起こした最も直接的なきっかけは何ですか？",
+            "q": "2022年の生成AIブームの直接的きっかけは？",
             "options": [
-              "Googleの検索アルゴリズム更新",
+              "Google検索アルゴリズム更新",
               "ChatGPTの一般公開",
-              "Meta社によるFacebook広告AIの刷新",
-              "Appleによるプライバシー規制の強化"
+              "Meta広告AIの刷新",
+              "Appleプライバシー規制強化"
             ],
             "correct": 1,
-            "explanation": "2022年11月にOpenAIが公開したChatGPTが一般ユーザーに爆発的に普及し、生成AIブームの直接的なきっかけとなりました。リリース5日で100万ユーザーを突破しました。"
+            "explanation": "2022年11月のChatGPT公開が直接のきっかけ。5日で100万ユーザー突破。"
           },
           {
-            "q": "機械学習が2000年代にマーケティングで実用化された代表的な事例はどれですか？",
+            "q": "現在のAIブームが過去と異なる最大の理由は？",
             "options": [
-              "AIによるテレビCM自動生成",
-              "チャットGPTを使ったカスタマーサポート",
-              "Amazonのレコメンドエンジンとスパムフィルタ",
-              "AIアバターによる営業活動"
+              "AIアルゴリズムが初めて発明された",
+              "データ量・計算能力・Transformerの3要素が同時に揃った",
+              "政府の巨額補助金",
+              "量子コンピュータの実用化"
             ],
-            "correct": 2,
-            "explanation": "機械学習の実用化初期の代表例はAmazonのレコメンドエンジン（協調フィルタリング）とGmailのスパムフィルタです。これらは2000年代初頭から商用サービスに組み込まれました。"
+            "correct": 1,
+            "explanation": "ビッグデータ・GPU/TPU進化・Transformer発明の3要素が同時に揃ったことが決定的。"
           }
         ]
       }
@@ -74,7 +76,7 @@
     {
       "type": "summary",
       "data": {
-        "content": "# モジュール7-1 完了！\n\nAIの歴史とマーケティングへの影響を理解しました。\n\n## 習得したポイント\n\n✅ AIには過去に2度の「冬の時代」があり、現在が3度目のブームであることを説明できる\n✅ 現在のAIブームが過去と異なる理由（データ・計算能力・Transformer）を理解した\n✅ 各AI時代のマーケティング活用事例を時系列で整理できた\n✅ 「AI」という言葉が指す技術の幅広さを認識した\n\n## 次のステップ\n\n次のモジュール **「7-2: 機械学習とは何か」** では、AIを支える中核技術「機械学習」の仕組みをマーケティング視点で解説します。\n\n> 実務チャレンジ: 自社または競合他社のWebサイトで「AI活用」と記載されている機能を1つ探し、それが上記のどの時代の技術に相当するか考えてみましょう。",
+        "content": "# モジュール7-1 完了！\n\n## 習得したポイント\n\n✅ AIには2度の冬の時代があり、現在が3度目のブームであることを説明できる\n✅ 現在のAIブームが過去と異なる理由（データ・計算能力・Transformer）を理解した\n✅ 各AI時代のマーケティング活用事例を時系列で整理できた\n✅ 「AI」が指す技術の幅広さを認識した\n\n## 次のステップ\n\n次のモジュール **「7-2: 機械学習の基礎と学習方式」** では、AIの中核技術「機械学習」をマーケティング視点で解説します。\n\n> 実務チャレンジ: 自社サイトで「AI活用」と記載されている機能を1つ探し、どの時代の技術に相当するか考えてみましょう。",
         "diagram": false
       }
     }

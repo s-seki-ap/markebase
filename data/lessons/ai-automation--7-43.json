@@ -1,0 +1,82 @@
+{
+  "id": "ai-automation--7-43",
+  "moduleId": "7-43",
+  "categoryId": "ai-automation",
+  "title": "REST APIの呼び出しと認証基礎",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# PythonからWeb APIを叩く基礎\n\nマーケティング自動化の核となるのがAPI（Application Programming Interface）です。GA4、Google広告、Slack、OpenAI等のサービスをPythonから操作する方法を学びます。\n\n**あなたへの問い**: 「API」という言葉を聞いたことはあるが、実際に使ったことはありますか？",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# REST API基礎\n\n## APIの基本概念\n\n```\nREST API通信の流れ\n├── クライアント（Python）\n│   └── リクエスト送信\n│       ├── URL（エンドポイント）\n│       ├── メソッド（GET/POST/PUT/DELETE）\n│       ├── ヘッダー（認証情報等）\n│       └── ボディ（送信データ）\n└── サーバー（APIサービス）\n    └── レスポンス返却\n        ├── ステータスコード（200/400/500等）\n        └── ボディ（JSONデータ）\n```\n\n## Pythonでの実装\n\n```python\nimport requests\n\n# GETリクエスト\nresponse = requests.get(\n    'https://api.example.com/data',\n    headers={'Authorization': 'Bearer YOUR_API_KEY'}\n)\ndata = response.json()\n\n# POSTリクエスト\nresponse = requests.post(\n    'https://api.example.com/send',\n    json={'message': 'Hello from Python'},\n    headers={'Authorization': 'Bearer YOUR_API_KEY'}\n)\n```\n\n## 認証方式\n\n| 方式 | 用途 |\n|------|------|\n| APIキー | シンプルなAPI（OpenAI等） |\n| OAuth2 | Google API（GA4/BQ等） |\n| Bearer Token | 多くのREST API |",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 演習: REST APIの呼び出しと認証基礎を実践してみよう\n\n以下のコードの空欄を埋めて、実際に動くスクリプトを完成させましょう。",
+        "starterCode": "# REST APIの呼び出しと認証基礎の演習\n# TODO: 以下のコードを完成させてください\n\nprint('演習を完成させましょう')",
+        "hints": [
+          "REST APIの呼び出しと認証基礎の基本構文を確認しましょう",
+          "公式ドキュメントを参照してください",
+          "エラーメッセージをよく読んで対処しましょう"
+        ],
+        "answer": "# REST APIの呼び出しと認証基礎の模範回答\nprint('REST APIの呼び出しと認証基礎の演習完了！')"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "REST APIの呼び出しと認証基礎に関する問題1",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          },
+          {
+            "q": "REST APIの呼び出しと認証基礎に関する問題2",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          },
+          {
+            "q": "REST APIの呼び出しと認証基礎に関する問題3",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール7-43 完了！\n\n## 習得したポイント\n\n✅ REST APIの呼び出しと認証基礎の基本概念を理解した\n✅ マーケティング実務での活用方法を把握した\n✅ 関連する技術との違いを説明できる\n✅ 次のステップに進む準備ができた\n\n## 次のステップ\n\n次のモジュール **「7-44: OpenAI / Anthropic APIの実装入門」** に進みましょう。\n\n> 実務チャレンジ: 今回学んだ内容を自社の業務に1つ適用してみましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

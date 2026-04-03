@@ -1,0 +1,82 @@
+{
+  "id": "ai-automation--7-62",
+  "moduleId": "7-62",
+  "categoryId": "ai-automation",
+  "title": "メモリシステム（Auto Memory）の仕組み",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# AIに「記憶」を持たせる\n\n新しいプロジェクトメンバーが入るたびに同じ説明を繰り返すのは非効率ですよね。議事録やWikiに情報を蓄積して「まずこれ読んで」と渡すのが普通です。\n\nClaude Codeも同じ問題を抱えています。会話を閉じると文脈が消えるため、次の会話で「このプロジェクトはGA4分析のPJで...」と毎回説明し直す必要がありました。\n\nAuto Memory（メモリシステム）は、重要な情報をMEMORY.mdに自動保存し、次の会話で自動的に読み込む仕組みです。AIに「長期記憶」を与えるようなものです。\n\n**あなたへの問い**: AIとの会話で「前も言ったのに...」と感じたことはありますか？それが解消されたら何が変わりますか？",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# MEMORY.mdとAuto Memoryの設計\n\n## メモリの仕組み\n\nClaude Codeは会話中に「これは記憶しておくべき」と判断した情報を、`~/.claude/MEMORY.md` に自動保存します。\n\n```\nメモリシステムの構造\n├── MEMORY.md（自動記憶ファイル）\n│   ├── ユーザーの好み・スタイル\n│   ├── プロジェクト固有の知識\n│   ├── 過去のフィードバック\n│   └── 技術的な決定事項\n├── プロジェクト別メモリ\n│   └── .claude/memory/ 配下にプロジェクト固有記憶\n└── 読み込みタイミング\n    └── 会話開始時に自動読み込み\n```\n\n## 何が記憶されるか\n\n- **ユーザーの修正指示**: 「レポートは敬語で書いて」→ 次回以降も敬語で書く\n- **技術的な決定**: 「このPJではOpenAI APIを使う」→ 次回も同じAPIを選択\n- **プロジェクト情報**: クライアント名、使用ツール、ディレクトリ構成\n- **スタイルの好み**: 「結論→根拠→アクションの順で書いて」\n\n## 手動メモリ管理\n\n自動保存だけでなく、ユーザーが明示的に「これを覚えて」と指示することもできます。\n\n- 「今後すべてのレポートで前年比も併記して。覚えておいて」\n- 「このクライアントの担当者はA部長。メモリに追加して」\n\n## マーケ実務での活用\n\n| 記憶する内容 | 効果 |\n|------------|------|\n| クライアント別のレポートフォーマット | 毎回指定し直す手間が消える |\n| KPI定義（CVR=申込/セッション等） | 計算ミスが減る |\n| 禁止事項（実データのGitコミット不可） | セキュリティリスク低減 |\n| 文体の好み（敬語/丁寧語の使い分け） | 出力品質が安定する |\n\n## 注意点\n\n- MEMORY.mdが肥大化すると読み込み時間が増える\n- 古い情報は定期的に整理（棚卸し）する\n- 機密情報（パスワード等）は記憶させない",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "type": "interactive",
+        "content": "# 演習: メモリに保存すべき情報を判断しよう\n\n以下の情報をMEMORY.mdに「保存すべき」か「保存すべきでない」かを判断してください。",
+        "htmlContent": "<!DOCTYPE html><html><head><meta charset=\"utf-8\"><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#0f172a;color:#e2e8f0;font-family:system-ui,sans-serif;padding:24px;min-height:100vh}.title{font-size:1.3rem;font-weight:700;margin-bottom:8px}.desc{color:#94a3b8;margin-bottom:20px;font-size:.9rem}.item{background:#1e293b;border:1px solid #334155;border-radius:10px;padding:14px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:12px}.item-text{font-size:.9rem;flex:1;line-height:1.4}.item-btns{display:flex;gap:6px}.ib{padding:6px 14px;border-radius:8px;border:1px solid #475569;background:#0f172a;color:#94a3b8;cursor:pointer;font-size:.8rem;transition:all .2s;white-space:nowrap}.ib:hover{border-color:#3b82f6;color:#e2e8f0}.ib.selected{border-color:#8b5cf6;background:rgba(139,92,246,.12);color:#c4b5fd}.ib.correct{border-color:#10b981;background:rgba(16,185,129,.12);color:#10b981}.ib.wrong{border-color:#ef4444;background:rgba(239,68,68,.12);color:#ef4444}.btn{background:#3b82f6;color:#fff;border:none;padding:10px 24px;border-radius:8px;cursor:pointer;font-size:.95rem;margin-top:16px}.btn:hover{background:#2563eb}.score{margin-top:12px;padding:12px;border-radius:8px;font-weight:600;display:none}.score.show{display:block;background:rgba(16,185,129,.15);color:#10b981;border:1px solid #10b981}</style></head><body><div class=\"title\">メモリ保存判定</div><div class=\"desc\">各情報をMEMORY.mdに保存すべきか判断してください</div><div id=\"items\"></div><button class=\"btn\" onclick=\"check()\">回答を確認</button><div class=\"score\" id=\"score\"></div><script>const items=[{text:\"クライアントA向けレポートは常に敬語で書く\",answer:\"save\"},{text:\"BigQueryのサービスアカウントキーのJSON内容\",answer:\"nosave\"},{text:\"CVRの定義: 申込完了数 / セッション数\",answer:\"save\"},{text:\"今日のランチはカレーだった\",answer:\"nosave\"},{text:\"このPJではPython 3.11 + pandasを使う\",answer:\"save\"},{text:\"APIキー: sk-abc123...\",answer:\"nosave\"},{text:\"レポートは結論→根拠→アクションの順で書く\",answer:\"save\"},{text:\"一時的なデバッグ用の変数値\",answer:\"nosave\"}];const container=document.getElementById(\"items\");items.forEach((item,i)=>{const div=document.createElement(\"div\");div.className=\"item\";div.innerHTML='<div class=\"item-text\">'+item.text+'</div><div class=\"item-btns\"><button class=\"ib\" data-q=\"'+i+'\" data-val=\"save\" onclick=\"sel(this)\">保存する</button><button class=\"ib\" data-q=\"'+i+'\" data-val=\"nosave\" onclick=\"sel(this)\">保存しない</button></div>';container.appendChild(div)});function sel(btn){btn.parentElement.querySelectorAll(\".ib\").forEach(b=>b.classList.remove(\"selected\"));btn.classList.add(\"selected\")}function check(){let c=0;items.forEach((item,i)=>{document.querySelectorAll('.ib[data-q=\"'+i+'\"]').forEach(b=>{b.classList.remove(\"correct\",\"wrong\");if(b.classList.contains(\"selected\")){if(b.dataset.val===item.answer){b.classList.add(\"correct\");c++}else b.classList.add(\"wrong\")}if(b.dataset.val===item.answer&&!b.classList.contains(\"selected\"))b.classList.add(\"correct\")})});const s=document.getElementById(\"score\");s.classList.add(\"show\");s.textContent=\"スコア: \"+c+\"/\"+items.length+(c===items.length?\" パーフェクト！\":\" 永続的に有用な情報だけを保存し、機密情報や一時的情報は保存しません。\")}</script></body></html>",
+        "checkpoints": [
+          "メモリに保存すべき情報の基準を理解した",
+          "機密情報をメモリに保存してはいけないことを理解した",
+          "永続的に有用な情報と一時的な情報を区別できる"
+        ]
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "Claude CodeのAuto Memoryが保存先として使うファイルはどれですか？",
+            "options": [
+              "settings.json",
+              "CLAUDE.md",
+              "MEMORY.md",
+              ".env"
+            ],
+            "correct": 2,
+            "explanation": "Auto Memoryは~/.claude/MEMORY.mdに情報を保存します。CLAUDE.mdはプロジェクト指示書、settings.jsonは権限設定と役割が異なります。"
+          },
+          {
+            "q": "MEMORY.mdに保存すべきでない情報はどれですか？",
+            "options": [
+              "クライアント向けレポートの文体ルール",
+              "APIキーやパスワード",
+              "プロジェクトの技術スタック",
+              "KPIの定義"
+            ],
+            "correct": 1,
+            "explanation": "APIキーやパスワードなどの機密情報はMEMORY.mdに保存してはいけません。MEMORY.mdはGit管理される可能性があり、セキュリティリスクになります。"
+          },
+          {
+            "q": "MEMORY.mdの運用で注意すべき点はどれですか？",
+            "options": [
+              "できるだけ多くの情報を保存する",
+              "一度保存したら変更しない",
+              "古い情報を定期的に整理（棚卸し）する",
+              "全プロジェクト共通の情報だけ保存する"
+            ],
+            "correct": 2,
+            "explanation": "MEMORY.mdが肥大化すると読み込み時間が増え、古い情報が新しい情報と矛盾する可能性もあります。定期的に棚卸しして整理することが重要です。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール7-62 完了！\n\n## 習得したポイント\n\n✅ Auto MemoryがMEMORY.mdに情報を自動保存する仕組みを理解した\n✅ メモリに保存すべき情報とすべきでない情報を判断できる\n✅ 手動メモリ管理（明示的な記憶指示）の方法を把握した\n✅ 定期的なメモリ棚卸しの重要性を理解した\n\n## 次のステップ\n\n次のモジュール **「7-63: タスク管理（Todo）の活用」** では、複雑な作業を構造的に分解・追跡するTodoシステムを学びます。\n\n> 実務チャレンジ: Claude Codeに「私のレポート作成ルールを覚えて」と指示し、MEMORY.mdに保存されるか確認してみましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

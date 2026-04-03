@@ -1,0 +1,82 @@
+{
+  "id": "ai-automation--7-40",
+  "moduleId": "7-40",
+  "categoryId": "ai-automation",
+  "title": "データクレンジングの自動化",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 汚いデータを自動的にキレイにする\n\n実際のマーケティングデータは「欠損値」「重複」「表記ゆれ」「外れ値」だらけです。これを自動的にクリーニングするスクリプトを書けるようになりましょう。\n\n**あなたへの問い**: 「データの前処理に全体の8割の時間がかかる」と聞いたことはありますか？",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# データクレンジング自動化\n\n## よくあるデータ品質問題\n\n```\nデータ品質問題と対処法\n├── 欠損値（NaN）\n│   └── 削除 or 平均値/中央値で補完\n├── 重複行\n│   └── drop_duplicates()\n├── 表記ゆれ\n│   └── 正規化（大文字→小文字、全角→半角）\n├── 外れ値\n│   └── IQR法で検出・除外\n└── 型の不一致\n    └── astype()で型変換\n```\n\n## pandasでのクレンジング\n\n```python\nimport pandas as pd\n\n# 欠損値処理\ndf = df.dropna(subset=['session_id'])  # 必須列のNaN行削除\ndf['revenue'] = df['revenue'].fillna(0)  # 0で補完\n\n# 重複削除\ndf = df.drop_duplicates(subset=['session_id', 'event_name'])\n\n# 表記ゆれ修正\ndf['channel'] = df['channel'].str.lower().str.strip()\ndf['channel'] = df['channel'].replace({\n    'organic': 'organic_search',\n    'organic search': 'organic_search'\n})\n\n# 外れ値除去（IQR法）\nQ1 = df['revenue'].quantile(0.25)\nQ3 = df['revenue'].quantile(0.75)\nIQR = Q3 - Q1\ndf = df[(df['revenue'] >= Q1-1.5*IQR) & (df['revenue'] <= Q3+1.5*IQR)]\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 演習: データクレンジングの自動化を実践してみよう\n\n以下のコードの空欄を埋めて、実際に動くスクリプトを完成させましょう。",
+        "starterCode": "# データクレンジングの自動化の演習\n# TODO: 以下のコードを完成させてください\n\nprint('演習を完成させましょう')",
+        "hints": [
+          "データクレンジングの自動化の基本構文を確認しましょう",
+          "公式ドキュメントを参照してください",
+          "エラーメッセージをよく読んで対処しましょう"
+        ],
+        "answer": "# データクレンジングの自動化の模範回答\nprint('データクレンジングの自動化の演習完了！')"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "データクレンジングの自動化に関する問題1",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          },
+          {
+            "q": "データクレンジングの自動化に関する問題2",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          },
+          {
+            "q": "データクレンジングの自動化に関する問題3",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール7-40 完了！\n\n## 習得したポイント\n\n✅ データクレンジングの自動化の基本概念を理解した\n✅ マーケティング実務での活用方法を把握した\n✅ 関連する技術との違いを説明できる\n✅ 次のステップに進む準備ができた\n\n## 次のステップ\n\n次のモジュール **「7-41: matplotlib・seabornでデータ可視化」** に進みましょう。\n\n> 実務チャレンジ: 今回学んだ内容を自社の業務に1つ適用してみましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

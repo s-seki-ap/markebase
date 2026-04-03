@@ -1,0 +1,82 @@
+{
+  "id": "ai-automation--7-63",
+  "moduleId": "7-63",
+  "categoryId": "ai-automation",
+  "title": "タスク管理（Todo）の活用",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# AIに「進捗管理」を任せる\n\nマーケティングプロジェクトでは、複数のタスクが同時進行します。データ収集、分析、レポート作成、クライアント報告――漏れなく進めるにはタスク管理が不可欠です。\n\nClaude CodeのTodoシステムは、複雑な作業を構造的に分解し、進捗を自動追跡します。AIが「次に何をすべきか」を自ら判断し、完了したタスクにチェックを入れてくれます。\n\nプロジェクトマネージャーがAIの中に住んでいるようなものです。\n\n**あなたへの問い**: 複雑なプロジェクトで「何から手をつければいいか分からない」と感じたことはありますか？",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# TodoRead・TodoWriteの活用\n\n## Todoシステムとは\n\nClaude Codeが複雑なタスクを受けると、内部的にTodoリストを作成して進捗を管理します。\n\n```\nTodoシステムの流れ\n├── 1. ユーザーが複雑なタスクを依頼\n├── 2. TodoWrite: タスクを分解してリスト化\n│   ├── タスクA: データ収集（status: in_progress）\n│   ├── タスクB: データ分析（status: pending）\n│   ├── タスクC: レポート作成（status: pending）\n│   └── タスクD: 品質チェック（status: pending）\n├── 3. 各タスクを順次実行\n│   └── 完了するごとにstatus: completedに更新\n├── 4. TodoRead: 進捗確認\n└── 5. 全タスク完了で最終結果を報告\n```\n\n## TodoWriteの使い方\n\nAIがタスクを登録・更新するために使います。各タスクには以下の情報が含まれます:\n\n- **id**: タスクの一意な識別子\n- **content**: タスクの内容\n- **status**: pending / in_progress / completed\n- **priority**: high / medium / low\n\n## TodoReadの使い方\n\n現在のタスク一覧と進捗状況を確認するために使います。ユーザーも「今の進捗は？」と聞くことで確認できます。\n\n## マーケ実務での活用例\n\n月次レポート作成を依頼した場合:\n1. [completed] GA4データの取得とCSV出力\n2. [completed] チャネル別セッション数の集計\n3. [in_progress] 前月比の計算と異常値チェック\n4. [pending] エグゼクティブサマリーの作成\n5. [pending] 改善提案の策定\n6. [pending] Markdownレポートの最終出力\n\n## 効果的なタスク分解のコツ\n\n- 1タスク = 1つのアクション（「集計して分析して」は2タスクに分ける）\n- 依存関係を意識する（データ取得が終わらないと分析できない）\n- 検証タスクを必ず含める（結果の妥当性チェック）",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "type": "interactive",
+        "content": "# 演習: タスクを正しい順序と優先度で分解しよう\n\n「競合3社のWebサイトを分析して比較レポートを作成」というタスクを、適切な順序で並べ替え、各タスクの優先度を設定してください。",
+        "htmlContent": "<!DOCTYPE html><html><head><meta charset=\"utf-8\"><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#0f172a;color:#e2e8f0;font-family:system-ui,sans-serif;padding:24px;min-height:100vh}.title{font-size:1.3rem;font-weight:700;margin-bottom:8px}.desc{color:#94a3b8;margin-bottom:16px;font-size:.9rem}.task-list{margin-bottom:16px}.task-item{background:#1e293b;border:1px solid #334155;border-radius:10px;padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:10px;cursor:grab;user-select:none;transition:all .2s}.task-item:hover{border-color:#3b82f6}.task-item.dragging{opacity:.4}.task-item .handle{color:#475569;font-size:1.2rem;cursor:grab}.task-item .text{flex:1;font-size:.9rem}.task-item select{padding:4px 8px;background:#0f172a;border:1px solid #475569;border-radius:6px;color:#e2e8f0;font-size:.8rem}.task-item select:focus{border-color:#8b5cf6;outline:none}.task-item.correct{border-color:#10b981;background:rgba(16,185,129,.06)}.task-item.wrong{border-color:#ef4444;background:rgba(239,68,68,.06)}.btn{background:#3b82f6;color:#fff;border:none;padding:10px 24px;border-radius:8px;cursor:pointer;font-size:.95rem;margin-top:12px}.btn:hover{background:#2563eb}.result{margin-top:12px;padding:12px;border-radius:8px;font-weight:600;display:none}.result.show{display:block}.result.pass{background:rgba(16,185,129,.15);color:#10b981;border:1px solid #10b981}.result.fail{background:rgba(239,68,68,.15);color:#ef4444;border:1px solid #ef4444}</style></head><body><div class=\"title\">タスク分解演習</div><div class=\"desc\">タスクをドラッグで正しい順序に並べ、優先度を設定してください</div><div class=\"task-list\" id=\"taskList\"></div><button class=\"btn\" onclick=\"check()\">回答を確認</button><div class=\"result\" id=\"result\"></div><script>const tasks=[{id:1,text:\"競合3社のURLと比較軸を確定する\",priority:\"high\"},{id:2,text:\"各社のサイト構成・CTA配置を調査する\",priority:\"high\"},{id:3,text:\"フォーム項目数・LP構成を比較表に整理する\",priority:\"medium\"},{id:4,text:\"自社との差分を分析し改善ポイントを抽出する\",priority:\"high\"},{id:5,text:\"比較レポートをMarkdownで出力する\",priority:\"medium\"}];const shuffled=[...tasks].sort(()=>Math.random()-.5);const list=document.getElementById(\"taskList\");let dragItem=null;shuffled.forEach(t=>{const div=document.createElement(\"div\");div.className=\"task-item\";div.draggable=true;div.dataset.id=t.id;div.innerHTML='<span class=\"handle\">&#9776;</span><span class=\"text\">'+t.text+'</span><select data-tid=\"'+t.id+'\"><option value=\"\">優先度</option><option value=\"high\">High</option><option value=\"medium\">Medium</option><option value=\"low\">Low</option></select>';div.addEventListener(\"dragstart\",e=>{dragItem=div;div.classList.add(\"dragging\");e.dataTransfer.effectAllowed=\"move\"});div.addEventListener(\"dragend\",()=>{div.classList.remove(\"dragging\");dragItem=null});div.addEventListener(\"dragover\",e=>{e.preventDefault();if(dragItem&&dragItem!==div){const rect=div.getBoundingClientRect();const mid=rect.top+rect.height/2;if(e.clientY<mid)list.insertBefore(dragItem,div);else list.insertBefore(dragItem,div.nextSibling)}});list.appendChild(div)});function check(){const items=document.querySelectorAll(\".task-item\");let orderCorrect=0;let prioCorrect=0;items.forEach((item,i)=>{item.classList.remove(\"correct\",\"wrong\");const expectedId=i+1;const actualId=parseInt(item.dataset.id);const sel=item.querySelector(\"select\");const task=tasks.find(t=>t.id===actualId);if(actualId===expectedId){orderCorrect++}if(sel.value===task.priority){prioCorrect++}if(actualId===expectedId&&sel.value===task.priority){item.classList.add(\"correct\")}else{item.classList.add(\"wrong\")}});const total=tasks.length*2;const score=orderCorrect+prioCorrect;const r=document.getElementById(\"result\");r.classList.add(\"show\");if(score===total){r.className=\"result show pass\";r.textContent=\"パーフェクト！タスク分解と優先度設定が完璧です。\"}else{r.className=\"result show fail\";r.textContent=\"順序: \"+orderCorrect+\"/\"+tasks.length+\"、優先度: \"+prioCorrect+\"/\"+tasks.length+\"。URL確定→調査→整理→分析→出力の流れです。\"}}</script></body></html>",
+        "checkpoints": [
+          "複雑なタスクを構造的に分解するスキルを身につけた",
+          "タスクの依存関係と優先度を適切に設定できる",
+          "TodoRead/TodoWriteの使い方を理解した"
+        ]
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "Claude CodeのTodoシステムで管理されるタスクのステータスとして正しい組み合わせはどれですか？",
+            "options": [
+              "open / closed / archived",
+              "pending / in_progress / completed",
+              "todo / doing / done",
+              "new / active / resolved"
+            ],
+            "correct": 1,
+            "explanation": "Claude CodeのTodoシステムでは、pending（未着手）、in_progress（進行中）、completed（完了）の3つのステータスでタスクを管理します。"
+          },
+          {
+            "q": "効果的なタスク分解のコツとして正しいのはどれですか？",
+            "options": [
+              "できるだけ大きな粒度でタスクをまとめる",
+              "1タスク = 1アクションに分割し依存関係を意識する",
+              "すべてのタスクを同じ優先度にする",
+              "検証タスクは省略して効率化する"
+            ],
+            "correct": 1,
+            "explanation": "1タスク1アクションに分割し、依存関係を意識することで、AIが効率的に処理できます。検証タスクも省略せず含めることで品質を担保します。"
+          },
+          {
+            "q": "「今の進捗は？」と聞いたとき、Claude Codeが使うツールはどれですか？",
+            "options": [
+              "TodoWrite",
+              "TodoRead",
+              "Read",
+              "Grep"
+            ],
+            "correct": 1,
+            "explanation": "進捗確認にはTodoReadが使われます。現在のタスク一覧とそれぞれのステータスを返します。TodoWriteはタスクの作成・更新に使います。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール7-63 完了！\n\n## 習得したポイント\n\n✅ TodoRead/TodoWriteによるタスク管理の仕組みを理解した\n✅ pending/in_progress/completedの3ステータスを把握した\n✅ 複雑なタスクを構造的に分解するスキルを習得した\n✅ タスクの依存関係と優先度設定の重要性を理解した\n\n## 次のステップ\n\n次のモジュール **「7-64: IDE統合（VS Code・JetBrains）」** では、エディタの中でClaude Codeを使う方法を学びます。\n\n> 実務チャレンジ: 次回Claude Codeに複雑なタスクを依頼する際、「まずTodoリストを作ってから進めて」と指示してみましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

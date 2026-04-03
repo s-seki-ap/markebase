@@ -8199,17 +8199,17 @@
       {
         "id": "7-2",
         "categoryId": "ai-automation",
-        "name": "機械学習とは何か",
-        "description": "ルールベースとMLの違いをマーケ視点で理解する",
+        "name": "機械学習の基礎と学習方式",
+        "description": "教師あり・なし・強化学習の違いをビジネスで使い分ける",
         "difficulty": "beginner",
-        "estimatedMinutes": 15,
+        "estimatedMinutes": 20,
         "lessons": []
       },
       {
         "id": "7-3",
         "categoryId": "ai-automation",
-        "name": "教師あり・なし・強化学習の違い",
-        "description": "3種類の学習方式をビジネスユースで使い分ける",
+        "name": "ニューラルネットワークと深層学習",
+        "description": "多層構造が精度を上げる仕組みをマーケ視点で理解する",
         "difficulty": "beginner",
         "estimatedMinutes": 20,
         "lessons": []
@@ -8217,41 +8217,14 @@
       {
         "id": "7-4",
         "categoryId": "ai-automation",
-        "name": "ニューラルネットワーク入門",
-        "description": "重みと活性化関数の仕組みを直感的に理解する",
+        "name": "NLP・画像認識・マルチモーダルAI",
+        "description": "テキスト・画像・音声を横断するAI技術の実務活用を把握",
         "difficulty": "beginner",
         "estimatedMinutes": 20,
         "lessons": []
       },
       {
         "id": "7-5",
-        "categoryId": "ai-automation",
-        "name": "深層学習（ディープラーニング）の基礎",
-        "description": "多層構造が精度を上げる理由をマーケに応用する",
-        "difficulty": "beginner",
-        "estimatedMinutes": 20,
-        "lessons": []
-      },
-      {
-        "id": "7-6",
-        "categoryId": "ai-automation",
-        "name": "自然言語処理（NLP）の概要",
-        "description": "テキスト分析・感情判定の実務活用を把握する",
-        "difficulty": "beginner",
-        "estimatedMinutes": 15,
-        "lessons": []
-      },
-      {
-        "id": "7-7",
-        "categoryId": "ai-automation",
-        "name": "コンピュータビジョンの概要",
-        "description": "画像認識の技術が広告クリエイティブに与える影響",
-        "difficulty": "beginner",
-        "estimatedMinutes": 15,
-        "lessons": []
-      },
-      {
-        "id": "7-8",
         "categoryId": "ai-automation",
         "name": "生成AI（Generative AI）の登場と衝撃",
         "description": "テキスト・画像・動画生成の現状と可能性を把握",
@@ -8260,7 +8233,7 @@
         "lessons": []
       },
       {
-        "id": "7-9",
+        "id": "7-6",
         "categoryId": "ai-automation",
         "name": "LLM（大規模言語モデル）の仕組み",
         "description": "Transformerアーキテクチャをビジネス観点で理解",
@@ -8269,7 +8242,7 @@
         "lessons": []
       },
       {
-        "id": "7-10",
+        "id": "7-7",
         "categoryId": "ai-automation",
         "name": "トークンとコンテキストウィンドウ",
         "description": "コスト計算とプロンプト設計に不可欠な基礎知識",
@@ -8278,61 +8251,16 @@
         "lessons": []
       },
       {
-        "id": "7-11",
+        "id": "7-8",
         "categoryId": "ai-automation",
-        "name": "GPT-4o / GPT-4.1の特徴と活用法",
-        "description": "OpenAIの最新モデルをマーケ業務に活かす判断軸",
+        "name": "主要LLMモデル比較（GPT/Claude/Gemini/Llama）",
+        "description": "各モデルの特徴・得意領域を用途別に比較選定する",
         "difficulty": "beginner",
         "estimatedMinutes": 20,
         "lessons": []
       },
       {
-        "id": "7-12",
-        "categoryId": "ai-automation",
-        "name": "Claudeの特徴と得意領域",
-        "description": "長文・倫理・コーディングでのClaudeの強みを把握",
-        "difficulty": "beginner",
-        "estimatedMinutes": 20,
-        "lessons": []
-      },
-      {
-        "id": "7-13",
-        "categoryId": "ai-automation",
-        "name": "Geminiの特徴とGCP連携",
-        "description": "Google WorkspaceやBQとのネイティブ統合を理解",
-        "difficulty": "beginner",
-        "estimatedMinutes": 20,
-        "lessons": []
-      },
-      {
-        "id": "7-14",
-        "categoryId": "ai-automation",
-        "name": "Llama・オープンソースLLMの活用",
-        "description": "自社サーバー運用でコスト削減する選択肢を評価",
-        "difficulty": "beginner",
-        "estimatedMinutes": 15,
-        "lessons": []
-      },
-      {
-        "id": "7-15",
-        "categoryId": "ai-automation",
-        "name": "Mistral・軽量LLMの可能性",
-        "description": "低コスト・高速推論モデルの実務適用シーンを把握",
-        "difficulty": "beginner",
-        "estimatedMinutes": 15,
-        "lessons": []
-      },
-      {
-        "id": "7-16",
-        "categoryId": "ai-automation",
-        "name": "主要LLMモデル特徴比較",
-        "description": "GPT/Claude/Gemini/Llamaを用途別に比較選定する",
-        "difficulty": "beginner",
-        "estimatedMinutes": 20,
-        "lessons": []
-      },
-      {
-        "id": "7-17",
+        "id": "7-9",
         "categoryId": "ai-automation",
         "name": "LLM APIコスト比較と最適化",
         "description": "入出力トークン単価を把握しROIを最大化する",
@@ -8341,7 +8269,7 @@
         "lessons": []
       },
       {
-        "id": "7-18",
+        "id": "7-10",
         "categoryId": "ai-automation",
         "name": "マルチモーダルLLMの活用",
         "description": "画像・音声を入力できるモデルで業務を自動化する",
@@ -8350,25 +8278,16 @@
         "lessons": []
       },
       {
-        "id": "7-19",
+        "id": "7-11",
         "categoryId": "ai-automation",
-        "name": "ファインチューニングの概念と判断基準",
-        "description": "自社データでLLMを特化させる際の費用対効果",
-        "difficulty": "beginner",
-        "estimatedMinutes": 15,
-        "lessons": []
-      },
-      {
-        "id": "7-20",
-        "categoryId": "ai-automation",
-        "name": "RAG（検索拡張生成）の概念",
-        "description": "社内ナレッジとLLMを組み合わせる設計を理解する",
+        "name": "ファインチューニングとRAGの概念",
+        "description": "自社データ特化とナレッジ検索拡張の使い分けを理解する",
         "difficulty": "beginner",
         "estimatedMinutes": 20,
         "lessons": []
       },
       {
-        "id": "7-21",
+        "id": "7-12",
         "categoryId": "ai-automation",
         "name": "プロンプトの構造と設計原則",
         "description": "明確な指示・文脈・制約の書き方を実務で習得",
@@ -8377,7 +8296,7 @@
         "lessons": []
       },
       {
-        "id": "7-22",
+        "id": "7-13",
         "categoryId": "ai-automation",
         "name": "System / User / Assistantロールの使い方",
         "description": "チャット形式APIでペルソナと文脈を制御する技術",
@@ -8386,7 +8305,7 @@
         "lessons": []
       },
       {
-        "id": "7-23",
+        "id": "7-14",
         "categoryId": "ai-automation",
         "name": "Zero-shot / Few-shotプロンプティング",
         "description": "例示の有無で回答品質が変わる仕組みを体得する",
@@ -8395,7 +8314,7 @@
         "lessons": []
       },
       {
-        "id": "7-24",
+        "id": "7-15",
         "categoryId": "ai-automation",
         "name": "Chain of Thoughtプロンプティング",
         "description": "思考ステップを明示してLLMの推論精度を高める",
@@ -8404,16 +8323,16 @@
         "lessons": []
       },
       {
-        "id": "7-25",
+        "id": "7-16",
         "categoryId": "ai-automation",
-        "name": "ロールプレイングプロンプト設計",
+        "name": "ロールプレイング・ペルソナプロンプト設計",
         "description": "専門家ペルソナを与えて出力品質を向上させる技法",
         "difficulty": "beginner",
         "estimatedMinutes": 15,
         "lessons": []
       },
       {
-        "id": "7-26",
+        "id": "7-17",
         "categoryId": "ai-automation",
         "name": "Output Format指定とJSON出力",
         "description": "機械処理しやすい構造化出力をプロンプトで制御",
@@ -8422,43 +8341,43 @@
         "lessons": []
       },
       {
-        "id": "7-27",
+        "id": "7-18",
         "categoryId": "ai-automation",
-        "name": "Temperature / Top-Pパラメータ調整",
-        "description": "創造性と一貫性のバランスを数値で制御する方法",
-        "difficulty": "beginner",
-        "estimatedMinutes": 15,
-        "lessons": []
-      },
-      {
-        "id": "7-28",
-        "categoryId": "ai-automation",
-        "name": "トークン最適化テクニック",
-        "description": "コストを抑えながら品質を維持するプロンプト削減術",
+        "name": "Temperature・Top-P・トークン最適化",
+        "description": "パラメータ調整とコスト削減を両立するプロンプト技術",
         "difficulty": "beginner",
         "estimatedMinutes": 20,
         "lessons": []
       },
       {
-        "id": "7-29",
+        "id": "7-19",
         "categoryId": "ai-automation",
-        "name": "プロンプトテンプレートの管理・運用",
-        "description": "チームで再利用できるプロンプト資産を構築する方法",
+        "name": "プロンプトチェーンとパイプライン設計",
+        "description": "複数プロンプトを連鎖させ複雑な処理を段階実行する手法",
         "difficulty": "beginner",
         "estimatedMinutes": 20,
         "lessons": []
       },
       {
-        "id": "7-30",
+        "id": "7-20",
         "categoryId": "ai-automation",
-        "name": "プロンプトの評価とA/Bテスト",
-        "description": "複数プロンプトを比較し最適版を選定する検証手法",
+        "name": "プロンプトの評価メトリクスとイテレーション",
+        "description": "複数プロンプトの精度を定量比較し継続的に改善する手法",
         "difficulty": "beginner",
         "estimatedMinutes": 20,
         "lessons": []
       },
       {
-        "id": "7-31",
+        "id": "7-21",
+        "categoryId": "ai-automation",
+        "name": "プロンプトテンプレートの管理と評価",
+        "description": "チーム再利用できるプロンプト資産の構築とA/Bテスト手法",
+        "difficulty": "beginner",
+        "estimatedMinutes": 20,
+        "lessons": []
+      },
+      {
+        "id": "7-22",
         "categoryId": "ai-automation",
         "name": "SEO記事のAI生成ワークフロー",
         "description": "キーワードから構成・本文まで一気通貫で自動化する",
@@ -8467,79 +8386,43 @@
         "lessons": []
       },
       {
-        "id": "7-32",
+        "id": "7-23",
         "categoryId": "ai-automation",
-        "name": "広告コピーの大量生成と選定",
-        "description": "LLMで10パターン生成しCTR予測で絞り込む手法",
+        "name": "広告コピー・LPコピーのAI大量生成",
+        "description": "LLMで複数パターンを生成しCTR予測で絞り込む手法",
         "difficulty": "intermediate",
         "estimatedMinutes": 25,
         "lessons": []
       },
       {
-        "id": "7-33",
+        "id": "7-24",
         "categoryId": "ai-automation",
-        "name": "メールマーケティングコピーのAI生成",
-        "description": "件名・本文・CTAをセグメント別に自動生成する",
-        "difficulty": "intermediate",
-        "estimatedMinutes": 30,
-        "lessons": []
-      },
-      {
-        "id": "7-34",
-        "categoryId": "ai-automation",
-        "name": "SNS投稿文のAI量産テクニック",
-        "description": "1記事から複数SNS向け投稿を自動展開するフロー",
+        "name": "メール・SNS投稿のAI量産テクニック",
+        "description": "件名・本文・CTAをセグメント別に自動生成・展開する",
         "difficulty": "intermediate",
         "estimatedMinutes": 25,
         "lessons": []
       },
       {
-        "id": "7-35",
+        "id": "7-25",
         "categoryId": "ai-automation",
-        "name": "LPコピーのAI生成と構成設計",
-        "description": "ヒーロー・ベネフィット・CTAをLLMで高速作成",
-        "difficulty": "intermediate",
-        "estimatedMinutes": 30,
-        "lessons": []
-      },
-      {
-        "id": "7-36",
-        "categoryId": "ai-automation",
-        "name": "AIコンテンツの品質チェックフロー",
-        "description": "正確性・ブランド整合性・読みやすさを自動検証",
+        "name": "AIコンテンツの品質管理とファクトチェック",
+        "description": "ハルシネーション検出・ブランド整合性・正確性を自動検証",
         "difficulty": "intermediate",
         "estimatedMinutes": 25,
         "lessons": []
       },
       {
-        "id": "7-37",
+        "id": "7-26",
         "categoryId": "ai-automation",
-        "name": "AIコンテンツのファクトチェック手法",
-        "description": "ハルシネーション検出とソース確認を組み込む設計",
-        "difficulty": "intermediate",
-        "estimatedMinutes": 30,
-        "lessons": []
-      },
-      {
-        "id": "7-38",
-        "categoryId": "ai-automation",
-        "name": "ブランドボイスのAI維持技術",
-        "description": "トーン・言葉遣いを一貫させるプロンプト設計法",
-        "difficulty": "intermediate",
-        "estimatedMinutes": 30,
-        "lessons": []
-      },
-      {
-        "id": "7-39",
-        "categoryId": "ai-automation",
-        "name": "AIコンテンツのSEOリスクと対策",
-        "description": "Googleのガイドライン準拠でペナルティを回避する",
+        "name": "ブランドボイス維持とSEOリスク対策",
+        "description": "トーン一貫性の維持とGoogleガイドライン準拠を両立する",
         "difficulty": "intermediate",
         "estimatedMinutes": 25,
         "lessons": []
       },
       {
-        "id": "7-40",
+        "id": "7-27",
         "categoryId": "ai-automation",
         "name": "コンテンツカレンダーのAI自動生成",
         "description": "月次・週次の投稿計画をLLMで高速ドラフトする",
@@ -8548,7 +8431,7 @@
         "lessons": []
       },
       {
-        "id": "7-41",
+        "id": "7-28",
         "categoryId": "ai-automation",
         "name": "Google Apps Script（GAS）入門",
         "description": "JavaScriptベースでGoogle Workspaceを自動化する基礎",
@@ -8557,52 +8440,34 @@
         "lessons": []
       },
       {
-        "id": "7-42",
+        "id": "7-29",
         "categoryId": "ai-automation",
-        "name": "GASでスプレッドシートを自動操作",
-        "description": "データ集計・フォーマット・メール送信を一括処理",
+        "name": "GASでスプレッドシート・Gmail自動化",
+        "description": "データ集計・メール分類・テンプレ返信を一括処理する",
         "difficulty": "intermediate",
         "estimatedMinutes": 30,
         "lessons": []
       },
       {
-        "id": "7-43",
+        "id": "7-30",
         "categoryId": "ai-automation",
-        "name": "GASでGmail自動化",
-        "description": "メール分類・返信テンプレ・転送ルールを自動設定",
+        "name": "GASフォーム連携とトリガー設定",
+        "description": "回答収集から通知まで自動化し定期実行を設定する",
         "difficulty": "intermediate",
         "estimatedMinutes": 25,
         "lessons": []
       },
       {
-        "id": "7-44",
+        "id": "7-31",
         "categoryId": "ai-automation",
-        "name": "GoogleフォームとGASの連携自動化",
-        "description": "回答収集→集計→通知まで一気通貫で自動化する",
+        "name": "GASからAPI・Webhook・Slack連携",
+        "description": "外部REST APIやSlack Webhookをスクリプトで呼び出す",
         "difficulty": "intermediate",
         "estimatedMinutes": 30,
         "lessons": []
       },
       {
-        "id": "7-45",
-        "categoryId": "ai-automation",
-        "name": "GASトリガーによる定期実行設定",
-        "description": "時間・イベントベースで処理を自動起動する方法",
-        "difficulty": "intermediate",
-        "estimatedMinutes": 25,
-        "lessons": []
-      },
-      {
-        "id": "7-46",
-        "categoryId": "ai-automation",
-        "name": "GASからWeb APIをコールする",
-        "description": "外部REST APIをGASで呼び出しデータ連携する方法",
-        "difficulty": "intermediate",
-        "estimatedMinutes": 30,
-        "lessons": []
-      },
-      {
-        "id": "7-47",
+        "id": "7-32",
         "categoryId": "ai-automation",
         "name": "GASでWebスクレイピング基礎",
         "description": "競合サイトの価格・テキストを定期収集するスクリプト",
@@ -8611,34 +8476,25 @@
         "lessons": []
       },
       {
-        "id": "7-48",
+        "id": "7-33",
         "categoryId": "ai-automation",
-        "name": "GASとSlack Webhookの連携",
-        "description": "スプレッドシートのアラートをSlackに自動通知する",
+        "name": "GASのデバッグとエラーハンドリング",
+        "description": "Logger出力・try-catch・実行ログで障害を迅速に特定する",
         "difficulty": "intermediate",
         "estimatedMinutes": 25,
         "lessons": []
       },
       {
-        "id": "7-49",
+        "id": "7-34",
         "categoryId": "ai-automation",
-        "name": "GASとBigQueryの連携",
-        "description": "BQクエリ結果をスプレッドシートに定期反映させる",
-        "difficulty": "intermediate",
-        "estimatedMinutes": 35,
-        "lessons": []
-      },
-      {
-        "id": "7-50",
-        "categoryId": "ai-automation",
-        "name": "GASのデプロイとWebアプリ公開",
-        "description": "GASをWebアプリとして社内ツールに仕立てる手順",
+        "name": "GASとBigQuery連携・Webアプリ公開",
+        "description": "BQクエリ結果のスプレッドシート反映とWebアプリ化",
         "difficulty": "intermediate",
         "estimatedMinutes": 30,
         "lessons": []
       },
       {
-        "id": "7-51",
+        "id": "7-35",
         "categoryId": "ai-automation",
         "name": "Python環境構築（venv・pip）",
         "description": "仮想環境で依存関係を整理し再現性を高める基礎",
@@ -8647,61 +8503,43 @@
         "lessons": []
       },
       {
-        "id": "7-52",
+        "id": "7-36",
         "categoryId": "ai-automation",
-        "name": "Pythonの変数・型・演算子",
-        "description": "str/int/float/boolをマーケデータ処理で使いこなす",
+        "name": "Python基本文法（変数・型・制御構文）",
+        "description": "str/int/listとfor/ifをマーケデータ処理で使いこなす",
         "difficulty": "intermediate",
         "estimatedMinutes": 25,
         "lessons": []
       },
       {
-        "id": "7-53",
+        "id": "7-37",
         "categoryId": "ai-automation",
-        "name": "Pythonのリスト・辞書・タプル操作",
-        "description": "APIレスポンスのJSON解析に直結するデータ構造",
+        "name": "Python関数・辞書・モジュール分割",
+        "description": "再利用可能なコードとJSON解析に直結するデータ構造",
         "difficulty": "intermediate",
         "estimatedMinutes": 25,
         "lessons": []
       },
       {
-        "id": "7-54",
+        "id": "7-38",
         "categoryId": "ai-automation",
-        "name": "Pythonのforループ・if条件分岐",
-        "description": "データフィルタリングと繰り返し処理を実務で使う",
+        "name": "Pythonでファイル操作と正規表現",
+        "description": "CSV/JSON/テキストの一括処理とパターンマッチングを習得する",
         "difficulty": "intermediate",
         "estimatedMinutes": 25,
         "lessons": []
       },
       {
-        "id": "7-55",
+        "id": "7-39",
         "categoryId": "ai-automation",
-        "name": "Python関数定義とモジュール分割",
-        "description": "再利用可能なコードを書くための設計思想を習得",
+        "name": "pandasでデータ分析・前処理",
+        "description": "CSV読み込み・欠損値処理・型変換でGA4データを即戦力分析",
         "difficulty": "intermediate",
         "estimatedMinutes": 30,
         "lessons": []
       },
       {
-        "id": "7-56",
-        "categoryId": "ai-automation",
-        "name": "pandasでデータ分析入門",
-        "description": "DataFrameでGA4エクスポートCSVを即戦力分析する",
-        "difficulty": "intermediate",
-        "estimatedMinutes": 30,
-        "lessons": []
-      },
-      {
-        "id": "7-57",
-        "categoryId": "ai-automation",
-        "name": "CSVデータ読み込みと前処理",
-        "description": "欠損値・型変換・列操作でデータを分析可能にする",
-        "difficulty": "intermediate",
-        "estimatedMinutes": 25,
-        "lessons": []
-      },
-      {
-        "id": "7-58",
+        "id": "7-40",
         "categoryId": "ai-automation",
         "name": "データクレンジングの自動化",
         "description": "重複削除・外れ値除去・正規化をスクリプト化する",
@@ -8710,16 +8548,16 @@
         "lessons": []
       },
       {
-        "id": "7-59",
+        "id": "7-41",
         "categoryId": "ai-automation",
-        "name": "matplotlib / seabornで可視化",
-        "description": "分析結果を棒グラフ・折れ線・ヒートマップで表現",
+        "name": "matplotlib・seabornでデータ可視化",
+        "description": "棒グラフ・折れ線・ヒートマップで分析結果を表現する",
         "difficulty": "intermediate",
         "estimatedMinutes": 30,
         "lessons": []
       },
       {
-        "id": "7-60",
+        "id": "7-42",
         "categoryId": "ai-automation",
         "name": "Jupyter Notebookの活用術",
         "description": "分析と文書を一体化したインタラクティブ環境の使い方",
@@ -8728,7 +8566,7 @@
         "lessons": []
       },
       {
-        "id": "7-61",
+        "id": "7-43",
         "categoryId": "ai-automation",
         "name": "REST APIの呼び出しと認証基礎",
         "description": "GET/POSTリクエストとAPIキー管理を実装する方法",
@@ -8737,61 +8575,34 @@
         "lessons": []
       },
       {
-        "id": "7-62",
+        "id": "7-44",
         "categoryId": "ai-automation",
-        "name": "OpenAI APIの実装入門",
-        "description": "Chat Completions APIでLLMを自社システムに組み込む",
+        "name": "OpenAI / Anthropic APIの実装入門",
+        "description": "Chat Completions・Messages APIでLLMをシステムに組み込む",
         "difficulty": "intermediate",
         "estimatedMinutes": 30,
         "lessons": []
       },
       {
-        "id": "7-63",
+        "id": "7-45",
         "categoryId": "ai-automation",
-        "name": "Anthropic APIの実装入門",
-        "description": "Claude APIでメッセージングとStreamingを実装する",
+        "name": "Google API認証とOAuth2実装",
+        "description": "サービスアカウントとOAuth2でGA4・BQ・Sheets APIを使う",
         "difficulty": "intermediate",
         "estimatedMinutes": 30,
         "lessons": []
       },
       {
-        "id": "7-64",
+        "id": "7-46",
         "categoryId": "ai-automation",
-        "name": "Google APIの利用と認証設定",
-        "description": "サービスアカウントでGA4・BQ・SheetsAPIを使う",
-        "difficulty": "intermediate",
-        "estimatedMinutes": 35,
-        "lessons": []
-      },
-      {
-        "id": "7-65",
-        "categoryId": "ai-automation",
-        "name": "OAuth2認証フローの実装",
-        "description": "ユーザー代理でAPIを安全に呼び出す認証設計",
-        "difficulty": "intermediate",
-        "estimatedMinutes": 30,
-        "lessons": []
-      },
-      {
-        "id": "7-66",
-        "categoryId": "ai-automation",
-        "name": "Webhookの設計と受信処理",
-        "description": "外部サービスのイベントをリアルタイムで受け取る仕組み",
-        "difficulty": "intermediate",
-        "estimatedMinutes": 30,
-        "lessons": []
-      },
-      {
-        "id": "7-67",
-        "categoryId": "ai-automation",
-        "name": "Zapier / Makeでノーコード自動化",
-        "description": "プログラム不要でSaaS間のデータ連携フローを構築",
+        "name": "Webhook・ノーコード自動化（Zapier/Make）",
+        "description": "イベント駆動の受信処理とSaaS間連携フローを構築する",
         "difficulty": "intermediate",
         "estimatedMinutes": 25,
         "lessons": []
       },
       {
-        "id": "7-68",
+        "id": "7-47",
         "categoryId": "ai-automation",
         "name": "n8nでセルフホスト自動化パイプライン",
         "description": "無料・自社管理の自動化基盤を構築する実践手順",
@@ -8800,7 +8611,7 @@
         "lessons": []
       },
       {
-        "id": "7-69",
+        "id": "7-48",
         "categoryId": "ai-automation",
         "name": "cronと定期バッチ実行の設計",
         "description": "サーバーサイドで時刻指定の定期処理を設定する方法",
@@ -8809,7 +8620,7 @@
         "lessons": []
       },
       {
-        "id": "7-70",
+        "id": "7-49",
         "categoryId": "ai-automation",
         "name": "Cloud Functionsでサーバーレス実行",
         "description": "GCPでイベント駆動の軽量処理をデプロイする手順",
@@ -8818,55 +8629,244 @@
         "lessons": []
       },
       {
-        "id": "7-71",
+        "id": "7-50",
         "categoryId": "ai-automation",
-        "name": "AIエージェントとは何か",
-        "description": "自律的にタスクを分解・実行するエージェントの設計思想",
+        "name": "Claude Codeとは何か",
+        "description": "AIエージェント型開発ツールの概要と従来のAIアシスタントとの違い",
+        "difficulty": "intermediate",
+        "estimatedMinutes": 20,
+        "lessons": []
+      },
+      {
+        "id": "7-51",
+        "categoryId": "ai-automation",
+        "name": "Claude Codeのインストールと初期設定",
+        "description": "Node.js環境構築からclaude loginまでの導入手順を実践する",
+        "difficulty": "intermediate",
+        "estimatedMinutes": 25,
+        "lessons": []
+      },
+      {
+        "id": "7-52",
+        "categoryId": "ai-automation",
+        "name": "CLAUDE.mdの書き方とプロジェクト指示設計",
+        "description": "プロジェクトルール・技術スタック・禁止事項を効果的に伝える方法",
+        "difficulty": "intermediate",
+        "estimatedMinutes": 30,
+        "lessons": []
+      },
+      {
+        "id": "7-53",
+        "categoryId": "ai-automation",
+        "name": "Claude Codeとの対話ベストプラクティス",
+        "description": "コンテキスト管理・効果的な指示の出し方・会話の組み立て方",
+        "difficulty": "intermediate",
+        "estimatedMinutes": 25,
+        "lessons": []
+      },
+      {
+        "id": "7-54",
+        "categoryId": "ai-automation",
+        "name": "パーミッションモデルとセキュリティ設計",
+        "description": "Allowedツール・ファイルアクセス制限・安全な運用ルールの設定",
+        "difficulty": "intermediate",
+        "estimatedMinutes": 25,
+        "lessons": []
+      },
+      {
+        "id": "7-55",
+        "categoryId": "ai-automation",
+        "name": "Claude Codeの設定ファイル体系",
+        "description": "settings.json・.claude/の構造と設定の優先順位を理解する",
+        "difficulty": "intermediate",
+        "estimatedMinutes": 20,
+        "lessons": []
+      },
+      {
+        "id": "7-56",
+        "categoryId": "ai-automation",
+        "name": "ツール詳解: Read・Write・Edit",
+        "description": "ファイル読み書き・差分編集ツールの仕様と使い分けを習得",
+        "difficulty": "intermediate",
+        "estimatedMinutes": 25,
+        "lessons": []
+      },
+      {
+        "id": "7-57",
+        "categoryId": "ai-automation",
+        "name": "ツール詳解: Bash・Grep・Glob",
+        "description": "コマンド実行・コンテンツ検索・ファイル探索ツールの活用法",
+        "difficulty": "intermediate",
+        "estimatedMinutes": 25,
+        "lessons": []
+      },
+      {
+        "id": "7-58",
+        "categoryId": "ai-automation",
+        "name": "エージェントとサブエージェントの仕組み",
+        "description": "メインAgent・Subagentの役割分担と並列処理の設計",
+        "difficulty": "advanced",
+        "estimatedMinutes": 30,
+        "lessons": []
+      },
+      {
+        "id": "7-59",
+        "categoryId": "ai-automation",
+        "name": "スキル（Slash Commands）の作成と活用",
+        "description": "カスタムコマンドで繰り返しタスクをワンコマンド化する方法",
+        "difficulty": "advanced",
+        "estimatedMinutes": 30,
+        "lessons": []
+      },
+      {
+        "id": "7-60",
+        "categoryId": "ai-automation",
+        "name": "フック（Hooks）の設計と活用",
+        "description": "PreTool・PostTool・Notificationフックで処理を自動挿入する",
+        "difficulty": "advanced",
+        "estimatedMinutes": 30,
+        "lessons": []
+      },
+      {
+        "id": "7-61",
+        "categoryId": "ai-automation",
+        "name": "MCPサーバーの接続と活用",
+        "description": "外部ツール・データソースをMCPプロトコルでClaude Codeに統合",
         "difficulty": "advanced",
         "estimatedMinutes": 35,
+        "lessons": []
+      },
+      {
+        "id": "7-62",
+        "categoryId": "ai-automation",
+        "name": "メモリシステム（Auto Memory）の仕組み",
+        "description": "会話を跨いで記憶を永続化するMEMORY.mdの運用と設計",
+        "difficulty": "advanced",
+        "estimatedMinutes": 25,
+        "lessons": []
+      },
+      {
+        "id": "7-63",
+        "categoryId": "ai-automation",
+        "name": "タスク管理（Todo）の活用",
+        "description": "TodoRead・TodoWriteで複雑な作業を構造的に分解・追跡する",
+        "difficulty": "advanced",
+        "estimatedMinutes": 25,
+        "lessons": []
+      },
+      {
+        "id": "7-64",
+        "categoryId": "ai-automation",
+        "name": "IDE統合（VS Code・JetBrains）",
+        "description": "エディタ拡張としてClaude Codeを組み込みコーディング効率を上げる",
+        "difficulty": "intermediate",
+        "estimatedMinutes": 25,
+        "lessons": []
+      },
+      {
+        "id": "7-65",
+        "categoryId": "ai-automation",
+        "name": "ヘッドレスモードとCI/CD統合",
+        "description": "GitHub ActionsやスクリプトからClaude Codeを非対話で実行する",
+        "difficulty": "advanced",
+        "estimatedMinutes": 35,
+        "lessons": []
+      },
+      {
+        "id": "7-66",
+        "categoryId": "ai-automation",
+        "name": "Git連携とコミット・PR作成の自動化",
+        "description": "Claude Codeでgit操作・コミットメッセージ生成・PR作成を効率化する",
+        "difficulty": "advanced",
+        "estimatedMinutes": 30,
+        "lessons": []
+      },
+      {
+        "id": "7-67",
+        "categoryId": "ai-automation",
+        "name": "望ましいディレクトリ構成の設計",
+        "description": "CLAUDE.mdに記載するプロジェクト構造と命名規則のベストプラクティス",
+        "difficulty": "advanced",
+        "estimatedMinutes": 30,
+        "lessons": []
+      },
+      {
+        "id": "7-68",
+        "categoryId": "ai-automation",
+        "name": "Claude Codeでコードレビューワークフロー",
+        "description": "PRレビュー・差分分析・改善提案をAIエージェントに委任する",
+        "difficulty": "advanced",
+        "estimatedMinutes": 30,
+        "lessons": []
+      },
+      {
+        "id": "7-69",
+        "categoryId": "ai-automation",
+        "name": "テスト駆動開発（TDD）とClaude Code",
+        "description": "テスト作成・実行・修正サイクルをAIと協調で回す手法",
+        "difficulty": "advanced",
+        "estimatedMinutes": 35,
+        "lessons": []
+      },
+      {
+        "id": "7-70",
+        "categoryId": "ai-automation",
+        "name": "リファクタリングとドキュメント生成",
+        "description": "既存コードの改善・型付け・docstring生成をClaude Codeで効率化",
+        "difficulty": "advanced",
+        "estimatedMinutes": 30,
+        "lessons": []
+      },
+      {
+        "id": "7-71",
+        "categoryId": "ai-automation",
+        "name": "複数プロジェクトの管理とコンテキスト切替",
+        "description": "プロジェクト別CLAUDE.mdとメモリで複数リポジトリを効率運用する",
+        "difficulty": "advanced",
+        "estimatedMinutes": 25,
         "lessons": []
       },
       {
         "id": "7-72",
         "categoryId": "ai-automation",
-        "name": "Tool Use / Function Callingの実装",
-        "description": "LLMに関数を与えてリアルタイムデータを取得させる",
+        "name": "チーム開発でのClaude Code活用",
+        "description": "共有CLAUDE.md・スキル標準化・オンボーディングへの組み込み方",
         "difficulty": "advanced",
-        "estimatedMinutes": 40,
+        "estimatedMinutes": 30,
         "lessons": []
       },
       {
         "id": "7-73",
         "categoryId": "ai-automation",
-        "name": "MCP（Model Context Protocol）概念",
-        "description": "LLMと外部ツールを標準プロトコルで繋ぐ設計思想",
+        "name": "Claude Codeのコスト管理とトークン最適化",
+        "description": "使用量モニタリング・コンテキスト圧縮・効率的な利用パターン",
         "difficulty": "advanced",
-        "estimatedMinutes": 35,
+        "estimatedMinutes": 25,
         "lessons": []
       },
       {
         "id": "7-74",
         "categoryId": "ai-automation",
-        "name": "MCPサーバーの構築と公開",
-        "description": "FastAPIでMCPサーバーを実装しLLMに接続する手順",
+        "name": "AIエージェントとは何か",
+        "description": "自律的にタスクを分解・実行するエージェントの設計思想",
         "difficulty": "advanced",
-        "estimatedMinutes": 45,
+        "estimatedMinutes": 30,
         "lessons": []
       },
       {
         "id": "7-75",
         "categoryId": "ai-automation",
-        "name": "Claude Codeを使った開発自動化",
-        "description": "AIエージェントにコード生成・テスト・修正を委任する",
+        "name": "Tool Use / Function Callingの実装",
+        "description": "LLMに関数を与えてリアルタイムデータを取得させる",
         "difficulty": "advanced",
-        "estimatedMinutes": 40,
+        "estimatedMinutes": 35,
         "lessons": []
       },
       {
         "id": "7-76",
         "categoryId": "ai-automation",
-        "name": "AIワークフローの設計パターン",
-        "description": "Sequential/Parallel/Conditionalの3パターンを習得",
+        "name": "MCP（Model Context Protocol）の概念と構築",
+        "description": "LLMと外部ツールを標準プロトコルで繋ぐ設計と実装",
         "difficulty": "advanced",
         "estimatedMinutes": 40,
         "lessons": []
@@ -8874,8 +8874,8 @@
       {
         "id": "7-77",
         "categoryId": "ai-automation",
-        "name": "Human-in-the-Loopの設計",
-        "description": "自動処理に人間の確認ステップを組み込む安全設計",
+        "name": "AIワークフローの設計パターン",
+        "description": "Sequential/Parallel/Conditionalの3パターンを習得",
         "difficulty": "advanced",
         "estimatedMinutes": 35,
         "lessons": []
@@ -8883,62 +8883,62 @@
       {
         "id": "7-78",
         "categoryId": "ai-automation",
-        "name": "AIエージェントのエラーハンドリング",
-        "description": "失敗・タイムアウト・ハルシネーションを検出し復旧する",
-        "difficulty": "advanced",
-        "estimatedMinutes": 40,
-        "lessons": []
-      },
-      {
-        "id": "7-79",
-        "categoryId": "ai-automation",
-        "name": "AIシステムのコスト管理と監視",
-        "description": "トークン使用量・API費用をリアルタイム監視する仕組み",
+        "name": "Human-in-the-Loopとエラーハンドリング",
+        "description": "人間確認ステップの組み込みとLLM障害からの復旧設計",
         "difficulty": "advanced",
         "estimatedMinutes": 35,
         "lessons": []
       },
       {
-        "id": "7-80",
+        "id": "7-79",
         "categoryId": "ai-automation",
-        "name": "AIエージェントのテストと品質保証",
-        "description": "非決定論的なLLM出力を評価・検証するテスト手法",
+        "name": "マルチエージェントシステムの設計",
+        "description": "複数AIが協調して複雑タスクを処理する高度な設計",
         "difficulty": "advanced",
         "estimatedMinutes": 40,
         "lessons": []
       },
       {
+        "id": "7-80",
+        "categoryId": "ai-automation",
+        "name": "AIシステムのテストと品質保証",
+        "description": "非決定論的なLLM出力を評価・検証するテスト手法",
+        "difficulty": "advanced",
+        "estimatedMinutes": 35,
+        "lessons": []
+      },
+      {
         "id": "7-81",
         "categoryId": "ai-automation",
-        "name": "GA4データのAI自動分析パイプライン",
-        "description": "BQクエリ結果をLLMに渡しインサイトを自動生成する",
+        "name": "AIシステムのコスト管理と監視",
+        "description": "トークン使用量・API費用をリアルタイム監視する仕組み",
         "difficulty": "advanced",
-        "estimatedMinutes": 45,
+        "estimatedMinutes": 30,
         "lessons": []
       },
       {
         "id": "7-82",
         "categoryId": "ai-automation",
-        "name": "自然言語→SQLコンバーターの実装",
-        "description": "日本語の質問をBigQueryクエリに自動変換するシステム",
+        "name": "GA4データのAI自動分析パイプライン",
+        "description": "BQクエリ結果をLLMに渡しインサイトを自動生成する",
         "difficulty": "advanced",
-        "estimatedMinutes": 45,
+        "estimatedMinutes": 40,
         "lessons": []
       },
       {
         "id": "7-83",
         "categoryId": "ai-automation",
-        "name": "月次マーケティングレポートの自動生成",
-        "description": "データ収集→分析→スライド作成まで全自動化する設計",
+        "name": "自然言語からSQLコンバーターの実装",
+        "description": "日本語の質問をBigQueryクエリに自動変換するシステム",
         "difficulty": "advanced",
-        "estimatedMinutes": 50,
+        "estimatedMinutes": 40,
         "lessons": []
       },
       {
         "id": "7-84",
         "categoryId": "ai-automation",
-        "name": "マーケティングチャットボットの構築",
-        "description": "RAG+LLMでGA4データに回答できるBotを実装する",
+        "name": "月次レポート自動生成の設計",
+        "description": "データ収集から分析・スライド作成まで全自動化する",
         "difficulty": "advanced",
         "estimatedMinutes": 45,
         "lessons": []
@@ -8946,98 +8946,98 @@
       {
         "id": "7-85",
         "categoryId": "ai-automation",
-        "name": "AIパーソナライゼーションエンジン設計",
-        "description": "ユーザー行動データからコンテンツ推薦を自動化する",
+        "name": "マーケティングチャットボットの構築",
+        "description": "RAG+LLMでGA4データに回答できるBotを実装する",
         "difficulty": "advanced",
-        "estimatedMinutes": 45,
+        "estimatedMinutes": 40,
         "lessons": []
       },
       {
         "id": "7-86",
         "categoryId": "ai-automation",
-        "name": "需要予測モデルの構築と活用",
-        "description": "時系列データで売上・トラフィックを予測する実装",
+        "name": "AIパーソナライゼーションと需要予測",
+        "description": "行動データからコンテンツ推薦・売上予測を自動化する",
         "difficulty": "advanced",
-        "estimatedMinutes": 50,
+        "estimatedMinutes": 40,
         "lessons": []
       },
       {
         "id": "7-87",
         "categoryId": "ai-automation",
-        "name": "SNSコメントの感情分析自動化",
-        "description": "ブランドメンション・口コミをリアルタイム感情判定",
+        "name": "AIコンテンツのリライト・多言語翻訳自動化",
+        "description": "LLMで既存コンテンツの改善と多言語展開を効率化する",
         "difficulty": "advanced",
-        "estimatedMinutes": 40,
+        "estimatedMinutes": 35,
         "lessons": []
       },
       {
         "id": "7-88",
         "categoryId": "ai-automation",
-        "name": "画像生成AIの広告クリエイティブ活用",
-        "description": "DALL-E・Midjourneyを広告制作ワークフローに組む",
+        "name": "SNSコメントの感情分析自動化",
+        "description": "ブランドメンション・口コミをリアルタイム感情判定する",
         "difficulty": "advanced",
-        "estimatedMinutes": 40,
+        "estimatedMinutes": 35,
         "lessons": []
       },
       {
         "id": "7-89",
         "categoryId": "ai-automation",
-        "name": "動画生成AIのコンテンツマーケ活用",
-        "description": "Sora/RunwayでUGC代替動画を制作するワークフロー",
+        "name": "画像・動画生成AIのマーケ活用",
+        "description": "DALL-E・Midjourney・Soraを広告制作ワークフローに組む",
         "difficulty": "advanced",
-        "estimatedMinutes": 40,
+        "estimatedMinutes": 35,
         "lessons": []
       },
       {
         "id": "7-90",
         "categoryId": "ai-automation",
-        "name": "マルチエージェントシステムの設計",
-        "description": "複数AIが協調して複雑タスクを処理する高度な設計",
+        "name": "AI導入のROI計算フレームワーク",
+        "description": "工数削減・売上貢献を定量化してAI投資を正当化する",
         "difficulty": "advanced",
-        "estimatedMinutes": 50,
+        "estimatedMinutes": 35,
         "lessons": []
       },
       {
         "id": "7-91",
         "categoryId": "ai-automation",
-        "name": "AI導入のROI計算フレームワーク",
-        "description": "工数削減・売上貢献を定量化してAI投資を正当化する",
+        "name": "AIガバナンスポリシーの策定",
+        "description": "社内AI利用ルールと承認フローを文書化する方法",
         "difficulty": "advanced",
-        "estimatedMinutes": 40,
+        "estimatedMinutes": 30,
         "lessons": []
       },
       {
         "id": "7-92",
         "categoryId": "ai-automation",
-        "name": "AIガバナンスポリシーの策定",
-        "description": "社内AI利用ルールと承認フローを文書化する方法",
+        "name": "著作権とAI生成コンテンツの法的理解",
+        "description": "生成物の権利帰属と商用利用リスクを正しく判断する",
         "difficulty": "advanced",
-        "estimatedMinutes": 35,
+        "estimatedMinutes": 30,
         "lessons": []
       },
       {
         "id": "7-93",
         "categoryId": "ai-automation",
-        "name": "著作権とAI生成コンテンツの法的理解",
-        "description": "生成物の権利帰属と商用利用リスクを正しく判断する",
+        "name": "AIバイアスの検出と軽減策",
+        "description": "性別・人種等のバイアスが広告に与えるリスクを管理する",
         "difficulty": "advanced",
-        "estimatedMinutes": 35,
+        "estimatedMinutes": 30,
         "lessons": []
       },
       {
         "id": "7-94",
         "categoryId": "ai-automation",
-        "name": "AIバイアスの検出と軽減策",
-        "description": "性別・人種等のバイアスが広告に与えるリスクを管理",
+        "name": "個人情報保護とAI利用の両立",
+        "description": "GDPR・個人情報保護法準拠でAIを安全に活用する",
         "difficulty": "advanced",
-        "estimatedMinutes": 40,
+        "estimatedMinutes": 30,
         "lessons": []
       },
       {
         "id": "7-95",
         "categoryId": "ai-automation",
-        "name": "個人情報保護とAI利用の両立",
-        "description": "GDPR・個人情報保護法準拠でAIを安全に活用する",
+        "name": "AI活用提案書の作成技術",
+        "description": "経営層を動かすROI・リスク・ロードマップ提案の型",
         "difficulty": "advanced",
         "estimatedMinutes": 35,
         "lessons": []
@@ -9045,44 +9045,44 @@
       {
         "id": "7-96",
         "categoryId": "ai-automation",
-        "name": "AI活用提案書の作成技術",
-        "description": "経営層を動かすROI・リスク・ロードマップ提案の型",
+        "name": "社内AI推進と変革管理の進め方",
+        "description": "抵抗勢力への対処と段階的普及計画を設計する方法",
         "difficulty": "advanced",
-        "estimatedMinutes": 40,
+        "estimatedMinutes": 30,
         "lessons": []
       },
       {
         "id": "7-97",
         "categoryId": "ai-automation",
-        "name": "社内AI推進・変革管理の進め方",
-        "description": "抵抗勢力への対処と段階的普及計画を設計する方法",
+        "name": "最新AIトレンドのキャッチアップ法",
+        "description": "論文・リリースを効率追跡し業務適用を即判断する習慣",
         "difficulty": "advanced",
-        "estimatedMinutes": 35,
+        "estimatedMinutes": 25,
         "lessons": []
       },
       {
         "id": "7-98",
         "categoryId": "ai-automation",
-        "name": "マーケティングAIロードマップ設計",
-        "description": "3年間のAI活用フェーズ計画を事業戦略に紐づける",
+        "name": "AI活用の社内教育プログラム設計",
+        "description": "ワークショップ・ハンズオン・認定制度でチームAIリテラシーを底上げ",
         "difficulty": "advanced",
-        "estimatedMinutes": 45,
+        "estimatedMinutes": 30,
         "lessons": []
       },
       {
         "id": "7-99",
         "categoryId": "ai-automation",
-        "name": "最新AIトレンドのキャッチアップ法",
-        "description": "論文・リリースを効率追跡し業務適用を即判断する習慣",
+        "name": "マーケティングAIロードマップ設計",
+        "description": "3年間のAI活用フェーズ計画を事業戦略に紐づける",
         "difficulty": "advanced",
-        "estimatedMinutes": 35,
+        "estimatedMinutes": 40,
         "lessons": []
       },
       {
         "id": "7-100",
         "categoryId": "ai-automation",
         "name": "AI自動化総合プロジェクト演習",
-        "description": "LLM+API+自動化を組み合わせた実務システムを構築",
+        "description": "LLM+API+Claude Code+自動化を組み合わせた実務システムを構築",
         "difficulty": "advanced",
         "estimatedMinutes": 50,
         "lessons": []

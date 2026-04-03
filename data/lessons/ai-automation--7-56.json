@@ -1,0 +1,82 @@
+{
+  "id": "ai-automation--7-56",
+  "moduleId": "7-56",
+  "categoryId": "ai-automation",
+  "title": "ツール詳解: Read・Write・Edit",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# ファイル操作はAI活用の基本中の基本\n\nマーケターの仕事は「ファイル」との格闘です。CSVデータの読み込み、レポートの作成、既存資料の修正。この3つの操作をClaude Codeでは Read・Write・Edit という3つのツールが担当します。\n\nこれらの使い分けを理解すれば、「このCSVを読んで集計し、レポートファイルに書き出して、既存の要約を更新して」という一連の作業を自然言語だけで完結できます。\n\n**あなたへの問い**: 今日、ファイルの読み込み・新規作成・修正をそれぞれ何回行いましたか？その作業にどれくらい時間がかかりましたか？",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# Read・Write・Editの3ツール\n\n## 役割の違い\n\n```\nファイル操作ツール\n├── Read: ファイルを読む（非破壊・安全）\n│   ├── テキスト・画像・PDF・Jupyter Notebook対応\n│   ├── offset/limitで部分読み取り可能\n│   └── 行番号付きで内容を返す\n├── Write: ファイルを新規作成 or 全体上書き\n│   ├── 新しいファイルを作るとき\n│   ├── 既存ファイルを完全に書き換えるとき\n│   └── 事前にReadが必要（安全策）\n└── Edit: ファイルの一部を差分編集\n    ├── old_string → new_string で部分置換\n    ├── ファイル全体を書き換えない\n    └── 複数箇所の同時修正にはreplace_all\n```\n\n## マーケ実務での使い分け\n\n| 操作 | ツール | 例 |\n|------|--------|----|\n| CSVデータの確認 | Read | 「このCSVの先頭20行を見せて」 |\n| 月次レポート作成 | Write | 「分析結果をreport.mdに書き出して」 |\n| 既存レポートの数値更新 | Edit | 「先月のPV値を今月の値に更新して」 |\n| PDF資料の内容確認 | Read | 「この提案書PDFの3-5ページを読んで」 |\n\n## Editの強み: 安全な部分修正\n\nWriteは全体上書きするため、大きなファイルの一部だけ変えたいときは危険です。Editなら指定した文字列だけを置き換えるため、他の部分を壊しません。\n\n例: 月次レポートの「3月」を「4月」に変更\n- Write: ファイル全体を再生成（リスクあり）\n- Edit: `old_string: \"3月度\"` → `new_string: \"4月度\"` と部分置換（安全）\n\n## 注意点\n\n- Writeの前にReadが必須（既存内容を確認するため）\n- Editのold_stringがファイル内で一意でないとエラー\n- 大きなファイルはoffset/limitで分割読み取り",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "type": "interactive",
+        "content": "# 演習: 適切なツールを選ぼう\n\n以下のマーケティング業務シナリオに対して、Read・Write・Editのどれを使うべきか選択してください。",
+        "htmlContent": "<!DOCTYPE html><html><head><meta charset=\"utf-8\"><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#0f172a;color:#e2e8f0;font-family:system-ui,sans-serif;padding:24px;min-height:100vh}.title{font-size:1.3rem;font-weight:700;margin-bottom:8px}.desc{color:#94a3b8;margin-bottom:20px;font-size:.9rem}.q-card{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:16px;margin-bottom:10px}.q-text{font-size:.93rem;margin-bottom:12px;line-height:1.5}.tool-btns{display:flex;gap:8px}.t-btn{flex:1;padding:10px;border-radius:8px;border:1px solid #475569;background:#0f172a;color:#94a3b8;cursor:pointer;font-size:.9rem;font-weight:600;text-align:center;transition:all .2s}.t-btn:hover{border-color:#3b82f6;color:#e2e8f0}.t-btn.selected{border-color:#8b5cf6;background:rgba(139,92,246,.12);color:#c4b5fd}.t-btn.correct{border-color:#10b981;background:rgba(16,185,129,.12);color:#10b981}.t-btn.wrong{border-color:#ef4444;background:rgba(239,68,68,.12);color:#ef4444}.t-btn .icon{font-size:1.2rem;display:block;margin-bottom:4px}.btn{background:#3b82f6;color:#fff;border:none;padding:10px 24px;border-radius:8px;cursor:pointer;font-size:.95rem;margin-top:16px}.btn:hover{background:#2563eb}.score{margin-top:16px;padding:12px;border-radius:8px;font-weight:600;display:none}.score.show{display:block;background:rgba(16,185,129,.15);color:#10b981;border:1px solid #10b981}</style></head><body><div class=\"title\">ツール選択クイズ</div><div class=\"desc\">各シナリオに最適なツールを選んでください</div><div id=\"quizzes\"></div><button class=\"btn\" onclick=\"check()\">回答を確認</button><div class=\"score\" id=\"score\"></div><script>const qs=[{text:\"クライアントから届いたCSVの中身を確認したい\",answer:\"Read\"},{text:\"分析結果を新しいMarkdownファイルとして保存したい\",answer:\"Write\"},{text:\"既存レポートの『3月度』を『4月度』に修正したい\",answer:\"Edit\"},{text:\"提案書PDFの5ページ目を確認したい\",answer:\"Read\"},{text:\"レポートテンプレートから今月分のレポートを新規作成したい\",answer:\"Write\"},{text:\"既存の競合分析表に新しい競合1社を追記したい\",answer:\"Edit\"}];const container=document.getElementById(\"quizzes\");qs.forEach((q,i)=>{const div=document.createElement(\"div\");div.className=\"q-card\";div.innerHTML='<div class=\"q-text\">'+q.text+'</div><div class=\"tool-btns\"><button class=\"t-btn\" data-q=\"'+i+'\" data-val=\"Read\" onclick=\"sel(this)\"><span class=\"icon\">&#128214;</span>Read</button><button class=\"t-btn\" data-q=\"'+i+'\" data-val=\"Write\" onclick=\"sel(this)\"><span class=\"icon\">&#9997;</span>Write</button><button class=\"t-btn\" data-q=\"'+i+'\" data-val=\"Edit\" onclick=\"sel(this)\"><span class=\"icon\">&#128295;</span>Edit</button></div>';container.appendChild(div)});function sel(btn){btn.parentElement.querySelectorAll(\".t-btn\").forEach(b=>b.classList.remove(\"selected\"));btn.classList.add(\"selected\")}function check(){let c=0;qs.forEach((q,i)=>{document.querySelectorAll('.t-btn[data-q=\"'+i+'\"]').forEach(b=>{b.classList.remove(\"correct\",\"wrong\");if(b.classList.contains(\"selected\")){if(b.dataset.val===q.answer){b.classList.add(\"correct\");c++}else b.classList.add(\"wrong\")}if(b.dataset.val===q.answer&&!b.classList.contains(\"selected\"))b.classList.add(\"correct\")})});const s=document.getElementById(\"score\");s.classList.add(\"show\");s.textContent=\"スコア: \"+c+\"/\"+qs.length+(c===qs.length?\" パーフェクト！\":\" Read=確認、Write=新規作成、Edit=部分修正です\")}</script></body></html>",
+        "checkpoints": [
+          "Read・Write・Editの使い分けを理解した",
+          "既存ファイルの部分修正にはEditが安全であることを理解した",
+          "Writeの前にReadが必要な理由を理解した"
+        ]
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "既存のレポートファイルの一部の数値だけを更新したい場合、最適なツールはどれですか？",
+            "options": [
+              "Read",
+              "Write",
+              "Edit",
+              "Bash"
+            ],
+            "correct": 2,
+            "explanation": "一部の修正にはEditが最適です。old_stringからnew_stringへの差分置換なので、ファイルの他の部分を壊すリスクがありません。Writeだとファイル全体を書き換えてしまいます。"
+          },
+          {
+            "q": "Writeツールを使う前に必ず行うべきことは何ですか？",
+            "options": [
+              "Bashでファイルの権限を確認する",
+              "Readで既存の内容を確認する",
+              "Editで書き込み先を検証する",
+              "Grepでファイルの存在を確認する"
+            ],
+            "correct": 1,
+            "explanation": "Writeは既存ファイルを完全に上書きするため、事前にReadで内容を確認する安全策が組み込まれています。これにより意図しない上書きを防ぎます。"
+          },
+          {
+            "q": "Readツールで大きなファイルを効率的に読むにはどうしますか？",
+            "options": [
+              "ファイルを事前に分割しておく",
+              "offsetとlimitパラメータで必要な範囲だけ読む",
+              "Bashのheadコマンドを使う",
+              "ファイルを圧縮してから読む"
+            ],
+            "correct": 1,
+            "explanation": "Readツールにはoffset（開始行）とlimit（読み取り行数）のパラメータがあり、大きなファイルでも必要な部分だけを効率的に読むことができます。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール7-56 完了！\n\n## 習得したポイント\n\n✅ Read（読む）・Write（作る）・Edit（直す）の3ツールの役割を把握した\n✅ マーケ業務ごとの最適なツール選択ができるようになった\n✅ Editによる安全な部分修正の利点を理解した\n✅ 大きなファイルの効率的な読み取り方法を学んだ\n\n## 次のステップ\n\n次のモジュール **「7-57: ツール詳解: Bash・Grep・Glob」** では、コマンド実行と検索ツールの活用法を学びます。\n\n> 実務チャレンジ: Claude Codeに「このCSVを読んで、チャネル別に集計した結果を新しいファイルに書き出して」と依頼してみましょう。Read→Write の流れを体験してください。",
+        "diagram": false
+      }
+    }
+  ]
+}

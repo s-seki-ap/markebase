@@ -1,0 +1,82 @@
+{
+  "id": "ai-automation--7-58",
+  "moduleId": "7-58",
+  "categoryId": "ai-automation",
+  "title": "エージェントとサブエージェントの仕組み",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# チームリーダーとメンバーの関係をAIで再現する\n\nマーケティングチームでプロジェクトを進めるとき、リーダーが全体を統括し、メンバーに個別タスクを振りますよね。「Aさんはデータ集計、Bさんはクリエイティブ制作」のように。\n\nClaude Codeの内部でも同じことが起きています。メインのAgent（リーダー）が全体を把握し、複雑なタスクはSubagent（メンバー）に分割して並列処理します。\n\nこの仕組みを理解すると、なぜClaude Codeが複雑なタスクも効率的にこなせるのかが分かります。\n\n**あなたへの問い**: あなたのチームで「一人に全部任せる」のと「分担して同時に進める」のではどちらが早いですか？",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# Agent / Subagentアーキテクチャ\n\n## メインAgentの役割\n\nClaude Codeのメインエージェントは、ユーザーの指示を理解し、必要に応じてタスクを分割します。\n\n```\nAgent / Subagent構造\n├── Main Agent（統括）\n│   ├── ユーザーの指示を解釈\n│   ├── タスクの分解戦略を決定\n│   ├── ツールの実行を管理\n│   └── 最終結果を統合して返答\n├── Subagent（実行者）\n│   ├── 独立したコンテキストで動作\n│   ├── 特定のタスクに集中\n│   ├── 結果をMain Agentに報告\n│   └── 並列実行で効率化\n└── ツール群\n    ├── Read / Write / Edit\n    ├── Bash / Grep / Glob\n    └── 外部MCP接続\n```\n\n## Subagentが使われる場面\n\n- **大規模なコードベースの調査**: 複数ファイルを同時に分析\n- **複雑なタスクの分割**: レポート生成とデータ検証を並行実行\n- **独立した検証作業**: メインの作業と別にテストを実行\n\n## マーケ実務でのイメージ\n\n「先月の全チャネルのパフォーマンスを分析してレポートを作成して」という指示に対して:\n\n1. Main Agent: タスクを分解（Organic分析、Paid分析、Social分析）\n2. Subagent A: Organicチャネルのデータ集計\n3. Subagent B: Paidチャネルのデータ集計\n4. Main Agent: 結果を統合してレポートを生成\n\n## Subagentの制約\n\n- メインAgentの全コンテキストは持たない（必要な情報だけ渡される）\n- ツールの実行権限はメインAgentと同じ\n- 実行結果はメインAgentに返されて統合される\n\nこの構造により、一つの長い対話の中でも効率的にタスクを処理できます。",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "type": "interactive",
+        "content": "# 演習: タスク分割シミュレーション\n\nマーケティングのタスクをMain AgentとSubagentにどう振り分けるか、フローチャートを組み立ててください。",
+        "htmlContent": "<!DOCTYPE html><html><head><meta charset=\"utf-8\"><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#0f172a;color:#e2e8f0;font-family:system-ui,sans-serif;padding:24px;min-height:100vh}.title{font-size:1.3rem;font-weight:700;margin-bottom:8px}.desc{color:#94a3b8;margin-bottom:16px;font-size:.9rem}.scenario{background:#1e293b;border:1px solid #8b5cf6;border-radius:12px;padding:16px;margin-bottom:20px}.scenario-label{color:#8b5cf6;font-size:.8rem;font-weight:700;margin-bottom:6px}.scenario-text{font-size:1rem;line-height:1.5}.flow{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}.flow-step{display:flex;align-items:center;gap:10px}.step-num{min-width:32px;height:32px;line-height:32px;text-align:center;border-radius:50%;font-size:.8rem;font-weight:700}.step-num.main{background:#8b5cf6;color:#fff}.step-num.sub{background:#3b82f6;color:#fff}.step-select{flex:1}.step-select select{width:100%;padding:10px;background:#1e293b;border:1px solid #475569;border-radius:8px;color:#e2e8f0;font-size:.9rem;cursor:pointer}.step-select select:focus{border-color:#8b5cf6;outline:none}.step-role{font-size:.75rem;color:#94a3b8;padding:2px 8px;border-radius:4px;background:#334155;white-space:nowrap}.btn{background:#3b82f6;color:#fff;border:none;padding:10px 24px;border-radius:8px;cursor:pointer;font-size:.95rem}.btn:hover{background:#2563eb}.result{margin-top:12px;padding:12px;border-radius:8px;font-weight:600;display:none}.result.show{display:block}.result.pass{background:rgba(16,185,129,.15);color:#10b981;border:1px solid #10b981}.result.fail{background:rgba(239,68,68,.15);color:#ef4444;border:1px solid #ef4444}</style></head><body><div class=\"title\">タスク分割フロー設計</div><div class=\"desc\">各ステップに正しい処理を選んでフローを完成させてください</div><div class=\"scenario\"><div class=\"scenario-label\">タスク</div><div class=\"scenario-text\">「全チャネルの月次パフォーマンスを分析してMarkdownレポートにまとめて」</div></div><div class=\"flow\" id=\"flow\"></div><button class=\"btn\" onclick=\"check()\">回答を確認</button><div class=\"result\" id=\"result\"></div><script>const steps=[{role:\"Main Agent\",type:\"main\",answer:\"task_decompose\",options:[{val:\"task_decompose\",text:\"タスクを分解: Organic/Paid/Social/Directの4チャネル分析に分割\"},{val:\"run_all\",text:\"全チャネルのデータを一つのクエリで取得\"},{val:\"write_report\",text:\"レポートファイルを先に作成\"}]},{role:\"Subagent A\",type:\"sub\",answer:\"organic\",options:[{val:\"organic\",text:\"Organicチャネルのセッション数・CVRを集計\"},{val:\"all_channels\",text:\"全チャネルのデータをまとめて取得\"},{val:\"report_format\",text:\"レポートのテンプレートを作成\"}]},{role:\"Subagent B\",type:\"sub\",answer:\"paid\",options:[{val:\"paid\",text:\"Paid広告チャネルのCPA・ROASを集計\"},{val:\"organic\",text:\"Organicチャネルのセッション数を再計算\"},{val:\"git_commit\",text:\"途中結果をGitにコミット\"}]},{role:\"Main Agent\",type:\"main\",answer:\"integrate\",options:[{val:\"integrate\",text:\"Subagentの結果を統合しMarkdownレポートを生成\"},{val:\"redo\",text:\"Subagentに再度同じタスクを依頼\"},{val:\"delete\",text:\"中間ファイルを削除して終了\"}]}];const flow=document.getElementById(\"flow\");steps.forEach((s,i)=>{const div=document.createElement(\"div\");div.className=\"flow-step\";const shuffled=[...s.options].sort(()=>Math.random()-.5);const optHtml=shuffled.map(o=>'<option value=\"'+o.val+'\">'+o.text+\"</option>\").join(\"\");div.innerHTML='<div class=\"step-num '+s.type+'\">'+( i+1)+'</div><div class=\"step-select\"><select data-idx=\"'+i+'\"><option value=\"\">-- 選択してください --</option>'+optHtml+\"</select></div><div class='step-role'>\"+s.role+\"</div>\";flow.appendChild(div)});function check(){let c=0;steps.forEach((s,i)=>{const sel=document.querySelector('select[data-idx=\"'+i+'\"]');if(sel.value===s.answer){sel.style.borderColor=\"#10b981\";c++}else{sel.style.borderColor=\"#ef4444\"}});const r=document.getElementById(\"result\");r.classList.add(\"show\");if(c===steps.length){r.className=\"result show pass\";r.textContent=\"全問正解！ Agent/Subagentのタスク分割フローを正しく設計できました。\"}else{r.className=\"result show fail\";r.textContent=c+\"/\"+steps.length+\" 正解。Main Agentは分解と統合、Subagentは個別タスクの実行を担当します。\"}}</script></body></html>",
+        "checkpoints": [
+          "Main Agentがタスク分解と結果統合を担当することを理解した",
+          "Subagentが独立したタスクを並列実行することを理解した",
+          "マーケ分析タスクへの適用をイメージできた"
+        ]
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "Claude CodeのMain Agentの主な役割はどれですか？",
+            "options": [
+              "すべてのファイル操作を直接実行する",
+              "ユーザーの指示を解釈しタスクを分解・統合する",
+              "外部APIとの通信のみを担当する",
+              "エラーログを記録する"
+            ],
+            "correct": 1,
+            "explanation": "Main Agentはユーザーの指示を理解し、必要に応じてタスクを分解してSubagentに振り分け、結果を統合して最終回答を返します。いわばプロジェクトマネージャーの役割です。"
+          },
+          {
+            "q": "Subagentの特徴として正しいのはどれですか？",
+            "options": [
+              "Main Agentの全コンテキストを持っている",
+              "ユーザーと直接対話できる",
+              "独立したコンテキストで特定タスクに集中する",
+              "Main Agentより多くのツールが使える"
+            ],
+            "correct": 2,
+            "explanation": "Subagentは必要な情報だけを受け取り、独立したコンテキストで特定タスクに集中します。全コンテキストは持たず、ユーザーとの直接対話もしません。"
+          },
+          {
+            "q": "Subagentによる並列処理が特に効果的なのはどのような場合ですか？",
+            "options": [
+              "単純なファイル読み取り1件",
+              "複数チャネルのデータ分析を同時に行う場合",
+              "1つのファイルの修正",
+              "ユーザーへの質問"
+            ],
+            "correct": 1,
+            "explanation": "複数の独立したデータ分析（チャネル別分析など）は並列処理の効果が高いです。依存関係がないタスクを同時実行することで処理時間を短縮できます。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール7-58 完了！\n\n## 習得したポイント\n\n✅ Main Agent（統括）とSubagent（実行者）の役割分担を理解した\n✅ タスク分解→並列実行→結果統合のフローを把握した\n✅ Subagentが独立コンテキストで動作する仕組みを理解した\n✅ マーケティング分析でのAgent活用をイメージできた\n\n## 次のステップ\n\n次のモジュール **「7-59: スキル（Slash Commands）の作成と活用」** では、よく使うタスクをワンコマンドで呼び出すカスタムコマンドの作り方を学びます。\n\n> 実務チャレンジ: Claude Codeに複雑なタスク（例:「3つのCSVを読んでそれぞれ集計し、比較表を作って」）を依頼して、内部でどうタスクが分割されるか観察してみましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

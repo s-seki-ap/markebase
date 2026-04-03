@@ -2,33 +2,35 @@
   "id": "ai-automation--7-6",
   "moduleId": "7-6",
   "categoryId": "ai-automation",
-  "title": "自然言語処理（NLP）の概要",
+  "title": "LLM（大規模言語モデル）の仕組み",
   "sections": [
     {
       "type": "intro",
       "data": {
-        "content": "# テキストはマーケターの最大の資産\n\nマーケターが日々扱うデータの多くは「テキスト」です。\n\n- 顧客レビュー・SNSコメント\n- メール・チャット履歴\n- 広告コピー・LP文章\n- 検索クエリ\n- 競合のWebコンテンツ\n\n**自然言語処理（NLP: Natural Language Processing）** は、コンピュータが人間の言語を理解・生成・分析する技術です。\n\nChatGPTで文章を生成したり、GoogleがSEOで「ページの意味」を評価したりするのはすべてNLPの応用です。\n\n**あなたへの問い**: Google検索で「安くて良いランニングシューズ」と入力したとき、Googleはどうやってあなたの意図を理解しているでしょうか？",
+        "content": "# マーケターが知るべきLLMの「中身」\n\nLLM（Large Language Model）は、ChatGPTやClaudeの基盤技術です。数千億のパラメータで「次に来る単語を予測する」ことで人間のような文章を生成します。\n\n## なぜ仕組みを知る必要があるか\n\n- **プロンプトの書き方が変わる**: 仕組みを知ると効果的な書き方がわかる\n- **コスト最適化**: トークンの仕組みでAPI費用を削減\n- **限界の理解**: 「嘘をつく」理由がわかればリスク管理が可能\n\n**あなたへの問い**: ChatGPTが正しく答えるのは「知識を持っている」からですか？それとも別の仕組みですか？",
         "diagram": false
       }
     },
     {
       "type": "concept",
       "data": {
-        "content": "# NLPの主要タスクとマーケティング活用\n\n## テキストをAIが処理するための前処理\n\n```\n「このサービス、使いやすくて最高です！」\n\n1. トークン化: [この][サービス][、][使い][やすく][て][最高][です][！]\n2. 正規化: 全角→半角、大文字→小文字\n3. ストップワード除去: [は][が][を][で] → 削除\n4. 数値ベクトル化: 各単語を数値列に変換\n```\n\n## 主要NLPタスクとマーケ活用一覧\n\n| タスク | 内容 | マーケ活用例 |\n|--------|------|-------------|\n| 感情分析 | 文章のポジ/ネガ判定 | レビュー監視、SNSリスク検知 |\n| テキスト分類 | カテゴリ分け | 問い合わせ自動振り分け |\n| 固有表現抽出(NER) | 人名・地名・商品名抽出 | 競合言及モニタリング |\n| 要約 | 長文を短く | 顧客の声の自動サマリー |\n| 翻訳 | 言語変換 | 多言語コンテンツ展開 |\n| 文章生成 | 自然なテキスト生成 | 広告コピー・メール生成 |\n| 意図理解 | 質問の目的把握 | チャットボット |\n\n## 現代NLPを支えるTransformerアーキテクチャ\n\n```\n従来のRNN:\n  「私は東京に...（ここまで覚えながら）...住んでいます」\n  → 長い文になると前の情報を忘れる\n\nTransformer（Attention機構）:\n  「私は東京に住んでいます」\n  → 全単語を同時に見て、関連する単語の関係を把握\n  → 「私」と「住んでいます」の関係を正確に捉える\n```\n\n## SEOとNLPの関係\n\nGoogleはBERT（2019年）、MUM（2021年）等のNLPモデルをランキングに導入しています。\n\n- キーワードの出現頻度だけでなく、**ページ全体の「意味」**を評価\n- 検索クエリの**真の意図（Search Intent）**に合致するページを上位表示\n- これが「検索意図を満たす質の高いコンテンツ」がSEOで重要な理由",
+        "content": "# LLMの仕組み: Transformerアーキテクチャ\n\n## 基本原理: 「次の単語予測」\n\n```\n入力: 「東京の人口は約」\n予測: 「1400」→「万」→「人」→「です」→「。」\n\nLLMは膨大なテキストから\n「この文脈の次に来る確率が最も高い単語」\nを繰り返し予測しているだけ\n```\n\n## Transformer（2017年）\n\nGoogleの論文「Attention is All You Need」で提案。\n\n### Self-Attention（自己注意機構）\n文中の各単語が他の全単語との関連性を計算。\n\n例: 「銀行の**口座**を開設した」\n→ 「口座」は「銀行」と強い関連\n→ 文脈で「bank（銀行）」と「bank（土手）」を区別\n\n### 革命的な理由\n- **並列処理**: RNNの逐次処理→全単語同時処理\n- **長い文脈記憶**: 遠くの単語との関係も把握\n- **スケーラビリティ**: パラメータ増→性能向上\n\n## LLMの学習プロセス\n\n| フェーズ | 内容 | コスト |\n|---------|------|--------|\n| 事前学習 | 大量テキストで次の単語予測 | 数億〜数十億円 |\n| 微調整 | 特定タスク向け追加学習 | 数万〜数百万円 |\n| RLHF | 人間フィードバックで品質向上 | 数千万円 |\n\n## マーケターへの示唆\n\n- LLMは「知識を持つ」のではなく「統計的に最もあり得る続きを生成」\n- だからハルシネーションが発生する\n- プロンプトに文脈を与えるほど予測精度が向上",
         "diagram": true
       }
     },
     {
       "type": "exercise",
       "data": {
-        "content": "# 演習: 顧客レビューをNLPで自動分析しよう\n\n以下のコードは顧客レビューを分析し、キーワード抽出と感情判定を行います。\n\n`reviews` リストに自社商品・サービスのレビューを追加して試してみましょう。",
-        "starterCode": "# 顧客レビューのNLP分析シミュレーション\n\nreviews = [\n    \"配送が早くて商品の品質も良かった。また注文したい。\",\n    \"サイズが思ったより小さかった。返品対応は丁寧でした。\",\n    \"コストパフォーマンスが最高。友人にもおすすめしました。\",\n    \"梱包が雑で商品に傷がありました。改善してほしい。\",\n]\n\n# 簡易キーワード辞書（実際はword2vec等のベクトル表現を使用）\nkeyword_categories = {\n    \"配送\": [\"配送\", \"発送\", \"届く\", \"到着\", \"遅い\", \"早い\"],\n    \"品質\": [\"品質\", \"丈夫\", \"傷\", \"壊れ\", \"素材\", \"作り\"],\n    \"価格\": [\"価格\", \"値段\", \"コスト\", \"安い\", \"高い\", \"コスパ\", \"コストパフォーマンス\"],\n    \"サービス\": [\"対応\", \"サービス\", \"サポート\", \"返品\", \"丁寧\"],\n    \"推薦\": [\"おすすめ\", \"リピート\", \"また\", \"友人\", \"紹介\"],\n}\n\npositive_signals = [\"良\", \"早\", \"最高\", \"丁寧\", \"おすすめ\", \"また\"]\nnegative_signals = [\"悪\", \"傷\", \"小さ\", \"雑\", \"改善\", \"返品\"]\n\nprint(\"=== 顧客レビュー分析レポート ===\")\nfor i, review in enumerate(reviews, 1):\n    # カテゴリ抽出\n    found_categories = []\n    for cat, words in keyword_categories.items():\n        if any(w in review for w in words):\n            found_categories.append(cat)\n    \n    # 感情スコア\n    pos_count = sum(1 for w in positive_signals if w in review)\n    neg_count = sum(1 for w in negative_signals if w in review)\n    sentiment = \"ポジティブ\" if pos_count > neg_count else (\"ネガティブ\" if neg_count > pos_count else \"混合\")\n    \n    print(f\"\\nレビュー{i}: {review}\")\n    print(f\"  話題カテゴリ: {', '.join(found_categories) if found_categories else '不明'}\")\n    print(f\"  感情判定: {sentiment} (ポジ:{pos_count} ネガ:{neg_count})\")\n\nprint(\"\\n=== 改善アクション候補 ===\")\nprint(\"ネガティブレビューの多いカテゴリ: 品質・梱包\")\nprint(\"推奨アクション: 梱包基準の見直し、品質検査工程の強化\")",
-        "hints": [
-          "reviewsリストに自分でレビューを追加してみましょう。日本語テキストを追加すると分析結果が変わります。",
-          "keyword_categoriesに新しいカテゴリを追加できます。例えば「デザイン: ['デザイン', '見た目', 'かわいい', 'おしゃれ']」",
-          "実際の商用NLPツール（Google Natural Language API、Amazon Comprehend等）はこの数百倍の精度で感情分析を行います。"
-        ],
-        "answer": "# 顧客レビューのNLP分析シミュレーション\n\nreviews = [\n    \"配送が早くて商品の品質も良かった。また注文したい。\",\n    \"サイズが思ったより小さかった。返品対応は丁寧でした。\",\n    \"コストパフォーマンスが最高。友人にもおすすめしました。\",\n    \"梱包が雑で商品に傷がありました。改善してほしい。\",\n    \"デザインがとてもおしゃれで気に入っています。リピートします。\",\n]\n\nkeyword_categories = {\n    \"配送\": [\"配送\", \"発送\", \"届く\", \"到着\", \"遅い\", \"早い\"],\n    \"品質\": [\"品質\", \"丈夫\", \"傷\", \"壊れ\", \"素材\", \"作り\"],\n    \"価格\": [\"価格\", \"値段\", \"コスト\", \"安い\", \"高い\", \"コスパ\", \"コストパフォーマンス\"],\n    \"サービス\": [\"対応\", \"サービス\", \"サポート\", \"返品\", \"丁寧\"],\n    \"推薦\": [\"おすすめ\", \"リピート\", \"また\", \"友人\", \"紹介\"],\n    \"デザイン\": [\"デザイン\", \"見た目\", \"おしゃれ\", \"かわいい\", \"スタイル\"],\n}\n\npositive_signals = [\"良\", \"早\", \"最高\", \"丁寧\", \"おすすめ\", \"また\", \"リピート\", \"おしゃれ\"]\nnegative_signals = [\"悪\", \"傷\", \"小さ\", \"雑\", \"改善\", \"返品\"]\n\nprint(\"=== 顧客レビュー分析レポート ===\")\nfor i, review in enumerate(reviews, 1):\n    found_categories = []\n    for cat, words in keyword_categories.items():\n        if any(w in review for w in words):\n            found_categories.append(cat)\n    pos_count = sum(1 for w in positive_signals if w in review)\n    neg_count = sum(1 for w in negative_signals if w in review)\n    sentiment = \"ポジティブ\" if pos_count > neg_count else (\"ネガティブ\" if neg_count > pos_count else \"混合\")\n    print(f\"\\nレビュー{i}: {review}\")\n    print(f\"  話題カテゴリ: {', '.join(found_categories) if found_categories else '不明'}\")\n    print(f\"  感情判定: {sentiment} (ポジ:{pos_count} ネガ:{neg_count})\")\n\nprint(\"\\n=== 改善アクション候補 ===\")\nprint(\"ネガティブレビューの多いカテゴリ: 品質・梱包\")\nprint(\"推奨アクション: 梱包基準の見直し、品質検査工程の強化\")"
+        "type": "interactive",
+        "data": {
+          "content": "# 演習: LLMの仕組みを穴埋めで確認\n\nLLMの動作原理に関する空欄を埋めてください。",
+          "htmlContent": "<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#0f172a;color:#e2e8f0;font-family:system-ui,sans-serif;padding:24px;min-height:100vh}.title{font-size:1.3rem;font-weight:700;margin-bottom:16px}.passage{background:#1e293b;border-radius:12px;padding:20px;line-height:2.2;font-size:.95rem;margin-bottom:16px}.blank select{background:#334155;border:2px solid #475569;border-radius:6px;padding:6px 10px;color:#e2e8f0;font-size:.85rem;min-width:140px}.blank select:focus{border-color:#3b82f6;outline:none}.btn{background:#3b82f6;color:#fff;border:none;border-radius:8px;padding:12px 28px;font-size:1rem;font-weight:600;cursor:pointer}.btn:hover{background:#2563eb}.result{margin-top:16px;padding:14px;border-radius:10px;font-weight:600;display:none}</style></head><body><div class=\"title\">LLMの仕組み穴埋め</div><div class=\"passage\" id=\"passage\"></div><button class=\"btn\" onclick=\"check()\">回答を確認</button><div class=\"result\" id=\"result\"></div><script>const blanks=[{\"before\":\"LLMの基本原理は、文脈から\",\"after\":\"ことです。\",\"options\":[{\"v\":\"next\",\"l\":\"次に来る単語を予測する\"},{\"v\":\"all\",\"l\":\"全ての単語を暗記する\"},{\"v\":\"search\",\"l\":\"データベースを検索する\"}],\"answer\":\"next\"},{\"before\":\"2017年にGoogleが発表した\",\"after\":\"アーキテクチャが現在のLLMの基盤です。\",\"options\":[{\"v\":\"transformer\",\"l\":\"Transformer\"},{\"v\":\"cnn\",\"l\":\"CNN\"},{\"v\":\"rnn\",\"l\":\"RNN\"}],\"answer\":\"transformer\"},{\"before\":\"その中核技術\",\"after\":\"は各単語が他の全単語との関連性を計算します。\",\"options\":[{\"v\":\"attention\",\"l\":\"Self-Attention\"},{\"v\":\"backprop\",\"l\":\"バックプロパゲーション\"},{\"v\":\"pooling\",\"l\":\"プーリング\"}],\"answer\":\"attention\"},{\"before\":\"事実と異なる情報を生成する現象を\",\"after\":\"と呼びます。\",\"options\":[{\"v\":\"hallucination\",\"l\":\"ハルシネーション\"},{\"v\":\"overfitting\",\"l\":\"過学習\"},{\"v\":\"underfitting\",\"l\":\"未学習\"}],\"answer\":\"hallucination\"},{\"before\":\"人間のフィードバックで品質向上するプロセスを\",\"after\":\"と呼びます。\",\"options\":[{\"v\":\"rlhf\",\"l\":\"RLHF\"},{\"v\":\"etl\",\"l\":\"ETL\"},{\"v\":\"cicd\",\"l\":\"CI/CD\"}],\"answer\":\"rlhf\"}];const container=document.getElementById(\"passage\");blanks.forEach((b,i)=>{const p=document.createElement(\"p\");let opts=b.options.map(o=>`<option value=\"${o.v}\">${o.l}</option>`).join(\"\");p.innerHTML=`${b.before} <span class=\"blank\"><select id=\"b${i}\"><option value=\"\">---</option>${opts}</select></span> ${b.after}`;container.appendChild(p);const br=document.createElement(\"br\");container.appendChild(br)});function check(){let s=0;blanks.forEach((b,i)=>{const el=document.getElementById(\"b\"+i);if(el.value===b.answer){s++;el.style.borderColor=\"#10b981\"}else el.style.borderColor=\"#ef4444\"});const r=document.getElementById(\"result\");r.style.display=\"block\";const ok=s===blanks.length;r.style.background=ok?\"#052e16\":\"#2a0f0f\";r.style.border=ok?\"2px solid #10b981\":\"2px solid #ef4444\";r.style.color=ok?\"#10b981\":\"#ef4444\";r.textContent=ok?`全問正解！（${s}/${blanks.length}）`:`${s}/${blanks.length}問正解。`}</script></body></html>",
+          "checkpoints": [
+            "LLMの基本原理（次の単語予測）を理解した",
+            "TransformerとSelf-Attentionの役割を把握した",
+            "ハルシネーションの発生メカニズムを説明できる"
+          ]
+        }
       }
     },
     {
@@ -36,37 +38,37 @@
       "data": {
         "questions": [
           {
-            "q": "GoogleがSEOランキングにBERTを導入した主な目的はどれですか？",
+            "q": "LLMの基本的な動作原理は？",
             "options": [
-              "Webページの読み込み速度を向上させるため",
-              "検索クエリの真の意図（文脈・意味）をより正確に理解するため",
-              "スパムリンクを検出するため",
-              "広告クリック率を最大化するため"
+              "リアルタイム検索",
+              "文脈から次の確率最高の単語を予測",
+              "プログラムルールに従う",
+              "DB検索"
             ],
             "correct": 1,
-            "explanation": "BERTはGoogleが2019年に導入したNLPモデルで、検索クエリの文脈・意図を深く理解することが目的です。これにより「安くて軽いランニングシューズ 初心者」のような複合的な意図のクエリに、より適切なページを表示できるようになりました。"
+            "explanation": "「次の単語予測」が本質。統計的パターンに基づく。"
           },
           {
-            "q": "「問い合わせメールを自動的に'注文関連'・'返品関連'・'技術サポート'に振り分ける」のはどのNLPタスクですか？",
+            "q": "Self-Attentionの役割は？",
             "options": [
-              "感情分析",
-              "固有表現抽出（NER）",
-              "テキスト分類",
-              "機械翻訳"
-            ],
-            "correct": 2,
-            "explanation": "テキストを事前に定義したカテゴリに自動で分類するのは「テキスト分類」タスクです。カスタマーサポートの自動振り分けや、コンテンツのジャンル分類に使われます。"
-          },
-          {
-            "q": "TransformerがRNNより優れている主な点はどれですか？",
-            "options": [
-              "計算量が少ないため、安いハードウェアで動く",
-              "Attention機構により、長い文章でも単語間の関係を正確に把握できる",
-              "テキスト以外のデータ（画像等）は処理できない",
-              "100%の精度で翻訳を実行できる"
+              "画像ピクセル分析",
+              "各単語が他の全単語との関連性を計算",
+              "音声→テキスト変換",
+              "データ圧縮"
             ],
             "correct": 1,
-            "explanation": "RNNは文章を順番に処理するため、長い文になると前の情報を忘れる問題がありました。TransformerのAttention機構は文章全体を同時に処理し、離れた位置にある単語間の関係も正確に捉えます。ChatGPT・Gemini・ClaudeはすべてTransformerをベースにしています。"
+            "explanation": "文中の各単語間の関連度を計算し、文脈に応じた意味を理解する仕組み。"
+          },
+          {
+            "q": "LLMで最もコストがかかるフェーズは？",
+            "options": [
+              "プロンプト設計",
+              "事前学習",
+              "ユーザーへの回答",
+              "APIキー発行"
+            ],
+            "correct": 1,
+            "explanation": "事前学習は数千台GPU×数ヶ月で数億〜数十億円。"
           }
         ]
       }
@@ -74,7 +76,7 @@
     {
       "type": "summary",
       "data": {
-        "content": "# モジュール7-6 完了！\n\nNLPの主要タスクとマーケティング活用の全体像を把握しました。\n\n## 習得したポイント\n\n✅ NLPの主要タスク（感情分析・分類・NER・要約・生成）をマーケ活用で説明できる\n✅ GoogleのBERT導入によりSEOが「意味の理解」に進化したことを理解した\n✅ TransformerがRNNより優れる理由（Attention機構）を把握した\n✅ 顧客レビューのNLP自動分析の基本的な実装を体験した\n\n## 次のステップ\n\n次のモジュール **「7-7: コンピュータビジョンの概要」** では、AIが画像・動画を処理する仕組みと、マーケティングクリエイティブへの活用を学びます。\n\n> 実務チャレンジ: 自社商品・サービスの最新SNSコメントを20件収集し、ChatGPTに「感情分析し、カテゴリ別に集計してください」と依頼してみましょう。どんなインサイトが得られますか？",
+        "content": "# モジュール7-6 完了！\n\n## 習得したポイント\n\n✅ LLMが「次の単語予測」で文章を生成していることを理解した\n✅ TransformerのSelf-Attentionが文脈理解の鍵であることを把握した\n✅ ハルシネーションの仕組みを説明できる\n✅ 事前学習→微調整→RLHFの学習プロセスを理解した\n\n## 次のステップ\n\n次のモジュール **「7-7: トークンとコンテキストウィンドウ」** でLLMのコスト計算の基礎を学びます。\n\n> 実務チャレンジ: 長い文脈を与えた場合と短い場合で回答の質がどう変わるか実験してみましょう。",
         "diagram": false
       }
     }

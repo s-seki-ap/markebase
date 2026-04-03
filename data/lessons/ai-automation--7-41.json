@@ -1,0 +1,82 @@
+{
+  "id": "ai-automation--7-41",
+  "moduleId": "7-41",
+  "categoryId": "ai-automation",
+  "title": "matplotlib・seabornでデータ可視化",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 分析結果を説得力のあるグラフで表現する\n\nデータ分析の結果は、グラフで表現することで理解度と説得力が大幅に向上します。matplotlibとseabornを使って、マーケティングレポートに使えるグラフを作成しましょう。\n\n**あなたへの問い**: 上司やクライアントへのレポートで、Excelのグラフに限界を感じたことはありませんか？",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# データ可視化\n\n## matplotlib基本\n\n```python\nimport matplotlib.pyplot as plt\n\n# 折れ線グラフ（日別セッション数）\nplt.figure(figsize=(12, 6))\nplt.plot(dates, sessions, color='#3b82f6')\nplt.title('日別セッション数推移')\nplt.xlabel('日付')\nplt.ylabel('セッション数')\nplt.grid(True, alpha=0.3)\nplt.savefig('sessions_trend.png', dpi=150)\n```\n\n## seabornで美しいグラフ\n\n```python\nimport seaborn as sns\n\n# チャネル別CV数（棒グラフ）\nsns.barplot(data=df, x='channel', y='conversions',\n            palette='viridis')\n\n# ヒートマップ（曜日×時間帯のCV数）\npivot = df.pivot_table(values='cv', \n                       index='hour', columns='weekday')\nsns.heatmap(pivot, annot=True, cmap='YlOrRd')\n```\n\n## マーケレポート定番グラフ\n\n| グラフ | 用途 |\n|--------|------|\n| 折れ線 | 日別・月別トレンド |\n| 棒グラフ | チャネル別比較 |\n| 円グラフ | シェア・構成比 |\n| ヒートマップ | 時間帯×曜日分析 |\n| 散布図 | 相関分析 |",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 演習: matplotlib・seabornでデータ可視化を実践してみよう\n\n以下のコードの空欄を埋めて、実際に動くスクリプトを完成させましょう。",
+        "starterCode": "# matplotlib・seabornでデータ可視化の演習\n# TODO: 以下のコードを完成させてください\n\nprint('演習を完成させましょう')",
+        "hints": [
+          "matplotlib・seabornでデータ可視化の基本構文を確認しましょう",
+          "公式ドキュメントを参照してください",
+          "エラーメッセージをよく読んで対処しましょう"
+        ],
+        "answer": "# matplotlib・seabornでデータ可視化の模範回答\nprint('matplotlib・seabornでデータ可視化の演習完了！')"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "matplotlib・seabornでデータ可視化に関する問題1",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          },
+          {
+            "q": "matplotlib・seabornでデータ可視化に関する問題2",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          },
+          {
+            "q": "matplotlib・seabornでデータ可視化に関する問題3",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール7-41 完了！\n\n## 習得したポイント\n\n✅ matplotlib・seabornでデータ可視化の基本概念を理解した\n✅ マーケティング実務での活用方法を把握した\n✅ 関連する技術との違いを説明できる\n✅ 次のステップに進む準備ができた\n\n## 次のステップ\n\n次のモジュール **「7-42: Jupyter Notebookの活用術」** に進みましょう。\n\n> 実務チャレンジ: 今回学んだ内容を自社の業務に1つ適用してみましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}

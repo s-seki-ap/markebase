@@ -1,0 +1,82 @@
+{
+  "id": "ai-automation--7-33",
+  "moduleId": "7-33",
+  "categoryId": "ai-automation",
+  "title": "GASのデバッグとエラーハンドリング",
+  "sections": [
+    {
+      "type": "intro",
+      "data": {
+        "content": "# 障害を迅速に特定する方法\n\nGASスクリプトが期待通りに動かないとき、原因を素早く特定して修正する能力が重要です。Logger出力、try-catch、実行ログの活用を学びましょう。\n\n**あなたへの問い**: GASスクリプトがエラーで止まったとき、原因特定にどれくらい時間がかかりますか？",
+        "diagram": false
+      }
+    },
+    {
+      "type": "concept",
+      "data": {
+        "content": "# デバッグとエラーハンドリング\n\n## Logger出力\n\n```javascript\nfunction debugExample() {\n  const data = getDataFromSheet();\n  Logger.log('取得データ: ' + JSON.stringify(data));\n  Logger.log('データ件数: ' + data.length);\n}\n```\n\n## try-catchパターン\n\n```javascript\nfunction robustFunction() {\n  try {\n    const response = UrlFetchApp.fetch(url);\n    const data = JSON.parse(response.getContentText());\n    return data;\n  } catch (error) {\n    Logger.log('エラー発生: ' + error.message);\n    // エラー通知\n    sendSlackMessage('GASエラー: ' + error.message);\n    return null;\n  }\n}\n```\n\n## 実行ログの確認\n\n```\nデバッグの手順\n├── 1. Apps Script エディタ → 実行ログ確認\n├── 2. Logger.log で変数の中身を確認\n├── 3. try-catch でエラー箇所を特定\n├── 4. ブレークポイントでステップ実行\n└── 5. エラー通知の自動化（Slack/メール）\n```",
+        "diagram": true
+      }
+    },
+    {
+      "type": "exercise",
+      "data": {
+        "content": "# 演習: GASのデバッグとエラーハンドリングを実践してみよう\n\n以下のコードの空欄を埋めて、実際に動くスクリプトを完成させましょう。",
+        "starterCode": "# GASのデバッグとエラーハンドリングの演習\n# TODO: 以下のコードを完成させてください\n\nprint('演習を完成させましょう')",
+        "hints": [
+          "GASのデバッグとエラーハンドリングの基本構文を確認しましょう",
+          "公式ドキュメントを参照してください",
+          "エラーメッセージをよく読んで対処しましょう"
+        ],
+        "answer": "# GASのデバッグとエラーハンドリングの模範回答\nprint('GASのデバッグとエラーハンドリングの演習完了！')"
+      }
+    },
+    {
+      "type": "quiz",
+      "data": {
+        "questions": [
+          {
+            "q": "GASのデバッグとエラーハンドリングに関する問題1",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          },
+          {
+            "q": "GASのデバッグとエラーハンドリングに関する問題2",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          },
+          {
+            "q": "GASのデバッグとエラーハンドリングに関する問題3",
+            "options": [
+              "選択肢A",
+              "選択肢B",
+              "選択肢C",
+              "選択肢D"
+            ],
+            "correct": 1,
+            "explanation": "解説"
+          }
+        ]
+      }
+    },
+    {
+      "type": "summary",
+      "data": {
+        "content": "# モジュール7-33 完了！\n\n## 習得したポイント\n\n✅ GASのデバッグとエラーハンドリングの基本概念を理解した\n✅ マーケティング実務での活用方法を把握した\n✅ 関連する技術との違いを説明できる\n✅ 次のステップに進む準備ができた\n\n## 次のステップ\n\n次のモジュール **「7-34: GASとBigQuery連携・Webアプリ公開」** に進みましょう。\n\n> 実務チャレンジ: 今回学んだ内容を自社の業務に1つ適用してみましょう。",
+        "diagram": false
+      }
+    }
+  ]
+}
