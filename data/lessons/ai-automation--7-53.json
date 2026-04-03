@@ -19,7 +19,7 @@
       }
     },
     {
-      "type": "exercise",
+      "type": "interactive",
       "data": {
         "type": "interactive",
         "content": "# 演習: 良い指示と悪い指示を見分けよう\n\n以下の指示文を「効果的」「改善が必要」に分類してください。",

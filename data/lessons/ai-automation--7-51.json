@@ -19,7 +19,7 @@
       }
     },
     {
-      "type": "exercise",
+      "type": "interactive",
       "data": {
         "type": "interactive",
         "content": "# 演習: Claude Codeのインストール手順を正しい順序に並べ替えよう\n\nClaude Codeを使い始めるまでのステップを正しい順序にドラッグ&ドロップで並べ替えてください。",

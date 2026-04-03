@@ -19,7 +19,7 @@
       }
     },
     {
-      "type": "exercise",
+      "type": "interactive",
       "data": {
         "type": "interactive",
         "content": "# 演習: セキュリティシナリオ判定\n\nClaude Codeから以下の操作が提案されました。各操作に対して「許可」「確認が必要」「拒否」のいずれかを選んでください。",

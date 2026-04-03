@@ -19,7 +19,7 @@
       }
     },
     {
-      "type": "exercise",
+      "type": "interactive",
       "data": {
         "type": "interactive",
         "content": "# 演習: CLAUDE.mdの構成要素を正しく分類しよう\n\n以下の記述が「概要」「技術スタック」「ルール」「禁止事項」のどこに入るか、ドラッグ&ドロップで分類してください。",

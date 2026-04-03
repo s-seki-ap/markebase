@@ -19,7 +19,7 @@
       }
     },
     {
-      "type": "exercise",
+      "type": "interactive",
       "data": {
         "type": "interactive",
         "content": "# 演習: IDE統合の活用シーンを判断しよう\n\n以下のマーケティング業務シーンで、IDE統合のClaude Codeをどう活用するか、最適なアクションを選んでください。",

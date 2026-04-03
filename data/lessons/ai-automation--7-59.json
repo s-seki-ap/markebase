@@ -19,7 +19,7 @@
       }
     },
     {
-      "type": "exercise",
+      "type": "interactive",
       "data": {
         "type": "interactive",
         "content": "# 演習: スキルファイルを組み立てよう\n\n月次レポート生成スキルの手順を正しい順序に並べ替えてください。",

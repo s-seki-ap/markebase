@@ -19,7 +19,7 @@
       }
     },
     {
-      "type": "exercise",
+      "type": "interactive",
       "data": {
         "type": "interactive",
         "content": "# 演習: フックの種類とユースケースをマッチングしよう\n\n各ユースケースに対して、PreTool・PostTool・Notificationのどのフックが適切か選んでください。",

@@ -19,7 +19,7 @@
       }
     },
     {
-      "type": "exercise",
+      "type": "interactive",
       "data": {
         "type": "interactive",
         "content": "# 演習: MCPサーバー接続シナリオを設計しよう\n\nマーケティング業務の各タスクに対して、必要なMCPサーバーを選んでワークフローを完成させてください。",

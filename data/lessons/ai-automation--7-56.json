@@ -19,7 +19,7 @@
       }
     },
     {
-      "type": "exercise",
+      "type": "interactive",
       "data": {
         "type": "interactive",
         "content": "# 演習: 適切なツールを選ぼう\n\n以下のマーケティング業務シナリオに対して、Read・Write・Editのどれを使うべきか選択してください。",

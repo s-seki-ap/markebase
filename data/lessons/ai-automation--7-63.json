@@ -19,7 +19,7 @@
       }
     },
     {
-      "type": "exercise",
+      "type": "interactive",
       "data": {
         "type": "interactive",
         "content": "# 演習: タスクを正しい順序と優先度で分解しよう\n\n「競合3社のWebサイトを分析して比較レポートを作成」というタスクを、適切な順序で並べ替え、各タスクの優先度を設定してください。",

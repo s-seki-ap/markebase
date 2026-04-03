@@ -19,7 +19,7 @@
       }
     },
     {
-      "type": "exercise",
+      "type": "interactive",
       "data": {
         "type": "interactive",
         "content": "# 演習: メモリに保存すべき情報を判断しよう\n\n以下の情報をMEMORY.mdに「保存すべき」か「保存すべきでない」かを判断してください。",

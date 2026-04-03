@@ -19,7 +19,7 @@
       }
     },
     {
-      "type": "exercise",
+      "type": "interactive",
       "data": {
         "type": "interactive",
         "content": "# 演習: Bash・Grep・Globの使い分けマッチング\n\n左の作業と右のツールを正しくマッチングしてください。",

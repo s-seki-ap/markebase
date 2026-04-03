@@ -19,7 +19,7 @@
       }
     },
     {
-      "type": "exercise",
+      "type": "interactive",
       "data": {
         "type": "interactive",
         "content": "# 演習: タスク分割シミュレーション\n\nマーケティングのタスクをMain AgentとSubagentにどう振り分けるか、フローチャートを組み立ててください。",

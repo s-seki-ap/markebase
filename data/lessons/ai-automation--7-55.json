@@ -19,7 +19,7 @@
       }
     },
     {
-      "type": "exercise",
+      "type": "interactive",
       "data": {
         "type": "interactive",
         "content": "# 演習: 設定項目を正しいファイルに配置しよう\n\n各設定項目を「CLAUDE.md」「settings.json」「settings.local.json」のどこに書くべきか、選択してください。",
