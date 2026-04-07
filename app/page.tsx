@@ -178,6 +178,23 @@ export default async function Home() {
           )}
         </div>
 
+        {/* CTA */}
+        <div className="flex gap-4 mb-8">
+          <Link
+            href="/curriculum"
+            className="btn-3d btn-3d-green inline-flex items-center gap-2 px-8 py-4 text-lg"
+          >
+            カリキュラムマップを見る 🚀
+          </Link>
+          <Link
+            href="/admin"
+            className="inline-flex items-center gap-2 px-6 py-4 rounded-2xl font-bold text-sm transition-all duration-200 hover:scale-[1.02]"
+            style={{ backgroundColor: "var(--color-card)", color: "var(--color-text-muted)", boxShadow: "var(--color-card-shadow)" }}
+          >
+            チーム学習状況
+          </Link>
+        </div>
+
         {/* Streak banner */}
         {streak >= 3 && (
           <div
@@ -247,7 +264,7 @@ export default async function Home() {
         </div>
 
         {/* Skill radar */}
-        {skillData.length > 0 && completedCount > 0 && (
+        {skillData.length > 0 && (
           <div className="mb-10 p-6 rounded-2xl" style={{ backgroundColor: "var(--color-card)", boxShadow: "var(--color-card-shadow)" }}>
             <h2 className="text-lg font-bold mb-2" style={{ color: "var(--color-text-heading)" }}>🎯 スキルマップ</h2>
             <p className="text-xs mb-4" style={{ color: "var(--color-text-muted)" }}>カテゴリ別の学習完了率</p>
@@ -332,22 +349,6 @@ export default async function Home() {
           </div>
         )}
 
-        {/* CTA */}
-        <div className="flex gap-4">
-          <Link
-            href="/curriculum"
-            className="btn-3d btn-3d-green inline-flex items-center gap-2 px-8 py-4 text-lg"
-          >
-            カリキュラムマップを見る 🚀
-          </Link>
-          <Link
-            href="/admin"
-            className="inline-flex items-center gap-2 px-6 py-4 rounded-2xl font-bold text-sm transition-all duration-200 hover:scale-[1.02]"
-            style={{ backgroundColor: "var(--color-card)", color: "var(--color-text-muted)", boxShadow: "var(--color-card-shadow)" }}
-          >
-            チーム学習状況
-          </Link>
-        </div>
       </div>
     </main>
   );

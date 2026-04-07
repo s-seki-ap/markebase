@@ -1,6 +1,11 @@
 import { getCategories, isModuleAvailable } from "@/lib/curriculum";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { getUserProgress } from "@/lib/progress";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+
+const isDevBypass = !process.env.GOOGLE_CLIENT_ID;
 
 const DIFFICULTY_LABEL: Record<string, string> = {
   beginner: "入門",
@@ -14,7 +19,7 @@ const DIFFICULTY_COLOR: Record<string, string> = {
   advanced: "#FF4B4B",
 };
 
-export default function CategoryPage({
+export default async function CategoryPage({
   params,
 }: {
   params: { categoryId: string };
@@ -23,6 +28,19 @@ export default function CategoryPage({
   const category = categories.find((c) => c.id === params.categoryId);
 
   if (!category) notFound();
+
+  // Fetch user progress for completed badges
+  let completedModules = new Set<string>();
+  try {
+    const session = await getServerSession(authOptions);
+    const userId = isDevBypass ? "dev-user" : session?.user?.email ?? null;
+    if (userId) {
+      const progress = await getUserProgress(userId);
+      completedModules = new Set(Object.keys(progress));
+    }
+  } catch {
+    // Firestore未接続時は空
+  }
 
   return (
     <main className="min-h-screen p-6 lg:p-8" style={{ backgroundColor: "var(--color-page)" }}>
@@ -50,23 +68,58 @@ export default function CategoryPage({
           </div>
         </div>
 
+        {/* Progress summary */}
+        {(() => {
+          const availableModules = category.modules.filter((m) => isModuleAvailable(category.id, m.id));
+          const completedInCat = availableModules.filter((m) => completedModules.has(`${category.id}--${m.id}`)).length;
+          return completedInCat > 0 || availableModules.length > 0 ? (
+            <div className="mb-6 p-4 rounded-2xl flex items-center gap-4" style={{ backgroundColor: "var(--color-card)", boxShadow: "var(--color-card-shadow)" }}>
+              <div className="flex-1">
+                <p className="text-sm font-bold" style={{ color: "var(--color-text-heading)" }}>
+                  {completedInCat}/{availableModules.length} モジュール完了
+                </p>
+                <div className="mt-2 h-3 rounded-full overflow-hidden" style={{ backgroundColor: "var(--color-border)" }}>
+                  <div
+                    className="h-full rounded-full transition-all duration-500"
+                    style={{
+                      backgroundColor: "var(--color-green)",
+                      width: availableModules.length > 0 ? `${(completedInCat / availableModules.length) * 100}%` : "0%",
+                    }}
+                  />
+                </div>
+              </div>
+              {completedInCat === availableModules.length && availableModules.length > 0 && (
+                <span className="text-2xl">🏆</span>
+              )}
+            </div>
+          ) : null;
+        })()}
+
         {/* Module list */}
         <div className="space-y-3">
           {category.modules.map((module, index) => {
             const available = isModuleAvailable(category.id, module.id);
+            const isCompleted = completedModules.has(`${category.id}--${module.id}`);
 
             return available ? (
               <Link
                 key={module.id}
                 href={`/curriculum/${category.id}/${module.id}`}
                 className="flex items-center gap-4 p-5 rounded-2xl border-2 transition-all duration-200 hover:scale-[1.01]"
-                style={{ backgroundColor: "var(--color-card)", borderColor: "var(--color-border)", boxShadow: "var(--color-card-shadow)" }}
+                style={{
+                  backgroundColor: "var(--color-card)",
+                  borderColor: isCompleted ? "var(--color-green)" : "var(--color-border)",
+                  boxShadow: "var(--color-card-shadow)",
+                }}
               >
                 <span
                   className="text-sm font-mono w-8 h-8 rounded-full flex items-center justify-center font-extrabold shrink-0"
-                  style={{ backgroundColor: "var(--color-border)", color: "var(--color-text-secondary)" }}
+                  style={{
+                    backgroundColor: isCompleted ? "var(--color-green)" : "var(--color-border)",
+                    color: isCompleted ? "#ffffff" : "var(--color-text-secondary)",
+                  }}
                 >
-                  {String(index + 1).padStart(2, "0")}
+                  {isCompleted ? "✓" : String(index + 1).padStart(2, "0")}
                 </span>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-bold" style={{ color: "var(--color-text-heading)" }}>{module.name}</p>
@@ -84,7 +137,16 @@ export default function CategoryPage({
                     {DIFFICULTY_LABEL[module.difficulty]}
                   </span>
                   <span className="text-xs font-semibold" style={{ color: "var(--color-text-disabled)" }}>{module.estimatedMinutes}分</span>
-                  <span className="text-lg font-bold" style={{ color: "var(--color-blue)" }}>→</span>
+                  {isCompleted ? (
+                    <span
+                      className="text-xs px-3 py-1 rounded-full font-bold"
+                      style={{ backgroundColor: "var(--color-green-bg)", color: "var(--color-green)", border: "2px solid var(--color-green)" }}
+                    >
+                      完了
+                    </span>
+                  ) : (
+                    <span className="text-lg font-bold" style={{ color: "var(--color-blue)" }}>→</span>
+                  )}
                 </div>
               </Link>
             ) : (

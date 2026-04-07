@@ -63,9 +63,14 @@ export default function LessonPageClient({
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [visitedSections, setVisitedSections] = useState<Set<number>>(new Set([0]));
   const [earnedXP, setEarnedXP] = useState(0);
+  const [completedQuizSections, setCompletedQuizSections] = useState<Set<number>>(new Set());
   const sections = lessonData.sections;
   const currentSection = sections[currentSectionIndex];
   const currentModule = category.modules.find((m) => m.id === moduleId);
+  const currentModuleIndex = category.modules.findIndex((m) => m.id === moduleId);
+  const nextModule = currentModuleIndex >= 0 && currentModuleIndex < category.modules.length - 1
+    ? category.modules[currentModuleIndex + 1]
+    : null;
 
   const markSectionVisited = useCallback((index: number) => {
     setVisitedSections((prev) => {
@@ -75,11 +80,14 @@ export default function LessonPageClient({
     });
   }, []);
 
+  const isQuizGated = currentSection.type === "quiz" && !completedQuizSections.has(currentSectionIndex);
+
   const goNext = () => {
+    if (isQuizGated) return;
     if (currentSectionIndex < sections.length - 1) {
+      markSectionVisited(currentSectionIndex);
       const nextIndex = currentSectionIndex + 1;
       setCurrentSectionIndex(nextIndex);
-      markSectionVisited(nextIndex);
 
       // summaryセクションに到達 → モジュール完了を記録
       if (sections[nextIndex].type === "summary") {
@@ -100,7 +108,12 @@ export default function LessonPageClient({
 
   const handleQuizComplete = useCallback((xp: number) => {
     setEarnedXP((prev) => prev + xp);
-  }, []);
+    setCompletedQuizSections((prev) => {
+      const next = new Set(prev);
+      next.add(currentSectionIndex);
+      return next;
+    });
+  }, [currentSectionIndex]);
 
   return (
     <div className="flex h-screen overflow-hidden" style={{ backgroundColor: "var(--color-page)" }}>
@@ -176,7 +189,7 @@ export default function LessonPageClient({
           {sections.map((section, index) => (
             <button
               key={index}
-              onClick={() => { setCurrentSectionIndex(index); markSectionVisited(index); }}
+              onClick={() => { setCurrentSectionIndex(index); }}
               className="w-full flex items-center gap-3 px-3 py-2.5 rounded-2xl text-left transition-all duration-200 mb-1 hover:scale-[1.02]"
               style={{
                 backgroundColor:
@@ -237,9 +250,15 @@ export default function LessonPageClient({
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </button>
-            <span className="text-sm hidden sm:block font-semibold" style={{ color: "var(--color-text-disabled)" }}>
-              {category.name} / {currentModule?.name}
-            </span>
+            <div className="hidden sm:flex items-center gap-1.5 text-sm font-semibold" style={{ color: "var(--color-text-disabled)" }}>
+              <Link href="/" className="hover:underline" style={{ color: "var(--color-text-muted)" }}>ダッシュボード</Link>
+              <span>/</span>
+              <Link href="/curriculum" className="hover:underline" style={{ color: "var(--color-text-muted)" }}>カリキュラム</Link>
+              <span>/</span>
+              <Link href={`/curriculum/${category.id}`} className="hover:underline" style={{ color: "var(--color-text-muted)" }}>{category.name}</Link>
+              <span>/</span>
+              <span style={{ color: "var(--color-text-heading)" }}>{currentModule?.name}</span>
+            </div>
             <span className="text-sm sm:hidden font-semibold" style={{ color: "var(--color-text-disabled)" }}>
               {currentModule?.name ?? lessonData.title}
             </span>
@@ -300,6 +319,9 @@ export default function LessonPageClient({
               isLast={currentSectionIndex === sections.length - 1}
               categoryId={category.id}
               moduleId={moduleId}
+              nextModuleHref={nextModule ? `/curriculum/${category.id}/${nextModule.id}` : null}
+              nextModuleName={nextModule?.name ?? null}
+              categoryPageHref={`/curriculum/${category.id}`}
             />
           )}
         </div>
@@ -336,6 +358,9 @@ function ContentSection({
   isLast,
   categoryId,
   moduleId,
+  nextModuleHref,
+  nextModuleName,
+  categoryPageHref,
 }: {
   section: { type: string; data: Record<string, unknown> };
   onNext: () => void;
@@ -344,7 +369,11 @@ function ContentSection({
   isLast: boolean;
   categoryId: string;
   moduleId: string;
+  nextModuleHref: string | null;
+  nextModuleName: string | null;
+  categoryPageHref: string;
 }) {
+  const [showAnnotations, setShowAnnotations] = useState(false);
   const isSummary = section.type === "summary";
   const isSlideSection = section.type === "intro" || section.type === "concept";
   const annotations = section.data.annotations as AnnotationItem[] | undefined;
@@ -386,62 +415,69 @@ function ContentSection({
   return (
     <div className="h-full flex flex-col">
       <div className="flex-1 overflow-y-auto">
-        {hasAnnotations ? (
-          /* 2-column layout: main content (65%) + annotation sidebar (35%) */
-          <div className="flex flex-col lg:flex-row min-h-full">
-            {/* Main content */}
-            <div className="flex-1 min-w-0 px-6 lg:px-10 py-10 lg:py-12 lg:max-w-none">
-              <MarkdownContent content={section.data.content as string} />
-              {Boolean(section.data.diagram) && (
-                <div className="mt-8">
-                  <DiagramSection type={section.type} categoryId={categoryId} />
+        <div className="max-w-[740px] mx-auto px-6 lg:px-10 py-10 lg:py-12">
+          <MarkdownContent content={section.data.content as string} />
+          {Boolean(section.data.diagram) && (
+            <div className="mt-8">
+              <DiagramSection type={section.type} categoryId={categoryId} />
+            </div>
+          )}
+          {isSummary && <ModuleFeedback categoryId={categoryId} moduleId={moduleId} />}
+
+          {/* Next module navigation (summary only) */}
+          {isSummary && (
+            <div className="mt-8 flex flex-col sm:flex-row gap-3">
+              {nextModuleHref ? (
+                <Link
+                  href={nextModuleHref}
+                  className="btn-3d btn-3d-green inline-flex items-center justify-center gap-2 px-6 py-3 text-sm"
+                >
+                  次のモジュールへ: {nextModuleName} 🚀
+                </Link>
+              ) : (
+                <Link
+                  href={categoryPageHref}
+                  className="btn-3d btn-3d-green inline-flex items-center justify-center gap-2 px-6 py-3 text-sm"
+                >
+                  カテゴリ一覧に戻る 🏠
+                </Link>
+              )}
+            </div>
+          )}
+
+          {/* Collapsible annotation panel */}
+          {hasAnnotations && (
+            <div className="mt-8">
+              <button
+                onClick={() => setShowAnnotations(!showAnnotations)}
+                className="flex items-center gap-2 px-4 py-2.5 rounded-2xl text-sm font-bold transition-all hover:scale-[1.02]"
+                style={{ backgroundColor: "var(--color-blue-bg)", color: "var(--color-blue)", border: "2px solid var(--color-blue)" }}
+              >
+                📖 用語解説 {showAnnotations ? "を閉じる ▲" : `を見る (${annotations.length}件) ▼`}
+              </button>
+              {showAnnotations && (
+                <div className="mt-4 space-y-3 animate-bounce-in">
+                  {annotations.map((a, i) => (
+                    <div
+                      key={i}
+                      className="rounded-2xl p-4 border-l-4"
+                      style={{
+                        backgroundColor: "var(--color-card)",
+                        borderLeftColor: "var(--color-blue)",
+                        boxShadow: "var(--color-card-shadow)",
+                      }}
+                    >
+                      <p className="font-extrabold text-sm mb-1" style={{ color: "var(--color-text-heading)" }}>{a.term}</p>
+                      <p className="text-sm leading-relaxed" style={{ color: "var(--color-text-muted)" }}>
+                        {a.desc}
+                      </p>
+                    </div>
+                  ))}
                 </div>
               )}
-              {isSummary && <ModuleFeedback categoryId={categoryId} moduleId={moduleId} />}
             </div>
-            {/* Annotation sidebar */}
-            <aside
-              className="shrink-0 w-full lg:w-[35%] px-6 py-10 border-t-2 lg:border-t-0 lg:border-l-2"
-              style={{ borderColor: "var(--color-border)" }}
-            >
-              <p
-                className="text-xs font-extrabold uppercase tracking-widest mb-4"
-                style={{ color: "var(--color-blue)" }}
-              >
-                📖 用語解説
-              </p>
-              <div className="space-y-3">
-                {annotations.map((a, i) => (
-                  <div
-                    key={i}
-                    className="rounded-2xl p-4 border-l-4"
-                    style={{
-                      backgroundColor: "var(--color-card)",
-                      borderLeftColor: "var(--color-blue)",
-                      boxShadow: "var(--color-card-shadow)",
-                    }}
-                  >
-                    <p className="font-extrabold text-sm mb-1" style={{ color: "var(--color-text-heading)" }}>{a.term}</p>
-                    <p className="text-sm leading-relaxed" style={{ color: "var(--color-text-muted)" }}>
-                      {a.desc}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </aside>
-          </div>
-        ) : (
-          /* 1-column: summary and fallback */
-          <div className="max-w-[740px] mx-auto px-6 lg:px-10 py-10 lg:py-12">
-            <MarkdownContent content={section.data.content as string} />
-            {Boolean(section.data.diagram) && (
-              <div className="mt-8">
-                <DiagramSection type={section.type} categoryId={categoryId} />
-              </div>
-            )}
-            {isSummary && <ModuleFeedback categoryId={categoryId} moduleId={moduleId} />}
-          </div>
-        )}
+          )}
+        </div>
       </div>
 
       {/* Navigation */}

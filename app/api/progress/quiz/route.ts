@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { saveQuizXP } from "@/lib/progress";
+import { revalidatePath } from "next/cache";
 
 const isDevBypass = !process.env.GOOGLE_CLIENT_ID;
 
@@ -29,5 +30,6 @@ export async function POST(request: NextRequest) {
   }
 
   const result = await saveQuizXP(userId, categoryId, moduleId, score);
+  revalidatePath("/");
   return NextResponse.json(result);
 }

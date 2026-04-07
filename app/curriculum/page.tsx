@@ -23,15 +23,11 @@ export default function CurriculumPage() {
   return (
     <main className="min-h-screen p-6 lg:p-8" style={{ backgroundColor: "var(--color-page)" }}>
       <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="flex items-center gap-4 mb-8">
-          <Link
-            href="/"
-            className="flex items-center gap-2 text-sm font-bold transition-all hover:scale-105"
-            style={{ color: "var(--color-text-muted)" }}
-          >
-            &larr; ダッシュボード
-          </Link>
+        {/* Breadcrumb */}
+        <div className="flex items-center gap-2 text-sm mb-8 font-semibold" style={{ color: "var(--color-text-muted)" }}>
+          <Link href="/" className="hover:scale-105 transition-all">ダッシュボード</Link>
+          <span>/</span>
+          <span style={{ color: "var(--color-text-heading)" }}>カリキュラム</span>
         </div>
 
         <h1 className="text-3xl lg:text-4xl font-extrabold mb-2" style={{ color: "var(--color-text-heading)" }}>

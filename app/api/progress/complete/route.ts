@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { markModuleComplete } from "@/lib/progress";
+import { revalidatePath } from "next/cache";
 
 const isDevBypass = !process.env.GOOGLE_CLIENT_ID;
 
@@ -25,5 +26,7 @@ export async function POST(request: NextRequest) {
   }
 
   const result = await markModuleComplete(userId, categoryId, moduleId);
+  revalidatePath("/");
+  revalidatePath(`/curriculum/${categoryId}`);
   return NextResponse.json(result);
 }
