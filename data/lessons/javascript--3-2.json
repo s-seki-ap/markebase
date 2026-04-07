@@ -2,33 +2,33 @@
   "id": "javascript--3-2",
   "moduleId": "3-2",
   "categoryId": "javascript",
-  "title": "変数・型・演算子",
+  "title": "console.logでデバッグする技術",
   "sections": [
     {
       "type": "intro",
       "data": {
-        "content": "# なぜ「変数」がマーケターに重要なのか\n\nGTMを使ったことがある方なら、「変数」という言葉を聞いたことがあるはずです。\n\n## GTMの「変数」とJSの「変数」は同じ概念\n\nGTMには「組み込み変数」（クリック先URL、ページURL、フォームIDなど）と「ユーザー定義変数」があります。これらは全て、JavaScriptの変数の仕組みを使っています。\n\nGTMで `{{Click URL}}` と書くとき、内部では以下のようなJSが動いています。\n```js\nlet clickUrl = document.activeElement.href;\n```\n\n## GA4のカスタムディメンションとも直結\n\nGA4のカスタムディメンション（例：「会員ランク」「商品カテゴリ」）を送信するとき、その値はJavaScriptの変数に格納されてからGA4に渡されます。\n\n```js\nlet memberRank = \"gold\";  // ← これが変数\ngtag('event', 'page_view', { member_rank: memberRank });\n```\n\n## 型を理解するとデバッグが速くなる\n\n「数字のはずなのに文字列として送られている」「nullが入っている」といったGA4の計測ミスの多くは、変数の「型」の問題です。型を理解することで、計測トラブルを自力で解決できるようになります。",
+        "content": "# なぜデバッグスキルがマーケターに必要なのか\n\nGTMのカスタムHTMLタグやカスタムJS変数がうまく動かないとき、「どこが問題か」を突き止める技術がデバッグです。\n\n## 「動かない」の原因を特定する唯一の方法\n\nGTMでタグが発火しない、GA4にイベントが送られない、dataLayerの値がおかしい。こうした問題に遭遇したとき、`console.log()` を使えば変数の中身をその場で確認できます。\n\n```js\n// GTMカスタムHTMLタグのデバッグ例\nconsole.log(\"dataLayer の中身:\", dataLayer);\nconsole.log(\"現在のURL:\", window.location.href);\n```\n\n## console はログだけじゃない\n\nJavaScriptの `console` オブジェクトには、`log` 以外にも便利なメソッドがあります。\n\n- **console.table()** — 配列やオブジェクトを表形式で表示。GA4のeコマースitemsの中身確認に最適\n- **console.dir()** — オブジェクトのプロパティを展開して表示。DOM要素の詳細確認に便利\n\n## 開発者ツールのConsoleタブが「マーケターの武器」\n\n前回のモジュールで開発者ツールを開く方法を学びました。今回は、Consoleタブを使いこなして「自分でトラブルを解決できる」力を身につけます。",
         "diagram": false
       }
     },
     {
       "type": "concept",
       "data": {
-        "content": "# 変数・データ型・演算子\n\n## 変数の宣言: let と const\n\n```js\n// let: 後から値を変更できる変数\nlet pageViews = 0;\npageViews = 100;  // OK、変更できる\n\n// const: 変更できない定数（一度設定したら固定）\nconst siteName = \"MarkeBase\";\n// siteName = \"別のサイト\";  // エラー！変更不可\n```\n\n**使い分けの目安**: 変わらない値（サイト名、プロパティIDなど）は `const`、変わる値（PV数、ユーザー状態など）は `let`。\n\n## データ型（Type）\n\n変数に入れられるデータの種類を「型」といいます。\n\n```js\n// 文字列（String）: テキスト。クォートで囲む\nlet pageName = \"トップページ\";\nlet utmSource = \"google\";\n\n// 数値（Number）: 数字。クォート不要\nlet price = 9800;\nlet conversionRate = 0.032;\n\n// 真偽値（Boolean）: true か false のみ\nlet isConverted = false;\nlet isMember = true;\n\n// null: 値が「ない」ことを明示的に示す\nlet userId = null;\n\n// undefined: 変数が宣言されたが値がまだない\nlet campaignName;  // → undefined\n```\n\n## typeof演算子で型を確認する\n\n```js\nconsole.log(typeof \"google\");    // → \"string\"\nconsole.log(typeof 9800);        // → \"number\"\nconsole.log(typeof true);        // → \"boolean\"\nconsole.log(typeof null);        // → \"object\"（JSの有名なバグ）\n```\n\nGA4に数値を送るべきところで文字列が送られていないか、`typeof` で確認できます。\n\n## 主な演算子\n\n```js\n// 算術演算子\nlet revenue = 9800 * 3;     // 掛け算 → 29400\nlet cpa = 50000 / 10;       // 割り算 → 5000\n\n// 比較演算子（結果はtrue/false）\nconsole.log(100 > 50);      // → true\nconsole.log(\"google\" === \"google\");  // → true（完全一致）\n\n// 文字列の結合\nlet msg = \"UTMソース: \" + utmSource;  // → \"UTMソース: google\"\n```",
-        "diagram": true
+        "content": "# console.log / console.table / console.dir の使い分け\n\n## console.log() — 基本のデバッグ出力\n\n最もよく使うメソッドです。文字列・数値・変数・オブジェクトなど何でも出力できます。\n\n```js\n// 文字列と変数を一緒に表示\nlet pageName = \"商品詳細ページ\";\nconsole.log(\"現在のページ:\", pageName);\n// → 現在のページ: 商品詳細ページ\n\n// 複数の値をカンマ区切りで出力\nlet price = 9800;\nlet quantity = 3;\nconsole.log(\"価格:\", price, \"個数:\", quantity, \"合計:\", price * quantity);\n// → 価格: 9800 個数: 3 合計: 29400\n```\n\n**カンマ区切り vs 文字列結合**\n```js\n// カンマ区切り（推奨）: 型がそのまま表示される\nconsole.log(\"値:\", 9800);       // → 値: 9800（数値として青色表示）\n\n// 文字列結合: 全て文字列になる\nconsole.log(\"値:\" + 9800);      // → 値:9800（文字列として黒色表示）\n```\n\n## console.table() — 配列やオブジェクトを表形式で表示\n\nGA4のeコマースイベントで送る商品リスト（items配列）の中身を確認するときに非常に便利です。\n\n```js\nconst items = [\n  { item_id: \"SKU-001\", item_name: \"Tシャツ\", price: 2980 },\n  { item_id: \"SKU-002\", item_name: \"パーカー\", price: 5980 },\n  { item_id: \"SKU-003\", item_name: \"キャップ\", price: 1980 },\n];\n\nconsole.table(items);\n// → 表形式で item_id, item_name, price が列として見やすく表示される\n```\n\n| (index) | item_id | item_name | price |\n|---------|---------|-----------|-------|\n| 0 | SKU-001 | Tシャツ | 2980 |\n| 1 | SKU-002 | パーカー | 5980 |\n| 2 | SKU-003 | キャップ | 1980 |\n\n`console.log(items)` だと折りたたまれた形で表示されますが、`console.table(items)` なら一覧表で即座に確認できます。\n\n## console.dir() — オブジェクトのプロパティを詳細表示\n\nDOM要素やネストしたオブジェクトの中身を展開して確認するときに使います。\n\n```js\n// DOM要素を確認する場合\nconst btn = document.querySelector(\"button\");\nconsole.log(btn);   // → <button>...</button>（HTML表示）\nconsole.dir(btn);   // → オブジェクトとして全プロパティを展開表示\n```\n\n`console.log()` はDOM要素をHTMLタグとして表示しますが、`console.dir()` はそのDOM要素が持つプロパティ（id, className, textContent, styleなど）をオブジェクトとして一覧表示します。\n\n## 使い分けまとめ\n\n| メソッド | 用途 | 実務での使いどころ |\n|----------|------|--------------------|\n| `console.log()` | 変数の値や処理の流れを確認 | GTMタグのデバッグ全般 |\n| `console.table()` | 配列・オブジェクトを表形式で見る | eコマースのitems確認 |\n| `console.dir()` | オブジェクトの全プロパティを展開 | DOM要素の詳細確認 |",
+        "diagram": false
       }
     },
     {
       "type": "exercise",
       "data": {
-        "content": "# 練習: Webサイト情報を変数に格納する\n\nWebマーケティングの現場でよく扱うデータを変数に格納して、console.logで表示してみましょう。\n\n## 課題\n\n1. `pageName`（文字列）に現在のページ名を格納する\n2. `pageViews`（数値）に今月のPV数 `45000` を格納する\n3. `isConverted`（真偽値）にCV済みかどうか `false` を格納する\n4. `utmSource` に `\"google\"` を格納し、`typeof` で型を確認する\n5. CPA（費用対効果）を計算: 広告費 `200000` ÷ CV数 `40`",
-        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>変数の練習</title>\n</head>\n<body>\n  <h1>変数・型・演算子の練習</h1>\n\n  <script>\n    // ① ページ名を格納（文字列）\n    // let pageName = ...\n\n\n    // ② 今月のPV数を格納（数値）\n    // let pageViews = ...\n\n\n    // ③ CV済みかどうかを格納（真偽値）\n    // let isConverted = ...\n\n\n    // ④ UTMソースを格納し、typeofで型を確認\n    // const utmSource = ...\n    // console.log(typeof ...)\n\n\n    // ⑤ CPAを計算して表示\n    // 広告費: 200000、CV数: 40\n    // const cpa = ...\n    // console.log(\"CPA: \" + cpa + \"円\")\n\n  </script>\n</body>\n</html>",
+        "content": "# 練習: GA4 eコマースデータをデバッグする\n\nGA4のeコマースイベントで送信する商品データを、console.log / console.table / console.dir を使って確認してみましょう。\n\n## 課題\n\n1. 商品データの配列 `items` を `console.log()` で出力する\n2. 同じ `items` を `console.table()` で表形式表示する\n3. 注文情報オブジェクト `orderInfo` を `console.dir()` で詳細表示する\n4. `console.log()` でカンマ区切りを使い、「注文ID」と「合計金額」をラベル付きで表示する\n5. ページ上の `#order-summary` 要素を `console.log()` と `console.dir()` の両方で出力して違いを確認する",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>consoleデバッグ練習</title>\n  <style>\n    body { font-family: sans-serif; padding: 20px; }\n    #order-summary { background: #f0f0f0; padding: 16px; margin-top: 16px; border-radius: 8px; }\n  </style>\n</head>\n<body>\n  <h1>consoleデバッグ練習</h1>\n  <div id=\"order-summary\">\n    <p>注文内容を開発者ツールのConsoleで確認してください</p>\n  </div>\n\n  <script>\n    // GA4 eコマースの商品データ\n    const items = [\n      { item_id: \"SKU-101\", item_name: \"ランニングシューズ\", price: 12800, quantity: 1 },\n      { item_id: \"SKU-205\", item_name: \"スポーツウェア\", price: 6980, quantity: 2 },\n      { item_id: \"SKU-310\", item_name: \"ドリンクボトル\", price: 1500, quantity: 1 },\n    ];\n\n    // 注文情報\n    const orderInfo = {\n      transaction_id: \"ORD-20260407-001\",\n      currency: \"JPY\",\n      value: 28260,\n      items: items,\n    };\n\n    // ① items を console.log() で出力\n\n\n    // ② items を console.table() で表形式表示\n\n\n    // ③ orderInfo を console.dir() で詳細表示\n\n\n    // ④ console.log() でカンマ区切りを使い、注文IDと合計金額を表示\n    // 例: \"注文ID:\" \"ORD-...\" \"合計:\" 28260\n\n\n    // ⑤ #order-summary を log と dir の両方で出力\n    // const summaryEl = document.querySelector(\"#order-summary\");\n\n\n  </script>\n</body>\n</html>",
         "hints": [
-          "文字列は `\"ダブルクォート\"` で囲みます。数値はそのまま書きます。例: `let price = 9800;` — GA4のvalueパラメータも同じく数値で渡します。",
-          "真偽値は `true` または `false`（クォートなし、小文字）で書きます。GA4のユーザープロパティでも「会員かどうか」をtrueとfalseで管理することがあります。",
-          "`typeof` は変数の前に書くだけです: `console.log(typeof utmSource)`。GA4に送るパラメータの型が期待通りかデバッグするときに使えます。"
+          "`console.log(items)` でまずは基本的な出力を確認しましょう。開発者ツールのConsoleタブ（F12 → Console）で結果を確認します。",
+          "`console.table(items)` と書くだけで、item_id / item_name / price / quantity が表の列として整理されて表示されます。GA4のeコマースデータの確認に日常的に使えるテクニックです。",
+          "DOM要素に対して `console.log(el)` はHTMLタグを表示し、`console.dir(el)` はオブジェクトのプロパティ一覧を表示します。この違いを体感してみてください。"
         ],
-        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>変数の練習</title>\n</head>\n<body>\n  <h1>変数・型・演算子の練習</h1>\n\n  <script>\n    // ① ページ名を格納（文字列）\n    let pageName = \"トップページ\";\n    console.log(\"ページ名: \" + pageName);\n\n    // ② 今月のPV数を格納（数値）\n    let pageViews = 45000;\n    console.log(\"PV数: \" + pageViews);\n\n    // ③ CV済みかどうかを格納（真偽値）\n    let isConverted = false;\n    console.log(\"CV済み: \" + isConverted);\n\n    // ④ UTMソースを格納し、typeofで型を確認\n    const utmSource = \"google\";\n    console.log(typeof utmSource);  // → string\n\n    // ⑤ CPAを計算して表示\n    const cpa = 200000 / 40;\n    console.log(\"CPA: \" + cpa + \"円\");  // → CPA: 5000円\n  </script>\n</body>\n</html>"
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>consoleデバッグ練習</title>\n  <style>\n    body { font-family: sans-serif; padding: 20px; }\n    #order-summary { background: #f0f0f0; padding: 16px; margin-top: 16px; border-radius: 8px; }\n  </style>\n</head>\n<body>\n  <h1>consoleデバッグ練習</h1>\n  <div id=\"order-summary\">\n    <p>注文内容を開発者ツールのConsoleで確認してください</p>\n  </div>\n\n  <script>\n    // GA4 eコマースの商品データ\n    const items = [\n      { item_id: \"SKU-101\", item_name: \"ランニングシューズ\", price: 12800, quantity: 1 },\n      { item_id: \"SKU-205\", item_name: \"スポーツウェア\", price: 6980, quantity: 2 },\n      { item_id: \"SKU-310\", item_name: \"ドリンクボトル\", price: 1500, quantity: 1 },\n    ];\n\n    // 注文情報\n    const orderInfo = {\n      transaction_id: \"ORD-20260407-001\",\n      currency: \"JPY\",\n      value: 28260,\n      items: items,\n    };\n\n    // ① items を console.log() で出力\n    console.log(\"商品データ:\", items);\n\n    // ② items を console.table() で表形式表示\n    console.table(items);\n\n    // ③ orderInfo を console.dir() で詳細表示\n    console.dir(orderInfo);\n\n    // ④ console.log() でカンマ区切りを使い、注文IDと合計金額を表示\n    console.log(\"注文ID:\", orderInfo.transaction_id, \"合計:\", orderInfo.value);\n\n    // ⑤ #order-summary を log と dir の両方で出力\n    const summaryEl = document.querySelector(\"#order-summary\");\n    console.log(\"log表示:\", summaryEl);   // HTMLタグとして表示\n    console.dir(summaryEl);               // プロパティ一覧として表示\n  </script>\n</body>\n</html>"
       }
     },
     {
@@ -36,37 +36,37 @@
       "data": {
         "questions": [
           {
-            "q": "`let` と `const` の違いとして正しいのはどれですか？",
+            "q": "GA4のeコマースイベントで送信する `items` 配列の中身を確認するとき、最も見やすいconsoleメソッドはどれですか？",
             "options": [
-              "letは文字列専用、constは数値専用",
-              "letは後から値を変更できる、constは変更できない",
-              "letはグローバル変数、constはローカル変数になる",
-              "letとconstは全く同じで、書き方のスタイルの違いだけ"
+              "console.log(items)",
+              "console.table(items)",
+              "console.dir(items)",
+              "console.error(items)"
             ],
             "correct": 1,
-            "explanation": "letは後から値を上書きできる変数、constは一度設定したら変更できない定数です。GTMのカスタムJS変数では、計算結果を格納して返す場合に const を使うことが多いです。変わらない値（サイトID、ブランド名など）は const にしておくと意図しない変更を防げます。"
+            "explanation": "`console.table()` は配列やオブジェクトの配列を表形式で表示します。GA4のeコマースで使う items 配列のように、同じ構造のオブジェクトが複数ある場合、item_id / item_name / price などが列として整理されて一目で確認できます。"
           },
           {
-            "q": "`typeof null` の実行結果はどれですか？",
+            "q": "`console.log(\"価格:\", 9800)` と `console.log(\"価格:\" + 9800)` の違いとして正しいのはどれですか？",
             "options": [
-              "\"null\"",
-              "\"undefined\"",
-              "\"object\"",
-              "\"boolean\""
-            ],
-            "correct": 2,
-            "explanation": "`typeof null` は `\"object\"` を返します。これはJavaScript初期のバグで、現在も仕様として残っています。GA4でnullが送られてきたとき、typeofでチェックしてもobjectと返ってくるため、null判定には `=== null` を使う必要があります。"
-          },
-          {
-            "q": "GA4のイベントパラメータで `value: \"9800\"` と `value: 9800` の違いは何ですか？",
-            "options": [
-              "違いはない。GA4が自動的に変換してくれる",
-              "前者は文字列型、後者は数値型。収益レポートには数値型で送る必要がある",
-              "文字列の方が精度が高いので前者が正しい",
-              "GA4はどちらの型でも受け付けないため、エラーになる"
+              "全く同じ結果になる",
+              "カンマ区切りは数値型のまま表示され、+ 結合は文字列に変換される",
+              "カンマ区切りはエラーになる",
+              "+ 結合の方が処理が速いので常にこちらを使うべき"
             ],
             "correct": 1,
-            "explanation": "GA4のvalueパラメータ（売上金額）は数値型で送る必要があります。文字列型 `\"9800\"` で送ると収益レポートに集計されないことがあります。GTMでデータレイヤー変数を使う際、数値型になっているかを `typeof` で確認する習慣が大切です。"
+            "explanation": "カンマ区切りの `console.log(\"価格:\", 9800)` は各引数の型を保ったまま表示します（数値は青色で表示されるブラウザが多い）。一方 `\"価格:\" + 9800` は文字列結合なので全体が文字列になります。デバッグでは型を確認したい場面が多いため、カンマ区切りが推奨です。"
+          },
+          {
+            "q": "DOM要素を `console.log()` と `console.dir()` で出力したとき、表示の違いとして正しいのはどれですか？",
+            "options": [
+              "どちらも同じHTMLタグが表示される",
+              "console.log() はHTMLタグとして表示、console.dir() はオブジェクトのプロパティ一覧として表示",
+              "console.dir() はエラーになる",
+              "console.log() はテキストのみ、console.dir() はスタイル付きで表示"
+            ],
+            "correct": 1,
+            "explanation": "`console.log()` でDOM要素を渡すと `<div id=\"example\">...</div>` のようにHTMLタグとして表示されます。`console.dir()` はその要素をJavaScriptオブジェクトとして扱い、id / className / textContent / style などの全プロパティを展開して表示します。GTMでクリック要素の属性を確認するときに `console.dir()` が役立ちます。"
           }
         ]
       }
@@ -74,7 +74,7 @@
     {
       "type": "summary",
       "data": {
-        "content": "# モジュール3-2 完了！\n\nJavaScriptの変数と型の基礎を習得しました。\n\n## 習得したスキル\n\n✅ **let と const** の使い分けを理解した\n✅ **文字列・数値・真偽値・null** の4つの型を把握した\n✅ **typeof演算子** でデータ型を確認できるようになった\n✅ **GA4パラメータの型ミスを発見できる**視点を得た\n\n## なぜこれが計測品質に直結するか\n\nGA4に送るデータの型が間違っていると、レポートに正しく集計されません。特に売上金額（value）が文字列として送られているケースは現場でよく発生するミスです。typeofを使ったデバッグができるようになると、計測トラブルを自力で特定できます。\n\n## 次のモジュールへ\n\n次は **「3-3: 条件分岐とループ」** です。「ユーザーがCVしたかどうかで処理を分ける」「複数の商品情報を一括処理する」といった実務直結のコードを書きます。\n\n> 💡 **実務チャレンジ**: GTMを開いて「変数」タブを確認してみましょう。組み込み変数（クリックURL、ページURL等）のデータ型が何型か意識してみてください。",
+        "content": "# モジュール3-2 完了！\n\nconsoleメソッドを使い分けてデバッグする技術を習得しました。\n\n## 習得したスキル\n\n- **console.log()** で変数の値や処理の流れを確認できるようになった\n- **console.table()** で配列データを表形式で見やすく表示できるようになった\n- **console.dir()** でオブジェクトやDOM要素のプロパティを詳細確認できるようになった\n- **カンマ区切り出力**で型を保ったまま複数の値を表示する方法を理解した\n\n## 実務での活用シーン\n\n| 場面 | 使うメソッド |\n|------|-------------|\n| GTMカスタムHTMLタグが動かない | `console.log()` で変数の値を確認 |\n| GA4 eコマースのitems確認 | `console.table()` で一覧表示 |\n| クリック要素の属性を調べたい | `console.dir()` でプロパティ確認 |\n| dataLayerの中身を確認 | `console.log(dataLayer)` |\n\n## 次のモジュールへ\n\n次は **「3-3: var・let・constの違いと使い分け」** です。JavaScriptの変数宣言の3つの方法と、それぞれのスコープの違いを理解します。GTMのコードでvarとletが混在していることがありますが、その理由がわかるようになります。\n\n> 実務チャレンジ: 開発者ツールのConsoleを開き、`console.table(dataLayer)` と入力してみましょう。GTMが設置されたサイトなら、dataLayerの中身が表形式で表示されます。",
         "diagram": false
       }
     }

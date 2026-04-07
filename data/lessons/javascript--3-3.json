@@ -2,33 +2,33 @@
   "id": "javascript--3-3",
   "moduleId": "3-3",
   "categoryId": "javascript",
-  "title": "条件分岐とループ",
+  "title": "var・let・constの違いと使い分け",
   "sections": [
     {
       "type": "intro",
       "data": {
-        "content": "# マーケティングは「条件分岐」でできている\n\nマーケティングの施策を少し丁寧に言語化すると、ほぼ全て「もし〜なら、〜する」という構造になります。\n\n## 実務の条件分岐の例\n\n**GTMのトリガー設定**\n「もしページURLに `/thanks` が含まれるなら、コンバージョンタグを発火させる」\n→ これはJavaScriptの `if` 文と全く同じ構造です。\n\n**GA4のオーディエンス設定**\n「もしユーザーが商品詳細ページを3回以上見ていて、かつ購入していないなら、リターゲティングリストに追加する」\n→ 複数条件の `if` 文です。\n\n**パーソナライゼーション**\n「会員ランクが gold なら割引クーポンを表示、silver なら別のオファーを表示、それ以外は非表示」\n→ `if / else if / else` の構造です。\n\n## ループ（繰り返し処理）の実務活用\n\n「カートに入った商品が複数ある場合、各商品のIDと価格をGA4に送る」\n→ 商品の数だけ繰り返す `forEach` です。\n\nこれらの仕組みを理解すると、GTMのカスタムHTMLタグやカスタムJS変数のコードを読んで理解できるようになります。",
+        "content": "# GTMのコードでvarとletが混在している理由\n\nGTMのカスタムHTMLタグやネット上のサンプルコードを見ると、変数宣言に `var`、`let`、`const` の3種類が使われていることに気づきます。\n\n## 3つの宣言方法が存在する歴史的背景\n\nJavaScriptには元々 `var` しかありませんでした。2015年のES6（ECMAScript 2015）で `let` と `const` が追加されました。\n\n- **var** — 古い書き方。GTMの古いサンプルコードや、レガシーなタグ実装でまだ見かける\n- **let** — 後から値を変更できる変数。現代のコードではvarの代わりにこちらを使う\n- **const** — 一度代入したら変更できない定数。変わらない値はこちらを使う\n\n## なぜ使い分けを理解する必要があるか\n\nGTMのカスタムHTMLタグ内で `var` を使うと、意図しない変数の上書きが起きてバグの原因になることがあります。`let` と `const` を正しく使い分けることで、安全で読みやすいコードが書けます。\n\n```js\n// GTMカスタムHTMLタグでよくあるパターン\nvar trackingId = \"G-XXXXXXXXXX\";  // ← var（古い書き方）\nconst trackingId = \"G-XXXXXXXXXX\"; // ← const（推奨。IDは変わらないので）\n```",
         "diagram": false
       }
     },
     {
       "type": "concept",
       "data": {
-        "content": "# 条件分岐とループの書き方\n\n## if / else if / else\n\n```js\nlet score = 85;\n\nif (score >= 90) {\n  console.log(\"Aランク\");\n} else if (score >= 70) {\n  console.log(\"Bランク\");  // ← scoreが85なのでここが実行される\n} else {\n  console.log(\"Cランク\");\n}\n```\n\n**GTMのトリガーに置き換えると:**\n```js\nlet pageUrl = window.location.href;\n\nif (pageUrl.includes(\"/thanks\")) {\n  // コンバージョンタグを発火\n}\n```\n\n## 比較演算子\n\n| 演算子 | 意味 | 例 |\n|--------|------|----|\n| `===` | 完全一致（型も含む） | `\"90\" === 90` → false |\n| `!==` | 不一致 | `status !== \"error\"` |\n| `>` | より大きい | `pageViews > 1000` |\n| `>=` | 以上 | `score >= 70` |\n| `&&` | かつ（AND） | `isLogin && isPremium` |\n| `\\|\\|` | または（OR） | `page === \"/\" \\|\\| page === \"/home\"` |\n\n## forループ\n\n```js\n// 基本のforループ\nfor (let i = 0; i < 3; i++) {\n  console.log(i + \"回目\");\n}\n// → 0回目, 1回目, 2回目\n```\n\n## 配列のforEach（GA4のecommerceイベントで頻出）\n\n```js\n// 複数商品をGA4に送る実務パターン\nconst items = [\n  { item_id: \"SKU-001\", item_name: \"Tシャツ\", price: 2980 },\n  { item_id: \"SKU-002\", item_name: \"パーカー\", price: 5980 },\n];\n\nitems.forEach(function(item) {\n  console.log(item.item_name + \": \" + item.price + \"円\");\n});\n```",
-        "diagram": true
+        "content": "# var・let・constの仕組みとスコープ\n\n## 基本的な違い\n\n| 特徴 | var | let | const |\n|------|-----|-----|-------|\n| 再代入（値の変更） | できる | できる | できない |\n| 再宣言（同じ名前で宣言） | できる | できない | できない |\n| スコープ | 関数スコープ | ブロックスコープ | ブロックスコープ |\n| 巻き上げ（Hoisting） | 宣言が巻き上げられる | エラーになる | エラーになる |\n\n## 再代入と再宣言\n\n```js\n// var: 再代入も再宣言もOK（危険！）\nvar price = 9800;\nvar price = 5000;  // 再宣言OK → 意図せず上書きする危険がある\nprice = 3000;      // 再代入OK\n\n// let: 再代入OK、再宣言NG\nlet count = 0;\ncount = 1;         // 再代入OK\n// let count = 2;  // エラー！再宣言できない\n\n// const: 再代入NG、再宣言NG\nconst siteName = \"MarkeBase\";\n// siteName = \"別の名前\";  // エラー！変更できない\n// const siteName = \"X\";   // エラー！再宣言できない\n```\n\n## スコープの違い（最も重要）\n\n**varは「関数スコープ」** — if文やforループのブロック `{}` を無視する\n**let/constは「ブロックスコープ」** — `{}` の中だけで有効\n\n```js\n// var: ブロックの外からもアクセスできてしまう\nif (true) {\n  var message = \"varの変数\";\n}\nconsole.log(message);  // → \"varの変数\"（アクセスできてしまう！）\n\n// let: ブロックの中だけで有効\nif (true) {\n  let greeting = \"letの変数\";\n}\n// console.log(greeting);  // → エラー！ブロックの外からはアクセスできない\n```\n\nGTMのカスタムHTMLタグ内で `var` を使うと、他のタグの変数と名前が衝突するリスクがあります。`let` や `const` なら、そのブロック内に閉じ込められるので安全です。\n\n## 巻き上げ（Hoisting）\n\n```js\n// var: 宣言だけが巻き上げられ、undefinedになる\nconsole.log(x);  // → undefined（エラーにならない！）\nvar x = 10;\n\n// let/const: 宣言前にアクセスするとエラー\n// console.log(y);  // → ReferenceError!\n// let y = 10;\n```\n\n`var` はエラーにならずに `undefined` を返すため、バグに気づきにくくなります。\n\n## 実務での使い分けルール\n\n```js\n// 1. 基本は const を使う（変わらない値）\nconst GA4_PROPERTY_ID = \"G-XXXXXXXXXX\";\nconst API_ENDPOINT = \"https://api.example.com\";\n\n// 2. 値が変わる場合だけ let を使う\nlet totalClicks = 0;\ntotalClicks++;\n\n// 3. var は使わない（レガシーコードを読むときだけ知っておく）\n```",
+        "diagram": false
       }
     },
     {
       "type": "exercise",
       "data": {
-        "content": "# 練習: ユーザーランク判定システム\n\nスコアに応じてユーザーのランクを判定するプログラムを作成してください。\nこれはGA4のオーディエンス設定やGTMの条件設定と同じ思考プロセスです。\n\n## 課題\n\n1. 変数 `score` の値（0〜100）に応じて以下のランクを判定して表示する\n   - 80以上: Goldランク\n   - 60以上80未満: Silverランク\n   - 60未満: Bronzeランク\n\n2. **ボーナス**: 以下の複数ユーザーのスコアをforeachでループして全員のランクを表示する\n   - `const users = [95, 72, 58, 83, 41]`",
-        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>条件分岐の練習</title>\n</head>\n<body>\n  <h1>ユーザーランク判定</h1>\n\n  <script>\n    // ① スコアに応じてランクを判定してください\n    let score = 75;\n\n    // if / else if / else を使ってランクを表示\n    // 80以上 → \"Goldランク\"\n    // 60以上80未満 → \"Silverランク\"\n    // 60未満 → \"Bronzeランク\"\n\n\n\n    // ② ボーナス: 複数ユーザーをループして全員のランクを表示\n    const users = [95, 72, 58, 83, 41];\n\n    // users.forEach(function(s) { ... }) を使ってみましょう\n\n\n  </script>\n</body>\n</html>",
+        "content": "# 練習: var・let・constの動作を体験する\n\nvar / let / const のスコープや再代入の違いを、実際にコードを動かして確認しましょう。\n\n## 課題\n\n1. `const` でGA4プロパティIDを宣言し、変更しようとするとエラーになることを確認する\n2. `let` でクリックカウンターを宣言し、値を更新する\n3. `var` と `let` のスコープの違いをif文で確認する\n4. ページ上の結果表示エリアに、各テストの結果を表示する",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>var・let・const練習</title>\n  <style>\n    body { font-family: sans-serif; padding: 20px; }\n    .result { background: #f0f0f0; padding: 12px; margin: 8px 0; border-radius: 4px; font-family: monospace; }\n    .error { background: #fee; color: #c00; }\n  </style>\n</head>\n<body>\n  <h1>var・let・constの違いを体験</h1>\n  <div id=\"results\"></div>\n\n  <script>\n    const resultsEl = document.querySelector(\"#results\");\n\n    function addResult(text, isError) {\n      const div = document.createElement(\"div\");\n      div.className = \"result\" + (isError ? \" error\" : \"\");\n      div.textContent = text;\n      resultsEl.appendChild(div);\n    }\n\n    // ① const でGA4プロパティIDを宣言\n    // const propertyId = \"G-XXXXXXXXXX\";\n    // addResult(\"GA4 ID: \" + propertyId);\n\n    // constを変更しようとするとエラーになることを確認\n    // try {\n    //   propertyId = \"G-YYYYYYYYYY\";\n    // } catch (e) {\n    //   addResult(\"constの変更エラー: \" + e.message, true);\n    // }\n\n\n    // ② let でクリックカウンターを宣言し、値を更新\n    // let clickCount = ...;\n    // clickCount を 1 増やす\n    // addResult で結果を表示\n\n\n    // ③ var と let のスコープの違いを確認\n    // if (true) { var varTest = \"varの値\"; }\n    // if (true) { let letTest = \"letの値\"; }\n    //\n    // varTest はブロック外からアクセスできるか？\n    // letTest はブロック外からアクセスできるか？\n    // try-catch で確認してみましょう\n\n\n    // ④ まとめ: 推奨される使い分けを表示\n    // addResult(\"推奨: 基本はconst、値が変わる場合だけlet、varは使わない\");\n\n  </script>\n</body>\n</html>",
         "hints": [
-          "`if (score >= 80) { }` のように書きます。GTMトリガーで「ページURLが〜を含む場合」と設定するのと同じ構造です。",
-          "`else if (score >= 60) { }` を追加することで複数条件を順番に判定できます。条件は上から順に評価されるため、最初に一致した条件だけが実行されます。",
-          "配列のforEachは `users.forEach(function(s) { ここにif文を書く })` の形です。GA4のecommerceイベントで複数商品をitemsとして渡すとき、内部でこの処理が行われています。"
+          "`const` で宣言した変数に再代入すると `TypeError` が発生します。`try { ... } catch (e) { ... }` で囲むと、エラーメッセージを安全に取得して表示できます。",
+          "`let clickCount = 0; clickCount++;` で値を1増やせます。`const` と違って `let` は値の変更が許可されています。",
+          "if文の `{}` の中で `var` で宣言した変数はブロックの外からもアクセスできますが、`let` で宣言した変数はブロック外からアクセスすると `ReferenceError` になります。`try-catch` で確認してみましょう。"
         ],
-        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>条件分岐の練習</title>\n</head>\n<body>\n  <h1>ユーザーランク判定</h1>\n\n  <script>\n    // ① ランク判定\n    let score = 75;\n\n    if (score >= 80) {\n      console.log(\"Goldランク\");\n    } else if (score >= 60) {\n      console.log(\"Silverランク\");  // scoreが75なのでここ\n    } else {\n      console.log(\"Bronzeランク\");\n    }\n\n    // ② 複数ユーザーをループ\n    const users = [95, 72, 58, 83, 41];\n\n    users.forEach(function(s) {\n      if (s >= 80) {\n        console.log(s + \"点 → Goldランク\");\n      } else if (s >= 60) {\n        console.log(s + \"点 → Silverランク\");\n      } else {\n        console.log(s + \"点 → Bronzeランク\");\n      }\n    });\n  </script>\n</body>\n</html>"
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>var・let・const練習</title>\n  <style>\n    body { font-family: sans-serif; padding: 20px; }\n    .result { background: #f0f0f0; padding: 12px; margin: 8px 0; border-radius: 4px; font-family: monospace; }\n    .error { background: #fee; color: #c00; }\n  </style>\n</head>\n<body>\n  <h1>var・let・constの違いを体験</h1>\n  <div id=\"results\"></div>\n\n  <script>\n    const resultsEl = document.querySelector(\"#results\");\n\n    function addResult(text, isError) {\n      const div = document.createElement(\"div\");\n      div.className = \"result\" + (isError ? \" error\" : \"\");\n      div.textContent = text;\n      resultsEl.appendChild(div);\n    }\n\n    // ① const でGA4プロパティIDを宣言\n    const propertyId = \"G-XXXXXXXXXX\";\n    addResult(\"GA4 ID: \" + propertyId);\n\n    try {\n      propertyId = \"G-YYYYYYYYYY\";\n    } catch (e) {\n      addResult(\"constの変更エラー: \" + e.message, true);\n    }\n\n    // ② let でクリックカウンターを宣言し、値を更新\n    let clickCount = 0;\n    clickCount++;\n    addResult(\"clickCount(let): 0 → \" + clickCount + \" に更新成功\");\n\n    // ③ var と let のスコープの違いを確認\n    if (true) { var varTest = \"varの値\"; }\n    addResult(\"varTest(ブロック外): \" + varTest + \" ← アクセスできる\");\n\n    if (true) { let letTest = \"letの値\"; }\n    try {\n      addResult(\"letTest(ブロック外): \" + letTest);\n    } catch (e) {\n      addResult(\"letTest(ブロック外): \" + e.message + \" ← アクセスできない\", true);\n    }\n\n    // ④ まとめ\n    addResult(\"推奨: 基本はconst、値が変わる場合だけlet、varは使わない\");\n  </script>\n</body>\n</html>"
       }
     },
     {
@@ -36,37 +36,37 @@
       "data": {
         "questions": [
           {
-            "q": "`==` と `===` の違いとして正しいのはどれですか？",
+            "q": "`var` と `let` の最も重要な違いはどれですか？",
             "options": [
-              "どちらも同じ。書き方のスタイルが違うだけ",
-              "`==` は値だけを比較、`===` は値と型の両方を比較する",
-              "`===` は数値専用、`==` は文字列専用",
-              "`===` の方が処理が重いため、`==` を使うべき"
+              "varは数値専用、letは文字列専用",
+              "varは関数スコープ、letはブロックスコープ",
+              "varの方が処理速度が速い",
+              "letはブラウザによっては使えない"
             ],
             "correct": 1,
-            "explanation": "`===` は値と型が両方一致する場合のみtrueを返す「厳密等価演算子」です。`\"90\" == 90` はtrueになりますが、`\"90\" === 90` はfalseです（文字列と数値なので型が違う）。GA4やGTMのコードでは型の不一致によるバグを防ぐため、`===` を使うのが現代のベストプラクティスです。"
+            "explanation": "`var` は関数スコープなので if文やforループの `{}` を無視して外からもアクセスできます。`let` はブロックスコープなので `{}` の中だけで有効です。GTMのカスタムHTMLタグ内で `let` を使えば、他のタグとの変数名衝突を防げます。"
           },
           {
-            "q": "以下のコードの実行結果はどれですか？\n`if (false) { console.log(\"A\"); } else if (true) { console.log(\"B\"); } else { console.log(\"C\"); }`",
+            "q": "GTMのカスタムHTMLタグでGA4のプロパティID（変わらない値）を宣言するとき、最も適切な書き方はどれですか？",
             "options": [
-              "A",
-              "B",
-              "C",
-              "AとBの両方"
-            ],
-            "correct": 1,
-            "explanation": "if文は上から順に条件を評価し、最初にtrueになった条件のブロックだけを実行します。最初の `false` はスキップされ、次の `true` のブロック「B」が実行されます。GTMトリガーの条件も同様に、設定した全条件が満たされた場合にのみ発火します。"
-          },
-          {
-            "q": "GTMで「ページURLに /thanks を含む場合にのみタグを発火させる」トリガーを設定しました。これはJavaScriptのどの概念と最も近いですか？",
-            "options": [
-              "forループ（繰り返し処理）",
-              "変数の型変換",
-              "if文による条件分岐",
-              "関数の定義"
+              "var propertyId = \"G-XXXXXXXXXX\";",
+              "let propertyId = \"G-XXXXXXXXXX\";",
+              "const propertyId = \"G-XXXXXXXXXX\";",
+              "propertyId = \"G-XXXXXXXXXX\";"
             ],
             "correct": 2,
-            "explanation": "GTMのトリガー条件は「もし〜なら発火する」という条件分岐そのものです。内部では `if (pageUrl.includes('/thanks')) { fireTag(); }` のようなJavaScriptが実行されています。GTMの設定UIは、JSを直接書かなくても条件分岐を設定できるようにしたものです。"
+            "explanation": "GA4のプロパティIDは一度設定したら変わらない値なので `const` が最適です。`const` にしておけば、コード内で誤って書き換えようとしたときにエラーで知らせてくれるため、バグを未然に防げます。"
+          },
+          {
+            "q": "以下のコードの実行結果はどれですか？\n```\nconsole.log(x);\nvar x = 5;\n```",
+            "options": [
+              "5",
+              "undefined",
+              "ReferenceError（エラー）",
+              "null"
+            ],
+            "correct": 1,
+            "explanation": "`var` は「巻き上げ（Hoisting）」により、宣言だけがコードの先頭に移動します。しかし代入は元の位置で行われるため、`console.log(x)` の時点では `undefined` になります。`let` で同じことをするとReferenceErrorになるため、バグに気づきやすくなります。これも `let` / `const` が推奨される理由の一つです。"
           }
         ]
       }
@@ -74,7 +74,7 @@
     {
       "type": "summary",
       "data": {
-        "content": "# モジュール3-3 完了！\n\n条件分岐とループという、プログラムの根幹となる概念を習得しました。\n\n## 習得したスキル\n\n✅ **if / else if / else** で複数条件を処理できるようになった\n✅ **`===` による厳密な比較**の重要性を理解した\n✅ **forEachループ**で複数データを処理できるようになった\n✅ **GTMトリガーが条件分岐そのもの**であることを理解した\n\n## GTMコードが読めるようになってきた\n\n「URLに `/thanks` が含まれていたらCV計測する」「商品リストを1件ずつGA4に送る」といったGTMのカスタムコードが、今なら読んで理解できるはずです。\n\n## 次のモジュールへ\n\n次は **「3-4: 関数とスコープ」** です。GTMのカスタムJavaScript変数は「関数」そのものです。URLからUTMパラメータを取得する実務的な関数を書きます。\n\n> 💡 **実務チャレンジ**: GTMのカスタムHTMLタグのコードを1つ開いて、`if` 文が使われているか確認してみましょう。どういう条件で何をしているか読んでみてください。",
+        "content": "# モジュール3-3 完了！\n\nvar・let・constの違いとスコープの概念を理解しました。\n\n## 習得したスキル\n\n- **const** は変更不可の定数。基本はこれを使う\n- **let** は値が変わる変数に使う。ブロックスコープで安全\n- **var** は関数スコープで巻き上げがある。レガシーコードを読むときだけ知っておく\n- **ブロックスコープと関数スコープ**の違いを理解した\n\n## 実務での使い分け早見表\n\n| 場面 | 使う宣言 | 例 |\n|------|----------|----|\n| GA4プロパティID | const | `const GA4_ID = \"G-XXX\";` |\n| APIエンドポイント | const | `const API_URL = \"https://...\";` |\n| クリック回数カウンター | let | `let count = 0;` |\n| forループのインデックス | let | `for (let i = 0; ...)` |\n| 古いサンプルコードで見かける | var | 新規コードでは使わない |\n\n## 次のモジュールへ\n\n次は **「3-4: JSのデータ型」** です。string / number / boolean / null / undefined の5つの基本型と、typeof演算子でデータ型を確認する方法を学びます。GA4に正しい型でデータを送るための基礎知識です。\n\n> 実務チャレンジ: GTMのカスタムHTMLタグを一つ開いて、`var` が使われている箇所を見つけてみましょう。それを `const` や `let` に置き換えるとしたら、どちらが適切か考えてみてください。",
         "diagram": false
       }
     }

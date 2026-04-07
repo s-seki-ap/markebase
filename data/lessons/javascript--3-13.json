@@ -2,7 +2,7 @@
   "id": "javascript--3-13",
   "moduleId": "3-13",
   "categoryId": "javascript",
-  "title": "forループで繰り返し処理を書く",
+  "title": "forループで繰り返し処理を自動化する",
   "sections": [
     {
       "type": "intro",

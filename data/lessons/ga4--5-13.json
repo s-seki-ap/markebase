@@ -2,7 +2,7 @@
   "id": "ga4--5-13",
   "moduleId": "5-13",
   "categoryId": "ga4",
-  "title": "Eコマース計測イベント：purchase・add_to_cartの実装",
+  "title": "EC向け推奨イベント：purchase・add_to_cartの実装",
   "sections": [
     {
       "type": "intro",

@@ -2,7 +2,7 @@
   "id": "bigquery--6-9",
   "moduleId": "6-9",
   "categoryId": "bigquery",
-  "title": "SQLコメント：クエリに説明を入れる習慣",
+  "title": "SQLコメント：クエリに説明を書く習慣",
   "sections": [
     {
       "type": "intro",

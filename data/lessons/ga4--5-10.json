@@ -2,7 +2,7 @@
   "id": "ga4--5-10",
   "moduleId": "5-10",
   "categoryId": "ga4",
-  "title": "参照元トラフィック除外とクロスドメイン計測",
+  "title": "内部トラフィック除外とクロスドメイン計測",
   "sections": [
     {
       "type": "intro",

@@ -2,7 +2,7 @@
   "id": "javascript--3-9",
   "moduleId": "3-9",
   "categoryId": "javascript",
-  "title": "GTMカスタムHTMLタグのJS構造と読み方",
+  "title": "GTMカスタムHTMLタグのJS制約と回避策",
   "sections": [
     {
       "type": "intro",

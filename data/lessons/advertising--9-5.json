@@ -2,7 +2,7 @@
   "id": "advertising--9-5",
   "moduleId": "9-5",
   "categoryId": "advertising",
-  "title": "広告媒体の特徴比較と目的別の最適媒体選定",
+  "title": "広告媒体の特性比較と目的別の最適媒体選択",
   "sections": [
     {
       "type": "intro",
@@ -37,7 +37,12 @@
         "questions": [
           {
             "q": "BtoBサービスの新規リード獲得において、最も優先度が高い媒体はどれですか？",
-            "options": ["TikTok広告", "Instagram広告", "Google検索広告", "LINE広告"],
+            "options": [
+              "TikTok広告",
+              "Instagram広告",
+              "Google検索広告",
+              "LINE広告"
+            ],
             "correct": 2,
             "explanation": "BtoBでは「業務課題を検索で解決しようとしている層」へのリーチが最も効率的です。Google検索広告は「〇〇システム 導入」「〇〇 比較」などの検索意図を持つユーザーに直接リーチできるため最優先です。"
           },
@@ -54,7 +59,12 @@
           },
           {
             "q": "日本市場において、30〜50代のカバレッジが最も高い広告媒体はどれですか？",
-            "options": ["TikTok広告", "Instagram広告", "LINE広告", "Twitter/X広告"],
+            "options": [
+              "TikTok広告",
+              "Instagram広告",
+              "LINE広告",
+              "Twitter/X広告"
+            ],
             "correct": 2,
             "explanation": "LINEは日本国内で約9,600万人のMAUを持ち（2024年）、30〜50代の普及率が非常に高い媒体です。特に地域・年齢・性別ターゲティングと合わせることで、特定の地域の中高年層への効率的なリーチが可能です。"
           }

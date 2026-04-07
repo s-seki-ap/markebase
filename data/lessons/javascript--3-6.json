@@ -2,33 +2,33 @@
   "id": "javascript--3-6",
   "moduleId": "3-6",
   "categoryId": "javascript",
-  "title": "配列とオブジェクト",
+  "title": "テンプレートリテラルで文字列を組み立てる",
   "sections": [
     {
       "type": "intro",
       "data": {
-        "content": "# GA4のデータ構造は「配列」と「オブジェクト」でできている\n\nGA4にeコマースイベントを送るコードを見たことがあれば、このような構造を目にしたはずです。\n\n```js\ngtag('event', 'purchase', {\n  transaction_id: 'T-001',\n  value: 29800,\n  currency: 'JPY',\n  items: [\n    { item_id: 'SKU-001', item_name: 'Tシャツ', price: 9800, quantity: 2 },\n    { item_id: 'SKU-002', item_name: 'パーカー', price: 10200, quantity: 1 }\n  ]\n});\n```\n\nこの `{ ... }` の部分が **オブジェクト**、`[ ... ]` の部分が **配列** です。\n\n## なぜこれが重要か\n\n**GA4実装の精度が上がる**\n`items` 配列の構造を理解すると、「なぜitem_nameが文字列でなければならないか」「なぜquantityが数値でなければならないか」が納得できます。型ミスによる計測エラーを事前に防げます。\n\n**GTMのデータレイヤー設計**\n`dataLayer.push()` で送るデータもオブジェクトと配列の組み合わせです。設計の意図が理解できるようになります。\n\n**APIレスポンスの読み方**\nGA4 Data APIやGoogle Ads APIが返すデータはJSON（オブジェクトと配列の組み合わせ）です。APIレスポンスを読んで必要な値を取り出せるようになります。",
+        "content": "# バッククォートで文字列を「組み立てる」\n\nGA4のイベント実装やGTMのカスタムHTML作成で、文字列の中に変数を埋め込みたい場面は頻繁にあります。\n\n```js\n// 従来の書き方（+で連結）\nconst message = 'キャンペーン「' + campaignName + '」のCV数は ' + cvCount + ' 件です。';\n```\n\nこの書き方は引用符の開閉が増えて読みにくく、ミスの原因になります。\n\n```js\n// テンプレートリテラル（バッククォート構文）\nconst message = `キャンペーン「${campaignName}」のCV数は ${cvCount} 件です。`;\n```\n\nバッククォート（`` ` ``）で囲み、`${変数名}` で値を埋め込む。これが **テンプレートリテラル** です。\n\n## なぜマーケターに重要か\n\n**GTMカスタムHTMLの可読性向上**\nGTMのカスタムHTMLタグで動的なHTML文字列を組み立てるとき、テンプレートリテラルを使うとコードが格段に読みやすくなります。\n\n**GA4イベントパラメータの組み立て**\n`dataLayer.push()` に渡す文字列値をページ情報から動的に作るケースで重宝します。\n\n**複数行の文字列がそのまま書ける**\nHTMLの断片やエラーメッセージなど、改行を含む長い文字列を自然に記述できます。",
         "diagram": false
       }
     },
     {
       "type": "concept",
       "data": {
-        "content": "# 配列とオブジェクトの使い方\n\n## 配列（Array）: 順番を持つデータのリスト\n\n```js\n// 配列の作成\nconst campaigns = [\"spring_sale\", \"summer_sale\", \"winter_sale\"];\n\n// 要素へのアクセス（0始まり）\nconsole.log(campaigns[0]);  // → \"spring_sale\"\nconsole.log(campaigns[2]);  // → \"winter_sale\"\n\n// 要素数\nconsole.log(campaigns.length);  // → 3\n\n// 追加\ncampaigns.push(\"autumn_sale\");\n```\n\n## 配列の処理メソッド（GA4実装で頻出）\n\n```js\nconst items = [\n  { name: \"Tシャツ\",  price: 9800,  category: \"tops\" },\n  { name: \"パーカー\", price: 12800, category: \"tops\" },\n  { name: \"スニーカー\", price: 18000, category: \"shoes\" },\n];\n\n// filter: 条件に合うものだけ抽出\nconst tops = items.filter(item => item.category === \"tops\");\n// → [{ name:\"Tシャツ\"... }, { name:\"パーカー\"... }]\n\n// map: 各要素を変換した新しい配列を作る\nconst names = items.map(item => item.name);\n// → [\"Tシャツ\", \"パーカー\", \"スニーカー\"]\n\n// reduce: 配列を1つの値にまとめる\nconst total = items.reduce((sum, item) => sum + item.price, 0);\n// → 40600\n```\n\n## オブジェクト（Object）: 名前付きデータの集合\n\n```js\n// オブジェクトの作成\nconst event = {\n  event_name: \"purchase\",\n  value: 29800,\n  currency: \"JPY\",\n  is_member: true\n};\n\n// プロパティへのアクセス\nconsole.log(event.event_name);  // → \"purchase\"\nconsole.log(event[\"value\"]);    // → 29800（同じ結果）\n\n// プロパティの追加・変更\nevent.transaction_id = \"T-001\";\n```\n\n## JSON（JavaScript Object Notation）\n\nAPIのレスポンスや設定ファイルで使われるデータ形式です。JSのオブジェクト・配列とほぼ同じ見た目です。\n\n```js\n// JSON文字列 → JSオブジェクト\nconst jsonStr = '{\"name\":\"山田\",\"score\":85}';\nconst obj = JSON.parse(jsonStr);\nconsole.log(obj.name);  // → \"山田\"\n\n// JSオブジェクト → JSON文字列\nconst str = JSON.stringify({ utm_source: \"google\", value: 9800 });\n```",
-        "diagram": true
+        "content": "# テンプレートリテラルの使い方\n\n## 基本: 変数の埋め込み（`${}`）\n\n```js\nconst pagePath = '/products/shoes';\nconst pageTitle = 'シューズ一覧';\n\n// + 連結（従来）\nconst label1 = pageTitle + '(' + pagePath + ')';\n\n// テンプレートリテラル（推奨）\nconst label2 = `${pageTitle}(${pagePath})`;\n// → \"シューズ一覧(/products/shoes)\"\n```\n\n`${}` の中には変数だけでなく **式（計算や関数呼び出し）** も書けます。\n\n```js\nconst price = 9800;\nconst quantity = 3;\n\nconsole.log(`合計: ${price * quantity}円`);\n// → \"合計: 29400円\"\n\nconsole.log(`大文字: ${pageTitle.toUpperCase()}`);\n// → \"大文字: シューズ一覧\"（日本語は変化しないが英語なら大文字に）\n```\n\n## 複数行の文字列\n\n従来の引用符では改行するには `\\n` が必要でしたが、テンプレートリテラルではそのまま改行できます。\n\n```js\n// 従来\nconst html1 = '<div>\\n  <h2>' + title + '</h2>\\n  <p>' + desc + '</p>\\n</div>';\n\n// テンプレートリテラル\nconst html2 = `\n<div>\n  <h2>${title}</h2>\n  <p>${desc}</p>\n</div>\n`;\n```\n\nGTMのカスタムHTMLタグでHTML断片を動的に生成するとき、この書き方なら構造がひと目でわかります。\n\n## 実務パターン: GA4イベントラベルの動的生成\n\n```js\n// ページ情報からイベントラベルを動的に作る\nconst category = 'shoes';\nconst action = 'click';\nconst timestamp = new Date().toISOString();\n\nconst eventLabel = `${category}_${action}_${timestamp}`;\n// → \"shoes_click_2026-04-07T10:30:00.000Z\"\n```\n\n## 比較まとめ\n\n| 書き方 | 囲み文字 | 変数埋め込み | 改行 |\n|---|---|---|---|\n| シングルクォート `'...'` | `'` | `+` で連結 | `\\n` が必要 |\n| ダブルクォート `\"...\"` | `\"` | `+` で連結 | `\\n` が必要 |\n| テンプレートリテラル | `` ` `` | `${変数}` | そのまま改行OK |",
+        "diagram": false
       }
     },
     {
       "type": "exercise",
       "data": {
-        "content": "# 練習: EC商品データを集計する\n\nEC サイトの商品データが配列で定義されています。\n`filter` / `map` / `reduce` を使って分析してみましょう。\nこれはGA4のeコマースレポートが内部でやっている集計処理と同じ考え方です。\n\n## 課題\n\n1. `filter` で `category === \"apparel\"` の商品だけ抽出する\n2. `map` で全商品の `name` だけの配列を作る\n3. `reduce` で全商品の `price` の合計を計算する\n4. **ボーナス**: `filter` と `reduce` を組み合わせて「アパレル商品の合計金額」を求める",
-        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>配列・オブジェクトの練習</title>\n</head>\n<body>\n  <h1>EC商品データ集計</h1>\n\n  <script>\n    // 商品データ（GA4のitemsパラメータと同じ構造）\n    const products = [\n      { item_id: \"SKU-001\", name: \"プレミアムTシャツ\",  price: 9800,  category: \"apparel\" },\n      { item_id: \"SKU-002\", name: \"デニムパンツ\",       price: 18000, category: \"apparel\" },\n      { item_id: \"SKU-003\", name: \"レザースニーカー\",   price: 32000, category: \"shoes\"   },\n      { item_id: \"SKU-004\", name: \"キャップ\",           price: 6500,  category: \"apparel\" },\n      { item_id: \"SKU-005\", name: \"トートバッグ\",       price: 14800, category: \"bags\"    },\n    ];\n\n    // ① filterでアパレル商品だけ抽出\n    // const apparelItems = products.filter(...)\n    // console.log(\"アパレル:\", apparelItems);\n\n\n    // ② mapで商品名一覧を作成\n    // const names = products.map(...)\n    // console.log(\"商品名:\", names);\n\n\n    // ③ reduceで合計金額を計算\n    // const total = products.reduce(...)\n    // console.log(\"合計:\", total, \"円\");\n\n\n    // ④ ボーナス: アパレル商品の合計金額\n\n\n  </script>\n</body>\n</html>",
+        "content": "# 練習: キャンペーンレポートの文字列を組み立てる\n\nキャンペーンの成果データが変数に入っています。\nテンプレートリテラルを使って、レポート用の文字列を組み立ててみましょう。\n\n## 課題\n\n1. キャンペーン名・セッション数・CV数を埋め込んだ1行サマリーを作る\n2. CV率（CVR）を `${}` の中で計算して埋め込む\n3. 複数行のHTMLレポートをテンプレートリテラルで組み立てる\n4. 結果を画面に表示する",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>テンプレートリテラルの練習</title>\n  <style>\n    body { font-family: sans-serif; padding: 24px; background: #f9f9f9; }\n    .report { background: white; padding: 20px; border-radius: 8px; max-width: 500px; }\n    pre { background: #1e293b; color: #e2e8f0; padding: 16px; border-radius: 6px;\n          font-size: 14px; white-space: pre-wrap; }\n    #output { margin-top: 16px; }\n  </style>\n</head>\n<body>\n  <div class=\"report\">\n    <h1>キャンペーンレポート生成</h1>\n    <div id=\"output\"></div>\n  </div>\n\n  <script>\n    // キャンペーンデータ\n    const campaignName = 'spring_sale_2026';\n    const sessions = 12480;\n    const conversions = 374;\n    const revenue = 2890000;\n\n    // --- 課題 1 ---\n    // テンプレートリテラルで1行サマリーを作る\n    // 例: \"spring_sale_2026: 12480セッション / 374CV\"\n    // const summary = ...\n\n\n    // --- 課題 2 ---\n    // CVR（CV率）を ${} の中で計算して埋め込む\n    // ヒント: (conversions / sessions * 100).toFixed(2) でパーセント表示\n    // const cvrLine = ...\n\n\n    // --- 課題 3 ---\n    // 複数行のHTMLレポートをテンプレートリテラルで組み立てる\n    // const reportHtml = `\n    //   <h2>...</h2>\n    //   <ul>\n    //     <li>セッション: ...</li>\n    //     <li>CV数: ...</li>\n    //     <li>CVR: ...%</li>\n    //     <li>売上: ...円</li>\n    //   </ul>\n    // `;\n\n\n    // --- 課題 4 ---\n    // #output に結果を表示\n    // document.querySelector('#output').innerHTML = reportHtml;\n\n  </script>\n</body>\n</html>",
         "hints": [
-          "`filter` は `products.filter(function(p) { return p.category === \"apparel\"; })` または アロー関数で `products.filter(p => p.category === \"apparel\")` と書きます。GA4のセグメント設定で「カテゴリ = apparel のイベントのみ」と絞り込むのと同じ発想です。",
-          "`map` は各要素を変換します。`products.map(p => p.name)` で名前だけの配列を作れます。GA4の `items` 配列から `item_name` だけを取り出すときも同じ手法です。",
-          "`reduce` は `products.reduce((sum, p) => sum + p.price, 0)` と書きます。第2引数の `0` が合計の初期値です。GA4の `value` パラメータに渡す「カート合計金額」をこの方法で計算します。"
+          "テンプレートリテラルはバッククォート（`）で囲みます。キーボードでは Shift + @ の位置にあります。`const summary = `${campaignName}: ${sessions}セッション / ${conversions}CV`;` のように書きます。",
+          "CVRは `${(conversions / sessions * 100).toFixed(2)}` のように `${}` の中に式をそのまま書けます。`.toFixed(2)` で小数点以下2桁に丸められます。",
+          "複数行HTMLは改行をそのまま含められます。`const reportHtml = `<h2>${campaignName}</h2>\\n<ul>\\n  <li>セッション: ${sessions.toLocaleString()}</li>\\n</ul>`;` のようにそのまま改行を入れましょう。`.toLocaleString()` で数値に桁区切りカンマがつきます。"
         ],
-        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>配列・オブジェクトの練習</title>\n</head>\n<body>\n  <h1>EC商品データ集計</h1>\n\n  <script>\n    const products = [\n      { item_id: \"SKU-001\", name: \"プレミアムTシャツ\",  price: 9800,  category: \"apparel\" },\n      { item_id: \"SKU-002\", name: \"デニムパンツ\",       price: 18000, category: \"apparel\" },\n      { item_id: \"SKU-003\", name: \"レザースニーカー\",   price: 32000, category: \"shoes\"   },\n      { item_id: \"SKU-004\", name: \"キャップ\",           price: 6500,  category: \"apparel\" },\n      { item_id: \"SKU-005\", name: \"トートバッグ\",       price: 14800, category: \"bags\"    },\n    ];\n\n    // ① アパレル商品だけ抽出\n    const apparelItems = products.filter(p => p.category === \"apparel\");\n    console.log(\"アパレル:\", apparelItems);\n    // → [{Tシャツ}, {デニムパンツ}, {キャップ}]\n\n    // ② 商品名一覧\n    const names = products.map(p => p.name);\n    console.log(\"商品名:\", names);\n    // → [\"プレミアムTシャツ\", \"デニムパンツ\", ...]\n\n    // ③ 合計金額\n    const total = products.reduce((sum, p) => sum + p.price, 0);\n    console.log(\"合計:\", total, \"円\");  // → 81100 円\n\n    // ④ アパレル商品の合計金額\n    const apparelTotal = products\n      .filter(p => p.category === \"apparel\")\n      .reduce((sum, p) => sum + p.price, 0);\n    console.log(\"アパレル合計:\", apparelTotal, \"円\");  // → 34300 円\n  </script>\n</body>\n</html>"
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>テンプレートリテラルの練習</title>\n  <style>\n    body { font-family: sans-serif; padding: 24px; background: #f9f9f9; }\n    .report { background: white; padding: 20px; border-radius: 8px; max-width: 500px; }\n    pre { background: #1e293b; color: #e2e8f0; padding: 16px; border-radius: 6px;\n          font-size: 14px; white-space: pre-wrap; }\n    #output { margin-top: 16px; }\n  </style>\n</head>\n<body>\n  <div class=\"report\">\n    <h1>キャンペーンレポート生成</h1>\n    <div id=\"output\"></div>\n  </div>\n\n  <script>\n    const campaignName = 'spring_sale_2026';\n    const sessions = 12480;\n    const conversions = 374;\n    const revenue = 2890000;\n\n    // 課題 1: 1行サマリー\n    const summary = `${campaignName}: ${sessions}セッション / ${conversions}CV`;\n    console.log(summary);\n\n    // 課題 2: CVRを式で計算して埋め込み\n    const cvrLine = `CVR: ${(conversions / sessions * 100).toFixed(2)}%`;\n    console.log(cvrLine);\n\n    // 課題 3: 複数行HTMLレポート\n    const reportHtml = `\n      <h2>${campaignName}</h2>\n      <p>${summary}</p>\n      <ul>\n        <li>セッション: ${sessions.toLocaleString()}</li>\n        <li>CV数: ${conversions.toLocaleString()}</li>\n        <li>${cvrLine}</li>\n        <li>売上: ${revenue.toLocaleString()}円</li>\n      </ul>\n    `;\n\n    // 課題 4: 画面に表示\n    document.querySelector('#output').innerHTML = reportHtml;\n  </script>\n</body>\n</html>"
       }
     },
     {
@@ -36,37 +36,37 @@
       "data": {
         "questions": [
           {
-            "q": "配列とオブジェクトの違いとして正しいのはどれですか？",
+            "q": "テンプレートリテラルを囲む記号はどれですか？",
             "options": [
-              "配列は数値のみ、オブジェクトは文字列のみ格納できる",
-              "配列はインデックス（番号）でアクセス、オブジェクトはキー（名前）でアクセスする",
-              "配列はGTMで使い、オブジェクトはGA4で使う",
-              "配列とオブジェクトは同じもので書き方が違うだけ"
-            ],
-            "correct": 1,
-            "explanation": "配列 `[a, b, c]` は `[0]` `[1]` `[2]` という番号でアクセスします。オブジェクト `{name: \"山田\", score: 85}` は `.name` `.score` というキー名でアクセスします。GA4のitemsパラメータは「オブジェクトの配列」——つまり両方を組み合わせた構造です。"
-          },
-          {
-            "q": "JSONとは何ですか？",
-            "options": [
-              "JavaScriptだけで使えるデータ保存形式",
-              "Googleが開発したデータベースの名前",
-              "言語やシステムを問わず使えるテキストベースのデータ交換形式",
-              "HTMLのタグを省略した書き方のこと"
+              "シングルクォート（'）",
+              "ダブルクォート（\"）",
+              "バッククォート（`）",
+              "丸括弧（()）"
             ],
             "correct": 2,
-            "explanation": "JSON（JavaScript Object Notation）はJSのオブジェクト記法をベースにしたテキスト形式です。JavaScriptだけでなく、Python・Ruby・PHPなどあらゆる言語で読み書きできます。GA4 Data APIのレスポンス、GTMの設定エクスポート、このMarkeBaseの教材データもすべてJSONです。"
+            "explanation": "テンプレートリテラルはバッククォート（`）で囲みます。シングルクォートやダブルクォートでは `${変数}` の埋め込みが機能せず、そのまま文字列として出力されてしまいます。キーボードでは Shift + @ の位置にあります。"
           },
           {
-            "q": "GA4のeコマースイベントで `items` パラメータが配列形式（`[...]`）になっている理由はどれですか？",
+            "q": "次のコードの出力はどれですか？\n```js\nconst x = 10;\nconst y = 3;\nconsole.log(`合計: ${x + y}`);\n```",
             "options": [
-              "GA4のシステム上の制限で、オブジェクトを渡せないから",
-              "1回の購入で複数の商品が含まれる場合があるため",
-              "配列の方が送信データ量が少なくなるから",
-              "GTMが配列しか受け付けないから"
+              "合計: ${x + y}",
+              "合計: 10 + 3",
+              "合計: 13",
+              "エラーになる"
             ],
-            "correct": 1,
-            "explanation": "1回の購入（purchase）や1回のカート追加（add_to_cart）に複数商品が含まれるケースを想定しているため、items は配列形式です。商品が1点だけの場合も `items: [{ ... }]` のように1要素の配列として渡します。複数商品をそれぞれ個別のGA4イベントで送ってしまうと、1回の取引として集計されなくなります。"
+            "correct": 2,
+            "explanation": "`${}` の中には変数だけでなく式（計算）も書けます。`${x + y}` は `10 + 3` が計算されて `13` になります。GA4イベントで商品の合計金額を計算して文字列に埋め込むときなど、実務で頻繁に使うパターンです。"
+          },
+          {
+            "q": "テンプレートリテラルの特徴として間違っているものはどれですか？",
+            "options": [
+              "改行をそのまま含めることができる",
+              "${} の中で関数を呼び出すことができる",
+              "バッククォートの中ではシングルクォートやダブルクォートをエスケープなしで使える",
+              "テンプレートリテラルの中では変数宣言（const, let）ができる"
+            ],
+            "correct": 3,
+            "explanation": "`${}` の中に書けるのは「式（値を返すもの）」だけです。`const` や `let` による変数宣言は「文（命令）」なので `${}` の中には書けません。一方、改行はそのまま含められ、`${}` 内で関数呼び出し（`${name.toUpperCase()}`）も可能です。"
           }
         ]
       }
@@ -74,7 +74,7 @@
     {
       "type": "summary",
       "data": {
-        "content": "# モジュール3-6 完了！\n\n配列とオブジェクトというデータ構造の基礎を習得しました。\n\n## 習得したスキル\n\n✅ **配列** の作成・アクセス・filter/map/reduce を使いこなせるようになった\n✅ **オブジェクト** のプロパティを読み書きできるようになった\n✅ **JSON** の役割を理解し、parse/stringify を使えるようになった\n✅ **GA4 eコマースの items 配列**の構造を深く理解した\n\n## GA4実装への応用\n\n```js\n// カートの商品データを items 配列に変換する（実務パターン）\nconst cartItems = [\n  { id: \"SKU-001\", name: \"Tシャツ\", price: 9800, qty: 2 },\n];\n\nconst ga4Items = cartItems.map(item => ({\n  item_id:   item.id,\n  item_name: item.name,\n  price:     item.price,\n  quantity:  item.qty\n}));\n\nconst totalValue = cartItems.reduce((sum, item) => sum + item.price * item.qty, 0);\n```\n\nこのパターンがそのままGA4のpurchaseイベント実装に使えます。\n\n## 次のモジュールへ\n\n次は **「3-7: 非同期処理とAPI通信」** です。GA4 Data APIやGoogle Ads APIからデータを取得する `fetch()` と `async/await` を学びます。\n\n> 💡 **実務チャレンジ**: GTMのデータレイヤー設定を開き、eコマースイベントのコードを確認してみましょう。`items` の中身がオブジェクトの配列になっていることを確認してください。",
+        "content": "# モジュール3-6 完了！\n\nテンプレートリテラルを使った文字列の組み立て方を習得しました。\n\n## 習得したスキル\n\n- バッククォート（`` ` ``）で文字列を囲み、`${変数}` で値を埋め込める\n- `${}` の中で計算や関数呼び出しができる\n- 改行を含む複数行の文字列をそのまま記述できる\n- `+` 連結よりも可読性の高いコードが書ける\n\n## GA4/GTM実務での活用\n\n```js\n// GTMカスタムHTMLで動的なHTML断片を組み立てる\nconst productName = 'プレミアムTシャツ';\nconst price = 9800;\n\nconst tag = `\n<div class=\"promo-banner\">\n  <p>${productName} が今だけ ${(price * 0.8).toLocaleString()}円！</p>\n</div>\n`;\n```\n\nテンプレートリテラルは日常的に使う基本構文です。GTMのカスタムHTMLやデータレイヤーの値組み立てで活用してください。\n\n## 次のモジュールへ\n\n次は **「3-7: コメントの書き方と意図を伝えるドキュメント」** です。コードの可読性を高めるコメントの書き方を学びます。",
         "diagram": false
       }
     }

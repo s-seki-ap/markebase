@@ -2,7 +2,7 @@
   "id": "css--2-1",
   "moduleId": "2-1",
   "categoryId": "css",
-  "title": "CSSとは何か：スタイルシートがブラウザに何を伝えるか",
+  "title": "CSSとは何か：スタイルシートがブラウザに解釈される仕組み",
   "sections": [
     {
       "type": "intro",
@@ -37,19 +37,34 @@
         "questions": [
           {
             "q": "CSSルールの基本構造として正しいのはどれですか？",
-            "options": ["セレクタ(プロパティ: 値)", "セレクタ { プロパティ: 値; }", "セレクタ [プロパティ = 値]", "セレクタ -> プロパティ: 値"],
+            "options": [
+              "セレクタ(プロパティ: 値)",
+              "セレクタ { プロパティ: 値; }",
+              "セレクタ [プロパティ = 値]",
+              "セレクタ -> プロパティ: 値"
+            ],
             "correct": 1,
             "explanation": "CSSルールは `セレクタ { プロパティ: 値; }` の形式で書きます。波括弧 `{}` でプロパティと値のペアを囲み、セミコロン `;` で終端します。"
           },
           {
             "q": "HTMLが定義するものとCSSが定義するものの組み合わせとして正しいのはどれですか？",
-            "options": ["HTML=見た目、CSS=構造", "HTML=構造、CSS=見た目", "HTML=動き、CSS=構造", "HTML=見た目、CSS=動き"],
+            "options": [
+              "HTML=見た目、CSS=構造",
+              "HTML=構造、CSS=見た目",
+              "HTML=動き、CSS=構造",
+              "HTML=見た目、CSS=動き"
+            ],
             "correct": 1,
             "explanation": "HTMLはWebページの「構造（何を表示するか）」を定義し、CSSは「見た目（どう表示するか）」を定義します。この役割分担がWebの基本原則です。"
           },
           {
             "q": "ABテストでCTAボタンの色を変更したい場合、変更するCSSプロパティはどれですか？",
-            "options": ["font-size", "background-color", "text-align", "margin"],
+            "options": [
+              "font-size",
+              "background-color",
+              "text-align",
+              "margin"
+            ],
             "correct": 1,
             "explanation": "`background-color` プロパティでボタンの背景色を変更できます。ABテストでボタン色を変えてCVRの違いを検証するのは、マーケターの代表的なCSS活用シーンです。"
           }

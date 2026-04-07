@@ -2,7 +2,7 @@
   "id": "bigquery--6-16",
   "moduleId": "6-16",
   "categoryId": "bigquery",
-  "title": "CROSS JOIN：全組み合わせの生成と注意点",
+  "title": "CROSS JOIN：全組み合わせを作る使い所と注意点",
   "sections": [
     {
       "type": "intro",

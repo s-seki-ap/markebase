@@ -2,7 +2,7 @@
   "id": "bigquery--6-4",
   "moduleId": "6-4",
   "categoryId": "bigquery",
-  "title": "AND/OR/NOT：複数条件でデータを絞り込む",
+  "title": "AND/OR/NOT：複合条件でデータを絞り込む",
   "sections": [
     {
       "type": "intro",

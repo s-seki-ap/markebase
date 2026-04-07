@@ -2,7 +2,7 @@
   "id": "css--2-2",
   "moduleId": "2-2",
   "categoryId": "css",
-  "title": "CSSセレクタの基本（要素・クラス・ID・複合セレクタ）",
+  "title": "CSSセレクタの基本（要素・クラス・ID・属性セレクタ）",
   "sections": [
     {
       "type": "intro",
@@ -37,19 +37,34 @@
         "questions": [
           {
             "q": "GTMでCTAボタン（class=\"cta-button\"）のクリックを計測するCSSセレクタはどれですか？",
-            "options": [".cta-button", "#cta-button", "cta-button", "*cta-button"],
+            "options": [
+              ".cta-button",
+              "#cta-button",
+              "cta-button",
+              "*cta-button"
+            ],
             "correct": 0,
             "explanation": "クラスセレクタはドット（`.`）を先頭に付けます。`.cta-button` で `class=\"cta-button\"` を持つ要素を指定できます。GTMのトリガー条件で頻繁に使うパターンです。"
           },
           {
             "q": "CSSセレクタの詳細度（優先順位）が最も高いのはどれですか？",
-            "options": ["要素セレクタ（p）", "クラスセレクタ（.btn）", "IDセレクタ（#header）", "ユニバーサルセレクタ（*）"],
+            "options": [
+              "要素セレクタ（p）",
+              "クラスセレクタ（.btn）",
+              "IDセレクタ（#header）",
+              "ユニバーサルセレクタ（*）"
+            ],
             "correct": 2,
             "explanation": "IDセレクタ（`#`）は最も詳細度が高く、クラスセレクタ（`.`）、要素セレクタの順に低くなります。IDはページ内で一意なので、最も具体的な指定になります。"
           },
           {
             "q": "`.header a` というセレクタが意味するものはどれですか？",
-            "options": ["headerクラスを持つaタグ", "headerクラスの中にある全てのaタグ", "headerクラスの直下のaタグのみ", "headerタグとaタグの両方"],
+            "options": [
+              "headerクラスを持つaタグ",
+              "headerクラスの中にある全てのaタグ",
+              "headerクラスの直下のaタグのみ",
+              "headerタグとaタグの両方"
+            ],
             "correct": 1,
             "explanation": "スペースで区切る「子孫セレクタ」は、前の要素の中にある（ネストの深さに関係なく）全ての該当要素を選択します。`.header a` は `.header` クラスの中の全ての `a` タグに適用されます。"
           }

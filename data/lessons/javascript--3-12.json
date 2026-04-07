@@ -2,7 +2,7 @@
   "id": "javascript--3-12",
   "moduleId": "3-12",
   "categoryId": "javascript",
-  "title": "switchで多分岐処理を読みやすくする",
+  "title": "switchで多分岐処理を可読性高く書く",
   "sections": [
     {
       "type": "intro",

@@ -2,33 +2,33 @@
   "id": "javascript--3-7",
   "moduleId": "3-7",
   "categoryId": "javascript",
-  "title": "非同期処理とAPI通信",
+  "title": "コメントの書き方と意図を伝えるドキュメント",
   "sections": [
     {
       "type": "intro",
       "data": {
-        "content": "# APIとは「データの受け渡し窓口」\n\nマーケティングの現場では、様々なツールがAPIでデータをやり取りしています。\n\n## マーケターがAPIに触れる場面\n\n**GA4 Data API**\nGA4の管理画面を経由せず、プログラムから直接データを取得できます。Looker StudioのGA4コネクタや、社内データ基盤へのGA4データ連携はこのAPIを使っています。\n\n**Google Ads API**\n広告のキャンペーン・入札額・レポートをプログラムから操作できます。自動入札調整ツールやレポート自動化に使われます。\n\n**各種マーケツールのWebhook**\nHubSpotのフォーム送信・SalesforceのCRM更新をリアルタイムで別システムに連携する「Webhook」もAPIの一形態です。\n\n## 「非同期」が必要な理由\n\nAPIからデータを取得する処理には時間がかかります（ネットワーク通信のため）。\n\n```\n同期処理: A → Aの完了を待つ → B → C  （待ち時間が発生）\n非同期処理: A → Bを先に進める → Aが完了したらCを実行  （待ち時間ゼロ）\n```\n\nGTMのタグが「ページの読み込みをブロックしない」設計になっているのも、非同期処理の仕組みを使っているからです。",
+        "content": "# なぜコメントを書くのか\n\nGTMのカスタムHTMLタグやカスタムJS変数を開いたとき、「このコードは何をしているんだろう？」と悩んだ経験はありませんか。\n\n3か月前に自分で書いたコードですら、コメントがなければ意図を思い出せません。チームメンバーならなおさらです。\n\n## マーケターがコメントを書く場面\n\n**GTMカスタムHTMLタグ**\n「なぜこのタグが必要か」「どのページで発火するか」をコメントで残しておくと、後からメンテナンスする人（未来の自分を含む）が助かります。\n\n**dataLayer.push() の実装コード**\n開発者に依頼して実装してもらったコードに「どのGA4イベントに対応しているか」をコメントで書いておくと、仕様変更時の影響範囲がすぐわかります。\n\n**カスタムJS変数**\nGTMのカスタムJavaScript変数は短いコードですが、「なぜこの値を返すのか」の意図をコメントに残すことで、設定の引き継ぎがスムーズになります。\n\n## コメントは「何をしているか」ではなく「なぜそうしたか」\n\nコードを読めば「何をしているか」はわかります。コメントで書くべきは **「なぜその判断をしたか」** です。",
         "diagram": false
       }
     },
     {
       "type": "concept",
       "data": {
-        "content": "# fetch と async/await\n\n## fetch() — APIを呼び出す命令\n\n```js\n// fetch(URL) でAPIにリクエストを送る\nfetch(\"https://api.example.com/users\")\n  .then(response => response.json())   // レスポンスをJSONに変換\n  .then(data => console.log(data))     // データを使う\n  .catch(error => console.error(error)); // エラー処理\n```\n\n`.then()` をつなぐ書き方（Promise チェーン）は読みにくいため、現在は `async/await` が主流です。\n\n## async/await — 非同期処理をわかりやすく書く\n\n```js\n// async をつけた関数の中でだけ await を使える\nasync function fetchUsers() {\n  try {\n    const response = await fetch(\"https://api.example.com/users\");\n    // ↑ fetchの完了を「待って」から次の行へ進む\n\n    const data = await response.json();\n    // ↑ JSONへの変換完了を「待って」から次の行へ進む\n\n    console.log(data);\n  } catch (error) {\n    // エラーが起きた場合の処理\n    console.error(\"取得失敗:\", error);\n  }\n}\n\nfetchUsers();\n```\n\n**`await` を「待って」と訳すと覚えやすい**。`await fetch(url)` = 「URLからデータを取ってくるのを待って」。\n\n## APIレスポンスの構造（JSONの読み方）\n\n```js\n// GA4 Data APIのレスポンス（簡略版）\nconst response = {\n  rows: [\n    { dimensionValues: [{value: \"google\"}], metricValues: [{value: \"1234\"}] },\n    { dimensionValues: [{value: \"direct\"}], metricValues: [{value: \"987\"}]  },\n  ]\n};\n\n// 必要な値を取り出す\nresponse.rows.forEach(row => {\n  const source  = row.dimensionValues[0].value;\n  const sessions = row.metricValues[0].value;\n  console.log(source + \": \" + sessions + \"セッション\");\n});\n```",
-        "diagram": true
+        "content": "# JavaScriptのコメント構文\n\n## 1行コメント: `//`\n\n```js\n// UTMパラメータからsourceを取得（GA4のsource属性に利用）\nconst source = params.get('utm_source') || '(direct)';\n\nconst price = 9800; // 税込価格（2026年4月時点）\n```\n\n`//` から行末までがコメントになります。行の途中からでも書けます。\n\n## 複数行コメント: `/* ... */`\n\n```js\n/*\n  カート追加イベント（add_to_cart）の実装\n  - GA4推奨イベント形式に準拠\n  - 2026/03 仕様変更: item_brand パラメータを追加\n  - 担当: マーケチーム（GTM経由で発火）\n*/\ndataLayer.push({\n  event: 'add_to_cart',\n  ecommerce: { /* 省略 */ }\n});\n```\n\n`/*` で始まり `*/` で終わる範囲がすべてコメントになります。複数行の説明や、一時的にコードを無効化（コメントアウト）するときに使います。\n\n## 使い分けガイド\n\n| 場面 | 推奨 | 例 |\n|---|---|---|\n| 短い補足・1行の説明 | `//` | `// 税込価格` |\n| 処理ブロックの説明 | `/* */` | 関数やイベント実装の冒頭説明 |\n| コードの一時無効化 | `//` または `/* */` | デバッグ時に一部を無効にする |\n| TODO・注意事項 | `//` | `// TODO: item_brand追加対応` |\n\n## 良いコメント vs 悪いコメント\n\n```js\n// 悪い例: コードの内容をそのまま繰り返しているだけ\nconst total = price * quantity; // priceとquantityを掛ける\n\n// 良い例: 「なぜ」を説明している\nconst total = price * quantity; // GA4のvalueパラメータ用。税込・送料別\n```\n\n```js\n// 悪い例: 情報が古くなっている（嘘のコメント）\n// 3商品まで対応（2025/01）\nconst MAX_ITEMS = 10; // ← 実際は10に変更済み\n\n// 良い例: 変更履歴も更新する\n// 最大商品数。2026/03に3→10に拡張（要件ID: REQ-042）\nconst MAX_ITEMS = 10;\n```\n\n## GTM実務でのコメントパターン\n\n```js\n// GTMカスタムJavaScript変数: ページカテゴリ判定\n// パスの第2階層をカテゴリとして返す\n// 例: /products/shoes/abc → \"shoes\"\n// GA4のcontent_groupパラメータに使用\nfunction() {\n  var segments = window.location.pathname.split('/');\n  return segments[2] || 'top';\n}\n```\n\nこのように「何を返すか」「何に使うか」「例」の3点をコメントに書くと、GTMの設定を引き継ぐ際に非常に助かります。",
+        "diagram": false
       }
     },
-      {
+    {
       "type": "exercise",
       "data": {
-        "content": "# 練習: APIデータを取得して表示する\n\n> ⚠️ **注意**: このプレビュー環境では外部APIへの通信（fetch）が制限されています。\n> 以下の演習では **ダミーデータを使ったシミュレーション** で非同期処理を体験します。\n> 実際のブラウザ（npm run dev）では本物のfetchが動作します。\n\n## 課題\n\nダミーAPIから取得したようなユーザーデータを処理する `async` 関数を作成してください。\n\n1. `async function getUsers()` を定義する\n2. `await` でダミーデータ取得を「待つ」（`simulateFetch()` を使用）\n3. 取得した配列をループして、各ユーザーの名前をHTMLリストに追加する\n4. `try/catch` でエラーハンドリングをする",
-        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>非同期処理の練習</title>\n</head>\n<body>\n  <h1>ユーザー一覧</h1>\n  <div id=\"loading\">読み込み中...</div>\n  <ul id=\"userList\"></ul>\n\n  <script>\n    // ダミーAPIシミュレーター（実際のfetchと同じ使い方）\n    function simulateFetch() {\n      return new Promise(resolve => {\n        setTimeout(() => {\n          resolve([\n            { id: 1, name: \"田中 太郎\",  email: \"tanaka@example.com\" },\n            { id: 2, name: \"佐藤 花子\",  email: \"sato@example.com\"   },\n            { id: 3, name: \"鈴木 一郎\",  email: \"suzuki@example.com\" },\n          ]);\n        }, 800); // 0.8秒後にデータが返ってくる（API通信のシミュレーション）\n      });\n    }\n\n    // ① async関数を定義してください\n    // async function getUsers() {\n    //   try {\n    //     const users = await simulateFetch();\n    //     // ② #loading を非表示にする\n    //     // ③ usersをforEachでループして #userList に <li> を追加\n    //   } catch (error) {\n    //     // ④ エラー時の処理\n    //   }\n    // }\n\n    // ⑤ 関数を呼び出す\n    // getUsers();\n  </script>\n</body>\n</html>",
+        "content": "# 練習: GTM実装コードにコメントを追加する\n\nコメントが一切ないGTM関連のコードがあります。\n適切なコメントを追加して、チームメンバーが読んでも意図がわかるコードにしてください。\n\n## 課題\n\n1. 各コードブロックの冒頭に「何をしているか」「なぜ必要か」を `//` または `/* */` で書く\n2. 変数や条件分岐の横に補足コメントを追加する\n3. 画面下部のボタンを押すと、コメント付きコードが表示される確認機能を実装する",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>コメントの練習</title>\n  <style>\n    body { font-family: sans-serif; padding: 24px; background: #f9f9f9; }\n    .container { background: white; padding: 24px; border-radius: 8px; max-width: 600px; }\n    pre { background: #1e293b; color: #e2e8f0; padding: 16px; border-radius: 6px;\n          font-size: 13px; white-space: pre-wrap; overflow-x: auto; }\n    button { background: #2563eb; color: white; padding: 10px 20px;\n             border: none; border-radius: 6px; font-size: 14px; cursor: pointer; margin-top: 12px; }\n    #result { margin-top: 16px; display: none; }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <h1>コメント追加チャレンジ</h1>\n    <p>以下のコードに適切なコメントを追加してください。</p>\n\n    <pre id=\"codeBlock\"></pre>\n    <button id=\"showBtn\">コメント付きコードを確認</button>\n    <div id=\"result\"><pre id=\"resultCode\"></pre></div>\n  </div>\n\n  <script>\n    // --- コメントなしのコード（課題の対象）---\n    window.dataLayer = window.dataLayer || [];\n\n    function getUtmSource() {\n      var params = new URLSearchParams(window.location.search);\n      return params.get('utm_source') || '(direct)';\n    }\n\n    var threshold = 10000;\n    var cartValue = 12500;\n\n    if (cartValue >= threshold) {\n      dataLayer.push({\n        event: 'high_value_cart',\n        cart_value: cartValue\n      });\n    }\n\n    // --- ここから課題 ---\n    // 上のコードブロックにコメントを追加したバージョンを\n    // commentedCode 変数にテンプレートリテラルで書いてください\n\n    // const commentedCode = `\n    //   ここにコメント付きコードを書く\n    // `;\n\n\n    // 元のコードを表示\n    var originalCode = 'window.dataLayer = window.dataLayer || [];\\n\\n'\n      + 'function getUtmSource() {\\n'\n      + '  var params = new URLSearchParams(window.location.search);\\n'\n      + '  return params.get(\\'utm_source\\') || \\'(direct)\\';\\n'\n      + '}\\n\\n'\n      + 'var threshold = 10000;\\n'\n      + 'var cartValue = 12500;\\n\\n'\n      + 'if (cartValue >= threshold) {\\n'\n      + '  dataLayer.push({\\n'\n      + '    event: \\'high_value_cart\\',\\n'\n      + '    cart_value: cartValue\\n'\n      + '  });\\n'\n      + '}';\n\n    document.querySelector('#codeBlock').textContent = originalCode;\n\n    // ボタンクリックで結果を表示\n    // document.querySelector('#showBtn').addEventListener('click', function() {\n    //   document.querySelector('#result').style.display = 'block';\n    //   document.querySelector('#resultCode').textContent = commentedCode;\n    // });\n  </script>\n</body>\n</html>",
         "hints": [
-          "`async function getUsers() { ... }` と定義し、中で `const users = await simulateFetch();` と書きます。`await` をつけると「データが返ってくるまで待つ」動作になります。",
-          "`document.querySelector(\"#loading\").style.display = \"none\"` で読み込み表示を消せます。`users.forEach(user => { ... })` でループします。",
-          "`const li = document.createElement(\"li\"); li.textContent = user.name; document.querySelector(\"#userList\").appendChild(li);` でリスト要素を追加できます。`catch (error) { console.error(error); }` でエラーをConsoleに表示します。"
+          "コメントは「なぜそのコードが必要か」を書きましょう。例: `// dataLayerの初期化（GTMスニペットより前に実行する必要がある）`",
+          "`getUtmSource` 関数には「GA4のトラフィックソース分析で使用」「URLにutm_sourceがない場合は (direct) を返す」などの意図を書きます。",
+          "`threshold` には「送料無料の閾値」や「高額カートのカスタムイベント発火条件」など、ビジネス上の意味をコメントします。"
         ],
-        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>非同期処理の練習</title>\n</head>\n<body>\n  <h1>ユーザー一覧</h1>\n  <div id=\"loading\">読み込み中...</div>\n  <ul id=\"userList\"></ul>\n\n  <script>\n    function simulateFetch() {\n      return new Promise(resolve => {\n        setTimeout(() => {\n          resolve([\n            { id: 1, name: \"田中 太郎\",  email: \"tanaka@example.com\" },\n            { id: 2, name: \"佐藤 花子\",  email: \"sato@example.com\"   },\n            { id: 3, name: \"鈴木 一郎\",  email: \"suzuki@example.com\" },\n          ]);\n        }, 800);\n      });\n    }\n\n    async function getUsers() {\n      try {\n        const users = await simulateFetch();\n\n        document.querySelector(\"#loading\").style.display = \"none\";\n\n        const list = document.querySelector(\"#userList\");\n        users.forEach(user => {\n          const li = document.createElement(\"li\");\n          li.textContent = user.name + \" (\" + user.email + \")\";\n          list.appendChild(li);\n        });\n      } catch (error) {\n        document.querySelector(\"#loading\").textContent = \"読み込みに失敗しました\";\n        console.error(\"エラー:\", error);\n      }\n    }\n\n    getUsers();\n  </script>\n</body>\n</html>"
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>コメントの練習</title>\n  <style>\n    body { font-family: sans-serif; padding: 24px; background: #f9f9f9; }\n    .container { background: white; padding: 24px; border-radius: 8px; max-width: 600px; }\n    pre { background: #1e293b; color: #e2e8f0; padding: 16px; border-radius: 6px;\n          font-size: 13px; white-space: pre-wrap; overflow-x: auto; }\n    button { background: #2563eb; color: white; padding: 10px 20px;\n             border: none; border-radius: 6px; font-size: 14px; cursor: pointer; margin-top: 12px; }\n    #result { margin-top: 16px; display: none; }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <h1>コメント追加チャレンジ</h1>\n    <p>以下のコードに適切なコメントを追加してください。</p>\n\n    <pre id=\"codeBlock\"></pre>\n    <button id=\"showBtn\">コメント付きコードを確認</button>\n    <div id=\"result\"><pre id=\"resultCode\"></pre></div>\n  </div>\n\n  <script>\n    window.dataLayer = window.dataLayer || [];\n\n    function getUtmSource() {\n      var params = new URLSearchParams(window.location.search);\n      return params.get('utm_source') || '(direct)';\n    }\n\n    var threshold = 10000;\n    var cartValue = 12500;\n\n    if (cartValue >= threshold) {\n      dataLayer.push({\n        event: 'high_value_cart',\n        cart_value: cartValue\n      });\n    }\n\n    // コメント付きバージョン\n    const commentedCode = `// dataLayerの初期化\n// GTMスニペットより前に記述する。既に初期化済みなら何もしない。\nwindow.dataLayer = window.dataLayer || [];\n\n/*\n  UTMソース取得関数\n  - URLの utm_source パラメータを返す\n  - パラメータがない場合は \"(direct)\" を返す\n  - 用途: GA4カスタムイベントの流入元判定に使用\n*/\nfunction getUtmSource() {\n  var params = new URLSearchParams(window.location.search);\n  return params.get('utm_source') || '(direct)'; // 未設定時はdirect扱い\n}\n\n// 高額カート判定の閾値（税込10,000円以上で発火）\n// ビジネス要件: 高額カートユーザーにリターゲティング広告を配信するため\nvar threshold = 10000;\nvar cartValue = 12500; // 実際はカートAPIから動的に取得する\n\n// カート金額が閾値以上の場合、カスタムイベントをGA4に送信\nif (cartValue >= threshold) {\n  dataLayer.push({\n    event: 'high_value_cart',   // GTMトリガー: カスタムイベント名\n    cart_value: cartValue        // GA4イベントパラメータ: カート金額\n  });\n}`;\n\n    // 元のコードを表示\n    var originalCode = 'window.dataLayer = window.dataLayer || [];\\n\\n'\n      + 'function getUtmSource() {\\n'\n      + '  var params = new URLSearchParams(window.location.search);\\n'\n      + '  return params.get(\\'utm_source\\') || \\'(direct)\\';\\n'\n      + '}\\n\\n'\n      + 'var threshold = 10000;\\n'\n      + 'var cartValue = 12500;\\n\\n'\n      + 'if (cartValue >= threshold) {\\n'\n      + '  dataLayer.push({\\n'\n      + '    event: \\'high_value_cart\\',\\n'\n      + '    cart_value: cartValue\\n'\n      + '  });\\n'\n      + '}';\n\n    document.querySelector('#codeBlock').textContent = originalCode;\n\n    document.querySelector('#showBtn').addEventListener('click', function() {\n      document.querySelector('#result').style.display = 'block';\n      document.querySelector('#resultCode').textContent = commentedCode;\n    });\n  </script>\n</body>\n</html>"
       }
     },
     {
@@ -36,37 +36,37 @@
       "data": {
         "questions": [
           {
-            "q": "APIの説明として最も適切なのはどれですか？",
+            "q": "JavaScriptの1行コメントの書き方として正しいのはどれですか？",
             "options": [
-              "Webページのデザインを管理するシステムのこと",
-              "異なるシステム間でデータをやり取りするための窓口・規約",
-              "GoogleのAI機能を指す専門用語",
-              "HTMLとCSSを自動生成するツール"
-            ],
-            "correct": 1,
-            "explanation": "API（Application Programming Interface）は「アプリケーション同士がデータをやり取りするための窓口」です。GA4 Data APIを使えばGA4のデータをプログラムから取得でき、Google Ads APIを使えば広告データを自動で処理できます。マーケティングツールのほぼ全てがAPIを提供しています。"
-          },
-          {
-            "q": "`async/await` を使う主な目的はどれですか？",
-            "options": [
-              "コードを高速化するための最適化手法",
-              "非同期処理（時間のかかる処理）を同期処理のように読みやすく書くための書き方",
-              "データを暗号化して安全に送信するための仕組み",
-              "複数のHTMLページを1つにまとめる機能"
-            ],
-            "correct": 1,
-            "explanation": "`async/await` はAPIへのリクエストなど「時間のかかる非同期処理」を、上から下へ順番に実行されるように見える形で書けるようにする構文です。内部はPromiseという非同期の仕組みを使っていますが、`.then().then()` の連鎖より格段に読みやすくなります。"
-          },
-          {
-            "q": "GA4 Data APIを使うと何ができますか？",
-            "options": [
-              "GA4の管理画面のUIをカスタマイズできる",
-              "GA4のトラッキングコードを自動でサイトに設置できる",
-              "GA4のレポートデータをプログラムから自動取得して、独自ダッシュボードや自動レポートに活用できる",
-              "GA4の課金プランを変更できる"
+              "<!-- コメント -->",
+              "# コメント",
+              "// コメント",
+              "** コメント **"
             ],
             "correct": 2,
-            "explanation": "GA4 Data APIを使うと、GA4管理画面を手動で操作しなくても、セッション数・コンバージョン数・収益などのデータをプログラムから自動取得できます。Looker StudioのGA4コネクタもこのAPIを使っており、スプレッドシートへの自動レポート出力やBigQueryへのデータ連携に活用されています。"
+            "explanation": "JavaScriptの1行コメントは `//` で始めます。`<!-- -->` はHTMLのコメント、`#` はPythonやシェルスクリプトのコメントです。GTMのカスタムHTMLタグ内では、HTMLコメント `<!-- -->` とJSコメント `//` の両方を使う場面があるので、混同しないよう注意しましょう。"
+          },
+          {
+            "q": "コメントの書き方として最も適切なのはどれですか？",
+            "options": [
+              "// priceとquantityを掛け算する\nconst total = price * quantity;",
+              "// GA4のvalueパラメータ用。税込・送料別の合計金額\nconst total = price * quantity;",
+              "// total\nconst total = price * quantity;",
+              "コメントは不要。コードだけで十分伝わる"
+            ],
+            "correct": 1,
+            "explanation": "良いコメントは「なぜそうしたか」「何に使うか」を説明します。「priceとquantityを掛ける」はコードを読めばわかるので冗長です。一方「GA4のvalueパラメータ用、税込・送料別」という情報はコードだけでは読み取れないため、有用なコメントです。"
+          },
+          {
+            "q": "複数行コメント `/* ... */` の説明として正しいのはどれですか？",
+            "options": [
+              "1行にしか使えない",
+              "/* で始まり */ で終わる範囲がすべてコメントになり、複数行の説明やコードの一時無効化に使う",
+              "HTMLファイル内でしか使えないJavaScript専用構文",
+              "/* の後に必ずスペースを入れないとエラーになる"
+            ],
+            "correct": 1,
+            "explanation": "`/* */` は複数行にまたがるコメントに使います。関数やイベント実装の冒頭に「目的・変更履歴・担当者」などをまとめて書くときに便利です。また、デバッグ時にコードの一部を一時的に無効化する「コメントアウト」にも使われます。"
           }
         ]
       }
@@ -74,7 +74,7 @@
     {
       "type": "summary",
       "data": {
-        "content": "# モジュール3-7 完了！\n\n非同期処理とAPI通信という重要な概念を習得しました。\n\n## 習得したスキル\n\n✅ **同期 vs 非同期処理**の違いを理解した\n✅ **fetch()** でAPIからデータを取得する方法を把握した\n✅ **async/await** で非同期処理を読みやすく書けるようになった\n✅ **try/catch** でエラーハンドリングができるようになった\n✅ **APIレスポンス（JSON）** から必要な値を取り出せるようになった\n\n## 実務でここからできること\n\n- Looker StudioでGA4データを取得する仕組みが理解できる\n- 社内データ基盤へのGA4 API連携のコードが読めるようになる\n- Google Apps ScriptでGA4データを自動取得するスクリプトが書ける\n- マーケツールのWebhook設定でデータの流れを設計できる\n\n## 次のモジュールへ\n\n最後のモジュール **「3-8: JSの実務活用 — GTM・dataLayer・GA4イベント」** では、3-1〜3-7の全知識を統合して、実際のGA4 + GTM連携コードを書きます。\n\n> 💡 **実務チャレンジ**: Looker StudioでGA4データソースを追加するとき「GA4 Data API」という文字列が出てきます。これが今日学んだAPIを使っていることを確認してみてください。",
+        "content": "# モジュール3-7 完了！\n\nコメントの書き方と、チームに意図を伝えるドキュメンテーションを学びました。\n\n## 習得したスキル\n\n- `//` で1行コメント、`/* */` で複数行コメントを書ける\n- 「何をしているか」ではなく「なぜそうしたか」を伝えるコメントが書ける\n- GTMカスタムHTMLやカスタムJS変数に適切なコメントを残せる\n- コメントアウトでデバッグ時にコードを一時無効化できる\n\n## GTM実務でのベストプラクティス\n\n```js\n// GTMカスタムJavaScript変数: ログインステータス判定\n// Cookie \"user_token\" の有無でログイン/非ログインを判定\n// GA4のuser_propertiesで「会員/非会員」セグメント分析に使用\n// 最終更新: 2026/04 （Cookie名変更に伴い修正）\nfunction() {\n  return document.cookie.indexOf('user_token') !== -1\n    ? 'logged_in'\n    : 'guest';\n}\n```\n\nコメントは未来の自分とチームメンバーへのメッセージです。「読んでわかるコード」+「なぜを伝えるコメント」の組み合わせを心がけましょう。\n\n## 次のモジュールへ\n\n次は **「3-8: strictモードでバグを早期発見する」** です。`'use strict'` を使ってJavaScriptのよくあるバグを未然に防ぐ方法を学びます。",
         "diagram": false
       }
     }

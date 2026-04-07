@@ -2,7 +2,7 @@
   "id": "ga4--5-14",
   "moduleId": "5-14",
   "categoryId": "ga4",
-  "title": "リード獲得計測イベント：generate_lead設計",
+  "title": "リード獲得向け推奨イベント：generate_lead実装",
   "sections": [
     {
       "type": "intro",

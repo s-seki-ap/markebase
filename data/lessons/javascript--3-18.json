@@ -2,7 +2,7 @@
   "id": "javascript--3-18",
   "moduleId": "3-18",
   "categoryId": "javascript",
-  "title": "三項演算子でコンパクトな条件分岐を書く",
+  "title": "三項演算子でコンパクトな条件式を書く",
   "sections": [
     {
       "type": "intro",

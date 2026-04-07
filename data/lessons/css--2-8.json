@@ -2,7 +2,7 @@
   "id": "css--2-8",
   "moduleId": "2-8",
   "categoryId": "css",
-  "title": "初期値・計算値・使用値・実際値の4つの値概念",
+  "title": "初期値・計算値・使用値・実効値の4つの値概念",
   "sections": [
     {
       "type": "intro",
@@ -38,19 +38,34 @@
         "questions": [
           {
             "q": "DevToolsの「Computed」タブで確認できる値はどれですか？",
-            "options": ["初期値（CSSを何も書いていない場合のデフォルト値）", "計算値（rem・%などが実際のpxに変換された値）", "ソースコードに書いたCSSの値そのまま", "HTMLの属性値"],
+            "options": [
+              "初期値（CSSを何も書いていない場合のデフォルト値）",
+              "計算値（rem・%などが実際のpxに変換された値）",
+              "ソースコードに書いたCSSの値そのまま",
+              "HTMLの属性値"
+            ],
             "correct": 1,
             "explanation": "DevToolsのComputedタブには、remや%などの相対値が実際のpx値に変換された「計算値」が表示されます。Stylesタブには書いたCSSの値（指定値）が表示されるのと対照的です。"
           },
           {
             "q": "html要素のfont-sizeが16pxで、.parentのfont-sizeが1.5remのとき、.parentの中にある.childにfont-size: 2emを設定すると計算値は何pxになりますか？",
-            "options": ["32px", "48px", "24px", "16px"],
+            "options": [
+              "32px",
+              "48px",
+              "24px",
+              "16px"
+            ],
             "correct": 1,
             "explanation": ".parentのfont-size: 1.5rem = 16px × 1.5 = 24px。.childのfont-size: 2emは親(.parent)のfont-size(24px)を基準とするため、24px × 2 = 48pxになります。emはネストの影響を受けることに注意が必要です。"
           },
           {
             "q": "`initial` キーワードをCSSで使うと、その値はどうなりますか？",
-            "options": ["親要素の値を継承する", "ブラウザのUser Agent Stylesheetの値になる", "CSSの仕様で定められた初期値になる", "0またはnoneになる"],
+            "options": [
+              "親要素の値を継承する",
+              "ブラウザのUser Agent Stylesheetの値になる",
+              "CSSの仕様で定められた初期値になる",
+              "0またはnoneになる"
+            ],
             "correct": 2,
             "explanation": "`initial` はCSSの仕様で各プロパティに定められた初期値（initial value）に戻します。例えばfont-sizeのinitialは 'medium'、colorのinitialは 'canvastext' です。User Agent Stylesheetの値とは異なります。"
           }

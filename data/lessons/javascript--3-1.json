@@ -2,7 +2,7 @@
   "id": "javascript--3-1",
   "moduleId": "3-1",
   "categoryId": "javascript",
-  "title": "JSとは何か・開発者ツール",
+  "title": "JavaScriptとは何か・ブラウザでの動作原理",
   "sections": [
     {
       "type": "intro",

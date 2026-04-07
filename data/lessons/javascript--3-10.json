@@ -2,7 +2,7 @@
   "id": "javascript--3-10",
   "moduleId": "3-10",
   "categoryId": "javascript",
-  "title": "ES5構文でGTM互換JSを書く方法",
+  "title": "ES5構文でGTM互換のJSを書く",
   "sections": [
     {
       "type": "intro",

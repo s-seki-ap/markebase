@@ -2,33 +2,33 @@
   "id": "javascript--3-4",
   "moduleId": "3-4",
   "categoryId": "javascript",
-  "title": "関数とスコープ",
+  "title": "JSのデータ型：string・number・boolean・null・undefined",
   "sections": [
     {
       "type": "intro",
       "data": {
-        "content": "# GTMのカスタムJS変数は「関数」そのもの\n\nGTMで「カスタムJavaScript変数」を作ったことがある方は、次のようなコードを見たことがあるはずです。\n\n```js\nfunction() {\n  return window.location.pathname;\n}\n```\n\nこれが**関数（Function）**です。「処理をひとまとめにして名前をつけたもの」です。\n\n## なぜ関数が重要か\n\n**GTMカスタムJS変数の全体が関数**\nGTMのカスタムJS変数は `function() { return 値; }` という形式で書きます。`return` は「この値を返す」という命令です。\n\n**処理の再利用**\n「URLからutm_sourceを取得する」処理を毎回書かずに、一度関数にしておけば何度でも呼び出せます。\n\n```js\n// ↓ この「getParam」という関数を一度作れば\nfunction getParam(name) {\n  const params = new URLSearchParams(window.location.search);\n  return params.get(name);\n}\n\n// ↓ 何度でも簡単に使える\ngetParam(\"utm_source\");   // → \"google\"\ngetParam(\"utm_medium\");   // → \"cpc\"\ngetParam(\"utm_campaign\"); // → \"summer_sale\"\n```\n\nこれがGTMのカスタムJS変数として設定されているコードの典型例です。今日はこれが書けるようになります。",
+        "content": "# GA4の計測ミスの多くは「型」の問題\n\nGA4にデータを送るとき、「数字のはずなのに文字列として送られている」「nullが入っている」といったトラブルが頻繁に起きます。これらはJavaScriptのデータ型を理解していれば防げる問題です。\n\n## よくある型ミスの例\n\n```js\n// NG: 売上金額が文字列として送られている\ngtag('event', 'purchase', { value: \"9800\" });  // ← \"9800\" は文字列！\n\n// OK: 数値として送る\ngtag('event', 'purchase', { value: 9800 });    // ← 9800 は数値\n```\n\nGA4の収益レポートでは `value` パラメータが数値型（number）であることが前提です。文字列型で送ると、収益データが正しく集計されないことがあります。\n\n## dataLayerの値も型が重要\n\nGTMのdataLayerに商品価格をpushするとき、ECサイトのHTMLから取得した値が文字列になっているケースがよくあります。\n\n```js\n// ECサイトのHTMLから取得した値（文字列になりがち）\nlet priceText = document.querySelector(\".price\").textContent;  // \"9,800円\"\n// ↑ これは文字列。このままGA4に送ると数値として集計されない\n```\n\n## typeof演算子でデバッグ\n\n前回学んだ `console.log()` と組み合わせて `typeof` を使えば、変数に入っているデータの型をその場で確認できます。",
         "diagram": false
       }
     },
     {
       "type": "concept",
       "data": {
-        "content": "# 関数の書き方とスコープ\n\n## 関数宣言の基本\n\n```js\n// function 関数名(引数) { 処理; return 戻り値; }\nfunction greet(name) {\n  return \"こんにちは、\" + name + \"さん\";\n}\n\n// 呼び出し\nconst message = greet(\"山田\");\nconsole.log(message);  // → \"こんにちは、山田さん\"\n```\n\n- **引数（ひきすう）**: 関数に渡す入力値。`name` の部分。\n- **戻り値（もどりち）**: `return` で返す出力値。\n\n## アロー関数（=> ）\n\nより短く書ける現代的な書き方です。GTMやGA4のサンプルコードでよく見かけます。\n\n```js\n// 通常の関数\nfunction add(a, b) {\n  return a + b;\n}\n\n// アロー関数（同じ意味）\nconst add = (a, b) => a + b;\n\nconsole.log(add(3, 5));  // → 8\n```\n\n## スコープ（変数の有効範囲）\n\n```js\nconst globalVar = \"グローバル\";  // どこからでもアクセス可能\n\nfunction checkScope() {\n  const localVar = \"ローカル\";  // この関数の中だけで有効\n  console.log(globalVar);   // → \"グローバル\" ← アクセスできる\n  console.log(localVar);    // → \"ローカル\"\n}\n\ncheckScope();\n// console.log(localVar);  // → エラー！関数の外からは見えない\n```\n\nGTMのカスタムJS変数内で宣言した変数は、その変数の外（他のタグや変数）からは見えません。これがスコープです。\n\n## URLパラメータ取得（実務頻出）\n\n```js\n// URLSearchParams: URLのクエリ文字列を解析するJSの機能\n// 例: https://example.com/?utm_source=google&utm_medium=cpc\n\nconst params = new URLSearchParams(window.location.search);\nconsole.log(params.get(\"utm_source\"));  // → \"google\"\nconsole.log(params.get(\"utm_medium\"));  // → \"cpc\"\n```",
-        "diagram": true
+        "content": "# JavaScriptの基本データ型\n\nJavaScriptには5つの基本的なデータ型（プリミティブ型）があります。\n\n## string（文字列）\n\nテキストデータ。シングルクォート `'` またはダブルクォート `\"` で囲みます。\n\n```js\nlet pageName = \"トップページ\";\nlet utmSource = 'google';\nlet message = `こんにちは`;  // バッククォート（テンプレートリテラル）もOK\n\nconsole.log(typeof pageName);  // → \"string\"\n```\n\n**GA4での例**: ページタイトル、イベント名、UTMパラメータなど。\n\n## number（数値）\n\n整数も小数もすべて number 型です。クォートで囲みません。\n\n```js\nlet price = 9800;           // 整数\nlet conversionRate = 0.032; // 小数\nlet negative = -500;        // 負の数\n\nconsole.log(typeof price);  // → \"number\"\n```\n\n**GA4での例**: value（売上金額）、price（商品価格）、quantity（数量）など。\n\n## boolean（真偽値）\n\n`true` または `false` のどちらかのみ。条件分岐の結果がbooleanです。\n\n```js\nlet isLoggedIn = true;\nlet hasConverted = false;\n\nconsole.log(typeof isLoggedIn);  // → \"boolean\"\n\n// 比較の結果もboolean\nconsole.log(100 > 50);   // → true\nconsole.log(\"a\" === \"b\"); // → false\n```\n\n**GA4での例**: ユーザープロパティ「会員かどうか」をtrue/falseで管理。\n\n## null（値が存在しない）\n\n「値が意図的にない」ことを示します。「空っぽの箱」のイメージです。\n\n```js\nlet userId = null;  // まだログインしていないのでユーザーIDがない\n\nconsole.log(typeof null);  // → \"object\"（JSの歴史的なバグ！）\nconsole.log(userId === null);  // → true（nullの判定はこちらを使う）\n```\n\n注意: `typeof null` は `\"object\"` を返します。これはJavaScriptの有名なバグですが、仕様として残っています。null判定には `=== null` を使いましょう。\n\n## undefined（未定義）\n\n「変数が宣言されたが値が代入されていない」状態です。\n\n```js\nlet campaignName;  // 値を代入していない\nconsole.log(campaignName);         // → undefined\nconsole.log(typeof campaignName);  // → \"undefined\"\n```\n\n**nullとundefinedの違い**\n\n| | null | undefined |\n|---|------|----------|\n| 意味 | 意図的に「値なし」を設定 | 値がまだ設定されていない |\n| typeof | \"object\"（バグ） | \"undefined\" |\n| 発生場面 | 開発者が明示的に代入 | 変数宣言のみで代入なし |\n| GA4での例 | ログアウト時のuserId | 未設定のカスタムディメンション |\n\n## typeof演算子まとめ\n\n```js\nconsole.log(typeof \"hello\");     // → \"string\"\nconsole.log(typeof 42);          // → \"number\"\nconsole.log(typeof true);        // → \"boolean\"\nconsole.log(typeof null);        // → \"object\"（要注意！）\nconsole.log(typeof undefined);   // → \"undefined\"\n```",
+        "diagram": false
       }
     },
     {
       "type": "exercise",
       "data": {
-        "content": "# 練習: UTMパラメータ取得関数を作る\n\nGTMのカスタムJS変数として実際に使えるコードを書きましょう。\nURLのクエリパラメータ（`?utm_source=google` の部分）を取得する関数を作成してください。\n\n## 課題\n\n1. `getParam(paramName)` という関数を作成する\n   - 引数 `paramName` に `\"utm_source\"` などのパラメータ名を渡す\n   - URLSearchParamsで値を取得して `return` する\n   - 値がない場合は `\"(none)\"` を返す\n\n2. 以下のテストURLで動作確認する（演習用にURLを上書きしています）\n   - `utm_source` → `\"google\"`\n   - `utm_medium` → `\"cpc\"`\n   - 存在しないパラメータ → `\"(none)\"`\n\n> 💡 このコードはほぼそのままGTMのカスタムJS変数に貼り付けて使えます。",
-        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>関数の練習</title>\n</head>\n<body>\n  <h1>UTMパラメータ取得関数</h1>\n\n  <script>\n    // 演習用: URLパラメータをシミュレート\n    // ※実際のブラウザURLの代わりに使用\n    const testSearch = \"?utm_source=google&utm_medium=cpc&utm_campaign=summer_sale\";\n\n    // ① getParam関数を定義してください\n    // 引数: paramName（取得したいパラメータ名）\n    // 戻り値: パラメータの値。なければ \"(none)\"\n    function getParam(paramName) {\n      // URLSearchParams を使って testSearch を解析\n      // ヒント: new URLSearchParams(testSearch)\n      \n\n      // 値がなければ \"(none)\" を return\n      \n    }\n\n    // ② 以下で動作確認（変更不要）\n    console.log(\"utm_source: \" + getParam(\"utm_source\"));\n    console.log(\"utm_medium: \" + getParam(\"utm_medium\"));\n    console.log(\"utm_campaign: \" + getParam(\"utm_campaign\"));\n    console.log(\"存在しない: \" + getParam(\"utm_content\"));\n  </script>\n</body>\n</html>",
+        "content": "# 練習: GA4イベントパラメータの型チェッカーを作る\n\nGA4に送信するイベントパラメータの型が正しいかどうかをチェックするツールを作ってみましょう。\n\n## 課題\n\n1. 各パラメータの `typeof` を確認して、期待する型と合っているかチェックする\n2. 型が正しければ「OK」、間違っていれば「NG」と表示する\n3. `value` が文字列になっているバグを発見して修正する\n4. null と undefined の違いを typeof で確認する",
+        "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>データ型チェッカー</title>\n  <style>\n    body { font-family: sans-serif; padding: 20px; }\n    .ok { color: #16a34a; font-weight: bold; }\n    .ng { color: #dc2626; font-weight: bold; }\n    .result { padding: 8px 0; border-bottom: 1px solid #eee; font-family: monospace; }\n  </style>\n</head>\n<body>\n  <h1>GA4パラメータ型チェッカー</h1>\n  <div id=\"results\"></div>\n\n  <script>\n    const resultsEl = document.querySelector(\"#results\");\n\n    function checkType(name, value, expectedType) {\n      const actualType = typeof value;\n      const isOk = actualType === expectedType;\n      const div = document.createElement(\"div\");\n      div.className = \"result\";\n      div.innerHTML = '<span class=\"' + (isOk ? 'ok' : 'ng') + '\">' +\n        (isOk ? 'OK' : 'NG') + '</span> ' +\n        name + ': ' + JSON.stringify(value) + ' (typeof: \"' + actualType + '\"' +\n        (isOk ? '' : ' ← 期待: \"' + expectedType + '\"') + ')';\n      resultsEl.appendChild(div);\n    }\n\n    // GA4 purchase イベントのパラメータ（一部にバグあり！）\n    const eventName = \"purchase\";\n    const transactionId = \"T-12345\";\n    const value = \"9800\";          // ← この型は正しい？\n    const currency = \"JPY\";\n    const isFirstPurchase = true;\n    const couponCode = null;\n    let memberRank;                 // 未設定\n\n    // ① 各パラメータの型をチェック\n    // checkType(\"event_name\", eventName, \"string\");\n    // checkType(\"transaction_id\", ..., ...);\n    // checkType(\"value\", ..., \"number\");        // ← 数値であるべき！\n    // checkType(\"currency\", ..., ...);\n    // checkType(\"is_first_purchase\", ..., \"boolean\");\n\n    // ② null と undefined の typeof を確認\n    // console.log(\"couponCode の typeof:\", typeof couponCode);\n    // console.log(\"memberRank の typeof:\", typeof memberRank);\n\n    // ③ value のバグを修正（文字列→数値に変換）\n    // const fixedValue = ...;\n    // checkType(\"value(修正後)\", fixedValue, \"number\");\n\n  </script>\n</body>\n</html>",
         "hints": [
-          "関数は `function getParam(paramName) { 処理; return 値; }` の形で定義します。GTMのカスタムJS変数も `function() { return 値; }` という同じ形式です。",
-          "`new URLSearchParams(testSearch)` でパラメータを解析できます。`.get(\"utm_source\")` のように `.get(パラメータ名)` で値を取得します。値がなければnullが返ります。",
-          "`params.get(paramName)` の結果がnullの場合は `\"(none)\"` を返します。`return params.get(paramName) || \"(none)\"` と書くと、nullやundefinedの場合に `\"(none)\"` を返すシンプルな書き方になります。"
+          "`checkType(パラメータ名, 値, 期待する型)` を呼び出すだけでOKです。例: `checkType(\"currency\", currency, \"string\");`",
+          "`typeof null` は `\"object\"` を返します。nullの判定には `=== null` を使いましょう。`typeof undefined` は `\"undefined\"` です。",
+          "文字列の `\"9800\"` を数値に変換するには `Number(\"9800\")` を使います。結果は数値型の `9800` になります。次のモジュールで型変換を詳しく学びます。"
         ],
-        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>関数の練習</title>\n</head>\n<body>\n  <h1>UTMパラメータ取得関数</h1>\n\n  <script>\n    // 演習用: URLパラメータをシミュレート\n    const testSearch = \"?utm_source=google&utm_medium=cpc&utm_campaign=summer_sale\";\n\n    // getParam関数\n    function getParam(paramName) {\n      const params = new URLSearchParams(testSearch);\n      return params.get(paramName) || \"(none)\";\n    }\n\n    // 動作確認\n    console.log(\"utm_source: \" + getParam(\"utm_source\"));    // → google\n    console.log(\"utm_medium: \" + getParam(\"utm_medium\"));    // → cpc\n    console.log(\"utm_campaign: \" + getParam(\"utm_campaign\")); // → summer_sale\n    console.log(\"存在しない: \" + getParam(\"utm_content\"));   // → (none)\n  </script>\n</body>\n</html>"
+        "answer": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>データ型チェッカー</title>\n  <style>\n    body { font-family: sans-serif; padding: 20px; }\n    .ok { color: #16a34a; font-weight: bold; }\n    .ng { color: #dc2626; font-weight: bold; }\n    .result { padding: 8px 0; border-bottom: 1px solid #eee; font-family: monospace; }\n  </style>\n</head>\n<body>\n  <h1>GA4パラメータ型チェッカー</h1>\n  <div id=\"results\"></div>\n\n  <script>\n    const resultsEl = document.querySelector(\"#results\");\n\n    function checkType(name, value, expectedType) {\n      const actualType = typeof value;\n      const isOk = actualType === expectedType;\n      const div = document.createElement(\"div\");\n      div.className = \"result\";\n      div.innerHTML = '<span class=\"' + (isOk ? 'ok' : 'ng') + '\">' +\n        (isOk ? 'OK' : 'NG') + '</span> ' +\n        name + ': ' + JSON.stringify(value) + ' (typeof: \"' + actualType + '\"' +\n        (isOk ? '' : ' ← 期待: \"' + expectedType + '\"') + ')';\n      resultsEl.appendChild(div);\n    }\n\n    // GA4 purchase イベントのパラメータ\n    const eventName = \"purchase\";\n    const transactionId = \"T-12345\";\n    const value = \"9800\";          // バグ: 文字列になっている\n    const currency = \"JPY\";\n    const isFirstPurchase = true;\n    const couponCode = null;\n    let memberRank;                 // 未設定\n\n    // ① 各パラメータの型をチェック\n    checkType(\"event_name\", eventName, \"string\");\n    checkType(\"transaction_id\", transactionId, \"string\");\n    checkType(\"value\", value, \"number\");  // NG! 文字列になっている\n    checkType(\"currency\", currency, \"string\");\n    checkType(\"is_first_purchase\", isFirstPurchase, \"boolean\");\n\n    // ② null と undefined の typeof を確認\n    console.log(\"couponCode の typeof:\", typeof couponCode);   // → \"object\"\n    console.log(\"memberRank の typeof:\", typeof memberRank);   // → \"undefined\"\n    console.log(\"couponCode === null:\", couponCode === null);   // → true\n\n    // ③ value のバグを修正\n    const fixedValue = Number(value);  // \"9800\" → 9800\n    checkType(\"value(修正後)\", fixedValue, \"number\");  // OK!\n  </script>\n</body>\n</html>"
       }
     },
     {
@@ -36,37 +36,37 @@
       "data": {
         "questions": [
           {
-            "q": "以下の関数の戻り値は何ですか？\n`function calcCPA(cost, cv) { return cost / cv; }`\n`calcCPA(100000, 25)` を呼び出した場合",
+            "q": "GA4のpurchaseイベントで `value: \"9800\"` と送信した場合、何が起きますか？",
             "options": [
-              "100000",
-              "25",
-              "4000",
-              "undefined"
-            ],
-            "correct": 2,
-            "explanation": "`cost` に100000、`cv` に25が渡されるので、`100000 / 25 = 4000` が返ります。このようにCPA・CPCなどの指標計算を関数にしておくと、GTMのカスタムJS変数として再利用できます。"
-          },
-          {
-            "q": "アロー関数 `const double = (n) => n * 2;` を呼び出した `double(7)` の結果はどれですか？",
-            "options": [
-              "7",
-              "2",
-              "14",
-              "エラーになる"
-            ],
-            "correct": 2,
-            "explanation": "`(n) => n * 2` は `function(n) { return n * 2; }` と同じ意味です。`double(7)` は `7 * 2 = 14` を返します。アロー関数はGA4やGTMのドキュメントのサンプルコードでよく使われる書き方です。"
-          },
-          {
-            "q": "GTMの「カスタムJavaScript変数」で正しいコードの形式はどれですか？",
-            "options": [
-              "`let value = window.location.pathname;`",
-              "`function() { return window.location.pathname; }`",
-              "`console.log(window.location.pathname);`",
-              "`if (window.location.pathname) { return true; }`"
+              "問題なく収益レポートに集計される",
+              "文字列型のため収益レポートに正しく集計されない可能性がある",
+              "GA4がエラーを返して送信に失敗する",
+              "自動的に数値型に変換されるので問題ない"
             ],
             "correct": 1,
-            "explanation": "GTMのカスタムJavaScript変数は必ず `function() { return 値; }` という形式で書く必要があります。変数に値を代入するだけではGTMに値が渡らず、`return` で値を返す関数の形式にする必要があります。これがJavaScriptの「関数の戻り値」の実務活用の典型例です。"
+            "explanation": "GA4のvalueパラメータは数値型で送る必要があります。文字列型の `\"9800\"` で送信すると、収益レポートに集計されないことがあります。ECサイトのHTMLから価格を取得するとき、文字列になっていることが多いので `Number()` で数値に変換してから送りましょう。"
+          },
+          {
+            "q": "`typeof null` の結果として正しいのはどれですか？",
+            "options": [
+              "\"null\"",
+              "\"undefined\"",
+              "\"object\"",
+              "\"boolean\""
+            ],
+            "correct": 2,
+            "explanation": "`typeof null` は `\"object\"` を返します。これはJavaScript初期からのバグで、現在も仕様として残っています。nullかどうかを判定するときは `typeof` ではなく `=== null` を使います。GA4のパラメータにnullが入っていないかチェックするとき、この知識が必要です。"
+          },
+          {
+            "q": "以下の変数のうち、`typeof` の結果が `\"undefined\"` になるのはどれですか？",
+            "options": [
+              "let x = null;",
+              "let x = \"\";",
+              "let x = 0;",
+              "let x;"
+            ],
+            "correct": 3,
+            "explanation": "`let x;` は変数を宣言しただけで値を代入していないため、`typeof x` は `\"undefined\"` になります。`null` は `\"object\"`、空文字列 `\"\"` は `\"string\"`、`0` は `\"number\"` です。GA4のカスタムディメンションが未設定のとき、この `undefined` が送られることがあります。"
           }
         ]
       }
@@ -74,7 +74,7 @@
     {
       "type": "summary",
       "data": {
-        "content": "# モジュール3-4 完了！\n\n関数という概念を習得し、GTMのカスタムJS変数と直接つながりました。\n\n## 習得したスキル\n\n✅ **function宣言**で処理をまとめて再利用できるようになった\n✅ **引数と戻り値**の概念を理解した\n✅ **アロー関数（=>）**の書き方を把握した\n✅ **URLSearchParams**でUTMパラメータを取得できるようになった\n✅ **GTMのカスタムJS変数が関数である**ことを完全に理解した\n\n## ここまでで何ができるようになったか\n\nモジュール3-1〜3-4を通して、次のことができるようになりました:\n\n- 開発者ツール(F12)でJSのエラーや`console.log`出力を確認できる\n- GTMのカスタムJSコードを読んで意味がわかる\n- URLパラメータを取得する関数をGTMに設定できる\n- GA4のイベントパラメータの型ミスを自力で発見できる\n\n## 次のカテゴリへ\n\n**「3-5: dataLayerへのpush」** では、ここまでの知識を総動員して、実際のGA4 + GTM連携コードを書きます。`dataLayer.push()` でカスタムイベントを送信する実装を体験しましょう。\n\n> 💡 **実務チャレンジ**: GTMのカスタムJS変数を一つ開いて、`function() { return ... }` の部分が今日学んだ「関数」であることを確認してみましょう。`return` の後に何が書いてあるか読んでみてください。",
+        "content": "# モジュール3-4 完了！\n\nJavaScriptの基本データ型とtypeof演算子を使ったデバッグ方法を習得しました。\n\n## 習得したスキル\n\n- **string / number / boolean / null / undefined** の5つの基本型を理解した\n- **typeof演算子** で変数のデータ型を確認できるようになった\n- **typeof null が \"object\" を返す**という罠を知った\n- **GA4パラメータの型ミス**を発見・修正できる視点を得た\n\n## 5つの型クイックリファレンス\n\n| 型 | typeof結果 | GA4での例 |\n|---|---|---|\n| string | \"string\" | ページタイトル、UTMパラメータ |\n| number | \"number\" | 売上金額、商品価格 |\n| boolean | \"boolean\" | 会員フラグ、初回購入フラグ |\n| null | \"object\" | 未ログイン時のuserId |\n| undefined | \"undefined\" | 未設定のカスタムディメンション |\n\n## 次のモジュールへ\n\n次は **「3-5: 暗黙の型変換と明示的型変換」** です。`==` と `===` の違い、`Number()` や `String()` による型変換を学びます。ECサイトの価格を文字列から数値に変換するなど、実務で頻出するテクニックです。\n\n> 実務チャレンジ: GA4のDebugViewを開いて、任意のイベントのパラメータを確認してみましょう。value パラメータが数値型になっているか、文字列型になっていないかをチェックしてみてください。",
         "diagram": false
       }
     }

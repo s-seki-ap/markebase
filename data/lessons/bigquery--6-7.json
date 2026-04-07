@@ -2,7 +2,7 @@
   "id": "bigquery--6-7",
   "moduleId": "6-7",
   "categoryId": "bigquery",
-  "title": "DISTINCT：重複を除いてユニークな値を取得",
+  "title": "DISTINCT：重複を除いたユニークな値を取得",
   "sections": [
     {
       "type": "intro",

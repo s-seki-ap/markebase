@@ -2,7 +2,7 @@
   "id": "seo--4-5",
   "moduleId": "4-5",
   "categoryId": "seo",
-  "title": "SERPの構成：オーガニック・広告・リッチリザルト",
+  "title": "SERPの構造：オーガニック・広告・リッチリザルト",
   "sections": [
     {
       "type": "intro",
@@ -49,13 +49,23 @@
           },
           {
             "q": "FAQリッチリザルトを実装するために使用するSchema.orgの@typeは何ですか？",
-            "options": ["Article", "FAQPage", "HowTo", "WebPage"],
+            "options": [
+              "Article",
+              "FAQPage",
+              "HowTo",
+              "WebPage"
+            ],
             "correct": 1,
             "explanation": "`FAQPage` タイプを使うことで、Google検索でFAQリッチリザルト（質問と回答が展開表示される）の対象になります。mainEntityに複数のQuestionオブジェクトを配列で指定します。"
           },
           {
             "q": "オーガニック検索1位のCTR（クリック率）の目安として最も近いものはどれですか？",
-            "options": ["約5%", "約15%", "約28%", "約50%"],
+            "options": [
+              "約5%",
+              "約15%",
+              "約28%",
+              "約50%"
+            ],
             "correct": 2,
             "explanation": "オーガニック検索1位のCTRは平均約28%と言われています（キーワードや業界により変動あり）。2位は約15%、3位は約11%と急落するため、1位と2位の差は大きく、1位獲得の価値は非常に高いです。"
           }

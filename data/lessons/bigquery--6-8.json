@@ -2,7 +2,7 @@
   "id": "bigquery--6-8",
   "moduleId": "6-8",
   "categoryId": "bigquery",
-  "title": "ASエイリアス：列名とテーブル名を読みやすく変換",
+  "title": "AS別名：列名とテーブル名を読みやすく変換",
   "sections": [
     {
       "type": "intro",
