@@ -6,6 +6,7 @@ import Image from "next/image";
 import { getUser, getUserProgress, getWeeklyCompletedCount, getRecentModules, getLeaderboard } from "@/lib/progress";
 import { getCategories, isModuleAvailable } from "@/lib/curriculum";
 import SkillRadar from "@/components/SkillRadar";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const isDevBypass = !process.env.GOOGLE_CLIENT_ID;
 const TOTAL_MODULES = 47;
@@ -120,28 +121,29 @@ export default async function Home() {
     : 100;
 
   return (
-    <main className="min-h-screen p-8" style={{ backgroundColor: "#0f172a" }}>
+    <main className="min-h-screen p-8" style={{ backgroundColor: "var(--color-page)" }}>
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-12">
           <div className="flex items-center gap-3">
             <div
-              className="w-10 h-10 rounded-xl flex items-center justify-center text-white text-xl font-bold"
-              style={{ backgroundColor: "#3b82f6" }}
+              className="w-10 h-10 rounded-xl flex items-center justify-center text-xl font-bold"
+              style={{ backgroundColor: "var(--color-blue)", color: "#ffffff" }}
             >
               M
             </div>
-            <span className="text-xl font-bold text-white">MarkeBase</span>
+            <span className="text-xl font-bold" style={{ color: "var(--color-text-heading)" }}>MarkeBase</span>
           </div>
           <div className="flex items-center gap-3">
+            <ThemeToggle />
             {streak > 0 && (
-              <span className="text-sm px-3 py-1 rounded-full" style={{ backgroundColor: "#f59e0b22", color: "#f59e0b" }}>
+              <span className="text-sm px-3 py-1 rounded-full" style={{ backgroundColor: "var(--color-orange-bg)", color: "var(--color-orange)" }}>
                 {streak}日連続
               </span>
             )}
             <div className="text-right">
-              <p className="text-sm text-white font-medium">{userName}</p>
-              {userEmail && <p className="text-xs text-slate-400">{userEmail}</p>}
+              <p className="text-sm font-medium" style={{ color: "var(--color-text-heading)" }}>{userName}</p>
+              {userEmail && <p className="text-xs" style={{ color: "var(--color-text-muted)" }}>{userEmail}</p>}
             </div>
             {userImage ? (
               <Image
@@ -153,8 +155,8 @@ export default async function Home() {
               />
             ) : (
               <div
-                className="w-9 h-9 rounded-full flex items-center justify-center text-white text-sm font-bold"
-                style={{ backgroundColor: "#475569" }}
+                className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold"
+                style={{ backgroundColor: "var(--color-border-strong)", color: "#ffffff" }}
               >
                 {userName[0]}
               </div>
@@ -164,15 +166,15 @@ export default async function Home() {
 
         {/* Welcome + Streak celebration */}
         <div className="mb-10">
-          <h1 className="text-3xl font-bold text-white mb-2">
+          <h1 className="text-3xl font-bold mb-2" style={{ color: "var(--color-text-heading)" }}>
             おかえりなさい、{userName.split(" ")[0]}さん
           </h1>
           {weeklyCount >= WEEKLY_GOAL ? (
-            <p style={{ color: "#10b981" }} className="font-medium">
+            <p style={{ color: "var(--color-green)" }} className="font-medium">
               今週の目標達成！素晴らしい！次の目標に挑戦しましょう。
             </p>
           ) : (
-            <p className="text-slate-400">
+            <p style={{ color: "var(--color-text-muted)" }}>
               学習を続けましょう。今日も1モジュール進めてみませんか？
             </p>
           )}
@@ -182,12 +184,12 @@ export default async function Home() {
         {streak >= 3 && (
           <div
             className="flex items-center gap-4 p-4 rounded-xl mb-6"
-            style={{ backgroundColor: "#f59e0b15", border: "1px solid #f59e0b33" }}
+            style={{ backgroundColor: "var(--color-orange-bg)", border: "1px solid var(--color-orange)" }}
           >
             <span className="text-3xl">{streak >= 7 ? "\uD83D\uDD25" : "\u2B50"}</span>
             <div>
-              <p className="text-white font-semibold">{streak}日連続学習中！</p>
-              <p className="text-slate-400 text-sm">
+              <p className="font-semibold" style={{ color: "var(--color-text-heading)" }}>{streak}日連続学習中！</p>
+              <p className="text-sm" style={{ color: "var(--color-text-muted)" }}>
                 {streak >= 7
                   ? "1週間以上の連続記録。この調子で続けましょう！"
                   : `あと${7 - streak}日で1週間達成です。`}
@@ -198,46 +200,46 @@ export default async function Home() {
 
         {/* Stats */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
-          <div className="p-5 rounded-xl" style={{ backgroundColor: "#1e293b" }}>
-            <p className="text-slate-400 text-sm mb-1">完了モジュール</p>
-            <p className="text-2xl font-bold text-white">
-              {completedCount} <span className="text-sm text-slate-500 font-normal">/ {TOTAL_MODULES}</span>
+          <div className="p-5 rounded-xl" style={{ backgroundColor: "var(--color-card)", boxShadow: "var(--color-card-shadow)" }}>
+            <p className="text-sm mb-1" style={{ color: "var(--color-text-muted)" }}>完了モジュール</p>
+            <p className="text-2xl font-bold" style={{ color: "var(--color-text-heading)" }}>
+              {completedCount} <span className="text-sm font-normal" style={{ color: "var(--color-text-disabled)" }}>/ {TOTAL_MODULES}</span>
             </p>
-            <div className="mt-2 h-1.5 rounded-full" style={{ backgroundColor: "#334155" }}>
+            <div className="mt-2 h-1.5 rounded-full" style={{ backgroundColor: "var(--color-border)" }}>
               <div
                 className="h-full rounded-full transition-all"
                 style={{
-                  backgroundColor: "#10b981",
+                  backgroundColor: "var(--color-green)",
                   width: `${Math.min((completedCount / TOTAL_MODULES) * 100, 100)}%`,
                 }}
               />
             </div>
           </div>
-          <div className="p-5 rounded-xl" style={{ backgroundColor: "#1e293b" }}>
-            <p className="text-slate-400 text-sm mb-1">獲得XP</p>
-            <p className="text-2xl font-bold" style={{ color: "#fbbf24" }}>{xp} XP</p>
+          <div className="p-5 rounded-xl" style={{ backgroundColor: "var(--color-card)", boxShadow: "var(--color-card-shadow)" }}>
+            <p className="text-sm mb-1" style={{ color: "var(--color-text-muted)" }}>獲得XP</p>
+            <p className="text-2xl font-bold" style={{ color: "var(--color-yellow)" }}>{xp} XP</p>
           </div>
-          <div className="p-5 rounded-xl" style={{ backgroundColor: "#1e293b" }}>
-            <p className="text-slate-400 text-sm mb-1">レベル</p>
-            <p className="text-2xl font-bold" style={{ color: "#10b981" }}>Lv. {level}</p>
-            <div className="mt-2 h-1.5 rounded-full" style={{ backgroundColor: "#334155" }}>
+          <div className="p-5 rounded-xl" style={{ backgroundColor: "var(--color-card)", boxShadow: "var(--color-card-shadow)" }}>
+            <p className="text-sm mb-1" style={{ color: "var(--color-text-muted)" }}>レベル</p>
+            <p className="text-2xl font-bold" style={{ color: "var(--color-green)" }}>Lv. {level}</p>
+            <div className="mt-2 h-1.5 rounded-full" style={{ backgroundColor: "var(--color-border)" }}>
               <div
                 className="h-full rounded-full transition-all"
-                style={{ backgroundColor: "#10b981", width: `${levelProgress}%` }}
+                style={{ backgroundColor: "var(--color-green)", width: `${levelProgress}%` }}
               />
             </div>
           </div>
-          <div className="p-5 rounded-xl" style={{ backgroundColor: "#1e293b" }}>
-            <p className="text-slate-400 text-sm mb-1">今週の目標</p>
-            <p className="text-2xl font-bold text-white">
-              {weeklyCount} <span className="text-sm text-slate-500 font-normal">/ {WEEKLY_GOAL}</span>
+          <div className="p-5 rounded-xl" style={{ backgroundColor: "var(--color-card)", boxShadow: "var(--color-card-shadow)" }}>
+            <p className="text-sm mb-1" style={{ color: "var(--color-text-muted)" }}>今週の目標</p>
+            <p className="text-2xl font-bold" style={{ color: "var(--color-text-heading)" }}>
+              {weeklyCount} <span className="text-sm font-normal" style={{ color: "var(--color-text-disabled)" }}>/ {WEEKLY_GOAL}</span>
             </p>
             <div className="mt-2 flex gap-1">
               {Array.from({ length: WEEKLY_GOAL }).map((_, i) => (
                 <div
                   key={i}
                   className="h-1.5 flex-1 rounded-full"
-                  style={{ backgroundColor: i < weeklyCount ? "#10b981" : "#334155" }}
+                  style={{ backgroundColor: i < weeklyCount ? "var(--color-green)" : "var(--color-border)" }}
                 />
               ))}
             </div>
@@ -246,9 +248,9 @@ export default async function Home() {
 
         {/* Skill radar */}
         {skillData.length > 0 && completedCount > 0 && (
-          <div className="mb-10 p-6 rounded-xl" style={{ backgroundColor: "#1e293b" }}>
-            <h2 className="text-lg font-semibold text-white mb-2">スキルマップ</h2>
-            <p className="text-slate-400 text-xs mb-4">カテゴリ別の学習完了率</p>
+          <div className="mb-10 p-6 rounded-xl" style={{ backgroundColor: "var(--color-card)", boxShadow: "var(--color-card-shadow)" }}>
+            <h2 className="text-lg font-semibold mb-2" style={{ color: "var(--color-text-heading)" }}>スキルマップ</h2>
+            <p className="text-xs mb-4" style={{ color: "var(--color-text-muted)" }}>カテゴリ別の学習完了率</p>
             <SkillRadar data={skillData} />
           </div>
         )}
@@ -256,7 +258,7 @@ export default async function Home() {
         {/* Recent modules */}
         {recentModules.length > 0 && (
           <div className="mb-10">
-            <h2 className="text-lg font-semibold text-white mb-4">最近学習したモジュール</h2>
+            <h2 className="text-lg font-semibold mb-4" style={{ color: "var(--color-text-heading)" }}>最近学習したモジュール</h2>
             <div className="space-y-2">
               {recentModules.map((mod) => {
                 const [catId, modId] = mod.id.split("--");
@@ -266,13 +268,13 @@ export default async function Home() {
                     key={mod.id}
                     href={`/curriculum/${catId}/${modId}`}
                     className="flex items-center justify-between p-4 rounded-xl transition-colors hover:opacity-90"
-                    style={{ backgroundColor: "#1e293b" }}
+                    style={{ backgroundColor: "var(--color-card)", boxShadow: "var(--color-card-shadow)" }}
                   >
                     <div className="flex items-center gap-3">
-                      <span style={{ color: "#10b981" }}>&#10003;</span>
-                      <span className="text-sm text-white">{moduleName}</span>
+                      <span style={{ color: "var(--color-green)" }}>&#10003;</span>
+                      <span className="text-sm" style={{ color: "var(--color-text-heading)" }}>{moduleName}</span>
                     </div>
-                    <span className="text-xs text-slate-500">完了</span>
+                    <span className="text-xs" style={{ color: "var(--color-text-disabled)" }}>完了</span>
                   </Link>
                 );
               })}
@@ -284,28 +286,28 @@ export default async function Home() {
         {topMembers.length > 0 && (
           <div className="mb-10">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-white">チームランキング</h2>
-              <Link href="/admin" className="text-xs hover:text-white transition-colors" style={{ color: "#94a3b8" }}>
+              <h2 className="text-lg font-semibold" style={{ color: "var(--color-text-heading)" }}>チームランキング</h2>
+              <Link href="/admin" className="text-xs hover:opacity-80 transition-opacity" style={{ color: "var(--color-text-muted)" }}>
                 全員を見る &rarr;
               </Link>
             </div>
-            <div className="rounded-xl overflow-hidden" style={{ backgroundColor: "#1e293b" }}>
+            <div className="rounded-xl overflow-hidden" style={{ backgroundColor: "var(--color-card)", boxShadow: "var(--color-card-shadow)" }}>
               {topMembers.map((member, i) => (
                 <div
                   key={i}
                   className="flex items-center justify-between px-5 py-3 border-b last:border-b-0"
-                  style={{ borderColor: "#334155" }}
+                  style={{ borderColor: "var(--color-border)" }}
                 >
                   <div className="flex items-center gap-3">
-                    <span className="w-6 text-center text-sm font-bold" style={{ color: i === 0 ? "#fbbf24" : i === 1 ? "#94a3b8" : i === 2 ? "#b45309" : "#64748b" }}>
+                    <span className="w-6 text-center text-sm font-bold" style={{ color: i === 0 ? "var(--color-yellow)" : i === 1 ? "var(--color-text-muted)" : i === 2 ? "#b45309" : "var(--color-text-disabled)" }}>
                       {i + 1}
                     </span>
-                    <span className="text-sm text-white">{member.name}</span>
+                    <span className="text-sm" style={{ color: "var(--color-text-heading)" }}>{member.name}</span>
                   </div>
                   <div className="flex items-center gap-4">
-                    <span className="text-xs text-slate-400">{member.completedCount} 完了</span>
-                    <span className="text-xs" style={{ color: "#10b981" }}>Lv.{member.level}</span>
-                    <span className="text-sm font-medium" style={{ color: "#fbbf24" }}>{member.xp.toLocaleString()} XP</span>
+                    <span className="text-xs" style={{ color: "var(--color-text-muted)" }}>{member.completedCount} 完了</span>
+                    <span className="text-xs" style={{ color: "var(--color-green)" }}>Lv.{member.level}</span>
+                    <span className="text-sm font-medium" style={{ color: "var(--color-yellow)" }}>{member.xp.toLocaleString()} XP</span>
                   </div>
                 </div>
               ))}
@@ -317,16 +319,16 @@ export default async function Home() {
         <div className="flex gap-4">
           <Link
             href="/curriculum"
-            className="inline-flex items-center gap-2 px-8 py-4 rounded-xl text-white font-semibold text-lg transition-opacity hover:opacity-90"
-            style={{ backgroundColor: "#3b82f6" }}
+            className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-semibold text-lg transition-opacity hover:opacity-90"
+            style={{ backgroundColor: "var(--color-blue)", color: "#ffffff" }}
           >
             カリキュラムマップを見る
             <span>&rarr;</span>
           </Link>
           <Link
             href="/admin"
-            className="inline-flex items-center gap-2 px-6 py-4 rounded-xl text-slate-400 font-medium text-sm transition-colors hover:text-white"
-            style={{ backgroundColor: "#1e293b" }}
+            className="inline-flex items-center gap-2 px-6 py-4 rounded-xl font-medium text-sm transition-opacity hover:opacity-80"
+            style={{ backgroundColor: "var(--color-card)", color: "var(--color-text-muted)", boxShadow: "var(--color-card-shadow)" }}
           >
             チーム学習状況
           </Link>

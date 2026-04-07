@@ -58,28 +58,29 @@ const CATEGORY_FLOW = [
 
 export default function WhyLearnPage() {
   return (
-    <main className="min-h-screen" style={{ backgroundColor: "#0f172a" }}>
+    <main className="min-h-screen" style={{ backgroundColor: "var(--color-page)" }}>
       {/* Hero */}
       <div className="relative overflow-hidden">
         <div
           className="absolute inset-0 opacity-20"
           style={{
-            background: "radial-gradient(ellipse at 50% 0%, #3b82f6 0%, transparent 70%)",
+            background: "radial-gradient(ellipse at 50% 0%, var(--color-blue) 0%, transparent 70%)",
           }}
         />
         <div className="relative max-w-3xl mx-auto px-8 pt-16 pb-12">
           <Link
             href="/curriculum"
-            className="inline-flex items-center gap-1 text-slate-400 hover:text-white transition-colors text-sm mb-10"
+            className="inline-flex items-center gap-1 text-sm mb-10 transition-opacity hover:opacity-80"
+            style={{ color: "var(--color-text-muted)" }}
           >
             ← カリキュラムマップ
           </Link>
-          <h1 className="text-3xl sm:text-4xl font-bold text-white mb-4 leading-tight">
+          <h1 className="text-3xl sm:text-4xl font-bold mb-4 leading-tight" style={{ color: "var(--color-text-heading)" }}>
             なぜデジタルマーケターは
             <br />
             体系的に学ぶ必要があるのか
           </h1>
-          <p className="text-slate-400 text-lg leading-relaxed">
+          <p className="text-lg leading-relaxed" style={{ color: "var(--color-text-muted)" }}>
             断片的な知識の寄せ集めでは、現場で通用しません。
             <br />
             知識がつながって初めて「使える」ようになります。
@@ -91,10 +92,10 @@ export default function WhyLearnPage() {
       <div className="max-w-3xl mx-auto px-8 pb-8">
         {SECTIONS.map((section, i) => (
           <section key={i} className="mb-12">
-            <h2 className="text-xl font-bold text-white mb-4 flex items-start gap-3">
+            <h2 className="text-xl font-bold mb-4 flex items-start gap-3" style={{ color: "var(--color-text-heading)" }}>
               <span
                 className="shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold mt-0.5"
-                style={{ backgroundColor: "#3b82f622", color: "#3b82f6" }}
+                style={{ backgroundColor: "var(--color-blue-bg)", color: "var(--color-blue)" }}
               >
                 {i + 1}
               </span>
@@ -104,7 +105,8 @@ export default function WhyLearnPage() {
               {section.body.split("\n\n").map((paragraph, j) => (
                 <p
                   key={j}
-                  className="text-slate-300 text-sm leading-relaxed"
+                  className="text-sm leading-relaxed"
+                  style={{ color: "var(--color-text-secondary)" }}
                 >
                   {paragraph}
                 </p>
@@ -115,10 +117,10 @@ export default function WhyLearnPage() {
 
         {/* Learning flow */}
         <section className="mb-16">
-          <h2 className="text-xl font-bold text-white mb-6 flex items-start gap-3">
+          <h2 className="text-xl font-bold mb-6 flex items-start gap-3" style={{ color: "var(--color-text-heading)" }}>
             <span
               className="shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold mt-0.5"
-              style={{ backgroundColor: "#3b82f622", color: "#3b82f6" }}
+              style={{ backgroundColor: "var(--color-blue-bg)", color: "var(--color-blue)" }}
             >
               5
             </span>
@@ -130,21 +132,21 @@ export default function WhyLearnPage() {
                 <div key={i} className="flex items-center gap-4">
                   <div
                     className="shrink-0 w-10 h-10 rounded-xl flex items-center justify-center text-xl"
-                    style={{ backgroundColor: "#1e293b" }}
+                    style={{ backgroundColor: "var(--color-card)" }}
                   >
                     {item.icon}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-white text-sm font-medium">{item.name}</p>
-                    <p className="text-slate-500 text-xs">{item.desc}</p>
+                    <p className="text-sm font-medium" style={{ color: "var(--color-text-heading)" }}>{item.name}</p>
+                    <p className="text-xs" style={{ color: "var(--color-text-disabled)" }}>{item.desc}</p>
                   </div>
                   {i < CATEGORY_FLOW.length - 1 && (
-                    <span className="text-slate-600 text-xs shrink-0">→</span>
+                    <span className="text-xs shrink-0" style={{ color: "var(--color-text-disabled)" }}>→</span>
                   )}
                 </div>
               ))}
             </div>
-            <p className="text-slate-400 text-xs mt-4">
+            <p className="text-xs mt-4" style={{ color: "var(--color-text-muted)" }}>
               各カテゴリ100モジュール。基礎から順に進む設計ですが、経験に応じてどこからでも始められます。
             </p>
           </div>
@@ -153,18 +155,18 @@ export default function WhyLearnPage() {
         {/* CTA */}
         <div
           className="rounded-2xl p-8 text-center"
-          style={{ backgroundColor: "#1e293b" }}
+          style={{ backgroundColor: "var(--color-card)", boxShadow: "var(--color-card-shadow)" }}
         >
-          <p className="text-white font-semibold text-lg mb-2">
+          <p className="font-semibold text-lg mb-2" style={{ color: "var(--color-text-heading)" }}>
             まずは1モジュールから始めてみませんか？
           </p>
-          <p className="text-slate-400 text-sm mb-6">
+          <p className="text-sm mb-6" style={{ color: "var(--color-text-muted)" }}>
             1,200モジュールすべてを終える必要はありません。今日の1つが明日の武器になります。
           </p>
           <Link
             href="/curriculum"
-            className="inline-flex items-center gap-2 px-8 py-3 rounded-xl text-white font-semibold transition-opacity hover:opacity-90"
-            style={{ backgroundColor: "#3b82f6" }}
+            className="inline-flex items-center gap-2 px-8 py-3 rounded-xl font-semibold transition-opacity hover:opacity-90"
+            style={{ backgroundColor: "var(--color-blue)", color: "#ffffff" }}
           >
             カリキュラムマップを見る →
           </Link>

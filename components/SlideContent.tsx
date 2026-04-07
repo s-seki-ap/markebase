@@ -33,7 +33,8 @@ function splitIntoSlides(content: string): string[] {
 const slideMarkdownComponents = {
   h1: ({ children, ...props }: ComponentPropsWithoutRef<"h1">) => (
     <h1
-      className="text-2xl lg:text-3xl font-bold text-white mb-6 leading-tight"
+      className="text-2xl lg:text-3xl font-bold mb-6 leading-tight"
+      style={{ color: "var(--color-text-heading)" }}
       {...props}
     >
       {children}
@@ -41,7 +42,8 @@ const slideMarkdownComponents = {
   ),
   h2: ({ children, ...props }: ComponentPropsWithoutRef<"h2">) => (
     <h2
-      className="text-xl lg:text-2xl font-bold text-white mb-5 leading-snug"
+      className="text-xl lg:text-2xl font-bold mb-5 leading-snug"
+      style={{ color: "var(--color-text-heading)" }}
       {...props}
     >
       {children}
@@ -49,7 +51,8 @@ const slideMarkdownComponents = {
   ),
   h3: ({ children, ...props }: ComponentPropsWithoutRef<"h3">) => (
     <h3
-      className="text-lg font-semibold text-slate-100 mt-6 mb-3 leading-snug"
+      className="text-lg font-semibold mt-6 mb-3 leading-snug"
+      style={{ color: "var(--color-text-primary)" }}
       {...props}
     >
       {children}
@@ -57,7 +60,8 @@ const slideMarkdownComponents = {
   ),
   p: ({ children, ...props }: ComponentPropsWithoutRef<"p">) => (
     <p
-      className="text-slate-300 text-base leading-[1.9] mb-4"
+      className="text-base leading-[1.9] mb-4"
+      style={{ color: "var(--color-text-secondary)" }}
       {...props}
     >
       {children}
@@ -74,14 +78,14 @@ const slideMarkdownComponents = {
     </ol>
   ),
   li: ({ children, ...props }: ComponentPropsWithoutRef<"li">) => (
-    <li className="text-slate-300 text-base leading-[1.8] pl-1" {...props}>
+    <li className="text-base leading-[1.8] pl-1" style={{ color: "var(--color-text-secondary)" }} {...props}>
       {children}
     </li>
   ),
   blockquote: ({ children, ...props }: ComponentPropsWithoutRef<"blockquote">) => (
     <blockquote
       className="border-l-4 pl-5 py-3 my-5 rounded-r-lg text-base leading-[1.8]"
-      style={{ borderColor: "#3b82f6", backgroundColor: "#1e293b80", color: "#cbd5e1" }}
+      style={{ borderColor: "var(--color-blue)", backgroundColor: "var(--color-blue-bg)", color: "var(--color-text-secondary)" }}
       {...props}
     >
       {children}
@@ -99,7 +103,7 @@ const slideMarkdownComponents = {
     return (
       <code
         className="px-1.5 py-0.5 rounded text-sm font-mono"
-        style={{ backgroundColor: "#1e293b", color: "#93c5fd" }}
+        style={{ backgroundColor: "var(--color-card)", color: "#93c5fd" }}
         {...props}
       >
         {children}
@@ -109,24 +113,24 @@ const slideMarkdownComponents = {
   pre: ({ children, ...props }: ComponentPropsWithoutRef<"pre">) => (
     <pre
       className="rounded-xl p-5 text-sm font-mono overflow-x-auto my-5 leading-relaxed"
-      style={{ backgroundColor: "#0f172a", color: "#e2e8f0", border: "1px solid #334155" }}
+      style={{ backgroundColor: "var(--color-page)", color: "var(--color-text-primary)", border: "1px solid var(--color-border)" }}
       {...props}
     >
       {children}
     </pre>
   ),
   table: ({ children, ...props }: ComponentPropsWithoutRef<"table">) => (
-    <div className="overflow-x-auto my-5 rounded-lg" style={{ border: "1px solid #334155" }}>
+    <div className="overflow-x-auto my-5 rounded-lg" style={{ border: "1px solid var(--color-border)" }}>
       <table className="w-full text-sm border-collapse" {...props}>{children}</table>
     </div>
   ),
   thead: ({ children, ...props }: ComponentPropsWithoutRef<"thead">) => (
-    <thead style={{ backgroundColor: "#1e293b" }} {...props}>{children}</thead>
+    <thead style={{ backgroundColor: "var(--color-card)" }} {...props}>{children}</thead>
   ),
   th: ({ children, ...props }: ComponentPropsWithoutRef<"th">) => (
     <th
-      className="text-left text-white font-semibold px-4 py-3 border-b"
-      style={{ borderColor: "#334155" }}
+      className="text-left font-semibold px-4 py-3 border-b"
+      style={{ color: "var(--color-text-heading)", borderColor: "var(--color-border)" }}
       {...props}
     >
       {children}
@@ -134,15 +138,15 @@ const slideMarkdownComponents = {
   ),
   td: ({ children, ...props }: ComponentPropsWithoutRef<"td">) => (
     <td
-      className="text-slate-300 px-4 py-3 border-b"
-      style={{ borderColor: "#334155" }}
+      className="px-4 py-3 border-b"
+      style={{ color: "var(--color-text-secondary)", borderColor: "var(--color-border)" }}
       {...props}
     >
       {children}
     </td>
   ),
   strong: ({ children, ...props }: ComponentPropsWithoutRef<"strong">) => (
-    <strong className="text-white font-semibold" {...props}>{children}</strong>
+    <strong className="font-semibold" style={{ color: "var(--color-text-heading)" }} {...props}>{children}</strong>
   ),
   a: ({ children, href, ...props }: ComponentPropsWithoutRef<"a">) => (
     <a
@@ -157,7 +161,7 @@ const slideMarkdownComponents = {
     </a>
   ),
   hr: ({ ...props }: ComponentPropsWithoutRef<"hr">) => (
-    <hr className="my-6 border-t" style={{ borderColor: "#334155" }} {...props} />
+    <hr className="my-6 border-t" style={{ borderColor: "var(--color-border)" }} {...props} />
   ),
 };
 
@@ -198,14 +202,14 @@ export default function SlideContent({ content }: SlideContentProps) {
       {/* Slide navigation */}
       <div
         className="flex items-center justify-between px-6 lg:px-10 py-3 border-t shrink-0"
-        style={{ borderColor: "#1e293b" }}
+        style={{ borderColor: "var(--color-border)" }}
       >
         {/* Prev */}
         <button
           onClick={goPrevSlide}
           disabled={currentSlide === 0}
           className="px-4 py-2 rounded-lg text-sm transition-colors disabled:opacity-20 disabled:cursor-not-allowed"
-          style={{ color: "#94a3b8" }}
+          style={{ color: "var(--color-text-muted)" }}
         >
           ← 前へ
         </button>
@@ -221,12 +225,12 @@ export default function SlideContent({ content }: SlideContentProps) {
                 width: i === currentSlide ? "24px" : "8px",
                 height: "8px",
                 borderRadius: "4px",
-                backgroundColor: i === currentSlide ? "#3b82f6" : i < currentSlide ? "#10b981" : "#334155",
+                backgroundColor: i === currentSlide ? "var(--color-blue)" : i < currentSlide ? "var(--color-green)" : "var(--color-border)",
               }}
               aria-label={`スライド ${i + 1}`}
             />
           ))}
-          <span className="text-slate-500 text-xs ml-2">
+          <span className="text-xs ml-2" style={{ color: "var(--color-text-disabled)" }}>
             {currentSlide + 1}/{totalSlides}
           </span>
         </div>
@@ -236,7 +240,7 @@ export default function SlideContent({ content }: SlideContentProps) {
           onClick={goNextSlide}
           disabled={currentSlide === totalSlides - 1}
           className="px-4 py-2 rounded-lg text-sm font-medium transition-colors disabled:opacity-20 disabled:cursor-not-allowed"
-          style={{ backgroundColor: currentSlide === totalSlides - 1 ? "transparent" : "#3b82f6", color: "white" }}
+          style={{ backgroundColor: currentSlide === totalSlides - 1 ? "transparent" : "var(--color-blue)", color: "#ffffff" }}
         >
           次へ →
         </button>

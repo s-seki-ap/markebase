@@ -13,25 +13,25 @@ export default function SignInClient({
   return (
     <div
       className="min-h-screen flex items-center justify-center"
-      style={{ backgroundColor: "#0f172a" }}
+      style={{ backgroundColor: "var(--color-page)" }}
     >
       <div
         className="w-full max-w-md p-8 rounded-2xl"
-        style={{ backgroundColor: "#1e293b" }}
+        style={{ backgroundColor: "var(--color-card)", boxShadow: "var(--color-card-shadow)" }}
       >
         {/* Logo */}
         <div className="flex items-center justify-center gap-3 mb-8">
           <div
-            className="w-12 h-12 rounded-xl flex items-center justify-center text-white text-2xl font-bold"
-            style={{ backgroundColor: "#3b82f6" }}
+            className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl font-bold"
+            style={{ backgroundColor: "var(--color-blue)", color: "#ffffff" }}
           >
             M
           </div>
-          <span className="text-2xl font-bold text-white">MarkeBase</span>
+          <span className="text-2xl font-bold" style={{ color: "var(--color-text-heading)" }}>MarkeBase</span>
         </div>
 
         {/* Tagline */}
-        <p className="text-center text-slate-400 mb-8 text-sm">
+        <p className="text-center text-sm mb-8" style={{ color: "var(--color-text-muted)" }}>
           デジタルマーケターのための
           <br />
           インタラクティブ学習プラットフォーム
@@ -41,8 +41,8 @@ export default function SignInClient({
           <>
             <button
               onClick={() => signIn("google", { callbackUrl: "/" })}
-              className="w-full flex items-center justify-center gap-3 px-6 py-3 rounded-xl text-white font-medium transition-opacity hover:opacity-90"
-              style={{ backgroundColor: "#3b82f6" }}
+              className="w-full flex items-center justify-center gap-3 px-6 py-3 rounded-xl font-medium transition-opacity hover:opacity-90"
+              style={{ backgroundColor: "var(--color-blue)", color: "#ffffff" }}
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24">
                 <path
@@ -64,7 +64,7 @@ export default function SignInClient({
               </svg>
               Googleでログイン
             </button>
-            <p className="text-center text-slate-500 text-xs mt-6">
+            <p className="text-center text-xs mt-6" style={{ color: "var(--color-text-disabled)" }}>
               @appirits.com アカウントでログインしてください
             </p>
           </>
@@ -72,15 +72,15 @@ export default function SignInClient({
           <div className="space-y-3">
             <div
               className="rounded-xl p-4 text-sm text-center"
-              style={{ backgroundColor: "#0f172a", border: "1px solid #334155" }}
+              style={{ backgroundColor: "var(--color-page)", border: "1px solid var(--color-border)" }}
             >
-              <p className="text-slate-300 font-medium mb-1">デモモード</p>
-              <p className="text-slate-500 text-xs">ログインなしで利用できます</p>
+              <p className="font-medium mb-1" style={{ color: "var(--color-text-secondary)" }}>デモモード</p>
+              <p className="text-xs" style={{ color: "var(--color-text-disabled)" }}>ログインなしで利用できます</p>
             </div>
             <button
               onClick={() => router.push("/curriculum")}
-              className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-white font-medium transition-opacity hover:opacity-90"
-              style={{ backgroundColor: "#10b981" }}
+              className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-medium transition-opacity hover:opacity-90"
+              style={{ backgroundColor: "var(--color-green)", color: "#ffffff" }}
             >
               📚 デモを始める
             </button>

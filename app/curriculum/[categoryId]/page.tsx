@@ -25,15 +25,15 @@ export default function CategoryPage({
   if (!category) notFound();
 
   return (
-    <main className="min-h-screen p-8" style={{ backgroundColor: "#0f172a" }}>
+    <main className="min-h-screen p-8" style={{ backgroundColor: "var(--color-page)" }}>
       <div className="max-w-3xl mx-auto">
         {/* Breadcrumb */}
-        <div className="flex items-center gap-2 text-sm text-slate-400 mb-8">
-          <Link href="/" className="hover:text-white transition-colors">ダッシュボード</Link>
+        <div className="flex items-center gap-2 text-sm mb-8" style={{ color: "var(--color-text-muted)" }}>
+          <Link href="/" className="hover:opacity-80 transition-opacity">ダッシュボード</Link>
           <span>/</span>
-          <Link href="/curriculum" className="hover:text-white transition-colors">カリキュラム</Link>
+          <Link href="/curriculum" className="hover:opacity-80 transition-opacity">カリキュラム</Link>
           <span>/</span>
-          <span className="text-white">{category.name}</span>
+          <span style={{ color: "var(--color-text-heading)" }}>{category.name}</span>
         </div>
 
         {/* Header */}
@@ -45,8 +45,8 @@ export default function CategoryPage({
             {category.icon}
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-white">{category.name}</h1>
-            <p className="text-slate-400 text-sm mt-1">{category.description}</p>
+            <h1 className="text-2xl font-bold" style={{ color: "var(--color-text-heading)" }}>{category.name}</h1>
+            <p className="text-sm mt-1" style={{ color: "var(--color-text-muted)" }}>{category.description}</p>
           </div>
         </div>
 
@@ -59,15 +59,15 @@ export default function CategoryPage({
               <Link
                 key={module.id}
                 href={`/curriculum/${category.id}/${module.id}`}
-                className="flex items-center gap-4 p-4 rounded-xl border transition-all hover:border-slate-500"
-                style={{ backgroundColor: "#1e293b", borderColor: "#334155" }}
+                className="flex items-center gap-4 p-4 rounded-xl border transition-all hover:opacity-90"
+                style={{ backgroundColor: "var(--color-card)", borderColor: "var(--color-border)", boxShadow: "var(--color-card-shadow)" }}
               >
-                <span className="text-slate-500 text-sm font-mono w-8 shrink-0">
+                <span className="text-sm font-mono w-8 shrink-0" style={{ color: "var(--color-text-disabled)" }}>
                   {String(index + 1).padStart(2, "0")}
                 </span>
                 <div className="flex-1 min-w-0">
-                  <p className="text-white text-sm font-medium">{module.name}</p>
-                  <p className="text-slate-500 text-xs mt-0.5 truncate">{module.description}</p>
+                  <p className="text-sm font-medium" style={{ color: "var(--color-text-heading)" }}>{module.name}</p>
+                  <p className="text-xs mt-0.5 truncate" style={{ color: "var(--color-text-disabled)" }}>{module.description}</p>
                 </div>
                 <div className="flex items-center gap-3 shrink-0">
                   <span
@@ -79,22 +79,22 @@ export default function CategoryPage({
                   >
                     {DIFFICULTY_LABEL[module.difficulty]}
                   </span>
-                  <span className="text-slate-500 text-xs">{module.estimatedMinutes}分</span>
-                  <span className="text-slate-400 text-sm">→</span>
+                  <span className="text-xs" style={{ color: "var(--color-text-disabled)" }}>{module.estimatedMinutes}分</span>
+                  <span className="text-sm" style={{ color: "var(--color-text-muted)" }}>→</span>
                 </div>
               </Link>
             ) : (
               <div
                 key={module.id}
                 className="flex items-center gap-4 p-4 rounded-xl border opacity-40 cursor-not-allowed"
-                style={{ backgroundColor: "#1e293b", borderColor: "#334155" }}
+                style={{ backgroundColor: "var(--color-card)", borderColor: "var(--color-border)" }}
               >
-                <span className="text-slate-500 text-sm font-mono w-8 shrink-0">
+                <span className="text-sm font-mono w-8 shrink-0" style={{ color: "var(--color-text-disabled)" }}>
                   {String(index + 1).padStart(2, "0")}
                 </span>
                 <div className="flex-1 min-w-0">
-                  <p className="text-slate-400 text-sm font-medium">{module.name}</p>
-                  <p className="text-slate-600 text-xs mt-0.5 truncate">{module.description}</p>
+                  <p className="text-sm font-medium" style={{ color: "var(--color-text-muted)" }}>{module.name}</p>
+                  <p className="text-xs mt-0.5 truncate" style={{ color: "var(--color-text-disabled)" }}>{module.description}</p>
                 </div>
                 <div className="flex items-center gap-3 shrink-0">
                   <span
@@ -106,10 +106,10 @@ export default function CategoryPage({
                   >
                     {DIFFICULTY_LABEL[module.difficulty]}
                   </span>
-                  <span className="text-slate-500 text-xs">{module.estimatedMinutes}分</span>
+                  <span className="text-xs" style={{ color: "var(--color-text-disabled)" }}>{module.estimatedMinutes}分</span>
                   <span
                     className="text-xs px-2 py-0.5 rounded-full"
-                    style={{ backgroundColor: "#334155", color: "#64748b" }}
+                    style={{ backgroundColor: "var(--color-border)", color: "var(--color-text-disabled)" }}
                   >
                     準備中
                   </span>

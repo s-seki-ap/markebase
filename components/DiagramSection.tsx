@@ -30,9 +30,9 @@ function HtmlTagDiagram() {
   return (
     <div
       className="rounded-xl p-6"
-      style={{ backgroundColor: "#1e293b", border: "1px solid #334155" }}
+      style={{ backgroundColor: "var(--color-card)", border: "1px solid var(--color-border)" }}
     >
-      <p className="text-slate-400 text-xs font-medium mb-4 uppercase tracking-wide">
+      <p className="text-xs font-medium mb-4 uppercase tracking-wide" style={{ color: "var(--color-text-muted)" }}>
         図解: HTMLタグが動く仕組み
       </p>
       <div className="flex flex-col gap-4 items-center">
@@ -40,40 +40,40 @@ function HtmlTagDiagram() {
         <div
           className="w-full p-3 rounded-lg text-center transition-all"
           style={{
-            backgroundColor: step >= 0 ? "#0f172a" : "transparent",
+            backgroundColor: step >= 0 ? "var(--color-page)" : "transparent",
             opacity: step >= 0 ? 1 : 0,
-            border: "1px solid #334155",
+            border: "1px solid var(--color-border)",
           }}
         >
-          <span className="text-slate-300 text-sm">マーケティングポートフォリオ</span>
-          <p className="text-slate-500 text-xs mt-1">① テキスト（意味なし）</p>
+          <span className="text-sm" style={{ color: "var(--color-text-secondary)" }}>マーケティングポートフォリオ</span>
+          <p className="text-xs mt-1" style={{ color: "var(--color-text-disabled)" }}>① テキスト（意味なし）</p>
         </div>
 
         {step >= 1 && (
           <>
-            <div className="text-slate-500 text-xl">↓</div>
+            <div className="text-xl" style={{ color: "var(--color-text-disabled)" }}>↓</div>
             {/* Step 1: Tagged */}
             <div
               className="w-full p-3 rounded-lg text-center transition-all"
-              style={{ backgroundColor: "#0f172a", border: "1px solid #3b82f6" }}
+              style={{ backgroundColor: "var(--color-page)", border: "1px solid var(--color-blue)" }}
             >
               <code className="text-sm" style={{ color: "#93c5fd" }}>
                 &lt;h1&gt;
-                <span style={{ color: "#e2e8f0" }}>マーケティングポートフォリオ</span>
+                <span style={{ color: "var(--color-text-primary)" }}>マーケティングポートフォリオ</span>
                 &lt;/h1&gt;
               </code>
-              <p className="text-slate-500 text-xs mt-1">② タグで囲む（意味が生まれる）</p>
+              <p className="text-xs mt-1" style={{ color: "var(--color-text-disabled)" }}>② タグで囲む（意味が生まれる）</p>
             </div>
           </>
         )}
 
         {step >= 2 && (
           <>
-            <div className="text-slate-500 text-xl">↓</div>
+            <div className="text-xl" style={{ color: "var(--color-text-disabled)" }}>↓</div>
             {/* Step 2: Browser renders */}
             <div
               className="w-full p-3 rounded-lg"
-              style={{ backgroundColor: "white", border: "1px solid #10b981" }}
+              style={{ backgroundColor: "white", border: "1px solid var(--color-green)" }}
             >
               <h1 style={{ fontSize: "20px", fontWeight: "bold", color: "#111" }}>
                 マーケティングポートフォリオ
@@ -87,12 +87,12 @@ function HtmlTagDiagram() {
 
         {step >= 3 && (
           <>
-            <div className="text-slate-500 text-xl">↓</div>
+            <div className="text-xl" style={{ color: "var(--color-text-disabled)" }}>↓</div>
             <div
               className="w-full p-3 rounded-lg text-center"
-              style={{ backgroundColor: "#10b98122", border: "1px solid #10b981" }}
+              style={{ backgroundColor: "var(--color-green-bg)", border: "1px solid var(--color-green)" }}
             >
-              <p className="text-sm" style={{ color: "#10b981" }}>
+              <p className="text-sm" style={{ color: "var(--color-green)" }}>
                 🔍 検索エンジンも「これはページの主見出し」と認識してSEO評価！
               </p>
             </div>
@@ -116,30 +116,30 @@ function GA4ModelDiagram() {
   return (
     <div
       className="rounded-xl p-6"
-      style={{ backgroundColor: "#1e293b", border: "1px solid #334155" }}
+      style={{ backgroundColor: "var(--color-card)", border: "1px solid var(--color-border)" }}
     >
-      <p className="text-slate-400 text-xs font-medium mb-4 uppercase tracking-wide">
+      <p className="text-xs font-medium mb-4 uppercase tracking-wide" style={{ color: "var(--color-text-muted)" }}>
         図解: セッションベース vs イベントベース
       </p>
 
       <div className="grid grid-cols-2 gap-4">
         {/* UA side */}
         <div>
-          <p className="text-xs text-center mb-3 font-medium" style={{ color: "#ef4444" }}>
+          <p className="text-xs text-center mb-3 font-medium" style={{ color: "var(--color-red)" }}>
             UA（旧）: セッションベース
           </p>
           <div
             className="p-3 rounded-lg space-y-2"
-            style={{ backgroundColor: "#0f172a", border: "1px solid #ef444444" }}
+            style={{ backgroundColor: "var(--color-page)", border: "1px solid var(--color-red-bg)" }}
           >
             {["セッション開始", "ページビュー", "ページビュー", "セッション終了"].map((item, i) => (
               <div
                 key={i}
                 className="p-2 rounded text-xs text-center transition-all"
                 style={{
-                  backgroundColor: step >= i ? "#ef444422" : "transparent",
-                  color: step >= i ? "#ef4444" : "#475569",
-                  border: `1px solid ${step >= i ? "#ef44444a" : "#1e293b"}`,
+                  backgroundColor: step >= i ? "var(--color-red-bg)" : "transparent",
+                  color: step >= i ? "var(--color-red)" : "var(--color-border-strong)",
+                  border: `1px solid ${step >= i ? "var(--color-red)" : "var(--color-card)"}`,
                 }}
               >
                 {item}
@@ -150,21 +150,21 @@ function GA4ModelDiagram() {
 
         {/* GA4 side */}
         <div>
-          <p className="text-xs text-center mb-3 font-medium" style={{ color: "#10b981" }}>
+          <p className="text-xs text-center mb-3 font-medium" style={{ color: "var(--color-green)" }}>
             GA4（新）: イベントベース
           </p>
           <div
             className="p-3 rounded-lg space-y-2"
-            style={{ backgroundColor: "#0f172a", border: "1px solid #10b98144" }}
+            style={{ backgroundColor: "var(--color-page)", border: "1px solid var(--color-green-bg)" }}
           >
             {["page_view", "scroll", "click", "purchase"].map((item, i) => (
               <div
                 key={i}
                 className="p-2 rounded text-xs text-center transition-all"
                 style={{
-                  backgroundColor: step >= i ? "#10b98122" : "transparent",
-                  color: step >= i ? "#10b981" : "#475569",
-                  border: `1px solid ${step >= i ? "#10b9814a" : "#1e293b"}`,
+                  backgroundColor: step >= i ? "var(--color-green-bg)" : "transparent",
+                  color: step >= i ? "var(--color-green)" : "var(--color-border-strong)",
+                  border: `1px solid ${step >= i ? "var(--color-green)" : "var(--color-card)"}`,
                 }}
               >
                 {item}
@@ -177,7 +177,7 @@ function GA4ModelDiagram() {
       {step >= 3 && (
         <div
           className="mt-4 p-3 rounded-lg text-center text-xs"
-          style={{ backgroundColor: "#f9731622", color: "#f97316" }}
+          style={{ backgroundColor: "var(--color-orange-bg)", color: "var(--color-orange)" }}
         >
           🔥 GA4ではすべての行動が「イベント」として統一管理される
         </div>

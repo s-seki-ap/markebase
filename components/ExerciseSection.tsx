@@ -8,7 +8,7 @@ const MonacoEditor = dynamic(() => import("@monaco-editor/react"), {
   loading: () => (
     <div
       className="h-full flex items-center justify-center"
-      style={{ backgroundColor: "#1e1e1e", color: "#666" }}
+      style={{ backgroundColor: "var(--color-card-alt)", color: "var(--color-text-disabled)" }}
     >
       エディタを読み込み中...
     </div>
@@ -55,9 +55,9 @@ function judgeCode(userCode: string, answer: string): JudgeResult {
 }
 
 const JUDGE_MESSAGES: Record<string, { icon: string; text: string; color: string }> = {
-  correct: { icon: "\u2705", text: "正解！よくできました。", color: "#10b981" },
-  partial: { icon: "\uD83D\uDCA1", text: "惜しい！もう少しです。ヒントを確認してみましょう。", color: "#f59e0b" },
-  incorrect: { icon: "\u274C", text: "もう一度試してみましょう。ヒントを見ると手がかりが得られます。", color: "#ef4444" },
+  correct: { icon: "\u2705", text: "正解！よくできました。", color: "var(--color-green)" },
+  partial: { icon: "\uD83D\uDCA1", text: "惜しい！もう少しです。ヒントを確認してみましょう。", color: "var(--color-orange)" },
+  incorrect: { icon: "\u274C", text: "もう一度試してみましょう。ヒントを見ると手がかりが得られます。", color: "var(--color-red)" },
 };
 
 export default function ExerciseSection({
@@ -91,43 +91,43 @@ export default function ExerciseSection({
         {/* Left: Instructions */}
         <div
           className="shrink-0 overflow-y-auto border-b lg:border-b-0 lg:border-r p-5 w-full lg:w-[28%] max-h-[35vh] lg:max-h-none"
-          style={{ backgroundColor: "#0f172a", borderColor: "#1e293b" }}
+          style={{ backgroundColor: "var(--color-page)", borderColor: "var(--color-border)" }}
         >
           <div className="space-y-3">
             {contentLines.map((line, i) => {
               if (line.startsWith("# ")) {
-                return <h2 key={i} className="text-lg font-bold text-white mb-1">{line.slice(2)}</h2>;
+                return <h2 key={i} className="text-lg font-bold mb-1" style={{ color: "var(--color-text-heading)" }}>{line.slice(2)}</h2>;
               }
               if (line.startsWith("## ")) {
-                return <h3 key={i} className="text-base font-semibold text-white mt-5 mb-1">{line.slice(3)}</h3>;
+                return <h3 key={i} className="text-base font-semibold mt-5 mb-1" style={{ color: "var(--color-text-heading)" }}>{line.slice(3)}</h3>;
               }
               if (line.startsWith("> ")) {
                 return (
-                  <p key={i} className="text-slate-400 text-sm italic border-l-2 pl-3 py-1 rounded-r" style={{ borderColor: "#8b5cf6", backgroundColor: "#8b5cf608" }}>
+                  <p key={i} className="text-sm italic border-l-2 pl-3 py-1 rounded-r" style={{ color: "var(--color-text-muted)", borderColor: "var(--color-purple)", backgroundColor: "var(--color-purple-bg)" }}>
                     {line.slice(2)}
                   </p>
                 );
               }
               if (line.match(/^\d+\./)) {
-                return <p key={i} className="text-slate-300 text-sm leading-relaxed">{line}</p>;
+                return <p key={i} className="text-sm leading-relaxed" style={{ color: "var(--color-text-secondary)" }}>{line}</p>;
               }
               if (line.trim() === "") return <div key={i} className="h-2" />;
-              return <p key={i} className="text-slate-300 text-sm leading-[1.8]">{line}</p>;
+              return <p key={i} className="text-sm leading-[1.8]" style={{ color: "var(--color-text-secondary)" }}>{line}</p>;
             })}
           </div>
 
           {/* Hints */}
           <div className="mt-6">
             <div className="flex items-center justify-between mb-3">
-              <p className="text-slate-400 text-sm font-medium">ヒント</p>
-              <span className="text-slate-500 text-xs">{shownHints}/{data.hints.length}</span>
+              <p className="text-sm font-medium" style={{ color: "var(--color-text-muted)" }}>ヒント</p>
+              <span className="text-xs" style={{ color: "var(--color-text-disabled)" }}>{shownHints}/{data.hints.length}</span>
             </div>
 
             {data.hints.slice(0, shownHints).map((hint, i) => (
               <div
                 key={i}
-                className="mb-2.5 p-3.5 rounded-lg text-sm text-slate-300 leading-[1.7]"
-                style={{ backgroundColor: "#1e293b" }}
+                className="mb-2.5 p-3.5 rounded-lg text-sm leading-[1.7]"
+                style={{ backgroundColor: "var(--color-card)", color: "var(--color-text-secondary)" }}
               >
                 💡 {hint}
               </div>
@@ -137,7 +137,7 @@ export default function ExerciseSection({
               <button
                 onClick={showNextHint}
                 className="w-full py-2.5 rounded-lg text-sm transition-colors"
-                style={{ backgroundColor: "#1e293b", color: "#94a3b8" }}
+                style={{ backgroundColor: "var(--color-card)", color: "var(--color-text-muted)" }}
               >
                 ヒントを表示 →
               </button>
@@ -146,7 +146,7 @@ export default function ExerciseSection({
         </div>
 
         {/* Center: Editor */}
-        <div className="min-w-0 w-full lg:flex-1 h-[280px] lg:h-auto" style={{ backgroundColor: "#1e1e1e" }}>
+        <div className="min-w-0 w-full lg:flex-1 h-[280px] lg:h-auto" style={{ backgroundColor: "var(--color-card-alt)" }}>
           <MonacoEditor
             height="100%"
             defaultLanguage="html"
@@ -167,18 +167,18 @@ export default function ExerciseSection({
         {/* Right: Preview */}
         <div
           className="shrink-0 flex flex-col border-t lg:border-t-0 lg:border-l w-full lg:w-[35%] h-[220px] lg:h-auto"
-          style={{ borderColor: "#1e293b" }}
+          style={{ borderColor: "var(--color-border)" }}
         >
           <div
             className="px-3 py-2 border-b flex items-center gap-2"
-            style={{ backgroundColor: "#1e293b", borderColor: "#334155" }}
+            style={{ backgroundColor: "var(--color-card)", borderColor: "var(--color-border)" }}
           >
             <div className="flex gap-1.5">
               <div className="w-3 h-3 rounded-full" style={{ backgroundColor: "#ef4444" }} />
               <div className="w-3 h-3 rounded-full" style={{ backgroundColor: "#f59e0b" }} />
               <div className="w-3 h-3 rounded-full" style={{ backgroundColor: "#10b981" }} />
             </div>
-            <span className="text-slate-400 text-xs">プレビュー</span>
+            <span className="text-xs" style={{ color: "var(--color-text-muted)" }}>プレビュー</span>
           </div>
           <div className="flex-1 bg-white">
             {previewHtml ? (
@@ -191,7 +191,7 @@ export default function ExerciseSection({
             ) : (
               <div
                 className="h-full flex items-center justify-center text-sm"
-                style={{ backgroundColor: "#f8fafc", color: "#94a3b8" }}
+                style={{ backgroundColor: "#f8fafc", color: "var(--color-text-muted)" }}
               >
                 [▶ 実行] を押すとここに表示されます
               </div>
@@ -205,8 +205,8 @@ export default function ExerciseSection({
         <div
           className="flex items-center gap-3 px-5 py-2.5 border-t"
           style={{
-            borderColor: "#1e293b",
-            backgroundColor: `${JUDGE_MESSAGES[judgeResult].color}15`,
+            borderColor: "var(--color-border)",
+            backgroundColor: `color-mix(in srgb, ${JUDGE_MESSAGES[judgeResult].color} 8%, transparent)`,
           }}
         >
           <span className="text-lg">{JUDGE_MESSAGES[judgeResult].icon}</span>
@@ -219,19 +219,19 @@ export default function ExerciseSection({
       {/* Action bar */}
       <div
         className="flex items-center gap-3 px-5 py-3 border-t shrink-0"
-        style={{ backgroundColor: "#0f172a", borderColor: "#1e293b" }}
+        style={{ backgroundColor: "var(--color-page)", borderColor: "var(--color-border)" }}
       >
         <button
           onClick={handleRun}
           className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-opacity hover:opacity-90"
-          style={{ backgroundColor: "#10b981", color: "white" }}
+          style={{ backgroundColor: "var(--color-green)", color: "#ffffff" }}
         >
           ▶ 実行
         </button>
         <button
           onClick={onAIClick}
           className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-colors"
-          style={{ backgroundColor: "#8b5cf622", color: "#8b5cf6" }}
+          style={{ backgroundColor: "var(--color-purple-bg)", color: "var(--color-purple)" }}
         >
           🤖 AIに質問
         </button>
@@ -239,7 +239,7 @@ export default function ExerciseSection({
           <button
             onClick={onNext}
             className="flex items-center gap-2 px-6 py-2 rounded-lg text-sm font-medium transition-opacity hover:opacity-90"
-            style={{ backgroundColor: "#3b82f6", color: "white" }}
+            style={{ backgroundColor: "var(--color-blue)", color: "#ffffff" }}
           >
             次へ →
           </button>

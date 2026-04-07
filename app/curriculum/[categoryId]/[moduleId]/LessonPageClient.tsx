@@ -20,6 +20,7 @@ const WORKSHEET_CATEGORIES = new Set([
 import AIChatPanel from "@/components/AIChatPanel";
 import ModuleFeedback from "@/components/ModuleFeedback";
 import SlideContent from "@/components/SlideContent";
+import ThemeToggle from "@/components/ThemeToggle";
 
 interface LessonPageClientProps {
   category: Category;
@@ -102,12 +103,12 @@ export default function LessonPageClient({
   }, []);
 
   return (
-    <div className="flex h-screen overflow-hidden" style={{ backgroundColor: "#0f172a" }}>
+    <div className="flex h-screen overflow-hidden" style={{ backgroundColor: "var(--color-page)" }}>
       {/* Mobile sidebar backdrop */}
       {sidebarOpen && (
         <div
           className="fixed inset-0 z-20 lg:hidden"
-          style={{ backgroundColor: "rgba(0,0,0,0.6)" }}
+          style={{ backgroundColor: "var(--color-overlay)" }}
           onClick={() => setSidebarOpen(false)}
         />
       )}
@@ -119,40 +120,41 @@ export default function LessonPageClient({
           ${sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}
         style={{
           width: "260px",
-          backgroundColor: "#0f172a",
-          borderRight: "1px solid #1e293b",
+          backgroundColor: "var(--color-page)",
+          borderRight: "1px solid var(--color-border)",
         }}
       >
         {/* Logo */}
-        <div className="p-4 border-b" style={{ borderColor: "#1e293b" }}>
+        <div className="p-4 border-b" style={{ borderColor: "var(--color-border)" }}>
           <Link href="/" className="flex items-center gap-2">
             <div
-              className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm font-bold"
-              style={{ backgroundColor: "#3b82f6" }}
+              className="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold"
+              style={{ backgroundColor: "var(--color-blue)", color: "#ffffff" }}
             >
               M
             </div>
-            <span className="text-white font-semibold text-sm">MarkeBase</span>
+            <span className="font-semibold text-sm" style={{ color: "var(--color-text-heading)" }}>MarkeBase</span>
           </Link>
         </div>
 
         {/* Category & module info */}
-        <div className="p-4 border-b" style={{ borderColor: "#1e293b" }}>
+        <div className="p-4 border-b" style={{ borderColor: "var(--color-border)" }}>
           <Link
             href={`/curriculum/${category.id}`}
-            className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors text-xs mb-3"
+            className="flex items-center gap-2 text-xs mb-3 transition-opacity hover:opacity-80"
+            style={{ color: "var(--color-text-muted)" }}
           >
             ← {category.icon} {category.name}
           </Link>
-          <p className="text-white text-sm font-medium">{currentModule?.name ?? lessonData.title}</p>
+          <p className="text-sm font-medium" style={{ color: "var(--color-text-heading)" }}>{currentModule?.name ?? lessonData.title}</p>
           {currentModule && (
-            <p className="text-slate-500 text-xs mt-1">{currentModule.estimatedMinutes}分</p>
+            <p className="text-xs mt-1" style={{ color: "var(--color-text-disabled)" }}>{currentModule.estimatedMinutes}分</p>
           )}
         </div>
 
         {/* Section list */}
         <nav className="p-3 flex-1">
-          <p className="text-slate-500 text-xs font-medium px-2 mb-2 uppercase tracking-wide">
+          <p className="text-xs font-medium px-2 mb-2 uppercase tracking-wide" style={{ color: "var(--color-text-disabled)" }}>
             セクション
           </p>
           {sections.map((section, index) => (
@@ -162,32 +164,33 @@ export default function LessonPageClient({
               className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-colors mb-1"
               style={{
                 backgroundColor:
-                  currentSectionIndex === index ? "#1e293b" : "transparent",
+                  currentSectionIndex === index ? "var(--color-card)" : "transparent",
                 color:
-                  currentSectionIndex === index ? "#ffffff" : "#94a3b8",
+                  currentSectionIndex === index ? "var(--color-text-heading)" : "var(--color-text-muted)",
               }}
             >
               <span className="text-base w-5 text-center">
                 {visitedSections.has(index) && currentSectionIndex !== index ? (
-                  <span style={{ color: "#10b981" }}>&#10003;</span>
+                  <span style={{ color: "var(--color-green)" }}>&#10003;</span>
                 ) : (
                   SECTION_ICONS[section.type]
                 )}
               </span>
               <span className="text-sm">{SECTION_LABELS[section.type]}</span>
               {currentSectionIndex === index && (
-                <span className="ml-auto w-1.5 h-1.5 rounded-full bg-blue-400" />
+                <span className="ml-auto w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "var(--color-blue)" }} />
               )}
             </button>
           ))}
         </nav>
 
-        {/* AI button */}
-        <div className="p-4 border-t" style={{ borderColor: "#1e293b" }}>
+        {/* Theme toggle + AI button */}
+        <div className="p-4 border-t flex flex-col gap-2" style={{ borderColor: "var(--color-border)" }}>
+          <ThemeToggle />
           <button
             onClick={() => setShowAIPanel(true)}
             className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium transition-colors"
-            style={{ backgroundColor: "#8b5cf622", color: "#8b5cf6" }}
+            style={{ backgroundColor: "var(--color-purple-bg)", color: "var(--color-purple)" }}
           >
             🤖 AIに質問する
           </button>
@@ -199,12 +202,13 @@ export default function LessonPageClient({
         {/* Topbar */}
         <header
           className="flex items-center justify-between px-4 lg:px-6 py-3 shrink-0 border-b"
-          style={{ backgroundColor: "#0f172a", borderColor: "#1e293b" }}
+          style={{ backgroundColor: "var(--color-page)", borderColor: "var(--color-border)" }}
         >
           <div className="flex items-center gap-3">
             {/* Hamburger (mobile only) */}
             <button
-              className="lg:hidden p-1.5 rounded-lg text-slate-400 hover:text-white transition-colors"
+              className="lg:hidden p-1.5 rounded-lg transition-opacity hover:opacity-80"
+              style={{ color: "var(--color-text-muted)" }}
               onClick={() => setSidebarOpen(true)}
               aria-label="メニューを開く"
             >
@@ -212,20 +216,20 @@ export default function LessonPageClient({
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </button>
-            <span className="text-slate-500 text-sm hidden sm:block">
+            <span className="text-sm hidden sm:block" style={{ color: "var(--color-text-disabled)" }}>
               {category.name} / {currentModule?.name}
             </span>
-            <span className="text-slate-500 text-sm sm:hidden">
+            <span className="text-sm sm:hidden" style={{ color: "var(--color-text-disabled)" }}>
               {currentModule?.name ?? lessonData.title}
             </span>
           </div>
           <div className="flex items-center gap-4">
-            <span className="text-sm font-medium" style={{ color: "#fbbf24" }}>
+            <span className="text-sm font-medium" style={{ color: "var(--color-yellow)" }}>
               {earnedXP > 0 ? `+${earnedXP} XP` : ""}
             </span>
             <div
-              className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold"
-              style={{ backgroundColor: "#3b82f6" }}
+              className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold"
+              style={{ backgroundColor: "var(--color-blue)", color: "#ffffff" }}
             >
               U
             </div>
@@ -331,13 +335,13 @@ function ContentSection({
         {/* Section navigation (前へ / 次へ) */}
         <div
           className="flex justify-between items-center px-8 py-4 border-t shrink-0"
-          style={{ borderColor: "#1e293b" }}
+          style={{ borderColor: "var(--color-border)" }}
         >
           <button
             onClick={onPrev}
             disabled={isFirst}
             className="px-4 py-2 rounded-lg text-sm transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
-            style={{ color: "#94a3b8" }}
+            style={{ color: "var(--color-text-muted)" }}
           >
             ← 前のセクション
           </button>
@@ -345,7 +349,7 @@ function ContentSection({
             onClick={onNext}
             disabled={isLast}
             className="flex items-center gap-2 px-6 py-2 rounded-lg text-sm font-medium transition-opacity hover:opacity-90 disabled:opacity-30 disabled:cursor-not-allowed"
-            style={{ backgroundColor: "#3b82f6", color: "white" }}
+            style={{ backgroundColor: "var(--color-blue)", color: "#ffffff" }}
           >
             次のセクション →
           </button>
@@ -373,7 +377,7 @@ function ContentSection({
             {/* Annotation sidebar */}
             <aside
               className="shrink-0 w-full lg:w-[35%] px-6 py-10 border-t lg:border-t-0 lg:border-l"
-              style={{ borderColor: "#1e293b" }}
+              style={{ borderColor: "var(--color-border)" }}
             >
               <p
                 className="text-xs font-semibold uppercase tracking-widest mb-4"
@@ -387,12 +391,12 @@ function ContentSection({
                     key={i}
                     className="rounded-lg p-4 border-l-4"
                     style={{
-                      backgroundColor: "#1e293b",
+                      backgroundColor: "var(--color-card)",
                       borderLeftColor: "#06b6d4",
                     }}
                   >
-                    <p className="font-bold text-white text-sm mb-1">{a.term}</p>
-                    <p className="text-sm leading-relaxed" style={{ color: "#94a3b8" }}>
+                    <p className="font-bold text-sm mb-1" style={{ color: "var(--color-text-heading)" }}>{a.term}</p>
+                    <p className="text-sm leading-relaxed" style={{ color: "var(--color-text-muted)" }}>
                       {a.desc}
                     </p>
                   </div>
@@ -417,13 +421,13 @@ function ContentSection({
       {/* Navigation */}
       <div
         className="flex justify-between items-center px-8 py-4 border-t shrink-0"
-        style={{ borderColor: "#1e293b" }}
+        style={{ borderColor: "var(--color-border)" }}
       >
         <button
           onClick={onPrev}
           disabled={isFirst}
           className="px-4 py-2 rounded-lg text-sm transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
-          style={{ color: "#94a3b8" }}
+          style={{ color: "var(--color-text-muted)" }}
         >
           ← 前へ
         </button>
@@ -431,7 +435,7 @@ function ContentSection({
           onClick={onNext}
           disabled={isLast}
           className="flex items-center gap-2 px-6 py-2 rounded-lg text-sm font-medium transition-opacity hover:opacity-90 disabled:opacity-30 disabled:cursor-not-allowed"
-          style={{ backgroundColor: "#3b82f6", color: "white" }}
+          style={{ backgroundColor: "var(--color-blue)", color: "#ffffff" }}
         >
           次へ →
         </button>
@@ -443,16 +447,16 @@ function ContentSection({
 // react-markdown + remark-gfm based renderer
 const markdownComponents = {
   h1: ({ children, ...props }: ComponentPropsWithoutRef<"h1">) => (
-    <h1 className="text-2xl lg:text-3xl font-bold text-white mt-2 mb-6 leading-tight" {...props}>{children}</h1>
+    <h1 className="text-2xl lg:text-3xl font-bold mt-2 mb-6 leading-tight" style={{ color: "var(--color-text-heading)" }} {...props}>{children}</h1>
   ),
   h2: ({ children, ...props }: ComponentPropsWithoutRef<"h2">) => (
-    <h2 className="text-xl font-semibold text-white mt-10 mb-4 leading-snug" {...props}>{children}</h2>
+    <h2 className="text-xl font-semibold mt-10 mb-4 leading-snug" style={{ color: "var(--color-text-heading)" }} {...props}>{children}</h2>
   ),
   h3: ({ children, ...props }: ComponentPropsWithoutRef<"h3">) => (
-    <h3 className="text-lg font-semibold text-slate-100 mt-8 mb-3 leading-snug" {...props}>{children}</h3>
+    <h3 className="text-lg font-semibold mt-8 mb-3 leading-snug" style={{ color: "var(--color-text-primary)" }} {...props}>{children}</h3>
   ),
   p: ({ children, ...props }: ComponentPropsWithoutRef<"p">) => (
-    <p className="text-slate-300 text-[15px] leading-[1.9] mb-4" {...props}>{children}</p>
+    <p className="text-[15px] leading-[1.9] mb-4" style={{ color: "var(--color-text-secondary)" }} {...props}>{children}</p>
   ),
   ul: ({ children, ...props }: ComponentPropsWithoutRef<"ul">) => (
     <ul className="list-disc ml-5 space-y-2 mb-4" {...props}>{children}</ul>
@@ -461,12 +465,12 @@ const markdownComponents = {
     <ol className="list-decimal ml-5 space-y-2 mb-4" {...props}>{children}</ol>
   ),
   li: ({ children, ...props }: ComponentPropsWithoutRef<"li">) => (
-    <li className="text-slate-300 text-[15px] leading-[1.8] pl-1" {...props}>{children}</li>
+    <li className="text-[15px] leading-[1.8] pl-1" style={{ color: "var(--color-text-secondary)" }} {...props}>{children}</li>
   ),
   blockquote: ({ children, ...props }: ComponentPropsWithoutRef<"blockquote">) => (
     <blockquote
       className="border-l-4 pl-5 py-3 my-5 rounded-r-lg text-[15px] leading-[1.8]"
-      style={{ borderColor: "#3b82f6", backgroundColor: "#1e293b80", color: "#cbd5e1" }}
+      style={{ borderColor: "var(--color-blue)", backgroundColor: "var(--color-blue-bg)", color: "var(--color-text-secondary)" }}
       {...props}
     >
       {children}
@@ -482,7 +486,7 @@ const markdownComponents = {
     return (
       <code
         className="px-1.5 py-0.5 rounded text-[13px] font-mono"
-        style={{ backgroundColor: "#1e293b", color: "#93c5fd" }}
+        style={{ backgroundColor: "var(--color-card)", color: "#93c5fd" }}
         {...props}
       >
         {children}
@@ -492,27 +496,27 @@ const markdownComponents = {
   pre: ({ children, ...props }: ComponentPropsWithoutRef<"pre">) => (
     <pre
       className="rounded-xl p-5 text-sm font-mono overflow-x-auto my-6 leading-relaxed"
-      style={{ backgroundColor: "#0f172a", color: "#e2e8f0", border: "1px solid #334155" }}
+      style={{ backgroundColor: "var(--color-page)", color: "var(--color-text-primary)", border: "1px solid var(--color-border)" }}
       {...props}
     >
       {children}
     </pre>
   ),
   table: ({ children, ...props }: ComponentPropsWithoutRef<"table">) => (
-    <div className="overflow-x-auto my-6 rounded-lg" style={{ border: "1px solid #334155" }}>
+    <div className="overflow-x-auto my-6 rounded-lg" style={{ border: "1px solid var(--color-border)" }}>
       <table className="w-full text-[14px] border-collapse" {...props}>{children}</table>
     </div>
   ),
   thead: ({ children, ...props }: ComponentPropsWithoutRef<"thead">) => (
-    <thead style={{ backgroundColor: "#1e293b" }} {...props}>{children}</thead>
+    <thead style={{ backgroundColor: "var(--color-card)" }} {...props}>{children}</thead>
   ),
   th: ({ children, ...props }: ComponentPropsWithoutRef<"th">) => (
-    <th className="text-left text-white font-semibold px-4 py-3 border-b" style={{ borderColor: "#334155" }} {...props}>
+    <th className="text-left font-semibold px-4 py-3 border-b" style={{ color: "var(--color-text-heading)", borderColor: "var(--color-border)" }} {...props}>
       {children}
     </th>
   ),
   td: ({ children, ...props }: ComponentPropsWithoutRef<"td">) => (
-    <td className="text-slate-300 px-4 py-3 border-b" style={{ borderColor: "#334155" }} {...props}>
+    <td className="px-4 py-3 border-b" style={{ color: "var(--color-text-secondary)", borderColor: "var(--color-border)" }} {...props}>
       {children}
     </td>
   ),
@@ -529,10 +533,10 @@ const markdownComponents = {
     </a>
   ),
   strong: ({ children, ...props }: ComponentPropsWithoutRef<"strong">) => (
-    <strong className="text-white font-semibold" {...props}>{children}</strong>
+    <strong className="font-semibold" style={{ color: "var(--color-text-heading)" }} {...props}>{children}</strong>
   ),
   hr: ({ ...props }: ComponentPropsWithoutRef<"hr">) => (
-    <hr className="my-8 border-t" style={{ borderColor: "#334155" }} {...props} />
+    <hr className="my-8 border-t" style={{ borderColor: "var(--color-border)" }} {...props} />
   ),
 };
 

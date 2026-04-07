@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import { Suspense } from "react";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
+import Providers from "./providers";
 import "./globals.css";
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID ?? "G-BVF7R4WG1F";
@@ -17,7 +18,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ja">
+    <html lang="ja" suppressHydrationWarning>
       <head>
         {GA_ID && (
           <>
@@ -36,11 +37,13 @@ export default function RootLayout({
           </>
         )}
       </head>
-      <body style={{ backgroundColor: "#0f172a", color: "#f1f5f9", minHeight: "100vh" }}>
-        <Suspense fallback={null}>
-          <GoogleAnalytics />
-        </Suspense>
-        {children}
+      <body style={{ minHeight: "100vh" }}>
+        <Providers>
+          <Suspense fallback={null}>
+            <GoogleAnalytics />
+          </Suspense>
+          {children}
+        </Providers>
       </body>
     </html>
   );

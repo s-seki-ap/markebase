@@ -4,18 +4,72 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ===== Light Mode (default) ===== */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-page: #f8fafc;
+  --color-card: #ffffff;
+  --color-card-alt: #f1f5f9;
+  --color-border: #e2e8f0;
+  --color-border-strong: #cbd5e1;
+  --color-text-heading: #0f172a;
+  --color-text-primary: #1e293b;
+  --color-text-secondary: #475569;
+  --color-text-muted: #64748b;
+  --color-text-disabled: #94a3b8;
+  --color-overlay: rgba(0,0,0,0.3);
+  --color-card-shadow: 0 1px 3px rgba(0,0,0,0.08);
+
+  /* Accent (shared) */
+  --color-blue: #3b82f6;
+  --color-green: #10b981;
+  --color-purple: #8b5cf6;
+  --color-yellow: #fbbf24;
+  --color-red: #ef4444;
+  --color-orange: #f59e0b;
+
+  /* Semi-transparent accent backgrounds */
+  --color-blue-bg: #3b82f615;
+  --color-green-bg: #10b98115;
+  --color-purple-bg: #8b5cf615;
+  --color-yellow-bg: #fbbf2415;
+  --color-red-bg: #ef444415;
+  --color-orange-bg: #f59e0b15;
+
+  /* Fonts */
   --font-sans: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ===== Dark Mode ===== */
+.dark {
+  --color-page: #0f172a;
+  --color-card: #1e293b;
+  --color-card-alt: #1e1e1e;
+  --color-border: #334155;
+  --color-border-strong: #475569;
+  --color-text-heading: #ffffff;
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: #cbd5e1;
+  --color-text-muted: #94a3b8;
+  --color-text-disabled: #64748b;
+  --color-overlay: rgba(0,0,0,0.6);
+  --color-card-shadow: none;
+
+  /* Accent (same values) */
+  --color-blue: #3b82f6;
+  --color-green: #10b981;
+  --color-purple: #8b5cf6;
+  --color-yellow: #fbbf24;
+  --color-red: #ef4444;
+  --color-orange: #f59e0b;
+
+  /* Semi-transparent accent backgrounds (higher opacity on dark) */
+  --color-blue-bg: #3b82f622;
+  --color-green-bg: #10b98122;
+  --color-purple-bg: #8b5cf622;
+  --color-yellow-bg: #fbbf2422;
+  --color-red-bg: #ef444422;
+  --color-orange-bg: #f59e0b22;
 }
 
 html {
@@ -25,8 +79,8 @@ html {
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
+  color: var(--color-text-primary);
+  background: var(--color-page);
   font-family: var(--font-sans);
   line-height: 1.8;
 }

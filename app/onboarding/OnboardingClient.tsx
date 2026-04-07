@@ -79,20 +79,20 @@ export default function OnboardingClient({ userName }: { userName: string }) {
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center p-8" style={{ backgroundColor: "#0f172a" }}>
+    <main className="min-h-screen flex items-center justify-center p-8" style={{ backgroundColor: "var(--color-page)" }}>
       <div className="w-full max-w-lg">
         {/* Header */}
         <div className="text-center mb-10">
           <div
-            className="w-14 h-14 rounded-2xl flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4"
-            style={{ backgroundColor: "#3b82f6" }}
+            className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl font-bold mx-auto mb-4"
+            style={{ backgroundColor: "var(--color-blue)", color: "#ffffff" }}
           >
             M
           </div>
-          <h1 className="text-2xl font-bold text-white mb-2">
+          <h1 className="text-2xl font-bold mb-2" style={{ color: "var(--color-text-heading)" }}>
             ようこそ、{userName.split(" ")[0]}さん
           </h1>
-          <p className="text-slate-400 text-sm">
+          <p className="text-sm" style={{ color: "var(--color-text-muted)" }}>
             あなたに合った学習プランを作成します
           </p>
         </div>
@@ -105,7 +105,7 @@ export default function OnboardingClient({ userName }: { userName: string }) {
               className="h-2 rounded-full transition-all"
               style={{
                 width: step === i ? "24px" : "8px",
-                backgroundColor: step >= i ? "#3b82f6" : "#334155",
+                backgroundColor: step >= i ? "var(--color-blue)" : "var(--color-border)",
               }}
             />
           ))}
@@ -114,7 +114,7 @@ export default function OnboardingClient({ userName }: { userName: string }) {
         {/* Step 1: Role */}
         {step === 0 && (
           <div>
-            <h2 className="text-lg font-semibold text-white mb-6 text-center">
+            <h2 className="text-lg font-semibold mb-6 text-center" style={{ color: "var(--color-text-heading)" }}>
               あなたの役割は？
             </h2>
             <div className="space-y-3">
@@ -124,14 +124,14 @@ export default function OnboardingClient({ userName }: { userName: string }) {
                   onClick={() => { setRole(r.id); setStep(1); }}
                   className="w-full flex items-center gap-4 p-5 rounded-xl border transition-all text-left"
                   style={{
-                    backgroundColor: role === r.id ? "#3b82f622" : "#1e293b",
-                    borderColor: role === r.id ? "#3b82f6" : "#334155",
+                    backgroundColor: role === r.id ? "var(--color-blue-bg)" : "var(--color-card)",
+                    borderColor: role === r.id ? "var(--color-blue)" : "var(--color-border)",
                   }}
                 >
                   <span className="text-2xl">{r.icon}</span>
                   <div>
-                    <p className="text-white font-medium">{r.label}</p>
-                    <p className="text-slate-400 text-sm">{r.desc}</p>
+                    <p className="font-medium" style={{ color: "var(--color-text-heading)" }}>{r.label}</p>
+                    <p className="text-sm" style={{ color: "var(--color-text-muted)" }}>{r.desc}</p>
                   </div>
                 </button>
               ))}
@@ -142,7 +142,7 @@ export default function OnboardingClient({ userName }: { userName: string }) {
         {/* Step 2: Experience */}
         {step === 1 && (
           <div>
-            <h2 className="text-lg font-semibold text-white mb-6 text-center">
+            <h2 className="text-lg font-semibold mb-6 text-center" style={{ color: "var(--color-text-heading)" }}>
               マーケティングの経験は？
             </h2>
             <div className="space-y-3">
@@ -156,20 +156,21 @@ export default function OnboardingClient({ userName }: { userName: string }) {
                   }}
                   className="w-full flex items-start gap-4 p-5 rounded-xl border transition-all text-left"
                   style={{
-                    backgroundColor: experience === e.id ? "#3b82f622" : "#1e293b",
-                    borderColor: experience === e.id ? "#3b82f6" : "#334155",
+                    backgroundColor: experience === e.id ? "var(--color-blue-bg)" : "var(--color-card)",
+                    borderColor: experience === e.id ? "var(--color-blue)" : "var(--color-border)",
                   }}
                 >
                   <div>
-                    <p className="text-white font-medium">{e.label}</p>
-                    <p className="text-slate-400 text-sm">{e.desc}</p>
+                    <p className="font-medium" style={{ color: "var(--color-text-heading)" }}>{e.label}</p>
+                    <p className="text-sm" style={{ color: "var(--color-text-muted)" }}>{e.desc}</p>
                   </div>
                 </button>
               ))}
             </div>
             <button
               onClick={() => setStep(0)}
-              className="mt-4 text-sm text-slate-500 hover:text-slate-300 transition-colors"
+              className="mt-4 text-sm transition-opacity hover:opacity-80"
+              style={{ color: "var(--color-text-disabled)" }}
             >
               &larr; 戻る
             </button>
@@ -179,10 +180,10 @@ export default function OnboardingClient({ userName }: { userName: string }) {
         {/* Step 3: Recommended path */}
         {step === 2 && (
           <div>
-            <h2 className="text-lg font-semibold text-white mb-2 text-center">
+            <h2 className="text-lg font-semibold mb-2 text-center" style={{ color: "var(--color-text-heading)" }}>
               おすすめの学習パス
             </h2>
-            <p className="text-slate-400 text-sm mb-6 text-center">
+            <p className="text-sm mb-6 text-center" style={{ color: "var(--color-text-muted)" }}>
               あなたの役割と経験に基づいて選びました。変更もできます。
             </p>
             <div className="space-y-3">
@@ -195,22 +196,22 @@ export default function OnboardingClient({ userName }: { userName: string }) {
                     onClick={() => setSelectedPath(path.id)}
                     className="w-full flex items-start gap-4 p-5 rounded-xl border transition-all text-left relative"
                     style={{
-                      backgroundColor: isSelected ? `${path.color}22` : "#1e293b",
-                      borderColor: isSelected ? path.color : "#334155",
+                      backgroundColor: isSelected ? `${path.color}22` : "var(--color-card)",
+                      borderColor: isSelected ? path.color : "var(--color-border)",
                     }}
                   >
                     {isRecommended && (
                       <span
                         className="absolute -top-2 right-3 text-xs px-2 py-0.5 rounded-full font-medium"
-                        style={{ backgroundColor: path.color, color: "white" }}
+                        style={{ backgroundColor: path.color, color: "#ffffff" }}
                       >
                         おすすめ
                       </span>
                     )}
                     <span className="text-2xl">{path.icon}</span>
                     <div>
-                      <p className="text-white font-medium">{path.name}</p>
-                      <p className="text-slate-400 text-sm">{path.description}</p>
+                      <p className="font-medium" style={{ color: "var(--color-text-heading)" }}>{path.name}</p>
+                      <p className="text-sm" style={{ color: "var(--color-text-muted)" }}>{path.description}</p>
                     </div>
                   </button>
                 );
@@ -220,14 +221,15 @@ export default function OnboardingClient({ userName }: { userName: string }) {
               <button
                 onClick={handleComplete}
                 disabled={!selectedPath || saving}
-                className="w-full py-4 rounded-xl text-white font-semibold text-lg transition-opacity hover:opacity-90 disabled:opacity-50"
-                style={{ backgroundColor: "#3b82f6" }}
+                className="w-full py-4 rounded-xl font-semibold text-lg transition-opacity hover:opacity-90 disabled:opacity-50"
+                style={{ backgroundColor: "var(--color-blue)", color: "#ffffff" }}
               >
                 {saving ? "保存中..." : "学習を始める"}
               </button>
               <button
                 onClick={() => setStep(1)}
-                className="text-sm text-slate-500 hover:text-slate-300 transition-colors"
+                className="text-sm transition-opacity hover:opacity-80"
+                style={{ color: "var(--color-text-disabled)" }}
               >
                 &larr; 戻る
               </button>

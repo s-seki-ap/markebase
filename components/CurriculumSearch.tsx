@@ -39,34 +39,34 @@ export default function CurriculumSearch({ modules }: CurriculumSearchProps) {
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="モジュール名やカテゴリで検索..."
-        className="w-full px-5 py-3 rounded-xl text-sm text-white placeholder-slate-500"
-        style={{ backgroundColor: "#1e293b", border: "1px solid #334155" }}
+        className="w-full px-5 py-3 rounded-xl text-sm"
+        style={{ backgroundColor: "var(--color-card)", border: "1px solid var(--color-border)", color: "var(--color-text-heading)" }}
       />
 
       {results.length > 0 && (
         <div
           className="absolute z-10 top-full left-0 right-0 mt-2 rounded-xl overflow-hidden shadow-xl max-h-[400px] overflow-y-auto"
-          style={{ backgroundColor: "#1e293b", border: "1px solid #334155" }}
+          style={{ backgroundColor: "var(--color-card)", border: "1px solid var(--color-border)" }}
         >
           {results.map((m) => (
             <Link
               key={`${m.categoryId}--${m.moduleId}`}
               href={m.available ? `/curriculum/${m.categoryId}/${m.moduleId}` : `/curriculum/${m.categoryId}`}
-              className="flex items-center justify-between px-5 py-3 border-b last:border-b-0 transition-colors hover:bg-slate-700/30"
-              style={{ borderColor: "#334155" }}
+              className="flex items-center justify-between px-5 py-3 border-b last:border-b-0 transition-opacity hover:opacity-80"
+              style={{ borderColor: "var(--color-border)" }}
               onClick={() => setQuery("")}
             >
               <div className="flex items-center gap-3 min-w-0">
                 <span>{m.categoryIcon}</span>
                 <div className="min-w-0">
-                  <p className="text-sm text-white truncate">{m.moduleName}</p>
-                  <p className="text-xs text-slate-500">{m.categoryName}</p>
+                  <p className="text-sm truncate" style={{ color: "var(--color-text-heading)" }}>{m.moduleName}</p>
+                  <p className="text-xs" style={{ color: "var(--color-text-disabled)" }}>{m.categoryName}</p>
                 </div>
               </div>
               <div className="flex items-center gap-2 shrink-0">
-                <span className="text-xs text-slate-500">{m.estimatedMinutes}分</span>
+                <span className="text-xs" style={{ color: "var(--color-text-disabled)" }}>{m.estimatedMinutes}分</span>
                 {!m.available && (
-                  <span className="text-xs px-2 py-0.5 rounded-full" style={{ backgroundColor: "#334155", color: "#64748b" }}>
+                  <span className="text-xs px-2 py-0.5 rounded-full" style={{ backgroundColor: "var(--color-border)", color: "var(--color-text-disabled)" }}>
                     未公開
                   </span>
                 )}
@@ -78,8 +78,8 @@ export default function CurriculumSearch({ modules }: CurriculumSearchProps) {
 
       {query.trim() && results.length === 0 && (
         <div
-          className="absolute z-10 top-full left-0 right-0 mt-2 px-5 py-4 rounded-xl text-sm text-slate-500 text-center"
-          style={{ backgroundColor: "#1e293b", border: "1px solid #334155" }}
+          className="absolute z-10 top-full left-0 right-0 mt-2 px-5 py-4 rounded-xl text-sm text-center"
+          style={{ backgroundColor: "var(--color-card)", border: "1px solid var(--color-border)", color: "var(--color-text-disabled)" }}
         >
           「{query}」に一致するモジュールが見つかりません
         </div>

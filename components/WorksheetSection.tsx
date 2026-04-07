@@ -36,20 +36,20 @@ export default function WorksheetSection({
         {/* Left: Instructions + Hints */}
         <div
           className="shrink-0 overflow-y-auto border-b lg:border-b-0 lg:border-r p-6 w-full lg:w-[36%] max-h-[40vh] lg:max-h-none"
-          style={{ backgroundColor: "#0f172a", borderColor: "#1e293b" }}
+          style={{ backgroundColor: "var(--color-page)", borderColor: "var(--color-border)" }}
         >
           <div className="prose-sm">
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
               components={{
                 h1: ({ children }) => (
-                  <h2 className="text-lg font-bold text-white mb-3">{children}</h2>
+                  <h2 className="text-lg font-bold mb-3" style={{ color: "var(--color-text-heading)" }}>{children}</h2>
                 ),
                 h2: ({ children }) => (
-                  <h3 className="text-base font-semibold text-white mt-5 mb-2">{children}</h3>
+                  <h3 className="text-base font-semibold mt-5 mb-2" style={{ color: "var(--color-text-heading)" }}>{children}</h3>
                 ),
                 p: ({ children }) => (
-                  <p className="text-slate-300 text-sm leading-[1.8] mb-3">{children}</p>
+                  <p className="text-sm leading-[1.8] mb-3" style={{ color: "var(--color-text-secondary)" }}>{children}</p>
                 ),
                 ul: ({ children }) => (
                   <ul className="list-disc ml-4 space-y-1.5 mb-3">{children}</ul>
@@ -58,15 +58,15 @@ export default function WorksheetSection({
                   <ol className="list-decimal ml-4 space-y-1.5 mb-3">{children}</ol>
                 ),
                 li: ({ children }) => (
-                  <li className="text-slate-300 text-sm leading-[1.7]">{children}</li>
+                  <li className="text-sm leading-[1.7]" style={{ color: "var(--color-text-secondary)" }}>{children}</li>
                 ),
                 strong: ({ children }) => (
-                  <strong className="text-white font-semibold">{children}</strong>
+                  <strong className="font-semibold" style={{ color: "var(--color-text-heading)" }}>{children}</strong>
                 ),
                 code: ({ children }) => (
                   <code
                     className="px-1.5 py-0.5 rounded text-xs font-mono"
-                    style={{ backgroundColor: "#1e293b", color: "#93c5fd" }}
+                    style={{ backgroundColor: "var(--color-card)", color: "#93c5fd" }}
                   >
                     {children}
                   </code>
@@ -74,7 +74,7 @@ export default function WorksheetSection({
                 blockquote: ({ children }) => (
                   <blockquote
                     className="border-l-3 pl-4 py-2 my-3 rounded-r text-sm"
-                    style={{ borderColor: "#8b5cf6", backgroundColor: "#8b5cf610", color: "#cbd5e1" }}
+                    style={{ borderColor: "var(--color-purple)", backgroundColor: "var(--color-purple-bg)", color: "var(--color-text-secondary)" }}
                   >
                     {children}
                   </blockquote>
@@ -88,8 +88,8 @@ export default function WorksheetSection({
           {/* Hints */}
           <div className="mt-6">
             <div className="flex items-center justify-between mb-3">
-              <p className="text-slate-400 text-sm font-medium">ヒント</p>
-              <span className="text-slate-500 text-xs">
+              <p className="text-sm font-medium" style={{ color: "var(--color-text-muted)" }}>ヒント</p>
+              <span className="text-xs" style={{ color: "var(--color-text-disabled)" }}>
                 {shownHints}/{data.hints.length}
               </span>
             </div>
@@ -97,8 +97,8 @@ export default function WorksheetSection({
             {data.hints.slice(0, shownHints).map((hint, i) => (
               <div
                 key={i}
-                className="mb-2.5 p-3.5 rounded-lg text-sm text-slate-300 leading-[1.7]"
-                style={{ backgroundColor: "#1e293b" }}
+                className="mb-2.5 p-3.5 rounded-lg text-sm leading-[1.7]"
+                style={{ backgroundColor: "var(--color-card)", color: "var(--color-text-secondary)" }}
               >
                 💡 {hint}
               </div>
@@ -107,8 +107,8 @@ export default function WorksheetSection({
             {shownHints < data.hints.length && (
               <button
                 onClick={showNextHint}
-                className="w-full py-2.5 rounded-lg text-sm transition-colors hover:opacity-80"
-                style={{ backgroundColor: "#1e293b", color: "#94a3b8" }}
+                className="w-full py-2.5 rounded-lg text-sm transition-opacity hover:opacity-80"
+                style={{ backgroundColor: "var(--color-card)", color: "var(--color-text-muted)" }}
               >
                 ヒントを表示 →
               </button>
@@ -121,18 +121,18 @@ export default function WorksheetSection({
           {/* Worksheet header */}
           <div
             className="px-4 py-2.5 border-b flex items-center justify-between shrink-0"
-            style={{ backgroundColor: "#1e293b", borderColor: "#334155" }}
+            style={{ backgroundColor: "var(--color-card)", borderColor: "var(--color-border)" }}
           >
             <div className="flex items-center gap-2">
               <span className="text-base">📝</span>
-              <span className="text-slate-300 text-sm font-medium">ワークシート</span>
+              <span className="text-sm font-medium" style={{ color: "var(--color-text-secondary)" }}>ワークシート</span>
             </div>
             <button
               onClick={() => setShowAnswer(!showAnswer)}
               className="px-3 py-1 rounded text-xs transition-colors"
               style={{
-                backgroundColor: showAnswer ? "#f59e0b22" : "#33415566",
-                color: showAnswer ? "#fbbf24" : "#94a3b8",
+                backgroundColor: showAnswer ? "var(--color-orange-bg)" : "var(--color-border)",
+                color: showAnswer ? "var(--color-yellow)" : "var(--color-text-muted)",
               }}
             >
               {showAnswer ? "📖 解答を隠す" : "📖 解答例を見る"}
@@ -155,12 +155,12 @@ export default function WorksheetSection({
       {/* Action bar */}
       <div
         className="flex items-center gap-3 px-5 py-3 border-t shrink-0"
-        style={{ backgroundColor: "#0f172a", borderColor: "#1e293b" }}
+        style={{ backgroundColor: "var(--color-page)", borderColor: "var(--color-border)" }}
       >
         <button
           onClick={onAIClick}
           className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-colors"
-          style={{ backgroundColor: "#8b5cf622", color: "#8b5cf6" }}
+          style={{ backgroundColor: "var(--color-purple-bg)", color: "var(--color-purple)" }}
         >
           🤖 AIに質問
         </button>
@@ -168,7 +168,7 @@ export default function WorksheetSection({
           <button
             onClick={onNext}
             className="flex items-center gap-2 px-6 py-2 rounded-lg text-sm font-medium transition-opacity hover:opacity-90"
-            style={{ backgroundColor: "#3b82f6", color: "white" }}
+            style={{ backgroundColor: "var(--color-blue)", color: "#ffffff" }}
           >
             次へ →
           </button>
