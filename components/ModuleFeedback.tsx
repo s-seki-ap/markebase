@@ -7,7 +7,7 @@ interface ModuleFeedbackProps {
   moduleId: string;
 }
 
-const RATING_LABELS = ["", "難しすぎた", "やや難しい", "ちょうど良い", "簡単だった", "簡単すぎた"];
+const RATING_LABELS = ["", "不満", "やや不満", "ふつう", "良かった", "とても良かった"];
 
 export default function ModuleFeedback({ categoryId, moduleId }: ModuleFeedbackProps) {
   const [rating, setRating] = useState(0);

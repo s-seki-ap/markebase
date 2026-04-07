@@ -65,7 +65,7 @@ export default function QuizSection({ data, onNext, categoryId, moduleId, onQuiz
     }
 
     return (
-      <div className="h-full flex items-center justify-center">
+      <div className="h-full overflow-y-auto flex items-center justify-center p-8">
         <div className="text-center max-w-md">
           <div className="text-7xl mb-6 animate-bounce-in">{score === total ? "🎉" : score >= total / 2 ? "👏" : "💪"}</div>
           <h2 className="text-3xl font-extrabold mb-2" style={{ color: "var(--color-text-heading)" }}>
@@ -98,8 +98,8 @@ export default function QuizSection({ data, onNext, categoryId, moduleId, onQuiz
   }
 
   return (
-    <div className="h-full flex items-center justify-center p-8">
-      <div className="w-full max-w-[600px]">
+    <div className="h-full overflow-y-auto flex items-start justify-center p-8">
+      <div className="w-full max-w-[600px] py-4">
         {/* Progress */}
         <div className="flex items-center gap-3 mb-8">
           {data.questions.map((_, i) => (

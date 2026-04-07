@@ -33,7 +33,7 @@ function splitIntoSlides(content: string): string[] {
 const slideMarkdownComponents = {
   h1: ({ children, ...props }: ComponentPropsWithoutRef<"h1">) => (
     <h1
-      className="text-2xl lg:text-3xl font-extrabold mb-6 leading-tight"
+      className="text-2xl lg:text-3xl font-extrabold mb-8 leading-tight"
       style={{ color: "var(--color-text-heading)" }}
       {...props}
     >
@@ -42,7 +42,7 @@ const slideMarkdownComponents = {
   ),
   h2: ({ children, ...props }: ComponentPropsWithoutRef<"h2">) => (
     <h2
-      className="text-xl lg:text-2xl font-extrabold mb-5 leading-snug"
+      className="text-xl lg:text-2xl font-extrabold mt-10 mb-6 leading-snug"
       style={{ color: "var(--color-text-heading)" }}
       {...props}
     >
@@ -51,7 +51,7 @@ const slideMarkdownComponents = {
   ),
   h3: ({ children, ...props }: ComponentPropsWithoutRef<"h3">) => (
     <h3
-      className="text-lg font-bold mt-6 mb-3 leading-snug"
+      className="text-lg font-bold mt-8 mb-4 leading-snug"
       style={{ color: "var(--color-text-primary)" }}
       {...props}
     >
@@ -60,7 +60,7 @@ const slideMarkdownComponents = {
   ),
   p: ({ children, ...props }: ComponentPropsWithoutRef<"p">) => (
     <p
-      className="text-base leading-[1.9] mb-4"
+      className="text-base leading-[2.0] mb-5"
       style={{ color: "var(--color-text-secondary)" }}
       {...props}
     >
@@ -68,23 +68,23 @@ const slideMarkdownComponents = {
     </p>
   ),
   ul: ({ children, ...props }: ComponentPropsWithoutRef<"ul">) => (
-    <ul className="list-disc ml-5 space-y-2.5 mb-5" {...props}>
+    <ul className="list-disc ml-5 space-y-3 mb-6" {...props}>
       {children}
     </ul>
   ),
   ol: ({ children, ...props }: ComponentPropsWithoutRef<"ol">) => (
-    <ol className="list-decimal ml-5 space-y-2.5 mb-5" {...props}>
+    <ol className="list-decimal ml-5 space-y-3 mb-6" {...props}>
       {children}
     </ol>
   ),
   li: ({ children, ...props }: ComponentPropsWithoutRef<"li">) => (
-    <li className="text-base leading-[1.8] pl-1" style={{ color: "var(--color-text-secondary)" }} {...props}>
+    <li className="text-base leading-[2.0] pl-1" style={{ color: "var(--color-text-secondary)" }} {...props}>
       {children}
     </li>
   ),
   blockquote: ({ children, ...props }: ComponentPropsWithoutRef<"blockquote">) => (
     <blockquote
-      className="border-l-4 pl-5 py-3 my-5 rounded-r-xl text-base leading-[1.8]"
+      className="border-l-4 pl-5 py-3 my-6 rounded-r-xl text-base leading-[1.8]"
       style={{ borderColor: "var(--color-blue)", backgroundColor: "var(--color-blue-bg)", color: "var(--color-text-secondary)" }}
       {...props}
     >
