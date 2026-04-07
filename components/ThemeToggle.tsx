@@ -13,11 +13,11 @@ export default function ThemeToggle() {
     return (
       <button
         style={{
-          width: 36,
-          height: 36,
-          borderRadius: 8,
+          width: 40,
+          height: 40,
+          borderRadius: 16,
           backgroundColor: "var(--color-card)",
-          border: "1px solid var(--color-border)",
+          border: "2px solid var(--color-border)",
         }}
         aria-label="テーマ切替"
       />
@@ -42,17 +42,22 @@ export default function ThemeToggle() {
         display: "flex",
         alignItems: "center",
         gap: 6,
-        padding: "6px 12px",
-        borderRadius: 8,
+        padding: "8px 14px",
+        borderRadius: 16,
         backgroundColor: "var(--color-card)",
-        border: "1px solid var(--color-border)",
+        border: "2px solid var(--color-border)",
         color: "var(--color-text-secondary)",
         fontSize: 13,
+        fontWeight: 700,
         cursor: "pointer",
-        transition: "opacity 0.15s",
+        transition: "all 0.15s",
       }}
-      onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.8")}
-      onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.transform = "scale(1.05)";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.transform = "scale(1)";
+      }}
     >
       <span>{icon}</span>
       <span>{label}</span>

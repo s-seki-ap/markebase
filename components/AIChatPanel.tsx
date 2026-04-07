@@ -91,19 +91,19 @@ export default function AIChatPanel({
       {/* Panel */}
       <div
         className="fixed right-0 top-0 h-full z-50 flex flex-col w-full md:w-[400px]"
-        style={{ backgroundColor: "var(--color-card)", borderLeft: "1px solid var(--color-border)" }}
+        style={{ backgroundColor: "var(--color-card)", borderLeft: "2px solid var(--color-border)" }}
       >
         {/* Header */}
         <div
-          className="flex items-center justify-between p-4 border-b shrink-0"
+          className="flex items-center justify-between p-4 border-b-2 shrink-0"
           style={{ borderColor: "var(--color-border)" }}
         >
           <div className="flex items-center gap-2">
-            <span className="text-lg">🤖</span>
+            <span className="text-2xl">🤖</span>
             <div>
-              <p className="font-medium text-sm" style={{ color: "var(--color-text-heading)" }}>AIアシスタント</p>
+              <p className="font-bold text-sm" style={{ color: "var(--color-text-heading)" }}>AIアシスタント</p>
               {lessonTitle && (
-                <p className="text-xs" style={{ color: "var(--color-purple)" }}>
+                <p className="text-xs font-semibold" style={{ color: "var(--color-purple)" }}>
                   {lessonTitle}
                 </p>
               )}
@@ -111,8 +111,8 @@ export default function AIChatPanel({
           </div>
           <button
             onClick={onClose}
-            className="text-lg leading-none transition-opacity hover:opacity-80"
-            style={{ color: "var(--color-text-muted)" }}
+            className="w-8 h-8 rounded-full flex items-center justify-center text-lg font-bold transition-all hover:scale-110"
+            style={{ backgroundColor: "var(--color-border)", color: "var(--color-text-muted)" }}
             aria-label="閉じる"
           >
             ✕
@@ -124,21 +124,20 @@ export default function AIChatPanel({
           {/* Welcome message */}
           {messages.length === 0 && !apiError && (
             <div
-              className="p-4 rounded-xl text-sm border-l-4"
+              className="p-4 rounded-2xl text-sm"
               style={{
-                backgroundColor: "var(--color-page)",
-                color: "var(--color-text-primary)",
-                borderColor: "var(--color-purple)",
+                backgroundColor: "var(--color-purple-bg)",
+                border: "2px solid var(--color-purple)",
               }}
             >
-              <p className="font-medium mb-2" style={{ color: "var(--color-purple)" }}>
-                MarkeBase AI
+              <p className="font-bold mb-2" style={{ color: "var(--color-purple)" }}>
+                🤖 MarkeBase AI
               </p>
               <p className="leading-relaxed" style={{ color: "var(--color-text-secondary)" }}>
-                こんにちは！GA4・GTM・HTML・CSS・Webマーケティングについて何でも聞いてください。
+                こんにちは！GA4・GTM・HTML・CSS・Webマーケティングについて何でも聞いてね！
               </p>
               {lessonTitle && (
-                <p className="mt-2 text-xs" style={{ color: "var(--color-text-disabled)" }}>
+                <p className="mt-2 text-xs font-semibold" style={{ color: "var(--color-text-disabled)" }}>
                   現在のレッスン「{lessonTitle}」の内容を踏まえて回答します。
                 </p>
               )}
@@ -152,7 +151,7 @@ export default function AIChatPanel({
               className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
             >
               <div
-                className={`max-w-[85%] px-4 py-2.5 rounded-xl text-sm leading-relaxed ${
+                className={`max-w-[85%] px-4 py-3 rounded-2xl text-sm leading-relaxed ${
                   msg.role === "assistant" ? "chat-markdown" : ""
                 }`}
                 style={
@@ -164,7 +163,7 @@ export default function AIChatPanel({
                     : {
                         backgroundColor: "var(--color-page)",
                         color: "var(--color-text-primary)",
-                        borderLeft: "3px solid var(--color-purple)",
+                        border: "2px solid var(--color-purple)",
                       }
                 }
               >
@@ -176,7 +175,7 @@ export default function AIChatPanel({
                         <p className="mb-2 last:mb-0 leading-relaxed">{children}</p>
                       ),
                       strong: ({ children }) => (
-                        <strong className="font-semibold" style={{ color: "var(--color-text-heading)" }}>{children}</strong>
+                        <strong className="font-bold" style={{ color: "var(--color-text-heading)" }}>{children}</strong>
                       ),
                       ul: ({ children }) => (
                         <ul className="mb-2 last:mb-0 ml-3 space-y-0.5" style={{ listStyleType: "disc" }}>{children}</ul>
@@ -192,7 +191,7 @@ export default function AIChatPanel({
                         if (isBlock) {
                           return (
                             <code
-                              className="block my-2 p-2.5 rounded-lg text-xs overflow-x-auto"
+                              className="block my-2 p-2.5 rounded-xl text-xs overflow-x-auto"
                               style={{
                                 backgroundColor: "var(--color-card)",
                                 color: "#a5f3fc",
@@ -205,7 +204,7 @@ export default function AIChatPanel({
                         }
                         return (
                           <code
-                            className="px-1 py-0.5 rounded text-xs"
+                            className="px-1.5 py-0.5 rounded-lg text-xs"
                             style={{
                               backgroundColor: "var(--color-border)",
                               color: "#a5f3fc",
@@ -218,20 +217,20 @@ export default function AIChatPanel({
                       },
                       pre: ({ children }) => <>{children}</>,
                       h1: ({ children }) => (
-                        <p className="font-semibold mb-1.5 mt-2 first:mt-0" style={{ color: "var(--color-text-heading)" }}>{children}</p>
+                        <p className="font-bold mb-1.5 mt-2 first:mt-0" style={{ color: "var(--color-text-heading)" }}>{children}</p>
                       ),
                       h2: ({ children }) => (
-                        <p className="font-semibold mb-1.5 mt-2 first:mt-0" style={{ color: "var(--color-text-heading)" }}>{children}</p>
+                        <p className="font-bold mb-1.5 mt-2 first:mt-0" style={{ color: "var(--color-text-heading)" }}>{children}</p>
                       ),
                       h3: ({ children }) => (
-                        <p className="font-semibold mb-1 mt-1.5 first:mt-0" style={{ color: "var(--color-text-heading)" }}>{children}</p>
+                        <p className="font-bold mb-1 mt-1.5 first:mt-0" style={{ color: "var(--color-text-heading)" }}>{children}</p>
                       ),
                       a: ({ href, children }) => (
                         <a
                           href={href}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="underline"
+                          className="underline font-bold"
                           style={{ color: "#93c5fd" }}
                         >
                           {children}
@@ -255,19 +254,19 @@ export default function AIChatPanel({
           {loading && (
             <div className="flex justify-start">
               <div
-                className="px-4 py-3 rounded-xl text-sm"
+                className="px-4 py-3 rounded-2xl text-sm"
                 style={{
                   backgroundColor: "var(--color-page)",
-                  borderLeft: "3px solid var(--color-purple)",
+                  border: "2px solid var(--color-purple)",
                 }}
               >
                 <div className="flex items-center gap-1.5">
-                  <span className="text-xs" style={{ color: "var(--color-text-muted)" }}>考え中</span>
+                  <span className="text-xs font-bold" style={{ color: "var(--color-text-muted)" }}>考え中</span>
                   <span className="flex gap-1">
                     {[0, 1, 2].map((i) => (
                       <span
                         key={i}
-                        className="w-1.5 h-1.5 rounded-full animate-bounce"
+                        className="w-2 h-2 rounded-full animate-bounce"
                         style={{
                           backgroundColor: "var(--color-purple)",
                           animationDelay: `${i * 0.15}s`,
@@ -283,11 +282,11 @@ export default function AIChatPanel({
           {/* Error message */}
           {apiError && (
             <div
-              className="p-3 rounded-xl text-sm"
+              className="p-3 rounded-2xl text-sm font-bold"
               style={{
-                backgroundColor: "#450a0a",
-                color: "#fca5a5",
-                border: "1px solid #7f1d1d",
+                backgroundColor: "var(--color-red-bg)",
+                color: "var(--color-red)",
+                border: "2px solid var(--color-red)",
               }}
             >
               {apiError}
@@ -299,7 +298,7 @@ export default function AIChatPanel({
 
         {/* Input area */}
         <div
-          className="p-4 border-t shrink-0"
+          className="p-4 border-t-2 shrink-0"
           style={{ borderColor: "var(--color-border)" }}
         >
           <div className="flex gap-2">
@@ -310,18 +309,17 @@ export default function AIChatPanel({
               onKeyDown={handleKeyDown}
               placeholder="質問を入力（Enterで送信）"
               disabled={loading}
-              className="flex-1 px-3 py-2 rounded-lg text-sm outline-none disabled:opacity-50"
+              className="flex-1 px-4 py-3 rounded-2xl text-sm font-semibold outline-none disabled:opacity-50"
               style={{
                 backgroundColor: "var(--color-page)",
                 color: "var(--color-text-primary)",
-                border: "1px solid var(--color-border)",
+                border: "2px solid var(--color-border)",
               }}
             />
             <button
               onClick={sendMessage}
               disabled={loading || !input.trim()}
-              className="px-4 py-2 rounded-lg text-sm font-medium transition-opacity hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed"
-              style={{ backgroundColor: "var(--color-purple)", color: "#ffffff" }}
+              className="btn-3d btn-3d-purple px-5 py-2 text-sm disabled:opacity-40 disabled:cursor-not-allowed"
             >
               送信
             </button>

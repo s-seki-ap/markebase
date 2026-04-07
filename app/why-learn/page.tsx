@@ -70,15 +70,15 @@ export default function WhyLearnPage() {
         <div className="relative max-w-3xl mx-auto px-8 pt-16 pb-12">
           <Link
             href="/curriculum"
-            className="inline-flex items-center gap-1 text-sm mb-10 transition-opacity hover:opacity-80"
+            className="inline-flex items-center gap-1 text-sm font-bold mb-10 transition-all hover:scale-105"
             style={{ color: "var(--color-text-muted)" }}
           >
             ← カリキュラムマップ
           </Link>
-          <h1 className="text-3xl sm:text-4xl font-bold mb-4 leading-tight" style={{ color: "var(--color-text-heading)" }}>
+          <h1 className="text-3xl sm:text-4xl font-extrabold mb-4 leading-tight" style={{ color: "var(--color-text-heading)" }}>
             なぜデジタルマーケターは
             <br />
-            体系的に学ぶ必要があるのか
+            体系的に学ぶ必要があるのか 🎯
           </h1>
           <p className="text-lg leading-relaxed" style={{ color: "var(--color-text-muted)" }}>
             断片的な知識の寄せ集めでは、現場で通用しません。
@@ -92,16 +92,16 @@ export default function WhyLearnPage() {
       <div className="max-w-3xl mx-auto px-8 pb-8">
         {SECTIONS.map((section, i) => (
           <section key={i} className="mb-12">
-            <h2 className="text-xl font-bold mb-4 flex items-start gap-3" style={{ color: "var(--color-text-heading)" }}>
+            <h2 className="text-xl font-extrabold mb-4 flex items-start gap-3" style={{ color: "var(--color-text-heading)" }}>
               <span
-                className="shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold mt-0.5"
-                style={{ backgroundColor: "var(--color-blue-bg)", color: "var(--color-blue)" }}
+                className="shrink-0 w-10 h-10 rounded-2xl flex items-center justify-center text-sm font-extrabold mt-0.5"
+                style={{ backgroundColor: "var(--color-blue-bg)", color: "var(--color-blue)", border: "2px solid var(--color-blue)" }}
               >
                 {i + 1}
               </span>
               {section.title}
             </h2>
-            <div className="pl-11 space-y-4">
+            <div className="pl-13 space-y-4">
               {section.body.split("\n\n").map((paragraph, j) => (
                 <p
                   key={j}
@@ -117,31 +117,31 @@ export default function WhyLearnPage() {
 
         {/* Learning flow */}
         <section className="mb-16">
-          <h2 className="text-xl font-bold mb-6 flex items-start gap-3" style={{ color: "var(--color-text-heading)" }}>
+          <h2 className="text-xl font-extrabold mb-6 flex items-start gap-3" style={{ color: "var(--color-text-heading)" }}>
             <span
-              className="shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold mt-0.5"
-              style={{ backgroundColor: "var(--color-blue-bg)", color: "var(--color-blue)" }}
+              className="shrink-0 w-10 h-10 rounded-2xl flex items-center justify-center text-sm font-extrabold mt-0.5"
+              style={{ backgroundColor: "var(--color-blue-bg)", color: "var(--color-blue)", border: "2px solid var(--color-blue)" }}
             >
               5
             </span>
             学習の全体像
           </h2>
-          <div className="pl-11">
+          <div className="pl-13">
             <div className="space-y-3">
               {CATEGORY_FLOW.map((item, i) => (
                 <div key={i} className="flex items-center gap-4">
                   <div
-                    className="shrink-0 w-10 h-10 rounded-xl flex items-center justify-center text-xl"
-                    style={{ backgroundColor: "var(--color-card)" }}
+                    className="shrink-0 w-12 h-12 rounded-2xl flex items-center justify-center text-xl"
+                    style={{ backgroundColor: "var(--color-card)", boxShadow: "var(--color-card-shadow)" }}
                   >
                     {item.icon}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium" style={{ color: "var(--color-text-heading)" }}>{item.name}</p>
+                    <p className="text-sm font-bold" style={{ color: "var(--color-text-heading)" }}>{item.name}</p>
                     <p className="text-xs" style={{ color: "var(--color-text-disabled)" }}>{item.desc}</p>
                   </div>
                   {i < CATEGORY_FLOW.length - 1 && (
-                    <span className="text-xs shrink-0" style={{ color: "var(--color-text-disabled)" }}>→</span>
+                    <span className="text-lg font-bold shrink-0" style={{ color: "var(--color-green)" }}>→</span>
                   )}
                 </div>
               ))}
@@ -157,18 +157,17 @@ export default function WhyLearnPage() {
           className="rounded-2xl p-8 text-center"
           style={{ backgroundColor: "var(--color-card)", boxShadow: "var(--color-card-shadow)" }}
         >
-          <p className="font-semibold text-lg mb-2" style={{ color: "var(--color-text-heading)" }}>
-            まずは1モジュールから始めてみませんか？
+          <p className="font-extrabold text-lg mb-2" style={{ color: "var(--color-text-heading)" }}>
+            まずは1モジュールから始めてみよう！ 💪
           </p>
           <p className="text-sm mb-6" style={{ color: "var(--color-text-muted)" }}>
             1,200モジュールすべてを終える必要はありません。今日の1つが明日の武器になります。
           </p>
           <Link
             href="/curriculum"
-            className="inline-flex items-center gap-2 px-8 py-3 rounded-xl font-semibold transition-opacity hover:opacity-90"
-            style={{ backgroundColor: "var(--color-blue)", color: "#ffffff" }}
+            className="btn-3d btn-3d-green inline-flex items-center gap-2 px-8 py-3 text-base"
           >
-            カリキュラムマップを見る →
+            カリキュラムマップを見る 🚀
           </Link>
         </div>
       </div>

@@ -29,21 +29,21 @@ const LEARNING_PATHS: LearningPath[] = [
     name: "マーケティング基礎",
     description: "Webの仕組みからGA4まで、マーケターに必要な基礎知識を体系的に学びます。",
     icon: "📊",
-    color: "#10b981",
+    color: "#58CC02",
   },
   {
     id: "technical-basics",
     name: "テクニカル基礎",
     description: "HTML/JavaScript/Web技術の基礎を学び、タグ実装やデータレイヤー設計ができるようになります。",
     icon: "💻",
-    color: "#3b82f6",
+    color: "#1CB0F6",
   },
   {
     id: "ga4-master",
     name: "GA4マスター",
     description: "GA4のデータモデルからBigQuery連携・アトリビューションまで、GA4を完全に使いこなす上級コースです。",
     icon: "🎯",
-    color: "#8b5cf6",
+    color: "#CE82FF",
   },
 ];
 
@@ -84,15 +84,15 @@ export default function OnboardingClient({ userName }: { userName: string }) {
         {/* Header */}
         <div className="text-center mb-10">
           <div
-            className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl font-bold mx-auto mb-4"
-            style={{ backgroundColor: "var(--color-blue)", color: "#ffffff" }}
+            className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl font-extrabold mx-auto mb-4"
+            style={{ backgroundColor: "var(--color-green)", color: "#ffffff", boxShadow: "0 4px 0 var(--color-green-shadow)" }}
           >
             M
           </div>
-          <h1 className="text-2xl font-bold mb-2" style={{ color: "var(--color-text-heading)" }}>
-            ようこそ、{userName.split(" ")[0]}さん
+          <h1 className="text-2xl font-extrabold mb-2" style={{ color: "var(--color-text-heading)" }}>
+            ようこそ、{userName.split(" ")[0]}さん！ 🎉
           </h1>
-          <p className="text-sm" style={{ color: "var(--color-text-muted)" }}>
+          <p className="text-sm font-semibold" style={{ color: "var(--color-text-muted)" }}>
             あなたに合った学習プランを作成します
           </p>
         </div>
@@ -102,10 +102,10 @@ export default function OnboardingClient({ userName }: { userName: string }) {
           {[0, 1, 2].map((i) => (
             <div
               key={i}
-              className="h-2 rounded-full transition-all"
+              className="h-3 rounded-full transition-all duration-300"
               style={{
-                width: step === i ? "24px" : "8px",
-                backgroundColor: step >= i ? "var(--color-blue)" : "var(--color-border)",
+                width: step === i ? "32px" : "12px",
+                backgroundColor: step >= i ? "var(--color-green)" : "var(--color-border)",
               }}
             />
           ))}
@@ -114,7 +114,7 @@ export default function OnboardingClient({ userName }: { userName: string }) {
         {/* Step 1: Role */}
         {step === 0 && (
           <div>
-            <h2 className="text-lg font-semibold mb-6 text-center" style={{ color: "var(--color-text-heading)" }}>
+            <h2 className="text-lg font-bold mb-6 text-center" style={{ color: "var(--color-text-heading)" }}>
               あなたの役割は？
             </h2>
             <div className="space-y-3">
@@ -122,15 +122,16 @@ export default function OnboardingClient({ userName }: { userName: string }) {
                 <button
                   key={r.id}
                   onClick={() => { setRole(r.id); setStep(1); }}
-                  className="w-full flex items-center gap-4 p-5 rounded-xl border transition-all text-left"
+                  className="w-full flex items-center gap-4 p-5 rounded-2xl border-2 transition-all duration-200 text-left hover:scale-[1.02]"
                   style={{
-                    backgroundColor: role === r.id ? "var(--color-blue-bg)" : "var(--color-card)",
-                    borderColor: role === r.id ? "var(--color-blue)" : "var(--color-border)",
+                    backgroundColor: role === r.id ? "var(--color-green-bg)" : "var(--color-card)",
+                    borderColor: role === r.id ? "var(--color-green)" : "var(--color-border)",
+                    boxShadow: "var(--color-card-shadow)",
                   }}
                 >
-                  <span className="text-2xl">{r.icon}</span>
+                  <span className="text-3xl">{r.icon}</span>
                   <div>
-                    <p className="font-medium" style={{ color: "var(--color-text-heading)" }}>{r.label}</p>
+                    <p className="font-bold" style={{ color: "var(--color-text-heading)" }}>{r.label}</p>
                     <p className="text-sm" style={{ color: "var(--color-text-muted)" }}>{r.desc}</p>
                   </div>
                 </button>
@@ -142,7 +143,7 @@ export default function OnboardingClient({ userName }: { userName: string }) {
         {/* Step 2: Experience */}
         {step === 1 && (
           <div>
-            <h2 className="text-lg font-semibold mb-6 text-center" style={{ color: "var(--color-text-heading)" }}>
+            <h2 className="text-lg font-bold mb-6 text-center" style={{ color: "var(--color-text-heading)" }}>
               マーケティングの経験は？
             </h2>
             <div className="space-y-3">
@@ -154,14 +155,15 @@ export default function OnboardingClient({ userName }: { userName: string }) {
                     setSelectedPath(recommendedPathId);
                     setStep(2);
                   }}
-                  className="w-full flex items-start gap-4 p-5 rounded-xl border transition-all text-left"
+                  className="w-full flex items-start gap-4 p-5 rounded-2xl border-2 transition-all duration-200 text-left hover:scale-[1.02]"
                   style={{
                     backgroundColor: experience === e.id ? "var(--color-blue-bg)" : "var(--color-card)",
                     borderColor: experience === e.id ? "var(--color-blue)" : "var(--color-border)",
+                    boxShadow: "var(--color-card-shadow)",
                   }}
                 >
                   <div>
-                    <p className="font-medium" style={{ color: "var(--color-text-heading)" }}>{e.label}</p>
+                    <p className="font-bold" style={{ color: "var(--color-text-heading)" }}>{e.label}</p>
                     <p className="text-sm" style={{ color: "var(--color-text-muted)" }}>{e.desc}</p>
                   </div>
                 </button>
@@ -169,7 +171,7 @@ export default function OnboardingClient({ userName }: { userName: string }) {
             </div>
             <button
               onClick={() => setStep(0)}
-              className="mt-4 text-sm transition-opacity hover:opacity-80"
+              className="mt-4 text-sm font-bold transition-all hover:scale-105"
               style={{ color: "var(--color-text-disabled)" }}
             >
               &larr; 戻る
@@ -180,8 +182,8 @@ export default function OnboardingClient({ userName }: { userName: string }) {
         {/* Step 3: Recommended path */}
         {step === 2 && (
           <div>
-            <h2 className="text-lg font-semibold mb-2 text-center" style={{ color: "var(--color-text-heading)" }}>
-              おすすめの学習パス
+            <h2 className="text-lg font-bold mb-2 text-center" style={{ color: "var(--color-text-heading)" }}>
+              おすすめの学習パス 🎯
             </h2>
             <p className="text-sm mb-6 text-center" style={{ color: "var(--color-text-muted)" }}>
               あなたの役割と経験に基づいて選びました。変更もできます。
@@ -194,23 +196,24 @@ export default function OnboardingClient({ userName }: { userName: string }) {
                   <button
                     key={path.id}
                     onClick={() => setSelectedPath(path.id)}
-                    className="w-full flex items-start gap-4 p-5 rounded-xl border transition-all text-left relative"
+                    className="w-full flex items-start gap-4 p-5 rounded-2xl border-2 transition-all duration-200 text-left relative hover:scale-[1.02]"
                     style={{
                       backgroundColor: isSelected ? `${path.color}22` : "var(--color-card)",
                       borderColor: isSelected ? path.color : "var(--color-border)",
+                      boxShadow: "var(--color-card-shadow)",
                     }}
                   >
                     {isRecommended && (
                       <span
-                        className="absolute -top-2 right-3 text-xs px-2 py-0.5 rounded-full font-medium"
-                        style={{ backgroundColor: path.color, color: "#ffffff" }}
+                        className="absolute -top-3 right-3 text-xs px-3 py-1 rounded-full font-bold"
+                        style={{ backgroundColor: path.color, color: "#ffffff", boxShadow: `0 2px 0 ${path.color}88` }}
                       >
-                        おすすめ
+                        ⭐ おすすめ
                       </span>
                     )}
-                    <span className="text-2xl">{path.icon}</span>
+                    <span className="text-3xl">{path.icon}</span>
                     <div>
-                      <p className="font-medium" style={{ color: "var(--color-text-heading)" }}>{path.name}</p>
+                      <p className="font-bold" style={{ color: "var(--color-text-heading)" }}>{path.name}</p>
                       <p className="text-sm" style={{ color: "var(--color-text-muted)" }}>{path.description}</p>
                     </div>
                   </button>
@@ -221,14 +224,13 @@ export default function OnboardingClient({ userName }: { userName: string }) {
               <button
                 onClick={handleComplete}
                 disabled={!selectedPath || saving}
-                className="w-full py-4 rounded-xl font-semibold text-lg transition-opacity hover:opacity-90 disabled:opacity-50"
-                style={{ backgroundColor: "var(--color-blue)", color: "#ffffff" }}
+                className="btn-3d btn-3d-green w-full py-4 text-lg disabled:opacity-50"
               >
-                {saving ? "保存中..." : "学習を始める"}
+                {saving ? "保存中..." : "🚀 学習を始める"}
               </button>
               <button
                 onClick={() => setStep(1)}
-                className="text-sm transition-opacity hover:opacity-80"
+                className="text-sm font-bold transition-all hover:scale-105"
                 style={{ color: "var(--color-text-disabled)" }}
               >
                 &larr; 戻る

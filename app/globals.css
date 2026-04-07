@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Noto+Sans+JP:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,70 +6,84 @@
 
 /* ===== Light Mode (default) ===== */
 :root {
-  --color-page: #f8fafc;
+  --color-page: #f7f7f7;
   --color-card: #ffffff;
-  --color-card-alt: #f1f5f9;
-  --color-border: #e2e8f0;
-  --color-border-strong: #cbd5e1;
-  --color-text-heading: #0f172a;
-  --color-text-primary: #1e293b;
-  --color-text-secondary: #475569;
-  --color-text-muted: #64748b;
-  --color-text-disabled: #94a3b8;
+  --color-card-alt: #f0f0f0;
+  --color-border: #e5e5e5;
+  --color-border-strong: #d4d4d4;
+  --color-text-heading: #3c3c3c;
+  --color-text-primary: #4b4b4b;
+  --color-text-secondary: #777777;
+  --color-text-muted: #afafaf;
+  --color-text-disabled: #d4d4d4;
   --color-overlay: rgba(0,0,0,0.3);
-  --color-card-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  --color-card-shadow: 0 2px 12px rgba(0,0,0,0.06);
 
-  /* Accent (shared) */
-  --color-blue: #3b82f6;
-  --color-green: #10b981;
-  --color-purple: #8b5cf6;
-  --color-yellow: #fbbf24;
-  --color-red: #ef4444;
-  --color-orange: #f59e0b;
+  /* Accent — Duolingo-inspired vibrant palette */
+  --color-green: #58CC02;
+  --color-blue: #1CB0F6;
+  --color-purple: #CE82FF;
+  --color-yellow: #FFC800;
+  --color-red: #FF4B4B;
+  --color-orange: #FF9600;
+
+  /* 3D button shadows */
+  --color-green-shadow: #46a302;
+  --color-blue-shadow: #1899d6;
+  --color-purple-shadow: #a855c6;
+  --color-red-shadow: #e53535;
+  --color-orange-shadow: #e08600;
 
   /* Semi-transparent accent backgrounds */
-  --color-blue-bg: #3b82f615;
-  --color-green-bg: #10b98115;
-  --color-purple-bg: #8b5cf615;
-  --color-yellow-bg: #fbbf2415;
-  --color-red-bg: #ef444415;
-  --color-orange-bg: #f59e0b15;
+  --color-green-bg: #58CC0218;
+  --color-blue-bg: #1CB0F618;
+  --color-purple-bg: #CE82FF18;
+  --color-yellow-bg: #FFC80018;
+  --color-red-bg: #FF4B4B18;
+  --color-orange-bg: #FF960018;
 
   /* Fonts */
-  --font-sans: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-sans: 'Nunito', 'Noto Sans JP', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
 }
 
 /* ===== Dark Mode ===== */
 .dark {
-  --color-page: #0f172a;
-  --color-card: #1e293b;
-  --color-card-alt: #1e1e1e;
-  --color-border: #334155;
-  --color-border-strong: #475569;
+  --color-page: #131f24;
+  --color-card: #1a2b32;
+  --color-card-alt: #1e2e36;
+  --color-border: #2d4048;
+  --color-border-strong: #3d5058;
   --color-text-heading: #ffffff;
-  --color-text-primary: #f1f5f9;
-  --color-text-secondary: #cbd5e1;
-  --color-text-muted: #94a3b8;
-  --color-text-disabled: #64748b;
+  --color-text-primary: #e5e5e5;
+  --color-text-secondary: #b0b0b0;
+  --color-text-muted: #808080;
+  --color-text-disabled: #505050;
   --color-overlay: rgba(0,0,0,0.6);
-  --color-card-shadow: none;
+  --color-card-shadow: 0 2px 12px rgba(0,0,0,0.3);
 
-  /* Accent (same values) */
-  --color-blue: #3b82f6;
-  --color-green: #10b981;
-  --color-purple: #8b5cf6;
-  --color-yellow: #fbbf24;
-  --color-red: #ef4444;
-  --color-orange: #f59e0b;
+  /* Accent (same vibrant values) */
+  --color-green: #58CC02;
+  --color-blue: #1CB0F6;
+  --color-purple: #CE82FF;
+  --color-yellow: #FFC800;
+  --color-red: #FF4B4B;
+  --color-orange: #FF9600;
+
+  /* 3D button shadows */
+  --color-green-shadow: #46a302;
+  --color-blue-shadow: #1899d6;
+  --color-purple-shadow: #a855c6;
+  --color-red-shadow: #e53535;
+  --color-orange-shadow: #e08600;
 
   /* Semi-transparent accent backgrounds (higher opacity on dark) */
-  --color-blue-bg: #3b82f622;
-  --color-green-bg: #10b98122;
-  --color-purple-bg: #8b5cf622;
-  --color-yellow-bg: #fbbf2422;
-  --color-red-bg: #ef444422;
-  --color-orange-bg: #f59e0b22;
+  --color-green-bg: #58CC0225;
+  --color-blue-bg: #1CB0F625;
+  --color-purple-bg: #CE82FF25;
+  --color-yellow-bg: #FFC80025;
+  --color-red-bg: #FF4B4B25;
+  --color-orange-bg: #FF960025;
 }
 
 html {
@@ -87,6 +101,144 @@ body {
 
 code, pre, .font-mono {
   font-family: var(--font-mono) !important;
+}
+
+/* ===== Duolingo-style 3D Buttons ===== */
+.btn-3d {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  border-radius: 16px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.1s ease;
+  text-decoration: none;
+}
+
+.btn-3d:active {
+  transform: translateY(2px);
+}
+
+.btn-3d-green {
+  background-color: var(--color-green);
+  color: #ffffff;
+  box-shadow: 0 4px 0 var(--color-green-shadow);
+}
+.btn-3d-green:active {
+  box-shadow: 0 2px 0 var(--color-green-shadow);
+}
+.btn-3d-green:hover {
+  filter: brightness(1.05);
+}
+
+.btn-3d-blue {
+  background-color: var(--color-blue);
+  color: #ffffff;
+  box-shadow: 0 4px 0 var(--color-blue-shadow);
+}
+.btn-3d-blue:active {
+  box-shadow: 0 2px 0 var(--color-blue-shadow);
+}
+.btn-3d-blue:hover {
+  filter: brightness(1.05);
+}
+
+.btn-3d-purple {
+  background-color: var(--color-purple);
+  color: #ffffff;
+  box-shadow: 0 4px 0 var(--color-purple-shadow);
+}
+.btn-3d-purple:active {
+  box-shadow: 0 2px 0 var(--color-purple-shadow);
+}
+.btn-3d-purple:hover {
+  filter: brightness(1.05);
+}
+
+.btn-3d-red {
+  background-color: var(--color-red);
+  color: #ffffff;
+  box-shadow: 0 4px 0 var(--color-red-shadow);
+}
+.btn-3d-red:active {
+  box-shadow: 0 2px 0 var(--color-red-shadow);
+}
+.btn-3d-red:hover {
+  filter: brightness(1.05);
+}
+
+.btn-3d-orange {
+  background-color: var(--color-orange);
+  color: #ffffff;
+  box-shadow: 0 4px 0 var(--color-orange-shadow);
+}
+.btn-3d-orange:active {
+  box-shadow: 0 2px 0 var(--color-orange-shadow);
+}
+.btn-3d-orange:hover {
+  filter: brightness(1.05);
+}
+
+/* ===== Animations ===== */
+@keyframes bounce-in {
+  0% { transform: scale(0); opacity: 0; }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-5deg); }
+  75% { transform: rotate(5deg); }
+}
+
+@keyframes progress-stripe {
+  0% { background-position: 0 0; }
+  100% { background-position: 40px 0; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(88, 204, 2, 0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(88, 204, 2, 0); }
+}
+
+.animate-bounce-in {
+  animation: bounce-in 0.4s ease-out;
+}
+
+.animate-wiggle {
+  animation: wiggle 0.5s ease-in-out;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Progress bar stripe animation */
+.progress-stripe {
+  background-image: linear-gradient(
+    45deg,
+    rgba(255,255,255,0.15) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(255,255,255,0.15) 50%,
+    rgba(255,255,255,0.15) 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 40px 40px;
+  animation: progress-stripe 1s linear infinite;
 }
 
 @layer utilities {

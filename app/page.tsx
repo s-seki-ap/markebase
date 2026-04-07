@@ -36,7 +36,6 @@ export default async function Home() {
   const userEmail = session?.user?.email ?? null;
   const userImage = session?.user?.image ?? null;
 
-  // Firestore からデータ取得（接続不可時はフォールバック）
   let user: Awaited<ReturnType<typeof getUser>> = null;
   let completedCount = 0;
   let weeklyCount = 0;
@@ -49,7 +48,6 @@ export default async function Home() {
     // Firestore未接続時はnull
   }
 
-  // オンボーディング未完了 → リダイレクト（Firestore接続時のみ）
   if (userId && !user && !isDevBypass) {
     redirect("/onboarding");
   }
@@ -74,7 +72,6 @@ export default async function Home() {
   const level = user?.level ?? 1;
   const streak = user?.streak ?? 0;
 
-  // チームリーダーボード（上位5名）
   let topMembers: Array<{ name: string; xp: number; level: number; completedCount: number }> = [];
   try {
     const lb = await getLeaderboard();
@@ -88,7 +85,6 @@ export default async function Home() {
     // Firestore未設定時は空
   }
 
-  // モジュール名解決用のマップ
   const categories = getCategories();
   const categoryMap = new Map<string, Map<string, string>>();
   for (const cat of categories) {
@@ -99,7 +95,6 @@ export default async function Home() {
     categoryMap.set(cat.id, modMap);
   }
 
-  // カテゴリ別完了率（スキルレーダー用）
   const skillData = categories
     .filter((cat) => cat.modules.some((m) => isModuleAvailable(cat.id, m.id)))
     .map((cat) => {
@@ -112,7 +107,6 @@ export default async function Home() {
       };
     });
 
-  // レベル進捗の計算
   const levelThresholds = [0, 100, 250, 450, 700, 1000, 1350, 1750, 2200, 2700, 3250];
   const currentThreshold = levelThresholds[level - 1] ?? 0;
   const nextThreshold = levelThresholds[level] ?? currentThreshold + 500;
@@ -121,42 +115,46 @@ export default async function Home() {
     : 100;
 
   return (
-    <main className="min-h-screen p-8" style={{ backgroundColor: "var(--color-page)" }}>
+    <main className="min-h-screen p-6 lg:p-8" style={{ backgroundColor: "var(--color-page)" }}>
       <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="flex items-center justify-between mb-12">
+        <div className="flex items-center justify-between mb-10">
           <div className="flex items-center gap-3">
             <div
-              className="w-10 h-10 rounded-xl flex items-center justify-center text-xl font-bold"
-              style={{ backgroundColor: "var(--color-blue)", color: "#ffffff" }}
+              className="w-12 h-12 rounded-2xl flex items-center justify-center text-xl font-extrabold"
+              style={{ backgroundColor: "var(--color-green)", color: "#ffffff", boxShadow: "0 4px 0 var(--color-green-shadow)" }}
             >
               M
             </div>
-            <span className="text-xl font-bold" style={{ color: "var(--color-text-heading)" }}>MarkeBase</span>
+            <span className="text-xl font-extrabold" style={{ color: "var(--color-text-heading)" }}>MarkeBase</span>
           </div>
           <div className="flex items-center gap-3">
             <ThemeToggle />
             {streak > 0 && (
-              <span className="text-sm px-3 py-1 rounded-full" style={{ backgroundColor: "var(--color-orange-bg)", color: "var(--color-orange)" }}>
-                {streak}日連続
+              <span
+                className="text-sm px-4 py-1.5 rounded-full font-bold"
+                style={{ backgroundColor: "var(--color-orange-bg)", color: "var(--color-orange)", border: "2px solid var(--color-orange)" }}
+              >
+                {streak >= 7 ? "\uD83D\uDD25" : "\u2B50"} {streak}日連続
               </span>
             )}
             <div className="text-right">
-              <p className="text-sm font-medium" style={{ color: "var(--color-text-heading)" }}>{userName}</p>
+              <p className="text-sm font-bold" style={{ color: "var(--color-text-heading)" }}>{userName}</p>
               {userEmail && <p className="text-xs" style={{ color: "var(--color-text-muted)" }}>{userEmail}</p>}
             </div>
             {userImage ? (
               <Image
                 src={userImage}
                 alt="avatar"
-                width={36}
-                height={36}
-                className="w-9 h-9 rounded-full"
+                width={40}
+                height={40}
+                className="w-10 h-10 rounded-full"
+                style={{ border: "3px solid var(--color-green)" }}
               />
             ) : (
               <div
-                className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold"
-                style={{ backgroundColor: "var(--color-border-strong)", color: "#ffffff" }}
+                className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold"
+                style={{ backgroundColor: "var(--color-green)", color: "#ffffff" }}
               >
                 {userName[0]}
               </div>
@@ -164,18 +162,18 @@ export default async function Home() {
           </div>
         </div>
 
-        {/* Welcome + Streak celebration */}
-        <div className="mb-10">
-          <h1 className="text-3xl font-bold mb-2" style={{ color: "var(--color-text-heading)" }}>
-            おかえりなさい、{userName.split(" ")[0]}さん
+        {/* Welcome */}
+        <div className="mb-8">
+          <h1 className="text-3xl lg:text-4xl font-extrabold mb-2" style={{ color: "var(--color-text-heading)" }}>
+            おかえり、{userName.split(" ")[0]}さん！
           </h1>
           {weeklyCount >= WEEKLY_GOAL ? (
-            <p style={{ color: "var(--color-green)" }} className="font-medium">
-              今週の目標達成！素晴らしい！次の目標に挑戦しましょう。
+            <p className="text-lg font-bold" style={{ color: "var(--color-green)" }}>
+              🎉 今週の目標達成！すごい！次の目標にチャレンジしよう！
             </p>
           ) : (
-            <p style={{ color: "var(--color-text-muted)" }}>
-              学習を続けましょう。今日も1モジュール進めてみませんか？
+            <p className="text-base" style={{ color: "var(--color-text-muted)" }}>
+              今日も1モジュール進めてみよう 💪
             </p>
           )}
         </div>
@@ -183,16 +181,16 @@ export default async function Home() {
         {/* Streak banner */}
         {streak >= 3 && (
           <div
-            className="flex items-center gap-4 p-4 rounded-xl mb-6"
-            style={{ backgroundColor: "var(--color-orange-bg)", border: "1px solid var(--color-orange)" }}
+            className="flex items-center gap-4 p-5 rounded-2xl mb-6"
+            style={{ backgroundColor: "var(--color-orange-bg)", border: "2px solid var(--color-orange)" }}
           >
-            <span className="text-3xl">{streak >= 7 ? "\uD83D\uDD25" : "\u2B50"}</span>
+            <span className="text-4xl">{streak >= 7 ? "\uD83D\uDD25" : "\u2B50"}</span>
             <div>
-              <p className="font-semibold" style={{ color: "var(--color-text-heading)" }}>{streak}日連続学習中！</p>
+              <p className="font-extrabold text-lg" style={{ color: "var(--color-text-heading)" }}>{streak}日連続学習中！</p>
               <p className="text-sm" style={{ color: "var(--color-text-muted)" }}>
                 {streak >= 7
-                  ? "1週間以上の連続記録。この調子で続けましょう！"
-                  : `あと${7 - streak}日で1週間達成です。`}
+                  ? "1週間以上の連続記録！この調子で続けよう！ 🏆"
+                  : `あと${7 - streak}日で1週間達成だよ！`}
               </p>
             </div>
           </div>
@@ -200,14 +198,14 @@ export default async function Home() {
 
         {/* Stats */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
-          <div className="p-5 rounded-xl" style={{ backgroundColor: "var(--color-card)", boxShadow: "var(--color-card-shadow)" }}>
-            <p className="text-sm mb-1" style={{ color: "var(--color-text-muted)" }}>完了モジュール</p>
-            <p className="text-2xl font-bold" style={{ color: "var(--color-text-heading)" }}>
+          <div className="p-5 rounded-2xl" style={{ backgroundColor: "var(--color-card)", boxShadow: "var(--color-card-shadow)" }}>
+            <p className="text-sm mb-1 font-semibold" style={{ color: "var(--color-text-muted)" }}>完了モジュール</p>
+            <p className="text-3xl font-extrabold" style={{ color: "var(--color-text-heading)" }}>
               {completedCount} <span className="text-sm font-normal" style={{ color: "var(--color-text-disabled)" }}>/ {TOTAL_MODULES}</span>
             </p>
-            <div className="mt-2 h-1.5 rounded-full" style={{ backgroundColor: "var(--color-border)" }}>
+            <div className="mt-3 h-3 rounded-full" style={{ backgroundColor: "var(--color-border)" }}>
               <div
-                className="h-full rounded-full transition-all"
+                className="h-full rounded-full transition-all duration-500"
                 style={{
                   backgroundColor: "var(--color-green)",
                   width: `${Math.min((completedCount / TOTAL_MODULES) * 100, 100)}%`,
@@ -215,30 +213,32 @@ export default async function Home() {
               />
             </div>
           </div>
-          <div className="p-5 rounded-xl" style={{ backgroundColor: "var(--color-card)", boxShadow: "var(--color-card-shadow)" }}>
-            <p className="text-sm mb-1" style={{ color: "var(--color-text-muted)" }}>獲得XP</p>
-            <p className="text-2xl font-bold" style={{ color: "var(--color-yellow)" }}>{xp} XP</p>
+          <div className="p-5 rounded-2xl" style={{ backgroundColor: "var(--color-card)", boxShadow: "var(--color-card-shadow)" }}>
+            <p className="text-sm mb-1 font-semibold" style={{ color: "var(--color-text-muted)" }}>獲得XP</p>
+            <p className="text-3xl font-extrabold" style={{ color: "var(--color-yellow)" }}>
+              <span className="text-lg mr-1">⭐</span>{xp}
+            </p>
           </div>
-          <div className="p-5 rounded-xl" style={{ backgroundColor: "var(--color-card)", boxShadow: "var(--color-card-shadow)" }}>
-            <p className="text-sm mb-1" style={{ color: "var(--color-text-muted)" }}>レベル</p>
-            <p className="text-2xl font-bold" style={{ color: "var(--color-green)" }}>Lv. {level}</p>
-            <div className="mt-2 h-1.5 rounded-full" style={{ backgroundColor: "var(--color-border)" }}>
+          <div className="p-5 rounded-2xl" style={{ backgroundColor: "var(--color-card)", boxShadow: "var(--color-card-shadow)" }}>
+            <p className="text-sm mb-1 font-semibold" style={{ color: "var(--color-text-muted)" }}>レベル</p>
+            <p className="text-3xl font-extrabold" style={{ color: "var(--color-green)" }}>Lv. {level}</p>
+            <div className="mt-3 h-3 rounded-full" style={{ backgroundColor: "var(--color-border)" }}>
               <div
-                className="h-full rounded-full transition-all"
+                className="h-full rounded-full transition-all duration-500"
                 style={{ backgroundColor: "var(--color-green)", width: `${levelProgress}%` }}
               />
             </div>
           </div>
-          <div className="p-5 rounded-xl" style={{ backgroundColor: "var(--color-card)", boxShadow: "var(--color-card-shadow)" }}>
-            <p className="text-sm mb-1" style={{ color: "var(--color-text-muted)" }}>今週の目標</p>
-            <p className="text-2xl font-bold" style={{ color: "var(--color-text-heading)" }}>
+          <div className="p-5 rounded-2xl" style={{ backgroundColor: "var(--color-card)", boxShadow: "var(--color-card-shadow)" }}>
+            <p className="text-sm mb-1 font-semibold" style={{ color: "var(--color-text-muted)" }}>今週の目標</p>
+            <p className="text-3xl font-extrabold" style={{ color: "var(--color-text-heading)" }}>
               {weeklyCount} <span className="text-sm font-normal" style={{ color: "var(--color-text-disabled)" }}>/ {WEEKLY_GOAL}</span>
             </p>
-            <div className="mt-2 flex gap-1">
+            <div className="mt-3 flex gap-1.5">
               {Array.from({ length: WEEKLY_GOAL }).map((_, i) => (
                 <div
                   key={i}
-                  className="h-1.5 flex-1 rounded-full"
+                  className="h-3 flex-1 rounded-full transition-all duration-300"
                   style={{ backgroundColor: i < weeklyCount ? "var(--color-green)" : "var(--color-border)" }}
                 />
               ))}
@@ -248,8 +248,8 @@ export default async function Home() {
 
         {/* Skill radar */}
         {skillData.length > 0 && completedCount > 0 && (
-          <div className="mb-10 p-6 rounded-xl" style={{ backgroundColor: "var(--color-card)", boxShadow: "var(--color-card-shadow)" }}>
-            <h2 className="text-lg font-semibold mb-2" style={{ color: "var(--color-text-heading)" }}>スキルマップ</h2>
+          <div className="mb-10 p-6 rounded-2xl" style={{ backgroundColor: "var(--color-card)", boxShadow: "var(--color-card-shadow)" }}>
+            <h2 className="text-lg font-bold mb-2" style={{ color: "var(--color-text-heading)" }}>🎯 スキルマップ</h2>
             <p className="text-xs mb-4" style={{ color: "var(--color-text-muted)" }}>カテゴリ別の学習完了率</p>
             <SkillRadar data={skillData} />
           </div>
@@ -258,7 +258,7 @@ export default async function Home() {
         {/* Recent modules */}
         {recentModules.length > 0 && (
           <div className="mb-10">
-            <h2 className="text-lg font-semibold mb-4" style={{ color: "var(--color-text-heading)" }}>最近学習したモジュール</h2>
+            <h2 className="text-lg font-bold mb-4" style={{ color: "var(--color-text-heading)" }}>📚 最近学習したモジュール</h2>
             <div className="space-y-2">
               {recentModules.map((mod) => {
                 const [catId, modId] = mod.id.split("--");
@@ -267,14 +267,24 @@ export default async function Home() {
                   <Link
                     key={mod.id}
                     href={`/curriculum/${catId}/${modId}`}
-                    className="flex items-center justify-between p-4 rounded-xl transition-colors hover:opacity-90"
+                    className="flex items-center justify-between p-4 rounded-2xl transition-all duration-200 hover:scale-[1.01]"
                     style={{ backgroundColor: "var(--color-card)", boxShadow: "var(--color-card-shadow)" }}
                   >
                     <div className="flex items-center gap-3">
-                      <span style={{ color: "var(--color-green)" }}>&#10003;</span>
-                      <span className="text-sm" style={{ color: "var(--color-text-heading)" }}>{moduleName}</span>
+                      <span
+                        className="w-8 h-8 rounded-full flex items-center justify-center text-sm"
+                        style={{ backgroundColor: "var(--color-green-bg)", color: "var(--color-green)" }}
+                      >
+                        ✓
+                      </span>
+                      <span className="text-sm font-semibold" style={{ color: "var(--color-text-heading)" }}>{moduleName}</span>
                     </div>
-                    <span className="text-xs" style={{ color: "var(--color-text-disabled)" }}>完了</span>
+                    <span
+                      className="text-xs px-3 py-1 rounded-full font-bold"
+                      style={{ backgroundColor: "var(--color-green-bg)", color: "var(--color-green)" }}
+                    >
+                      完了
+                    </span>
                   </Link>
                 );
               })}
@@ -286,28 +296,35 @@ export default async function Home() {
         {topMembers.length > 0 && (
           <div className="mb-10">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold" style={{ color: "var(--color-text-heading)" }}>チームランキング</h2>
-              <Link href="/admin" className="text-xs hover:opacity-80 transition-opacity" style={{ color: "var(--color-text-muted)" }}>
+              <h2 className="text-lg font-bold" style={{ color: "var(--color-text-heading)" }}>🏆 チームランキング</h2>
+              <Link href="/admin" className="text-xs font-bold transition-opacity hover:opacity-80" style={{ color: "var(--color-blue)" }}>
                 全員を見る &rarr;
               </Link>
             </div>
-            <div className="rounded-xl overflow-hidden" style={{ backgroundColor: "var(--color-card)", boxShadow: "var(--color-card-shadow)" }}>
+            <div className="rounded-2xl overflow-hidden" style={{ backgroundColor: "var(--color-card)", boxShadow: "var(--color-card-shadow)" }}>
               {topMembers.map((member, i) => (
                 <div
                   key={i}
-                  className="flex items-center justify-between px-5 py-3 border-b last:border-b-0"
+                  className="flex items-center justify-between px-5 py-4 border-b-2 last:border-b-0"
                   style={{ borderColor: "var(--color-border)" }}
                 >
                   <div className="flex items-center gap-3">
-                    <span className="w-6 text-center text-sm font-bold" style={{ color: i === 0 ? "var(--color-yellow)" : i === 1 ? "var(--color-text-muted)" : i === 2 ? "#b45309" : "var(--color-text-disabled)" }}>
+                    <span
+                      className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-extrabold"
+                      style={{
+                        backgroundColor: i === 0 ? "var(--color-yellow-bg)" : i === 1 ? "var(--color-blue-bg)" : i === 2 ? "var(--color-orange-bg)" : "var(--color-card)",
+                        color: i === 0 ? "var(--color-yellow)" : i === 1 ? "var(--color-blue)" : i === 2 ? "var(--color-orange)" : "var(--color-text-disabled)",
+                        border: i < 3 ? `2px solid ${i === 0 ? "var(--color-yellow)" : i === 1 ? "var(--color-blue)" : "var(--color-orange)"}` : "none",
+                      }}
+                    >
                       {i + 1}
                     </span>
-                    <span className="text-sm" style={{ color: "var(--color-text-heading)" }}>{member.name}</span>
+                    <span className="text-sm font-bold" style={{ color: "var(--color-text-heading)" }}>{member.name}</span>
                   </div>
                   <div className="flex items-center gap-4">
-                    <span className="text-xs" style={{ color: "var(--color-text-muted)" }}>{member.completedCount} 完了</span>
-                    <span className="text-xs" style={{ color: "var(--color-green)" }}>Lv.{member.level}</span>
-                    <span className="text-sm font-medium" style={{ color: "var(--color-yellow)" }}>{member.xp.toLocaleString()} XP</span>
+                    <span className="text-xs font-semibold" style={{ color: "var(--color-text-muted)" }}>{member.completedCount} 完了</span>
+                    <span className="text-xs font-bold" style={{ color: "var(--color-green)" }}>Lv.{member.level}</span>
+                    <span className="text-sm font-extrabold" style={{ color: "var(--color-yellow)" }}>⭐ {member.xp.toLocaleString()}</span>
                   </div>
                 </div>
               ))}
@@ -319,15 +336,13 @@ export default async function Home() {
         <div className="flex gap-4">
           <Link
             href="/curriculum"
-            className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-semibold text-lg transition-opacity hover:opacity-90"
-            style={{ backgroundColor: "var(--color-blue)", color: "#ffffff" }}
+            className="btn-3d btn-3d-green inline-flex items-center gap-2 px-8 py-4 text-lg"
           >
-            カリキュラムマップを見る
-            <span>&rarr;</span>
+            カリキュラムマップを見る 🚀
           </Link>
           <Link
             href="/admin"
-            className="inline-flex items-center gap-2 px-6 py-4 rounded-xl font-medium text-sm transition-opacity hover:opacity-80"
+            className="inline-flex items-center gap-2 px-6 py-4 rounded-2xl font-bold text-sm transition-all duration-200 hover:scale-[1.02]"
             style={{ backgroundColor: "var(--color-card)", color: "var(--color-text-muted)", boxShadow: "var(--color-card-shadow)" }}
           >
             チーム学習状況

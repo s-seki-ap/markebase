@@ -53,7 +53,6 @@ export default function QuizSection({ data, onNext, categoryId, moduleId, onQuiz
     const total = data.questions.length;
     const xp = score * 10;
 
-    // Firestore にクイズXPを保存
     if (!xpSaved && categoryId && moduleId) {
       setXpSaved(true);
       fetch("/api/progress/quiz", {
@@ -68,30 +67,29 @@ export default function QuizSection({ data, onNext, categoryId, moduleId, onQuiz
     return (
       <div className="h-full flex items-center justify-center">
         <div className="text-center max-w-md">
-          <div className="text-6xl mb-6">{score === total ? "🎉" : score >= total / 2 ? "👏" : "💪"}</div>
-          <h2 className="text-2xl font-bold mb-2" style={{ color: "var(--color-text-heading)" }}>
-            {score}/{total} 正解
+          <div className="text-7xl mb-6 animate-bounce-in">{score === total ? "🎉" : score >= total / 2 ? "👏" : "💪"}</div>
+          <h2 className="text-3xl font-extrabold mb-2" style={{ color: "var(--color-text-heading)" }}>
+            {score}/{total} 正解！
           </h2>
           <p className="text-base mb-6 leading-relaxed" style={{ color: "var(--color-text-muted)" }}>
             {score === total
-              ? "パーフェクト！素晴らしい理解度です。"
+              ? "パーフェクト！すごい！ 🏆"
               : score >= total / 2
-              ? "よくできました！不正解の問題を復習しましょう。"
-              : "もう一度テキストを読み直してみましょう。"}
+              ? "よくできました！不正解の問題を復習しよう！"
+              : "もう一度チャレンジしてみよう！"}
           </p>
           <div
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl mb-8 text-lg font-bold"
-            style={{ backgroundColor: "var(--color-yellow-bg)", color: "var(--color-yellow)" }}
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full mb-8 text-lg font-extrabold animate-bounce-in"
+            style={{ backgroundColor: "var(--color-yellow-bg)", color: "var(--color-yellow)", border: "2px solid var(--color-yellow)" }}
           >
             ⭐ +{xp} XP 獲得！
           </div>
           <div>
             <button
               onClick={onNext}
-              className="px-8 py-3 rounded-xl font-medium transition-opacity hover:opacity-90"
-              style={{ backgroundColor: "var(--color-blue)", color: "#ffffff" }}
+              className="btn-3d btn-3d-green px-8 py-3 text-base"
             >
-              次のセクションへ →
+              次のセクションへ 🚀
             </button>
           </div>
         </div>
@@ -107,29 +105,29 @@ export default function QuizSection({ data, onNext, categoryId, moduleId, onQuiz
           {data.questions.map((_, i) => (
             <div
               key={i}
-              className="h-1.5 flex-1 rounded-full transition-colors"
+              className="h-3 flex-1 rounded-full transition-all duration-300"
               style={{
                 backgroundColor:
                   i < currentQ
                     ? "var(--color-green)"
                     : i === currentQ
                     ? "var(--color-blue)"
-                    : "var(--color-card)",
+                    : "var(--color-border)",
               }}
             />
           ))}
-          <span className="text-xs shrink-0" style={{ color: "var(--color-text-muted)" }}>
+          <span className="text-xs shrink-0 font-bold" style={{ color: "var(--color-text-muted)" }}>
             {currentQ + 1}/{data.questions.length}
           </span>
         </div>
 
         {/* Question */}
-        <h2 className="text-xl lg:text-2xl font-bold mb-8 leading-relaxed" style={{ color: "var(--color-text-heading)" }}>
+        <h2 className="text-xl lg:text-2xl font-extrabold mb-8 leading-relaxed" style={{ color: "var(--color-text-heading)" }}>
           {question.q}
         </h2>
 
         {/* Options */}
-        <div className="space-y-3.5 mb-8">
+        <div className="space-y-3 mb-8">
           {question.options.map((option, i) => {
             let borderColor = "var(--color-border)";
             let bgColor = "var(--color-card)";
@@ -154,17 +152,21 @@ export default function QuizSection({ data, onNext, categoryId, moduleId, onQuiz
               <button
                 key={i}
                 onClick={() => handleSelect(i)}
-                className="w-full text-left px-5 py-4 rounded-xl border transition-all text-[15px] leading-relaxed font-medium"
+                className="w-full text-left px-5 py-4 rounded-2xl border-2 transition-all duration-200 text-[15px] leading-relaxed font-bold hover:scale-[1.01]"
                 style={{
                   backgroundColor: bgColor,
                   borderColor,
                   color: textColor,
                   cursor: isAnswered ? "default" : "pointer",
+                  boxShadow: isAnswered ? "none" : "var(--color-card-shadow)",
                 }}
               >
                 <span
-                  className="inline-flex w-7 h-7 rounded-full items-center justify-center text-xs mr-3 shrink-0 font-bold"
-                  style={{ backgroundColor: "var(--color-border)" }}
+                  className="inline-flex w-8 h-8 rounded-full items-center justify-center text-xs mr-3 shrink-0 font-extrabold"
+                  style={{
+                    backgroundColor: isAnswered && i === question.correct ? "var(--color-green)" : isAnswered && i === selected ? "var(--color-red)" : "var(--color-border)",
+                    color: isAnswered && (i === question.correct || i === selected) ? "#ffffff" : "var(--color-text-secondary)",
+                  }}
                 >
                   {String.fromCharCode(65 + i)}
                 </span>
@@ -177,14 +179,14 @@ export default function QuizSection({ data, onNext, categoryId, moduleId, onQuiz
         {/* Explanation */}
         {isAnswered && (
           <div
-            className="p-5 rounded-xl mb-6"
+            className="p-5 rounded-2xl mb-6 animate-bounce-in"
             style={{
               backgroundColor: isCorrect ? "var(--color-green-bg)" : "var(--color-red-bg)",
-              borderLeft: `4px solid ${isCorrect ? "var(--color-green)" : "var(--color-red)"}`,
+              border: `2px solid ${isCorrect ? "var(--color-green)" : "var(--color-red)"}`,
             }}
           >
-            <p className="font-semibold mb-2 text-base" style={{ color: isCorrect ? "var(--color-green)" : "var(--color-red)" }}>
-              {isCorrect ? "✅ 正解！" : "❌ 不正解"}
+            <p className="font-extrabold mb-2 text-base" style={{ color: isCorrect ? "var(--color-green)" : "var(--color-red)" }}>
+              {isCorrect ? "✅ 正解！すごい！" : "😅 おしい！"}
             </p>
             <p className="text-[15px] leading-[1.8]" style={{ color: "var(--color-text-secondary)" }}>{question.explanation}</p>
           </div>
@@ -194,10 +196,9 @@ export default function QuizSection({ data, onNext, categoryId, moduleId, onQuiz
         {isAnswered && (
           <button
             onClick={handleNext}
-            className="w-full py-3 rounded-xl font-medium transition-opacity hover:opacity-90"
-            style={{ backgroundColor: "var(--color-blue)", color: "#ffffff" }}
+            className="btn-3d btn-3d-green w-full py-3 text-base"
           >
-            {currentQ < data.questions.length - 1 ? "次の問題 →" : "結果を見る"}
+            {currentQ < data.questions.length - 1 ? "次の問題 →" : "結果を見る 🎯"}
           </button>
         )}
       </div>

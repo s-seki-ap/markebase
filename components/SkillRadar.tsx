@@ -26,10 +26,10 @@ export default function SkillRadar({ data }: SkillRadarProps) {
     <div className="w-full h-[300px]">
       <ResponsiveContainer width="100%" height="100%">
         <RadarChart cx="50%" cy="50%" outerRadius="70%" data={data}>
-          <PolarGrid stroke="var(--color-border)" />
+          <PolarGrid stroke="var(--color-border)" strokeWidth={2} />
           <PolarAngleAxis
             dataKey="category"
-            tick={{ fill: "var(--color-text-muted)", fontSize: 11 }}
+            tick={{ fill: "var(--color-text-muted)", fontSize: 11, fontWeight: 700 }}
           />
           <PolarRadiusAxis
             angle={90}
@@ -40,10 +40,10 @@ export default function SkillRadar({ data }: SkillRadarProps) {
           <Radar
             name="完了率"
             dataKey="value"
-            stroke="var(--color-blue)"
-            fill="var(--color-blue)"
-            fillOpacity={0.25}
-            strokeWidth={2}
+            stroke="#58CC02"
+            fill="#58CC02"
+            fillOpacity={0.3}
+            strokeWidth={3}
           />
         </RadarChart>
       </ResponsiveContainer>
