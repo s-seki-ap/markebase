@@ -7,7 +7,7 @@
     {
       "type": "intro",
       "data": {
-        "content": "# 「何もしなくても計測される」データを把握する\n\nGA4を導入した瞬間から、追加実装なしで計測が始まるイベントがあります。これらを「自動収集イベント」と呼びます。\n\n## なぜ重要か\n\nGA4を使いこなすマーケターの多くが、「カスタムイベントを実装しなければ何も取れない」と思い込んでいます。しかし実際には、**かなりの情報がすでに計測されています**。\n\nこれを知らないと：\n- 「すでに取れているデータ」を二重実装してしまう\n- カスタムイベントの命名がGA4予約済みイベントと衝突する\n- 実は分析できる行動データがあることに気づかない\n\n## 自動収集イベントの3分類\n\n```\n1. 自動収集イベント（Automatically collected events）\n   → タグを設置するだけで取れる\n   → 例: first_visit, session_start, page_view（拡張計測時）\n\n2. 拡張計測イベント（Enhanced measurement events）\n   → GA4管理画面のトグルONで取れる\n   → 例: scroll, click, video_progress\n\n3. 推奨イベント（Recommended events）\n   → Googleが「この名前で実装してね」と推奨\n   → 例: purchase, add_to_cart, login\n```\n\nこのモジュールでは **1. 自動収集イベント** を詳しく学びます。",
+        "content": "# 「何もしなくても計測される」データを把握する\n\nGA4を導入した瞬間から、追加実装なしで計測が始まるイベントがあります。これらを「自動収集イベント」と呼びます。\n\n## なぜ重要か\n\nGA4を使いこなすマーケターの多くが、「カスタムイベントを実装しなければ何も取れない」と思い込んでいます。しかし実際には、**かなりの情報がすでに計測されています**。\n\nこれを知らないと：\n- 「すでに取れているデータ」を二重実装してしまう\n- カスタムイベントの命名がGA4予約済みイベントと衝突する\n- 実は分析できる行動データがあることに気づかない\n\n## 自動収集イベントの3分類\n\n```\n1. 自動収集イベント（Automatically collected events）\n   → タグを設置するだけで取れる\n   → 例: first_visit, session_start, page_view（拡張計測時）\n\n2. 拡張計測イベント（Enhanced measurement events）\n   → GA4管理画面のトグルONで取れる\n   → 例: scroll, click, video_progress\n\n3. 推奨イベント（Recommended events）\n   → Googleが「この名前で実装してね」と推奨\n   → 例: purchase, add_to_cart, login\n```\n\n> **注意**: page_viewは技術的には拡張計測イベントです。GA4タグ設置時にデフォルトONとなるため自動的に収集されますが、管理画面の拡張計測設定でOFFにすることも可能です。\n\nこのモジュールでは **1. 自動収集イベント** を詳しく学びます。",
         "diagram": false
       }
     },

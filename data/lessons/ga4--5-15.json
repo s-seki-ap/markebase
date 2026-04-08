@@ -22,13 +22,13 @@
       "type": "exercise",
       "data": {
         "content": "# 練習: イベント命名規則を適用する\n\n以下の「NG命名」を正しい命名規則に修正してください。\n\n## 課題\n\n以下のJavaScriptオブジェクトにある誤ったイベント名を、命名規則（動詞_名詞_修飾語、小文字、アンダースコア）に従って修正してください。\n\n**修正ルール**:\n1. 小文字+アンダースコアのみ使用\n2. 動詞を先頭に（click、view、submit、download）\n3. 予約済みイベント名は使わない\n4. 40文字以内",
-        "starterCode": "// NG: 命名規則違反のイベント一覧\n// 各イベント名を正しく修正してください\n\nconst badEventNames = [\n  // 1. バナーをクリックしたとき\n  'BannerClick',\n\n  // 2. 動画を再生したとき（GA4予約済みイベント名と競合）\n  'video_start',\n\n  // 3. ハンバーガーメニューを開いたとき\n  'open-hamburger-menu',\n\n  // 4. 404エラーページを表示したとき（予約済みイベント名と競合）\n  'error',\n\n  // 5. キャンペーンバナーのCTAボタンをクリックしたとき\n  'click campaign banner CTA button'\n];\n\n// TODO: 正しいイベント名に修正した配列を作成してください\nconst goodEventNames = [\n  // 1.\n  '',\n  // 2.\n  '',\n  // 3.\n  '',\n  // 4.\n  '',\n  // 5.\n  ''\n];",
+        "starterCode": "// NG: 命名規則違反のイベント一覧\n// 各イベント名を正しく修正してください\n\nconst badEventNames = [\n  // 1. バナーをクリックしたとき\n  'BannerClick',\n\n  // 2. 動画を再生したとき（GA4の拡張計測イベントと競合するため使用を避けるべき）\n  'video_start',\n\n  // 3. ハンバーガーメニューを開いたとき\n  'open-hamburger-menu',\n\n  // 4. 404エラーページを表示したとき（予約済みイベント名と競合）\n  'error',\n\n  // 5. キャンペーンバナーのCTAボタンをクリックしたとき\n  'click campaign banner CTA button'\n];\n\n// TODO: 正しいイベント名に修正した配列を作成してください\nconst goodEventNames = [\n  // 1.\n  '',\n  // 2.\n  '',\n  // 3.\n  '',\n  // 4.\n  '',\n  // 5.\n  ''\n];",
         "hints": [
           "1. キャメルケースをスネークケースに変換: `BannerClick` → `click_banner`",
-          "2. `video_start` はGA4の予約済みイベント名。カスタム計測ならフルに記述: `play_video_hero` など（動画の場所や種類を付与）",
+          "2. `video_start` はGA4の拡張計測イベントと競合するため使用を避けるべき名前。カスタム計測ならフルに記述: `play_video_hero` など（動画の場所や種類を付与）",
           "4. `error` はGA4予約済み。ページ表示なら `view_page_error` または `view_error_404` などが適切。5. スペースとハイフンは不可、40文字以内: `click_button_campaign_cta` など"
         ],
-        "answer": "// NG: 命名規則違反のイベント一覧\nconst badEventNames = [\n  'BannerClick',\n  'video_start',\n  'open-hamburger-menu',\n  'error',\n  'click campaign banner CTA button'\n];\n\n// OK: 修正後のイベント名\nconst goodEventNames = [\n  // 1. 小文字+スネークケース、動詞始まり\n  'click_banner',\n\n  // 2. GA4予約済みのvideo_startは使わない\n  //    カスタム動画ならプレーヤー名などで区別する\n  'play_video_hero',\n\n  // 3. ハイフン不可 → アンダースコアに\n  'open_menu_hamburger',\n\n  // 4. 予約済みのerrorは使わない\n  'view_page_error_404',\n\n  // 5. スペース不可、40文字以内\n  'click_button_campaign_cta'\n];"
+        "answer": "// NG: 命名規則違反のイベント一覧\nconst badEventNames = [\n  'BannerClick',\n  'video_start',\n  'open-hamburger-menu',\n  'error',\n  'click campaign banner CTA button'\n];\n\n// OK: 修正後のイベント名\nconst goodEventNames = [\n  // 1. 小文字+スネークケース、動詞始まり\n  'click_banner',\n\n  // 2. video_startはGA4の拡張計測イベントと競合するため使用を避けるべき\n  //    カスタム動画ならプレーヤー名などで区別する\n  'play_video_hero',\n\n  // 3. ハイフン不可 → アンダースコアに\n  'open_menu_hamburger',\n\n  // 4. 予約済みのerrorは使わない\n  'view_page_error_404',\n\n  // 5. スペース不可、40文字以内\n  'click_button_campaign_cta'\n];"
       }
     },
     {
