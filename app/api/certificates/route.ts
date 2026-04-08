@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { getUser, getUserProgress } from "@/lib/progress";
+import { getUser } from "@/lib/progress";
 import { getUserBadges } from "@/lib/badges";
-import { getCategories } from "@/lib/curriculum";
 
 const isDevBypass =
   process.env.NODE_ENV !== "production" && !process.env.GOOGLE_CLIENT_ID;
@@ -34,7 +33,6 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "Badge not earned" }, { status: 403 });
   }
 
-  const categories = getCategories();
   const badgeDefs = (await import("@/data/badges.json")).default;
   const badge = badgeDefs.find((b: { id: string }) => b.id === badgeId);
   if (!badge) {
