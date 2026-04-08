@@ -109,29 +109,45 @@ export default async function CategoryPage({
               <Link
                 key={module.id}
                 href={`/curriculum/${category.id}/${module.id}`}
-                className="flex items-center gap-4 p-5 rounded-2xl border-2 transition-all duration-200 hover:scale-[1.01]"
+                className="block p-4 sm:p-5 rounded-2xl border-2 transition-all duration-200 hover:scale-[1.01]"
                 style={{
                   backgroundColor: "var(--color-card)",
                   borderColor: isCompleted ? "var(--color-green)" : "var(--color-border)",
                   boxShadow: "var(--color-card-shadow)",
                 }}
               >
-                <span
-                  className="text-sm font-mono w-8 h-8 rounded-full flex items-center justify-center font-extrabold shrink-0"
-                  style={{
-                    backgroundColor: isCompleted ? "var(--color-green)" : "var(--color-border)",
-                    color: isCompleted ? "#ffffff" : "var(--color-text-secondary)",
-                  }}
-                >
-                  {isCompleted ? "✓" : String(index + 1).padStart(2, "0")}
-                </span>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-bold" style={{ color: "var(--color-text-heading)" }}>{module.name}</p>
-                  <p className="text-xs mt-0.5 truncate" style={{ color: "var(--color-text-muted)" }}>{module.description}</p>
-                </div>
-                <div className="flex items-center gap-3 shrink-0">
+                <div className="flex items-center gap-3 sm:gap-4">
                   <span
-                    className="text-xs px-3 py-1 rounded-full font-bold"
+                    className="text-sm font-mono w-8 h-8 rounded-full flex items-center justify-center font-extrabold shrink-0"
+                    style={{
+                      backgroundColor: isCompleted ? "var(--color-green)" : "var(--color-border)",
+                      color: isCompleted ? "#ffffff" : "var(--color-text-secondary)",
+                    }}
+                  >
+                    {isCompleted ? "✓" : String(index + 1).padStart(2, "0")}
+                  </span>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-bold" style={{ color: "var(--color-text-heading)" }}>{module.name}</p>
+                    <p className="text-xs mt-0.5 truncate" style={{ color: "var(--color-text-muted)" }}>{module.description}</p>
+                  </div>
+                  {/* Desktop: arrow / completed */}
+                  <div className="hidden sm:flex items-center shrink-0">
+                    {isCompleted ? (
+                      <span
+                        className="text-xs px-3 py-1 rounded-full font-bold"
+                        style={{ backgroundColor: "var(--color-green-bg)", color: "var(--color-green)", border: "2px solid var(--color-green)" }}
+                      >
+                        完了
+                      </span>
+                    ) : (
+                      <span className="text-lg font-bold" style={{ color: "var(--color-blue)" }}>→</span>
+                    )}
+                  </div>
+                </div>
+                {/* Meta row — wraps on mobile */}
+                <div className="flex flex-wrap items-center gap-2 mt-2 ml-11 sm:ml-12">
+                  <span
+                    className="text-xs px-2.5 py-0.5 rounded-full font-bold"
                     style={{
                       backgroundColor: `${DIFFICULTY_COLOR[module.difficulty]}22`,
                       color: DIFFICULTY_COLOR[module.difficulty],
@@ -146,15 +162,14 @@ export default async function CategoryPage({
                       👥 {moduleCounts[`${category.id}--${module.id}`]}名が完了
                     </span>
                   )}
-                  {isCompleted ? (
+                  {/* Mobile: completed badge */}
+                  {isCompleted && (
                     <span
-                      className="text-xs px-3 py-1 rounded-full font-bold"
+                      className="sm:hidden text-xs px-2.5 py-0.5 rounded-full font-bold"
                       style={{ backgroundColor: "var(--color-green-bg)", color: "var(--color-green)", border: "2px solid var(--color-green)" }}
                     >
                       完了
                     </span>
-                  ) : (
-                    <span className="text-lg font-bold" style={{ color: "var(--color-blue)" }}>→</span>
                   )}
                 </div>
               </Link>

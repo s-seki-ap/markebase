@@ -103,6 +103,15 @@ code, pre, .font-mono {
   font-family: var(--font-mono) !important;
 }
 
+/* ===== Touch target minimum (WCAG 2.5.8) ===== */
+@media (pointer: coarse) {
+  button, a[role="button"], .btn-3d,
+  input[type="text"], input[type="email"], input[type="password"],
+  textarea, select {
+    min-height: 44px;
+  }
+}
+
 /* ===== Duolingo-style 3D Buttons ===== */
 .btn-3d {
   display: inline-flex;
@@ -239,6 +248,13 @@ code, pre, .font-mono {
   );
   background-size: 40px 40px;
   animation: progress-stripe 1s linear infinite;
+}
+
+/* ===== Mobile bottom nav spacing ===== */
+@media (max-width: 1023px) {
+  main {
+    padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px)) !important;
+  }
 }
 
 @layer utilities {

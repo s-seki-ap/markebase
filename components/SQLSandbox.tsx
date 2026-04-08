@@ -14,6 +14,7 @@ export default function SQLSandbox({ sampleData, initialSQL = "", onNext }: SQLS
   const [result, setResult] = useState<QueryResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [mobileTab, setMobileTab] = useState<"data" | "sql" | "result">("sql");
 
   const handleExecute = async () => {
     if (sql.trim() === "" || loading) return;
@@ -24,8 +25,10 @@ export default function SQLSandbox({ sampleData, initialSQL = "", onNext }: SQLS
       const { executeSQLWithSampleData } = await import("@/lib/duckdb-client");
       const res = await executeSQLWithSampleData(sampleData, sql);
       setResult(res);
+      setMobileTab("result");
     } catch (e) {
       setError(e instanceof Error ? e.message : "SQL実行エラー");
+      setMobileTab("result");
     } finally {
       setLoading(false);
     }
@@ -33,10 +36,28 @@ export default function SQLSandbox({ sampleData, initialSQL = "", onNext }: SQLS
 
   return (
     <div className="h-full flex flex-col">
+      {/* Mobile tab bar */}
+      <div className="flex lg:hidden border-b-2 shrink-0" style={{ borderColor: "var(--color-border)" }}>
+        {([["data", "📋 データ"], ["sql", "🗃️ SQL"], ["result", "📊 結果"]] as const).map(([tab, label]) => (
+          <button
+            key={tab}
+            onClick={() => setMobileTab(tab)}
+            className="flex-1 py-3 text-xs font-bold text-center transition-all min-h-[44px]"
+            style={{
+              color: mobileTab === tab ? "var(--color-purple)" : "var(--color-text-muted)",
+              borderBottom: mobileTab === tab ? "3px solid var(--color-purple)" : "3px solid transparent",
+              backgroundColor: mobileTab === tab ? "var(--color-card)" : "transparent",
+            }}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
       <div className="flex-1 flex flex-col lg:flex-row min-h-0 overflow-y-auto lg:overflow-hidden">
         {/* Left: Sample data */}
         <div
-          className="shrink-0 overflow-y-auto border-b-2 lg:border-b-0 lg:border-r-2 p-5 w-full lg:w-[30%] max-h-[35vh] lg:max-h-none"
+          className={`shrink-0 overflow-y-auto border-b-2 lg:border-b-0 lg:border-r-2 p-5 w-full lg:w-[30%] lg:max-h-none ${mobileTab === "data" ? "flex-1" : "hidden lg:block"}`}
           style={{ backgroundColor: "var(--color-page)", borderColor: "var(--color-border)" }}
         >
           <h3 className="text-sm font-extrabold mb-4" style={{ color: "var(--color-text-heading)" }}>
@@ -72,7 +93,7 @@ export default function SQLSandbox({ sampleData, initialSQL = "", onNext }: SQLS
         </div>
 
         {/* Center: SQL editor */}
-        <div className="min-w-0 w-full lg:flex-1 flex flex-col">
+        <div className={`min-w-0 w-full lg:flex-1 flex flex-col ${mobileTab === "sql" ? "flex-1" : "hidden lg:flex"}`}>
           <div className="px-3 py-2 border-b-2 flex items-center gap-2" style={{ backgroundColor: "var(--color-card)", borderColor: "var(--color-border)" }}>
             <span className="text-xs font-bold" style={{ color: "var(--color-purple)" }}>SQL</span>
           </div>
@@ -88,7 +109,7 @@ export default function SQLSandbox({ sampleData, initialSQL = "", onNext }: SQLS
 
         {/* Right: Result */}
         <div
-          className="shrink-0 flex flex-col border-t-2 lg:border-t-0 lg:border-l-2 w-full lg:w-[35%] h-[220px] lg:h-auto"
+          className={`shrink-0 flex flex-col border-t-2 lg:border-t-0 lg:border-l-2 w-full lg:w-[35%] lg:h-auto ${mobileTab === "result" ? "flex-1" : "hidden lg:flex"}`}
           style={{ borderColor: "var(--color-border)" }}
         >
           <div className="px-3 py-2 border-b-2 flex items-center gap-2" style={{ backgroundColor: "var(--color-card)", borderColor: "var(--color-border)" }}>

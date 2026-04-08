@@ -68,11 +68,13 @@ export default function ExerciseSection({
   const [previewHtml, setPreviewHtml] = useState("");
   const [shownHints, setShownHints] = useState(0);
   const [judgeResult, setJudgeResult] = useState<JudgeResult>(null);
+  const [mobileTab, setMobileTab] = useState<"instructions" | "editor" | "preview">("instructions");
 
   const handleRun = () => {
     setPreviewHtml(code);
     const result = judgeCode(code, data.answer);
     setJudgeResult(result);
+    setMobileTab("preview");
   };
 
   const showNextHint = () => {
@@ -85,11 +87,32 @@ export default function ExerciseSection({
 
   return (
     <div className="h-full flex flex-col">
+      {/* Mobile tab bar */}
+      <div
+        className="flex lg:hidden border-b-2 shrink-0"
+        style={{ borderColor: "var(--color-border)" }}
+      >
+        {([["instructions", "📖 課題"], ["editor", "✏️ コード"], ["preview", "👁️ 結果"]] as const).map(([tab, label]) => (
+          <button
+            key={tab}
+            onClick={() => setMobileTab(tab)}
+            className="flex-1 py-3 text-xs font-bold text-center transition-all min-h-[44px]"
+            style={{
+              color: mobileTab === tab ? "var(--color-green)" : "var(--color-text-muted)",
+              borderBottom: mobileTab === tab ? "3px solid var(--color-green)" : "3px solid transparent",
+              backgroundColor: mobileTab === tab ? "var(--color-card)" : "transparent",
+            }}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
       {/* 3-pane layout */}
       <div className="flex-1 flex flex-col lg:flex-row min-h-0 overflow-y-auto lg:overflow-hidden">
         {/* Left: Instructions */}
         <div
-          className="shrink-0 overflow-y-auto border-b-2 lg:border-b-0 lg:border-r-2 p-5 w-full lg:w-[28%] max-h-[35vh] lg:max-h-none"
+          className={`shrink-0 overflow-y-auto border-b-2 lg:border-b-0 lg:border-r-2 p-5 w-full lg:w-[28%] lg:max-h-none ${mobileTab === "instructions" ? "flex-1" : "hidden lg:block"}`}
           style={{ backgroundColor: "var(--color-page)", borderColor: "var(--color-border)" }}
         >
           <div className="space-y-3">
@@ -145,7 +168,7 @@ export default function ExerciseSection({
         </div>
 
         {/* Center: Editor */}
-        <div className="min-w-0 w-full lg:flex-1 h-[280px] lg:h-auto" style={{ backgroundColor: "var(--color-card-alt)" }}>
+        <div className={`min-w-0 w-full lg:flex-1 lg:h-auto ${mobileTab === "editor" ? "flex-1" : "hidden lg:block"}`} style={{ backgroundColor: "var(--color-card-alt)" }}>
           <MonacoEditor
             height="100%"
             defaultLanguage="html"
@@ -165,7 +188,7 @@ export default function ExerciseSection({
 
         {/* Right: Preview */}
         <div
-          className="shrink-0 flex flex-col border-t-2 lg:border-t-0 lg:border-l-2 w-full lg:w-[35%] h-[220px] lg:h-auto"
+          className={`shrink-0 flex flex-col border-t-2 lg:border-t-0 lg:border-l-2 w-full lg:w-[35%] lg:h-auto ${mobileTab === "preview" ? "flex-1" : "hidden lg:flex"}`}
           style={{ borderColor: "var(--color-border)" }}
         >
           <div

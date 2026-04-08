@@ -199,7 +199,7 @@ export default async function Home() {
         )}
 
         {/* CTA */}
-        <div className="flex gap-4 mb-8">
+        <div className="flex flex-col sm:flex-row gap-4 mb-8">
           <Link
             href="/curriculum"
             className="btn-3d btn-3d-green inline-flex items-center gap-2 px-8 py-4 text-lg"
@@ -234,7 +234,7 @@ export default async function Home() {
         )}
 
         {/* Stats */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
           <div className="p-5 rounded-2xl" style={{ backgroundColor: "var(--color-card)", boxShadow: "var(--color-card-shadow)" }}>
             <p className="text-sm mb-1 font-semibold" style={{ color: "var(--color-text-muted)" }}>完了モジュール</p>
             <p className="text-3xl font-extrabold" style={{ color: "var(--color-text-heading)" }}>
