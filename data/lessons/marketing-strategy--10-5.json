@@ -21,7 +21,7 @@
     {
       "type": "exercise",
       "data": {
-        "content": "# 練習: SWOT分析 + クロスSWOT戦略シートを作成する\n\n想定する企業・サービスについて、SWOT分析とクロスSWOT戦略を整理してください。\n\n## 課題\n\n以下のHTMLテンプレートを完成させ、4象限のSWOTシートとクロスSWOT戦略を記述してください。",
+        "content": "# 練習: SWOT分析 + クロスSWOT戦略シートを作成する\n\n想定する企業・サービスについて、SWOT分析とクロスSWOT戦略を整理してください。\n\n## 課題\n\n以下のテンプレートに沿って、4象限のSWOTシートとクロスSWOT戦略を記述してください。\n\n> 💡 回答を入力したら「AI添削」ボタンで評価を受けましょう。",
         "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>SWOT分析シート</title>\n  <style>\n    body { font-family: sans-serif; max-width: 820px; margin: 40px auto; padding: 20px; }\n    .swot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 2px solid #e2e8f0; border-radius: 8px; overflow: hidden; }\n    .cell { padding: 20px; }\n    textarea { width: 100%; height: 100px; padding: 8px; border: 1px solid #e2e8f0; border-radius: 4px; resize: vertical; }\n  </style>\n</head>\n<body>\n  <h1>SWOT分析シート</h1>\n  <p>分析対象: <input type=\"text\" placeholder=\"企業・サービス名\" style=\"padding:4px 8px; border:1px solid #ccc; border-radius:4px; width:260px;\"/></p>\n\n  <!-- SWOTグリッド（4象限）をここに作成 -->\n\n  <!-- クロスSWOT戦略（4戦略）をここに追加 -->\n\n</body>\n</html>",
         "hints": [
           "SWOTグリッドは2×2のgridで作成します。S（強み）=緑、W（弱み）=赤、O（機会）=青、T（脅威）=オレンジで色分けすると見やすくなります。",

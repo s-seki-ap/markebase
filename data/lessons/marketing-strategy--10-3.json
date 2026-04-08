@@ -21,7 +21,7 @@
     {
       "type": "exercise",
       "data": {
-        "content": "# 練習: STP分析シートを作成する\n\n任意の製品・サービスを対象に、STP分析を実施してください。\n\n## 課題\n\n以下のHTMLテンプレートを完成させ、セグメンテーション・ターゲティング・ポジショニングの3ステップを記述してください。",
+        "content": "# 練習: STP分析シートを作成する\n\n任意の製品・サービスを対象に、STP分析を実施してください。\n\n## 課題\n\n以下のテンプレートに沿って、セグメンテーション・ターゲティング・ポジショニングの3ステップを記述してください。\n\n> 💡 回答を入力したら「AI添削」ボタンで評価を受けましょう。",
         "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>STP分析シート</title>\n  <style>\n    body { font-family: sans-serif; max-width: 750px; margin: 40px auto; padding: 20px; }\n    .step { border-left: 4px solid #3b82f6; padding: 16px 20px; margin: 20px 0; background: #f8fafc; border-radius: 0 8px 8px 0; }\n    .step h2 { margin-top: 0; color: #1e293b; }\n    textarea { width: 100%; height: 100px; padding: 8px; border: 1px solid #cbd5e1; border-radius: 4px; resize: vertical; }\n    label { display: block; font-weight: bold; margin: 10px 0 4px; font-size: 0.9rem; color: #475569; }\n  </style>\n</head>\n<body>\n  <h1>STP分析シート</h1>\n  <p>対象: <input type=\"text\" placeholder=\"製品・サービス名\" style=\"padding: 4px 8px; border: 1px solid #ccc; border-radius: 4px; width: 260px;\" /></p>\n\n  <!-- Sステップ -->\n  <!-- Tステップ -->\n  <!-- Pステップ -->\n\n</body>\n</html>",
         "hints": [
           "Segmentationステップでは「地理的・人口統計・心理的・行動」の4軸でセグメントを書き出しましょう。",

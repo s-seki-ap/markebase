@@ -21,7 +21,7 @@
     {
       "type": "exercise",
       "data": {
-        "content": "# 練習: エコシステムの構造を整理する\n\nあなたは新入社員に対してデジタル広告エコシステムの説明資料を作成します。\n\n## 課題\n\n以下のHTMLを完成させ、エコシステムの主要プレイヤーと役割を整理した表を作成してください。\n\n1. 広告主側のプレイヤー（広告主、エージェンシー、DSP、DMP）の行を追加する\n2. メディア側のプレイヤー（パブリッシャー、SSP）の行を追加する\n3. 中立プレイヤー（Ad Exchange）の行を追加する",
+        "content": "# 練習: エコシステムの構造を整理する\n\nあなたは新入社員に対してデジタル広告エコシステムの説明資料を作成します。\n\n## 課題\n\n以下の指示に沿って、エコシステムの主要プレイヤーと役割を整理した一覧を整理してください。\n\n1. 広告主側のプレイヤー（広告主、エージェンシー、DSP、DMP）について記述する\n2. メディア側のプレイヤー（パブリッシャー、SSP）について記述する\n3. 中立プレイヤー（Ad Exchange）について記述する\n\n> 💡 回答を入力したら「AI添削」ボタンで評価を受けましょう。",
         "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>デジタル広告エコシステム</title>\n  <style>\n    body { font-family: 'Noto Sans JP', sans-serif; padding: 20px; background: #f8fafc; }\n    h1 { color: #1e293b; font-size: 20px; }\n    table { border-collapse: collapse; width: 100%; margin-top: 16px; }\n    th { background: #3b82f6; color: white; padding: 10px 14px; text-align: left; }\n    td { border: 1px solid #e2e8f0; padding: 8px 14px; }\n    tr:nth-child(even) { background: #f1f5f9; }\n    .advertiser { background: #dbeafe !important; }\n    .publisher  { background: #dcfce7 !important; }\n    .neutral    { background: #fef9c3 !important; }\n  </style>\n</head>\n<body>\n  <h1>デジタル広告エコシステム 主要プレイヤー一覧</h1>\n  <table>\n    <thead>\n      <tr>\n        <th>プレイヤー</th>\n        <th>立場</th>\n        <th>主な役割</th>\n        <th>代表例</th>\n      </tr>\n    </thead>\n    <tbody>\n      <!-- ここに各プレイヤーの行を追加してください -->\n    </tbody>\n  </table>\n</body>\n</html>",
         "hints": [
           "<tr class=\"advertiser\"> を使うと広告主側の行を青色にできます。",
@@ -37,13 +37,23 @@
         "questions": [
           {
             "q": "世界初のバナー広告が掲載されたのはいつ頃ですか？",
-            "options": ["1990年", "1994年", "1998年", "2001年"],
+            "options": [
+              "1990年",
+              "1994年",
+              "1998年",
+              "2001年"
+            ],
             "correct": 1,
             "explanation": "1994年にAT&Tがウェブサイト「HotWired」に最初のバナー広告を掲載しました。当時のクリック率は驚異の44%でしたが、現在のバナー広告のクリック率は0.1%前後です。"
           },
           {
             "q": "GoogleがDSP・Ad Exchange・SSPのすべての層を持っていることを何と表現しますか？",
-            "options": ["フルスタック戦略", "垂直統合", "水平展開", "プログラマティック独占"],
+            "options": [
+              "フルスタック戦略",
+              "垂直統合",
+              "水平展開",
+              "プログラマティック独占"
+            ],
             "correct": 1,
             "explanation": "Googleは広告主向けツール（Google広告）、取引所（Google Ad Exchange）、メディア向けツール（Google Ad Manager）を全て保有する垂直統合モデルです。これが広告市場での圧倒的シェアの背景にあります。"
           },

@@ -21,7 +21,7 @@
     {
       "type": "exercise",
       "data": {
-        "content": "# 練習: バリューチェーン分析シートを作成する\n\n自社（または想定する企業）のバリューチェーンを整理し、各活動の強弱を評価してください。\n\n## 課題\n\n以下のHTMLテンプレートを完成させ、主活動5つと支援活動を含むバリューチェーン図を作成してください。各活動に「強み/普通/弱み」の評価も追加してください。",
+        "content": "# 練習: バリューチェーン分析シートを作成する\n\n自社（または想定する企業）のバリューチェーンを整理し、各活動の強弱を評価してください。\n\n## 課題\n\n以下の内容を整理して書き出してください。各活動に「強み/普通/弱み」の評価も追加してください。\n\n> 💡 回答を入力したら「AI添削」ボタンで評価を受けましょう。",
         "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>バリューチェーン分析</title>\n  <style>\n    body { font-family: sans-serif; max-width: 900px; margin: 40px auto; padding: 20px; }\n    .vc-container { border: 2px solid #e2e8f0; border-radius: 8px; overflow: hidden; }\n    .support-row { background: #f1f5f9; padding: 12px 16px; border-bottom: 1px solid #e2e8f0; }\n    .primary-row { display: flex; }\n    .activity-cell { flex: 1; padding: 16px; border-right: 1px solid #e2e8f0; }\n    .activity-cell:last-child { border-right: none; }\n    textarea { width: 100%; height: 60px; padding: 6px; border: 1px solid #e2e8f0; border-radius: 4px; font-size: 0.8rem; resize: vertical; }\n  </style>\n</head>\n<body>\n  <h1>バリューチェーン分析</h1>\n  <p>分析対象: <input type=\"text\" placeholder=\"企業・サービス名\" style=\"padding:4px 8px; border:1px solid #ccc; border-radius:4px; width:260px;\"/></p>\n\n  <!-- バリューチェーン図をここに作成 -->\n  <!-- 上部に支援活動、下部に主活動5つ（横並び） -->\n\n</body>\n</html>",
         "hints": [
           "バリューチェーン図は「支援活動（上部）」と「主活動（下部・横並び）」の構成にします。主活動は5つを横並びにし、矢印の流れを表現しましょう。",

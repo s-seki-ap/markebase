@@ -21,7 +21,7 @@
     {
       "type": "exercise",
       "data": {
-        "content": "# 練習: 4P/4Cマーケティングミックスシートを作成する\n\n任意の製品・サービスの4P分析を行い、4C視点でのチェックも実施してください。\n\n## 課題\n\n以下のHTMLテンプレートを完成させ、4Pの各要素を記述してください。また、各項目の下に4C視点での確認コメントを追記してください。",
+        "content": "# 練習: 4P/4Cマーケティングミックスシートを作成する\n\n任意の製品・サービスの4P分析を行い、4C視点でのチェックも実施してください。\n\n## 課題\n\n以下のテンプレートに沿って、4Pの各要素を記述してください。また、各項目の下に4C視点での確認コメントを追記してください。\n\n> 💡 回答を入力したら「AI添削」ボタンで評価を受けましょう。",
         "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>4P/4Cマーケティングミックスシート</title>\n  <style>\n    body { font-family: sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; }\n    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }\n    .card { border-radius: 8px; padding: 20px; }\n    textarea { width: 100%; height: 80px; padding: 8px; border: 1px solid #e2e8f0; border-radius: 4px; resize: vertical; }\n    label { display: block; font-weight: bold; margin: 10px 0 4px; font-size: 0.85rem; }\n    .tag { display: inline-block; font-size: 0.75rem; padding: 2px 8px; border-radius: 12px; margin-bottom: 8px; }\n  </style>\n</head>\n<body>\n  <h1>4P / 4C マーケティングミックスシート</h1>\n  <p>対象: <input type=\"text\" placeholder=\"製品・サービス名\" style=\"padding:4px 8px; border:1px solid #ccc; border-radius:4px; width:260px;\"/></p>\n\n  <div class=\"grid-2\">\n    <!-- 4つのカードをここに作成 -->\n  </div>\n\n</body>\n</html>",
         "hints": [
           "4つのカード（Product, Price, Place, Promotion）を2列グリッドで配置しましょう。各カードに異なる背景色をつけると見やすくなります。",

@@ -21,7 +21,7 @@
     {
       "type": "exercise",
       "data": {
-        "content": "# 練習: マーケティング視点で価値を整理する\n\nあなたが担当する（または想定する）製品・サービスについて、マーケティングの3要素を整理してください。\n\n## 課題\n\n以下のHTMLテンプレートを使い、「価値の創造・伝達・提供」の3要素を埋めてください。\n\n> 架空の例でも構いません。例：オンライン英会話サービス、BtoBのSaaSツール、など",
+        "content": "# 練習: マーケティング視点で価値を整理する\n\nあなたが担当する（または想定する）製品・サービスについて、マーケティングの3要素を整理してください。\n\n## 課題\n\n以下のテンプレートに沿って、「価値の創造・伝達・提供」の3要素を埋めてください。\n\n> 架空の例でも構いません。例：オンライン英会話サービス、BtoBのSaaSツール、など\n\n> 💡 回答を入力したら「AI添削」ボタンで評価を受けましょう。",
         "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>マーケティング価値整理シート</title>\n  <style>\n    body { font-family: sans-serif; max-width: 700px; margin: 40px auto; padding: 20px; }\n    .card { border: 1px solid #ddd; border-radius: 8px; padding: 20px; margin: 16px 0; }\n    .card h2 { margin-top: 0; color: #3b82f6; }\n    input, textarea { width: 100%; padding: 8px; margin-top: 8px; border: 1px solid #ccc; border-radius: 4px; }\n    textarea { height: 80px; resize: vertical; }\n    label { font-weight: bold; display: block; margin-top: 12px; }\n  </style>\n</head>\n<body>\n  <h1>マーケティング価値整理シート</h1>\n\n  <div class=\"card\">\n    <h2>対象製品・サービス</h2>\n    <label>製品・サービス名</label>\n    <input type=\"text\" placeholder=\"例：オンライン英会話サービス\" />\n  </div>\n\n  <!-- ここに「価値の創造」「価値の伝達」「価値の提供」のカードを追加してください -->\n\n</body>\n</html>",
         "hints": [
           "「価値の創造」カードには、顧客のどんな課題・ニーズに応えているかを記述しましょう。",

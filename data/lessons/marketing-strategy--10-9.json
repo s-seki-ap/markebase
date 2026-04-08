@@ -21,7 +21,7 @@
     {
       "type": "exercise",
       "data": {
-        "content": "# 練習: インタラクティブなポジショニングマップを作成する\n\nHTMLとJavaScriptを使って、競合をドラッグできるポジショニングマップを作成してください。\n\n## 課題\n\n以下のテンプレートを完成させ、2軸のポジショニングマップに競合と自社をプロットしてください。",
+        "content": "# 練習: インタラクティブなポジショニングマップを作成する\n\n内容を整理して書き出してください。\n\n## 課題\n\n以下のテンプレートを完成させ、2軸のポジショニングマップに競合と自社をプロットしてください。\n\n> 💡 回答を入力したら「AI添削」ボタンで評価を受けましょう。",
         "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>ポジショニングマップ</title>\n  <style>\n    body { font-family: sans-serif; max-width: 700px; margin: 40px auto; padding: 20px; }\n    #map { position: relative; width: 560px; height: 560px; border: 2px solid #e2e8f0; background: #f8fafc; margin: 20px auto; }\n    .dot { position: absolute; width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: bold; text-align: center; cursor: pointer; transform: translate(-50%, -50%); border: 2px solid rgba(0,0,0,0.1); }\n    .axis-label { position: absolute; font-size: 0.8rem; color: #64748b; font-weight: bold; }\n  </style>\n</head>\n<body>\n  <h1>ポジショニングマップ</h1>\n\n  <div style=\"text-align:center;\">\n    <label>横軸（右が高い）: <input id=\"xAxis\" type=\"text\" value=\"専門性（汎用→特化）\" style=\"width:200px; padding:4px 8px; border:1px solid #ccc; border-radius:4px;\"/></label>\n    <label style=\"margin-left:16px;\">縦軸（上が高い）: <input id=\"yAxis\" type=\"text\" value=\"価格（低価格→高価格）\" style=\"width:200px; padding:4px 8px; border:1px solid #ccc; border-radius:4px;\"/></label>\n  </div>\n\n  <div id=\"map\">\n    <!-- 軸線と競合ドットをここに追加 -->\n  </div>\n\n</body>\n</html>",
         "hints": [
           "マップの中央に横軸（X軸）と縦軸（Y軸）を線で描きます。CSSのposition:absoluteで線を配置しましょう。",

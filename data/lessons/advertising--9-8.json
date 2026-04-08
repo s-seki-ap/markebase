@@ -21,7 +21,7 @@
     {
       "type": "exercise",
       "data": {
-        "content": "# 練習: 広告文ポリシー違反チェッカー\n\n広告文のポリシー違反を判定するチェッカーを実装します。\n\n## 課題\n\n以下のJavaScriptを完成させてください。\n\n1. `checkAdText()` 関数で広告文のポリシー違反を検出する\n2. 以下のルールをチェックする\n   - 「最安値」「No.1」「業界最高」の根拠なし最上級表現を検出\n   - 「絶対に」「保証」「必ず」の虚偽約束表現を検出\n   - 「！！」（感嘆符2つ以上連続）の過度な記号使用を検出\n3. 違反が見つかった場合は警告、なければ「問題なし」を表示する",
+        "content": "# 練習: 広告文ポリシー違反チェッカー\n\n広告文のポリシー違反を判定するチェッカーを実装します。\n\n## 課題\n\n以下のJavaScriptを完成させてください。\n\n1. `checkAdText()` 関数で広告文のポリシー違反を検出する\n2. 以下のルールをチェックする\n   - 「最安値」「No.1」「業界最高」の根拠なし最上級表現を検出\n   - 「絶対に」「保証」「必ず」の虚偽約束表現を検出\n   - 「！！」（感嘆符2つ以上連続）の過度な記号使用を検出\n3. 違反が見つかった場合は警告、なければ「問題なし」を表示する\n\n> 💡 回答を入力したら「AI添削」ボタンで評価を受けましょう。",
         "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>広告文ポリシーチェッカー</title>\n  <style>\n    body { font-family: 'Noto Sans JP', sans-serif; background: #0f172a; color: #e2e8f0; padding: 20px; }\n    h1 { color: #60a5fa; font-size: 18px; }\n    textarea { width: 100%; background: #1e293b; border: 1px solid #334155; color: #e2e8f0; padding: 12px; border-radius: 6px; font-size: 14px; resize: vertical; box-sizing: border-box; }\n    button { background: #3b82f6; color: white; border: none; padding: 10px 24px; border-radius: 6px; cursor: pointer; margin-top: 8px; }\n    .result { margin-top: 16px; padding: 12px 16px; border-radius: 6px; font-size: 13px; }\n    .ok { background: #14532d; border: 1px solid #16a34a; }\n    .ng { background: #450a0a; border: 1px solid #dc2626; }\n    .violation { color: #fca5a5; margin: 4px 0; }\n  </style>\n</head>\n<body>\n  <h1>広告文 ポリシー違反チェッカー</h1>\n  <p style=\"font-size:13px; color:#94a3b8;\">チェックしたい広告文を入力してください</p>\n  <textarea id=\"adText\" rows=\"4\" placeholder=\"例: 業界最安値！絶対に満足保証！今すぐお問い合わせください！！\"></textarea>\n  <button onclick=\"checkAdText()\">チェックする</button>\n  <div id=\"result\"></div>\n\n  <script>\n    function checkAdText() {\n      const text = document.getElementById('adText').value;\n      const violations = [];\n\n      // ここにチェックロジックを実装してください\n      // 1. 根拠なし最上級表現: 最安値・No.1・業界最高\n      // 2. 虚偽約束表現: 絶対に・保証・必ず\n      // 3. 過度な記号: ！！（感嘆符2つ以上連続）\n\n      // 結果表示（変更不要）\n      const resultEl = document.getElementById('result');\n      if (violations.length === 0) {\n        resultEl.className = 'result ok';\n        resultEl.innerHTML = '問題なし: ポリシー違反の可能性はありません';\n      } else {\n        resultEl.className = 'result ng';\n        resultEl.innerHTML = '<strong>警告: 以下の違反の可能性があります</strong>' +\n          violations.map(v => `<div class=\"violation\">・${v}</div>`).join('');\n      }\n    }\n  </script>\n</body>\n</html>",
         "hints": [
           "violations.push('メッセージ') で違反メッセージを追加します。",
@@ -37,7 +37,12 @@
         "questions": [
           {
             "q": "Google広告の自動審査が完了するまでの標準的な時間はどれくらいですか？",
-            "options": ["数秒", "約1時間", "約24時間", "3〜5営業日"],
+            "options": [
+              "数秒",
+              "約1時間",
+              "約24時間",
+              "3〜5営業日"
+            ],
             "correct": 1,
             "explanation": "Google広告の自動審査（AI審査）は通常約1時間で完了します。自動審査で問題がなければ「審査済み」となり配信が開始されます。複雑な内容や特定業種は手動審査に回り、1〜3営業日かかることがあります。"
           },

@@ -21,7 +21,7 @@
     {
       "type": "exercise",
       "data": {
-        "content": "# 練習: 広告指標計算ツール\n\n広告レポートの数値を入力すると、主要指標を自動計算するツールを実装します。\n\n## 課題\n\n以下のJavaScriptを完成させてください。\n\n1. `calculate()` 関数でCPC・CPM・CPA・ROAS・CTR・CVRを計算する\n2. 各指標の値を対応するHTML要素に表示する\n3. 各指標にコメント（良い・注意・要改善）を表示する",
+        "content": "# 練習: 広告指標計算ツール\n\n広告レポートの数値を入力すると、主要指標を自動計算するツールを実装します。\n\n## 課題\n\n以下のJavaScriptを完成させてください。\n\n1. `calculate()` 関数でCPC・CPM・CPA・ROAS・CTR・CVRを計算する\n2. 各指標の値を書き出す\n3. 各指標にコメント（良い・注意・要改善）を表示する\n\n> 💡 回答を入力したら「AI添削」ボタンで評価を受けましょう。",
         "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>広告指標計算ツール</title>\n  <style>\n    body { font-family: 'Noto Sans JP', sans-serif; background: #0f172a; color: #e2e8f0; padding: 20px; }\n    h1 { color: #60a5fa; font-size: 18px; }\n    .inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }\n    label { display: block; font-size: 12px; color: #94a3b8; margin-bottom: 4px; }\n    input { width: 100%; background: #1e293b; border: 1px solid #334155; color: #e2e8f0; padding: 8px; border-radius: 4px; box-sizing: border-box; }\n    button { background: #3b82f6; color: white; border: none; padding: 10px 24px; border-radius: 6px; cursor: pointer; margin: 8px 0 16px; }\n    .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }\n    .metric { background: #1e293b; padding: 12px; border-radius: 8px; text-align: center; }\n    .metric-name { font-size: 11px; color: #64748b; }\n    .metric-value { font-size: 22px; color: #f1f5f9; font-weight: bold; margin: 4px 0; }\n    .metric-comment { font-size: 11px; }\n  </style>\n</head>\n<body>\n  <h1>広告指標計算ツール</h1>\n  <div class=\"inputs\">\n    <div><label>広告費（円）</label><input id=\"cost\" type=\"number\" value=\"300000\"></div>\n    <div><label>表示回数（インプレッション）</label><input id=\"impressions\" type=\"number\" value=\"1000000\"></div>\n    <div><label>クリック数</label><input id=\"clicks\" type=\"number\" value=\"3000\"></div>\n    <div><label>コンバージョン数</label><input id=\"conversions\" type=\"number\" value=\"60\"></div>\n    <div><label>広告経由の売上（円）</label><input id=\"revenue\" type=\"number\" value=\"900000\"></div>\n  </div>\n  <button onclick=\"calculate()\">計算する</button>\n\n  <div class=\"metrics\">\n    <div class=\"metric\"><div class=\"metric-name\">CPC</div><div class=\"metric-value\" id=\"cpc\">-</div><div class=\"metric-comment\" id=\"cpc-comment\"></div></div>\n    <div class=\"metric\"><div class=\"metric-name\">CPM</div><div class=\"metric-value\" id=\"cpm\">-</div><div class=\"metric-comment\" id=\"cpm-comment\"></div></div>\n    <div class=\"metric\"><div class=\"metric-name\">CPA</div><div class=\"metric-value\" id=\"cpa\">-</div><div class=\"metric-comment\" id=\"cpa-comment\"></div></div>\n    <div class=\"metric\"><div class=\"metric-name\">ROAS</div><div class=\"metric-value\" id=\"roas\">-</div><div class=\"metric-comment\" id=\"roas-comment\"></div></div>\n    <div class=\"metric\"><div class=\"metric-name\">CTR</div><div class=\"metric-value\" id=\"ctr\">-</div><div class=\"metric-comment\" id=\"ctr-comment\"></div></div>\n    <div class=\"metric\"><div class=\"metric-name\">CVR</div><div class=\"metric-value\" id=\"cvr\">-</div><div class=\"metric-comment\" id=\"cvr-comment\"></div></div>\n  </div>\n\n  <script>\n    function calculate() {\n      const cost = parseFloat(document.getElementById('cost').value);\n      const impressions = parseFloat(document.getElementById('impressions').value);\n      const clicks = parseFloat(document.getElementById('clicks').value);\n      const conversions = parseFloat(document.getElementById('conversions').value);\n      const revenue = parseFloat(document.getElementById('revenue').value);\n\n      // 各指標を計算してください\n      const cpc  = 0; // 計算式を入れてください\n      const cpm  = 0; // 計算式を入れてください\n      const cpa  = 0; // 計算式を入れてください\n      const roas = 0; // 計算式を入れてください（%）\n      const ctr  = 0; // 計算式を入れてください（%）\n      const cvr  = 0; // 計算式を入れてください（%）\n\n      document.getElementById('cpc').textContent  = '¥' + Math.round(cpc).toLocaleString();\n      document.getElementById('cpm').textContent  = '¥' + Math.round(cpm).toLocaleString();\n      document.getElementById('cpa').textContent  = '¥' + Math.round(cpa).toLocaleString();\n      document.getElementById('roas').textContent = Math.round(roas) + '%';\n      document.getElementById('ctr').textContent  = ctr.toFixed(2) + '%';\n      document.getElementById('cvr').textContent  = cvr.toFixed(2) + '%';\n    }\n  </script>\n</body>\n</html>",
         "hints": [
           "CPC = cost / clicks、CPM = cost / impressions * 1000",
@@ -37,19 +37,34 @@
         "questions": [
           {
             "q": "広告費¥200,000で1,000,000回表示された場合のCPMはいくらですか？",
-            "options": ["¥20", "¥200", "¥2,000", "¥200,000"],
+            "options": [
+              "¥20",
+              "¥200",
+              "¥2,000",
+              "¥200,000"
+            ],
             "correct": 1,
             "explanation": "CPM = 広告費 ÷ 表示回数 × 1,000 = ¥200,000 ÷ 1,000,000 × 1,000 = ¥200です。CPMは1,000回表示あたりのコストを表す指標で、認知・ブランディング目的の広告評価に使います。"
           },
           {
             "q": "ECサイトで広告費¥500,000・広告経由売上¥2,500,000の場合、ROASは何%ですか？",
-            "options": ["200%", "500%", "50%", "2500%"],
+            "options": [
+              "200%",
+              "500%",
+              "50%",
+              "2500%"
+            ],
             "correct": 1,
             "explanation": "ROAS = 広告経由売上 ÷ 広告費 × 100 = ¥2,500,000 ÷ ¥500,000 × 100 = 500%です。ROAS 500%は1円の広告費で5円の売上を生んでいることを意味します。"
           },
           {
             "q": "ブランド認知拡大を目的とした広告キャンペーンの主要KPIとして最も適切な指標はどれですか？",
-            "options": ["CPA", "ROAS", "CPM・リーチ", "CVR"],
+            "options": [
+              "CPA",
+              "ROAS",
+              "CPM・リーチ",
+              "CVR"
+            ],
             "correct": 2,
             "explanation": "認知拡大目的のキャンペーンでは、何人に届いたかを示す「リーチ」と、1,000回表示あたりのコストである「CPM」が主要KPIです。CPA・ROASはコンバージョンや売上が前提の指標であり、認知フェーズには不適切です。"
           }

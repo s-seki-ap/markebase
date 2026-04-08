@@ -21,7 +21,7 @@
     {
       "type": "exercise",
       "data": {
-        "content": "# 練習: DSP・SSP・DMPの設定概念を整理する\n\nあなたは広告運用担当者として、新しいリターゲティングキャンペーンの設定方針をHTMLドキュメントにまとめます。\n\n## 課題\n\n以下の設定概念カードのHTMLを完成させてください。\n\n1. DSPカードに「ターゲット」「入札戦略」「除外設定」を記述する\n2. DMPカードに使用するオーディエンスセグメントを記述する\n3. SSPカードに配信先メディア条件を記述する",
+        "content": "# 練習: DSP・SSP・DMPの設定概念を整理する\n\nあなたは広告運用担当者として、新しいリターゲティングキャンペーンの設定方針を整理します。\n\n## 課題\n\n以下のテンプレートに沿って、各設定概念カードの内容を記述してください。\n\n1. DSPカードに「ターゲット」「入札戦略」「除外設定」を記述する\n2. DMPカードに使用するオーディエンスセグメントを記述する\n3. SSPカードに配信先メディア条件を記述する\n\n> 💡 回答を入力したら「AI添削」ボタンで評価を受けましょう。",
         "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>キャンペーン設定概念書</title>\n  <style>\n    body { font-family: 'Noto Sans JP', sans-serif; padding: 20px; background: #0f172a; color: #e2e8f0; }\n    h1 { color: #f1f5f9; font-size: 20px; margin-bottom: 24px; }\n    .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }\n    .card { background: #1e293b; border-radius: 8px; padding: 16px; border: 1px solid #334155; }\n    .card h2 { font-size: 14px; margin: 0 0 12px; }\n    .card ul { margin: 0; padding-left: 16px; font-size: 13px; color: #94a3b8; line-height: 1.8; }\n    .dsp { border-color: #3b82f6; }\n    .dsp h2 { color: #60a5fa; }\n    .dmp { border-color: #8b5cf6; }\n    .dmp h2 { color: #a78bfa; }\n    .ssp { border-color: #10b981; }\n    .ssp h2 { color: #34d399; }\n  </style>\n</head>\n<body>\n  <h1>リターゲティングキャンペーン 設定概念書</h1>\n  <div class=\"cards\">\n    <div class=\"card dsp\">\n      <h2>DSP設定</h2>\n      <ul>\n        <!-- DSPの設定項目を追加してください -->\n      </ul>\n    </div>\n    <div class=\"card dmp\">\n      <h2>DMP オーディエンス</h2>\n      <ul>\n        <!-- DMPのオーディエンスセグメントを追加してください -->\n      </ul>\n    </div>\n    <div class=\"card ssp\">\n      <h2>SSP 配信先条件</h2>\n      <ul>\n        <!-- SSPの配信先条件を追加してください -->\n      </ul>\n    </div>\n  </div>\n</body>\n</html>",
         "hints": [
           "DSPカードには「ターゲット: 過去30日間のサイト訪問者」「入札戦略: 目標CPA ¥3,000」「除外: 購入済みユーザー」などを記述します。",
@@ -59,7 +59,12 @@
           },
           {
             "q": "DV360はどの企業が提供するDSPですか？",
-            "options": ["Amazon", "The Trade Desk", "Google", "Meta"],
+            "options": [
+              "Amazon",
+              "The Trade Desk",
+              "Google",
+              "Meta"
+            ],
             "correct": 2,
             "explanation": "DV360（Display & Video 360）はGoogleが提供するエンタープライズ向けDSPです。Google広告（旧Google AdWords）より高度なプログラマティック機能を持ち、YouTube・Googleネットワーク在庫への強みがあります。"
           }

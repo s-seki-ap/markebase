@@ -21,7 +21,7 @@
     {
       "type": "exercise",
       "data": {
-        "content": "# 練習: アカウント構成ツリーを作成する\n\n以下のクライアント条件に対してGoogle広告のアカウント構成をHTMLで可視化してください。\n\n**条件**: フィットネスジム（渋谷・新宿の2店舗）\n- 商品: 月会費プラン・パーソナルトレーニング・短期集中プラン\n- 目的: 入会申込獲得\n\n## 課題\n\n以下のHTMLに、適切なキャンペーン・広告グループの階層ツリーを追加してください（最低3キャンペーン、各2広告グループ以上）。",
+        "content": "# 練習: アカウント構成ツリーを作成する\n\n以下のクライアント条件に対してGoogle広告のアカウント構成を整理して書き出してください。\n\n**条件**: フィットネスジム（渋谷・新宿の2店舗）\n- 商品: 月会費プラン・パーソナルトレーニング・短期集中プラン\n- 目的: 入会申込獲得\n\n## 課題\n\n以下の指示に沿って、適切なキャンペーン・広告グループの階層ツリーを追加してください（最低3キャンペーン、各2広告グループ以上）。\n\n> 💡 回答を入力したら「AI添削」ボタンで評価を受けましょう。",
         "starterCode": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>Googleアカウント構成ツリー</title>\n  <style>\n    body { font-family: 'Noto Sans JP', sans-serif; background: #0f172a; color: #e2e8f0; padding: 20px; }\n    h1 { color: #60a5fa; font-size: 18px; }\n    .tree { font-size: 13px; }\n    .account  { color: #f59e0b; font-weight: bold; margin: 4px 0; }\n    .campaign { color: #60a5fa; font-weight: bold; margin: 4px 0 4px 20px; }\n    .adgroup  { color: #34d399; margin: 2px 0 2px 40px; }\n    .keyword  { color: #94a3b8; margin: 2px 0 2px 60px; font-size: 12px; }\n    .budget   { color: #fbbf24; font-size: 11px; margin-left: 8px; }\n  </style>\n</head>\n<body>\n  <h1>Google広告 アカウント構成ツリー</h1>\n  <div class=\"tree\">\n    <div class=\"account\">アカウント: フィットネスジム株式会社</div>\n    <!-- キャンペーン・広告グループをここに追加してください -->\n  </div>\n</body>\n</html>",
         "hints": [
           "キャンペーンは <div class=\"campaign\">📁 キャンペーン名 <span class=\"budget\">日予算 ¥XX,XXX</span></div> の形式です。",
