@@ -22,6 +22,8 @@ export default function WorksheetSection({
 }: WorksheetSectionProps) {
   const [shownHints, setShownHints] = useState(0);
   const [showAnswer, setShowAnswer] = useState(false);
+  const [userNotes, setUserNotes] = useState("");
+  const [mobileTab, setMobileTab] = useState<"task" | "notes" | "example">("task");
 
   const showNextHint = () => {
     if (shownHints < data.hints.length) {
@@ -31,11 +33,32 @@ export default function WorksheetSection({
 
   return (
     <div className="h-full flex flex-col">
-      {/* 2-pane layout: instructions | worksheet */}
-      <div className="flex-1 flex flex-col lg:flex-row min-h-0 overflow-y-auto lg:overflow-hidden">
+      {/* Mobile tab bar */}
+      <div
+        className="flex lg:hidden border-b-2 shrink-0"
+        style={{ borderColor: "var(--color-border)" }}
+      >
+        {([["task", "📋 課題"], ["notes", "✏️ 回答"], ["example", "📖 解答例"]] as const).map(([tab, label]) => (
+          <button
+            key={tab}
+            onClick={() => setMobileTab(tab)}
+            className="flex-1 py-3 text-xs font-bold text-center transition-all min-h-[44px]"
+            style={{
+              color: mobileTab === tab ? "var(--color-green)" : "var(--color-text-muted)",
+              borderBottom: mobileTab === tab ? "3px solid var(--color-green)" : "3px solid transparent",
+              backgroundColor: mobileTab === tab ? "var(--color-card)" : "transparent",
+            }}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
+      {/* Content area */}
+      <div className="flex-1 flex flex-col lg:flex-row min-h-0 overflow-hidden">
         {/* Left: Instructions + Hints */}
         <div
-          className="shrink-0 overflow-y-auto border-b-2 lg:border-b-0 lg:border-r-2 p-6 w-full lg:w-[36%] max-h-[40vh] lg:max-h-none"
+          className={`overflow-y-auto border-b-2 lg:border-b-0 lg:border-r-2 p-5 sm:p-6 w-full lg:w-[40%] ${mobileTab === "task" ? "flex-1" : "hidden lg:block"}`}
           style={{ backgroundColor: "var(--color-page)", borderColor: "var(--color-border)" }}
         >
           <div className="prose-sm">
@@ -107,7 +130,7 @@ export default function WorksheetSection({
             {shownHints < data.hints.length && (
               <button
                 onClick={showNextHint}
-                className="w-full py-2.5 rounded-2xl text-sm font-bold transition-all hover:scale-[1.02]"
+                className="w-full py-2.5 rounded-2xl text-sm font-bold transition-all hover:scale-[1.02] min-h-[44px]"
                 style={{ backgroundColor: "var(--color-card)", color: "var(--color-text-muted)", boxShadow: "var(--color-card-shadow)" }}
               >
                 ヒントを表示 →
@@ -116,38 +139,63 @@ export default function WorksheetSection({
           </div>
         </div>
 
-        {/* Right: Interactive Worksheet */}
-        <div className="flex-1 flex flex-col min-w-0 h-[400px] lg:h-auto">
-          {/* Worksheet header */}
+        {/* Right: Notes (user input) + Answer preview */}
+        <div className={`flex-1 flex flex-col min-w-0 ${mobileTab === "notes" ? "" : mobileTab === "example" ? "" : "hidden lg:flex"}`}>
+          {/* Desktop toggle header */}
           <div
-            className="px-4 py-2.5 border-b-2 flex items-center justify-between shrink-0"
+            className="hidden lg:flex px-4 py-2.5 border-b-2 items-center justify-between shrink-0"
             style={{ backgroundColor: "var(--color-card)", borderColor: "var(--color-border)" }}
           >
             <div className="flex items-center gap-2">
-              <span className="text-base">📝</span>
-              <span className="text-sm font-bold" style={{ color: "var(--color-text-secondary)" }}>ワークシート</span>
+              <span className="text-base">{showAnswer ? "📖" : "✏️"}</span>
+              <span className="text-sm font-bold" style={{ color: "var(--color-text-secondary)" }}>
+                {showAnswer ? "解答例" : "あなたの回答"}
+              </span>
             </div>
             <button
               onClick={() => setShowAnswer(!showAnswer)}
-              className="px-4 py-1.5 rounded-full text-xs font-bold transition-all hover:scale-105"
+              className="px-4 py-1.5 rounded-full text-xs font-bold transition-all hover:scale-105 min-h-[36px]"
               style={{
                 backgroundColor: showAnswer ? "var(--color-orange-bg)" : "var(--color-border)",
                 color: showAnswer ? "var(--color-orange)" : "var(--color-text-muted)",
                 border: showAnswer ? "2px solid var(--color-orange)" : "2px solid transparent",
               }}
             >
-              {showAnswer ? "📖 解答を隠す" : "📖 解答例を見る"}
+              {showAnswer ? "✏️ 回答に戻る" : "📖 解答例を見る"}
             </button>
           </div>
 
-          {/* Worksheet content */}
-          <div className="flex-1 relative">
+          {/* Notes textarea (mobile: notes tab / desktop: default) */}
+          <div className={`flex-1 flex flex-col ${mobileTab === "notes" || (!showAnswer && mobileTab !== "example") ? "" : "hidden lg:hidden"}`}>
+            <textarea
+              value={userNotes}
+              onChange={(e) => setUserNotes(e.target.value)}
+              placeholder="ここに回答を入力してください...&#10;&#10;例：&#10;・プロジェクト名: ECサイトリニューアル&#10;・計画立案 → 自分が担当&#10;・品質管理 → エンジニアリーダーに委任"
+              className="flex-1 w-full p-5 text-sm leading-[1.9] outline-none resize-none"
+              style={{
+                backgroundColor: "var(--color-page)",
+                color: "var(--color-text-heading)",
+                fontFamily: "var(--font-sans)",
+              }}
+            />
+            {userNotes.length > 0 && (
+              <div
+                className="px-5 py-2 border-t-2 text-xs font-semibold"
+                style={{ borderColor: "var(--color-border)", color: "var(--color-text-disabled)" }}
+              >
+                {userNotes.length}文字入力済み
+              </div>
+            )}
+          </div>
+
+          {/* Answer preview (mobile: example tab / desktop: toggle) */}
+          <div className={`flex-1 ${mobileTab === "example" || (showAnswer && mobileTab !== "notes") ? "" : "hidden lg:hidden"}`}>
             <iframe
-              srcDoc={showAnswer ? data.answer : data.starterCode}
+              srcDoc={data.answer}
               sandbox="allow-scripts allow-forms"
               className="w-full h-full border-none"
               style={{ backgroundColor: "#ffffff" }}
-              title="worksheet"
+              title="answer-preview"
             />
           </div>
         </div>
@@ -160,7 +208,7 @@ export default function WorksheetSection({
       >
         <button
           onClick={onAIClick}
-          className="flex items-center gap-2 px-4 py-2 rounded-2xl text-sm font-bold transition-all hover:scale-105"
+          className="flex items-center gap-2 px-4 py-2 rounded-2xl text-sm font-bold transition-all hover:scale-105 min-h-[44px]"
           style={{ backgroundColor: "var(--color-purple-bg)", color: "var(--color-purple)", border: "2px solid var(--color-purple)" }}
         >
           🤖 AIに質問
@@ -168,7 +216,7 @@ export default function WorksheetSection({
         <div className="ml-auto">
           <button
             onClick={onNext}
-            className="btn-3d btn-3d-blue px-6 py-2 text-sm"
+            className="btn-3d btn-3d-blue px-6 py-2 text-sm min-h-[44px]"
           >
             次へ →
           </button>

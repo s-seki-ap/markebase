@@ -240,26 +240,26 @@ export default function ExerciseSection({
 
       {/* Action bar */}
       <div
-        className="flex items-center gap-3 px-5 py-3 border-t-2 shrink-0"
+        className="flex items-center gap-2 sm:gap-3 px-4 sm:px-5 py-3 border-t-2 shrink-0"
         style={{ backgroundColor: "var(--color-page)", borderColor: "var(--color-border)" }}
       >
         <button
           onClick={handleRun}
-          className="btn-3d btn-3d-green px-5 py-2 text-sm"
+          className="btn-3d btn-3d-green px-4 sm:px-5 py-2 text-sm min-h-[44px]"
         >
           ▶ 実行
         </button>
         <button
           onClick={onAIClick}
-          className="flex items-center gap-2 px-4 py-2 rounded-2xl text-sm font-bold transition-all hover:scale-105"
+          className="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-2xl text-sm font-bold transition-all hover:scale-105 min-h-[44px]"
           style={{ backgroundColor: "var(--color-purple-bg)", color: "var(--color-purple)", border: "2px solid var(--color-purple)" }}
         >
-          🤖 AIに質問
+          🤖 <span className="hidden sm:inline">AIに質問</span><span className="sm:hidden">AI</span>
         </button>
         <div className="ml-auto">
           <button
             onClick={onNext}
-            className="btn-3d btn-3d-blue px-6 py-2 text-sm"
+            className="btn-3d btn-3d-blue px-5 sm:px-6 py-2 text-sm min-h-[44px]"
           >
             次へ →
           </button>
