@@ -1,11 +1,12 @@
 import { getCategories, isModuleAvailable } from "@/lib/curriculum";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { getUserProgress } from "@/lib/progress";
+import { getUserProgress, getModuleCompletionCounts } from "@/lib/progress";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-const isDevBypass = !process.env.GOOGLE_CLIENT_ID;
+const isDevBypass =
+  process.env.NODE_ENV !== "production" && !process.env.GOOGLE_CLIENT_ID;
 
 const DIFFICULTY_LABEL: Record<string, string> = {
   beginner: "入門",
@@ -29,15 +30,18 @@ export default async function CategoryPage({
 
   if (!category) notFound();
 
-  // Fetch user progress for completed badges
+  // Fetch user progress and module stats
   let completedModules = new Set<string>();
+  let moduleCounts: Record<string, number> = {};
   try {
     const session = await getServerSession(authOptions);
     const userId = isDevBypass ? "dev-user" : session?.user?.email ?? null;
-    if (userId) {
-      const progress = await getUserProgress(userId);
-      completedModules = new Set(Object.keys(progress));
-    }
+    const [progress, counts] = await Promise.all([
+      userId ? getUserProgress(userId) : Promise.resolve({}),
+      getModuleCompletionCounts(),
+    ]);
+    completedModules = new Set(Object.keys(progress));
+    moduleCounts = counts;
   } catch {
     // Firestore未接続時は空
   }
@@ -137,6 +141,11 @@ export default async function CategoryPage({
                     {DIFFICULTY_LABEL[module.difficulty]}
                   </span>
                   <span className="text-xs font-semibold" style={{ color: "var(--color-text-disabled)" }}>{module.estimatedMinutes}分</span>
+                  {(moduleCounts[`${category.id}--${module.id}`] ?? 0) > 0 && (
+                    <span className="text-xs font-semibold" style={{ color: "var(--color-text-muted)" }}>
+                      👥 {moduleCounts[`${category.id}--${module.id}`]}名が完了
+                    </span>
+                  )}
                   {isCompleted ? (
                     <span
                       className="text-xs px-3 py-1 rounded-full font-bold"

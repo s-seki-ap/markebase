@@ -1,5 +1,6 @@
 import { db } from "./firebase";
 import { FieldValue } from "firebase-admin/firestore";
+import { checkAndAwardBadges, type BadgeDefinition } from "./badges";
 
 // ---------- Types ----------
 
@@ -13,6 +14,8 @@ export interface UserData {
   role?: "consultant" | "designer" | "engineer";
   experience?: "beginner" | "some" | "advanced";
   learningPathId?: string;
+  department?: string;
+  completedCount: number;
   createdAt: FirebaseFirestore.Timestamp;
 }
 
@@ -30,6 +33,7 @@ export interface LeaderboardEntry {
   level: number;
   completedCount: number;
   lastActiveDate: string;
+  department?: string;
 }
 
 // ---------- Helpers ----------
@@ -83,6 +87,7 @@ export async function createUser(
     level: 1,
     streak: 0,
     lastActiveDate: todayStr(),
+    completedCount: 0,
     createdAt: FieldValue.serverTimestamp() as unknown as FirebaseFirestore.Timestamp,
   };
   await db.collection("users").doc(userId).set(userData);
@@ -127,7 +132,7 @@ export async function markModuleComplete(
   categoryId: string,
   moduleId: string,
   quizScore: number | null = null
-): Promise<{ xpEarned: number }> {
+): Promise<{ xpEarned: number; newBadges: BadgeDefinition[] }> {
   const progressId = `${categoryId}--${moduleId}`;
   const progressRef = db
     .collection("users")
@@ -138,7 +143,7 @@ export async function markModuleComplete(
   // 既に完了済みならスキップ
   const existing = await progressRef.get();
   if (existing.exists) {
-    return { xpEarned: 0 };
+    return { xpEarned: 0, newBadges: [] };
   }
 
   const xpEarned = 30; // モジュール完了ベースXP
@@ -148,10 +153,17 @@ export async function markModuleComplete(
     xpEarned,
   });
 
-  // ユーザーのXP/レベル/ストリークを更新
+  // ユーザーのXP/レベル/ストリーク/完了数を更新
+  const userRef = db.collection("users").doc(userId);
+  await userRef.update({
+    completedCount: FieldValue.increment(1),
+  });
   await addXP(userId, xpEarned);
 
-  return { xpEarned };
+  // バッジ判定
+  const newBadges = await checkAndAwardBadges(userId);
+
+  return { xpEarned, newBadges };
 }
 
 export async function addXP(userId: string, amount: number): Promise<void> {
@@ -177,7 +189,7 @@ export async function saveQuizXP(
   categoryId: string,
   moduleId: string,
   score: number
-): Promise<{ xpEarned: number }> {
+): Promise<{ xpEarned: number; newBadges: BadgeDefinition[] }> {
   const xpEarned = score * 10;
   const progressId = `${categoryId}--${moduleId}`;
   const progressRef = db
@@ -199,7 +211,8 @@ export async function saveQuizXP(
   }
 
   await addXP(userId, xpEarned);
-  return { xpEarned };
+  const newBadges = await checkAndAwardBadges(userId);
+  return { xpEarned, newBadges };
 }
 
 // ---------- Leaderboard ----------
@@ -211,26 +224,46 @@ export async function getLeaderboard(): Promise<LeaderboardEntry[]> {
     .limit(50)
     .get();
 
-  const entries: LeaderboardEntry[] = [];
-  for (const doc of usersSnapshot.docs) {
+  return usersSnapshot.docs.map((doc) => {
     const data = doc.data() as UserData;
-    const progressSnapshot = await db
-      .collection("users")
-      .doc(doc.id)
-      .collection("progress")
-      .get();
-
-    entries.push({
+    return {
       userId: doc.id,
       name: data.name,
       email: data.email,
       xp: data.xp,
       level: data.level,
-      completedCount: progressSnapshot.size,
+      completedCount: data.completedCount ?? 0,
       lastActiveDate: data.lastActiveDate,
-    });
-  }
-  return entries;
+      department: data.department,
+    };
+  });
+}
+
+// ---------- Module Stats (Social Proof) ----------
+
+export async function getModuleCompletionCounts(): Promise<Record<string, number>> {
+  const usersSnapshot = await db.collection("users").limit(200).get();
+  const counts: Record<string, number> = {};
+
+  // Use cached completedCount from user docs + progress subcollections
+  const progressPromises = usersSnapshot.docs.map(async (userDoc) => {
+    const progressSnap = await db
+      .collection("users")
+      .doc(userDoc.id)
+      .collection("progress")
+      .get();
+    for (const doc of progressSnap.docs) {
+      counts[doc.id] = (counts[doc.id] ?? 0) + 1;
+    }
+  });
+
+  await Promise.all(progressPromises);
+  return counts;
+}
+
+export async function getTotalLearnerCount(): Promise<number> {
+  const snapshot = await db.collection("users").count().get();
+  return snapshot.data().count;
 }
 
 // ---------- Feedback ----------

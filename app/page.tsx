@@ -3,12 +3,15 @@ import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { getUser, getUserProgress, getWeeklyCompletedCount, getRecentModules, getLeaderboard } from "@/lib/progress";
+import { getUser, getUserProgress, getWeeklyCompletedCount, getRecentModules, getLeaderboard, getTotalLearnerCount } from "@/lib/progress";
+import { getUserBadges } from "@/lib/badges";
 import { getCategories, isModuleAvailable } from "@/lib/curriculum";
 import SkillRadar from "@/components/SkillRadar";
+import BadgeShowcase from "@/components/BadgeShowcase";
 import ThemeToggle from "@/components/ThemeToggle";
 
-const isDevBypass = !process.env.GOOGLE_CLIENT_ID;
+const isDevBypass =
+  process.env.NODE_ENV !== "production" && !process.env.GOOGLE_CLIENT_ID;
 const TOTAL_MODULES = 47;
 const WEEKLY_GOAL = 3;
 
@@ -41,6 +44,7 @@ export default async function Home() {
   let weeklyCount = 0;
   let recentModules: Array<{ id: string; completedAt: FirebaseFirestore.Timestamp }> = [];
   let progress: Record<string, { completedAt: FirebaseFirestore.Timestamp; quizScore: number | null; xpEarned: number }> = {};
+  let earnedBadgeIds: string[] = [];
 
   try {
     user = userId ? await getUser(userId) : null;
@@ -63,6 +67,7 @@ export default async function Home() {
       completedCount = Object.keys(progress).length;
       weeklyCount = weekly;
       recentModules = recent;
+      earnedBadgeIds = await getUserBadges(userId);
     } catch {
       // Firestore未接続時はデフォルト値
     }
@@ -73,14 +78,19 @@ export default async function Home() {
   const streak = user?.streak ?? 0;
 
   let topMembers: Array<{ name: string; xp: number; level: number; completedCount: number }> = [];
+  let totalLearners = 0;
   try {
-    const lb = await getLeaderboard();
+    const [lb, learnerCount] = await Promise.all([
+      getLeaderboard(),
+      getTotalLearnerCount(),
+    ]);
     topMembers = lb.slice(0, 5).map((e) => ({
       name: e.name,
       xp: e.xp,
       level: e.level,
       completedCount: e.completedCount,
     }));
+    totalLearners = learnerCount;
   } catch {
     // Firestore未設定時は空
   }
@@ -178,6 +188,16 @@ export default async function Home() {
           )}
         </div>
 
+        {/* Social proof */}
+        {totalLearners > 0 && (
+          <div
+            className="flex items-center gap-3 mb-6 px-5 py-3 rounded-2xl text-sm font-semibold"
+            style={{ backgroundColor: "var(--color-blue-bg)", color: "var(--color-blue)", border: "2px solid var(--color-blue)" }}
+          >
+            👥 現在 {totalLearners}名 が学習中
+          </div>
+        )}
+
         {/* CTA */}
         <div className="flex gap-4 mb-8">
           <Link
@@ -271,6 +291,11 @@ export default async function Home() {
             <SkillRadar data={skillData} />
           </div>
         )}
+
+        {/* Badges */}
+        <div className="mb-10 p-6 rounded-2xl" style={{ backgroundColor: "var(--color-card)", boxShadow: "var(--color-card-shadow)" }}>
+          <BadgeShowcase earnedBadgeIds={earnedBadgeIds} />
+        </div>
 
         {/* Recent modules */}
         {recentModules.length > 0 && (

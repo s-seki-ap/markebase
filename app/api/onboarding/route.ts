@@ -3,7 +3,8 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { getUser, createUser, updateUserOnboarding } from "@/lib/progress";
 
-const isDevBypass = !process.env.GOOGLE_CLIENT_ID;
+const isDevBypass =
+  process.env.NODE_ENV !== "production" && !process.env.GOOGLE_CLIENT_ID;
 
 function getUserId(session: { user?: { email?: string | null } } | null): string | null {
   if (isDevBypass) return "dev-user";

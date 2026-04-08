@@ -1,0 +1,162 @@
+[
+  {
+    "id": "web-fundamentals-master",
+    "name": "Web基礎マスター",
+    "description": "インターネット・Web基礎カテゴリを全モジュール完了",
+    "icon": "🌐",
+    "tier": "gold",
+    "condition": { "type": "category_complete", "categoryId": "web-fundamentals" }
+  },
+  {
+    "id": "html-master",
+    "name": "HTMLマスター",
+    "description": "HTMLカテゴリを全モジュール完了",
+    "icon": "📄",
+    "tier": "gold",
+    "condition": { "type": "category_complete", "categoryId": "html" }
+  },
+  {
+    "id": "css-master",
+    "name": "CSSマスター",
+    "description": "CSSカテゴリを全モジュール完了",
+    "icon": "🎨",
+    "tier": "gold",
+    "condition": { "type": "category_complete", "categoryId": "css" }
+  },
+  {
+    "id": "javascript-master",
+    "name": "JavaScriptマスター",
+    "description": "JavaScriptカテゴリを全モジュール完了",
+    "icon": "⚡",
+    "tier": "gold",
+    "condition": { "type": "category_complete", "categoryId": "javascript" }
+  },
+  {
+    "id": "seo-master",
+    "name": "SEOマスター",
+    "description": "SEOカテゴリを全モジュール完了",
+    "icon": "🔍",
+    "tier": "gold",
+    "condition": { "type": "category_complete", "categoryId": "seo" }
+  },
+  {
+    "id": "advertising-master",
+    "name": "広告運用マスター",
+    "description": "Web広告運用カテゴリを全モジュール完了",
+    "icon": "📢",
+    "tier": "gold",
+    "condition": { "type": "category_complete", "categoryId": "advertising" }
+  },
+  {
+    "id": "marketing-master",
+    "name": "マーケ戦略マスター",
+    "description": "マーケティング戦略カテゴリを全モジュール完了",
+    "icon": "📊",
+    "tier": "gold",
+    "condition": { "type": "category_complete", "categoryId": "marketing-strategy" }
+  },
+  {
+    "id": "ga4-master",
+    "name": "GA4マスター",
+    "description": "GA4 & GCPカテゴリを全モジュール完了",
+    "icon": "📈",
+    "tier": "gold",
+    "condition": { "type": "category_complete", "categoryId": "ga4" }
+  },
+  {
+    "id": "bigquery-master",
+    "name": "BigQueryマスター",
+    "description": "BigQueryカテゴリを全モジュール完了",
+    "icon": "🗃️",
+    "tier": "gold",
+    "condition": { "type": "category_complete", "categoryId": "bigquery" }
+  },
+  {
+    "id": "ai-master",
+    "name": "AI自動化マスター",
+    "description": "AI & 自動化カテゴリを全モジュール完了",
+    "icon": "🤖",
+    "tier": "gold",
+    "condition": { "type": "category_complete", "categoryId": "ai-automation" }
+  },
+  {
+    "id": "app-marketing-master",
+    "name": "アプリマーケマスター",
+    "description": "アプリマーケティングカテゴリを全モジュール完了",
+    "icon": "📱",
+    "tier": "gold",
+    "condition": { "type": "category_complete", "categoryId": "app-marketing" }
+  },
+  {
+    "id": "pm-master",
+    "name": "PMマスター",
+    "description": "プロジェクトマネジメントカテゴリを全モジュール完了",
+    "icon": "🎯",
+    "tier": "gold",
+    "condition": { "type": "category_complete", "categoryId": "project-management" }
+  },
+  {
+    "id": "first-step",
+    "name": "はじめの一歩",
+    "description": "最初のモジュールを完了",
+    "icon": "🚀",
+    "tier": "bronze",
+    "condition": { "type": "modules_completed", "count": 1 }
+  },
+  {
+    "id": "ten-modules",
+    "name": "学習者",
+    "description": "10モジュールを完了",
+    "icon": "📚",
+    "tier": "bronze",
+    "condition": { "type": "modules_completed", "count": 10 }
+  },
+  {
+    "id": "fifty-modules",
+    "name": "探究者",
+    "description": "50モジュールを完了",
+    "icon": "🏅",
+    "tier": "silver",
+    "condition": { "type": "modules_completed", "count": 50 }
+  },
+  {
+    "id": "hundred-modules",
+    "name": "マスター学習者",
+    "description": "100モジュールを完了",
+    "icon": "👑",
+    "tier": "platinum",
+    "condition": { "type": "modules_completed", "count": 100 }
+  },
+  {
+    "id": "streak-7",
+    "name": "7日連続学習",
+    "description": "7日連続で学習を継続",
+    "icon": "🔥",
+    "tier": "bronze",
+    "condition": { "type": "streak", "days": 7 }
+  },
+  {
+    "id": "streak-30",
+    "name": "30日連続学習",
+    "description": "30日連続で学習を継続",
+    "icon": "💎",
+    "tier": "silver",
+    "condition": { "type": "streak", "days": 30 }
+  },
+  {
+    "id": "xp-1000",
+    "name": "XP 1,000到達",
+    "description": "累計1,000 XPを獲得",
+    "icon": "⭐",
+    "tier": "bronze",
+    "condition": { "type": "xp_threshold", "xp": 1000 }
+  },
+  {
+    "id": "xp-5000",
+    "name": "XP 5,000到達",
+    "description": "累計5,000 XPを獲得",
+    "icon": "🌟",
+    "tier": "silver",
+    "condition": { "type": "xp_threshold", "xp": 5000 }
+  }
+]

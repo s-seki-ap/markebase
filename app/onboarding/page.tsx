@@ -4,7 +4,8 @@ import { redirect } from "next/navigation";
 import { getUser } from "@/lib/progress";
 import OnboardingClient from "./OnboardingClient";
 
-const isDevBypass = !process.env.GOOGLE_CLIENT_ID;
+const isDevBypass =
+  process.env.NODE_ENV !== "production" && !process.env.GOOGLE_CLIENT_ID;
 
 export default async function OnboardingPage() {
   const session = await getServerSession(authOptions);
