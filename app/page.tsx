@@ -36,7 +36,6 @@ export default async function Home() {
 
   const userId = getUserId(session);
   const userName = session?.user?.name ?? "ゲスト";
-  const userEmail = session?.user?.email ?? null;
   const userImage = session?.user?.image ?? null;
 
   let user: Awaited<ReturnType<typeof getUser>> = null;
@@ -127,43 +126,31 @@ export default async function Home() {
   return (
     <main className="min-h-screen p-6 lg:p-8" style={{ backgroundColor: "var(--color-page)" }}>
       <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-10">
-          <div className="flex items-center gap-3">
+        {/* Header — minimal: logo + avatar + theme */}
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-2.5">
             <div
-              className="w-12 h-12 rounded-2xl flex items-center justify-center text-xl font-extrabold"
-              style={{ backgroundColor: "var(--color-green)", color: "#ffffff", boxShadow: "0 4px 0 var(--color-green-shadow)" }}
+              className="w-10 h-10 rounded-xl flex items-center justify-center text-lg font-extrabold"
+              style={{ backgroundColor: "var(--color-green)", color: "#ffffff", boxShadow: "0 3px 0 var(--color-green-shadow)" }}
             >
               M
             </div>
-            <span className="text-xl font-extrabold" style={{ color: "var(--color-text-heading)" }}>MarkeBase</span>
+            <span className="text-lg font-extrabold" style={{ color: "var(--color-text-heading)" }}>MarkeBase</span>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <ThemeToggle />
-            {streak > 0 && (
-              <span
-                className="text-sm px-4 py-1.5 rounded-full font-bold"
-                style={{ backgroundColor: "var(--color-orange-bg)", color: "var(--color-orange)", border: "2px solid var(--color-orange)" }}
-              >
-                {streak >= 7 ? "\uD83D\uDD25" : "\u2B50"} {streak}日連続
-              </span>
-            )}
-            <div className="text-right">
-              <p className="text-sm font-bold" style={{ color: "var(--color-text-heading)" }}>{userName}</p>
-              {userEmail && <p className="text-xs" style={{ color: "var(--color-text-muted)" }}>{userEmail}</p>}
-            </div>
             {userImage ? (
               <Image
                 src={userImage}
                 alt="avatar"
-                width={40}
-                height={40}
-                className="w-10 h-10 rounded-full"
-                style={{ border: "3px solid var(--color-green)" }}
+                width={36}
+                height={36}
+                className="w-9 h-9 rounded-full"
+                style={{ border: "2px solid var(--color-green)" }}
               />
             ) : (
               <div
-                className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold"
+                className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold"
                 style={{ backgroundColor: "var(--color-green)", color: "#ffffff" }}
               >
                 {userName[0]}
@@ -172,66 +159,46 @@ export default async function Home() {
           </div>
         </div>
 
-        {/* Welcome */}
-        <div className="mb-8">
-          <h1 className="text-3xl lg:text-4xl font-extrabold mb-2" style={{ color: "var(--color-text-heading)" }}>
-            おかえり、{userName.split(" ")[0]}さん！
-          </h1>
-          {weeklyCount >= WEEKLY_GOAL ? (
-            <p className="text-lg font-bold" style={{ color: "var(--color-green)" }}>
-              🎉 今週の目標達成！すごい！次の目標にチャレンジしよう！
-            </p>
-          ) : (
-            <p className="text-base" style={{ color: "var(--color-text-muted)" }}>
-              今日も1モジュール進めてみよう 💪
-            </p>
-          )}
+        {/* Welcome + streak inline */}
+        <div className="mb-6">
+          <div className="flex items-center gap-3 flex-wrap">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold" style={{ color: "var(--color-text-heading)" }}>
+              おかえり、{userName.split(" ")[0]}さん！
+            </h1>
+            {streak > 0 && (
+              <span
+                className="text-xs px-3 py-1 rounded-full font-bold whitespace-nowrap"
+                style={{ backgroundColor: "var(--color-orange-bg)", color: "var(--color-orange)", border: "2px solid var(--color-orange)" }}
+              >
+                {streak >= 7 ? "\uD83D\uDD25" : "\u2B50"} {streak}日連続
+              </span>
+            )}
+          </div>
+          <p className="text-sm mt-1" style={{ color: "var(--color-text-muted)" }}>
+            {weeklyCount >= WEEKLY_GOAL
+              ? "🎉 今週の目標達成！次の目標にチャレンジしよう！"
+              : totalLearners > 0
+                ? `👥 ${totalLearners}名が学習中 — 今日も1モジュール進めよう`
+                : "今日も1モジュール進めてみよう 💪"}
+          </p>
         </div>
 
-        {/* Social proof */}
-        {totalLearners > 0 && (
-          <div
-            className="flex items-center gap-3 mb-6 px-5 py-3 rounded-2xl text-sm font-semibold"
-            style={{ backgroundColor: "var(--color-blue-bg)", color: "var(--color-blue)", border: "2px solid var(--color-blue)" }}
-          >
-            👥 現在 {totalLearners}名 が学習中
-          </div>
-        )}
-
         {/* CTA */}
-        <div className="flex flex-col sm:flex-row gap-4 mb-8">
+        <div className="flex flex-col sm:flex-row gap-3 mb-8">
           <Link
             href="/curriculum"
-            className="btn-3d btn-3d-green inline-flex items-center gap-2 px-8 py-4 text-lg"
+            className="btn-3d btn-3d-green inline-flex items-center gap-2 px-6 py-3 text-base"
           >
-            カリキュラムマップを見る 🚀
+            学習をはじめる 🚀
           </Link>
           <Link
             href="/admin"
-            className="inline-flex items-center gap-2 px-6 py-4 rounded-2xl font-bold text-sm transition-all duration-200 hover:scale-[1.02]"
+            className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl font-bold text-sm transition-all duration-200 hover:scale-[1.02]"
             style={{ backgroundColor: "var(--color-card)", color: "var(--color-text-muted)", boxShadow: "var(--color-card-shadow)" }}
           >
-            チーム学習状況
+            📊 チーム状況
           </Link>
         </div>
-
-        {/* Streak banner */}
-        {streak >= 3 && (
-          <div
-            className="flex items-center gap-4 p-5 rounded-2xl mb-6"
-            style={{ backgroundColor: "var(--color-orange-bg)", border: "2px solid var(--color-orange)" }}
-          >
-            <span className="text-4xl">{streak >= 7 ? "\uD83D\uDD25" : "\u2B50"}</span>
-            <div>
-              <p className="font-extrabold text-lg" style={{ color: "var(--color-text-heading)" }}>{streak}日連続学習中！</p>
-              <p className="text-sm" style={{ color: "var(--color-text-muted)" }}>
-                {streak >= 7
-                  ? "1週間以上の連続記録！この調子で続けよう！ 🏆"
-                  : `あと${7 - streak}日で1週間達成だよ！`}
-              </p>
-            </div>
-          </div>
-        )}
 
         {/* Stats */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
