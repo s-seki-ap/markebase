@@ -63,15 +63,51 @@ export interface InteractiveSection {
   checkpoints: string[];
 }
 
-export interface QuizQuestion {
+// 選択式クイズ
+export interface MultipleChoiceQuestion {
+  type?: "multiple_choice";
   q: string;
   options: [string, string, string, string];
   correct: number;
   explanation: string;
 }
 
+// 穴埋めクイズ
+export interface FillInBlankQuestion {
+  type: "fill_in_blank";
+  q: string;
+  blanks: string[]; // 正答リスト（どれか一致でOK）
+  explanation: string;
+}
+
+// SQL実行クイズ
+export interface SQLQuestion {
+  type: "sql";
+  q: string;
+  sampleData: {
+    tableName: string;
+    columns: string[];
+    rows: (string | number | null)[][];
+  }[];
+  expectedColumns: string[];
+  expectedRows: (string | number | null)[][];
+  explanation: string;
+}
+
+export type QuizQuestion = MultipleChoiceQuestion | FillInBlankQuestion | SQLQuestion;
+
 export interface QuizSection {
   questions: QuizQuestion[];
+}
+
+export interface SQLExerciseSection {
+  content: string;
+  sampleData: {
+    tableName: string;
+    columns: string[];
+    rows: (string | number | null)[][];
+  }[];
+  initialSQL?: string;
 }
 
 export type LessonSection =
@@ -79,6 +115,7 @@ export type LessonSection =
   | { type: "concept"; data: ConceptSection }
   | { type: "exercise"; data: ExerciseSection }
   | { type: "interactive"; data: InteractiveSection }
+  | { type: "sql_exercise"; data: SQLExerciseSection }
   | { type: "quiz"; data: QuizSection }
   | { type: "summary"; data: SummarySection };
 

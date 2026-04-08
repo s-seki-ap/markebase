@@ -17,10 +17,13 @@ const WORKSHEET_CATEGORIES = new Set([
   "marketing-strategy",
   "project-management",
 ]);
+import dynamic from "next/dynamic";
 import AIChatPanel from "@/components/AIChatPanel";
 import ModuleFeedback from "@/components/ModuleFeedback";
 import SlideContent from "@/components/SlideContent";
 import ThemeToggle from "@/components/ThemeToggle";
+
+const SQLSandbox = dynamic(() => import("@/components/SQLSandbox"), { ssr: false });
 
 interface LessonPageClientProps {
   category: Category;
@@ -28,7 +31,7 @@ interface LessonPageClientProps {
   lessonData: {
     title: string;
     sections: Array<{
-      type: "intro" | "concept" | "exercise" | "interactive" | "quiz" | "summary";
+      type: "intro" | "concept" | "exercise" | "interactive" | "sql_exercise" | "quiz" | "summary";
       data: Record<string, unknown>;
     }>;
   };
@@ -39,6 +42,7 @@ const SECTION_LABELS: Record<string, string> = {
   intro: "イントロ",
   concept: "概念理解",
   exercise: "演習",
+  sql_exercise: "SQL演習",
   interactive: "体験",
   quiz: "クイズ",
   summary: "まとめ",
@@ -48,6 +52,7 @@ const SECTION_ICONS: Record<string, string> = {
   intro: "👋",
   concept: "💡",
   exercise: "✏️",
+  sql_exercise: "🗃️",
   interactive: "🎮",
   quiz: "🧠",
   summary: "✅",
@@ -283,7 +288,13 @@ export default function LessonPageClient({
 
         {/* Section content */}
         <div className="flex-1 overflow-hidden">
-          {currentSection.type === "exercise" && WORKSHEET_CATEGORIES.has(category.id) ? (
+          {currentSection.type === "sql_exercise" ? (
+            <SQLSandbox
+              sampleData={(currentSection.data as { sampleData: { tableName: string; columns: string[]; rows: (string | number | null)[][] }[] }).sampleData}
+              initialSQL={(currentSection.data as { initialSQL?: string }).initialSQL}
+              onNext={goNext}
+            />
+          ) : currentSection.type === "exercise" && WORKSHEET_CATEGORIES.has(category.id) ? (
             <WorksheetSection
               data={currentSection.data as { content: string; starterCode: string; hints: string[]; answer: string }}
               onNext={goNext}

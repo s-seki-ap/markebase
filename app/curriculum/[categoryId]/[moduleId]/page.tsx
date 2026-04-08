@@ -19,7 +19,7 @@ export default function LessonPage({
   const typedLessonData = lessonData as {
     title: string;
     sections: Array<{
-      type: "intro" | "concept" | "exercise" | "quiz" | "summary";
+      type: "intro" | "concept" | "exercise" | "interactive" | "sql_exercise" | "quiz" | "summary";
       data: Record<string, unknown>;
     }>;
   };
