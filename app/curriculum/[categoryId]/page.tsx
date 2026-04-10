@@ -48,7 +48,7 @@ export default async function CategoryPage({
 
   return (
     <main className="min-h-screen p-6 lg:p-8" style={{ backgroundColor: "var(--color-page)" }}>
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-sm mb-8 font-semibold" style={{ color: "var(--color-text-muted)" }}>
           <Link href="/" className="hover:scale-105 transition-all">ダッシュボード</Link>

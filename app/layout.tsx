@@ -3,6 +3,7 @@ import Script from "next/script";
 import { Suspense } from "react";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import BottomNav from "@/components/BottomNav";
+import AppShell from "@/components/AppShell";
 import Providers from "./providers";
 import "./globals.css";
 
@@ -57,7 +58,7 @@ export default function RootLayout({
           <Suspense fallback={null}>
             <GoogleAnalytics />
           </Suspense>
-          {children}
+          <AppShell>{children}</AppShell>
           <BottomNav />
         </Providers>
       </body>
