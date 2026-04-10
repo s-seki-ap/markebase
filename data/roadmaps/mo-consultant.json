@@ -1,0 +1,311 @@
+{
+  "id": "mo-consultant",
+  "name": "MOコンサルタントへの道",
+  "description": "Web基礎からGA4・BigQuery・マーケ戦略まで、アピリッツMO部コンサルタントに必要なスキルを段階的に習得するロードマップです。",
+  "icon": "🗺️",
+  "color": "#58CC02",
+  "estimatedWeeks": 12,
+  "recommendedFor": ["consultant"],
+  "chapters": [
+    {
+      "id": "ch-1",
+      "name": "デジタルの土台を作る",
+      "description": "Webの仕組みを理解し、クライアントと技術的な会話ができる基礎力を身につけます。",
+      "icon": "🌐",
+      "color": "#06b6d4",
+      "quests": [
+        {
+          "id": "q-1-1",
+          "name": "Webの仕組みを知る",
+          "description": "HTTP通信・URL・DNSなど、Webの裏側で起きていることを理解する",
+          "icon": "🔗",
+          "xpBonus": 50,
+          "modules": [
+            { "categoryId": "web-fundamentals", "moduleId": "0-1" },
+            { "categoryId": "web-fundamentals", "moduleId": "0-3" },
+            { "categoryId": "web-fundamentals", "moduleId": "0-4" },
+            { "categoryId": "web-fundamentals", "moduleId": "0-5" },
+            { "categoryId": "web-fundamentals", "moduleId": "0-7" }
+          ]
+        },
+        {
+          "id": "q-1-2",
+          "name": "HTMLを読めるようになる",
+          "description": "ページソースを開いて構造を読み解く力を身につける",
+          "icon": "📄",
+          "xpBonus": 50,
+          "modules": [
+            { "categoryId": "html", "moduleId": "1-1" },
+            { "categoryId": "html", "moduleId": "1-2" },
+            { "categoryId": "html", "moduleId": "1-3" },
+            { "categoryId": "html", "moduleId": "1-6" },
+            { "categoryId": "html", "moduleId": "1-10" }
+          ]
+        },
+        {
+          "id": "q-1-3",
+          "name": "ブラウザとDevToolsを使いこなす",
+          "description": "Chrome DevToolsで計測タグやネットワークを確認できるようになる",
+          "icon": "🔍",
+          "xpBonus": 50,
+          "modules": [
+            { "categoryId": "web-fundamentals", "moduleId": "0-11" },
+            { "categoryId": "web-fundamentals", "moduleId": "0-12" },
+            { "categoryId": "web-fundamentals", "moduleId": "0-15" },
+            { "categoryId": "web-fundamentals", "moduleId": "0-16" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ch-2",
+      "name": "計測のプロになる",
+      "description": "GA4のデータモデルを理解し、設定・分析・レポートができるようになります。MOコンサルタントの最重要スキル。",
+      "icon": "📈",
+      "color": "#f59e0b",
+      "quests": [
+        {
+          "id": "q-2-1",
+          "name": "GA4の思想を理解する",
+          "description": "イベントベースモデル・3層構造・イベント分類を正しく理解する",
+          "icon": "💡",
+          "xpBonus": 80,
+          "modules": [
+            { "categoryId": "ga4", "moduleId": "5-1" },
+            { "categoryId": "ga4", "moduleId": "5-2" },
+            { "categoryId": "ga4", "moduleId": "5-3" },
+            { "categoryId": "ga4", "moduleId": "5-4" },
+            { "categoryId": "ga4", "moduleId": "5-5" }
+          ]
+        },
+        {
+          "id": "q-2-2",
+          "name": "GA4を正しく設定する",
+          "description": "プロパティ・データストリーム・フィルタ設定を実務レベルで扱える",
+          "icon": "⚙️",
+          "xpBonus": 80,
+          "modules": [
+            { "categoryId": "ga4", "moduleId": "5-6" },
+            { "categoryId": "ga4", "moduleId": "5-7" },
+            { "categoryId": "ga4", "moduleId": "5-8" },
+            { "categoryId": "ga4", "moduleId": "5-9" },
+            { "categoryId": "ga4", "moduleId": "5-10" }
+          ]
+        },
+        {
+          "id": "q-2-3",
+          "name": "GA4で分析・レポートする",
+          "description": "標準レポート・探索・アトリビューション・オーディエンスを使いこなす",
+          "icon": "📊",
+          "xpBonus": 80,
+          "modules": [
+            { "categoryId": "ga4", "moduleId": "5-11" },
+            { "categoryId": "ga4", "moduleId": "5-12" },
+            { "categoryId": "ga4", "moduleId": "5-13" },
+            { "categoryId": "ga4", "moduleId": "5-14" },
+            { "categoryId": "ga4", "moduleId": "5-15" }
+          ]
+        },
+        {
+          "id": "q-2-4",
+          "name": "GA4上級：連携と運用",
+          "description": "BigQuery連携・予測指標・プライバシー対応まで完全網羅する",
+          "icon": "🏆",
+          "xpBonus": 100,
+          "modules": [
+            { "categoryId": "ga4", "moduleId": "5-16" },
+            { "categoryId": "ga4", "moduleId": "5-17" },
+            { "categoryId": "ga4", "moduleId": "5-18" },
+            { "categoryId": "ga4", "moduleId": "5-19" },
+            { "categoryId": "ga4", "moduleId": "5-20" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ch-3",
+      "name": "データで語る",
+      "description": "SQLとBigQueryを使い、GA4データから自分でインサイトを抽出できるようになります。",
+      "icon": "🗄️",
+      "color": "#3b82f6",
+      "quests": [
+        {
+          "id": "q-3-1",
+          "name": "SQLの基本を身につける",
+          "description": "SELECT / WHERE / GROUP BY / JOINでデータを自在に操作する",
+          "icon": "📝",
+          "xpBonus": 80,
+          "modules": [
+            { "categoryId": "bigquery", "moduleId": "6-1" },
+            { "categoryId": "bigquery", "moduleId": "6-2" },
+            { "categoryId": "bigquery", "moduleId": "6-3" },
+            { "categoryId": "bigquery", "moduleId": "6-4" },
+            { "categoryId": "bigquery", "moduleId": "6-5" }
+          ]
+        },
+        {
+          "id": "q-3-2",
+          "name": "BigQueryでGA4データを分析する",
+          "description": "GA4のBigQueryエクスポートテーブルを実務で分析できる",
+          "icon": "🔬",
+          "xpBonus": 100,
+          "modules": [
+            { "categoryId": "bigquery", "moduleId": "6-6" },
+            { "categoryId": "bigquery", "moduleId": "6-7" },
+            { "categoryId": "bigquery", "moduleId": "6-8" },
+            { "categoryId": "bigquery", "moduleId": "6-9" },
+            { "categoryId": "bigquery", "moduleId": "6-10" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ch-4",
+      "name": "戦略を描く",
+      "description": "データに基づいたマーケティング戦略を立案し、広告運用・SEO施策を設計できるようになります。",
+      "icon": "🎯",
+      "color": "#8b5cf6",
+      "quests": [
+        {
+          "id": "q-4-1",
+          "name": "マーケティング戦略の型を学ぶ",
+          "description": "3C・SWOT・STP・4Pなど戦略フレームワークを実務で使える",
+          "icon": "🧭",
+          "xpBonus": 80,
+          "modules": [
+            { "categoryId": "marketing-strategy", "moduleId": "10-1" },
+            { "categoryId": "marketing-strategy", "moduleId": "10-2" },
+            { "categoryId": "marketing-strategy", "moduleId": "10-3" },
+            { "categoryId": "marketing-strategy", "moduleId": "10-4" },
+            { "categoryId": "marketing-strategy", "moduleId": "10-5" }
+          ]
+        },
+        {
+          "id": "q-4-2",
+          "name": "Web広告の実務を知る",
+          "description": "広告エコシステム・運用型広告・効果測定の基礎を習得する",
+          "icon": "📢",
+          "xpBonus": 80,
+          "modules": [
+            { "categoryId": "advertising", "moduleId": "9-1" },
+            { "categoryId": "advertising", "moduleId": "9-2" },
+            { "categoryId": "advertising", "moduleId": "9-3" },
+            { "categoryId": "advertising", "moduleId": "9-4" },
+            { "categoryId": "advertising", "moduleId": "9-5" }
+          ]
+        },
+        {
+          "id": "q-4-3",
+          "name": "SEOの基礎を固める",
+          "description": "検索エンジンの仕組み・オンページSEO・テクニカルSEOを理解する",
+          "icon": "🔎",
+          "xpBonus": 80,
+          "modules": [
+            { "categoryId": "seo", "moduleId": "4-1" },
+            { "categoryId": "seo", "moduleId": "4-2" },
+            { "categoryId": "seo", "moduleId": "4-3" },
+            { "categoryId": "seo", "moduleId": "4-4" },
+            { "categoryId": "seo", "moduleId": "4-5" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ch-5",
+      "name": "Cookieとプライバシーを理解する",
+      "description": "3rd Party Cookie廃止・同意管理・プライバシー規制をクライアントに正しく説明できるようになります。",
+      "icon": "🔒",
+      "color": "#ef4444",
+      "quests": [
+        {
+          "id": "q-5-1",
+          "name": "Cookie・トラッキングの仕組み",
+          "description": "1st/3rd Party Cookie、GA4の計測Cookie、ITPの影響を理解する",
+          "icon": "🍪",
+          "xpBonus": 80,
+          "modules": [
+            { "categoryId": "web-fundamentals", "moduleId": "0-21" },
+            { "categoryId": "web-fundamentals", "moduleId": "0-22" },
+            { "categoryId": "web-fundamentals", "moduleId": "0-28" },
+            { "categoryId": "web-fundamentals", "moduleId": "0-29" },
+            { "categoryId": "web-fundamentals", "moduleId": "0-31" }
+          ]
+        },
+        {
+          "id": "q-5-2",
+          "name": "プライバシー規制と同意管理",
+          "description": "GDPR・改正個人情報保護法・同意モードv2をクライアントに説明できる",
+          "icon": "📜",
+          "xpBonus": 100,
+          "modules": [
+            { "categoryId": "web-fundamentals", "moduleId": "0-33" },
+            { "categoryId": "web-fundamentals", "moduleId": "0-35" },
+            { "categoryId": "web-fundamentals", "moduleId": "0-36" },
+            { "categoryId": "web-fundamentals", "moduleId": "0-37" },
+            { "categoryId": "web-fundamentals", "moduleId": "0-38" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ch-6",
+      "name": "AIで加速する",
+      "description": "AI・自動化ツールを使い、分析・レポート・業務効率化を次のレベルへ引き上げます。",
+      "icon": "🤖",
+      "color": "#ec4899",
+      "quests": [
+        {
+          "id": "q-6-1",
+          "name": "AI活用の基本を身につける",
+          "description": "生成AIの仕組みと業務での活用パターンを理解する",
+          "icon": "🧠",
+          "xpBonus": 80,
+          "modules": [
+            { "categoryId": "ai-automation", "moduleId": "7-1" },
+            { "categoryId": "ai-automation", "moduleId": "7-2" },
+            { "categoryId": "ai-automation", "moduleId": "7-3" },
+            { "categoryId": "ai-automation", "moduleId": "7-4" },
+            { "categoryId": "ai-automation", "moduleId": "7-5" }
+          ]
+        },
+        {
+          "id": "q-6-2",
+          "name": "マーケ業務をAIで自動化する",
+          "description": "レポート生成・データ分析・コンテンツ制作をAIで効率化する",
+          "icon": "⚡",
+          "xpBonus": 100,
+          "modules": [
+            { "categoryId": "ai-automation", "moduleId": "7-6" },
+            { "categoryId": "ai-automation", "moduleId": "7-7" },
+            { "categoryId": "ai-automation", "moduleId": "7-8" },
+            { "categoryId": "ai-automation", "moduleId": "7-9" },
+            { "categoryId": "ai-automation", "moduleId": "7-10" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ch-7",
+      "name": "プロジェクトを回す",
+      "description": "クライアントワークに必要なPM・提案・コミュニケーションスキルを磨きます。",
+      "icon": "🗂️",
+      "color": "#f97316",
+      "quests": [
+        {
+          "id": "q-7-1",
+          "name": "プロジェクト管理の基本",
+          "description": "WBS・スケジュール・リスク管理でプロジェクトを確実に進める",
+          "icon": "📋",
+          "xpBonus": 80,
+          "modules": [
+            { "categoryId": "project-management", "moduleId": "11-1" },
+            { "categoryId": "project-management", "moduleId": "11-2" },
+            { "categoryId": "project-management", "moduleId": "11-3" },
+            { "categoryId": "project-management", "moduleId": "11-4" },
+            { "categoryId": "project-management", "moduleId": "11-5" }
+          ]
+        }
+      ]
+    }
+  ]
+}

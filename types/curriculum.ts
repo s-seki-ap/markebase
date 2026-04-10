@@ -126,3 +126,39 @@ export interface LessonData {
   type: Lesson["type"];
   section: LessonSection;
 }
+
+// ---------- Roadmap / Quest ----------
+
+export interface RoadmapModuleRef {
+  categoryId: string;
+  moduleId: string;
+}
+
+export interface Quest {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  xpBonus: number;
+  modules: RoadmapModuleRef[];
+}
+
+export interface Chapter {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  color: string;
+  quests: Quest[];
+}
+
+export interface Roadmap {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  color: string;
+  estimatedWeeks: number;
+  recommendedFor: string[];
+  chapters: Chapter[];
+}
