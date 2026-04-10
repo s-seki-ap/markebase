@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import type { LeaderboardEntry } from "@/lib/progress";
+import MonsterAvatar from "@/components/MonsterAvatar";
 
 interface Props {
   leaderboard: LeaderboardEntry[];
@@ -108,10 +109,19 @@ export default function AdminFilters({ leaderboard, departments }: Props) {
                     <td className="px-6 py-4 font-bold" style={{ color: "var(--color-text-heading)" }}>
                       <Link
                         href={`/admin/member/${encodeURIComponent(entry.userId)}`}
-                        className="hover:underline transition-all hover:opacity-80"
+                        className="inline-flex items-center gap-2 hover:underline transition-all hover:opacity-80"
                         style={{ color: "var(--color-text-heading)" }}
                       >
-                        {entry.name}
+                        <MonsterAvatar
+                          imageUrl={entry.monsterImageUrl ?? null}
+                          stage={entry.monsterStage ?? "egg"}
+                          primary={entry.monsterPrimary ?? null}
+                          secondary={entry.monsterSecondary ?? null}
+                          name={entry.monsterName ?? entry.name}
+                          generating={entry.monsterImageGenerating ?? false}
+                          size="sm"
+                        />
+                        <span>{entry.name}</span>
                       </Link>
                       {isInactive && <span className="ml-2 text-xs px-2 py-0.5 rounded-full" style={{ backgroundColor: "rgba(251,191,36,0.15)", color: "var(--color-yellow)" }}>休止中</span>}
                     </td>

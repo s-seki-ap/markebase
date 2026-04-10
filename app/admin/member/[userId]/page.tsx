@@ -7,6 +7,7 @@ import { getUserBadges } from "@/lib/badges";
 import { getCategories, isModuleAvailable } from "@/lib/curriculum";
 import LearningMap from "@/components/LearningMap";
 import BadgeShowcase from "@/components/BadgeShowcase";
+import MonsterAvatar from "@/components/MonsterAvatar";
 
 const isDevBypass =
   process.env.NODE_ENV !== "production" && !process.env.GOOGLE_CLIENT_ID;
@@ -120,16 +121,15 @@ export default async function MemberDetailPage({
 
         {/* Profile Header */}
         <div className="clay-card p-6 mb-6 flex flex-col lg:flex-row lg:items-center gap-6">
-          <div
-            className="w-20 h-20 rounded-3xl flex items-center justify-center text-3xl font-extrabold shrink-0"
-            style={{
-              background: "linear-gradient(145deg, #5fd97e, #42b860)",
-              color: "#ffffff",
-              boxShadow: "var(--clay-raised)",
-            }}
-          >
-            {user.name[0]}
-          </div>
+          <MonsterAvatar
+            imageUrl={user.monsterImageUrl ?? null}
+            stage={user.monsterStage ?? "egg"}
+            primary={user.monsterPrimary ?? null}
+            secondary={user.monsterSecondary ?? null}
+            name={user.monsterName ?? user.name}
+            generating={user.monsterImageGenerating ?? false}
+            size="lg"
+          />
           <div className="flex-1 min-w-0">
             <h1 className="text-2xl lg:text-3xl font-extrabold" style={{ color: "var(--color-text-heading)" }}>
               {user.name}

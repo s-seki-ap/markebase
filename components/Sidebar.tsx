@@ -8,6 +8,7 @@ const NAV_ITEMS = [
   { href: "/", icon: "🏠", label: "ホーム" },
   { href: "/quest", icon: "🗺️", label: "クエスト" },
   { href: "/curriculum", icon: "📚", label: "学習" },
+  { href: "/monster", icon: "🐣", label: "相棒" },
   { href: "/admin", icon: "📊", label: "チーム" },
 ];
 

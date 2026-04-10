@@ -2,13 +2,13 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
 import { getUser, getUserProgress, getWeeklyCompletedCount, getRecentModules, getLeaderboard, getTotalLearnerCount } from "@/lib/progress";
 import { getUserBadges } from "@/lib/badges";
 import { getCategories, isModuleAvailable } from "@/lib/curriculum";
 import SkillRadar from "@/components/SkillRadar";
 import BadgeShowcase from "@/components/BadgeShowcase";
 import ThemeToggle from "@/components/ThemeToggle";
+import MonsterAvatar from "@/components/MonsterAvatar";
 
 const isDevBypass =
   process.env.NODE_ENV !== "production" && !process.env.GOOGLE_CLIENT_ID;
@@ -36,7 +36,6 @@ export default async function Home() {
 
   const userId = getUserId(session);
   const userName = session?.user?.name ?? "ゲスト";
-  const userImage = session?.user?.image ?? null;
 
   let user: Awaited<ReturnType<typeof getUser>> = null;
   let completedCount = 0;
@@ -76,7 +75,18 @@ export default async function Home() {
   const level = user?.level ?? 1;
   const streak = user?.streak ?? 0;
 
-  let topMembers: Array<{ name: string; xp: number; level: number; completedCount: number }> = [];
+  let topMembers: Array<{
+    name: string;
+    xp: number;
+    level: number;
+    completedCount: number;
+    monsterName: string | null;
+    monsterStage: import("@/lib/monster/attributes").MonsterStage | null;
+    monsterPrimary: import("@/lib/monster/attributes").Attribute | null;
+    monsterSecondary: import("@/lib/monster/attributes").Attribute | null;
+    monsterImageUrl: string | null;
+    monsterImageGenerating: boolean;
+  }> = [];
   let totalLearners = 0;
   try {
     const [lb, learnerCount] = await Promise.all([
@@ -88,6 +98,12 @@ export default async function Home() {
       xp: e.xp,
       level: e.level,
       completedCount: e.completedCount,
+      monsterName: e.monsterName ?? null,
+      monsterStage: e.monsterStage ?? null,
+      monsterPrimary: e.monsterPrimary ?? null,
+      monsterSecondary: e.monsterSecondary ?? null,
+      monsterImageUrl: e.monsterImageUrl ?? null,
+      monsterImageGenerating: e.monsterImageGenerating ?? false,
     }));
     totalLearners = learnerCount;
   } catch {
@@ -139,23 +155,17 @@ export default async function Home() {
           </div>
           <div className="flex items-center gap-2">
             <ThemeToggle />
-            {userImage ? (
-              <Image
-                src={userImage}
-                alt="avatar"
-                width={36}
-                height={36}
-                className="w-9 h-9 rounded-full"
-                style={{ border: "2px solid var(--color-green)" }}
+            <Link href="/monster" aria-label="相棒" className="transition-transform hover:scale-105">
+              <MonsterAvatar
+                imageUrl={user?.monsterImageUrl ?? null}
+                stage={user?.monsterStage ?? "egg"}
+                primary={user?.monsterPrimary ?? null}
+                secondary={user?.monsterSecondary ?? null}
+                name={user?.monsterName ?? userName}
+                generating={user?.monsterImageGenerating ?? false}
+                size="sm"
               />
-            ) : (
-              <div
-                className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold"
-                style={{ backgroundColor: "var(--color-green)", color: "#ffffff" }}
-              >
-                {userName[0]}
-              </div>
-            )}
+            </Link>
           </div>
         </div>
 
@@ -190,23 +200,17 @@ export default async function Home() {
             >
               🗺️ クエストを進める
             </Link>
-            {userImage ? (
-              <Image
-                src={userImage}
-                alt="avatar"
-                width={44}
-                height={44}
-                className="w-11 h-11 rounded-full"
-                style={{ border: "2px solid var(--color-green)" }}
+            <Link href="/monster" aria-label="相棒" className="transition-transform hover:scale-105">
+              <MonsterAvatar
+                imageUrl={user?.monsterImageUrl ?? null}
+                stage={user?.monsterStage ?? "egg"}
+                primary={user?.monsterPrimary ?? null}
+                secondary={user?.monsterSecondary ?? null}
+                name={user?.monsterName ?? userName}
+                generating={user?.monsterImageGenerating ?? false}
+                size="md"
               />
-            ) : (
-              <div
-                className="w-11 h-11 rounded-full flex items-center justify-center text-base font-bold"
-                style={{ backgroundColor: "var(--color-green)", color: "#ffffff" }}
-              >
-                {userName[0]}
-              </div>
-            )}
+            </Link>
           </div>
         </div>
 
@@ -351,6 +355,15 @@ export default async function Home() {
                       >
                         {i + 1}
                       </span>
+                      <MonsterAvatar
+                        imageUrl={member.monsterImageUrl}
+                        stage={member.monsterStage ?? "egg"}
+                        primary={member.monsterPrimary}
+                        secondary={member.monsterSecondary}
+                        name={member.monsterName ?? member.name}
+                        generating={member.monsterImageGenerating}
+                        size="xs"
+                      />
                       <span className="text-xs font-bold truncate" style={{ color: "var(--color-text-heading)" }}>{member.name}</span>
                     </div>
                     <span className="text-xs font-extrabold shrink-0 ml-2" style={{ color: "var(--color-yellow)" }}>⭐ {member.xp.toLocaleString()}</span>

@@ -1,6 +1,8 @@
 import { db } from "./firebase";
 import { FieldValue } from "firebase-admin/firestore";
 import { checkAndAwardBadges, type BadgeDefinition } from "./badges";
+import { checkAndEvolveMonster } from "./monster";
+import type { Attribute, MonsterStage } from "./monster/attributes";
 
 // ---------- Types ----------
 
@@ -17,6 +19,15 @@ export interface UserData {
   department?: string;
   completedCount: number;
   createdAt: FirebaseFirestore.Timestamp;
+  // モンスター相棒
+  monsterName?: string | null;
+  monsterStage?: MonsterStage | null;
+  monsterPrimary?: Attribute | null;
+  monsterSecondary?: Attribute | null;
+  monsterImageUrl?: string | null;
+  monsterImageGenerating?: boolean;
+  monsterImageGeneratedAt?: FirebaseFirestore.Timestamp;
+  monsterImageUpdatedAt?: FirebaseFirestore.Timestamp;
 }
 
 export interface ModuleProgress {
@@ -34,6 +45,12 @@ export interface LeaderboardEntry {
   completedCount: number;
   lastActiveDate: string;
   department?: string;
+  monsterName?: string | null;
+  monsterStage?: MonsterStage | null;
+  monsterPrimary?: Attribute | null;
+  monsterSecondary?: Attribute | null;
+  monsterImageUrl?: string | null;
+  monsterImageGenerating?: boolean;
 }
 
 // ---------- Helpers ----------
@@ -172,6 +189,7 @@ export async function addXP(userId: string, amount: number): Promise<void> {
   if (!user.exists) return;
 
   const data = user.data() as UserData;
+  const oldLevel = data.level;
   const newXP = data.xp + amount;
   const newLevel = calcLevel(newXP);
   const newStreak = calcStreak(data.lastActiveDate, data.streak);
@@ -182,6 +200,15 @@ export async function addXP(userId: string, amount: number): Promise<void> {
     streak: newStreak,
     lastActiveDate: todayStr(),
   });
+
+  // レベルアップがあった場合のみ進化判定
+  if (newLevel > oldLevel) {
+    try {
+      await checkAndEvolveMonster(userId, newLevel);
+    } catch (err) {
+      console.error(`[progress] monster evolution check failed for ${userId}:`, err);
+    }
+  }
 }
 
 export async function saveQuizXP(
@@ -249,6 +276,12 @@ export async function getLeaderboard(): Promise<LeaderboardEntry[]> {
       completedCount: data.completedCount ?? 0,
       lastActiveDate: data.lastActiveDate,
       department: data.department,
+      monsterName: data.monsterName ?? null,
+      monsterStage: data.monsterStage ?? null,
+      monsterPrimary: data.monsterPrimary ?? null,
+      monsterSecondary: data.monsterSecondary ?? null,
+      monsterImageUrl: data.monsterImageUrl ?? null,
+      monsterImageGenerating: data.monsterImageGenerating ?? false,
     };
   });
 }
