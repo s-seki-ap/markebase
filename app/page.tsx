@@ -186,10 +186,17 @@ export default async function Home() {
         {/* CTA */}
         <div className="flex flex-col sm:flex-row gap-3 mb-8">
           <Link
-            href="/curriculum"
+            href="/quest"
             className="btn-3d btn-3d-green inline-flex items-center gap-2 px-6 py-3 text-base"
           >
-            学習をはじめる 🚀
+            🗺️ クエストを進める
+          </Link>
+          <Link
+            href="/curriculum"
+            className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl font-bold text-sm transition-all duration-200 hover:scale-[1.02]"
+            style={{ backgroundColor: "var(--color-card)", color: "var(--color-text-muted)", boxShadow: "var(--color-card-shadow)" }}
+          >
+            📚 自由に学ぶ
           </Link>
           <Link
             href="/admin"
