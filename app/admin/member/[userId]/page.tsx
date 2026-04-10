@@ -94,16 +94,17 @@ export default async function MemberDetailPage({
       return tb - ta;
     });
 
-  // Quiz stats
+  // Quiz stats (3問形式、score は 0〜3)
+  const QUIZ_TOTAL = 3;
   const quizProgress = history.filter((h) => h.quizScore !== null);
   const avgQuizScore =
     quizProgress.length > 0
-      ? Math.round(
+      ? (
           quizProgress.reduce((s, h) => s + (h.quizScore ?? 0), 0) /
-            quizProgress.length
-        )
+          quizProgress.length
+        ).toFixed(1)
       : null;
-  const correctCount = quizProgress.filter((h) => (h.quizScore ?? 0) >= 80).length;
+  const perfectCount = quizProgress.filter((h) => (h.quizScore ?? 0) >= QUIZ_TOTAL).length;
 
   return (
     <main className="min-h-screen p-6 lg:p-8 pb-24 lg:pb-8" style={{ backgroundColor: "var(--color-page)" }}>
@@ -173,13 +174,22 @@ export default async function MemberDetailPage({
           <div className="p-4 clay-card">
             <p className="text-xs mb-1 font-semibold" style={{ color: "var(--color-text-muted)" }}>クイズ平均</p>
             <p className="text-2xl lg:text-3xl font-extrabold" style={{ color: "var(--color-blue)" }}>
-              {avgQuizScore !== null ? `${avgQuizScore}点` : "-"}
+              {avgQuizScore !== null ? (
+                <>
+                  {avgQuizScore}
+                  <span className="text-sm font-normal" style={{ color: "var(--color-text-disabled)" }}>
+                    {" "}/ {QUIZ_TOTAL}
+                  </span>
+                </>
+              ) : (
+                "-"
+              )}
             </p>
           </div>
           <div className="p-4 clay-card">
-            <p className="text-xs mb-1 font-semibold" style={{ color: "var(--color-text-muted)" }}>高得点数</p>
+            <p className="text-xs mb-1 font-semibold" style={{ color: "var(--color-text-muted)" }}>全問正解</p>
             <p className="text-2xl lg:text-3xl font-extrabold" style={{ color: "var(--color-green)" }}>
-              {correctCount}
+              {perfectCount}
               <span className="text-xs font-normal ml-1" style={{ color: "var(--color-text-disabled)" }}>
                 / {quizProgress.length}
               </span>
@@ -235,9 +245,9 @@ export default async function MemberDetailPage({
                     const scoreColor =
                       score === null
                         ? "var(--color-text-disabled)"
-                        : score >= 80
+                        : score >= QUIZ_TOTAL
                           ? "var(--color-green)"
-                          : score >= 60
+                          : score >= QUIZ_TOTAL - 1
                             ? "var(--color-yellow)"
                             : "var(--color-red)";
                     return (
@@ -261,7 +271,7 @@ export default async function MemberDetailPage({
                           {h.moduleName}
                         </td>
                         <td className="px-4 py-3 text-right font-extrabold" style={{ color: scoreColor }}>
-                          {score !== null ? `${score}点` : "-"}
+                          {score !== null ? `${score}/${QUIZ_TOTAL}` : "-"}
                         </td>
                       </tr>
                     );

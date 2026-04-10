@@ -39,11 +39,14 @@ function nodeStyle(
   };
 }
 
+const QUIZ_TOTAL = 3;
+
 function quizBadge(score: number | null) {
   if (score === null) return null;
-  if (score >= 80) return { label: `${score}点`, color: "var(--color-green)", bg: "var(--color-green-bg)" };
-  if (score >= 60) return { label: `${score}点`, color: "var(--color-yellow)", bg: "var(--color-yellow-bg)" };
-  return { label: `${score}点`, color: "var(--color-red)", bg: "var(--color-red-bg)" };
+  const label = `${score}/${QUIZ_TOTAL}`;
+  if (score >= QUIZ_TOTAL) return { label, color: "var(--color-green)", bg: "var(--color-green-bg)" };
+  if (score >= QUIZ_TOTAL - 1) return { label, color: "var(--color-yellow)", bg: "var(--color-yellow-bg)" };
+  return { label, color: "var(--color-red)", bg: "var(--color-red-bg)" };
 }
 
 export default function LearningMap({ categories, progressMap, availableMap }: Props) {
