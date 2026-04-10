@@ -190,7 +190,7 @@ export async function saveQuizXP(
   moduleId: string,
   score: number
 ): Promise<{ xpEarned: number; newBadges: BadgeDefinition[] }> {
-  const xpEarned = score * 10;
+  // ベストスコア基準: 過去最高を上回ったときだけ差分をユーザーXPに加算
   const progressId = `${categoryId}--${moduleId}`;
   const progressRef = db
     .collection("users")
@@ -198,21 +198,35 @@ export async function saveQuizXP(
     .collection("progress")
     .doc(progressId);
 
-  // クイズスコアを更新（モジュール完了とは別にクイズXPを記録）
   const existing = await progressRef.get();
+  let xpDelta = 0;
+
   if (existing.exists) {
-    await progressRef.update({ quizScore: score });
+    const data = existing.data() as ModuleProgress;
+    const prevScore = data.quizScore;
+    const isNewBest = prevScore === null || score > prevScore;
+    if (isNewBest) {
+      const prevQuizXp = (prevScore ?? 0) * 10;
+      xpDelta = score * 10 - prevQuizXp;
+      await progressRef.update({ quizScore: score });
+    }
+    // スコアが同じか下がった場合はベストを保持し、XPも据え置き
   } else {
+    // 初回: クイズスコアとともに進捗ドキュメントを作成
+    xpDelta = score * 10;
     await progressRef.set({
       completedAt: FieldValue.serverTimestamp(),
       quizScore: score,
-      xpEarned,
+      xpEarned: score * 10,
     });
   }
 
-  await addXP(userId, xpEarned);
+  if (xpDelta > 0) {
+    await addXP(userId, xpDelta);
+  }
+
   const newBadges = await checkAndAwardBadges(userId);
-  return { xpEarned, newBadges };
+  return { xpEarned: xpDelta, newBadges };
 }
 
 // ---------- Leaderboard ----------
