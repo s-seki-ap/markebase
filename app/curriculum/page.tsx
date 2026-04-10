@@ -58,12 +58,7 @@ export default function CurriculumPage() {
               <Link
                 key={category.id}
                 href={`/curriculum/${category.id}`}
-                className="group block p-5 rounded-2xl border-2 transition-all duration-200 hover:scale-[1.03]"
-                style={{
-                  backgroundColor: "var(--color-card)",
-                  borderColor: "var(--color-border)",
-                  boxShadow: "var(--color-card-shadow)",
-                }}
+                className="group block p-5 clay-card transition-all duration-200 hover:scale-[1.03] hover:shadow-lg"
               >
                 {/* Icon */}
                 <div
