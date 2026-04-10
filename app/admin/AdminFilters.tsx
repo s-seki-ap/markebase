@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import type { LeaderboardEntry } from "@/lib/progress";
 
@@ -105,7 +106,13 @@ export default function AdminFilters({ leaderboard, departments }: Props) {
                       color: i === 0 ? "var(--color-yellow)" : i === 1 ? "var(--color-blue)" : i === 2 ? "var(--color-orange)" : "var(--color-text-disabled)",
                     }}>{i + 1}</td>
                     <td className="px-6 py-4 font-bold" style={{ color: "var(--color-text-heading)" }}>
-                      {entry.name}
+                      <Link
+                        href={`/admin/member/${encodeURIComponent(entry.userId)}`}
+                        className="hover:underline transition-all hover:opacity-80"
+                        style={{ color: "var(--color-text-heading)" }}
+                      >
+                        {entry.name}
+                      </Link>
                       {isInactive && <span className="ml-2 text-xs px-2 py-0.5 rounded-full" style={{ backgroundColor: "rgba(251,191,36,0.15)", color: "var(--color-yellow)" }}>休止中</span>}
                     </td>
                     <td className="px-6 py-4 text-sm" style={{ color: "var(--color-text-muted)" }}>{entry.department ?? "-"}</td>
